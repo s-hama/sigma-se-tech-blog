@@ -2,7 +2,8 @@
 * The sigma-se-tech-blog on s-hama's technical blog provides the source code excluding article information.
 
 # features
-* It is being showcased on https://sigma-se.com/. 
+[](TODO:https://todo.com/)
+* It is being showcased on https://todo.com/. 
 * We have implemented it in the operational environment listed below, and we are sharing it with the hope that it can serve as a reference for your Django web application development.
 
 # technology used
