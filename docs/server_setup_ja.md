@@ -11,3 +11,10 @@ XserverVPSからパケットフィルターの設定を変更する。
   - プロトコル: TCP
   - ポート番号: 22
   - 許可する送信元IPアドレス: 自身のIPアドレス/32
+
+## VPS接続用の一般ユーザー作成
+- rootでのログイン確認(初回)
+  - ssh root@[ホスト名]
+- 一般ユーザー作成
+  - useradd vpsuser	
+  - passwd vpsuser
