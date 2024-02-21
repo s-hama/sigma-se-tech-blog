@@ -73,3 +73,43 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   ```
   mv ~/.ssh/id_rsa_sigma.pub ~/.ssh/authorized_keys
   ```
+
+- サーバーで権限変更
+  ```
+  chmod 600 ~/.ssh/authorized_keys
+  chmod 700 ~/.ssh
+  chmod 755 ~/
+  ```
+
+- クライアントで権限変更
+  ```
+  chmod 755 /Users/s-hama
+  chmod 700 /Users/s-hama/.ssh
+  chmod 600 /Users/s-hama/.ssh/id_rsa_sigma
+  chmod 644 /Users/s-hama/.ssh/id_rsa_sigma.pub
+  ```
+
+- クライアントで~/.ssh配下にconfigファイルを下記内容で作成する
+  ```
+  Host sigma-se-vps
+    HostName 162.43.85.169
+    User vpsuser
+    IdentityFile ~/.ssh/id_rsa_sigma
+    Port 22
+    TCPKeepAlive yes
+    IdentitiesOnly yes
+  ```
+
+- クライアントで初回ログイン (known_hostsが自動生成される)
+  ```
+  ssh sigma-se-vps
+    The authenticity of host 'x162-43-85-169.static.xvps.ne.jp (162.43.85.169)' can't be established.
+    ED25519 key fingerprint is SHA256:sJ5+zzGjOV/uGBHz+ehjZEqlCJ9oT804bA2viP1pvn4.
+    This key is not known by any other names
+    Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+
+    Warning: Permanently added '162.43.85.169' (ED25519) to the list of known hosts.
+    Enter passphrase for key '/Users/s-hama/.ssh/id_rsa_sigma': パスワードフレーズ入力
+  ```
+  ※ 以降、ssh sigma-se-vpsでログイン時にパスワードフレーズの入力を求められるようになる
+
