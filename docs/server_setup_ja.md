@@ -113,3 +113,103 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   ```
   ※ 以降、ssh sigma-se-vpsでログイン時にパスワードフレーズの入力を求められるようになる
 
+## Vimインストールと初期設定
+サーバー側作業
+- DNFの更新
+  ```
+  sudo dnf update
+  sudo dnf upgrade
+  ```
+
+- Vimインストール
+  ```
+  sudo dnf -y install vim-enhanced
+  ```
+
+- コマンドエイリアスを自身のユーザー固有環境として適用する
+
+  最終行にalias vi='vim'を追記
+  ```
+  vi ~/.bashrc
+  ```
+  変更を反映
+  ```
+  source ~/.bashrc
+  ```
+
+- 自身のユーザー固有環境としてVimを設定する
+
+  ※ ユーザー単位(rootとvpsuserそれぞれ)で行う
+  .vimrcを新規作成
+  ```
+  vi ~/.vimrc
+  ```
+  下記の内容で追記し保存
+  ```
+  " vim の独自拡張機能を使用
+  " - vi との互換性無し
+  set nocompatible
+
+  " 文字コードを指定
+  set encoding=utf-8
+
+  " ファイルエンコードを指定
+  " 複数指定する場合はカンマ区切り
+  " 複数指定の場合 先頭から順に成功するまで読み込む
+  set fileencodings=utf-8
+
+  " 自動認識させる改行コードを指定
+  set fileformats=unix,dos
+
+  " バックアップを取得
+  " - 逆は [ set nobackup ]
+  set backup
+
+  " バックアップを取得するディレクトリを指定
+  set backupdir=~/backup
+
+  " 検索履歴を残す世代数
+  set history=50
+
+  " 検索時に大文字小文字を区別しない
+  set ignorecase
+
+  " 検索語に大文字を混ぜると検索時に大文字を区別する
+  set smartcase
+
+  " 検索語にマッチした単語をハイライト
+  " - 逆は [ set nohlsearch ]
+  set hlsearch
+
+  " インクリメンタルサーチを使用
+  " - 検索語の入力最中から随時マッチする文字列の検索を開始
+  " - 逆は [ set noincsearch ]
+  set incsearch
+
+  " 行番号を表示
+  " - 逆は [ set nonumber ]
+  set number
+
+  " 改行 ( $ ) やタブ ( ^I ) を可視化
+  set list
+
+  " 括弧入力時に対応する括弧を強調
+  set showmatch
+
+  " ファイルの末尾に改行を入れない
+  set binary noeol
+
+  " 自動インデントを有効にする
+  " - 逆は [ noautoindent ]
+  set autoindent
+
+  " 構文ごとに色分け表示する
+  " - 逆は [ syntax off ]
+  syntax on
+
+  " [ syntax on ] の場合のコメント文の色を変更
+  highlight Comment ctermfg=LightCyan
+
+  " ウィンドウ幅で行を折り返す
+  set wrap
+  ```
