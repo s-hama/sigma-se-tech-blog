@@ -213,3 +213,41 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   " ウィンドウ幅で行を折り返す
   set wrap
   ```
+
+## ファイアーウォールの設定
+  - ファイアーウォールの有効化
+    - 有効化されているか確認
+      ```
+      systemctl is-enabled firewalld
+      disabled
+      ```
+    - 無効になっているので有効化する
+      ```
+      systemctl enable --now firewalld
+      Created symlink /etc/systemd/system/dbus-org.fedoraproject.firewalld1.service → /usr/lib/systemd/system/firewalld.service.
+      Created symlink /etc/systemd/system/multi-user.target.wants/firewalld.service → /usr/lib/systemd/system/firewalld.service.
+      ```
+  - 設定確認/変更
+    - どのゾーンが許可されているか確認
+      ```
+      firewall-cmd --get-default-zone
+      public
+      ```
+    - ファイアーウォールの設定状況確認
+      ```
+      firewall-cmd --list-all
+      public (active)
+        target: default
+        icmp-block-inversion: no
+        interfaces: ens3
+        sources: 
+        services: cockpit dhcpv6-client ssh
+        ports: 
+        protocols: 
+        forward: yes
+        masquerade: no
+        forward-ports: 
+        source-ports: 
+        icmp-blocks: 
+        rich rules:
+      ```
