@@ -251,3 +251,34 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
         icmp-blocks: 
         rich rules:
       ```
+    - httpとhttpsを許可する(servicesにhttpとhttpsが許可されてないため)
+      - httpのサービスを永続的に許可
+      ```
+      firewall-cmd --zone=public --add-service=http --permanent
+      ```
+      - httpsのサービスを永続的に許可
+      ```
+      firewall-cmd --zone=public --add-service=https --permanent
+      ```
+    - ファイアーウォールを再起動する
+      ```
+      firewall-cmd --reload
+      ```
+    - ファイアーウォールの設定状況確認
+      ```
+      firewall-cmd --list-all
+      public (active)
+        target: default
+        icmp-block-inversion: no
+        interfaces: ens3
+        sources: 
+        services: cockpit dhcpv6-client http https ssh
+        ports: 
+        protocols: 
+        forward: yes
+        masquerade: no
+        forward-ports: 
+        source-ports: 
+        icmp-blocks: 
+        rich rules:
+      ```
