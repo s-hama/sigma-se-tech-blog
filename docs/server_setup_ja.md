@@ -314,3 +314,15 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   ```
   「HTTP SERVER TEST PAGE」ページが表示されればOK
 
+## 独自ドメインのネームサーバー設定とDNS設定
+独自ドメインをVPSに向ける
+- VPS側のネームサーバー設定
+  - XserverのDNS設定からドメイン(sigma-se.com)の追加を行う  
+※ 追加後は、標準で`種別: SOA`のDNSレコードが1つ、`種別: NS`のDNSレコードが3つ追加される
+  - DNSレコードを追加するボタンから下記レコードを追加する
+    ```
+    ホスト名: sigma-se.com
+    種別: A
+    内容: XserverVPSのIPアドレス
+    TTL: 3600
+    ```
