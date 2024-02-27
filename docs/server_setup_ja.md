@@ -326,3 +326,17 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     内容: XserverVPSのIPアドレス
     TTL: 3600
     ```
+- ドメイン側のネームサーバー設定
+  - Xserverのネームサーバーを登録する
+  お名前.com Navi > ドメイン設定 > ネームサーバーの設定 > ネームサーバーの変更 > ドメイン一覧からsigma-se.comを選択し、下記Xserverのネームサーバーを登録する
+    ```
+    ns1.xvps.ne.jp
+    ns2.xvps.ne.jp
+    ```
+    ※ 設定が反映されるまで数時間〜数日かかる
+  
+- ブラウザから起動確認
+  ```
+  http://sigma-se.com/
+  ```
+  「HTTP SERVER TEST PAGE」ページが表示されればOK
