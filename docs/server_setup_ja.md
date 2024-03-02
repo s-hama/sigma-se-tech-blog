@@ -388,3 +388,30 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     ```
     add_header Strict-Transport-Security "max-age=63072000";
     ```
+
+- Document Root(公開ディレクトリ)の変更
+  - 変更後のディレクトリ作成
+    ```
+    sudo mkdir /var/www
+    sudo mkdir /var/www/html
+    ```
+  - wwwディレクトリの所有者をnginxユーザーに変更、パーミッションを変更
+    ```
+    sudo chown -R nginx:nginx /var/www
+    sudo chmod -R 755 /var/www
+    ```
+  - htmlディレクトリの所有者をnginxユーザーに変更、パーミッションを変更
+    ```
+    sudo chown -R nginx:nginx /var/www/html
+    sudo chmod -R 755 /var/www/html
+    ```
+  - 仮のindex.htmlを作成
+    ```
+    sudo touch /var/www/html/index.html
+    ```
+    ※ 必要に応じてindex.htmlの中身を記載する
+  - index.htmlの所有者をnginxユーザーに変更、パーミッションを変更
+    ```
+    sudo chown nginx:nginx /var/www/html/index.html
+    sudo chmod 644 /var/www/html/index.html
+    ```
