@@ -61,12 +61,12 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
 ## OpenSSHの公開鍵認証設定
 公開鍵認証設定(SSHの鍵ペア設定)を行い、vpsuser(VPS接続用の一般ユーザー)からパスフレーズでログインできるようにする
 
-- クライアントから秘密鍵、公開鍵の生成
+- クライアント側から秘密鍵、公開鍵の生成
   ```
   ssh-keygen -f ~/.ssh/id_rsa_sigma
   ```
 
-- クライアントからサーバーに公開鍵を転送
+- クライアント側からサーバーに公開鍵を転送
   ```
   scp ~/.ssh/id_rsa_sigma.pub vpsuser@x162-43-85-169.static.xvps.ne.jp:/home/vpsuser/.ssh/
   ```
@@ -83,7 +83,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   chmod 755 ~/
   ```
 
-- クライアントで権限変更
+- クライアント側で権限変更
   ```
   chmod 755 /Users/s-hama
   chmod 700 /Users/s-hama/.ssh
@@ -91,7 +91,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   chmod 644 /Users/s-hama/.ssh/id_rsa_sigma.pub
   ```
 
-- クライアントで`~/.ssh`配下に`config`ファイルを下記内容で作成する
+- クライアント側で`~/.ssh`配下に`config`ファイルを下記内容で作成する
   ```
   Host sigma-se-vps
     HostName 162.43.85.169
@@ -102,7 +102,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     IdentitiesOnly yes
   ```
 
-- クライアントで初回ログイン (`known_hosts`が自動生成される)
+- クライアント側で初回ログイン (`known_hosts`が自動生成される)
   ```
   ssh sigma-se-vps
     The authenticity of host 'x162-43-85-169.static.xvps.ne.jp (162.43.85.169)' can't be established.
@@ -314,7 +314,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   ```
   http://サーバーのIPアドレス/
   ```
-  「HTTP SERVER TEST PAGE」ページが表示されればOK
+  デフォルトの`HTTP SERVER TEST PAGE`ページが表示されればOK
 
 ## 独自ドメインのネームサーバー設定とDNS設定
 独自ドメインをVPSに向ける
@@ -341,7 +341,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   ```
   http://sigma-se.com/
   ```
-  `HTTP SERVER TEST PAGE`ページが表示されればOK
+  `/var/www/html`が表示されればOK
 
 ## Nginxの初期設定
 サーバー側作業
