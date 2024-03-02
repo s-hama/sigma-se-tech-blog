@@ -35,7 +35,9 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   cp /etc/ssh/sshd_config /etc/ssh/sshd_config.default
   ```
 - sshd_config編集
-  - vim /etc/ssh/sshd_config
+    ```
+    vim /etc/ssh/sshd_config
+    ```
     - 変更前
       ```
       PermitRootLogin yes
@@ -69,7 +71,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   scp ~/.ssh/id_rsa_sigma.pub vpsuser@x162-43-85-169.static.xvps.ne.jp:/home/vpsuser/.ssh/
   ```
 
-- サーバーでid_rsa_sigma.pubをauthorized_keysにリネーム
+- サーバーで`id_rsa_sigma.pub`を`authorized_keys`にリネーム
   ```
   mv ~/.ssh/id_rsa_sigma.pub ~/.ssh/authorized_keys
   ```
@@ -89,7 +91,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   chmod 644 /Users/s-hama/.ssh/id_rsa_sigma.pub
   ```
 
-- クライアントで~/.ssh配下にconfigファイルを下記内容で作成する
+- クライアントで`~/.ssh`配下に`config`ファイルを下記内容で作成する
   ```
   Host sigma-se-vps
     HostName 162.43.85.169
@@ -100,7 +102,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     IdentitiesOnly yes
   ```
 
-- クライアントで初回ログイン (known_hostsが自動生成される)
+- クライアントで初回ログイン (`known_hosts`が自動生成される)
   ```
   ssh sigma-se-vps
     The authenticity of host 'x162-43-85-169.static.xvps.ne.jp (162.43.85.169)' can't be established.
@@ -339,7 +341,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   ```
   http://sigma-se.com/
   ```
-  「HTTP SERVER TEST PAGE」ページが表示されればOK
+  `HTTP SERVER TEST PAGE`ページが表示されればOK
 
 ## Nginxの初期設定
 サーバー側作業
@@ -365,7 +367,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
 
   - ブラウザで実装されているセキュリティ対策の有効化
 
-    http > servetディレクティブの中に以下の項目を追記する
+    `http > servet`ディレクティブの中に以下の項目を追記する
 
     クリックジャッキング対策
     ```
@@ -382,7 +384,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
 
   - その他のブラウザで実装されているセキュリティ対策
 
-    httpディレクティブの中に`server_tokens off;`を追記する
+    `http`ディレクティブの中に`server_tokens off;`を追記する
 
     中間者攻撃対策
     ```
@@ -410,7 +412,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     sudo touch /var/www/html/index.html
     ```
     ※ 必要に応じてindex.htmlの中身を記載する
-  - index.htmlの所有者をnginxユーザーに変更、パーミッションを変更
+  - `index.html`の所有者をnginxユーザーに変更、パーミッションを変更
     ```
     sudo chown nginx:nginx /var/www/html/index.html
     sudo chmod 644 /var/www/html/index.html
