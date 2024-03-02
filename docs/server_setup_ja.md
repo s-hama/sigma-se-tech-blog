@@ -316,33 +316,6 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   ```
   デフォルトの`HTTP SERVER TEST PAGE`ページが表示されればOK
 
-## 独自ドメインのネームサーバー設定とDNS設定
-独自ドメインをVPSに向ける
-- VPS側のネームサーバー設定
-  - XserverのDNS設定からドメイン(sigma-se.com)の追加を行う  
-※ 追加後は、標準で`種別: SOA`のDNSレコードが1つ、`種別: NS`のDNSレコードが3つ追加される
-  - DNSレコードを追加するボタンから下記レコードを追加する
-    ```
-    ホスト名: sigma-se.com
-    種別: A
-    内容: XserverVPSのIPアドレス
-    TTL: 3600
-    ```
-- ドメイン側のネームサーバー設定
-  - Xserverのネームサーバーを登録する
-  お名前.com Navi > ドメイン設定 > ネームサーバーの設定 > ネームサーバーの変更 > ドメイン一覧からsigma-se.comを選択し、下記Xserverのネームサーバーを登録する
-    ```
-    ns1.xvps.ne.jp
-    ns2.xvps.ne.jp
-    ```
-    ※ 設定が反映されるまで数時間〜数日かかる
-  
-- ブラウザから起動確認
-  ```
-  http://sigma-se.com/
-  ```
-  `/var/www/html`が表示されればOK
-
 ## Nginxの初期設定
 サーバー側作業
 - セキュリティ対策周りの対策
@@ -417,3 +390,31 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     sudo chown nginx:nginx /var/www/html/index.html
     sudo chmod 644 /var/www/html/index.html
     ```
+
+## 独自ドメインのネームサーバー設定とDNS設定
+独自ドメインをVPSに向ける
+- VPS側のネームサーバー設定
+  - XserverのDNS設定からドメイン(sigma-se.com)の追加を行う  
+※ 追加後は、標準で`種別: SOA`のDNSレコードが1つ、`種別: NS`のDNSレコードが3つ追加される
+  - DNSレコードを追加するボタンから下記レコードを追加する
+    ```
+    ホスト名: sigma-se.com
+    種別: A
+    内容: XserverVPSのIPアドレス
+    TTL: 3600
+    ```
+- ドメイン側のネームサーバー設定
+  - Xserverのネームサーバーを登録する
+  お名前.com Navi > ドメイン設定 > ネームサーバーの設定 > ネームサーバーの変更 > ドメイン一覧からsigma-se.comを選択し、下記Xserverのネームサーバーを登録する
+    ```
+    ns1.xvps.ne.jp
+    ns2.xvps.ne.jp
+    ```
+    ※ 設定が反映されるまで数時間〜数日かかる
+  
+- ブラウザから起動確認
+  ```
+  http://sigma-se.com/
+  ```
+  `/var/www/html`が表示されればOK
+
