@@ -1,0 +1,450 @@
+# 概要
+このドキュメントでは、`sigma-se-tech-blog`を構築するサーバー側のセットアップ手順について下記前提元記載する  
+- サーバーは、`XserverVPS`を利用することを前提に記載する
+- OSは、`CentOS Stream9`を利用することを前提に記載する
+- OSインストール直後の状態から実施した作業について自明であっても省略せずに記載する
+
+## パケットフィルターの設定変更
+XserverVPSからパケットフィルターの設定を変更する
+- VPSパネルからパケットフィルターを有効(ON)にする
+- VPSパネルからフィルタールールに下記設定を追加し、自身のIPのみ接続許可するように変更する
+  ```
+  プロトコル: TCP
+  ポート番号: 22
+  許可する送信元IPアドレス: 自身のIPアドレス/32
+  ```
+
+## VPS接続用の一般ユーザー作成
+サーバー側作業
+- rootでのログイン確認(初回)
+  ```
+  ssh root@[ホスト名]
+  ```
+- 一般ユーザー作成
+  ```
+  useradd vpsuser	
+  passwd vpsuser
+  ```
+
+## OpenSSHのsshd_config設定変更
+vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかログインできないように変更する
+
+サーバー側作業
+- 初期状態でバックアップしておく
+  ```
+  cp /etc/ssh/sshd_config /etc/ssh/sshd_config.default
+  ```
+- sshd_config編集
+    ```
+    vim /etc/ssh/sshd_config
+    ```
+    - 変更前
+      ```
+      PermitRootLogin yes
+      #PubkeyAuthentication yes
+      PasswordAuthentication yes
+      ```
+    - 変更後
+      ```
+      # rootで直接ログインできないように変更
+      PermitRootLogin no
+      # 公開鍵認証を許可するように変更
+      PubkeyAuthentication yes
+      # パスワードでログインできないように変更
+      PasswordAuthentication no
+      ```
+- SSHを再起動して設定を反映する
+  ```
+  systemctl restart sshd
+  ```
+
+## OpenSSHの公開鍵認証設定
+公開鍵認証設定(SSHの鍵ペア設定)を行い、vpsuser(VPS接続用の一般ユーザー)からパスフレーズでログインできるようにする
+
+- クライアント側から秘密鍵、公開鍵の生成
+  ```
+  ssh-keygen -f ~/.ssh/id_rsa_sigma
+  ```
+
+- クライアント側からサーバーに公開鍵を転送
+  ```
+  scp ~/.ssh/id_rsa_sigma.pub vpsuser@x162-43-85-169.static.xvps.ne.jp:/home/vpsuser/.ssh/
+  ```
+
+- サーバーで`id_rsa_sigma.pub`を`authorized_keys`にリネーム
+  ```
+  mv ~/.ssh/id_rsa_sigma.pub ~/.ssh/authorized_keys
+  ```
+
+- サーバーで権限変更
+  ```
+  chmod 600 ~/.ssh/authorized_keys
+  chmod 700 ~/.ssh
+  chmod 755 ~/
+  ```
+
+- クライアント側で権限変更
+  ```
+  chmod 755 /Users/s-hama
+  chmod 700 /Users/s-hama/.ssh
+  chmod 600 /Users/s-hama/.ssh/id_rsa_sigma
+  chmod 644 /Users/s-hama/.ssh/id_rsa_sigma.pub
+  ```
+
+- クライアント側で`~/.ssh`配下に`config`ファイルを下記内容で作成する
+  ```
+  Host sigma-se-vps
+    HostName 162.43.85.169
+    User vpsuser
+    IdentityFile ~/.ssh/id_rsa_sigma
+    Port 22
+    TCPKeepAlive yes
+    IdentitiesOnly yes
+  ```
+
+- クライアント側で初回ログイン (`known_hosts`が自動生成される)
+  ```
+  ssh sigma-se-vps
+    The authenticity of host 'x162-43-85-169.static.xvps.ne.jp (162.43.85.169)' can't be established.
+    ED25519 key fingerprint is SHA256:sJ5+zzGjOV/uGBHz+ehjZEqlCJ9oT804bA2viP1pvn4.
+    This key is not known by any other names
+    Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+
+    Warning: Permanently added '162.43.85.169' (ED25519) to the list of known hosts.
+    Enter passphrase for key '/Users/s-hama/.ssh/id_rsa_sigma': パスワードフレーズ入力
+  ```
+  ※ 以降、ssh sigma-se-vpsでログイン時にパスワードフレーズの入力を求められるようになる
+
+## Vimインストールと初期設定
+サーバー側作業
+- DNFの更新
+  ```
+  sudo dnf update
+  sudo dnf upgrade
+  ```
+
+- Vimインストール
+  ```
+  sudo dnf -y install vim-enhanced
+  ```
+
+- コマンドエイリアスを自身のユーザー固有環境として適用する
+
+  最終行にalias vi='vim'を追記
+  ```
+  vi ~/.bashrc
+  ```
+  変更を反映
+  ```
+  source ~/.bashrc
+  ```
+
+- 自身のユーザー固有環境としてVimを設定する
+
+  ※ ユーザー単位(rootとvpsuserそれぞれ)で行う
+  .vimrcを新規作成
+  ```
+  vi ~/.vimrc
+  ```
+  下記の内容で追記し保存
+  ```
+  " vim の独自拡張機能を使用
+  " - vi との互換性無し
+  set nocompatible
+
+  " 文字コードを指定
+  set encoding=utf-8
+
+  " ファイルエンコードを指定
+  " 複数指定する場合はカンマ区切り
+  " 複数指定の場合 先頭から順に成功するまで読み込む
+  set fileencodings=utf-8
+
+  " 自動認識させる改行コードを指定
+  set fileformats=unix,dos
+
+  " バックアップを取得
+  " - 逆は [ set nobackup ]
+  set backup
+
+  " バックアップを取得するディレクトリを指定
+  set backupdir=~/backup
+
+  " 検索履歴を残す世代数
+  set history=50
+
+  " 検索時に大文字小文字を区別しない
+  set ignorecase
+
+  " 検索語に大文字を混ぜると検索時に大文字を区別する
+  set smartcase
+
+  " 検索語にマッチした単語をハイライト
+  " - 逆は [ set nohlsearch ]
+  set hlsearch
+
+  " インクリメンタルサーチを使用
+  " - 検索語の入力最中から随時マッチする文字列の検索を開始
+  " - 逆は [ set noincsearch ]
+  set incsearch
+
+  " 行番号を表示
+  " - 逆は [ set nonumber ]
+  set number
+
+  " 改行 ( $ ) やタブ ( ^I ) を可視化
+  set list
+
+  " 括弧入力時に対応する括弧を強調
+  set showmatch
+
+  " ファイルの末尾に改行を入れない
+  set binary noeol
+
+  " 自動インデントを有効にする
+  " - 逆は [ noautoindent ]
+  set autoindent
+
+  " 構文ごとに色分け表示する
+  " - 逆は [ syntax off ]
+  syntax on
+
+  " [ syntax on ] の場合のコメント文の色を変更
+  highlight Comment ctermfg=LightCyan
+
+  " ウィンドウ幅で行を折り返す
+  set wrap
+  ```
+
+## ファイアーウォールの設定
+サーバー側作業
+  - ファイアーウォールの有効化
+    - 有効化されているか確認
+      ```
+      systemctl is-enabled firewalld
+      disabled
+      ```
+    - 無効になっているので有効化する
+      ```
+      systemctl enable --now firewalld
+      Created symlink /etc/systemd/system/dbus-org.fedoraproject.firewalld1.service → /usr/lib/systemd/system/firewalld.service.
+      Created symlink /etc/systemd/system/multi-user.target.wants/firewalld.service → /usr/lib/systemd/system/firewalld.service.
+      ```
+  - 設定確認/変更
+    - どのゾーンが許可されているか確認
+      ```
+      firewall-cmd --get-default-zone
+      public
+      ```
+    - ファイアーウォールの設定状況確認
+      ```
+      firewall-cmd --list-all
+      public (active)
+        target: default
+        icmp-block-inversion: no
+        interfaces: ens3
+        sources: 
+        services: cockpit dhcpv6-client ssh
+        ports: 
+        protocols: 
+        forward: yes
+        masquerade: no
+        forward-ports: 
+        source-ports: 
+        icmp-blocks: 
+        rich rules:
+      ```
+    - httpとhttpsを許可する(servicesにhttpとhttpsが許可されてないため)
+      - httpのサービスを永続的に許可
+      ```
+      firewall-cmd --zone=public --add-service=http --permanent
+      ```
+      - httpsのサービスを永続的に許可
+      ```
+      firewall-cmd --zone=public --add-service=https --permanent
+      ```
+    - ファイアーウォールを再起動する
+      ```
+      firewall-cmd --reload
+      ```
+    - ファイアーウォールの設定状況確認
+      ```
+      firewall-cmd --list-all
+      public (active)
+        target: default
+        icmp-block-inversion: no
+        interfaces: ens3
+        sources: 
+        services: cockpit dhcpv6-client http https ssh
+        ports: 
+        protocols: 
+        forward: yes
+        masquerade: no
+        forward-ports: 
+        source-ports: 
+        icmp-blocks: 
+        rich rules:
+      ```
+
+## Nginxインストール
+サーバー側作業
+- インストール
+  ```
+  sudo dnf install -y nginx
+  ```
+- バージョン確認
+  ```
+  nginx -v
+  nginx version: nginx/1.22.1
+  ```
+- ステータス確認
+  ```
+  sudo systemctl status nginx
+  ```
+- パケットフィルターの設定
+  - XserverVPSからパケットフィルターの設定を変更する
+    - VPSパネルからパケットフィルターを有効(ON)にする
+    - VPSパネルからフィルタールールに下記設定を追加し、自身のIPのみ接続許可するように変更する
+      ```
+      プロトコル: TCP
+      ポート番号: 80
+      許可する送信元IPアドレス: 全て許可する
+      ```
+- ブラウザから起動確認
+  ```
+  http://サーバーのIPアドレス/
+  ```
+  デフォルトの`HTTP SERVER TEST PAGE`ページが表示されればOK
+
+## Nginxの初期設定
+サーバー側作業
+- セキュリティ対策周りの対策
+
+  Nginxの設定ファイル(`/etc/nginx/nginx.conf`)に対して以下の項目を変更する
+  ```
+  vim /etc/nginx/nginx.conf
+  ```
+
+  - ディレクトリリスティングの無効化
+
+    `autoindex on;`があればコメントアウトまたは削除する
+    ```
+    # autoindex on;
+    ```
+
+  - Webサーバーのバージョン非表示化
+    httpディレクティブの中に`server_tokens off;`を追記する
+    ```
+    server_tokens off;
+    ```
+
+  - ブラウザで実装されているセキュリティ対策の有効化
+
+    `http > servet`ディレクティブの中に以下の項目を追記する
+
+    クリックジャッキング対策
+    ```
+    add_header x-frame-options "SAMEORIGIN";
+    ```
+    XSS対策
+    ```
+    add_header x-xss-protection "1; mode=block";
+    ```
+    MIMEタイプのスニッフィング対策
+    ```
+    add_header x-content-type-options "nosniff";
+    ```
+
+  - その他のブラウザで実装されているセキュリティ対策
+
+    `http`ディレクティブの中に`server_tokens off;`を追記する
+
+    中間者攻撃対策
+    ```
+    add_header Strict-Transport-Security "max-age=63072000";
+    ```
+
+- Document Root(公開ディレクトリ)の変更
+  - 変更後のディレクトリ作成
+    ```
+    sudo mkdir /var/www
+    sudo mkdir /var/www/html
+    ```
+  - wwwディレクトリの所有者をnginxユーザーに変更、パーミッションを変更
+    ```
+    sudo chown -R nginx:nginx /var/www
+    sudo chmod -R 755 /var/www
+    ```
+  - htmlディレクトリの所有者をnginxユーザーに変更、パーミッションを変更
+    ```
+    sudo chown -R nginx:nginx /var/www/html
+    sudo chmod -R 755 /var/www/html
+    ```
+  - 仮のindex.htmlを作成
+    ```
+    sudo touch /var/www/html/index.html
+    ```
+    ※ 必要に応じてindex.htmlの中身を記載する
+  - `index.html`の所有者をnginxユーザーに変更、パーミッションを変更
+    ```
+    sudo chown nginx:nginx /var/www/html/index.html
+    sudo chmod 644 /var/www/html/index.html
+    ```
+  - デフォルトページの無効化
+    - Document Root(公開ディレクトリ)を/var/www/htmlに変更する
+      ```
+      vim /etc/nginx/nginx.conf
+      ```
+      - 変更前
+        ```
+        root /usr/share/nginx/html;$
+        ```
+      - 変更後
+        ```
+        root /var/www/html;$
+        index  index.html;$
+        ```
+    - その他
+      - `/etc/nginx/conf.d/`配下など`alias /usr/share/nginx/html/`や`root /usr/share/nginx/html/`の設定があれば削除する
+
+        ※ 本環境では、/etc/nginx/nginx.confに集約されているため対処不要
+
+  - nginxを再起動する
+    - Document Root(公開ディレクトリ)を`/var/www/html`に変更する
+      ```
+      sudo systemctl restart nginx
+      ```
+
+  - ブラウザから起動確認
+    ```
+    http://サーバーのIPアドレス/
+    ```
+    `/var/www/html`が表示されればOK
+
+## 独自ドメインのネームサーバー設定とDNS設定
+独自ドメインをVPSに向ける
+- VPS側のネームサーバー設定
+  - XserverのDNS設定からドメイン(sigma-se.com)の追加を行う  
+※ 追加後は、標準で`種別: SOA`のDNSレコードが1つ、`種別: NS`のDNSレコードが3つ追加される
+  - DNSレコードを追加するボタンから下記レコードを追加する
+    ```
+    ホスト名: sigma-se.com
+    種別: A
+    内容: XserverVPSのIPアドレス
+    TTL: 3600
+    ```
+- ドメイン側のネームサーバー設定
+  - Xserverのネームサーバーを登録する
+  お名前.com Navi > ドメイン設定 > ネームサーバーの設定 > ネームサーバーの変更 > ドメイン一覧からsigma-se.comを選択し、下記Xserverのネームサーバーを登録する
+    ```
+    ns1.xvps.ne.jp
+    ns2.xvps.ne.jp
+    ```
+    ※ 設定が反映されるまで数時間〜数日かかる
+  
+- ブラウザから起動確認
+  ```
+  http://sigma-se.com/
+  ```
+  `/var/www/html`が表示されればOK
+
