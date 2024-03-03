@@ -390,6 +390,36 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     sudo chown nginx:nginx /var/www/html/index.html
     sudo chmod 644 /var/www/html/index.html
     ```
+  - デフォルトページの無効化
+    - Document Root(公開ディレクトリ)を/var/www/htmlに変更する
+      ```
+      vim /etc/nginx/nginx.conf
+      ```
+      - 変更前
+        ```
+        root /usr/share/nginx/html;$
+        ```
+      - 変更後
+        ```
+        root /var/www/html;$
+        index  index.html;$
+        ```
+    - その他
+      - `/etc/nginx/conf.d/`配下など`alias /usr/share/nginx/html/`や`root /usr/share/nginx/html/`の設定があれば削除する
+
+        ※ 本環境では、/etc/nginx/nginx.confに集約されているため対処不要
+
+  - nginxを再起動する
+    - Document Root(公開ディレクトリ)を`/var/www/html`に変更する
+      ```
+      sudo systemctl restart nginx
+      ```
+
+  - ブラウザから起動確認
+    ```
+    http://サーバーのIPアドレス/
+    ```
+    `/var/www/html`が表示されればOK
 
 ## 独自ドメインのネームサーバー設定とDNS設定
 独自ドメインをVPSに向ける
