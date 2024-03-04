@@ -449,3 +449,8 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   ```
   `/var/www/html`が表示されればOK
 
+## Python関連モジュールのインストール
+- Python、pip、python3-develのインストール
+    ```
+    sudo dnf install python3 python3-pip python3-devel
+    ```
