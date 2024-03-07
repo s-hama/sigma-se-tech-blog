@@ -457,31 +457,37 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
 
 ## 仮想環境(virtualenv)のインストールと環境構築
 - 前提
-  プロジェクトコードと仮装環境分けた下記フォルダ構成とする
+  Djangoプロジェクト及びアプリケーションと仮装環境分けた下記フォルダ構成とする
     ```
-    var/www
-    ├── projs
-    │   └── stb
-    │       └── app
-    └── venv
-        └── stb
+    var
+    └── www
+        ├── projs
+        │   └── sweb
+        │       ├── config
+        │       └── tblog
+        └── venvs
+            └── sweb
     ```
-    - `projs`: プロジェクトコードを格納する親フォルダ
+    - `var/www/projs`: プロジェクトを格納する親フォルダ
     
-      ※ 複数のプロジェクトコードを管理する目的
-    - `stb`: Djangoプロジェクトのルートフォルダ
-    
-      ※ django-admin startprojectコマンドで生成されるものを置く
-    - `projs`: プロジェクトコードを格納する親フォルダ
+      ※ 複数のプロジェクトを管理する目的
 
-      ※ 複数のプロジェクトコードを管理する目的
-    - `app`: Djangoアプリケーションのソースコードを格納するフォルダ
+    - `var/www/projs/sweb`: プロジェクトを格納する親フォルダ
 
-      ※ python manage.py start appコマンドで生成されるものを置く
-    - `venv`: 仮想環境を作成する親フォルダ
+    - `var/www/projs/sweb/config`: Djangoプロジェクトのルートフォルダ
+
+      ※ django-admin startprojectで生成されるものを置く
+
+      ※ プロジェクトのルートフォルダだが結局設定ファイルが置かれるため見やすさを考慮して`config`でプロジェクト作成する
+    - `var/www/projs/sweb/tblog`: Djangoアプリケーションのソースコードを格納するフォルダ
+
+      ※ python manage.py startで生成されるものを置く
+
+    - `var/www/venvs`: 仮想環境を作成する親フォルダ
 
       ※ Pythonの仮想環境をプロジェクト単位で管理する目的
-    - `stb`: Djangoプロジェクト stb のための仮想環境フォルダ
+
+    - `var/www/venvs/sweb`: Djangoプロジェクト`sweb`のための仮想環境フォルダ
     
       ※ プロジェクト独自の仮想環境を作成することで、プロジェクト間の依存関係を分離しする目的
 
