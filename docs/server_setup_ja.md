@@ -496,3 +496,19 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     ```
     sudo pip install virtualenv
     ```
+  - プロジェクト達を格納する親フォルダを作成
+    ```
+    mkdir /var/www/projs
+    ```
+  - プロジェクト(sweb)を格納するを作成
+    ```
+    mkdir /var/www/projs/sweb
+    ```
+  - 仮装環境達を格納する親フォルダを作成
+    ```
+    mkdir /var/www/venvs
+    ```
+  - 仮想環境を構築
+    ```
+    virtualenv -p python3 /var/www/venvs/sweb
+    ```
