@@ -512,3 +512,23 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     ```
     virtualenv -p python3 /var/www/venvs/sweb
     ```
+
+- 仮想環境内でDjangoをインストール
+  - 仮想環境の起動
+    ```
+    source /var/www/venvs/sweb/bin/activate
+    ```
+  - Djangoのインストール
+    ```
+    pip install django
+    ```
+  - Djangoプロジェクトの作成
+    ```
+    cd /var/www/projs/sweb
+    django-admin startproject config .
+    ```
+  - Djangoアプリケーションの作成
+    ```
+    cd /var/www/projs/sweb
+    python manage.py startapp tblog
+    ```
