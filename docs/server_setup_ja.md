@@ -532,3 +532,8 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     cd /var/www/projs/sweb
     python manage.py startapp tblog
     ```
+- 仮想環境内でuWSGIをインストール
+  - 仮想環境の起動
+    ```
+    pip install uwsgi
+    ```
