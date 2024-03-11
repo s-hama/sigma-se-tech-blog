@@ -537,3 +537,26 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     ```
     pip install uwsgi
     ```
+
+## Nginx, Django, uWSGIの連携設定
+- Nginxの設定
+  Nginxの設定ファイル(`nginx.conf`)に対して下記内容を変更する
+  ```
+  vim /etc/nginx/nginx.conf
+  ```
+  - server_nameにドメインを設定
+    - 変更前
+      ```
+      server_name  _;
+      ```
+    - 変更後
+      ```
+      server_name sigma-se.com;
+      ```
+  - uwsgiとDjangoの連携設定 (serverディレクティブ内に追記)
+    ```
+    location / {
+      include         uwsgi_params;
+      uwsgi_pass      unix:/var/www/projs/sweb/config/sweb.sock;
+    }
+    ```
