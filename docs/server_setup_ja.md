@@ -560,3 +560,20 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
       uwsgi_pass      unix:/var/www/projs/sweb/config/sweb.sock;
     }
     ```
+
+- uWSGIの設定
+  uWSGIの設定ファイル(`uwsgi.ini`)を下記内容で新規作成する
+  ```
+  vim /var/www/projs/sweb/config/uwsgi.ini
+  ```
+  - uwsgiとDjangoの連携設定
+    ```
+    [uwsgi]
+    chdir = /var/www/projs/sweb
+    module = config.wsgi:application
+    master = true
+    processes = 5
+    socket = /var/www/projs/sweb/config/sweb.sock
+    chmod-socket = 666
+    vacuum = true
+    ```
