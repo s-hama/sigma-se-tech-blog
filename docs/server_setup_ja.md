@@ -577,3 +577,18 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     chmod-socket = 666
     vacuum = true
     ```
+
+- Djangoの設定
+  Djangoの設定ファイル(`settings.py`)に対して下記内容を変更する
+  ```
+  vim /var/www/projs/sweb/config/settings.py
+  ```
+  - `ALLOWED_HOSTS`リストにNginxのサーバー名を追記
+    - 変更前
+      ```
+      ALLOWED_HOSTS = []
+      ```
+    - 変更後
+      ```
+      ALLOWED_HOSTS = ['sigma-se.com', 'www.sigma-se.com']
+      ```
