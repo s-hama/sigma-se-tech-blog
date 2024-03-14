@@ -592,3 +592,14 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
       ```
       ALLOWED_HOSTS = ['sigma-se.com', 'www.sigma-se.com']
       ```
+
+## PostgreSQLインストール/初期設定とDjangoの連携設定
+- PostgreSQLのインストール
+  - PostgreSQLを初期化
+    ```
+    sudo dnf install postgresql-server postgresql-contrib
+    ```
+  - PostgreSQLの自動起動設定
+    ```
+    sudo systemctl enable postgresql
+    ```
