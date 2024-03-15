@@ -603,3 +603,32 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     ```
     sudo systemctl enable postgresql
     ```
+
+- PostgreSQLとDjangoの連携設定
+  Nginxの設定ファイル(`settings.py`)に対して下記内容を変更する
+  ```
+  vim /var/www/projs/sweb/config/settings.py
+  ```
+  - `DATABASES`ディクショナリーにPostgreSQLの設定を追加
+    - 変更前
+      ```
+      DATABASES = {
+           'default': {
+               'ENGINE': 'django.db.backends.sqlite3',
+               'NAME': BASE_DIR / 'db.sqlite3',
+           }
+      }
+      ```
+    - 変更後
+      ```
+      DATABASES = {
+          'default': {
+              'ENGINE': 'django.db.backends.postgresql',
+              'NAME': 'tbdb',
+              'USER': 'psadmin',
+              'PASSWORD': 'shahoma-se1234',
+              'HOST': 'localhost',
+              'PORT': '5432',
+          }
+      }
+      ```
