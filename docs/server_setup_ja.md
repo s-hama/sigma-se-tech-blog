@@ -632,3 +632,17 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
           }
       }
       ```
+
+- PostgreSQLのユーザーとデータベースを作成
+  - postgresでログイン
+    ```
+    sudo -u postgres psql
+    ```
+  - データベースの作成
+    ```
+    postgres=# CREATE DATABASE tbdb;
+    ```
+  - ユーザー、パスワードの作成
+    ```
+    postgres=# CREATE USER psadmin WITH PASSWORD '*****';
+    ```
