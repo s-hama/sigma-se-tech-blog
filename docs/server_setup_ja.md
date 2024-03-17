@@ -646,3 +646,12 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     ```
     postgres=# CREATE USER psadmin WITH PASSWORD '*****';
     ```
+
+  - psadminの文字コードを設定
+    ```
+    postgres=# ALTER ROLE psadmin SET client_encoding TO 'utf8';
+    ```
+  - 実行された結果だけを見に行く
+    ```
+    postgres=# ALTER ROLE psadmin SET default_transaction_isolation TO 'read committed';
+    ```
