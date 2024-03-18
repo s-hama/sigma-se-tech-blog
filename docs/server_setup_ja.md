@@ -655,3 +655,13 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     ```
     postgres=# ALTER ROLE psadmin SET default_transaction_isolation TO 'read committed';
     ```
+
+  - タイムゾーンを設定
+    ```
+    postgres=# ALTER ROLE psadmin SET timezone TO 'UTC+9';
+    ```
+  - psadminに権限を付与して終了
+    ```
+    postgres=# GRANT ALL PRIVILEGES ON DATABASE tbdb TO psadmin;
+    postgres=# \q
+    ```
