@@ -529,7 +529,6 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     ```
   - Djangoアプリケーションの作成
     ```
-    cd /var/www/projs/sweb
     python manage.py startapp tblog
     ```
 - 仮想環境内でuWSGIをインストール
