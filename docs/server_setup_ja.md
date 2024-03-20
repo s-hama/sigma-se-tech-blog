@@ -596,7 +596,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
 - PostgreSQLのインストール
   - PostgreSQLを初期化
     ```
-    sudo dnf install postgresql-server postgresql-contrib
+    sudo dnf install postgresql-server postgresql-contrib postgresql-devel
     ```
   - PostgreSQLの自動起動設定
     ```
