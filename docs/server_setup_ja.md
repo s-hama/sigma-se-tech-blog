@@ -664,3 +664,17 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     postgres=# GRANT ALL PRIVILEGES ON DATABASE tbdb TO psadmin;
     postgres=# \q
     ```
+
+- アクセス/認証周りの設定
+  - `postgresql.conf`の`listen_addresses`を環境に合わせ変更
+    ```
+    vim /var/lib/pgsql/data/postgresql.conf
+    ```
+    - 変更前
+      ```
+      # listen_addresses = 'localhost'
+      ```
+    - 変更後
+      ```
+      listen_addresses = '*'
+      ```
