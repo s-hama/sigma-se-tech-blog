@@ -678,3 +678,27 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
       ```
       listen_addresses = '*'
       ```
+  - `pg_hba.conf` (認証設定ファイル) にドメイン情報を追加
+    ```
+    vim /var/lib/pgsql/data/pg_hba.conf
+    ```
+    - 変更前
+      ```
+      # "local" is for Unix domain socket connections only
+      local   all             all                                     peer
+      # IPv4 local connections:
+      host    all             all             127.0.0.1/32            ident
+      # IPv6 local connections:
+      host    all             all             ::1/128                 ident
+      ```
+    - 変更後
+      ```
+      # "local" is for Unix domain socket connections only
+      local   all             all                                     md5
+      # IPv4 local connections:
+      host    all             all             127.0.0.1/32            md5
+      # IPv6 local connections:
+      host    all             all             ::1/128                 md5
+      # Allow all users to connect from localhost using md5 password authentication
+      host    all             all             162.43.85.169/32        md5
+      ```
