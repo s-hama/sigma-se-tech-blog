@@ -711,3 +711,32 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     ```
     vim /var/www/projs/sweb/tblog/models.py
     ```
+  - Djangoの settings.py ファイルを更新する
+
+    INSTALLED_APPS ディクショナリーにアプリケーション名を追加する
+    ```
+    vim /var/www/projs/sweb/config/settings.py
+    ```
+    - 変更前
+      ```
+      INSTALLED_APPS = [
+      'django.contrib.admin',
+      'django.contrib.auth',$
+      'django.contrib.contenttypes',
+      'django.contrib.sessions',
+      'django.contrib.messages',
+      'django.contrib.staticfiles',
+      ]
+      ```
+    - 変更後
+      ```
+      INSTALLED_APPS = [
+      'tblog'
+      'django.contrib.admin',
+      'django.contrib.auth',$
+      'django.contrib.contenttypes',
+      'django.contrib.sessions',
+      'django.contrib.messages',
+      'django.contrib.staticfiles',
+      ]
+      ```
