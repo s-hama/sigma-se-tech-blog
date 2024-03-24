@@ -702,3 +702,12 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
       # Allow all users to connect from localhost using md5 password authentication
       host    all             all             162.43.85.169/32        md5
       ```
+
+## modelとデータベースの作成
+- PostgreSQLのインストール
+  - modelの定義
+
+    models.pyにmodel定義を追記する
+    ```
+    vim /var/www/projs/sweb/tblog/models.py
+    ```
