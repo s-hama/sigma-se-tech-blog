@@ -740,3 +740,14 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
       'django.contrib.staticfiles',
       ]
       ```
+  - 仮想環境の起動
+    ```
+    source /var/www/venvs/sweb/bin/activate
+    ```
+  - psycopg2-binary、Pillowパッケージをインストール
+
+    ※ models.pyにてImageFieldを使用するため
+    ```
+    pip install psycopg2-binary
+    python -m pip install Pillow
+    ```
