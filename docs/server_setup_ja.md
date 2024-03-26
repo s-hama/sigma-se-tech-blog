@@ -751,3 +751,10 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     pip install psycopg2-binary
     python -m pip install Pillow
     ```
+  - migrationsの作成
+
+    ※ config=プロジェクト名
+    ```
+    cd /var/www/projs/sweb
+    python manage.py makemigrations tblog
+    ```
