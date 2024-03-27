@@ -704,57 +704,52 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
       ```
 
 ## modelとデータベースの作成
-- PostgreSQLのインストール
-  - modelの定義
-
-    models.pyにmodel定義を追記する
+- modelの定義
+  models.pyにmodel定義を追記する
+  ```
+  vim /var/www/projs/sweb/tblog/models.py
+  ```
+- Djangoの settings.py ファイルを更新する
+  INSTALLED_APPS ディクショナリーにアプリケーション名を追加する
+  ```
+  vim /var/www/projs/sweb/config/settings.py
+  ```
+  - 変更前
     ```
-    vim /var/www/projs/sweb/tblog/models.py
+    INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',$
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    ]
     ```
-  - Djangoの settings.py ファイルを更新する
-
-    INSTALLED_APPS ディクショナリーにアプリケーション名を追加する
+  - 変更後
     ```
-    vim /var/www/projs/sweb/config/settings.py
+    INSTALLED_APPS = [
+    'tblog'
+    'django.contrib.admin',
+    'django.contrib.auth',$
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    ]
     ```
-    - 変更前
-      ```
-      INSTALLED_APPS = [
-      'django.contrib.admin',
-      'django.contrib.auth',$
-      'django.contrib.contenttypes',
-      'django.contrib.sessions',
-      'django.contrib.messages',
-      'django.contrib.staticfiles',
-      ]
-      ```
-    - 変更後
-      ```
-      INSTALLED_APPS = [
-      'tblog'
-      'django.contrib.admin',
-      'django.contrib.auth',$
-      'django.contrib.contenttypes',
-      'django.contrib.sessions',
-      'django.contrib.messages',
-      'django.contrib.staticfiles',
-      ]
-      ```
-  - 仮想環境の起動
-    ```
-    source /var/www/venvs/sweb/bin/activate
-    ```
-  - psycopg2-binary、Pillowパッケージをインストール
-
-    ※ models.pyにてImageFieldを使用するため
-    ```
-    pip install psycopg2-binary
-    python -m pip install Pillow
-    ```
-  - migrationsの作成
-
-    ※ config=プロジェクト名
-    ```
-    cd /var/www/projs/sweb
-    python manage.py makemigrations tblog
-    ```
+- 仮想環境の起動
+  ```
+  source /var/www/venvs/sweb/bin/activate
+  ```
+- psycopg2-binary、Pillowパッケージをインストール
+  ※ models.pyにてImageFieldを使用するため
+  ```
+  pip install psycopg2-binary
+  python -m pip install Pillow
+  ```
+- migrationsの作成
+  ※ config=プロジェクト名
+  ```
+  cd /var/www/projs/sweb
+  python manage.py makemigrations tblog
+  ```
