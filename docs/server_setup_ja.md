@@ -753,3 +753,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   cd /var/www/projs/sweb
   python manage.py makemigrations tblog
   ```
+- Datebaseの作成と更新
+  ```
+  python manage.py migrate
+  ```
