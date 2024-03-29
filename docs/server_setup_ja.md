@@ -757,3 +757,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   ```
   python manage.py migrate
   ```
+- PostgresSQLのスーパーユーザーの作成
+  ```
+  python manage.py createsuperuser
+  ```
