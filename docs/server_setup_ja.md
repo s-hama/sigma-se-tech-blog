@@ -761,3 +761,11 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   ```
   python manage.py createsuperuser
   ```
+- admin.pyの登録
+  ```
+  vim /var/www/projs/sweb/tblog/admin.py
+  ```
+    - `admin.site.register(tblog)`を追記する
+    ```
+    admin.site.register(tblog)
+    ```
