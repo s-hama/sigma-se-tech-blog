@@ -769,3 +769,9 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     ```
     admin.site.register(tblog)
     ```
+
+## 起動確認
+- PostgreSQLの再起動
+  ```
+  systemctl restart postgresql
+  ```
