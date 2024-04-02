@@ -775,3 +775,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   ```
   systemctl restart postgresql
   ```
+- Nginxの再起動
+  ```
+  sudo systemctl restart nginx
+  ```
