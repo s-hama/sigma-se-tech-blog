@@ -572,9 +572,11 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     module = config.wsgi:application
     master = true
     processes = 5
-    socket = /var/www/projs/sweb/config/sweb.sock
+    socket = /var/www/projs/sweb/sweb.sock
     chmod-socket = 666
     vacuum = true
+    logto =/var/www/projs/sweb/config/uwsgi.ini
+    env = PYTHONPATH=/var/www/venvs/sweb/lib/python3.9/site-packages
     ```
 
 - Djangoの設定
