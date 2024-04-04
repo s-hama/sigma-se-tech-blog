@@ -587,10 +587,12 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   - `ALLOWED_HOSTS`リストにNginxのサーバー名を追記
     - 変更前
       ```
+      DEBUG = True
       ALLOWED_HOSTS = []
       ```
     - 変更後
       ```
+      DEBUG = False
       ALLOWED_HOSTS = ['sigma-se.com', 'www.sigma-se.com']
       ```
 
