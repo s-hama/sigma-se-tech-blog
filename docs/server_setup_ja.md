@@ -556,7 +556,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     ```
     location / {
       include         uwsgi_params;
-      uwsgi_pass      unix:/var/www/projs/sweb/config/sweb.sock;
+      uwsgi_pass      unix:/var/www/projs/sweb/sweb.sock;
     }
     ```
 
