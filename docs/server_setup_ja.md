@@ -596,6 +596,45 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
       ALLOWED_HOSTS = ['sigma-se.com', 'www.sigma-se.com']
       ```
 
+- エラーページ作成
+  404, 500, 502, 503, 504エラー用のページを作成する
+  - 404のエラーページ作成
+    ```
+    vim /var/www/html/404.html
+    ```
+    ```
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>404 Not Found</title>
+      </head>
+      <body>
+        <h1>404 Not Found</h1>
+        <p>The page you requested could not be found.</p>
+      </body>
+    </html>
+    ```
+  - 500, 502, 503, 504のエラーページ作成
+    ```
+    vim /var/www/html/50x.html
+    ```
+    ```
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Server Error</title>
+      </head>
+      <body>
+        <h1>Server Error</h1>
+        <p>Sorry, something went wrong on the server. Please try again later.</p>
+      </body>
+    </html>
+    ```
+
 ## PostgreSQLインストール/初期設定とDjangoの連携設定
 - PostgreSQLのインストール
   - PostgreSQLを初期化
