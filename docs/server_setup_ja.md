@@ -808,9 +808,15 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   ```
   vim /var/www/projs/sweb/tblog/admin.py
   ```
-    - `admin.site.register(tblog)`を追記する
+    - models.pyで定義したmodelを登録する
     ```
-    admin.site.register(tblog)
+    from django.contrib import admin
+    from models import Post, SmallCategory, BigCategory, Tag
+
+    admin.site.register(Post)
+    dmin.site.register(SmallCategory)
+    admin.site.register(BigCategory)
+    admin.site.register(Tag)
     ```
 
 ## 起動確認
