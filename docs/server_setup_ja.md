@@ -818,6 +818,10 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     admin.site.register(BigCategory)
     admin.site.register(Tag)
     ```
+- uwsgiのログファイルの作成
+  ```
+  touch /var/www/projs/sweb/config/uwsgi.log
+  ```
 
 ## 起動確認
 - PostgreSQLの再起動
