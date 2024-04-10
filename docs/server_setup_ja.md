@@ -823,6 +823,18 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   touch /var/www/projs/sweb/config/uwsgi.log
   ```
 
+- 一般ユーザー(vpsuser)の所有者/権限に変更
+  ```
+  sudo chown vpsuser:vpsuser /var/www/projs/sweb
+  sudo chmod 775 /var/www/projs/sweb
+  sudo chown vpsuser:vpsuser /var/www/projs/sweb/sweb.sock
+  sudo chmod 666 /var/www/projs/sweb/sweb.sock
+  sudo chown vpsuser:vpsuser /var/www/projs/sweb/config/uwsgi.ini
+  sudo chmod 666 /var/www/projs/sweb/config/uwsgi.ini
+  sudo chown vpsuser:vpsuser /var/www/projs/sweb/config/uwsgi.log
+  sudo chmod 666 /var/www/projs/sweb/config/uwsgi.log
+  ```
+
 ## 起動確認
 - PostgreSQLの再起動
   ```
