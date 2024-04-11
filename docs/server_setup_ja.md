@@ -844,3 +844,9 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   ```
   sudo systemctl restart nginx
   ```
+- uWSGIの起動
+  ※ 一般ユーザー(vpsuser)で実行する
+  ```
+  source /var/www/venvs/sweb/bin/activate
+  uwsgi --ini /var/www/projs/sweb/config/uwsgi.ini
+  ```
