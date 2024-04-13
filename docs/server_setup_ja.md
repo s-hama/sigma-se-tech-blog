@@ -850,3 +850,8 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   source /var/www/venvs/sweb/bin/activate
   uwsgi --ini /var/www/projs/sweb/config/uwsgi.ini
   ```
+- ブラウザから起動確認
+  ```
+  http://sigma-se.com/
+  ```
+  `/var/www/html`が表示されればOK
