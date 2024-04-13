@@ -578,6 +578,10 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
     logto =/var/www/projs/sweb/config/uwsgi.ini
     env = PYTHONPATH=/var/www/venvs/sweb/lib/python3.9/site-packages
     ```
+- uwsgi_paramsの配置
+  ```
+  sudo cp -ip /etc/nginx/uwsgi_params /var/www/projs/sweb/
+  ```
 
 - Djangoの設定
   Djangoの設定ファイル(`settings.py`)に対して下記内容を変更する
