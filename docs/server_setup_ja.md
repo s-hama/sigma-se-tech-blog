@@ -839,6 +839,12 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   sudo chmod 666 /var/www/projs/sweb/config/uwsgi.log
   ```
 
+## 静的ファイルの収集
+- staticディレクトリ作成
+  ```
+  mkdir /var/www/projs/sweb/static
+  ```
+
 ## 起動確認
 - PostgreSQLの再起動
   ```
