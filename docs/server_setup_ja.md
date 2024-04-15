@@ -845,6 +845,12 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   mkdir /var/www/projs/sweb/static
   ```
 
+- 一般ユーザー(vpsuser)の所有者/権限に変更
+  ```
+  sudo chown vpsuser:vpsuser /var/www/projs/sweb/static
+  sudo chmod 755 /var/www/projs/sweb/static ※ 実行権限も必要
+  ```
+
 ## 起動確認
 - PostgreSQLの再起動
   ```
