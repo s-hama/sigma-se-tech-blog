@@ -851,6 +851,12 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   sudo chmod 755 /var/www/projs/sweb/static ※ 実行権限も必要
   ```
 
+- Djangoのsettings.pyにSTATIC_ROOTを追記
+  ```
+  vim /var/www/projs/sweb/config/settings.py
+  STATIC_ROOT = '/var/www/projs/sweb/static'
+  ```
+
 ## 起動確認
 - PostgreSQLの再起動
   ```
