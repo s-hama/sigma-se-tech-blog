@@ -857,6 +857,22 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   STATIC_ROOT = '/var/www/projs/sweb/static'
   ```
 
+- Nginxの設定ファイルにstaticを定義
+  ```
+  vim /etc/nginx/nginx.conf
+  ```
+    - 変更前
+      ```
+      STATIC_URL = 'static/
+      ```
+    - 変更後
+      ```
+      STATIC_URL = '/static/
+      location /static/ {
+        root /var/www/projs/sweb;	
+      }
+      ```
+
 ## 起動確認
 - PostgreSQLの再起動
   ```
