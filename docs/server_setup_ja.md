@@ -873,6 +873,11 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
       }
       ```
 
+- 静的ファイルの収集
+  ```
+  python manage.py collectstatic
+  ```
+
 ## 起動確認
 - PostgreSQLの再起動
   ```
