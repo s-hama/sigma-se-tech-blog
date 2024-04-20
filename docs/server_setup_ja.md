@@ -878,6 +878,12 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   python manage.py collectstatic
   ```
 
+- Django管理画面の接続確認
+  ```
+  http://sigma-se.com/admin/
+  ```
+  PostgresSQLのスーパーユーザー(psadmin)でログインできること
+
 ## 起動確認
 - PostgreSQLの再起動
   ```
