@@ -884,6 +884,14 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   ```
   PostgresSQLのスーパーユーザー(psadmin)でログインできること
 
+## Let's EncryptのSSL/TLS導入
+- EPELインストール
+  ```
+  sudo dnf config-manager --set-enabled crb
+  sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+  sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-next-release-latest-9.noarch.rpm
+  ```
+
 ## 起動確認
 - PostgreSQLの再起動
   ```
