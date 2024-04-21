@@ -892,6 +892,14 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-next-release-latest-9.noarch.rpm
   ```
 
+- Snappy インストール
+  ※ デバイスを初期化するのでしばらくまってから以降のインストールを行うこと
+  ```
+  sudo dnf --enablerepo=epel -y install snapd
+  sudo systemctl enable --now snapd.socket
+  sudo ln -s /var/lib/snapd/snap /snap
+  ```
+
 ## 起動確認
 - PostgreSQLの再起動
   ```
