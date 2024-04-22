@@ -900,6 +900,11 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   sudo ln -s /var/lib/snapd/snap /snap
   ```
 
+- core インストール
+  ```
+  sudo snap install core
+  ```
+
 ## 起動確認
 - PostgreSQLの再起動
   ```
