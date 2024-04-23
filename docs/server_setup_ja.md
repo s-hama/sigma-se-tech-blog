@@ -905,6 +905,12 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   sudo snap install core
   ```
 
+- cerbot インストール	
+  ```
+	sudo snap install --classic certbot
+	sudo ln -s /snap/bin/certbot /usr/bin/certbot #シンボリックリンク作成
+  ```
+
 ## 起動確認
 - PostgreSQLの再起動
   ```
