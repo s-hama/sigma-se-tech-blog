@@ -911,6 +911,13 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
 	sudo ln -s /snap/bin/certbot /usr/bin/certbot #シンボリックリンク作成
   ```
 
+- /var/www/htmlの権限変更
+	証明書を取得するため、/var/www/htmlディレクトリのパーミッション権限に実行権限を加える
+  ```
+	sudo chmod -R 775 /var/www
+	sudo chmod -R 775 /var/www/html
+  ```
+
 ## 起動確認
 - PostgreSQLの再起動
   ```
