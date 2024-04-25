@@ -918,6 +918,11 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
 	sudo chmod -R 775 /var/www/html
   ```
 
+- 証明書を取得
+  ```
+	certbot certonly --nginx -d sigma-se.com -m s-hama@sigma-se.jp
+  ```
+
 ## 起動確認
 - PostgreSQLの再起動
   ```
