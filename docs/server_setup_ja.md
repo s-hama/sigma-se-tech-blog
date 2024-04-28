@@ -921,7 +921,11 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
 
 - 証明書を取得
   ```
-	certbot certonly --nginx -d sigma-se.com -m s-hama@sigma-se.jp
+  certbot certonly --nginx --webroot -w /var/www/html -d sigma-se.com -m s-hama@sigma-se.jp
+    ･･･省略･･･
+    Certificate is saved at: /etc/letsencrypt/live/sigma-se.com/fullchain.pem
+    Key is saved at:         /etc/letsencrypt/live/sigma-se.com/privkey.pem
+    ･･･省略･･･
   ```
 
 ## 起動確認
