@@ -851,11 +851,19 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   sudo chmod 755 /var/www/projs/sweb/static ※ 実行権限も必要
   ```
 
-- Djangoのsettings.pyにSTATIC_ROOTを追記
+- Djangoのsettings.pyのSTATIC_ROOT、STATIC_URLを変更
   ```
   vim /var/www/projs/sweb/config/settings.py
-  STATIC_ROOT = '/var/www/projs/sweb/static'
   ```
+    - 変更前
+      ```
+      STATIC_URL = 'static/
+      ```
+    - 変更後
+      ```
+      STATIC_ROOT = '/var/www/projs/sweb/static'
+      STATIC_URL = '/static/
+      ```
 
 - Nginxの設定ファイルにstaticを定義
   ```
