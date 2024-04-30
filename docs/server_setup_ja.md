@@ -865,21 +865,16 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
       STATIC_URL = '/static/
       ```
 
-- Nginxの設定ファイルにstaticを定義
+- Nginxの設定ファイルにstaticを追加
   ```
   vim /etc/nginx/nginx.conf
   ```
-    - 変更前
-      ```
-      STATIC_URL = 'static/
-      ```
-    - 変更後
-      ```
-      STATIC_URL = '/static/
-      location /static/ {
-        root /var/www/projs/sweb;	
-      }
-      ```
+  - staticを定義
+    ```
+    location /static/ {
+      root /var/www/projs/sweb;	
+    }
+    ```
 
 - 静的ファイルの収集
   ```
