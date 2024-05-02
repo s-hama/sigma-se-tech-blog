@@ -1,8 +1,8 @@
 # 概要
-このドキュメントでは、`sigma-se-tech-blog`を構築するサーバー側のセットアップ手順について下記前提元記載する  
-- サーバーは、`XserverVPS`を利用することを前提に記載する
+このドキュメントでは、`sigma-se-tech-blog`を構築するサーバー側のセットアップ手順について下記前提の元記載する  
+- サーバーは、`XserverVPS`を利用することを前提に記述する
 - ドメインは、`sigma-se.com`(`お名前.com`で取得)を使用することを前提に記載する
-- OSは、`CentOS Stream9`を利用することを前提に記載する
+- OSは、`CentOS Stream9`を利用することを前提に記述する
 - OSインストール直後の状態から実施した作業について自明であっても省略せずに記載する
 
 ## パケットフィルターの設定変更
@@ -913,7 +913,6 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
 	sudo snap install --classic certbot
 	sudo ln -s /snap/bin/certbot /usr/bin/certbot #シンボリックリンク作成
   ```
-
 
 - 証明書を取得
   ```
