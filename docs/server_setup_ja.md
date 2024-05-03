@@ -887,41 +887,42 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   ```
   PostgresSQLのスーパーユーザー(psadmin)でログインできること
 
-## Let's EncryptのSSL/TLS導入
-- EPELインストール
-  ```
-  sudo dnf config-manager --set-enabled crb
-  sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
-  sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-next-release-latest-9.noarch.rpm
-  ```
+## HTTPS接続のみ許可する (TLS/SSL化)
+- Let's EncryptのTLS/SSL導入
+  - EPELインストール
+    ```
+    sudo dnf config-manager --set-enabled crb
+    sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+    sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-next-release-latest-9.noarch.rpm
+    ```
 
-- Snappy インストール
-  ※ デバイスを初期化するのでしばらくまってから以降のインストールを行うこと
-  ```
-  sudo dnf --enablerepo=epel -y install snapd
-  sudo systemctl enable --now snapd.socket
-  sudo ln -s /var/lib/snapd/snap /snap
-  ```
+  - Snappy インストール
+    ※ デバイスを初期化するのでしばらくまってから以降のインストールを行うこと
+    ```
+    sudo dnf --enablerepo=epel -y install snapd
+    sudo systemctl enable --now snapd.socket
+    sudo ln -s /var/lib/snapd/snap /snap
+    ```
 
-- core インストール
-  ```
-  sudo snap install core
-  ```
+  - core インストール
+    ```
+    sudo snap install core
+    ```
 
-- cerbot インストール	
-  ```
-	sudo snap install --classic certbot
-	sudo ln -s /snap/bin/certbot /usr/bin/certbot #シンボリックリンク作成
-  ```
+  - cerbot インストール	
+    ```
+	  sudo snap install --classic certbot
+	  sudo ln -s /snap/bin/certbot /usr/bin/certbot #シンボリックリンク作成
+    ```
 
-- 証明書を取得
-  ```
-  certbot certonly --nginx --webroot -w /var/www/html -d sigma-se.com -m s-hama@sigma-se.jp
-    ･･･省略･･･
-    Certificate is saved at: /etc/letsencrypt/live/sigma-se.com/fullchain.pem
-    Key is saved at:         /etc/letsencrypt/live/sigma-se.com/privkey.pem
-    ･･･省略･･･
-  ```
+  - 証明書を取得
+    ```
+    certbot certonly --nginx --webroot -w /var/www/html -d sigma-se.com -m s-hama@sigma-se.jp
+      ･･･省略･･･
+      Certificate is saved at: /etc/letsencrypt/live/sigma-se.com/fullchain.pem
+      Key is saved at:         /etc/letsencrypt/live/sigma-se.com/privkey.pem
+      ･･･省略･･･
+    ```
 
 ## 起動確認
 - PostgreSQLの再起動
