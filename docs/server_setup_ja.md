@@ -924,6 +924,101 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
       ･･･省略･･･
     ```
 
+- NginxのTLS/SSL設定
+  ```
+  vim /etc/nginx/nginx.conf
+  ```
+    - 変更前
+      ```
+      server {
+          listen       80 default_server;
+          listen       [::]:80 default_server;
+
+          server_name sigma-se.com;
+
+          root         /var/www/html;
+
+          index index.html;
+          include /etc/nginx/default.d/*.conf;
+
+          add_header x-frame-options "SAMEORIGIN";
+          add_header x-xss-protection "1; mode=block";
+          add_header x-content-type-options "nosniff";
+          add_header Strict-Transport-Security "max-age=63072000";
+
+          location /static/ {
+              root /var/www/projs/sweb;
+          }
+
+          location / {
+              include uwsgi_params;
+              uwsgi_pass unix:/var/www/projs/sweb/sweb.sock;
+          }
+
+          error_page 404 /404.html;
+          location = /404.html {
+          }
+
+          error_page 500 502 503 504 /50x.html;
+          location = /50x.html {
+          }
+      }
+      ```
+    - 変更後
+      ```
+      server {
+          listen 80 default_server;
+          listen [::]:80 default_server;
+
+          # server_name  _;
+          server_name sigma-se.com;
+
+          return 301 https://$host$request_uri;
+      }
+
+      server {
+          listen 443 ssl http2 default_server;
+          listen [::]:443 ssl http2 default_server;
+
+          server_name sigma-se.com;
+
+          ssl_certificate /etc/letsencrypt/live/sigma-se.com/fullchain.pem;
+          ssl_certificate_key /etc/letsencrypt/live/sigma-se.com/privkey.pem;
+          ssl_protocols TLSv1.2 TLSv1.3;
+          ssl_prefer_server_ciphers on;
+          ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
+          ssl_session_cache shared:SSL:10m;
+          ssl_session_timeout 10m;
+
+          root         /var/www/html;
+
+          index index.html;
+          include /etc/nginx/default.d/*.conf;
+
+          add_header x-frame-options "SAMEORIGIN";
+          add_header x-xss-protection "1; mode=block";
+          add_header x-content-type-options "nosniff";
+          add_header Strict-Transport-Security "max-age=63072000";
+
+          location /static/ {
+               root /var/www/projs/sweb;
+          }
+
+          location / {
+              include uwsgi_params;
+              uwsgi_pass unix:/var/www/projs/sweb/sweb.sock;
+          }
+
+          error_page 404 /404.html;
+          location = /404.html {
+          }
+
+          error_page 500 502 503 504 /50x.html;
+          location = /50x.html {
+          }
+      }
+      ```
+
 ## 起動確認
 - PostgreSQLの再起動
   ```
