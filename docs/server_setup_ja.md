@@ -1,11 +1,12 @@
 # 概要
-このドキュメントでは、`sigma-se-tech-blog`を構築するサーバー側のセットアップ手順について下記前提元記載する  
-- サーバーは、`XserverVPS`を利用することを前提に記載する
-- OSは、`CentOS Stream9`を利用することを前提に記載する
+このドキュメントでは、`sigma-se-tech-blog`を構築するサーバー側のセットアップ手順について下記前提の元記載する  
+- サーバーは、`XserverVPS`を利用することを前提に記述する
+- ドメインは、`sigma-se.com`(`お名前.com`で取得)を使用することを前提に記載する
+- OSは、`CentOS Stream9`を利用することを前提に記述する
 - OSインストール直後の状態から実施した作業について自明であっても省略せずに記載する
 
 ## パケットフィルターの設定変更
-XserverVPSからパケットフィルターの設定を変更する
+`XserverVPS`からパケットフィルターの設定を変更する
 - VPSパネルからパケットフィルターを有効(ON)にする
 - VPSパネルからフィルタールールに下記設定を追加し、自身のIPのみ接続許可するように変更する
   ```
@@ -318,7 +319,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
 
 ## Nginxの初期設定
 サーバー側作業
-- セキュリティ対策周りの対策
+- セキュリティ対策周りの設定
 
   Nginxの設定ファイル(`/etc/nginx/nginx.conf`)に対して以下の項目を変更する
   ```
@@ -357,7 +358,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
 
   - その他のブラウザで実装されているセキュリティ対策
 
-    `http`ディレクティブの中に`server_tokens off;`を追記する
+    http > servetディレクティブの中に以下の項目を追記する
 
     中間者攻撃対策
     ```
@@ -424,7 +425,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
 ## 独自ドメインのネームサーバー設定とDNS設定
 独自ドメインをVPSに向ける
 - VPS側のネームサーバー設定
-  - XserverのDNS設定からドメイン(sigma-se.com)の追加を行う  
+  - XserverのDNS設定からドメイン(`sigma-se.com`)の追加を行う  
 ※ 追加後は、標準で`種別: SOA`のDNSレコードが1つ、`種別: NS`のDNSレコードが3つ追加される
   - DNSレコードを追加するボタンから下記レコードを追加する
     ```
@@ -447,4 +448,597 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   http://sigma-se.com/
   ```
   `/var/www/html`が表示されればOK
+
+## Python関連モジュールのインストール
+- Python、pip、python3-develのインストール
+    ```
+    sudo dnf install python3 python3-pip python3-devel
+    ```
+
+## 仮想環境(virtualenv)のインストールと環境構築
+- 前提
+  Djangoプロジェクト及びアプリケーションと仮装環境分けた下記フォルダ構成とする
+    ```
+    var
+    └── www
+        ├── projs
+        │   └── sweb
+        │       ├── config
+        │       └── tblog
+        └── venvs
+            └── sweb
+    ```
+    - `var/www/projs`: プロジェクトを格納する親フォルダ
+    
+      ※ 複数のプロジェクトを管理する目的
+
+    - `var/www/projs/sweb`: プロジェクトを格納する親フォルダ
+
+    - `var/www/projs/sweb/config`: Djangoプロジェクトのルートフォルダ
+
+      ※ django-admin startprojectで生成されるものを置く
+
+      ※ プロジェクトのルートフォルダだが結局設定ファイルが置かれるため見やすさを考慮して`config`でプロジェクト作成する
+    - `var/www/projs/sweb/tblog`: Djangoアプリケーションのソースコードを格納するフォルダ
+
+      ※ python manage.py startで生成されるものを置く
+
+    - `var/www/venvs`: 仮想環境を作成する親フォルダ
+
+      ※ Pythonの仮想環境をプロジェクト単位で管理する目的
+
+    - `var/www/venvs/sweb`: Djangoプロジェクト`sweb`のための仮想環境フォルダ
+    
+      ※ プロジェクト独自の仮想環境を作成することで、プロジェクト間の依存関係を分離しする目的
+
+- 仮想環境の構築
+  - virtualenvのインストール
+    ```
+    sudo pip install virtualenv
+    ```
+  - プロジェクト達を格納する親フォルダを作成
+    ```
+    mkdir /var/www/projs
+    ```
+  - プロジェクト(sweb)を格納するを作成
+    ```
+    mkdir /var/www/projs/sweb
+    ```
+  - 仮装環境達を格納する親フォルダを作成
+    ```
+    mkdir /var/www/venvs
+    ```
+  - 仮想環境を構築
+    ```
+    virtualenv -p python3 /var/www/venvs/sweb
+    ```
+
+- 仮想環境内でDjangoをインストール
+  - 仮想環境の起動
+    ```
+    source /var/www/venvs/sweb/bin/activate
+    ```
+  - Djangoのインストール
+    ```
+    pip install django
+    ```
+  - Djangoプロジェクトの作成
+    ```
+    cd /var/www/projs/sweb
+    django-admin startproject config .
+    ```
+  - Djangoアプリケーションの作成
+    ```
+    python manage.py startapp tblog
+    ```
+- 仮想環境内でuWSGIをインストール
+  - 仮想環境の起動
+    ```
+    pip install uwsgi
+    ```
+
+## Nginx, Django, uWSGIの連携設定
+- Nginxの設定
+  Nginxの設定ファイル(`nginx.conf`)に対して下記内容を変更する
+  ```
+  vim /etc/nginx/nginx.conf
+  ```
+  - server_nameにドメインを設定
+    - 変更前
+      ```
+      server_name  _;
+      ```
+    - 変更後
+      ```
+      server_name sigma-se.com;
+      ```
+  - uwsgiとDjangoの連携設定 (serverディレクティブ内に追記)
+    ```
+    location / {
+      include         uwsgi_params;
+      uwsgi_pass      unix:/var/www/projs/sweb/sweb.sock;
+    }
+    ```
+
+- uWSGIの設定
+  uWSGIの設定ファイル(`uwsgi.ini`)を下記内容で新規作成する
+  ```
+  vim /var/www/projs/sweb/config/uwsgi.ini
+  ```
+  - uwsgiとDjangoの連携設定
+    ```
+    [uwsgi]
+    chdir = /var/www/projs/sweb
+    module = config.wsgi:application
+    master = true
+    processes = 5
+    socket = /var/www/projs/sweb/sweb.sock
+    chmod-socket = 666
+    vacuum = true
+    logto =/var/www/projs/sweb/config/uwsgi.ini
+    env = PYTHONPATH=/var/www/venvs/sweb/lib/python3.9/site-packages
+    ```
+- uwsgi_paramsの配置
+  ```
+  sudo cp -ip /etc/nginx/uwsgi_params /var/www/projs/sweb/
+  ```
+
+- Djangoの設定
+  Djangoの設定ファイル(`settings.py`)に対して下記内容を変更する
+  ```
+  vim /var/www/projs/sweb/config/settings.py
+  ```
+  - `ALLOWED_HOSTS`リストにNginxのサーバー名を追記
+    - 変更前
+      ```
+      DEBUG = True
+      ALLOWED_HOSTS = []
+      ```
+    - 変更後
+      ```
+      DEBUG = False
+      ALLOWED_HOSTS = ['sigma-se.com', 'www.sigma-se.com']
+      ```
+
+- エラーページ作成
+  404, 500, 502, 503, 504エラー用のページを作成する
+  - 404のエラーページ作成
+    ```
+    vim /var/www/html/404.html
+    ```
+    ```
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>404 Not Found</title>
+      </head>
+      <body>
+        <h1>404 Not Found</h1>
+        <p>The page you requested could not be found.</p>
+      </body>
+    </html>
+    ```
+  - 500, 502, 503, 504のエラーページ作成
+    ```
+    vim /var/www/html/50x.html
+    ```
+    ```
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Server Error</title>
+      </head>
+      <body>
+        <h1>Server Error</h1>
+        <p>Sorry, something went wrong on the server. Please try again later.</p>
+      </body>
+    </html>
+    ```
+
+## PostgreSQLインストール/初期設定とDjangoの連携設定
+- PostgreSQLのインストール
+  - PostgreSQLを初期化
+    ```
+    sudo dnf install postgresql-server postgresql-contrib postgresql-devel
+    ```
+  - PostgreSQLの自動起動設定
+    ```
+    sudo systemctl enable postgresql
+    ```
+
+- PostgreSQLとDjangoの連携設定
+  Nginxの設定ファイル(`settings.py`)に対して下記内容を変更する
+  ```
+  vim /var/www/projs/sweb/config/settings.py
+  ```
+  - `DATABASES`ディクショナリーにPostgreSQLの設定を追加
+    - 変更前
+      ```
+      DATABASES = {
+           'default': {
+               'ENGINE': 'django.db.backends.sqlite3',
+               'NAME': BASE_DIR / 'db.sqlite3',
+           }
+      }
+      ```
+    - 変更後
+      ```
+      DATABASES = {
+          'default': {
+              'ENGINE': 'django.db.backends.postgresql',
+              'NAME': 'tbdb',
+              'USER': 'psadmin',
+              'PASSWORD': 'shahoma-se1234',
+              'HOST': 'localhost',
+              'PORT': '5432',
+          }
+      }
+      ```
+
+- PostgreSQLのユーザーとデータベースを作成
+  - postgresでログイン
+    ```
+    sudo -u postgres psql
+    ```
+  - データベースの作成
+    ```
+    postgres=# CREATE DATABASE tbdb;
+    ```
+  - ユーザー、パスワードの作成
+    ```
+    postgres=# CREATE USER psadmin WITH PASSWORD '*****';
+    ```
+
+  - psadminの文字コードを設定
+    ```
+    postgres=# ALTER ROLE psadmin SET client_encoding TO 'utf8';
+    ```
+  - 実行された結果だけを見に行く
+    ```
+    postgres=# ALTER ROLE psadmin SET default_transaction_isolation TO 'read committed';
+    ```
+
+  - タイムゾーンを設定
+    ```
+    postgres=# ALTER ROLE psadmin SET timezone TO 'UTC+9';
+    ```
+  - psadminに権限を付与して終了
+    ```
+    postgres=# GRANT ALL PRIVILEGES ON DATABASE tbdb TO psadmin;
+    postgres=# \q
+    ```
+
+- アクセス/認証周りの設定
+  - `postgresql.conf`の`listen_addresses`を環境に合わせ変更
+    ```
+    vim /var/lib/pgsql/data/postgresql.conf
+    ```
+    - 変更前
+      ```
+      # listen_addresses = 'localhost'
+      ```
+    - 変更後
+      ```
+      listen_addresses = '*'
+      ```
+  - `pg_hba.conf` (認証設定ファイル) にドメイン情報を追加
+    ```
+    vim /var/lib/pgsql/data/pg_hba.conf
+    ```
+    - 変更前
+      ```
+      # "local" is for Unix domain socket connections only
+      local   all             all                                     peer
+      # IPv4 local connections:
+      host    all             all             127.0.0.1/32            ident
+      # IPv6 local connections:
+      host    all             all             ::1/128                 ident
+      ```
+    - 変更後
+      ```
+      # "local" is for Unix domain socket connections only
+      local   all             all                                     md5
+      # IPv4 local connections:
+      host    all             all             127.0.0.1/32            md5
+      # IPv6 local connections:
+      host    all             all             ::1/128                 md5
+      # Allow all users to connect from localhost using md5 password authentication
+      host    all             all             162.43.85.169/32        md5
+      ```
+
+## modelとデータベースの作成
+- modelの定義
+  models.pyにmodel定義を追記する
+  ```
+  vim /var/www/projs/sweb/tblog/models.py
+  ```
+- Djangoの settings.py ファイルを更新する
+  INSTALLED_APPS ディクショナリーにアプリケーション名を追加する
+  ```
+  vim /var/www/projs/sweb/config/settings.py
+  ```
+  - 変更前
+    ```
+    INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',$
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    ]
+    ```
+  - 変更後
+    ```
+    INSTALLED_APPS = [
+    'tblog'
+    'django.contrib.admin',
+    'django.contrib.auth',$
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    ]
+    ```
+- 仮想環境の起動
+  ```
+  source /var/www/venvs/sweb/bin/activate
+  ```
+- psycopg2-binary、psycopg、Pillowパッケージをインストール
+  ※ models.pyにてImageFieldを使用するため
+  ```
+  pip install psycopg2-binary psycopg
+  python -m pip install Pillow
+  ```
+- migrationsの作成
+  ※ config=プロジェクト名
+  ```
+  cd /var/www/projs/sweb
+  python manage.py makemigrations tblog
+  ```
+- Datebaseの作成と更新
+  ```
+  python manage.py migrate
+  ```
+- PostgresSQLのスーパーユーザーの作成
+  ```
+  python manage.py createsuperuser
+  ```
+- admin.pyの登録
+  ```
+  vim /var/www/projs/sweb/tblog/admin.py
+  ```
+    - models.pyで定義したmodelを登録する
+    ```
+    from django.contrib import admin
+    from models import Post, SmallCategory, BigCategory, Tag
+
+    admin.site.register(Post)
+    dmin.site.register(SmallCategory)
+    admin.site.register(BigCategory)
+    admin.site.register(Tag)
+    ```
+- uwsgiのログファイルの作成
+  ```
+  touch /var/www/projs/sweb/config/uwsgi.log
+  ```
+
+- 一般ユーザー(vpsuser)の所有者/権限に変更
+  ```
+  sudo chown vpsuser:vpsuser /var/www/projs/sweb
+  sudo chmod 775 /var/www/projs/sweb
+  sudo chown vpsuser:vpsuser /var/www/projs/sweb/sweb.sock
+  sudo chmod 666 /var/www/projs/sweb/sweb.sock
+  sudo chown vpsuser:vpsuser /var/www/projs/sweb/config/uwsgi.ini
+  sudo chmod 666 /var/www/projs/sweb/config/uwsgi.ini
+  sudo chown vpsuser:vpsuser /var/www/projs/sweb/config/uwsgi.log
+  sudo chmod 666 /var/www/projs/sweb/config/uwsgi.log
+  ```
+
+## 静的ファイルの収集
+- staticディレクトリ作成
+  ```
+  mkdir /var/www/projs/sweb/static
+  ```
+
+- 一般ユーザー(vpsuser)の所有者/権限に変更
+  ```
+  sudo chown vpsuser:vpsuser /var/www/projs/sweb/static
+  sudo chmod 755 /var/www/projs/sweb/static ※ 実行権限も必要
+  ```
+
+- Djangoのsettings.pyのSTATIC_ROOT、STATIC_URLを変更
+  ```
+  vim /var/www/projs/sweb/config/settings.py
+  ```
+    - 変更前
+      ```
+      STATIC_URL = 'static/
+      ```
+    - 変更後
+      ```
+      STATIC_ROOT = '/var/www/projs/sweb/static'
+      STATIC_URL = '/static/
+      ```
+
+- Nginxの設定ファイルにstaticを追加
+  ```
+  vim /etc/nginx/nginx.conf
+  ```
+  - staticを定義
+    ```
+    location /static/ {
+      root /var/www/projs/sweb;	
+    }
+    ```
+
+- 静的ファイルの収集
+  ```
+  python manage.py collectstatic
+  ```
+
+- Django管理画面の接続確認
+  ```
+  http://sigma-se.com/admin/
+  ```
+  PostgresSQLのスーパーユーザー(psadmin)でログインできること
+
+## HTTPS接続のみ許可する (TLS/SSL化)
+- Let's EncryptのTLS/SSL導入
+  - EPELインストール
+    ```
+    sudo dnf config-manager --set-enabled crb
+    sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+    sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-next-release-latest-9.noarch.rpm
+    ```
+
+  - Snappy インストール
+    ※ デバイスを初期化するのでしばらくまってから以降のインストールを行うこと
+    ```
+    sudo dnf --enablerepo=epel -y install snapd
+    sudo systemctl enable --now snapd.socket
+    sudo ln -s /var/lib/snapd/snap /snap
+    ```
+
+  - core インストール
+    ```
+    sudo snap install core
+    ```
+
+  - cerbot インストール	
+    ```
+	  sudo snap install --classic certbot
+	  sudo ln -s /snap/bin/certbot /usr/bin/certbot #シンボリックリンク作成
+    ```
+
+  - 証明書を取得
+    ```
+    certbot certonly --nginx --webroot -w /var/www/html -d sigma-se.com -m s-hama@sigma-se.jp
+      ･･･省略･･･
+      Certificate is saved at: /etc/letsencrypt/live/sigma-se.com/fullchain.pem
+      Key is saved at:         /etc/letsencrypt/live/sigma-se.com/privkey.pem
+      ･･･省略･･･
+    ```
+
+- NginxのTLS/SSL設定
+  ```
+  vim /etc/nginx/nginx.conf
+  ```
+    - 変更前
+      ```
+      server {
+          listen       80 default_server;
+          listen       [::]:80 default_server;
+
+          server_name sigma-se.com;
+
+          root         /var/www/html;
+
+          index index.html;
+          include /etc/nginx/default.d/*.conf;
+
+          add_header x-frame-options "SAMEORIGIN";
+          add_header x-xss-protection "1; mode=block";
+          add_header x-content-type-options "nosniff";
+          add_header Strict-Transport-Security "max-age=63072000";
+
+          location /static/ {
+              root /var/www/projs/sweb;
+          }
+
+          location / {
+              include uwsgi_params;
+              uwsgi_pass unix:/var/www/projs/sweb/sweb.sock;
+          }
+
+          error_page 404 /404.html;
+          location = /404.html {
+          }
+
+          error_page 500 502 503 504 /50x.html;
+          location = /50x.html {
+          }
+      }
+      ```
+    - 変更後
+      ```
+      server {
+          listen 80 default_server;
+          listen [::]:80 default_server;
+
+          # server_name  _;
+          server_name sigma-se.com;
+
+          return 301 https://$host$request_uri;
+      }
+
+      server {
+          listen 443 ssl http2 default_server;
+          listen [::]:443 ssl http2 default_server;
+
+          server_name sigma-se.com;
+
+          ssl_certificate /etc/letsencrypt/live/sigma-se.com/fullchain.pem;
+          ssl_certificate_key /etc/letsencrypt/live/sigma-se.com/privkey.pem;
+          ssl_protocols TLSv1.2 TLSv1.3;
+          ssl_prefer_server_ciphers on;
+          ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
+          ssl_session_cache shared:SSL:10m;
+          ssl_session_timeout 10m;
+
+          root         /var/www/html;
+
+          index index.html;
+          include /etc/nginx/default.d/*.conf;
+
+          add_header x-frame-options "SAMEORIGIN";
+          add_header x-xss-protection "1; mode=block";
+          add_header x-content-type-options "nosniff";
+          add_header Strict-Transport-Security "max-age=63072000";
+
+          location /static/ {
+               root /var/www/projs/sweb;
+          }
+
+          location / {
+              include uwsgi_params;
+              uwsgi_pass unix:/var/www/projs/sweb/sweb.sock;
+          }
+
+          error_page 404 /404.html;
+          location = /404.html {
+          }
+
+          error_page 500 502 503 504 /50x.html;
+          location = /50x.html {
+          }
+      }
+      ```
+
+- パケットフィルターの設定
+  - `XserverVPS`からパケットフィルターの設定を変更する
+    - VPSパネルからフィルタールールに`Webフィルター(TCP 20/21/80/443を許可)`を追加する
+
+## HTTPS接続確認
+- PostgreSQLの再起動
+  ```
+  systemctl restart postgresql
+  ```
+- Nginxの再起動
+  ```
+  sudo systemctl restart nginx
+  ```
+- uWSGIの起動
+  ※ 一般ユーザー(vpsuser)で実行する
+  ```
+  source /var/www/venvs/sweb/bin/activate
+  uwsgi --ini /var/www/projs/sweb/config/uwsgi.ini
+  ```
+- Django管理画面の接続確認
+  - https接続時(`https://sigma-se.com/admin/login`)、Django管理画面が表示されることを確認する
+  - http接続時(`http://sigma-se.com/admin/login`)、httpsへリダイレクトされDjango管理画面が表示されることを確認する
 
