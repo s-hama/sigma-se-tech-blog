@@ -1038,8 +1038,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   source /var/www/venvs/sweb/bin/activate
   uwsgi --ini /var/www/projs/sweb/config/uwsgi.ini
   ```
-- ブラウザから起動確認
-  ```
-  http://sigma-se.com/
-  ```
-  `/var/www/html`が表示されればOK
+- Django管理画面の接続確認
+  - https接続時(`https://sigma-se.com/admin/login`)、Django管理画面が表示されることを確認する
+  - http接続時(`http://sigma-se.com/admin/login`)、httpsへリダイレクトされDjango管理画面が表示されることを確認する
+
