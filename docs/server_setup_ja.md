@@ -1023,7 +1023,7 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   - `XserverVPS`からパケットフィルターの設定を変更する
     - VPSパネルからフィルタールールに`Webフィルター(TCP 20/21/80/443を許可)`を追加する
 
-## 起動確認
+## HTTPS接続確認
 - PostgreSQLの再起動
   ```
   systemctl restart postgresql
