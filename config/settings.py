@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['sigma-se.com', 'www.sigma-se.com']
 # Application definition
 
 INSTALLED_APPS = [
+    'tblog',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
