@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -128,3 +129,38 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGGING = {
+    'version': 1, 
+    'formatters': {
+        'all': { 
+            'format': ' *** '.join([
+                "[%(levelname)s]",
+                "asctime:%(asctime)s",
+                "module:%(module)s",
+                "message:%(message)s",
+                "process:%(process)d",
+                "thread:%(thread)d",
+            ])
+        },
+    },
+    'handlers': {
+        'file': { 
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',  
+            'filename': os.path.join('/var/log/nginx/', 'django.log'),
+            'formatter': 'all',  
+        },
+        'console': { 
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler', 
+            'formatter': 'all'
+        },
+    },
+    'loggers': {
+        'command': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+        },
+    },
+}
