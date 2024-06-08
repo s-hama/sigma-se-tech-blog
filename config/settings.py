@@ -131,6 +131,9 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join('/var/www/html', 'media')
+
 LOGGING = {
     'version': 1, 
     'formatters': {
