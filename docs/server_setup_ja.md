@@ -756,6 +756,56 @@ vpsuser(VPS接続用の一般ユーザー)かつ、公開鍵認証でしかロ�
   ```
   vim /var/www/projs/sweb/tblog/models.py
   ```
+  models.pyは、新規作成する
+  - 新規追加
+    ```
+    from django.db import models
+
+    def _get_latest_post(queryset):
+        return queryset.filter(is_publick=True).order_by('-created_at')[:5]
+
+    class BigCategory(models.Model):
+        name = models.CharField("大カテゴリ名", max_length=255)
+        created_at = models.DateTimeField("作成日", auto_now_add=True)
+        def __str__(self):
+            return self.name
+        def get_latest_post(self):
+            queryset = Post.objects.filter(category__parent=self)
+            return _get_latest_post(queryset)
+
+    class SmallCategory(models.Model):
+        name = models.CharField("小カテゴリ名", max_length=255)
+        parent = models.ForeignKey(BigCategory, verbose_name="大カテゴリ", on_delete=models.CASCADE)
+        created_at = models.DateTimeField("作成日", auto_now_add=True)
+        def __str__(self):
+            return self.name
+        def get_latest_post(self):
+            queryset = Post.objects.filter(category=self)
+            return _get_latest_post(queryset)
+
+    class Tag(models.Model):
+        name = models.CharField("タグ名", max_length=255)
+        created_at = models.DateTimeField("作成日", auto_now_add=True)
+        def __str__(self):
+            return self.name
+        def get_latest_post(self):
+            queryset = Post.objects.filter(tag=self)
+            return _get_latest_post(queryset)
+
+    class Post(models.Model):
+        title = models.CharField("タイトル", max_length=255)
+        text = models.TextField("本文")
+        category = models.ForeignKey(SmallCategory, verbose_name="カテゴリ", on_delete=models.CASCADE)
+        tag = models.ManyToManyField(Tag, blank=True, verbose_name="タグ")
+        thumbnail = models.ImageField("サムネイル", upload_to='thumbnail/', blank=True)
+        is_publick = models.BooleanField("公開可能か?", default=True)
+        is_html = models.BooleanField("HTMLソースか?", default=False)
+        created_at = models.DateTimeField("作成日", auto_now_add=True)
+        updated_at = models.DateTimeField("更新日", auto_now=True)
+        def __str__(self):
+            return self.title
+
+    ```
 - Djangoの settings.py ファイルを更新する
   `INSTALLED_APPS`ディクショナリーにアプリケーション名を追加する
   ```

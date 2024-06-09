@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -63,6 +64,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'tblog.context_processors.common',
             ],
         },
     },
@@ -107,9 +109,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ja'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
 
@@ -126,3 +130,41 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join('/var/www/html', 'media')
+
+LOGGING = {
+    'version': 1, 
+    'formatters': {
+        'all': { 
+            'format': ' *** '.join([
+                "[%(levelname)s]",
+                "asctime:%(asctime)s",
+                "module:%(module)s",
+                "message:%(message)s",
+                "process:%(process)d",
+                "thread:%(thread)d",
+            ])
+        },
+    },
+    'handlers': {
+        'file': { 
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',  
+            'filename': os.path.join('/var/log/nginx/', 'django.log'),
+            'formatter': 'all',  
+        },
+        'console': { 
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler', 
+            'formatter': 'all'
+        },
+    },
+    'loggers': {
+        'command': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+        },
+    },
+}
