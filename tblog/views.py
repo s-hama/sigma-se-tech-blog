@@ -20,3 +20,15 @@ class PostIndexView(BaseListView):
                 Q(title__icontains=keyword) | Q(text__icontains=keyword))
         logging.getLogger('command').debug('ON View.py > PostIndexView')
         return queryset
+
+class CategoryView(BaseListView):
+    def get_queryset(self):
+        queryset = self.base_queryset()
+        category = self.kwargs.get("small")
+        if category:
+            queryset = queryset.filter(category__name=category)
+        else:
+            category = self.kwargs.get("big")
+            queryset = queryset.filter(category__parent__name=category)
+        logging.getLogger('command').debug('ON View.py > CategoryView')
+        return queryset
