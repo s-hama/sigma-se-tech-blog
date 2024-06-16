@@ -32,3 +32,10 @@ class CategoryView(BaseListView):
             queryset = queryset.filter(category__parent__name=category)
         logging.getLogger('command').debug('ON View.py > CategoryView')
         return queryset
+
+class TagView(BaseListView):
+    def get_queryset(self):
+        tag = self.kwargs["tag"]
+        queryset = self.base_queryset().filter(tag__name=tag)
+        logging.getLogger('command').debug('ON View.py > TagView')
+        return queryset
