@@ -39,3 +39,8 @@ class TagView(BaseListView):
         queryset = self.base_queryset().filter(tag__name=tag)
         logging.getLogger('command').debug('ON View.py > TagView')
         return queryset
+
+class ProfileView(BaseListView):
+    def get_queryset(self):
+        queryset = self.base_queryset()
+        return queryset
