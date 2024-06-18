@@ -44,3 +44,8 @@ class ProfileView(BaseListView):
     def get_queryset(self):
         queryset = self.base_queryset()
         return queryset
+
+class ContactView(BaseListView):
+    def get_queryset(self):
+        queryset = self.base_queryset()
+        return queryset
