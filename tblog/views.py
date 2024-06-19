@@ -49,3 +49,8 @@ class ContactView(BaseListView):
     def get_queryset(self):
         queryset = self.base_queryset()
         return queryset
+
+class PpolicyView(BaseListView):
+    def get_queryset(self):
+        queryset = self.base_queryset()
+        return queryset
