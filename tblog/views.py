@@ -54,3 +54,12 @@ class PpolicyView(BaseListView):
     def get_queryset(self):
         queryset = self.base_queryset()
         return queryset
+
+class PostDetailView(generic.DetailView):
+    model = Post
+    def get_object(self, queryset=None):
+        post = super().get_object()
+        if str(post.category) not in str("PaidContent") and post.is_publick:
+            return post
+        else:
+            raise Http404
