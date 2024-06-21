@@ -61,5 +61,7 @@ class PostDetailView(generic.DetailView):
         post = super().get_object()
         if str(post.category) not in str("PaidContent") and post.is_publick:
             return post
+        elif str(post.category) in str("PaidContent") and post.is_publick and self.request.user.is_authenticated:
+            return post
         else:
             raise Http404
