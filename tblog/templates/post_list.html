@@ -1,0 +1,36 @@
+{% extends "tblog/base.html" %}
+{% load static %}
+{% block nav_home %}active{% endblock %}
+{% block content %}
+<br />
+  {% for post in post_list %}
+    <div class="row m-b-3">
+      <div class="col-xs-12 col-sm-12">
+        <h4>{{ post.title }}</h4>
+        <span class="tag tag-info">{{ post.category.parent }}</span>
+        <span class="tag tag-primary">{{ post.category }}</span>
+        {% for tag in post.tag.all %}
+          <span class="tag tag-success">{{ tag.name }}</span>
+        {% endfor %}
+        <p class="text-muted">{{ post.created_at }}</p>
+        {% if user.is_authenticated %}
+          {% if user.username == "admin" %}
+            <p>
+              <a class="nav-link" href="{% url 'admin:tblog_post_change' post.pk %}">>> 管理画面へ</a>
+            </p>
+          {% endif %}
+          <a class="btn btn-outline-primary btn-lg btn-block" href="{% url 'tblog:detail' post.pk %}">>> この記事を読む</a>
+        {% else %}
+          {% if post.category.name == "PaidContent" %}
+            <a class="btn btn-outline-primary btn-lg btn-block disabled" href="{% url 'tblog:detail' post.pk %}">>> この記事を読む</a>
+          {% else %}
+            <a class="btn btn-outline-primary btn-lg btn-block" href="{% url 'tblog:detail' post.pk %}">>> この記事を読む</a>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+  <div class="text-xs-center">
+    {% include "tblog/page.html" %}
+  </div>
+{% endblock %}
