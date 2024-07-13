@@ -1,0 +1,17 @@
+/* _button.scss over write */
+.btn-lg {
+    padding: .75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: .3rem;
+}
+
+.blog-h3 {
+    border-left: 10px solid #ea4335;
+    border-bottom: 2px solid #ea4335;
+    margin-top: 26px;
+    padding-left: 7px;
+    padding-bottom: 3px;
+    font-size: 1.25rem;
+    margin-bottom: 0;
+    font-weight: bold;
+}
