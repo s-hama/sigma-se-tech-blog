@@ -15,3 +15,26 @@
     margin-bottom: 0;
     font-weight: bold;
 }
+
+.blog-src {
+    color: #ffffff;
+    /* 
+    background-color: #eceeef;
+    padding-left:5px;
+    padding-right:5px;
+    */
+}
+
+.hljs {
+    /*
+    overflow-x: initial;
+    background:#eceeef;
+    */
+    padding: 0px 10px 15px 10px;
+}
+
+.btn-lg {
+    font-size: 1.0rem;
+    padding-top: 0.50rem;
+    padding-bottom: 0.50rem;
+}
