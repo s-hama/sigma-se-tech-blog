@@ -136,6 +136,7 @@ MEDIA_ROOT = os.path.join('/var/www/html', 'media')
 
 LOGGING = {
     'version': 1, 
+    'disable_existing_loggers': False,
     'formatters': {
         'all': { 
             'format': ' *** '.join([
