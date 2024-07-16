@@ -163,6 +163,9 @@ LOGGING = {
         },
     },
     'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+        },
         'command': {
             'handlers': ['file', 'console'],
             'level': 'DEBUG',
