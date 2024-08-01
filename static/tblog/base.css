@@ -38,3 +38,7 @@
     padding-top: 0.50rem;
     padding-bottom: 0.50rem;
 }
+
+.navbar-nav {
+    flex-direction: column; /* Default to column for small screens */
+}
