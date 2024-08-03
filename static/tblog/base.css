@@ -42,3 +42,9 @@
 .navbar-nav {
     flex-direction: column; /* Default to column for small screens */
 }
+
+@media (min-width: 576px) {
+    .navbar-nav {
+        flex-direction: row; /* Change to row for screens >= 576px */
+    }
+}
