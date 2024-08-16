@@ -112,7 +112,7 @@
                         <a class="nav-link nav-link-top {% if request.path == '/' %}active{% endif %}" href="{% url 'tblog:index' %}">Top<span class="visually-hidden">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'tblog:profile' %}">Profile</a>
+                        <a class="nav-link {% if request.path == '/profile/' %}active{% endif %}" href="{% url 'tblog:profile' %}">Profile</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'tblog:contact' %}">Contact</a>
