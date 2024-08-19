@@ -39,6 +39,10 @@
     padding-bottom: 0.50rem;
 }
 
+.nav-link-top {
+    padding-left: unset;
+}
+
 .navbar-nav {
     flex-direction: column; /* Default to column for small screens */
 }
