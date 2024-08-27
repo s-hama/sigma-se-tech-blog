@@ -136,11 +136,11 @@
                     </li>
                     {% endif %}
                     <li>
-                        <form action="{% url 'tblog:index' %}" method="GET" class="form-inline">
+                        <form action="{% url 'tblog:index' %}" method="GET" role="search" class="form-inline">
                             <input class="form-control" type="text" name="quick"
-                                style="width:140px; display:inline-block;" placeholder="キーワード入力">
-                            <button class="btn btn-outline-success" style="vertical-align:top;"
-                                type="submit">検索</button>
+                                style="width:130px; display:inline-block;" placeholder="Keyword" aria-label="Keyword">
+                            <button class="btn btn-outline-light" style="vertical-align:top;"
+                                type="submit">Search</button>
                         </form>
                     </li>
                 </ul>
