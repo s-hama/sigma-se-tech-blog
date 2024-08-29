@@ -39,18 +39,17 @@
     padding-bottom: 0.50rem;
 }
 
-/*
-.nav-link-top {
-    padding-left: unset;
+.blog-title {
+    color:#f5f5f5;
+    margin-bottom:unset;
+    margin-left:-0.35rem;
 }
 
-.navbar-nav {
-    flex-direction: column;
-}
-
+/* width > 576px */
 @media (min-width: 576px) {
-    .navbar-nav {
-        flex-direction: row;
+    .blog-title {
+        color:#f5f5f5;
+        margin-bottom:unset;
+        margin-left:-0.8rem;
     }
 }
-*/
