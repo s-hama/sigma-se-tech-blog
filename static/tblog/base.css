@@ -45,6 +45,10 @@
     margin-left:-0.35rem;
 }
 
+.blog-container {
+    padding-top: 2rem;
+}
+
 /* width > 576px */
 @media (min-width: 576px) {
     .blog-title {
