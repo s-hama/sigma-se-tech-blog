@@ -2,7 +2,7 @@
     <div class="col-xs-12 col-sm-12">
       「{{ post.category.parent.name }}」の最新 5件<br>
       {% for latest in post.category.parent.get_latest_post %}
-        ・<a href="{% url 'macuos:detail' latest.pk %}">{{ latest.title }}</a><br>
+        ・<a href="{% url 'tblog:detail' latest.pk %}">{{ latest.title }}</a><br>
       {% endfor %}
     </div>
 </div>
