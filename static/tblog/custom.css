@@ -39,6 +39,13 @@
     padding-bottom: 0.50rem;
 }
 
+.blog-header {
+    padding:2rem 1rem;
+    background-color: #495057;
+    border-radius:.1rem;
+    margin-top:54px;
+}
+
 .blog-title {
     color:#f5f5f5;
     margin-bottom:unset;
