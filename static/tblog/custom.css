@@ -56,11 +56,18 @@
     padding-top: 2rem;
 }
 
+.category-menu {
+    margin-top: 1.5rem;
+}
+
 /* width > 576px */
 @media (min-width: 576px) {
     .blog-title {
-        color:#f5f5f5;
-        margin-bottom:unset;
-        margin-left:-0.8rem;
+        color: #f5f5f5;
+        margin-bottom: unset;
+        margin-left: -0.8rem;
+    }
+    .category-menu {
+        margin-top: 0;
     }
 }
