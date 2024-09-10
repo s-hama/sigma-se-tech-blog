@@ -1,3 +1,9 @@
+/* default definition of text color */
+.menu-header {
+    background-color: var(--bs-gray-dark) !important;
+    border-color: var(--bs-gray-dark);
+}
+
 /* _button.scss over write */
 .btn-lg {
     padding: .75rem 1.5rem;
