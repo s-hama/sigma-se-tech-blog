@@ -1,4 +1,13 @@
 /* default definition of text color */
+body {
+    color: var(--bs-dark-text-emphasis);
+}
+
+.table th {
+    color: var(--bs-dark-text-emphasis) !important;
+}
+
+/* default definition of text color */
 .menu-header {
     background-color: var(--bs-gray-dark) !important;
     border-color: var(--bs-gray-dark);
@@ -32,10 +41,6 @@
 }
 
 .hljs {
-    /*
-    overflow-x: initial;
-    background:#eceeef;
-    */
     padding: 0px 10px 15px 10px;
 }
 
