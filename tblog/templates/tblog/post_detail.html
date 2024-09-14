@@ -24,7 +24,7 @@
       {% endfor %}
       <p class="text-muted">{{ post.created_at }}</p>
     {% if user.is_authenticated %}
-      <p><a class="nav-link" href="{% url 'admin:tblog_post_change' post.pk %}">管理画面へ</a></p>
+      <p><a class="link-secondary" href="{% url 'admin:tblog_post_change' post.pk %}">Go to Admin Console</a></p>
     {% endif %}
   </div>
 </div>
