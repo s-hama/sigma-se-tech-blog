@@ -17,10 +17,10 @@
   </div>
  
   <div class="card-footer">
-      <span class="tag tag-info">{{ post.category.parent }}</span>
-      <span class="tag tag-primary">{{ post.category }}</span>
+      <span class="badge category-parent">{{ post.category.parent }}</span>
+      <span class="badge category-child">{{ post.category }}</span>
       {% for tag in post.tag.all %}
-        <span class="tag tag-success">{{ tag.name }}</span>
+        <span class="badge category-grandchild">{{ tag.name }}</span>
       {% endfor %}
       <p class="text-muted">{{ post.created_at }}</p>
     {% if user.is_authenticated %}
