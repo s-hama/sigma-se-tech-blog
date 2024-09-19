@@ -2,35 +2,22 @@
 {% load static %}
 {% block nav_home %}active{% endblock %}
 {% block content %}
-<br />
 {% for post in post_list %}
-    <div class="row m-b-3">
-      <div class="col-xs-12 col-sm-12">
+<div class="border-primary mb-3">
+  <a class="btn btn-outline-primary btn-list-link col-12 col-sm-12 {% if post.category.name == 'PaidContent' %}disabled{% endif %}" href="{% url 'tblog:detail' post.pk %}">
     <h4>{{ post.title }}</h4>
-        <span class="tag tag-info">{{ post.category.parent }}</span>
-        <span class="tag tag-primary">{{ post.category }}</span>
+    <span class="badge category-parent">{{ post.category.parent }}</span>
+    <span class="badge category-child">{{ post.category }}</span>
     {% for tag in post.tag.all %}
-          <span class="tag tag-success">{{ tag.name }}</span>
+    <span class="badge category-grandchild">{{ tag.name }}</span>
     {% endfor %}
-    <p class="text-muted">{{ post.created_at }}</p>
-    {% if user.is_authenticated %}
-    {% if user.username == "admin" %}
-    <p>
-      <a class="link-secondary" href="{% url 'admin:tblog_post_change' post.pk %}">Go to Admin Console</a>
-    </p>
-    {% endif %}
-          <a class="btn btn-outline-primary btn-lg btn-block" href="{% url 'tblog:detail' post.pk %}">>> この記事を読む</a>
-    {% else %}
-    {% if post.category.name == "PaidContent" %}
-            <a class="btn btn-outline-primary btn-lg btn-block disabled" href="{% url 'tblog:detail' post.pk %}">>> この記事を読む</a>
-    {% else %}
-            <a class="btn btn-outline-primary btn-lg btn-block" href="{% url 'tblog:detail' post.pk %}">>> この記事を読む</a>
-    {% endif %}
-    {% endif %}
-  </div>
+    <span class="float-end">{{ post.created_at }}</span>
+  </a>
 </div>
 {% endfor %}
-  <div class="text-xs-center">
+<div class="row">
+  <div class="text-center">
     {% include "tblog/page.html" %}
+  </div>
 </div>
 {% endblock %}
