@@ -22,13 +22,15 @@
   {% endfor %}
   <a class="list-group-item list-group-last-item"></a> 
 </div>
+
 <div class="tags-menu list-group mt-4">
-    <a href="#" class="list-group-item active text-xs-left">
+  <a href="#" class="list-group-item list-group-item-action active text-start">
     Tags
   </a>
   {% for tag in tags  %}
-    <a class="list-group-item" href="{% url 'tblog:tag' tag.name %}">
+  <a class="list-group-item list-group-item-light list-group-item-action" href="{% url 'tblog:tag' tag.name %}">
     {{ tag.name }}
   </a>
   {% endfor %}
+  <a class="list-group-item list-group-last-item"></a> 
 </div>
