@@ -20,6 +20,45 @@ body {
     border-color: var(--bs-gray-dark);
 }
 
+.btn-list-link {
+    text-align: left;
+    padding: var(--bs-btn-padding-x);
+}
+
+.btn-list-link:hover {
+    color: var(--bs-white) !important;
+    background-color: var(--bs-gray-700);
+    border-color: var(--bs-gray-700);
+}
+
+.btn-list-link:active {
+    color: var(--bs-gray-700) !important;
+    background-color: var(--bs-white);
+    border-color: var(--bs-gray-700);
+}
+
+.btn-list-link:hover .category-parent,
+.btn-list-link:hover .category-child,
+.btn-list-link:hover .category-grandchild {
+    color: var(--bs-dark-text-emphasis);
+    background-color: var(--bs-white);
+}
+
+.btn-list-link:active .category-parent {
+    color: var(--bs-white);
+    background-color: var(--bs-gray-dark);
+}
+
+.btn-list-link:active .category-child {
+    color: var(--bs-white);
+    background-color: var(--bs-gray-600);
+}
+
+.btn-list-link:active .category-grandchild {
+    color: var(--bs-white);
+    background-color: var(--bs-gray-500);
+}
+
 /* _button.scss over write */
 .btn-lg {
     padding: .75rem 1.5rem;
