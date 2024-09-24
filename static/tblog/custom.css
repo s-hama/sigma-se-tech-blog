@@ -77,6 +77,12 @@ body {
     border-color: var(--bs-gray-700) !important;
 }
 
+.btn-outline-light:active {
+    color: var(--bs-white) !important;
+    background-color:  var(--bs-gray-dark) !important;
+    border-color:  var(--bs-white) !important;
+}
+
 /* _button.scss over write */
 .btn-lg {
     padding: .75rem 1.5rem;
