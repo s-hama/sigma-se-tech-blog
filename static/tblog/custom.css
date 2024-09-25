@@ -83,6 +83,14 @@ body {
     border-color:  var(--bs-white) !important;
 }
 
+.pagination {
+    border: none;
+}
+
+.pagination .page-link:focus {
+    box-shadow: none;
+}
+
 /* _button.scss over write */
 .btn-lg {
     padding: .75rem 1.5rem;
