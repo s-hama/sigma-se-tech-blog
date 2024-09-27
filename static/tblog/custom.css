@@ -112,6 +112,33 @@ body {
     border-color:  var(--bs-gray-700) !important;
 }
 
+.list-group-item {
+    border-top: none;
+    border-bottom: var(--bs-list-group-border-width) solid var(--bs-light-border-subtle);
+    border-left: var(--bs-list-group-border-width) solid var(--bs-gray-700);
+    border-right: var(--bs-list-group-border-width) solid var(--bs-gray-700);
+}
+
+a.list-group-last-item {
+    padding: 0.15rem 0.15rem;
+}
+
+.list-group > .list-group-item:last-of-type {
+    border-bottom-color: var(--bs-gray-700);
+    border-bottom-right-radius: inherit;
+    border-bottom-left-radius: inherit;
+}
+
+.list-group-item.active {
+    background-color: var(--bs-gray-700);
+    color: var(--bs-white);
+    border-color: var(--bs-gray-700);
+}
+
+.list-group-item-light {
+    background-color: var(--bs-white);
+}
+
 /* _button.scss over write */
 .btn-lg {
     padding: .75rem 1.5rem;
