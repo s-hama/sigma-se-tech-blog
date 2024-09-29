@@ -139,6 +139,11 @@ a.list-group-last-item {
     background-color: var(--bs-white);
 }
 
+.card-header:first-child {
+    border-color: var(--bs-gray-700) !important;
+    border-radius: var(--bs-border-radius-sm) var(--bs-border-radius-sm) 0 0;
+}
+
 /* _button.scss over write */
 .btn-lg {
     padding: .75rem 1.5rem;
