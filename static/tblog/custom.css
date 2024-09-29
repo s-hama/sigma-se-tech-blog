@@ -163,12 +163,7 @@ a.list-group-last-item {
 }
 
 .blog-src {
-    color: #ffffff;
-    /* 
-    background-color: #eceeef;
-    padding-left:5px;
-    padding-right:5px;
-    */
+    color: var(--bs-white);
 }
 
 .hljs {
