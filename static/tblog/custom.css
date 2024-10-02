@@ -193,6 +193,18 @@ a.list-group-last-item {
     padding-top: 2rem;
 }
 
+.category-parent {
+    background-color: var(--bs-gray-dark);
+}
+
+.category-child {
+    background-color: var(--bs-gray-600);
+}
+
+.category-grandchild {
+    background-color: var(--bs-gray-500);
+}
+
 .category-menu {
     margin-top: 1.5rem;
 }
