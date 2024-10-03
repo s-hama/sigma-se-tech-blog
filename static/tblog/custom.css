@@ -212,9 +212,9 @@ a.list-group-last-item {
 /* width > 576px */
 @media (min-width: 576px) {
     .blog-title {
-        color: #f5f5f5;
+        color: var(--bs-white);
         margin-bottom: unset;
-        margin-left: -0.8rem;
+        margin-left: -0.7rem;
     }
     .category-menu {
         margin-top: 0;
