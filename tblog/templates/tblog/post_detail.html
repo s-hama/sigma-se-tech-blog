@@ -1,0 +1,29 @@
+{% extends "tblog/base.html" %}
+{% block content %}
+<div class="card border-primary">
+  <div class="card-header bg-primary text-white">
+    <div>{{ post.title }}</div>
+  </div>
+  <div class="card-body">
+    {% if post.is_html %}
+      {{ post.text | safe}}
+    {% else %}
+      {{ post.text | urlize | linebreaks }}
+    {% endif %}
+    <hr>
+    {% include "tblog/latest_post.html" %}
+  </div>
+ 
+  <div class="card-footer">
+      <span class="badge category-parent">{{ post.category.parent }}</span>
+      <span class="badge category-child">{{ post.category }}</span>
+      {% for tag in post.tag.all %}
+        <span class="badge category-grandchild">{{ tag.name }}</span>
+      {% endfor %}
+      <p class="text-muted">{{ post.created_at }}</p>
+    {% if user.is_authenticated %}
+      <p><a class="link-secondary" href="{% url 'admin:tblog_post_change' post.pk %}">Go to Admin Console</a></p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
