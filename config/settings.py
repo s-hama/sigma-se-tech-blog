@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-&y73d7gv&^4*p2@%3yptskb@=qve=ps!&l&r!scxkm@#egb_p6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['sigma-se.com', 'www.sigma-se.com']
+ALLOWED_HOSTS = ['sigma-se.com', 'www.sigma-se.com', '162.43.85.169']
 
 
 # Application definition
@@ -136,6 +136,7 @@ MEDIA_ROOT = os.path.join('/var/www/html', 'media')
 
 LOGGING = {
     'version': 1, 
+    'disable_existing_loggers': False,
     'formatters': {
         'all': { 
             'format': ' *** '.join([
@@ -162,6 +163,11 @@ LOGGING = {
         },
     },
     'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
         'command': {
             'handlers': ['file', 'console'],
             'level': 'DEBUG',

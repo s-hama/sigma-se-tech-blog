@@ -1,0 +1,36 @@
+<div class="category-menu list-group">
+  <a href="#" class="list-group-item list-group-item-action active text-start">
+    Categories
+  </a>
+
+  {% for big in big_categories %}
+  <a class="list-group-item list-group-item-light list-group-item-action" 
+    data-bs-toggle="collapse" href="#c-{{ big.pk }}" aria-expanded="false" aria-controls="c-{{ big.pk }}">
+    {{ big.name }}
+  </a>
+  <div class="collapse" id="c-{{ big.pk }}">
+    <a href="{% url 'tblog:category' big.name %}" class="list-group-item list-group-item-light list-group-item-action">
+      <span class="text-muted">&gt;</span>&nbsp;{{ big.name }}
+    </a>
+
+    {% for small in big.smallcategory_set.all %}
+    <a href="{% url 'tblog:category' big.name small.name %}" class="list-group-item list-group-item-light list-group-item-action">
+      &nbsp;&nbsp;<span class="text-muted">&gt;</span>&nbsp;{{ small.name }}
+    </a>
+    {% endfor %}
+  </div>
+  {% endfor %}
+  <a class="list-group-item list-group-last-item"></a> 
+</div>
+
+<div class="tags-menu list-group mt-4">
+  <a href="#" class="list-group-item list-group-item-action active text-start">
+    Tags
+  </a>
+  {% for tag in tags  %}
+  <a class="list-group-item list-group-item-light list-group-item-action" href="{% url 'tblog:tag' tag.name %}">
+    {{ tag.name }}
+  </a>
+  {% endfor %}
+  <a class="list-group-item list-group-last-item"></a> 
+</div>

@@ -1,7 +1,6 @@
-from django.urls import path
-from django.conf.urls import include, url
+from django.urls import path, re_path, include
 from django.http import HttpResponse
-from.import views
+from . import views
 # import logging 
 
 # logging.getLogger('command').debug(' >>> ' + __name__)
@@ -9,26 +8,26 @@ from.import views
 urlpatterns = [ 
     path('', views.PostIndexView.as_view(), name='index'), 
 
-    url(r'^detail/(?P<pk>[0-9]+)/$',
+    re_path(r'^detail/(?P<pk>[0-9]+)/$',
         views.PostDetailView.as_view(), name='detail'),
  
-    url(r'^category/(?P<big>\w+)/(?P<small>\w+)/$',
+    re_path(r'^category/(?P<big>\w+)/(?P<small>\w+)/$',
         views.CategoryView.as_view(), name='category'),
  
-    url(r'^category/(?P<big>\w+)/$',
+    re_path(r'^category/(?P<big>\w+)/$',
         views.CategoryView.as_view(), name='category'),
  
-    url(r'^tag/(?P<tag>\w+)/$', 
+    re_path(r'^tag/(?P<tag>\w+)/$', 
         views.TagView.as_view(), name='tag'),
 
-    url(r'^profile/$',
+    re_path(r'^profile/$',
         views.ProfileView.as_view(), name='profile'),
 
-    url(r'^contact/$',
+    re_path(r'^contact/$',
         views.ContactView.as_view(), name='contact'),
 
-    url(r'^ppolicy/$',
+    re_path(r'^ppolicy/$',
         views.PpolicyView.as_view(), name='ppolicy'),
 
-    # url(r'^ads.txt', lambda x: HttpResponse('google.com, pub-4029756773390765, DIRECT, f08c47fec0942fa0', content_type='text/plain'), name='adsfile'),
+    # re_path(r'^ads.txt', lambda x: HttpResponse('google.com, pub-4029756773390765, DIRECT, f08c47fec0942fa0', content_type='text/plain'), name='adsfile'),
 ]

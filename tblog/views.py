@@ -19,6 +19,11 @@ class PostIndexView(BaseListView):
             queryset = queryset.filter(
                 Q(title__icontains=keyword) | Q(text__icontains=keyword))
         logging.getLogger('command').debug('ON View.py > PostIndexView')
+
+        # Log the contents of queryset
+        queryset_list = list(queryset.values())  # Convert QuerySet to list of dictionaries
+        logging.getLogger('command').debug(f'QuerySet contents: {queryset_list}')
+
         return queryset
 
 class CategoryView(BaseListView):

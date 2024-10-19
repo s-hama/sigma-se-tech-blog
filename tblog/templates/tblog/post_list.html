@@ -1,0 +1,23 @@
+{% extends "tblog/base.html" %}
+{% load static %}
+{% block nav_home %}active{% endblock %}
+{% block content %}
+{% for post in post_list %}
+<div class="border-primary mb-3">
+  <a class="btn btn-outline-primary btn-list-link col-12 col-sm-12 {% if post.category.name == 'PaidContent' %}disabled{% endif %}" href="{% url 'tblog:detail' post.pk %}">
+    <h4>{{ post.title }}</h4>
+    <span class="badge category-parent">{{ post.category.parent }}</span>
+    <span class="badge category-child">{{ post.category }}</span>
+    {% for tag in post.tag.all %}
+    <span class="badge category-grandchild">{{ tag.name }}</span>
+    {% endfor %}
+    <span class="float-end">{{ post.created_at }}</span>
+  </a>
+</div>
+{% endfor %}
+<div class="row">
+  <div class="text-center">
+    {% include "tblog/page.html" %}
+  </div>
+</div>
+{% endblock %}
