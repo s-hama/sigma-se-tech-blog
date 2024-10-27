@@ -1,5 +1,5 @@
 ## タイトル
-VPSで作るDjangoサイト構築手順 (Apache＆PostgreSQL編)：[1] ドメイン＆SSHの初期設定
+VPSで作るDjangoサイト構築手順 - Apache編 : 1/4 ドメイン&SSHの初期設定
 
 ## 目的
 この記事では、以下のVPS環境でDjangoサイトを構築するために必要な「ドメインとSSHの初期設定手順」を説明する
