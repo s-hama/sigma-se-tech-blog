@@ -46,3 +46,19 @@ VPSで作るDjangoサイト構築手順 - Apache編 : 1/4 ドメイン&SSHの初
 
 - 設定確認
 `nslookup`等で上記の設定が反映されているか確認すること
+
+### SSHの初期設定
+- rootでログインできないようにする<br>
+  ログイン用の一般ユーザーを作成する
+  ```
+  $ adduser vpsuser
+  $ passwd *******
+  ```
+
+  SSHの設定変更<br>
+  rootで直接アクセス出来ないようにする
+  ```
+  $ vim /etc/ssh/sshd_config
+  ```
+  → `PermitRootLogin no`がコメントアウトされていたら解除する
+
