@@ -1,0 +1,84 @@
+<div class="post-body">
+  <h2 id="目的">目的</h2>
+  <p>この記事では、以下のVPS環境でDjangoサイトを構築するために必要な「ドメインとSSHの初期設定手順」を説明する。</p>
+  <ul>
+    <li>OS：CentOS</li>
+    <li>言語：Python</li>
+    <li>WEBサーバー：Apache</li>
+    <li>FW：Django</li>
+    <li>DB：PostgresSQL</li>
+  </ul>
+  <h2 id="実施内容">実施内容</h2>
+  <h3 id="vps契約">VPS契約</h3>
+  <ul>
+    <li>価格に見合ったスペック（容量、メモリ、CPUなど）、安全性、操作性など、何を重視するかの基準をもとにVPS提供会社を決める。</li>
+    <li>ここでは、コストパフォーマンスとサポートの充実、プラン変更の柔軟性に基準を置き「さくらのVPS」で契約。</li>
+  </ul>
+  <h3 id="osインストール">OSインストール</h3>
+  <ul>
+    <li>開発環境(Apache, Django, PostgreSQL)がインストール可能で管理しやすいOSに絞る。</li>
+    <li>ここでは、英語圏のコミュニティが大きく、日本語情報が豊富で個人的に使い慣れているCentOSを選んだ。</li>
+    <li>CentOS7_x64_x84(標準)をインストール
+      インストールは、SAKURA VPS管理者用のコントロールパネルからGUI操作でインストールする。
+      <pre><code>$ cat /etc/redhat-release
+CentOS Linux release 7.4.1708 (Core)
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="独自ドメインの契約">独自ドメインの契約</h3>
+  <ul>
+    <li>ドメインの維持費、サーバー同時契約などの機能性、サポート体制など、何を重視するかの基準をもとにサービスを選ぶ。</li>
+    <li>ここでは、Whois情報の公開代行、自動更新の有無、サポートの充実に基準を置き「お名前.com」で独自ドメインを取得した。</li>
+    <li>以降、この独自ドメインを<strong>example.com</strong>と表記する。</li>
+  </ul>
+  <h3 id="ドメインのdns設定">ドメインのDNS設定</h3>
+  <p>※ 契約したサービスによって操作方法が初期状態が異なるので設定方法については割愛する。</p>
+  <ul>
+    <li>
+      <p>VPS側のネームサーバー設定（さくらのVPS）<br>
+        DNS設定からドメインの追加を行う。</p>
+      <pre><code>ホスト名: example.com
+種別: A
+内容: VPSのIPアドレス
+TTL: 3600
+</code></pre>
+    </li>
+    <li>
+      <p>ドメイン側のネームサーバー設定（お名前.com）<br>
+        <strong>example.com</strong>のドメイン設定でVPSのネームサーバーを登録する。<br>
+        ※ 設定が反映されるまで数時間〜数日かかるので注意。
+      </p>
+    </li>
+    <li>
+      <p>設定確認
+        <code>nslookup</code>等で上記の設定が反映されているか確認すること。
+      </p>
+    </li>
+  </ul>
+  <h3 id="sshの初期設定">SSHの初期設定</h3>
+  <ul>
+    <li>
+      <p>rootでログインできないようにする。<br>
+        ログイン用の一般ユーザーを作成する。</p>
+      <pre><code>$ adduser vpsuser
+$ passwd *******
+</code></pre>
+      <p>SSHの設定変更<br>
+        rootで直接アクセス出来ないようにする。</p>
+      <pre><code>$ vim /etc/ssh/sshd_config
+</code></pre>
+      <p>→ <code>PermitRootLogin no</code>がコメントアウトされていたら解除する。</p>
+    </li>
+    <li>
+      <p>公開鍵認証の設定<br>
+        公開鍵認証でのみログインするようにする。</p>
+      <pre><code>$ vim /etc/ssh/sshd_config
+</code></pre>
+      <p>→ <code>PasswordAuthentication no</code>がコメントアウトされていたら解除する。</p>
+    </li>
+  </ul>
+  <p>上記の設定により、新規登録した<code>vpsuser</code>と<strong>秘密鍵</strong>を使用しないとログインできなくなる。</p>
+
+  <script async src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+
+</div>
