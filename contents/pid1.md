@@ -62,3 +62,11 @@ VPSで作るDjangoサイト構築手順 - Apache編 : 1/4 ドメイン&SSHの初
   ```
   → `PermitRootLogin no`がコメントアウトされていたら解除する
 
+- 公開鍵認証の設定<br>
+  公開鍵認証でのみログインするようにする
+  ```
+  $ vim /etc/ssh/sshd_config
+  ```
+  → `PasswordAuthentication no`がコメントアウトされていたら解除する
+
+上記の設定により、新規登録した`vpsuser`と**秘密鍵**を使用しないとログインできなくなる
