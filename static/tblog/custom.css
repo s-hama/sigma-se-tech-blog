@@ -6,6 +6,11 @@ body {
     color: var(--bs-dark-text-emphasis) !important;
 }
 
+.card-body,
+.card-footer {
+    color: var(--bs-dark-text-emphasis);
+}
+
 .bg-primary {
     background-color: var(--bs-gray-700) !important;
     border-color: var(--bs-gray-700);
@@ -22,7 +27,7 @@ body {
 
 .btn-list-link {
     text-align: left;
-    padding: var(--bs-btn-padding-x);
+    padding: 0.5rem 1rem;
 }
 
 .btn-list-link:hover {
@@ -137,6 +142,10 @@ a.list-group-last-item {
 
 .list-group-item-light {
     background-color: var(--bs-white);
+}
+
+.card-header h4 {
+    margin-bottom: 0;
 }
 
 .card-header:first-child {
