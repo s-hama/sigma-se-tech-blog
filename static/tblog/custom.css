@@ -332,3 +332,59 @@ a.list-group-last-item {
 	font-size: 0.85em;
 }
 
+.post-body table {
+	border-collapse: collapse;
+	margin-bottom: 0.7em;
+}
+
+.post-body th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+.post-body th,
+.post-body td {
+	padding: 5px 10px;
+}
+
+.post-body table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+.post-body blockquote {
+	margin: 0;
+	padding: 0px 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+	border-radius: 2px;
+}
+
+.post-body code {
+	color: var(--bs-dark-text-emphasis);
+	font-size: 1em;
+    font-weight: 700;
+	line-height: 1.357em;
+}
+
+.post-body body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.post-body pre:not(.hljs),
+.post-body pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+.post-body pre {
+	background-color: var(--bs-dark-text-emphasis);
+}
+
+.post-body pre code {
+	display: inline-block;
+	color: var(--bs-white);
+	tab-size: 4;
+	background: var(--bs-dark-text-emphasis);
+}
+
