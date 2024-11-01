@@ -6,6 +6,11 @@ body {
     color: var(--bs-dark-text-emphasis) !important;
 }
 
+.card-body,
+.card-footer {
+    color: var(--bs-dark-text-emphasis);
+}
+
 .bg-primary {
     background-color: var(--bs-gray-700) !important;
     border-color: var(--bs-gray-700);
@@ -22,7 +27,7 @@ body {
 
 .btn-list-link {
     text-align: left;
-    padding: var(--bs-btn-padding-x);
+    padding: 0.5rem 1rem;
 }
 
 .btn-list-link:hover {
@@ -139,6 +144,10 @@ a.list-group-last-item {
     background-color: var(--bs-white);
 }
 
+.card-header h4 {
+    margin-bottom: 0;
+}
+
 .card-header:first-child {
     border-color: var(--bs-gray-700) !important;
     border-radius: var(--bs-border-radius-sm) var(--bs-border-radius-sm) 0 0;
@@ -220,3 +229,162 @@ a.list-group-last-item {
         margin-top: 0;
     }
 }
+
+/* post-body markdown */
+.post-body h1,
+.post-body h2,
+.post-body h3,
+.post-body h4,
+.post-body h5,
+.post-body h6,
+.post-body p,
+.post-body ol,
+.post-body ul,
+.post-body pre {
+	margin-top: 0;
+}
+
+.post-body h1,
+.post-body h2,
+.post-body h3,
+.post-body h4,
+.post-body h5,
+.post-body h6 {
+	font-weight: 600;
+	margin-top: 24px;
+	margin-bottom: 16px;
+	line-height: 1.25;
+}
+
+.post-body sub,
+.post-body sup {
+	line-height: 0;
+}
+
+.post-body ul ul:first-child,
+.post-body ul ol:first-child,
+.post-body ol ul:first-child,
+.post-body ol ol:first-child {
+	margin-bottom: 0;
+}
+
+.post-body img,
+.post-body video {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.post-body a:focus,
+.post-body input:focus,
+.post-body select:focus,
+.post-body textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+.post-body p {
+	margin-bottom: 16px;
+}
+
+.post-body li p {
+	margin-bottom: 0.7em;
+}
+
+.post-body ul,
+.post-body ol {
+	margin-bottom: 0.7em;
+}
+
+.post-body hr {
+	border: 0;
+	height: 1px;
+	border-bottom: 1px solid;
+}
+
+.post-body h1 {
+	font-size: 2em;
+	margin-top: 0;
+	padding-bottom: 0.3em;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+.post-body h2 {
+	font-size: 1.5em;
+	padding-bottom: 0.3em;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+.post-body h3 {
+	font-size: 1.25em;
+}
+
+.post-body h4 {
+	font-size: 1em;
+}
+
+.post-body h5 {
+	font-size: 0.875em;
+}
+
+.post-body h6 {
+	font-size: 0.85em;
+}
+
+.post-body table {
+	border-collapse: collapse;
+	margin-bottom: 0.7em;
+}
+
+.post-body th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+.post-body th,
+.post-body td {
+	padding: 5px 10px;
+}
+
+.post-body table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+.post-body blockquote {
+	margin: 0;
+	padding: 0px 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+	border-radius: 2px;
+}
+
+.post-body code {
+	color: var(--bs-dark-text-emphasis);
+	font-size: 1em;
+    font-weight: 700;
+	line-height: 1.357em;
+}
+
+.post-body body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.post-body pre:not(.hljs),
+.post-body pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+.post-body pre {
+	background-color: var(--bs-dark-text-emphasis);
+}
+
+.post-body pre code {
+	display: inline-block;
+	color: var(--bs-white);
+	tab-size: 4;
+	background: var(--bs-dark-text-emphasis);
+}
+
