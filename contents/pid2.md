@@ -9,3 +9,20 @@ VPSで作るDjangoサイト構築手順 - Apache編 : 1/4 Apache&SSL/TLSの初�
 - FW：Django
 - DB：PostgresSQL
 - ドメイン：example.com
+
+## 実施内容
+### Apache(httpd)インストール
+- インストール実行後、`Complete!`で正常終了。
+  ```
+  $ yum install httpd
+  ```
+
+### ファイアウォールの設定
+- CentOS7は、デフォルトでファイアウォールが有効なため、http、httpsも遮断されている状態なのでこの通信を許容するように設定変更する。<br>
+後にSSL/TSL化するため、ここでhttpsも一緒に許容しておく。
+  ```
+  $ systemctl start httpd # Apacheの起動
+  $ firewall-cmd --add-service=http --zone=public --permanent # http通信の許容
+  $ firewall-cmd --add-service=https --zone=public --permanent # https通信の許容
+  $ systemctl restart firewalld # ファイアウォールの再起動
+  ```
