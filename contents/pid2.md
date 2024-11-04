@@ -29,3 +29,14 @@ VPSで作るDjangoサイト構築手順 - Apache編 : 1/4 Apache&SSL/TLSの初�
 
 - httpでの接続確認<br>
 httpで自身のドメイン(http://example.com)にアクセスし、`Testing 123`と表示されれば設定成功。
+
+### httpd自動起動の設定
+- サーバー起動時にhttpdも自動で起動するように設定する。
+  ```
+  $ systemctl enable httpd
+  ```
+- 自動起動の設定確認<br>
+`httpd.service enabled`と表示されれば設定成功。
+  ```
+  $ systemctl list-unit-files -t service
+  ```
