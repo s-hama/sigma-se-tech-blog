@@ -26,3 +26,6 @@ VPSで作るDjangoサイト構築手順 - Apache編 : 1/4 Apache&SSL/TLSの初�
   $ firewall-cmd --add-service=https --zone=public --permanent # https通信の許容
   $ systemctl restart firewalld # ファイアウォールの再起動
   ```
+
+- httpでの接続確認<br>
+httpで自身のドメイン(http://example.com)にアクセスし、`Testing 123`と表示されれば設定成功。
