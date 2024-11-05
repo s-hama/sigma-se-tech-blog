@@ -40,3 +40,17 @@ httpで自身のドメイン(http://example.com)にアクセスし、`Testing 12
   ```
   $ systemctl list-unit-files -t service
   ```
+
+### DocumentRootの権限変更
+- vpsuser(所有者グループ)やapache(所有者)でもDocumentRoot配下(/var/www/html) が編集できるように権限変更する。
+  ```
+  $ cd /var/www
+  $ chown apache:vpsuser html 
+  $ chmod 775 html
+  ```
+
+- 仮のindexで表示確認<br>
+/var/www/htmlの直下にindex.htmlを新規作成後、httpで自身のドメイン(http://example.com)にアクセスし表示されれば設定成功。
+  ```
+  $ systemctl list-unit-files -t service
+  ```
