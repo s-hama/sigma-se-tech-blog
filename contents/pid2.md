@@ -54,3 +54,36 @@ httpで自身のドメイン(http://example.com)にアクセスし、`Testing 12
   ```
   $ systemctl list-unit-files -t service
   ```
+
+### httpsの解放設定
+- httpsのサービス解放<br>
+「--permanent」でOSを再起動しても設定が変わらないように設定を恒久化する。
+「--zone=public」で明示的にzoneをpublicに割当てる。<br>
+  ```
+  $ firewall-cmd --permanent --zone=public --add-service=https
+  ```
+
+- 設定を反映させるためfirewalldを再起動する
+  ```
+  $ systemctl restart firewalld
+  ```
+
+- httpsの解放確認<br>
+servicesにhttpsと表示されれば解放成功。
+  ```
+  $ firewall-cmd --list-all
+   public (active)
+    target: default
+    icmp-block-inversion: no
+    interfaces: eth0
+    sources:
+    services: dhcpv6-client ssh http https
+    ports:
+    protocols:
+    masquerade: no
+    forward-ports:
+    source-ports:
+    icmp-blocks:
+    rich rules:
+  ```
+
