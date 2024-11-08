@@ -87,3 +87,12 @@ servicesにhttpsと表示されれば解放成功。
     rich rules:
   ```
 
+### SSL/TLS証明書設定
+ここでは、SSL/TLS証明書が無料取得できる`Let's Encrypt`を使用する。
+以降、Certbot をインストールし、SSL/TLS証明書を取得して定期更新まで実施する。
+
+- mod_sslインストール<br>
+`Apache`を`SSL/TLS`に対応させる。
+  ```
+  $ yum install mod_ssl # mod_sslインストール
+  ```
