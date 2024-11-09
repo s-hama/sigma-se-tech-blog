@@ -96,3 +96,34 @@ servicesにhttpsと表示されれば解放成功。
   ```
   $ yum install mod_ssl # mod_sslインストール
   ```
+
+- 起動確認
+`active(running)`であることを確認する。<br>
+  ```
+  $ systemctl restart httpd
+  $ systemctl status httpd
+  * httpd.service - The Apache HTTP Server
+     Loaded: loaded (/usr/lib/systemd/system/httpd.service; enabled; vendor preset: disabled)
+     Active: active (running) since Fri 2018-09-14 21:54:42 JST; 1h 40min ago
+       Docs: man:httpd(8)
+             man:apachectl(8)
+    Process: 3887 ExecStop=/bin/kill -WINCH ${MAINPID} (code=exited, status=0/SUCCESS)
+    Process: 24271 ExecReload=/usr/sbin/httpd $OPTIONS -k graceful (code=exited, status=0/SUCCESS)
+   Main PID: 3895 (httpd)
+     Status: "Total requests: 49; Current requests/sec: 0; Current traffic:   0 B/sec"
+     CGroup: /system.slice/httpd.service
+             |-3895 /usr/sbin/httpd -DFOREGROUND
+             |-3896 /usr/sbin/httpd -DFOREGROUND
+             |-3897 /usr/sbin/httpd -DFOREGROUND
+             |-3898 /usr/sbin/httpd -DFOREGROUND
+             |-3899 /usr/sbin/httpd -DFOREGROUND
+             |-3900 /usr/sbin/httpd -DFOREGROUND
+             |-3902 /usr/sbin/httpd -DFOREGROUND
+             |-3903 /usr/sbin/httpd -DFOREGROUND
+             |-3979 /usr/sbin/httpd -DFOREGROUND
+             |-3982 /usr/sbin/httpd -DFOREGROUND
+             |-3995 /usr/sbin/httpd -DFOREGROUND
+             |-3996 /usr/sbin/httpd -DFOREGROUND
+             |-4089 /usr/sbin/httpd -DFOREGROUND
+             `-4536 /usr/sbin/httpd -DFOREGROUND
+  ```
