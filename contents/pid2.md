@@ -127,3 +127,9 @@ servicesにhttpsと表示されれば解放成功。
              |-4089 /usr/sbin/httpd -DFOREGROUND
              `-4536 /usr/sbin/httpd -DFOREGROUND
   ```
+
+- EPELリポジトリのインストール<br>
+`EPEL`は、CentOSで標準搭載されていないパッケージをyumでインストール可能にするためのリポジトリ。
+  ```
+  $ yum install epel-release
+  ```
