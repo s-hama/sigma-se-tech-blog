@@ -133,3 +133,18 @@ servicesにhttpsと表示されれば解放成功。
   ```
   $ yum install epel-release
   ```
+
+- Certbotのインストール<br>
+`Certbot`は、`Let's Encrypt`で使用するクライアントソフトウェアで、SSL/TLSサーバー証明書の取得、及び更新作業を自動化してくれる。
+  ```
+  $ yum install epel-release
+  ```
+
+- CertbotでSSL証明書を取得する
+  ```
+  $ sudo certbot --authenticator standalone --installer apache -d example.com --pre-hook "apachectl stop" --post-hook "apachectl start"
+  ```
+
+- SSL/TLSの動作確認<br>
+httpsで自身のドメイン(https://example.com)にアクセスできれば成功。<br>
+※ httpでアクセスしてもhttpsにリダイレクトされる。
