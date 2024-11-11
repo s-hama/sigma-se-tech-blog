@@ -148,3 +148,19 @@ servicesにhttpsと表示されれば解放成功。
 - SSL/TLSの動作確認<br>
 httpsで自身のドメイン(https://example.com)にアクセスできれば成功。<br>
 ※ httpでアクセスしてもhttpsにリダイレクトされる。
+
+### Let's Encryptの定期更新
+3か月単位で定期的な証明書の再発行が必要。
+期限が近づくと`Let's Encrypt certificate expiration notice for domain "example.com"`というメールが送られてくるため、期限以内に`certbot`から証明書を再発行する必要がある。
+
+- Apacheを停止して現在の証明書を強制的に再発行する。
+  ```
+  $ sudo systemctl stop httpd # Apache停止
+  $ sudo certbot renew --force-renewal --dry-run # 仮実施
+  $ openssl x509 -in /etc/letsencrypt/live/example.com/fullchain.pem -noout -dates # 有効期限の確認
+  $ sudo certbot renew --force-renewal # 本番実施：証明書再発行
+  $ sudo systemctl start httpd # Apache起動
+  ```
+
+- 有効期限の確認<br>
+ブラウザの証明書情報の有効期限が`3か月`伸びていれば再発行成功。
