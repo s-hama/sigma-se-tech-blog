@@ -1,0 +1,37 @@
+<div class="post-body">
+  <h2 id="目的">目的</h2>
+  <p>この記事では、以下のVPS環境でDjangoサイトを構築するために必要な「ApacheとSSL/TLSの初期設定手順」を説明する。</p>
+  <ul>
+    <li>OS：CentOS 7,4</li>
+    <li>言語：Python</li>
+    <li>WEBサーバー：Apache</li>
+    <li>FW：Django</li>
+    <li>DB：PostgresSQL</li>
+    <li>ドメイン：example.com</li>
+  </ul>
+  <h2 id="実施内容">実施内容</h2>
+  <h3 id="apachehttpdインストール">Apache(httpd)インストール</h3>
+  <ul>
+    <li>インストール実行後、<code>Complete!</code>で正常終了。
+      <pre><code>$ yum install httpd
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="ファイアウォールの設定">ファイアウォールの設定</h3>
+  <ul>
+    <li>
+      <p>CentOS7は、デフォルトでファイアウォールが有効なため、http、httpsも遮断されている状態なのでこの通信を許容するように設定変更する。<br>
+        後にSSL/TSL化するため、ここでhttpsも一緒に許容しておく。</p>
+      <pre><code>$ systemctl start httpd # Apacheの起動
+$ firewall-cmd --add-service=http --zone=public --permanent # http通信の許容
+$ firewall-cmd --add-service=https --zone=public --permanent # https通信の許容
+$ systemctl restart firewalld # ファイアウォールの再起動
+</code></pre>
+    </li>
+    <li>
+      <p>httpでの接続確認<br>
+        httpで自身のドメイン(http://example.com)にアクセスし、<code>Testing 123</code>と表示されれば設定成功。</p>
+    </li>
+  </ul>
+
+</div>
