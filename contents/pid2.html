@@ -33,5 +33,33 @@ $ systemctl restart firewalld # ファイアウォールの再起動
         httpで自身のドメイン(http://example.com)にアクセスし、<code>Testing 123</code>と表示されれば設定成功。</p>
     </li>
   </ul>
+  <h3 id="httpd自動起動の設定">httpd自動起動の設定</h3>
+  <ul>
+    <li>サーバー起動時にhttpdも自動で起動するように設定する。
+      <pre><code>$ systemctl enable httpd
+</code></pre>
+    </li>
+    <li>自動起動の設定確認<br>
+      <code>httpd.service enabled</code>と表示されれば設定成功。
+      <pre><code>$ systemctl list-unit-files -t service
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="documentrootの権限変更">DocumentRootの権限変更</h3>
+  <ul>
+    <li>
+      <p>vpsuser(所有者グループ)やapache(所有者)でもDocumentRoot配下(/var/www/html) が編集できるように権限変更する。</p>
+      <pre><code>$ cd /var/www
+$ chown apache:vpsuser html 
+$ chmod 775 html
+</code></pre>
+    </li>
+    <li>
+      <p>仮のindexで表示確認<br>
+        /var/www/htmlの直下にindex.htmlを新規作成後、httpで自身のドメイン(http://example.com)にアクセスし表示されれば設定成功。</p>
+      <pre><code>$ systemctl list-unit-files -t service
+</code></pre>
+    </li>
+  </ul>
 
 </div>
