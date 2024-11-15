@@ -61,5 +61,39 @@ $ chmod 775 html
 </code></pre>
     </li>
   </ul>
+  <h3 id="httpsの解放設定">httpsの解放設定</h3>
+  <ul>
+    <li>
+      <p>httpsのサービス解放<br>
+        「--permanent」でOSを再起動しても設定が変わらないように設定を恒久化する。
+        「--zone=public」で明示的にzoneをpublicに割当てる。<br></p>
+      <pre><code>$ firewall-cmd --permanent --zone=public --add-service=https
+</code></pre>
+    </li>
+    <li>
+      <p>設定を反映させるためfirewalldを再起動する</p>
+      <pre><code>$ systemctl restart firewalld
+</code></pre>
+    </li>
+    <li>
+      <p>httpsの解放確認<br>
+        servicesにhttpsと表示されれば解放成功。</p>
+      <pre><code>$ firewall-cmd --list-all
+ public (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: eth0
+  sources:
+  services: dhcpv6-client ssh http https
+  ports:
+  protocols:
+  masquerade: no
+  forward-ports:
+  source-ports:
+  icmp-blocks:
+  rich rules:
+</code></pre>
+    </li>
+  </ul>
 
 </div>
