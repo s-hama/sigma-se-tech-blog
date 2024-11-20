@@ -25,3 +25,17 @@ IUSリポジトリ経由 でPythonの最新バージョンをインストール�
   ```
   $ yum -y install https://centos7.iuscommunity.org/ius-release.rpm
   ```
+
+### Pythonインストール
+- Python3.6のインストール<br>
+`python36u`、`python36u-devel`をインストールする。<br>
+  ```
+  $ yum -y install python36u
+  $ yum -y install python36u-pip python36u-devel
+  ```
+
+- バージョン確認<br>
+  ```
+  $ python3.6 -V
+  Python 3.6.4
+  ```
