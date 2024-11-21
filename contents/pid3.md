@@ -39,3 +39,25 @@ IUSリポジトリ経由 でPythonの最新バージョンをインストール�
   $ python3.6 -V
   Python 3.6.4
   ```
+
+### Djangoインストール
+- venvで仮想環境を構築<br>
+Pythonの仮想環境を作成するパッケージは、他にも`virtualenv`、`anaconda`、`pyenv`、`pyenv-virtualenv`など多数あるが、ここでは、Python3から標準搭載されている`venv`を使用する。<br>
+<br>
+※ `vops`は、仮想環境が入るディレクトリ名なので各自の環境に合わせること。
+  ```
+  $ python3.6 -m venv /var/www/vops
+  ```
+
+- 仮想環境上にDjangoをインストール<br>
+`pip`で`Django`をインストールする。
+  ```
+  $ source /var/www/vops/bin/activate # 仮想環境起動
+  $ pip install django # djangoインストール
+  ```
+
+- Djangoプロジェクトの雛形作成<br>
+※ `ops`は、プロジェクト名なので、各自の環境に合わせること。
+  ```
+  $ django-admin startproject /var/www/vops/ops
+  ```
