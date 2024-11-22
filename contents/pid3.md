@@ -61,3 +61,11 @@ Pythonの仮想環境を作成するパッケージは、他にも`virtualenv`�
   ```
   $ django-admin startproject /var/www/vops/ops
   ```
+
+### アプリケーション作成
+実際にプログラムの成果物を配置することになるアプリケーションを作成する。
+※ ここでは、`macuos`という名称のアプリケーションを作成する。
+  ```
+  $ source /var/www/vops/bin/activate    # 仮想環境起動
+  $ python manage.py startapp /var/www/vops/ops/macuos    # アプリケーションを作成
+  ```
