@@ -77,3 +77,5 @@ Python3上では事前に`httpd-devel`をインストールする必要がある
   $ yum install -y httpd httpd-devel # httpd-develをインストール
   $ pip3.6 install mod_wsgi # pipでmod_wsgiをインストール
   ```
+
+### WSGIと仮想ホストの設定ファイル作成
