@@ -79,3 +79,15 @@ Python3上では事前に`httpd-devel`をインストールする必要がある
   ```
 
 ### WSGIと仮想ホストの設定ファイル作成
+- Apache設定ファイルの確認<br>
+Apacheの設定ファイル`httpd.conf`の設定内容を確認する。<br>
+  ```
+  $ cat /etc/httpd/conf/httpd.conf
+  …
+  Include conf.modules.d/*.conf  
+  IncludeOptional conf.d/*.conf 
+  …
+  ```
+上記`Include`は、`conf.modules.d`(module系の設定ファイル)配下の`*.conf`をロードする設定、`IncludeOptional`は、`conf.d`(その他設定系のファイル)配下の`*.conf`をロードする設定となる。<br>
+<br>
+そのため、次項で`WSGI設定ファイル`(django-wsgi.conf)と`仮想ホスト設定ファイル`(django.conf)を作成し、Apacheからmod_wsgiを介し、Djangoを起動できるよう、wsgi_module設定ファイルを作成する。<br>
