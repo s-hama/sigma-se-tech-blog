@@ -69,3 +69,11 @@ Pythonの仮想環境を作成するパッケージは、他にも`virtualenv`�
   $ source /var/www/vops/bin/activate    # 仮想環境起動
   $ python manage.py startapp /var/www/vops/ops/macuos    # アプリケーションを作成
   ```
+
+### mod_wsgiインストール
+Python3上では事前に`httpd-devel`をインストールする必要があるため、`mod_wsgi`の前に `httpd-devel`をインストールする。<br>
+  ```
+  $ source /var/www/vops/bin/activate # 仮想環境起動
+  $ yum install -y httpd httpd-devel # httpd-develをインストール
+  $ pip3.6 install mod_wsgi # pipでmod_wsgiをインストール
+  ```
