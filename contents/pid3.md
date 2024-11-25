@@ -91,3 +91,13 @@ Apacheの設定ファイル`httpd.conf`の設定内容を確認する。<br>
 上記`Include`は、`conf.modules.d`(module系の設定ファイル)配下の`*.conf`をロードする設定、`IncludeOptional`は、`conf.d`(その他設定系のファイル)配下の`*.conf`をロードする設定となる。<br>
 <br>
 そのため、次項で`WSGI設定ファイル`(django-wsgi.conf)と`仮想ホスト設定ファイル`(django.conf)を作成し、Apacheからmod_wsgiを介し、Djangoを起動できるよう、wsgi_module設定ファイルを作成する。<br>
+
+- WSGI設定ファイル作成<br>
+`/etc/httpd/conf.modules.d`配下に下記の内容で`django-wsgi.conf`を作成する。<br>
+  ```
+  LoadModule wsgi_module  /var/www/vops/lib64/python3.6/site-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so
+  ```
+※ wsgi_moduleのファイルパスは、findで確認。<br>
+  ```
+  $ find /var/www -name 'mod_*.so'
+  ```
