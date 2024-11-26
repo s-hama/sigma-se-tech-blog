@@ -101,3 +101,49 @@ Apacheの設定ファイル`httpd.conf`の設定内容を確認する。<br>
   ```
   $ find /var/www -name 'mod_*.so'
   ```
+
+- 仮想ホスト設定ファイル作成<br>
+`/etc/httpd/conf.d`配下に下記の内容で`django.conf`を作成する。<br>
+  ```
+  NameVirtualHost *:80
+  NameVirtualHost *:443
+  WSGISocketPrefix run/wsgi
+
+  <VirtualHost *:443>… (※1)
+      ServerName example.com … (※2)
+      SSLEngine On … (※3)
+      SSLCertificateFile /etc/letsencrypt/live/example.com/cert.pem … (※4)
+      SSLCertificateKeyFile  /etc/letsencrypt/live/example.com/privkey.pem … (※4)
+
+      WSGIDaemonProcess example.com processes=2 threads=15 python-home=/var/www/vops python-path=/var/www/vops/lib64/python3.6/site-packages … (※5)
+      WSGIProcessGroup example.com … (※6)
+      WSGIScriptAlias / /var/www/vops/ops/ops/wsgi.py … (※7)
+
+      Alias /static /var/www/vops/ops/macuos/static … (※8)
+      <Directory /var/www/vops/ops/macuos/static> 
+          Require all granted
+      </Directory>
+
+      <Directory /var/www/vops/ops/ops> … (※9)
+          <Files wsgi.py>
+              Require all granted
+          </Files>
+      </Directory>
+  </VirtualHost>
+  <VirtualHost *:80>… (※10)
+      ServerName example.com
+      RewriteEngine on
+      RewriteCond %{HTTPS} off
+      RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+  </VirtualHost>
+  ```
+※1 SSL/TLSポートのVirtualHost。
+※2 ServerName：自身のドメイン、サブドメイン、IP等を設定。
+※3 SSLEngine：SSL/TLSエンジンの有効化。
+※4 SSL/TLSサーバー証明書と秘密鍵の設定。Apache2.4では、上記のSSLCertificateFile、SSLCertificateKeyFileの設定になるが、Apache2.2だとSSLCertificateFile、SSLCertificateKeyFile、SSLCertificateChainFileの3つに設定が必要でさらに内容も若干違うため、バージョンが古い場合は、注意が必要。
+※5 マルチプロセスかつ、デーモンモードでの起動設定。
+※6 WSGIDaemonProcessと同じ、example.comを設定する必要あり。
+※7 wsgi.pyエイリアスと起動直後のトップ画面を https://example.com で表示したい場合の設定。 例えば、トップ画面から"XXX"というサブフォルダを掘りたい場合は、WSGIScriptAliasの第一パラメータに"/XXX"を指定する。
+※8 静的ファイルへの（アイコンや画像など）エイリアスを設定 及び、静的フォルダまでのパスを設定。
+※9 wsgi.pyまでのパスを設定。(起動直後にwsgi.pyを実行するよに設定)
+※10 httpデフォルトの80ポートのVirtualHost。httpsにリダイレクトするように設定。
