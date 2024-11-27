@@ -63,7 +63,7 @@ Pythonの仮想環境を作成するパッケージは、他にも`virtualenv`�
   ```
 
 ### アプリケーション作成
-実際にプログラムの成果物を配置することになるアプリケーションを作成する。
+- 実際にプログラムの成果物を配置することになるアプリケーションを作成
 ※ ここでは、`macuos`という名称のアプリケーションを作成する。
   ```
   $ source /var/www/vops/bin/activate    # 仮想環境起動
@@ -71,6 +71,7 @@ Pythonの仮想環境を作成するパッケージは、他にも`virtualenv`�
   ```
 
 ### mod_wsgiインストール
+- `httpd-devel`と`mod_wsgi`をインストール
 Python3上では事前に`httpd-devel`をインストールする必要があるため、`mod_wsgi`の前に `httpd-devel`をインストールする。<br>
   ```
   $ source /var/www/vops/bin/activate # 仮想環境起動
@@ -88,6 +89,7 @@ Apacheの設定ファイル`httpd.conf`の設定内容を確認する。<br>
   IncludeOptional conf.d/*.conf 
   …
   ```
+  - 補足<br>
 上記`Include`は、`conf.modules.d`(module系の設定ファイル)配下の`*.conf`をロードする設定、`IncludeOptional`は、`conf.d`(その他設定系のファイル)配下の`*.conf`をロードする設定となる。<br>
 <br>
 そのため、次項で`WSGI設定ファイル`(django-wsgi.conf)と`仮想ホスト設定ファイル`(django.conf)を作成し、Apacheからmod_wsgiを介し、Djangoを起動できるよう、wsgi_module設定ファイルを作成する。<br>
@@ -97,10 +99,11 @@ Apacheの設定ファイル`httpd.conf`の設定内容を確認する。<br>
   ```
   LoadModule wsgi_module  /var/www/vops/lib64/python3.6/site-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so
   ```
+  - 補足<br>
 ※ wsgi_moduleのファイルパスは、findで確認。<br>
-  ```
-  $ find /var/www -name 'mod_*.so'
-  ```
+    ```
+    $ find /var/www -name 'mod_*.so'
+    ```
 
 - 仮想ホスト設定ファイル作成<br>
 `/etc/httpd/conf.d`配下に下記の内容で`django.conf`を作成する。<br>
@@ -137,13 +140,14 @@ Apacheの設定ファイル`httpd.conf`の設定内容を確認する。<br>
       RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
   </VirtualHost>
   ```
-※1 SSL/TLSポートのVirtualHost。
-※2 ServerName：自身のドメイン、サブドメイン、IP等を設定。
-※3 SSLEngine：SSL/TLSエンジンの有効化。
-※4 SSL/TLSサーバー証明書と秘密鍵の設定。Apache2.4では、上記のSSLCertificateFile、SSLCertificateKeyFileの設定になるが、Apache2.2だとSSLCertificateFile、SSLCertificateKeyFile、SSLCertificateChainFileの3つに設定が必要でさらに内容も若干違うため、バージョンが古い場合は、注意が必要。
-※5 マルチプロセスかつ、デーモンモードでの起動設定。
-※6 WSGIDaemonProcessと同じ、example.comを設定する必要あり。
-※7 wsgi.pyエイリアスと起動直後のトップ画面を https://example.com で表示したい場合の設定。 例えば、トップ画面から"XXX"というサブフォルダを掘りたい場合は、WSGIScriptAliasの第一パラメータに"/XXX"を指定する。
-※8 静的ファイルへの（アイコンや画像など）エイリアスを設定 及び、静的フォルダまでのパスを設定。
-※9 wsgi.pyまでのパスを設定。(起動直後にwsgi.pyを実行するよに設定)
-※10 httpデフォルトの80ポートのVirtualHost。httpsにリダイレクトするように設定。
+  - 上記注釈<br>
+  ※1 SSL/TLSポートのVirtualHost。<br>
+  ※2 ServerName：自身のドメイン、サブドメイン、IP等を設定。<br>
+  ※3 SSLEngine：SSL/TLSエンジンの有効化。<br>
+  ※4 SSL/TLSサーバー証明書と秘密鍵の設定。Apache2.4では、上記のSSLCertificateFile、SSLCertificateKeyFileの設定になるが、Apache2.2だとSSLCertificateFile、SSLCertificateKeyFile、SSLCertificateChainFileの3つに設定が必要でさらに内容も若干違うため、バージョンが古い場合は、注意が必要。<br>
+  ※5 マルチプロセスかつ、デーモンモードでの起動設定。<br>
+  ※6 WSGIDaemonProcessと同じ、example.comを設定する必要あり。<br>
+  ※7 wsgi.pyエイリアスと起動直後のトップ画面を https://example.com で表示したい場合の設定。 例えば、トップ画面から"XXX"というサブフォルダを掘りたい場合は、WSGIScriptAliasの第一パラメータに"/XXX"を指定する。<br>
+  ※8 静的ファイルへの（アイコンや画像など）エイリアスを設定 及び、静的フォルダまでのパスを設定。<br>
+  ※9 wsgi.pyまでのパスを設定。(起動直後にwsgi.pyを実行するよに設定)<br>
+  ※10 httpデフォルトの80ポートのVirtualHost。httpsにリダイレクトするように設定。<br>
