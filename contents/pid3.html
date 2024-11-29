@@ -9,4 +9,22 @@
     <li>DB：PostgresSQL</li>
     <li>ドメイン：example.com</li>
   </ul>
+  <h2 id="実施内容">実施内容</h2>
+  <h3 id="centosにパッケージリポジトリを導入">CentOSにパッケージリポジトリを導入</h3>
+  <ul>
+    <li>
+      <p>開発パッケージのインストール<br>
+        EPELリポジトリを有効化する。<br>
+        ※ EPELはCentOSやRHELにない便利なパッケージを提供する外部リポジトリ。</p>
+      <pre><code>$ yum -y install epel-release
+</code></pre>
+    </li>
+    <li>
+      <p>IUSリポジトリの追加<br>
+        Pythonの最新アップストリームバージョンを提供するリポジトリ。<br>
+        IUSリポジトリ経由 でPythonの最新バージョンをインストールできるようにする。<br></p>
+      <pre><code>$ yum -y install https://centos7.iuscommunity.org/ius-release.rpm
+</code></pre>
+    </li>
+  </ul>
 </body>
