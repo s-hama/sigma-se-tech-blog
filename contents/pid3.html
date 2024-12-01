@@ -44,4 +44,30 @@ Python 3.6.4
 </code></pre>
     </li>
   </ul>
+  <h3 id="djangoインストール">Djangoインストール</h3>
+  <ul>
+    <li>
+      <p>venvで仮想環境を構築<br>
+        Pythonの仮想環境を作成するパッケージは、他にも<code>virtualenv</code>、<code>anaconda</code>、<code>pyenv</code>、<code>pyenv-virtualenv</code>など多数あるが、ここでは、Python3から標準搭載されている<code>venv</code>を使用する。<br>
+        <br>
+        ※ <code>vops</code>は、仮想環境が入るディレクトリ名なので各自の環境に合わせること。
+      </p>
+      <pre><code>$ python3.6 -m venv /var/www/vops
+</code></pre>
+    </li>
+    <li>
+      <p>仮想環境上にDjangoをインストール<br>
+        <code>pip</code>で<code>Django</code>をインストールする。
+      </p>
+      <pre><code>$ source /var/www/vops/bin/activate # 仮想環境起動
+$ pip install django # djangoインストール
+</code></pre>
+    </li>
+    <li>
+      <p>Djangoプロジェクトの雛形作成<br>
+        ※ <code>ops</code>は、プロジェクト名なので、各自の環境に合わせること。</p>
+      <pre><code>$ django-admin startproject /var/www/vops/ops
+</code></pre>
+    </li>
+  </ul>
 </body>
