@@ -79,4 +79,15 @@ $ python manage.py startapp /var/www/vops/ops/macuos    # アプリケーショ�
 </code></pre>
     </li>
   </ul>
+  <h3 id="mod_wsgiインストール">mod_wsgiインストール</h3>
+  <ul>
+    <li><code>httpd-devel</code>と<code>mod_wsgi</code>をインストール
+      Python3上では事前に<code>httpd-devel</code>をインストールする必要があるため、<code>mod_wsgi</code>の前に
+      <code>httpd-devel</code>をインストールする。<br>
+      <pre><code>$ source /var/www/vops/bin/activate # 仮想環境起動
+$ yum install -y httpd httpd-devel # httpd-develをインストール
+$ pip3.6 install mod_wsgi # pipでmod_wsgiをインストール
+</code></pre>
+    </li>
+  </ul>
 </body>
