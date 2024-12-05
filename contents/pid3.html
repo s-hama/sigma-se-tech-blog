@@ -92,5 +92,22 @@ $ pip3.6 install mod_wsgi # pipでmod_wsgiをインストール
   </ul>
   <h3 id="wsgiと仮想ホストの設定ファイル作成">WSGIと仮想ホストの設定ファイル作成</h3>
   <ul>
+    <li>
+      <p>Apache設定ファイルの確認<br>
+        Apacheの設定ファイル<code>httpd.conf</code>の設定内容を確認する。<br></p>
+      <pre><code>$ cat /etc/httpd/conf/httpd.conf
+…
+Include conf.modules.d/*.conf  
+IncludeOptional conf.d/*.conf 
+…
+</code></pre>
+      <ul>
+        <li>補足<br>
+          上記<code>Include</code>は、<code>conf.modules.d</code>(module系の設定ファイル)配下の<code>*.conf</code>をロードする設定、<code>IncludeOptional</code>は、<code>conf.d</code>(その他設定系のファイル)配下の<code>*.conf</code>をロードする設定となる。<br>
+          <br>
+          そのため、次項で<code>WSGI設定ファイル</code>(django-wsgi.conf)と<code>仮想ホスト設定ファイル</code>(django.conf)を作成し、Apacheからmod_wsgiを介し、Djangoを起動できるよう、wsgi_module設定ファイルを作成する。<br>
+        </li>
+      </ul>
+    </li>
   </ul>
 </body>
