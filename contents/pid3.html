@@ -109,5 +109,19 @@ IncludeOptional conf.d/*.conf
         </li>
       </ul>
     </li>
+    <li>
+      <p>WSGI設定ファイル作成<br>
+        <code>/etc/httpd/conf.modules.d</code>配下に下記の内容で<code>django-wsgi.conf</code>を作成する。<br>
+      </p>
+      <pre><code>LoadModule wsgi_module  /var/www/vops/lib64/python3.6/site-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so
+</code></pre>
+      <ul>
+        <li>補足<br>
+          ※ wsgi_moduleのファイルパスは、findで確認。<br>
+          <pre><code>$ find /var/www -name 'mod_*.so'
+</code></pre>
+        </li>
+      </ul>
+    </li>
   </ul>
 </body>
