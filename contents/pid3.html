@@ -123,5 +123,57 @@ IncludeOptional conf.d/*.conf
         </li>
       </ul>
     </li>
+    <li>
+      <p>仮想ホスト設定ファイル作成<br>
+        <code>/etc/httpd/conf.d</code>配下に下記の内容で<code>django.conf</code>を作成する。<br>
+      </p>
+      <pre><code>NameVirtualHost *:80
+NameVirtualHost *:443
+WSGISocketPrefix run/wsgi
+
+&lt;VirtualHost *:443&gt;… (※1)
+    ServerName example.com … (※2)
+    SSLEngine On … (※3)
+    SSLCertificateFile /etc/letsencrypt/live/example.com/cert.pem … (※4)
+    SSLCertificateKeyFile  /etc/letsencrypt/live/example.com/privkey.pem … (※4)
+
+    WSGIDaemonProcess example.com processes=2 threads=15 python-home=/var/www/vops python-path=/var/www/vops/lib64/python3.6/site-packages … (※5)
+    WSGIProcessGroup example.com … (※6)
+    WSGIScriptAlias / /var/www/vops/ops/ops/wsgi.py … (※7)
+
+    Alias /static /var/www/vops/ops/macuos/static … (※8)
+    &lt;Directory /var/www/vops/ops/macuos/static&gt; 
+        Require all granted
+    &lt;/Directory&gt;
+
+    &lt;Directory /var/www/vops/ops/ops&gt; … (※9)
+        &lt;Files wsgi.py&gt;
+            Require all granted
+        &lt;/Files&gt;
+    &lt;/Directory&gt;
+&lt;/VirtualHost&gt;
+&lt;VirtualHost *:80&gt;… (※10)
+    ServerName example.com
+    RewriteEngine on
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+&lt;/VirtualHost&gt;
+</code></pre>
+      <ul>
+        <li>上記注釈<br>
+          ※1 SSL/TLSポートのVirtualHost。<br>
+          ※2 ServerName：自身のドメイン、サブドメイン、IP等を設定。<br>
+          ※3 SSLEngine：SSL/TLSエンジンの有効化。<br>
+          ※4
+          SSL/TLSサーバー証明書と秘密鍵の設定。Apache2.4では、上記のSSLCertificateFile、SSLCertificateKeyFileの設定になるが、Apache2.2だとSSLCertificateFile、SSLCertificateKeyFile、SSLCertificateChainFileの3つに設定が必要でさらに内容も若干違うため、バージョンが古い場合は、注意が必要。<br>
+          ※5 マルチプロセスかつ、デーモンモードでの起動設定。<br>
+          ※6 WSGIDaemonProcessと同じ、example.comを設定する必要あり。<br>
+          ※7 wsgi.pyエイリアスと起動直後のトップ画面をexample.comで表示したい場合の設定。
+          例えば、トップ画面から&quot;XXX&quot;というサブフォルダを掘りたい場合は、WSGIScriptAliasの第一パラメータに&quot;/XXX&quot;を指定する。<br>
+          ※8 静的ファイルへの（アイコンや画像など）エイリアスを設定 及び、静的フォルダまでのパスを設定。<br>
+          ※9 wsgi.pyまでのパスを設定。(起動直後にwsgi.pyを実行するよに設定)<br>
+          ※10 httpデフォルトの80ポートのVirtualHost。httpsにリダイレクトするように設定。<br></li>
+      </ul>
+    </li>
   </ul>
 </body>
