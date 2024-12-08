@@ -1,0 +1,179 @@
+<div class="post-body">
+  <h2 id="目的">目的</h2>
+  <p>この記事では、以下のVPS環境でDjangoサイトを構築するために必要な「Django環境とサーバー設定のセットアップ手順」について説明する。</p>
+  <ul>
+    <li>OS：CentOS 7,4</li>
+    <li>言語：Python</li>
+    <li>WEBサーバー：Apache</li>
+    <li>FW：Django</li>
+    <li>DB：PostgresSQL</li>
+    <li>ドメイン：example.com</li>
+  </ul>
+  <h2 id="実施内容">実施内容</h2>
+  <h3 id="centosにパッケージリポジトリを導入">CentOSにパッケージリポジトリを導入</h3>
+  <ul>
+    <li>
+      <p>開発パッケージのインストール<br>
+        EPELリポジトリを有効化する。<br>
+        ※ EPELはCentOSやRHELにない便利なパッケージを提供する外部リポジトリ。</p>
+      <pre><code>$ yum -y install epel-release
+</code></pre>
+    </li>
+    <li>
+      <p>IUSリポジトリの追加<br>
+        Pythonの最新アップストリームバージョンを提供するリポジトリ。<br>
+        IUSリポジトリ経由 でPythonの最新バージョンをインストールできるようにする。<br></p>
+      <pre><code>$ yum -y install https://centos7.iuscommunity.org/ius-release.rpm
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="pythonインストール">Pythonインストール</h3>
+  <ul>
+    <li>
+      <p>Python3.6のインストール<br>
+        <code>python36u</code>、<code>python36u-devel</code>をインストールする。<br>
+      </p>
+      <pre><code>$ yum -y install python36u
+$ yum -y install python36u-pip python36u-devel
+</code></pre>
+    </li>
+    <li>
+      <p>バージョン確認<br></p>
+      <pre><code>$ python3.6 -V
+Python 3.6.4
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="djangoインストール">Djangoインストール</h3>
+  <ul>
+    <li>
+      <p>venvで仮想環境を構築<br>
+        Pythonの仮想環境を作成するパッケージは、他にも<code>virtualenv</code>、<code>anaconda</code>、<code>pyenv</code>、<code>pyenv-virtualenv</code>など多数あるが、ここでは、Python3から標準搭載されている<code>venv</code>を使用する。<br>
+        <br>
+        ※ <code>vops</code>は、仮想環境が入るディレクトリ名なので各自の環境に合わせること。
+      </p>
+      <pre><code>$ python3.6 -m venv /var/www/vops
+</code></pre>
+    </li>
+    <li>
+      <p>仮想環境上にDjangoをインストール<br>
+        <code>pip</code>で<code>Django</code>をインストールする。
+      </p>
+      <pre><code>$ source /var/www/vops/bin/activate # 仮想環境起動
+$ pip install django # djangoインストール
+</code></pre>
+    </li>
+    <li>
+      <p>Djangoプロジェクトの雛形作成<br>
+        ※ <code>ops</code>は、プロジェクト名なので、各自の環境に合わせること。</p>
+      <pre><code>$ django-admin startproject /var/www/vops/ops
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="アプリケーション作成">アプリケーション作成</h3>
+  <ul>
+    <li>実際にプログラムの成果物を配置することになるアプリケーションを作成
+      ※ ここでは、<code>macuos</code>という名称のアプリケーションを作成する。
+      <pre><code>$ source /var/www/vops/bin/activate    # 仮想環境起動
+$ python manage.py startapp /var/www/vops/ops/macuos    # アプリケーションを作成
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="mod_wsgiインストール">mod_wsgiインストール</h3>
+  <ul>
+    <li><code>httpd-devel</code>と<code>mod_wsgi</code>をインストール
+      Python3上では事前に<code>httpd-devel</code>をインストールする必要があるため、<code>mod_wsgi</code>の前に
+      <code>httpd-devel</code>をインストールする。<br>
+      <pre><code>$ source /var/www/vops/bin/activate # 仮想環境起動
+$ yum install -y httpd httpd-devel # httpd-develをインストール
+$ pip3.6 install mod_wsgi # pipでmod_wsgiをインストール
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="wsgiと仮想ホストの設定ファイル作成">WSGIと仮想ホストの設定ファイル作成</h3>
+  <ul>
+    <li>
+      <p>Apache設定ファイルの確認<br>
+        Apacheの設定ファイル<code>httpd.conf</code>の設定内容を確認する。<br></p>
+      <pre><code>$ cat /etc/httpd/conf/httpd.conf
+…
+Include conf.modules.d/*.conf  
+IncludeOptional conf.d/*.conf 
+…
+</code></pre>
+      <ul>
+        <li>補足<br>
+          上記<code>Include</code>は、<code>conf.modules.d</code>(module系の設定ファイル)配下の<code>*.conf</code>をロードする設定、<code>IncludeOptional</code>は、<code>conf.d</code>(その他設定系のファイル)配下の<code>*.conf</code>をロードする設定となる。<br>
+          <br>
+          そのため、次項で<code>WSGI設定ファイル</code>(django-wsgi.conf)と<code>仮想ホスト設定ファイル</code>(django.conf)を作成し、Apacheからmod_wsgiを介し、Djangoを起動できるよう、wsgi_module設定ファイルを作成する。<br>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>WSGI設定ファイル作成<br>
+        <code>/etc/httpd/conf.modules.d</code>配下に下記の内容で<code>django-wsgi.conf</code>を作成する。<br>
+      </p>
+      <pre><code>LoadModule wsgi_module  /var/www/vops/lib64/python3.6/site-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so
+</code></pre>
+      <ul>
+        <li>補足<br>
+          ※ wsgi_moduleのファイルパスは、findで確認。<br>
+          <pre><code>$ find /var/www -name 'mod_*.so'
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>仮想ホスト設定ファイル作成<br>
+        <code>/etc/httpd/conf.d</code>配下に下記の内容で<code>django.conf</code>を作成する。<br>
+      </p>
+      <pre><code>NameVirtualHost *:80
+NameVirtualHost *:443
+WSGISocketPrefix run/wsgi
+
+&lt;VirtualHost *:443&gt;… (※1)
+    ServerName example.com … (※2)
+    SSLEngine On … (※3)
+    SSLCertificateFile /etc/letsencrypt/live/example.com/cert.pem … (※4)
+    SSLCertificateKeyFile  /etc/letsencrypt/live/example.com/privkey.pem … (※4)
+
+    WSGIDaemonProcess example.com processes=2 threads=15 python-home=/var/www/vops python-path=/var/www/vops/lib64/python3.6/site-packages … (※5)
+    WSGIProcessGroup example.com … (※6)
+    WSGIScriptAlias / /var/www/vops/ops/ops/wsgi.py … (※7)
+
+    Alias /static /var/www/vops/ops/macuos/static … (※8)
+    &lt;Directory /var/www/vops/ops/macuos/static&gt; 
+        Require all granted
+    &lt;/Directory&gt;
+
+    &lt;Directory /var/www/vops/ops/ops&gt; … (※9)
+        &lt;Files wsgi.py&gt;
+            Require all granted
+        &lt;/Files&gt;
+    &lt;/Directory&gt;
+&lt;/VirtualHost&gt;
+&lt;VirtualHost *:80&gt;… (※10)
+    ServerName example.com
+    RewriteEngine on
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+&lt;/VirtualHost&gt;
+</code></pre>
+      <ul>
+        <li>上記注釈<br>
+          ※1 SSL/TLSポートのVirtualHost。<br>
+          ※2 ServerName：自身のドメイン、サブドメイン、IP等を設定。<br>
+          ※3 SSLEngine：SSL/TLSエンジンの有効化。<br>
+          ※4
+          SSL/TLSサーバー証明書と秘密鍵の設定。Apache2.4では、上記のSSLCertificateFile、SSLCertificateKeyFileの設定になるが、Apache2.2だとSSLCertificateFile、SSLCertificateKeyFile、SSLCertificateChainFileの3つに設定が必要でさらに内容も若干違うため、バージョンが古い場合は、注意が必要。<br>
+          ※5 マルチプロセスかつ、デーモンモードでの起動設定。<br>
+          ※6 WSGIDaemonProcessと同じ、example.comを設定する必要あり。<br>
+          ※7 wsgi.pyエイリアスと起動直後のトップ画面をexample.comで表示したい場合の設定。
+          例えば、トップ画面から&quot;XXX&quot;というサブフォルダを掘りたい場合は、WSGIScriptAliasの第一パラメータに&quot;/XXX&quot;を指定する。<br>
+          ※8 静的ファイルへの（アイコンや画像など）エイリアスを設定 及び、静的フォルダまでのパスを設定。<br>
+          ※9 wsgi.pyまでのパスを設定。(起動直後にwsgi.pyを実行するよに設定)<br>
+          ※10 httpデフォルトの80ポートのVirtualHost。httpsにリダイレクトするように設定。<br></li>
+      </ul>
+    </li>
+  </ul>
+</body>
