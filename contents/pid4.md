@@ -36,3 +36,52 @@ active (running) と表示されていれば成功。
   ```
   $ service postgresql status
   ```
+
+### Django周りの設定
+以下、Djangoのモデル定義が終わっていることが前提。
+- マイグレーションファイルを作成<br>
+※ マイグレーションファイル(モデルの内容をデータベースに適用するファイル)<br>
+  ```
+  $ /var/www/vops/ops/manage.py makemigrations
+  ```
+
+- マイグレーションファイルをデータベースに反映<br>
+マイグレーションファイルを基に、データベースの構造(テーブルの作成や更新)を変更する。
+  ```
+  $ /var/www/vops/ops/manage.py migrate
+  ```
+
+- スーパーユーザーの作成<br>
+  ```
+  $ /var/www/vops/ops/manage.py createsuperuser
+  ```
+
+- staticファイルの設定、収集<br>
+`settings.py`に`STATIC_ROOT`を定義する。<br>
+`collectstatic`により、このパスへ静的ファイルが収集される。
+  ```
+  $ vim /var/www/vops/ops/ops/settings.py
+  # STATIC_ROOT = os.path.join(BASE_DIR, "static/") ← この行を追記
+  $ /var/www/vops/ops/manage.py collectstatic
+  ```
+
+- Djangoのポートを解放<br>
+Djangoで使用するポートを解放する。<br>
+※ ここでは開発用として8080を解放する。
+  ```
+  # firewall-cmd --permanent --add-port=8080/tcp
+  # firewall-cmd --reload
+  ```
+
+- プロジェクトのドメイン設定<br>
+  - `settings.py`の`ALLOWED_HOST`にドメインを設定
+  ```
+  # firewall-cmd --permanent --add-port=8080/tcp
+  # firewall-cmd --reload
+  ```
+  - `settings.py`に`STATIC_ROOT`を定義<br>
+  ※ collectstaticにより、このパスへ静的ファイルが収集されるようになる。
+  ```
+  $ vim /var/www/vops/ops/ops/settings.py 
+  # ALLOWED_HOSTS = ['example.com']を指定する。
+  ```
