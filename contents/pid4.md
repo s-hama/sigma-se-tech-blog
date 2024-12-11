@@ -85,3 +85,27 @@ Djangoで使用するポートを解放する。<br>
   $ vim /var/www/vops/ops/ops/settings.py 
   # ALLOWED_HOSTS = ['example.com']を指定する。
   ```
+
+### PostgreSql周りの設定
+- `postgresql.conf`の`listen_addresses`を公開
+  ```
+  $ vim /var/lib/pgsql/data/postgresql.conf
+  listen_addresses = '*' # localhostを*に修正。 
+  ```
+
+- `pg_hba.conf(認証設定ファイル)`にドメイン情報を追加<br>
+IPアドレスは、サーバーのものを指定する。
+その他項目については、公式文章を参照。
+https://www.postgresql.jp/document/9.2/html/auth-pg-hba-conf.html
+  ```
+  $ vim /var/lib/pgsql/data/pg_hba.conf
+  # 下記を追記
+  host    all             all             XXX.XXX.XXX.XXX/32        md5
+  ```
+
+- firewallの設定<br>
+ポート5432を解放する。
+  ```
+  $ firewall-cmd --add-port=5432/tcp --zone=public --permanent # portを解放
+  $ firewall-cmd --reload # 再読込
+  ```
