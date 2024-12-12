@@ -109,3 +109,101 @@ https://www.postgresql.jp/document/9.2/html/auth-pg-hba-conf.html
   $ firewall-cmd --add-port=5432/tcp --zone=public --permanent # portを解放
   $ firewall-cmd --reload # 再読込
   ```
+
+### settings.pyの設定
+- デバッグモードの無効化
+  ```
+  DEBUG = False # 開発モードのTrueからFalseに修正。
+  ```
+- ALLOWED_HOSTSを自身のドメインに設定
+  ```
+  ALLOWED_HOSTS = ['example.com'] # 自身のドメインに修正。
+  ```
+- INSTALLED_APPSにアプリケーション名を追加
+  ```
+  INSTALLED_APPS = [
+      'macuos', # アプリケーション名を追加。
+      'django.contrib.admin',
+      'django.contrib.auth',
+      'django.contrib.contenttypes',
+      'django.contrib.sessions',
+      'django.contrib.messages',
+      'django.contrib.staticfiles',
+  ]
+  ```
+- SSL/TLS周りの設定を追加
+  ```
+  SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+  SECURE_SSL_REDIRECT = True
+  SESSION_COOKIE_SECURE = True
+  CSRF_COOKIE_SECURE = True
+  ```
+- ROOT_URLCONFの修正
+  ```
+  ROOT_URLCONF = 'ops.urls' # インタセプターの指令ファイルを指定。
+  ```
+- DATABASESの設定
+  ```
+  DATABASES = {
+      'default': {
+          'ENGINE': 'django.db.backends.postgresql_psycopg2',
+          'NAME': 'macuosdb', 
+          'USER': 'padmin',
+          'PASSWORD': '*****',
+          'HOST': 'example.com',
+          'PORT': '5432'
+      }
+  }
+  ```
+- 日本語化、タイムゾーンの設定
+  ```
+  LANGUAGE_CODE = 'ja'
+  TIME_ZONE = 'Asia/Tokyo'
+  USE_I18N = True
+  USE_L10N = True
+  USE_TZ = True
+  ```
+- 静的ファイル、メディアファイルのパス設定
+  ```
+  STATIC_URL = '/static/'
+  STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+  MEDIA_URL = '/media/'
+  MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+  ```
+- ログの設定(任意)
+  ```
+  LOGGING = {
+      'version': 1,
+      'formatters': {
+          'all': {
+              'format': ' *** '.join([
+                  "[%(levelname)s]",
+                  "asctime:%(asctime)s",
+                  "module:%(module)s",
+                  "message:%(message)s",
+                  "process:%(process)d",
+                  "thread:%(thread)d",
+              ])
+          },
+      },
+      'handlers': {
+          'file': {
+              'level': 'DEBUG',
+              'class': 'logging.FileHandler',
+              'filename': os.path.join('/var/log/httpd', 'django.log'),
+              'formatter': 'all',
+          },
+          'console': {
+              'level': 'DEBUG',
+              'class': 'logging.StreamHandler',
+              'formatter': 'all'
+          },
+      },
+      'loggers': {
+          'command': {
+              'handlers': ['file', 'console'],
+              'level': 'DEBUG',
+          },
+      },
+  }
+  ```
