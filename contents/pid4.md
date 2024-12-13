@@ -207,3 +207,18 @@ https://www.postgresql.jp/document/9.2/html/auth-pg-hba-conf.html
       },
   }
   ```
+
+### 起動確認　
+- Djangoの起動確認
+  - `manage.py`の`runserver`コマンドでDjangoを起動<br>
+  ※ `runserver`コマンド実行後、http://example.com:8080にアクセスし、ロケットが離陸している画像が表示されれば正常にDjangoが起動している。<br>
+  ※ runserver は、開発モードでの起動であることに注意。
+    ```
+    $ /var/www/vops/ops/manage.py runserver example.com:8080
+    ```
+
+- 本番環境の起動確認<br>
+`Apache`、`PostgresSQL`を再起動後、https://example.com にアクセスし、自身で作成したアプリが起動すれば成功。<br>
+モデルを修正した場合は、、`manage.py`の`makemigrations`、`migrate`を忘れないこと。<br><br>
+また、Django を単独で起動する`manage.py`の`runserver`や`runsslserver`は、あくまで開発モードなのでApacheと混同して両方起動しないように注意。<br><br>
+※ Apacheもrunserverも単独で動くので双方起動した場合、別プロセスで動きつつApache、Djangoそれぞれでリスエストを解析するので設定次第でどちらかが先に動きおかしな挙動となる。<br>
