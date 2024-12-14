@@ -221,4 +221,4 @@ https://www.postgresql.jp/document/9.2/html/auth-pg-hba-conf.html
 `Apache`、`PostgresSQL`を再起動後、https://example.com にアクセスし、自身で作成したアプリが起動すれば成功。<br>
 モデルを修正した場合は、、`manage.py`の`makemigrations`、`migrate`を忘れないこと。<br><br>
 また、Django を単独で起動する`manage.py`の`runserver`や`runsslserver`は、あくまで開発モードなのでApacheと混同して両方起動しないように注意。<br><br>
-※ Apacheもrunserverも単独で動くので双方起動した場合、別プロセスで動きつつApache、Djangoそれぞれでリスエストを解析するので設定次第でどちらかが先に動きおかしな挙動となる。<br>
+※ Apacheもrunserverも単独で動くので双方起動した場合、別プロセスで動きつつApache、Djangoそれぞれでリスエストを解析するので設定次第でどちらかが先に動き挙動がおかしくなる。<br>
