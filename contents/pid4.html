@@ -9,4 +9,33 @@
     <li>DB：PostgresSQL</li>
     <li>ドメイン：example.com</li>
   </ul>
+  <h2 id="実施内容">実施内容</h2>
+  <h3 id="データベースの環境構築">データベースの環境構築</h3>
+  <ul>
+    <li>
+      <p>PostgreSQLインストール</p>
+      <pre><code>yum -y install postgresql-server 
+</code></pre>
+    </li>
+    <li>
+      <p>データベースとユーザーの作成<br>
+        データベース<code>MACUOSDB</code>とアクセスユーザー<code>padmin</code>を作成。</p>
+      <pre><code>$ postgresql-setup initdb # データベースの初期化
+$ service postgresql start # PostgreSqlを起動
+$ sudo -u postgres psql # postgresでログイン
+postgres=# CREATE DATABASE MACUOSDB; # データベースの作成
+postgres=# CREATE USER padmin WITH PASSWORD '*****'; # ユーザー、パスワードの作成
+postgres=# ALTER ROLE padmin SET client_encoding TO 'utf8'; # padminの文字コードを設定
+postgres=# ALTER ROLE padmin SET default_transaction_isolation TO 'read committed';  # 実行された結果だけを見に行く
+postgres=# ALTER ROLE padmin SET timezone TO 'UTC+9'; # タイムゾーンを設定
+postgres=# GRANT ALL PRIVILEGES  ON DATABASE MACUOSDB TO admin;  # padminに権限を付与
+</code></pre>
+    </li>
+    <li>
+      <p>PostgreSqlを起動確認<br>
+        active (running) と表示されていれば成功。</p>
+      <pre><code>$ service postgresql status
+</code></pre>
+    </li>
+  </ul>
 </div>
