@@ -38,4 +38,59 @@ postgres=# GRANT ALL PRIVILEGES  ON DATABASE MACUOSDB TO admin;  # padminに権�
 </code></pre>
     </li>
   </ul>
+  <h3 id="django周りの設定">Django周りの設定</h3>
+  <p>以下、Djangoのモデル定義が終わっていることが前提。</p>
+  <ul>
+    <li>
+      <p>マイグレーションファイルを作成<br>
+        ※ マイグレーションファイル(モデルの内容をデータベースに適用するファイル)<br></p>
+      <pre><code>$ /var/www/vops/ops/manage.py makemigrations
+</code></pre>
+    </li>
+    <li>
+      <p>マイグレーションファイルをデータベースに反映<br>
+        マイグレーションファイルを基に、データベースの構造(テーブルの作成や更新)を変更する。</p>
+      <pre><code>$ /var/www/vops/ops/manage.py migrate
+</code></pre>
+    </li>
+    <li>
+      <p>スーパーユーザーの作成<br></p>
+      <pre><code>$ /var/www/vops/ops/manage.py createsuperuser
+</code></pre>
+    </li>
+    <li>
+      <p>staticファイルの設定、収集<br>
+        <code>settings.py</code>に<code>STATIC_ROOT</code>を定義する。<br>
+        <code>collectstatic</code>により、このパスへ静的ファイルが収集される。
+      </p>
+      <pre><code>$ vim /var/www/vops/ops/ops/settings.py
+# STATIC_ROOT = os.path.join(BASE_DIR, &quot;static/&quot;) ← この行を追記
+$ /var/www/vops/ops/manage.py collectstatic
+</code></pre>
+    </li>
+    <li>
+      <p>Djangoのポートを解放<br>
+        Djangoで使用するポートを解放する。<br>
+        ※ ここでは開発用として8080を解放する。</p>
+      <pre><code># firewall-cmd --permanent --add-port=8080/tcp
+# firewall-cmd --reload
+</code></pre>
+    </li>
+    <li>
+      <p>プロジェクトのドメイン設定<br></p>
+      <ul>
+        <li><code>settings.py</code>の<code>ALLOWED_HOST</code>にドメインを設定</li>
+      </ul>
+      <pre><code># firewall-cmd --permanent --add-port=8080/tcp
+# firewall-cmd --reload
+</code></pre>
+      <ul>
+        <li><code>settings.py</code>に<code>STATIC_ROOT</code>を定義<br>
+          ※ collectstaticにより、このパスへ静的ファイルが収集されるようになる。</li>
+      </ul>
+      <pre><code>$ vim /var/www/vops/ops/ops/settings.py 
+# ALLOWED_HOSTS = ['example.com']を指定する。
+</code></pre>
+    </li>
+  </ul>
 </div>
