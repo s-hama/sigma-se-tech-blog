@@ -121,4 +121,103 @@ $ firewall-cmd --reload # 再読込
 </code></pre>
     </li>
   </ul>
+  <h3 id="settingspyの設定">settings.pyの設定</h3>
+  <ul>
+    <li>デバッグモードの無効化
+      <pre><code>DEBUG = False # 開発モードのTrueからFalseに修正。
+</code></pre>
+    </li>
+    <li>ALLOWED_HOSTSを自身のドメインに設定
+      <pre><code>ALLOWED_HOSTS = ['example.com'] # 自身のドメインに修正。
+</code></pre>
+    </li>
+    <li>INSTALLED_APPSにアプリケーション名を追加
+      <pre><code>INSTALLED_APPS = [
+    'macuos', # アプリケーション名を追加。
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+]
+</code></pre>
+    </li>
+    <li>SSL/TLS周りの設定を追加
+      <pre><code>SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+</code></pre>
+    </li>
+    <li>ROOT_URLCONFの修正
+      <pre><code>ROOT_URLCONF = 'ops.urls' # インタセプターの指令ファイルを指定。
+</code></pre>
+    </li>
+    <li>DATABASESの設定
+      <pre><code>DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'macuosdb', 
+        'USER': 'padmin',
+        'PASSWORD': '*****',
+        'HOST': 'example.com',
+        'PORT': '5432'
+    }
+}
+</code></pre>
+    </li>
+    <li>日本語化、タイムゾーンの設定
+      <pre><code>LANGUAGE_CODE = 'ja'
+TIME_ZONE = 'Asia/Tokyo'
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
+</code></pre>
+    </li>
+    <li>静的ファイル、メディアファイルのパス設定
+      <pre><code>STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+</code></pre>
+    </li>
+    <li>ログの設定(任意)
+      <pre><code>LOGGING = {
+    'version': 1,
+    'formatters': {
+        'all': {
+            'format': ' *** '.join([
+                &quot;[%(levelname)s]&quot;,
+                &quot;asctime:%(asctime)s&quot;,
+                &quot;module:%(module)s&quot;,
+                &quot;message:%(message)s&quot;,
+                &quot;process:%(process)d&quot;,
+                &quot;thread:%(thread)d&quot;,
+            ])
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join('/var/log/httpd', 'django.log'),
+            'formatter': 'all',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'all'
+        },
+    },
+    'loggers': {
+        'command': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+        },
+    },
+}
+</code></pre>
+    </li>
+  </ul>
 </div>
