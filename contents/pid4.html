@@ -220,4 +220,27 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 </code></pre>
     </li>
   </ul>
+  <h3 id="起動確認">起動確認</h3>
+  <ul>
+    <li>
+      <p>Djangoの起動確認</p>
+      <ul>
+        <li><code>manage.py</code>の<code>runserver</code>コマンドでDjangoを起動<br>
+          ※ <code>runserver</code>コマンド実行後、http://example.com:8080にアクセスし、ロケットが離陸している画像が表示されれば正常にDjangoが起動している。<br>
+          ※ runserver は、開発モードでの起動であることに注意。
+          <pre><code>$ /var/www/vops/ops/manage.py runserver example.com:8080
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>本番環境の起動確認<br>
+        <code>Apache</code>、<code>PostgresSQL</code>を再起動後、https://example.comにアクセスし、自身で作成したアプリが起動すれば成功。<br>
+        モデルを修正した場合は、、<code>manage.py</code>の<code>makemigrations</code>、<code>migrate</code>を忘れないこと。<br><br>
+        また、Django
+        を単独で起動する<code>manage.py</code>の<code>runserver</code>や<code>runsslserver</code>は、あくまで開発モードなのでApacheと混同して両方起動しないように注意。<br><br>
+        ※ Apacheもrunserverも単独で動くので双方起動した場合、別プロセスで動きつつApache、Djangoそれぞれでリスエストを解析するので設定次第でどちらかが先に動き挙動がおかしくなる。<br>
+      </p>
+    </li>
+  </ul>
 </div>
