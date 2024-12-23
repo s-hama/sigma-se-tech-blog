@@ -6,3 +6,5 @@ Git - 状態管理概念 : working tree, index, stage, local repository, remote 
 
 ## 項目説明
 ### ワーキングツリー（working tree）
+現在チェックアウトしているローカルディレクトリを指す。
+実際に修正、追加、削除を行う作業場所のこと。
