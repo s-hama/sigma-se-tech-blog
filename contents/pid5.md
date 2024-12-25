@@ -13,3 +13,9 @@ Git - 状態管理概念 : working tree, index, stage, local repository, remote 
 `commit`前に`working tree`の変更を一時的に保存する場所。
 変更が`index`として表示される。
 `commit`準備ができた変更を`staging area`に移動して`commit`対象を管理する。
+
+### ローカルリポジトリ（local repository）
+ローカルマシン上にある個別リポジトリ。
+`commit`されたすべての履歴やバージョンが保存される場所。
+`branch`単位の`push`によって`commit`を`remote repository`に反映する。
+
