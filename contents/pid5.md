@@ -19,3 +19,6 @@ Git - 状態管理概念 : working tree, index, stage, local repository, remote 
 `commit`されたすべての履歴やバージョンが保存される場所。
 `branch`単位の`push`によって`commit`を`remote repository`に反映する。
 
+### リモートリポジトリ（remote repository）
+ネットワーク上にある共有リポジトリ。
+通常は、`GitHub`や`GitLab`などのホスティングサービス上に存在する。
