@@ -24,7 +24,7 @@ Git - 状態管理の概念と基本操作 : add, commit, diff, checkout, reset
 ネットワーク上にある共有リポジトリ。
 通常は、`GitHub`や`GitLab`などのホスティングサービス上に存在する。
 
-### ステータス確認: [git status]
+### [git status]：　ステータス確認
 - 確認用に`touch`でファイルを新規作成
   ```
   $ touch example-src.txt
