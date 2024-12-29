@@ -23,3 +23,31 @@ Git - 状態管理の概念と基本操作 : add, commit, diff, checkout, reset
 - リモートリポジトリ（remote repository）
 ネットワーク上にある共有リポジトリ。
 通常は、`GitHub`や`GitLab`などのホスティングサービス上に存在する。
+
+### ステータス確認: [git status]
+- 確認用に`touch`でファイルを新規作成
+  ```
+  $ touch example-src.txt
+  ```
+- `git status`でステータス確認<br>
+`Untracked files`に表示されるファイル達は、Git管理下にないファイルが表示される。<br>
+上記で新規作成した`example-src.txt`がバージョン管理下にないため`git add`を促す警告が表示されている。<br>
+  ```
+  $ git status
+  On branch master
+
+  No commits yet
+
+  Untracked files:
+  (use "git add ..." to include in what will be committed)
+
+          example-src.txt
+
+  nothing added to commit but untracked files present (use "git add" to track)
+  ```
+
+- `git status`のその他使用例
+  ```
+  $ git status [FILE]   # ファイルパス指定
+  $ git status [DIR]   # ディレクトリ指定
+  ```
