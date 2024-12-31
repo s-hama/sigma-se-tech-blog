@@ -51,3 +51,42 @@ Git - 状態管理の概念と基本操作 : status, add, commit, diff, reset, p
   $ git status [FILE]   # ファイルパス指定
   $ git status [DIR]   # ディレクトリ指定
   ```
+
+### [git add] : インデックスへ反映
+- 前項の警告に従い`git add`を実行<br>
+`git add`により、変更が`ワーキングツリー`から`インデックス`へ反映される。<br>
+  ```
+  $ git add example-src.txt
+  ```
+
+- ステータス確認<br>
+  ```
+  $ git status
+  On branch master
+
+  No commits yet
+
+  Changes to be committed:
+    (use "git rm --cached ..." to unstage)
+
+        new file:   example-src.txt
+  ```
+
+- `git add`のその他使用例
+  ```
+  $ git add [FILE]  # ファイルパス指定
+  $ git add [FILE1]  [FILE2]  [FILE3]  .... # ファイル複数指定
+  $ git add [DIR]  # ディレクトリ指定
+   git add [DIR1]  [DIR2]  [DIR3]  .... # ディレクトリ複数指定
+   git add .    # カレントディレクト以下すべてを追加する
+   git add -A   # Git管理内のすべての変更する (--allと同じ)
+   git add --all  # Git管理内のすべての変更する (--Aと同じ)
+   git add -u   # Git管理内で変更があったファイルをすべて追加する (--updateと同じ)
+   git add --update    # Git管理内で変更があったファイルをすべて追加する (--uと同じ)
+   git add -f     # .gitignoreにある管理対象外に設定したファイルも強制的に追加する(.-forceと同じ)
+   git add --force   # .gitignoreにある管理対象外に設定したファイルも強制的に追加る (-と同)
+   git add -p    # Git管理内のすべてのファイルを対象に対話形式 (Y or N)で追加す(--patchとじ)
+   git add --patch   # Git管理内のすべてのファイルを対象に対話形式 (Y or N)で追加る (-同じ)
+   git add -n    # addコマンド実行後のどういった結果になるか確認できる (--dry-rn同じ)
+  $ git add --dry-run  # addコマンド実行後のどういった結果になるか確認できる (-nとじ)
+  ```
