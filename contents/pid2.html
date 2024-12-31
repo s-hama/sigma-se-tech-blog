@@ -96,12 +96,12 @@ $ chmod 775 html
     </li>
   </ul>
   <h3 id="ssltls証明書設定">SSL/TLS証明書設定</h3>
-  <p>ここでは、SSL/TLS証明書が無料取得できる<code>Let's Encrypt</code>を使用する。
+  <p>ここでは、SSL/TLS証明書が無料取得できる<strong>Let's Encrypt</strong>を使用する。<br>
     以降、Certbot をインストールし、SSL/TLS証明書を取得して定期更新まで実施する。</p>
   <ul>
     <li>
       <p>mod_sslインストール<br>
-        <code>Apache</code>を<code>SSL/TLS</code>に対応させる。
+        <strong>Apache</strong>を<strong>SSL/TLS</strong>に対応させる。
       </p>
       <pre><code>$ yum install mod_ssl # mod_sslインストール
 </code></pre>
@@ -140,14 +140,14 @@ $ systemctl status httpd
     </li>
     <li>
       <p>EPELリポジトリのインストール<br>
-        <code>EPEL</code>は、CentOSで標準搭載されていないパッケージをyumでインストール可能にするためのリポジトリ。
+        <strong>EPEL</strong>は、CentOSで標準搭載されていないパッケージをyumでインストール可能にするためのリポジトリ。
       </p>
       <pre><code>$ yum install epel-release
 </code></pre>
     </li>
     <li>
       <p>Certbotのインストール<br>
-        <code>Certbot</code>は、<code>Let's Encrypt</code>で使用するクライアントソフトウェアで、SSL/TLSサーバー証明書の取得、及び更新作業を自動化してくれる。
+        <strong>Certbot</strong>は、<strong>Let's Encrypt</strong>で使用するクライアントソフトウェアで、SSL/TLSサーバー証明書の取得、及び更新作業を自動化してくれる。
       </p>
       <pre><code>$ yum install epel-release
 </code></pre>
@@ -159,13 +159,13 @@ $ systemctl status httpd
     </li>
     <li>
       <p>SSL/TLSの動作確認<br>
-        httpsで自身のドメイン(https://example.com)にアクセスできれば成功。<br>
+        httpsで自身のドメイン(http://example.com)にアクセスできれば成功。<br>
         ※ httpでアクセスしてもhttpsにリダイレクトされる。</p>
     </li>
   </ul>
   <h3 id="lets-encryptの定期更新">Let's Encryptの定期更新</h3>
   <p>3か月単位で定期的な証明書の再発行が必要。
-    期限が近づくと<code>Let's Encrypt certificate expiration notice for domain &quot;example.com&quot;</code>というメールが送られてくるため、期限以内に<code>certbot</code>から証明書を再発行する必要がある。
+    期限が近づくと<strong>Let's Encrypt certificate expiration notice for domain &quot;example.com&quot;</strong>というメールが送られてくるため、期限以内に<strong>certbot</strong>から証明書を再発行する必要がある。
   </p>
   <ul>
     <li>
@@ -179,8 +179,7 @@ $ sudo systemctl start httpd # Apache起動
     </li>
     <li>
       <p>有効期限の確認<br>
-        ブラウザの証明書情報の有効期限が<code>3か月</code>伸びていれば再発行成功。</p>
+        ブラウザの証明書情報の有効期限が<strong>3か月</strong>伸びていれば再発行成功。</p>
     </li>
   </ul>
-
 </div>
