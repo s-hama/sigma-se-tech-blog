@@ -18,7 +18,7 @@ VPSで作るDjangoサイト構築手順 - Apache編 : 4/4 データベース設�
   ```
 
 - データベースとユーザーの作成<br>
-データベース`MACUOSDB`とアクセスユーザー`padmin`を作成。
+データベース**MACUOSDB**とアクセスユーザー**padmin**を作成。
   ```
   $ postgresql-setup initdb # データベースの初期化
   $ service postgresql start # PostgreSqlを起動
@@ -57,7 +57,7 @@ active (running) と表示されていれば成功。
   ```
 
 - staticファイルの設定、収集<br>
-`settings.py`に`STATIC_ROOT`を定義する。<br>
+**settings.py**に`STATIC_ROOT`を定義する。<br>
 `collectstatic`により、このパスへ静的ファイルが収集される。
   ```
   $ vim /var/www/vops/ops/ops/settings.py
@@ -74,12 +74,12 @@ Djangoで使用するポートを解放する。<br>
   ```
 
 - プロジェクトのドメイン設定<br>
-  - `settings.py`の`ALLOWED_HOST`にドメインを設定
+  - **settings.py**の`ALLOWED_HOST`にドメインを設定
   ```
   # firewall-cmd --permanent --add-port=8080/tcp
   # firewall-cmd --reload
   ```
-  - `settings.py`に`STATIC_ROOT`を定義<br>
+  - **settings.py**に`STATIC_ROOT`を定義<br>
   ※ collectstaticにより、このパスへ静的ファイルが収集されるようになる。
   ```
   $ vim /var/www/vops/ops/ops/settings.py 
@@ -87,13 +87,13 @@ Djangoで使用するポートを解放する。<br>
   ```
 
 ### PostgreSql周りの設定
-- `postgresql.conf`の`listen_addresses`を公開
+- **postgresql.conf**の`listen_addresses`を公開
   ```
   $ vim /var/lib/pgsql/data/postgresql.conf
   listen_addresses = '*' # localhostを*に修正。 
   ```
 
-- `pg_hba.conf(認証設定ファイル)`にドメイン情報を追加<br>
+- **pg_hba.conf(認証設定ファイル)**にドメイン情報を追加<br>
 IPアドレスは、サーバーのものを指定する。
 その他項目については、公式文章を参照。
 https://www.postgresql.jp/document/9.2/html/auth-pg-hba-conf.html
@@ -210,7 +210,7 @@ https://www.postgresql.jp/document/9.2/html/auth-pg-hba-conf.html
 
 ### 起動確認　
 - Djangoの起動確認
-  - `manage.py`の`runserver`コマンドでDjangoを起動<br>
+  - **manage.py**の`runserver`コマンドでDjangoを起動<br>
   ※ `runserver`コマンド実行後、http://example.com:8080にアクセスし、ロケットが離陸している画像が表示されれば正常にDjangoが起動している。<br>
   ※ runserver は、開発モードでの起動であることに注意。
     ```
@@ -218,7 +218,7 @@ https://www.postgresql.jp/document/9.2/html/auth-pg-hba-conf.html
     ```
 
 - 本番環境の起動確認<br>
-`Apache`、`PostgresSQL`を再起動後、https://example.com にアクセスし、自身で作成したアプリが起動すれば成功。<br>
-モデルを修正した場合は、、`manage.py`の`makemigrations`、`migrate`を忘れないこと。<br><br>
-また、Django を単独で起動する`manage.py`の`runserver`や`runsslserver`は、あくまで開発モードなのでApacheと混同して両方起動しないように注意。<br><br>
+**Apache**、**PostgresSQL**を再起動後、https://example.comにアクセスし、自身で作成したアプリが起動すれば成功。<br>
+モデルを修正した場合は、**manage.py**の`makemigrations`、`migrate`を忘れないこと。<br><br>
+また、Django を単独で起動する**manage.py**の`runserver`や`runsslserver`は、あくまで開発モードなのでApacheと混同して両方起動しないように注意。<br><br>
 ※ Apacheもrunserverも単独で動くので双方起動した場合、別プロセスで動きつつApache、Djangoそれぞれでリスエストを解析するので設定次第でどちらかが先に動き挙動がおかしくなる。<br>
