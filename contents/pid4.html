@@ -1,4 +1,4 @@
-<div class="post-body">
+<div div class="post-body">
   <h2 id="目的">目的</h2>
   <p>この記事では、以下のVPS環境でDjangoサイトを構築するために必要な「データベース設定と起動確認手順」について説明する。</p>
   <ul>
@@ -19,7 +19,7 @@
     </li>
     <li>
       <p>データベースとユーザーの作成<br>
-        データベース<code>MACUOSDB</code>とアクセスユーザー<code>padmin</code>を作成。</p>
+        データベース<strong>MACUOSDB</strong>とアクセスユーザー<strong>padmin</strong>を作成。</p>
       <pre><code>$ postgresql-setup initdb # データベースの初期化
 $ service postgresql start # PostgreSqlを起動
 $ sudo -u postgres psql # postgresでログイン
@@ -60,7 +60,7 @@ postgres=# GRANT ALL PRIVILEGES  ON DATABASE MACUOSDB TO admin;  # padminに権�
     </li>
     <li>
       <p>staticファイルの設定、収集<br>
-        <code>settings.py</code>に<code>STATIC_ROOT</code>を定義する。<br>
+        <strong>settings.py</strong>に<code>STATIC_ROOT</code>を定義する。<br>
         <code>collectstatic</code>により、このパスへ静的ファイルが収集される。
       </p>
       <pre><code>$ vim /var/www/vops/ops/ops/settings.py
@@ -79,13 +79,13 @@ $ /var/www/vops/ops/manage.py collectstatic
     <li>
       <p>プロジェクトのドメイン設定<br></p>
       <ul>
-        <li><code>settings.py</code>の<code>ALLOWED_HOST</code>にドメインを設定</li>
+        <li><strong>settings.py</strong>の<code>ALLOWED_HOST</code>にドメインを設定</li>
       </ul>
       <pre><code># firewall-cmd --permanent --add-port=8080/tcp
 # firewall-cmd --reload
 </code></pre>
       <ul>
-        <li><code>settings.py</code>に<code>STATIC_ROOT</code>を定義<br>
+        <li><strong>settings.py</strong>に<code>STATIC_ROOT</code>を定義<br>
           ※ collectstaticにより、このパスへ静的ファイルが収集されるようになる。</li>
       </ul>
       <pre><code>$ vim /var/www/vops/ops/ops/settings.py 
@@ -96,13 +96,13 @@ $ /var/www/vops/ops/manage.py collectstatic
   <h3 id="postgresql周りの設定">PostgreSql周りの設定</h3>
   <ul>
     <li>
-      <p><code>postgresql.conf</code>の<code>listen_addresses</code>を公開</p>
+      <p><strong>postgresql.conf</strong>の<code>listen_addresses</code>を公開</p>
       <pre><code>$ vim /var/lib/pgsql/data/postgresql.conf
 listen_addresses = '*' # localhostを*に修正。 
 </code></pre>
     </li>
     <li>
-      <p><code>pg_hba.conf(認証設定ファイル)</code>にドメイン情報を追加<br>
+      <p><strong>pg_hba.conf(認証設定ファイル)</strong>にドメイン情報を追加<br>
         IPアドレスは、サーバーのものを指定する。
         その他項目については、公式文章を参照。
         <a
@@ -225,7 +225,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
     <li>
       <p>Djangoの起動確認</p>
       <ul>
-        <li><code>manage.py</code>の<code>runserver</code>コマンドでDjangoを起動<br>
+        <li><strong>manage.py</strong>の<code>runserver</code>コマンドでDjangoを起動<br>
           ※ <code>runserver</code>コマンド実行後、http://example.com:8080にアクセスし、ロケットが離陸している画像が表示されれば正常にDjangoが起動している。<br>
           ※ runserver は、開発モードでの起動であることに注意。
           <pre><code>$ /var/www/vops/ops/manage.py runserver example.com:8080
@@ -235,10 +235,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
     </li>
     <li>
       <p>本番環境の起動確認<br>
-        <code>Apache</code>、<code>PostgresSQL</code>を再起動後、https://example.comにアクセスし、自身で作成したアプリが起動すれば成功。<br>
-        モデルを修正した場合は、、<code>manage.py</code>の<code>makemigrations</code>、<code>migrate</code>を忘れないこと。<br><br>
-        また、Django
-        を単独で起動する<code>manage.py</code>の<code>runserver</code>や<code>runsslserver</code>は、あくまで開発モードなのでApacheと混同して両方起動しないように注意。<br><br>
+        <strong>Apache</strong>、<strong>PostgresSQL</strong>を再起動後、https://example.comにアクセスし、自身で作成したアプリが起動すれば成功。<br>
+        モデルを修正した場合は、<strong>manage.py</strong>の<code>makemigrations</code>、<code>migrate</code>を忘れないこと。<br><br>
+        また、Django を単独で起動する<strong>manage.py</strong>の<code>runserver</code>や<code>runsslserver</code>は、あくまで開発モードなのでApacheと混同して両方起動しないように注意。<br><br>
         ※ Apacheもrunserverも単独で動くので双方起動した場合、別プロセスで動きつつApache、Djangoそれぞれでリスエストを解析するので設定次第でどちらかが先に動き挙動がおかしくなる。<br>
       </p>
     </li>
