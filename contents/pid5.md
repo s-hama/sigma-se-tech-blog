@@ -33,3 +33,20 @@ GitHubリポジトリをリモートリポジトリとして利用し、ロー�
 統合ブランチにマージ後、不要となったトピックブランチは削除する。<br><br>
 トピックブランチ名は、改修内容が分かりやすいようにプロジェクト内の課題管理方法に準じた名前にするのが一般的。<br>
 ※ 課題管理番号を含めた短い名前にすることが多い。
+
+## 実施内容
+### GitHubのアカウント準備
+- Githubのアカウント登録
+https://github.com からアカウント登録(Sign up)する。
+
+- メール認証<br>
+登録したメールアドレス宛にメール「**[GitHub] Please verify your email**」が来るので、本文内のURLにアクセスしメール認証を完了させる。
+
+- 有料プラン変更<br>
+(1) 右上のプロフィールアイコンから**Settings**リンクをクリック。<br>
+(2) 左側のサイドメニューから**Billing**リンクをクリック。<br>
+(3) **Billing overviewセクション**の**Plan**にある**Get private repositories**ボタンをクリック。<br>
+(4) **Upgrade summaryセクション**の**Pay monthly / Pay yearly**ラジオボタンを選択。<br>
+(5) **Billing informationセクション**の**Add a Payment Method**リンクから支払い方法を指定。<br>
+(6) 必須情報の入力後、**Upgrade plan**ボタンをクリックする。<br>
+(7) (6)の後、**Billing overviewセクション**の**Plan**に**Personal - Unlimited private repositories**と表示されていれば、有料版へプラン変更が正常に完了。<br>
