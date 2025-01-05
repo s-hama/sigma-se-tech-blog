@@ -50,3 +50,62 @@ https://github.com からアカウント登録(Sign up)する。
 (5) **Billing informationセクション**の**Add a Payment Method**リンクから支払い方法を指定。<br>
 (6) 必須情報の入力後、**Upgrade plan**ボタンをクリックする。<br>
 (7) (6)の後、**Billing overviewセクション**の**Plan**に**Personal - Unlimited private repositories**と表示されていれば、有料版へプラン変更が正常に完了。<br>
+
+### SSHの公開鍵、秘密鍵の生成
+通信手段は、SSHを利用する。
+- id_rsa(秘密鍵)、id_rsa.pub(公開鍵)の生成<br>
+homeディレクトリに`.ssh`フォルダを作成後、そのフォルダに移動し、`ssh-keygen`を実行。
+  ```
+  $ mkdir ~/.ssh
+  $ cd ~/.ssh
+  $ ssh-keygen -t rsa -C "GitHubに登録したメールアドレス"
+  Generating public/private rsa key pair.
+  Enter file in which to save the key (/root/.ssh/id_rsa):        # Enter押下
+  Enter passphrase (empty for no passphrase):        # 新規のパスワードを入力
+  Enter same passphrase again:        # 確認用のパスワードを入力
+  Your identification has been saved in /root/.ssh/id_rsa.
+  Your public key has been saved in /root/.ssh/id_rsa.pub.
+  The key fingerprint is:
+  …
+  ```
+
+- 秘密鍵、公開鍵の生成確認<br>
+  ```
+  $ ls ~/.ssh
+  id_rsa  id_rsa.pub
+  ```
+
+- 秘密鍵、パスフレーズの登録<br>
+`ssh-add`で、SSH接続時に**パスワード入力を省略する**設定を行う。
+`ssh-add`は、OSによって実行方法が若干違うので注意。
+  ```
+  $ eval `ssh-agent`    # ssh-agent起動（evalなしだと環境変数の設定が必要）
+  $ ssh-add ~/.ssh/id_rsa
+  $ ssh-add -l    # 登録確認
+  2048 ********** /root/.ssh/id_rsa (RSA)   # このように表示されば正常に登録されている。
+  ```
+
+- GitHubに公開鍵を登録<br>
+(1) 右上のプロフィールアイコンから**Settings**リンクをクリックする。<br>
+(2) 左側のサイドメニューから**SSH and GPG Keys**リンクをクリックする。<br>
+(3) **SSH Keysセクション**の右側にある**add SSH Key**ボタンをクリックする。<br>
+(4) **Title**テキストボックスに任意の端末認識ができるような分かりやすいタイトルを記入する。<br>
+(5) 上記 秘密鍵、パスフレーズの登録で生成された id_rsa.pub(公開鍵) ファイル内すべてを**Key**にコピー＆ペーストする。<br>
+(6) **Add key**をクリックして保存する。<br>
+(7) GitHubのログインパスワードの入力を求められるので入力する。<br>
+(8) (3) で表示した画面に切り替わり**SSH keysセクション**に上記 (4)で設定した**Title**が表示されていれば成功。<br>
+
+- 接続確認<br>
+最後の2行は、GitHubはシェルアクセスを提供しない(許可しない)旨のメッセージなので問題なし、正常に接続できている。
+  ```
+  $ ssh -l git -i ~/.ssh/id_rsa github.com
+  The authenticity of host 'github.com (192.30.255.113)' can't be established.
+  RSA key fingerprint is **********.
+  RSA key fingerprint is **********.
+  Are you sure you want to continue connecting (yes/no)? yes    # 接続を継続するかの確認（yesを入力）
+  Warning: Permanently added 'github.com,192.30.255.113' (RSA) to the list of known hosts.
+  Enter passphrase for key '/root/.ssh/id_rsa':    # 上記、[ ssh-keygen ]で登録したパスワードを入力
+  PTY allocation request failed on channel 0
+  Hi ! You've successfully authenticated, but GitHub does not provide shell access.
+  Connection to github.com closed.
+  ```
