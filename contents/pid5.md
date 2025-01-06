@@ -109,3 +109,12 @@ homeディレクトリに`.ssh`フォルダを作成後、そのフォルダに�
   Hi ! You've successfully authenticated, but GitHub does not provide shell access.
   Connection to github.com closed.
   ```
+
+### GitHubのリポジトリ作成
+- id_rsa(秘密鍵)、id_rsa.pub(公開鍵)の生成<br>
+`home`ディレクトリに`.ssh`フォルダを作成後、そのフォルダに移動し、`ssh-keygen`を実行する。<br>
+(1) GitHubトップの右上「＋」をクリックし、**New Repository**リンクから**Create a new repository**画面に遷移する。<br>
+(2) 画面上部にある**Repository name**に任意のリポジトリ名を入力する。<br>
+(3) リポジトリの公開 / 非公開を設定する**Public / Private**ラジオボタンを選択する。<br>
+(4) (2)、(3) の入力に間違いがないことを確認し**Create repository**ボタンをクリックする。<br>
+(5) **Quick setup**画面の表示後、そのすぐ下にある**SSH**ボタンをクリックする。<br>
