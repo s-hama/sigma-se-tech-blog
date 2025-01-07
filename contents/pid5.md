@@ -118,3 +118,23 @@ homeディレクトリに`.ssh`フォルダを作成後、そのフォルダに�
 (3) リポジトリの公開 / 非公開を設定する**Public / Private**ラジオボタンを選択する。<br>
 (4) (2)、(3) の入力に間違いがないことを確認し**Create repository**ボタンをクリックする。<br>
 (5) **Quick setup**画面の表示後、そのすぐ下にある**SSH**ボタンをクリックする。<br>
+
+### [git clone] : リモートリポジトリの複製
+上記で作成したリモートリポジトリをclone(複製)する。
+- Gitの作業フォルダ作成
+  ```
+  $ mkdir ~/gitlocalrep
+  $ cd gitlocalrep
+  ```
+
+- リモートリポジトリをclone 
+  ```
+  $ git clone git@github.com:sigma-se/exrep.git    # 下記※のパスを入力
+  Cloning into 'exrep'...
+  Enter passphrase for key '/root/.ssh/id_rsa':    # パスフレーズを入力
+  warning: You appear to have cloned an empty repository.   # 空のディレクトリである警告
+  $ ls    # 確認
+  exrep
+  ```
+  ※ リモートリポジトリの**Quick setup**画面の**SSH**ボタン右側にあるURL「git@github.com:\<username\>/\<repositoryname\>.git」。<br>
+  上記の通り`clone`によってGitリポジトリが`clone`され**exrep**ディレクトリが作成される。
