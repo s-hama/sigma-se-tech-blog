@@ -138,3 +138,45 @@ homeディレクトリに`.ssh`フォルダを作成後、そのフォルダに�
   ```
   ※ リモートリポジトリの**Quick setup**画面の**SSH**ボタン右側にあるURL「git@github.com:\<username\>/\<repositoryname\>.git」。<br>
   上記の通り`clone`によってGitリポジトリが`clone`され**exrep**ディレクトリが作成される。
+
+### [git branch]：ブランチの作成
+- 現在のブランチ確認<br>
+アスタリスク(*)があるブランチが現在の作業ブランチとなる。<br>
+※ 今回は、cloneしただけなのでmastarブランチのみ。
+  ```
+  $ cd ~/gitlocalrep/exrep    # cloneしたディレクトリに移動。
+  $ git branch    # ブランチの確認
+   * master
+  ```
+
+- topicbranchブランチの作成<br>
+`git branch`と一緒に名前を指定することで、新規にブランチが作成される。<br>
+  ```
+  $ git branch topicbranch  #「topicbranch」ブランチを作成
+  $ git branch    # ブランチの確認
+  * master
+    topicbranch
+  ```
+
+- topicbranchブランチに切り替え<br>
+  ```
+  $ git checkout topicbranch
+  Switched to branch 'topicbranch'
+  $ git branch
+    master
+  * topicbranch
+  ```
+
+- （補足）ブランチ作成と切り替えを同時に実行<br>
+上記の`git branch topicbranch`と`git checkout topicbranch`は、`git checkout -b`で一度で実行することができる。
+  ```
+  $ git checkout -b topicbranch
+  Switched to branch 'topicbranch'
+  $ git branch
+    master
+  * topicbranch
+  ```
+
+以上で開発準備完了。<br><br>
+以降は、ローカルリポジトリ(ブランチ)からリモートリポジトリに対して、pull、commit, push等の操作を行いバージョン管理する流れとなる。<br><br>
+参考 : [Git - 状態管理の概念と基本操作 : status, add, commit, diff, reset, push, pull, checkout](https://sigma-se.com/detail/6/)
