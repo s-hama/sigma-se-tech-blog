@@ -3,8 +3,8 @@
   <ul class="pagination justify-content-center">
  
       {% if page_obj.has_previous %}
-        <li class="page-item">
-        <a class="page-link" href="?{% url_replace request page_obj.previous_page_number %}" aria-label="Previous">
+      <li class="page-item">
+        <a class="page-link link-secondary" href="?{% url_replace request page_obj.previous_page_number %}" aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
@@ -19,7 +19,7 @@
           </li>
         {% else %}
           <li class="page-item">
-            <a class="page-link" href="?{% url_replace request link_page %}">
+            <a class="page-link link-secondary" href="?{% url_replace request link_page %}">
               {{ link_page }}
             </a>
           </li>
@@ -27,8 +27,8 @@
       {% endfor %}
     
       {% if page_obj.has_next %}
-        <li class="page-item">
-        <a class="page-link" href="?{% url_replace request page_obj.next_page_number %}" aria-label="Next">
+      <li class="page-item">
+        <a class="page-link link-secondary" href="?{% url_replace request page_obj.next_page_number %}" aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
