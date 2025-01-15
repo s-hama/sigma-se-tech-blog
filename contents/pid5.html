@@ -141,4 +141,27 @@ Connection to github.com closed.
       (5) <strong>Quick setup</strong>画面の表示後、そのすぐ下にある<strong>SSH</strong>ボタンをクリックする。<br>
     </li>
   </ul>
+  <h3 id="git-clone--リモートリポジトリの複製">[git clone] : リモートリポジトリの複製</h3>
+  <p>上記で作成したリモートリポジトリをclone(複製)する。</p>
+  <ul>
+    <li>
+      <p>Gitの作業フォルダ作成</p>
+      <pre><code>$ mkdir ~/gitlocalrep
+$ cd gitlocalrep
+</code></pre>
+    </li>
+    <li>
+      <p>リモートリポジトリをclone</p>
+      <pre><code>$ git clone git@github.com:sigma-se/exrep.git    # 下記※のパスを入力
+Cloning into 'exrep'...
+Enter passphrase for key '/root/.ssh/id_rsa':    # パスフレーズを入力
+warning: You appear to have cloned an empty repository.   # 空のディレクトリである警告
+$ ls    # 確認
+exrep
+</code></pre>
+      <p>※ リモートリポジトリの<strong>Quick
+          setup</strong>画面の<strong>SSH</strong>ボタン右側にあるURL「git@github.com:&lt;username&gt;/&lt;repositoryname&gt;.git」。<br>
+        上記の通り<code>clone</code>によってGitリポジトリが<code>clone</code>され<strong>exrep</strong>ディレクトリが作成される。</p>
+    </li>
+  </ul>
 </div>
