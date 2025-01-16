@@ -164,4 +164,50 @@ exrep
         上記の通り<code>clone</code>によってGitリポジトリが<code>clone</code>され<strong>exrep</strong>ディレクトリが作成される。</p>
     </li>
   </ul>
+  <h3 id="git-branchブランチの作成">[git branch]：ブランチの作成</h3>
+  <ul>
+    <li>
+      <p>現在のブランチ確認<br>
+        アスタリスク(*)があるブランチが現在の作業ブランチとなる。<br>
+        ※ 今回は、cloneしただけなのでmastarブランチのみ。</p>
+      <pre><code>$ cd ~/gitlocalrep/exrep    # cloneしたディレクトリに移動。
+$ git branch    # ブランチの確認
+ * master
+</code></pre>
+    </li>
+    <li>
+      <p>topicbranchブランチの作成<br>
+        <code>git branch</code>と一緒に名前を指定することで、新規にブランチが作成される。<br>
+      </p>
+      <pre><code>$ git branch topicbranch  #「topicbranch」ブランチを作成
+$ git branch    # ブランチの確認
+* master
+  topicbranch
+</code></pre>
+    </li>
+    <li>
+      <p>topicbranchブランチに切り替え<br></p>
+      <pre><code>$ git checkout topicbranch
+Switched to branch 'topicbranch'
+$ git branch
+  master
+* topicbranch
+</code></pre>
+    </li>
+    <li>
+      <p>（補足）ブランチ作成と切り替えを同時に実行<br>
+        上記の<code>git branch topicbranch</code>と<code>git checkout topicbranch</code>は、<code>git checkout -b</code>で一度で実行することができる。
+      </p>
+      <pre><code>$ git checkout -b topicbranch
+Switched to branch 'topicbranch'
+$ git branch
+  master
+* topicbranch
+</code></pre>
+    </li>
+  </ul>
+  <p>以上で開発準備完了。<br><br>
+    以降は、ローカルリポジトリ(ブランチ)からリモートリポジトリに対して、pull、commit, push等の操作を行いバージョン管理する流れとなる。<br>
+    参考 : <a href="https://sigma-se.com/detail/6/">Git - 状態管理の概念と基本操作 : status, add, commit, diff, reset, push, pull,
+      checkout</a></p>
 </div>
