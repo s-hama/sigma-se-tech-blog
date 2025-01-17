@@ -42,7 +42,7 @@ IUSリポジトリ経由 でPythonの最新バージョンをインストール�
 
 ### Djangoインストール
 - venvで仮想環境を構築<br>
-Pythonの仮想環境を作成するパッケージは、他にも`virtualenv`、`anaconda`、`pyenv`、`pyenv-virtualenv`など多数あるが、ここでは、Python3から標準搭載されている`venv`を使用する。<br>
+Pythonの仮想環境を作成するパッケージは、他にも**virtualenv**、**anaconda**、**pyenv**、**pyenv-virtualenv**など多数あるが、ここでは、Python3から標準搭載されている**venv**を使用する。<br>
 <br>
 ※ `vops`は、仮想環境が入るディレクトリ名なので各自の環境に合わせること。
   ```
@@ -50,7 +50,7 @@ Pythonの仮想環境を作成するパッケージは、他にも`virtualenv`�
   ```
 
 - 仮想環境上にDjangoをインストール<br>
-`pip`で`Django`をインストールする。
+`pip`で**Django**をインストールする。
   ```
   $ source /var/www/vops/bin/activate # 仮想環境起動
   $ pip install django # djangoインストール
@@ -64,7 +64,7 @@ Pythonの仮想環境を作成するパッケージは、他にも`virtualenv`�
 
 ### アプリケーション作成
 - 実際にプログラムの成果物を配置することになるアプリケーションを作成
-※ ここでは、`macuos`という名称のアプリケーションを作成する。
+※ ここでは、**macuos**という名称のアプリケーションを作成する。
   ```
   $ source /var/www/vops/bin/activate    # 仮想環境起動
   $ python manage.py startapp /var/www/vops/ops/macuos    # アプリケーションを作成
@@ -81,7 +81,7 @@ Python3上では事前に`httpd-devel`をインストールする必要がある
 
 ### WSGIと仮想ホストの設定ファイル作成
 - Apache設定ファイルの確認<br>
-Apacheの設定ファイル`httpd.conf`の設定内容を確認する。<br>
+Apacheの設定ファイル**httpd.conf**の設定内容を確認する。<br>
   ```
   $ cat /etc/httpd/conf/httpd.conf
   …
@@ -90,12 +90,11 @@ Apacheの設定ファイル`httpd.conf`の設定内容を確認する。<br>
   …
   ```
   - 補足<br>
-上記`Include`は、`conf.modules.d`(module系の設定ファイル)配下の`*.conf`をロードする設定、`IncludeOptional`は、`conf.d`(その他設定系のファイル)配下の`*.conf`をロードする設定となる。<br>
-<br>
-そのため、次項で`WSGI設定ファイル`(django-wsgi.conf)と`仮想ホスト設定ファイル`(django.conf)を作成し、Apacheからmod_wsgiを介し、Djangoを起動できるよう、wsgi_module設定ファイルを作成する。<br>
+上記`Include`は、`conf.modules.d`(module系の設定ファイル)配下の`*.conf`をロードする設定、`IncludeOptional`は、`conf.d`(その他設定系のファイル)配下の`*.conf`をロードする設定となる。<br><br>
+そのため、次項で**WSGI設定ファイル(django-wsgi.conf)**と**仮想ホスト設定ファイル(django.conf)**を作成し、Apacheからmod_wsgiを介し、Djangoを起動できるよう、wsgi_module設定ファイルを作成する。<br>
 
 - WSGI設定ファイル作成<br>
-`/etc/httpd/conf.modules.d`配下に下記の内容で`django-wsgi.conf`を作成する。<br>
+`/etc/httpd/conf.modules.d`配下に下記の内容で**django-wsgi.conf**を作成する。<br>
   ```
   LoadModule wsgi_module  /var/www/vops/lib64/python3.6/site-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so
   ```
@@ -106,7 +105,7 @@ Apacheの設定ファイル`httpd.conf`の設定内容を確認する。<br>
     ```
 
 - 仮想ホスト設定ファイル作成<br>
-`/etc/httpd/conf.d`配下に下記の内容で`django.conf`を作成する。<br>
+`/etc/httpd/conf.d`配下に下記の内容で**django.conf**を作成する。<br>
   ```
   NameVirtualHost *:80
   NameVirtualHost *:443
@@ -147,7 +146,7 @@ Apacheの設定ファイル`httpd.conf`の設定内容を確認する。<br>
   ※4 SSL/TLSサーバー証明書と秘密鍵の設定。Apache2.4では、上記のSSLCertificateFile、SSLCertificateKeyFileの設定になるが、Apache2.2だとSSLCertificateFile、SSLCertificateKeyFile、SSLCertificateChainFileの3つに設定が必要でさらに内容も若干違うため、バージョンが古い場合は、注意が必要。<br>
   ※5 マルチプロセスかつ、デーモンモードでの起動設定。<br>
   ※6 WSGIDaemonProcessと同じ、example.comを設定する必要あり。<br>
-  ※7 wsgi.pyエイリアスと起動直後のトップ画面を https://example.com で表示したい場合の設定。 例えば、トップ画面から"XXX"というサブフォルダを掘りたい場合は、WSGIScriptAliasの第一パラメータに"/XXX"を指定する。<br>
+  ※7 wsgi.pyエイリアスと起動直後のトップ画面をhttps://example.comで表示したい場合の設定。 例えば、トップ画面から"XXX"というサブフォルダを掘りたい場合は、WSGIScriptAliasの第一パラメータに"/XXX"を指定する。<br>
   ※8 静的ファイルへの（アイコンや画像など）エイリアスを設定 及び、静的フォルダまでのパスを設定。<br>
   ※9 wsgi.pyまでのパスを設定。(起動直後にwsgi.pyを実行するよに設定)<br>
   ※10 httpデフォルトの80ポートのVirtualHost。httpsにリダイレクトするように設定。<br>
