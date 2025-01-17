@@ -88,11 +88,11 @@ servicesにhttpsと表示されれば解放成功。
   ```
 
 ### SSL/TLS証明書設定
-ここでは、SSL/TLS証明書が無料取得できる`Let's Encrypt`を使用する。
+ここでは、SSL/TLS証明書が無料取得できる**Let's Encrypt**を使用する。<br>
 以降、Certbot をインストールし、SSL/TLS証明書を取得して定期更新まで実施する。
 
 - mod_sslインストール<br>
-`Apache`を`SSL/TLS`に対応させる。
+**Apache**を**SSL/TLS**に対応させる。
   ```
   $ yum install mod_ssl # mod_sslインストール
   ```
@@ -129,13 +129,13 @@ servicesにhttpsと表示されれば解放成功。
   ```
 
 - EPELリポジトリのインストール<br>
-`EPEL`は、CentOSで標準搭載されていないパッケージをyumでインストール可能にするためのリポジトリ。
+**EPEL**は、CentOSで標準搭載されていないパッケージをyumでインストール可能にするためのリポジトリ。
   ```
   $ yum install epel-release
   ```
 
 - Certbotのインストール<br>
-`Certbot`は、`Let's Encrypt`で使用するクライアントソフトウェアで、SSL/TLSサーバー証明書の取得、及び更新作業を自動化してくれる。
+**Certbot**は、**Let's Encrypt**で使用するクライアントソフトウェアで、SSL/TLSサーバー証明書の取得、及び更新作業を自動化してくれる。
   ```
   $ yum install epel-release
   ```
@@ -151,7 +151,7 @@ httpsで自身のドメイン(https://example.com)にアクセスできれば成
 
 ### Let's Encryptの定期更新
 3か月単位で定期的な証明書の再発行が必要。
-期限が近づくと`Let's Encrypt certificate expiration notice for domain "example.com"`というメールが送られてくるため、期限以内に`certbot`から証明書を再発行する必要がある。
+期限が近づくと**Let's Encrypt certificate expiration notice for domain "example.com"**というメールが送られてくるため、期限以内に**certbot**から証明書を再発行する必要がある。
 
 - Apacheを停止して現在の証明書を強制的に再発行する。
   ```
@@ -163,4 +163,4 @@ httpsで自身のドメイン(https://example.com)にアクセスできれば成
   ```
 
 - 有効期限の確認<br>
-ブラウザの証明書情報の有効期限が`3か月`伸びていれば再発行成功。
+ブラウザの証明書情報の有効期限が**3か月**伸びていれば再発行成功。

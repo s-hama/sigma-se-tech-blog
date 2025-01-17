@@ -48,7 +48,7 @@ Python 3.6.4
   <ul>
     <li>
       <p>venvで仮想環境を構築<br>
-        Pythonの仮想環境を作成するパッケージは、他にも<code>virtualenv</code>、<code>anaconda</code>、<code>pyenv</code>、<code>pyenv-virtualenv</code>など多数あるが、ここでは、Python3から標準搭載されている<code>venv</code>を使用する。<br>
+        Pythonの仮想環境を作成するパッケージは、他にも<strong>virtualenv</strong>、<strong>anaconda</strong>、<strong>pyenv</strong>、<strong>pyenv-virtualenv</strong>など多数あるが、ここでは、Python3から標準搭載されている<strong>venv</strong>を使用する。<br>
         <br>
         ※ <code>vops</code>は、仮想環境が入るディレクトリ名なので各自の環境に合わせること。
       </p>
@@ -57,7 +57,7 @@ Python 3.6.4
     </li>
     <li>
       <p>仮想環境上にDjangoをインストール<br>
-        <code>pip</code>で<code>Django</code>をインストールする。
+        <code>pip</code>で<strong>Django</strong>をインストールする。
       </p>
       <pre><code>$ source /var/www/vops/bin/activate # 仮想環境起動
 $ pip install django # djangoインストール
@@ -73,7 +73,7 @@ $ pip install django # djangoインストール
   <h3 id="アプリケーション作成">アプリケーション作成</h3>
   <ul>
     <li>実際にプログラムの成果物を配置することになるアプリケーションを作成
-      ※ ここでは、<code>macuos</code>という名称のアプリケーションを作成する。
+      ※ ここでは、<strong>macuos</strong>という名称のアプリケーションを作成する。
       <pre><code>$ source /var/www/vops/bin/activate    # 仮想環境起動
 $ python manage.py startapp /var/www/vops/ops/macuos    # アプリケーションを作成
 </code></pre>
@@ -94,7 +94,7 @@ $ pip3.6 install mod_wsgi # pipでmod_wsgiをインストール
   <ul>
     <li>
       <p>Apache設定ファイルの確認<br>
-        Apacheの設定ファイル<code>httpd.conf</code>の設定内容を確認する。<br></p>
+        Apacheの設定ファイル<strong>httpd.conf</strong>の設定内容を確認する。<br></p>
       <pre><code>$ cat /etc/httpd/conf/httpd.conf
 …
 Include conf.modules.d/*.conf  
@@ -103,15 +103,14 @@ IncludeOptional conf.d/*.conf
 </code></pre>
       <ul>
         <li>補足<br>
-          上記<code>Include</code>は、<code>conf.modules.d</code>(module系の設定ファイル)配下の<code>*.conf</code>をロードする設定、<code>IncludeOptional</code>は、<code>conf.d</code>(その他設定系のファイル)配下の<code>*.conf</code>をロードする設定となる。<br>
-          <br>
-          そのため、次項で<code>WSGI設定ファイル</code>(django-wsgi.conf)と<code>仮想ホスト設定ファイル</code>(django.conf)を作成し、Apacheからmod_wsgiを介し、Djangoを起動できるよう、wsgi_module設定ファイルを作成する。<br>
+          上記<code>Include</code>は、<code>conf.modules.d</code>(module系の設定ファイル)配下の<code>*.conf</code>をロードする設定、<code>IncludeOptional</code>は、<code>conf.d</code>(その他設定系のファイル)配下の<code>*.conf</code>をロードする設定となる。<br><br>
+          そのため、次項で<strong>WSGI設定ファイル(django-wsgi.conf)</strong>と<strong>仮想ホスト設定ファイル(django.conf)</strong>を作成し、Apacheからmod_wsgiを介し、Djangoを起動できるよう、wsgi_module設定ファイルを作成する。<br>
         </li>
       </ul>
     </li>
     <li>
       <p>WSGI設定ファイル作成<br>
-        <code>/etc/httpd/conf.modules.d</code>配下に下記の内容で<code>django-wsgi.conf</code>を作成する。<br>
+        <code>/etc/httpd/conf.modules.d</code>配下に下記の内容で<strong>django-wsgi.conf</strong>を作成する。<br>
       </p>
       <pre><code>LoadModule wsgi_module  /var/www/vops/lib64/python3.6/site-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so
 </code></pre>
@@ -125,7 +124,7 @@ IncludeOptional conf.d/*.conf
     </li>
     <li>
       <p>仮想ホスト設定ファイル作成<br>
-        <code>/etc/httpd/conf.d</code>配下に下記の内容で<code>django.conf</code>を作成する。<br>
+        <code>/etc/httpd/conf.d</code>配下に下記の内容で<strong>django.conf</strong>を作成する。<br>
       </p>
       <pre><code>NameVirtualHost *:80
 NameVirtualHost *:443
@@ -168,7 +167,7 @@ WSGISocketPrefix run/wsgi
           SSL/TLSサーバー証明書と秘密鍵の設定。Apache2.4では、上記のSSLCertificateFile、SSLCertificateKeyFileの設定になるが、Apache2.2だとSSLCertificateFile、SSLCertificateKeyFile、SSLCertificateChainFileの3つに設定が必要でさらに内容も若干違うため、バージョンが古い場合は、注意が必要。<br>
           ※5 マルチプロセスかつ、デーモンモードでの起動設定。<br>
           ※6 WSGIDaemonProcessと同じ、example.comを設定する必要あり。<br>
-          ※7 wsgi.pyエイリアスと起動直後のトップ画面をexample.comで表示したい場合の設定。
+          ※7 wsgi.pyエイリアスと起動直後のトップ画面をhttps://example.comで表示したい場合の設定。
           例えば、トップ画面から&quot;XXX&quot;というサブフォルダを掘りたい場合は、WSGIScriptAliasの第一パラメータに&quot;/XXX&quot;を指定する。<br>
           ※8 静的ファイルへの（アイコンや画像など）エイリアスを設定 及び、静的フォルダまでのパスを設定。<br>
           ※9 wsgi.pyまでのパスを設定。(起動直後にwsgi.pyを実行するよに設定)<br>
@@ -176,4 +175,4 @@ WSGISocketPrefix run/wsgi
       </ul>
     </li>
   </ul>
-</body>
+</div>
