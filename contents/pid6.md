@@ -90,3 +90,33 @@ Git - 状態管理の概念と基本操作 : status, add, commit, diff, reset, p
    git add -n    # addコマンド実行後のどういった結果になるか確認できる (--dry-rn同じ)
   $ git add --dry-run  # addコマンド実行後のどういった結果になるか確認できる (-nとじ)
   ```
+
+### [git commit] : ローカルリポジトリへ反映
+- 上記の変更をメッセージ付きでコミット
+`git commit`により、変更が**インデックス**から**ローカルリポジトリ**へ反映される。<br>
+  ```
+  $ git commit -m 'Add example-src.txt'
+  [master (root-commit) 304a1cd] Add example-src.txt
+  Committer: root 
+  Your name and email address were configured automatically based
+  on your username and hostname. Please check that they are accurate.
+  You can suppress this message by setting them explicitly. Run the
+  following command and follow the instructions in your editor to edit
+  your configuration file:
+
+      git config --global --edit
+
+  After doing this, you may fix the identity used for this commit with:
+
+      git commit --amend --reset-author
+
+  1 file changed, 0 insertions(+), 0 deletions(-)
+  create mode 100644 example-src.txt
+  ```
+
+- `git commit`のその他使用例<br>
+  ```
+  $ git commit  -m "コミットメッセージ"  # コミットメッセージを指定
+  $ git commit  --amend  # 直前のコミットを上書き
+  $ git commit  [FILE]  # ファイルパス指定
+  ```
