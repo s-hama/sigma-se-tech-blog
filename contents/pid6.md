@@ -120,3 +120,40 @@ Git - 状態管理の概念と基本操作 : status, add, commit, diff, reset, p
   $ git commit  --amend  # 直前のコミットを上書き
   $ git commit  [FILE]  # ファイルパス指定
   ```
+
+### [git diff] : 差分確認
+- コミット後の編集<br>
+ファイルを編集後、再度ステータス確認を行うと下記の通り、コミット後に編集があったことを示す`modified: example-src.txt`が表示されるようになる。<br>
+  ```
+  $ echo "test input" > example-src.txt
+  $ git status
+  On branch master
+  Changes not staged for commit:
+  (use "git add ..." to update what will be committed)
+  (use "git checkout -- ..." to discard changes in working directory)
+
+          modified:   example-src.txt
+
+  no changes added to commit (use "git add" and/or "git commit -a")
+  ```
+
+- `git diff`で差分確認<br>
+差分結果として`test input`が追記されていることが分かる。<br>
+  ```
+  $ git diff
+  diff --git a/example-src.txt b/example-src.txt
+  index e69de29..c2cbb36 100644
+  --- a/example-src.txt
+  +++ b/example-src.txt
+  @@ -0,0 +1 @@
+  +test input
+  ```
+
+- `git diff`のその他使用例
+  ```
+  $ git diff HEAD  # 最新コミットとの差分確認
+  $ git diff --cached  # HEADとインデックスの差分確認
+  $ git diff --name-only  # 差分が発生しているファイル名の一覧を表示する
+  $ git diff HEAD^ HEAD # 直前のコミット内容を確認
+  $ git diff show # HEADのコミット内容を確認
+  ```
