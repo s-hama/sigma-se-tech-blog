@@ -157,3 +157,19 @@ Git - 状態管理の概念と基本操作 : status, add, commit, diff, reset, p
   $ git diff HEAD^ HEAD # 直前のコミット内容を確認
   $ git diff show # HEADのコミット内容を確認
   ```
+
+### [git reset] : コミットの取り消し
+- 最新コミット（HEAD）だけを取り消し、**ワーキングツリー**はそのまま<br>
+  ```
+  git reset --soft HEAD~1
+  ```
+
+- 最新コミット（HEAD）だけを取り消し、変更を**ステージ**から外す<br>
+  ```
+  git reset --mixed HEAD~1
+  ```
+
+- 最新のコミット（HEAD）だけを取り消し、**HEADの位置**、**インデックス / ステージ**、**ワーキングツリー**も全て取り消す<br>
+  ```
+  git reset --hard HEAD~1
+  ```
