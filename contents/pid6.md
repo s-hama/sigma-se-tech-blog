@@ -173,3 +173,22 @@ Git - 状態管理の概念と基本操作 : status, add, commit, diff, reset, p
   ```
   git reset --hard HEAD~1
   ```
+
+### [git push] : リモートリポジトリへ反映
+- 新規ブランチを**リモートリポジトリ**に反映し、追跡を設定<br>
+ローカルの`feature/new-feature`をリモートリポジトリの`origin`に作成し、`-u(--set-upstream)`オプションの指定によって、**ローカルリポジトリ**と**リモートリポジトリ**が紐付けられるため、次回以降は`git push`のみでpush可能となる。<br>
+  ```
+  git push -u origin feature/new-feature
+  ```
+
+- 特定のリモートブランチを指定して**リモートリポジトリ**へ反映<br>
+ローカルの`develop`ブランチをリモートリポジトリの`origin`に反映する。<br>
+  ```
+  git push origin develop
+  ```
+
+- **リモートリポジトリ**から特定のブランチを削除<br>
+ローカルの`develop`ブランチをリモートリポジトリの`origin`に反映する。<br>
+  ```
+  git push origin --delete branch_name
+  ```
