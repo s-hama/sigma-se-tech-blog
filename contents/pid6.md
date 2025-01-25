@@ -192,3 +192,10 @@ Git - 状態管理の概念と基本操作 : status, add, commit, diff, reset, p
   ```
   git push origin --delete branch_name
   ```
+
+### [git pull] : リモートリポジトリの変更を取込む
+- **リモートリポジトリ**の変更を**ローカルリポジトリ**に取り込む（リモートとブランチを明示的に指定）<br>
+`git pull`は、`git fetch`と`git merge`の操作をまとめて行っている。<br>
+  ```
+  git pull origin main
+  ```
