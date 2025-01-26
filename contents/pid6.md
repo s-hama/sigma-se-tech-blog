@@ -199,3 +199,22 @@ Git - 状態管理の概念と基本操作 : status, add, commit, diff, reset, p
   ```
   git pull origin main
   ```
+
+### [git checkout] : チェックアウト
+- ブランチの切り替え<br>
+developブランチに切り替る。<br>
+  ```
+  git checkout develop
+  ```
+
+- 新規ブランチ作成と切り替え<br>
+新規ブランチを作成し、同時にそのブランチに切り替える。<br>
+  ```
+  git checkout -b feature/develop-1
+  ```
+
+- 特定のコミットをチェックアウト<br>
+**コミットハッシュ**を指定し、**ワーキングツリー**を特定のコミットに変更する。<br>
+  ```
+  git checkout a1b2c3d
+  ```
