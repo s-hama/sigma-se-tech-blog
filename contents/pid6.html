@@ -1,4 +1,32 @@
 <div div class="post-body">
   <h2 id="目的">目的</h2>
   <p>この記事では、Gitにおける状態管理の概念と基本操作について説明する。</p>
+  <h2 id="項目説明">項目説明</h2>
+  <h3 id="状態管理の概念">状態管理の概念</h3>
+  <ul>
+    <li>
+      <p>ワーキングツリー（working tree）<br>
+        現在チェックアウトしているローカルディレクトリを指す。<br>
+        実際に修正、追加、削除を行う作業場所のこと。</p>
+    </li>
+    <li>
+      <p>インデックス / ステージ（index / staging area）<br>
+        <code>commit</code>前に<strong>ワーキングツリー（working tree）</strong>の変更を一時的に保存する場所。<br>
+            変更が</strong>index</strong>として表示される。<br>
+        <code>commit</code>準備ができた変更を<strong>ステージ（staging area）</strong>に移動して<code>commit</code>対象を管理する。
+      </p>
+    </li>
+    <li>
+      <p>ローカルリポジトリ（local repository）<br>
+        ローカルマシン上にある個別リポジトリ。
+        <code>commit</code>されたすべての履歴やバージョンが保存される場所。<br>
+        <code>branch</code>単位の<code>push</code>によって<code>commit</code>を<strong>リモートリポジトリ（remote repository）</strong>に反映する。
+      </p>
+    </li>
+    <li>
+      <p>リモートリポジトリ（remote repository）<br>
+        ネットワーク上にある共有リポジトリ。<br>
+        通常は、<strong>GitHub</strong>や<strong>GitLab</strong>などのホスティングサービス上に存在する。</p>
+    </li>
+  </ul>
 </div>
