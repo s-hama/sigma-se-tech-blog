@@ -29,4 +29,36 @@
         通常は、<strong>GitHub</strong>や<strong>GitLab</strong>などのホスティングサービス上に存在する。</p>
     </li>
   </ul>
+  <h3 id="git-status--ステータス確認">[git status] : ステータス確認</h3>
+  <ul>
+    <li>
+      <p>確認用に<code>touch</code>でファイルを新規作成</p>
+      <pre><code>$ touch example-src.txt
+</code></pre>
+    </li>
+    <li>
+      <p><code>git status</code>でステータス確認<br>
+        <code>Untracked files</code>に表示されるファイル達は、Git管理下にないファイルが表示される。<br>
+        上記で新規作成した<code>example-src.txt</code>がバージョン管理下にないため<code>git add</code>を促す警告が表示されている。<br>
+      </p>
+      <pre><code>$ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+(use &quot;git add ...&quot; to include in what will be committed)
+
+        example-src.txt
+
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)
+</code></pre>
+    </li>
+    <li>
+      <p><code>git status</code>のその他使用例</p>
+      <pre><code>$ git status [FILE]   # ファイルパス指定
+$ git status [DIR]   # ディレクトリ指定
+</code></pre>
+    </li>
+  </ul>
 </div>
