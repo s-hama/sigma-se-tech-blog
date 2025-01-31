@@ -103,4 +103,37 @@ $ git add --dry-run  # addコマンド実行後のどういった結果になる
 </code></pre>
     </li>
   </ul>
+  <h3 id="git-commit--ローカルリポジトリへ反映">[git commit] : ローカルリポジトリへ反映</h3>
+  <ul>
+    <li>
+      <p>上記の変更をメッセージ付きでコミット
+        <code>git commit</code>により、変更が<strong>インデックス</strong>から<strong>ローカルリポジトリ</strong>へ反映される。<br>
+      </p>
+      <pre><code>$ git commit -m 'Add example-src.txt'
+[master (root-commit) 304a1cd] Add example-src.txt
+Committer: root 
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+1 file changed, 0 insertions(+), 0 deletions(-)
+create mode 100644 example-src.txt
+</code></pre>
+    </li>
+    <li>
+      <p><code>git commit</code>のその他使用例<br></p>
+      <pre><code>$ git commit  -m &quot;コミットメッセージ&quot;  # コミットメッセージを指定
+$ git commit  --amend  # 直前のコミットを上書き
+$ git commit  [FILE]  # ファイルパス指定
+</code></pre>
+    </li>
+  </ul>
 </div>
