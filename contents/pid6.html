@@ -136,4 +136,43 @@ $ git commit  [FILE]  # ファイルパス指定
 </code></pre>
     </li>
   </ul>
+  <h3 id="git-diff--差分確認">[git diff] : 差分確認</h3>
+  <ul>
+    <li>
+      <p>コミット後の編集<br>
+        ファイルを編集後、再度ステータス確認を行うと下記の通り、コミット後に編集があったことを示す<code>modified: example-src.txt</code>が表示されるようになる。<br></p>
+      <pre><code>$ echo &quot;test input&quot; &gt; example-src.txt
+$ git status
+On branch master
+Changes not staged for commit:
+(use &quot;git add ...&quot; to update what will be committed)
+(use &quot;git checkout -- ...&quot; to discard changes in working directory)
+
+        modified:   example-src.txt
+
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)
+</code></pre>
+    </li>
+    <li>
+      <p><code>git diff</code>で差分確認<br>
+        差分結果として<code>test input</code>が追記されていることが分かる。<br></p>
+      <pre><code>$ git diff
+diff --git a/example-src.txt b/example-src.txt
+index e69de29..c2cbb36 100644
+--- a/example-src.txt
++++ b/example-src.txt
+@@ -0,0 +1 @@
++test input
+</code></pre>
+    </li>
+    <li>
+      <p><code>git diff</code>のその他使用例</p>
+      <pre><code>$ git diff HEAD  # 最新コミットとの差分確認
+$ git diff --cached  # HEADとインデックスの差分確認
+$ git diff --name-only  # 差分が発生しているファイル名の一覧を表示する
+$ git diff HEAD^ HEAD # 直前のコミット内容を確認
+$ git diff show # HEADのコミット内容を確認
+</code></pre>
+    </li>
+  </ul>
 </div>
