@@ -175,4 +175,23 @@ $ git diff show # HEADのコミット内容を確認
 </code></pre>
     </li>
   </ul>
+  <h3 id="git-reset--コミットの取り消し">[git reset] : コミットの取り消し</h3>
+  <ul>
+    <li>
+      <p>最新コミット（HEAD）だけを取り消し、<strong>ワーキングツリー</strong>はそのまま<br></p>
+      <pre><code>git reset --soft HEAD~1
+</code></pre>
+    </li>
+    <li>
+      <p>最新コミット（HEAD）だけを取り消し、変更を<strong>ステージ</strong>から外す<br></p>
+      <pre><code>git reset --mixed HEAD~1
+</code></pre>
+    </li>
+    <li>
+      <p>最新のコミット（HEAD）だけを取り消し、<strong>HEADの位置</strong>、<strong>インデックス /
+          ステージ</strong>、<strong>ワーキングツリー</strong>も全て取り消す<br></p>
+      <pre><code>git reset --hard HEAD~1
+</code></pre>
+    </li>
+  </ul>
 </div>
