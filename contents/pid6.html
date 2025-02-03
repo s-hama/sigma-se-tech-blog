@@ -194,4 +194,26 @@ $ git diff show # HEADのコミット内容を確認
 </code></pre>
     </li>
   </ul>
+  <h3 id="git-push--リモートリポジトリへ反映">[git push] : リモートリポジトリへ反映</h3>
+  <ul>
+    <li>
+      <p>新規ブランチを<strong>リモートリポジトリ</strong>に反映し、追跡を設定<br>
+        ローカルの<code>feature/new-feature</code>をリモートリポジトリの<code>origin</code>に作成し、<code>-u(--set-upstream)</code>オプションの指定によって、<strong>ローカルリポジトリ</strong>と<strong>リモートリポジトリ</strong>が紐付けられるため、次回以降は<code>git push</code>のみでpush可能となる。<br>
+      </p>
+      <pre><code>git push -u origin feature/new-feature
+</code></pre>
+    </li>
+    <li>
+      <p>特定のリモートブランチを指定して<strong>リモートリポジトリ</strong>へ反映<br>
+        ローカルの<code>develop</code>ブランチをリモートリポジトリの<code>origin</code>に反映する。<br></p>
+      <pre><code>git push origin develop
+</code></pre>
+    </li>
+    <li>
+      <p><strong>リモートリポジトリ</strong>から特定のブランチを削除<br>
+        ローカルの<code>develop</code>ブランチをリモートリポジトリの<code>origin</code>に反映する。<br></p>
+      <pre><code>git push origin --delete branch_name
+</code></pre>
+    </li>
+  </ul>
 </div>
