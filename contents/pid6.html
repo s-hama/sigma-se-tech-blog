@@ -224,4 +224,26 @@ $ git diff show # HEADのコミット内容を確認
 </code></pre>
     </li>
   </ul>
+  <h3 id="git-checkout--チェックアウト">[git checkout] : チェックアウト</h3>
+  <ul>
+    <li>
+      <p>ブランチの切り替え<br>
+        developブランチに切り替る。<br></p>
+      <pre><code>git checkout develop
+</code></pre>
+    </li>
+    <li>
+      <p>新規ブランチ作成と切り替え<br>
+        新規ブランチを作成し、同時にそのブランチに切り替える。<br></p>
+      <pre><code>git checkout -b feature/develop-1
+</code></pre>
+    </li>
+    <li>
+      <p>特定のコミットをチェックアウト<br>
+        <strong>コミットハッシュ</strong>を指定し、<strong>ワーキングツリー</strong>を特定のコミットに変更する。<br>
+      </p>
+      <pre><code>git checkout a1b2c3d
+</code></pre>
+    </li>
+  </ul>
 </div>
