@@ -18,3 +18,26 @@ Python - 開発向けVim設定 : 基礎からコードチェックまで
    filetype plugin indenton    " 自動インデントの設定
    syntax on    " シンタックスハイライトの設定
   ```
+
+### Python用のVim設定
+- ホームディレクトリに`.vim/ftplugin/python.vim`ファイルを作成<br>
+設定ファイルをファイルタイプ別に分割できるため、Pythonスクリプト専用の設定を定義することができる。<br>
+  ```
+  $ mkdir ~/.vim
+  $ mkdir ~/.vim/ftplugin
+  $ touch ~/.vim/ftplugin/python.vim
+  ```
+
+- Vimの設定を追記<br>
+下記は、Pythonコミュニティが推奨する**PEP8 ※1, 2：コーディング規約**に準拠した設定となる。<br>
+※1 PEP8（en） : https://www.python.org/dev/peps/pep-0008/<br>
+※2 PEP8（ja） : https://github.com/mumumu/pep8-ja<br>
+  ```
+  $ vim ~/.vim/ftplugin/python.vim
+   setlocal expandtab    " タブをスペースに置き換える設定
+   setlocal tabstop=4    " タブのインデント幅を4に設定
+   setlocal shiftwidth=4    " 自動インデント時の幅を4に設定
+   setlocal softtabstop=0    " キーボードから入るタブの数
+   autocmd BufWritePre * :%s/\s\+$//ge    " 保存時、行末スペースを除去する
+   setlocal textwidth=80    " 行折り返しを80文字に設定
+  ```
