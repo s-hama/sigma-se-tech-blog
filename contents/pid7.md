@@ -41,3 +41,21 @@ Python - 開発向けVim設定 : 基礎からコードチェックまで
    autocmd BufWritePre * :%s/\s\+$//ge    " 保存時、行末スペースを除去する
    setlocal textwidth=80    " 行折り返しを80文字に設定
   ```
+
+### コードチェックツールのインストール
+- **flake8**のインストール<br>
+Pythonで多く使用されているコードチェックツール**flake8**をインストールする。<br>
+下記、`pip show flake8`のRequires(依存ライブラリ)にもある通り、flake8は、pyflakes、pycodestyle、mccabe 3つライブラリをラップしているため、それぞれ個別のチェックも可能。<br>
+  ```
+  $ pip install flake8
+  $ pip show flake8
+   Name: flake8
+   Version: 3.6.0
+   Summary: the modular source code checker: pep8, pyflakes and co
+   Home-page: https://gitlab.com/pycqa/flake8
+   Author: Tarek Ziade
+   Author-email: tarek@ziade.org
+   License: MIT
+   Location: /var/www/vops/lib/python3.6/site-packages
+   Requires: pycodestyle, setuptools, pyflakes, mccabe
+  ```
