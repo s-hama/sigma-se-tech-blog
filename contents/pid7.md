@@ -59,3 +59,40 @@ Pythonで多く使用されているコードチェックツール**flake8**を�
    Location: /var/www/vops/lib/python3.6/site-packages
    Requires: pycodestyle, setuptools, pyflakes, mccabe
   ```
+
+### コードチェックの一例
+以下、**flake8**、**pyflakes**、**pycodestyle**、**mccabe**の一例。
+- **flake8** : コードチェック<br>
+  ```
+  $ flake8 example.py
+   example.py:11:1: E302 expected 2 blank lines, found 1
+   example.py:12:21: W291 trailing whitespace
+  …
+  ```
+
+- **pyflakes** : コードチェック<br>
+  ```
+  $ pyflakes example.py
+   example.py:74: undefined name 'Http404'
+  …
+  ```
+
+- **pycodestyle** : PEP8に準拠しているかチェック<br>
+  ```
+  $ pycodestyle example.py
+   example.py:10:1: W293 blank line contains whitespace
+   example.py:11:1: E302 expected 2 blank lines, found 1
+   example.py:12:21: W291 trailing whitespace
+  …
+  ```
+
+- **mccabe** : 循環的複雑度のチェック<br>
+  **flake8**ではデフォルト無効になっているため、下記のように `--max-complexity`を指定すれば循環的複雑度のチェックが可能となる。<br>
+  ※ 参考URLより抜粋 : https://github.com/pycqa/mccabe#plugin-for-flake8<br>
+  ```
+  $ flake8 --max-complexity 10 coolproject
+    ...
+    coolproject/mod.py:1204:1: C901 'CoolFactory.prepare' is too complex (14)
+  ```
+<br>
+その他、**flake8**には、**flake8-docstrings**や**flake8-import-order**など色々なプラグインが用意されており、必要に応じてカスタマイズすることができる。
