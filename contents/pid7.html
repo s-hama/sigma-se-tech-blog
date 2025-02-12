@@ -1,4 +1,22 @@
 <div class="post-body">
   <h2 id="目的">目的</h2>
   <p>この記事では、Python開発向けのVim設定とコードチェックの手順について説明する。</p>
+  <h2 id="実施内容">実施内容</h2>
+  <h3 id="vimの共通設定">Vimの共通設定</h3>
+  <ul>
+    <li>
+      <p>ホームディレクトリに<code>.vimrc</code>ファイルを作成<br>
+        <code>.vimrc</code>に設定を追記することでVim に反映される。<br>
+      </p>
+      <pre><code>touch ~/.vimrc
+</code></pre>
+    </li>
+    <li>
+      <p>Pythonを使う上で最低限必要な<strong>自動インデント</strong>と<strong>シンタックスハイライト</strong>のみ設定<br></p>
+      <pre><code>$ vim ~/.vimrc
+ filetype plugin indenton    &quot; 自動インデントの設定
+ syntax on    &quot; シンタックスハイライトの設定
+</code></pre>
+    </li>
+  </ul>
 </div>
