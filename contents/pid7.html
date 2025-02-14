@@ -19,4 +19,30 @@
 </code></pre>
     </li>
   </ul>
+  <h3 id="python用のvim設定">Python用のVim設定</h3>
+  <ul>
+    <li>
+      <p>ホームディレクトリに<code>.vim/ftplugin/python.vim</code>ファイルを作成<br>
+        設定ファイルをファイルタイプ別に分割できるため、Pythonスクリプト専用の設定を定義することができる。<br></p>
+      <pre><code>$ mkdir ~/.vim
+$ mkdir ~/.vim/ftplugin
+$ touch ~/.vim/ftplugin/python.vim
+</code></pre>
+    </li>
+    <li>
+      <p>Vimの設定を追記<br>
+        下記は、Pythonコミュニティが推奨する<strong>PEP8 ※1, 2：コーディング規約</strong>に準拠した設定となる。<br>
+        ※1 PEP8（en） : <a
+          href="https://www.python.org/dev/peps/pep-0008/">https://www.python.org/dev/peps/pep-0008/</a><br>
+        ※2 PEP8（ja） : <a href="https://github.com/mumumu/pep8-ja">https://github.com/mumumu/pep8-ja</a><br></p>
+      <pre><code>$ vim ~/.vim/ftplugin/python.vim
+ setlocal expandtab    &quot; タブをスペースに置き換える設定
+ setlocal tabstop=4    &quot; タブのインデント幅を4に設定
+ setlocal shiftwidth=4    &quot; 自動インデント時の幅を4に設定
+ setlocal softtabstop=0    &quot; キーボードから入るタブの数
+ autocmd BufWritePre * :%s/\s\+$//ge    &quot; 保存時、行末スペースを除去する
+ setlocal textwidth=80    &quot; 行折り返しを80文字に設定
+</code></pre>
+    </li>
+  </ul>
 </div>
