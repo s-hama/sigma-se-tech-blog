@@ -45,4 +45,24 @@ $ touch ~/.vim/ftplugin/python.vim
 </code></pre>
     </li>
   </ul>
+  <h3 id="コードチェックツールのインストール">コードチェックツールのインストール</h3>
+  <ul>
+    <li><strong>flake8</strong>のインストール<br>
+      Pythonで多く使用されているコードチェックツール<strong>flake8</strong>をインストールする。<br>
+      下記、<code>pip show flake8</code>のRequires(依存ライブラリ)にもある通り、flake8は、pyflakes、pycodestyle、mccabe
+      3つライブラリをラップしているため、それぞれ個別のチェックも可能。<br>
+      <pre><code>$ pip install flake8
+$ pip show flake8
+ Name: flake8
+ Version: 3.6.0
+ Summary: the modular source code checker: pep8, pyflakes and co
+ Home-page: https://gitlab.com/pycqa/flake8
+ Author: Tarek Ziade
+ Author-email: tarek@ziade.org
+ License: MIT
+ Location: /var/www/vops/lib/python3.6/site-packages
+ Requires: pycodestyle, setuptools, pyflakes, mccabe
+</code></pre>
+    </li>
+  </ul>
 </div>
