@@ -13,18 +13,18 @@ VPSで作るDjangoサイト構築手順 - Apache編 : 2/4 Apache&SSL/TLSの初�
 ## 実施内容
 ### Apache(httpd)インストール
 - インストール実行後、`Complete!`で正常終了。
-  ```
+  ```bash
   $ yum install httpd
   ```
 
 ### ファイアウォールの設定
 - CentOS7は、デフォルトでファイアウォールが有効なため、http、httpsも遮断されている状態なのでこの通信を許容するように設定変更する。<br>
 後にSSL/TSL化するため、ここでhttpsも一緒に許容しておく。
-  ```
-  $ systemctl start httpd # Apacheの起動
-  $ firewall-cmd --add-service=http --zone=public --permanent # http通信の許容
-  $ firewall-cmd --add-service=https --zone=public --permanent # https通信の許容
-  $ systemctl restart firewalld # ファイアウォールの再起動
+  ```bash
+  $ systemctl start httpd    # Apacheの起動
+  $ firewall-cmd --add-service=http --zone=public --permanent    # http通信の許容
+  $ firewall-cmd --add-service=https --zone=public --permanent    # https通信の許容
+  $ systemctl restart firewalld    # ファイアウォールの再起動
   ```
 
 - httpでの接続確認<br>
@@ -32,18 +32,18 @@ httpで自身のドメイン(http://example.com)にアクセスし、`Testing 12
 
 ### httpd自動起動の設定
 - サーバー起動時にhttpdも自動で起動するように設定する。
-  ```
+  ```bash
   $ systemctl enable httpd
   ```
 - 自動起動の設定確認<br>
 `httpd.service enabled`と表示されれば設定成功。
-  ```
+  ```bash
   $ systemctl list-unit-files -t service
   ```
 
 ### DocumentRootの権限変更
 - vpsuser(所有者グループ)やapache(所有者)でもDocumentRoot配下(/var/www/html) が編集できるように権限変更する。
-  ```
+  ```bash
   $ cd /var/www
   $ chown apache:vpsuser html 
   $ chmod 775 html
@@ -51,7 +51,7 @@ httpで自身のドメイン(http://example.com)にアクセスし、`Testing 12
 
 - 仮のindexで表示確認<br>
 /var/www/htmlの直下にindex.htmlを新規作成後、httpで自身のドメイン(http://example.com)にアクセスし表示されれば設定成功。
-  ```
+  ```bash
   $ systemctl list-unit-files -t service
   ```
 
@@ -59,18 +59,18 @@ httpで自身のドメイン(http://example.com)にアクセスし、`Testing 12
 - httpsのサービス解放<br>
 「--permanent」でOSを再起動しても設定が変わらないように設定を恒久化する。
 「--zone=public」で明示的にzoneをpublicに割当てる。<br>
-  ```
+  ```bash
   $ firewall-cmd --permanent --zone=public --add-service=https
   ```
 
 - 設定を反映させるためfirewalldを再起動する
-  ```
+  ```bash
   $ systemctl restart firewalld
   ```
 
 - httpsの解放確認<br>
 servicesにhttpsと表示されれば解放成功。
-  ```
+  ```bash
   $ firewall-cmd --list-all
    public (active)
     target: default
@@ -93,13 +93,13 @@ servicesにhttpsと表示されれば解放成功。
 
 - mod_sslインストール<br>
 **Apache**を**SSL/TLS**に対応させる。
-  ```
-  $ yum install mod_ssl # mod_sslインストール
+  ```bash
+  $ yum install mod_ssl    # mod_sslインストール
   ```
 
 - 起動確認
 `active(running)`であることを確認する。<br>
-  ```
+  ```bash
   $ systemctl restart httpd
   $ systemctl status httpd
   * httpd.service - The Apache HTTP Server
@@ -130,18 +130,18 @@ servicesにhttpsと表示されれば解放成功。
 
 - EPELリポジトリのインストール<br>
 **EPEL**は、CentOSで標準搭載されていないパッケージをyumでインストール可能にするためのリポジトリ。
-  ```
+  ```bash
   $ yum install epel-release
   ```
 
 - Certbotのインストール<br>
 **Certbot**は、**Let's Encrypt**で使用するクライアントソフトウェアで、SSL/TLSサーバー証明書の取得、及び更新作業を自動化してくれる。
-  ```
+  ```bash
   $ yum install epel-release
   ```
 
 - CertbotでSSL証明書を取得する
-  ```
+  ```bash
   $ sudo certbot --authenticator standalone --installer apache -d example.com --pre-hook "apachectl stop" --post-hook "apachectl start"
   ```
 
@@ -154,12 +154,12 @@ httpsで自身のドメイン(https://example.com)にアクセスできれば成
 期限が近づくと**Let's Encrypt certificate expiration notice for domain "example.com"**というメールが送られてくるため、期限以内に**certbot**から証明書を再発行する必要がある。
 
 - Apacheを停止して現在の証明書を強制的に再発行する。
-  ```
-  $ sudo systemctl stop httpd # Apache停止
-  $ sudo certbot renew --force-renewal --dry-run # 仮実施
-  $ openssl x509 -in /etc/letsencrypt/live/example.com/fullchain.pem -noout -dates # 有効期限の確認
-  $ sudo certbot renew --force-renewal # 本番実施：証明書再発行
-  $ sudo systemctl start httpd # Apache起動
+  ```bash
+  $ sudo systemctl stop httpd    # Apache停止
+  $ sudo certbot renew --force-renewal --dry-run    # 仮実施
+  $ openssl x509 -in /etc/letsencrypt/live/example.com/fullchain.pem -noout -dates    # 有効期限の確認
+  $ sudo certbot renew --force-renewal    # 本番実施：証明書再発行
+  $ sudo systemctl start httpd    # Apache起動
   ```
 
 - 有効期限の確認<br>

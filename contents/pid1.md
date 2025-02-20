@@ -19,7 +19,7 @@ VPSで作るDjangoサイト構築手順 - Apache編 : 1/4 ドメイン&SSHの初
 - ここでは、英語圏のコミュニティが大きく、日本語情報が豊富で個人的に使い慣れているCentOSを選んだ。
 - CentOS7_x64_x84(標準)をインストール
 インストールは、SAKURA VPS管理者用のコントロールパネルからGUI操作でインストールする
-  ```
+  ```bash
   $ cat /etc/redhat-release
   CentOS Linux release 7.4.1708 (Core)
   ```
@@ -33,12 +33,12 @@ VPSで作るDjangoサイト構築手順 - Apache編 : 1/4 ドメイン&SSHの初
 ※ 契約したサービスによって操作方法が初期状態が異なるので設定方法については割愛する。
 - VPS側のネームサーバー設定（さくらのVPS）<br>
   DNS設定からドメインの追加を行う。
-    ```
-    ホスト名: example.com
-    種別: A
-    内容: VPSのIPアドレス
-    TTL: 3600
-    ```
+  ```
+  ホスト名: example.com
+  種別: A
+  内容: VPSのIPアドレス
+  TTL: 3600
+  ```
 
 - ドメイン側のネームサーバー設定（お名前.com）<br>
   **example.com**のドメイン設定でVPSのネームサーバーを登録する。<br>
@@ -50,21 +50,21 @@ VPSで作るDjangoサイト構築手順 - Apache編 : 1/4 ドメイン&SSHの初
 ### SSHの初期設定
 - rootでログインできないようにする。<br>
   ログイン用の一般ユーザーを作成する。
-  ```
+  ```bash
   $ adduser vpsuser
   $ passwd *******
   ```
 
   SSHの設定変更<br>
   rootで直接アクセス出来ないようにする。
-  ```
+  ```bash
   $ vim /etc/ssh/sshd_config
   ```
   → `PermitRootLogin no`がコメントアウトされていたら解除する。
 
 - 公開鍵認証の設定<br>
   公開鍵認証でのみログインするようにする。
-  ```
+  ```bash
   $ vim /etc/ssh/sshd_config
   ```
   → `PasswordAuthentication no`がコメントアウトされていたら解除する。

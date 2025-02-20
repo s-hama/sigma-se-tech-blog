@@ -16,14 +16,14 @@
       <p>開発パッケージのインストール<br>
         EPELリポジトリを有効化する。<br>
         ※ EPELはCentOSやRHELにない便利なパッケージを提供する外部リポジトリ。</p>
-      <pre><code>$ yum -y install epel-release
+      <pre><code class="language-bash">$ yum -y install epel-release
 </code></pre>
     </li>
     <li>
       <p>IUSリポジトリの追加<br>
         Pythonの最新アップストリームバージョンを提供するリポジトリ。<br>
         IUSリポジトリ経由 でPythonの最新バージョンをインストールできるようにする。<br></p>
-      <pre><code>$ yum -y install https://centos7.iuscommunity.org/ius-release.rpm
+      <pre><code class="language-bash">$ yum -y install https://centos7.iuscommunity.org/ius-release.rpm
 </code></pre>
     </li>
   </ul>
@@ -33,13 +33,13 @@
       <p>Python3.6のインストール<br>
         <code>python36u</code>、<code>python36u-devel</code>をインストールする。<br>
       </p>
-      <pre><code>$ yum -y install python36u
+      <pre><code class="language-bash">$ yum -y install python36u
 $ yum -y install python36u-pip python36u-devel
 </code></pre>
     </li>
     <li>
       <p>バージョン確認<br></p>
-      <pre><code>$ python3.6 -V
+      <pre><code class="language-bash">$ python3.6 -V
 Python 3.6.4
 </code></pre>
     </li>
@@ -52,21 +52,21 @@ Python 3.6.4
         <br>
         ※ <code>vops</code>は、仮想環境が入るディレクトリ名なので各自の環境に合わせること。
       </p>
-      <pre><code>$ python3.6 -m venv /var/www/vops
+      <pre><code class="language-bash">$ python3.6 -m venv /var/www/vops
 </code></pre>
     </li>
     <li>
       <p>仮想環境上にDjangoをインストール<br>
         <code>pip</code>で<strong>Django</strong>をインストールする。
       </p>
-      <pre><code>$ source /var/www/vops/bin/activate # 仮想環境起動
-$ pip install django # djangoインストール
+      <pre><code class="language-bash">$ <span class="hljs-built_in">source</span> /var/www/vops/bin/activate    <span class="hljs-comment"># 仮想環境起動</span>
+$ pip install django    <span class="hljs-comment"># djangoインストール</span>
 </code></pre>
     </li>
     <li>
       <p>Djangoプロジェクトの雛形作成<br>
         ※ <code>ops</code>は、プロジェクト名なので、各自の環境に合わせること。</p>
-      <pre><code>$ django-admin startproject /var/www/vops/ops
+      <pre><code class="language-bash">$ django-admin startproject /var/www/vops/ops
 </code></pre>
     </li>
   </ul>
@@ -74,8 +74,8 @@ $ pip install django # djangoインストール
   <ul>
     <li>実際にプログラムの成果物を配置することになるアプリケーションを作成
       ※ ここでは、<strong>macuos</strong>という名称のアプリケーションを作成する。
-      <pre><code>$ source /var/www/vops/bin/activate    # 仮想環境起動
-$ python manage.py startapp /var/www/vops/ops/macuos    # アプリケーションを作成
+      <pre><code class="language-bash">$ <span class="hljs-built_in">source</span> /var/www/vops/bin/activate    <span class="hljs-comment"># 仮想環境起動</span>
+$ python manage.py startapp /var/www/vops/ops/macuos    <span class="hljs-comment"># アプリケーションを作成</span>
 </code></pre>
     </li>
   </ul>
@@ -84,9 +84,9 @@ $ python manage.py startapp /var/www/vops/ops/macuos    # アプリケーショ�
     <li><code>httpd-devel</code>と<code>mod_wsgi</code>をインストール
       Python3上では事前に<code>httpd-devel</code>をインストールする必要があるため、<code>mod_wsgi</code>の前に
       <code>httpd-devel</code>をインストールする。<br>
-      <pre><code>$ source /var/www/vops/bin/activate # 仮想環境起動
-$ yum install -y httpd httpd-devel # httpd-develをインストール
-$ pip3.6 install mod_wsgi # pipでmod_wsgiをインストール
+      <pre><code class="language-bash">$ <span class="hljs-built_in">source</span> /var/www/vops/bin/activate    <span class="hljs-comment"># 仮想環境起動</span>
+$ yum install -y httpd httpd-devel    <span class="hljs-comment"># httpd-develをインストール</span>
+$ pip3.6 install mod_wsgi    <span class="hljs-comment"># pipでmod_wsgiをインストール</span>
 </code></pre>
     </li>
   </ul>
@@ -95,7 +95,7 @@ $ pip3.6 install mod_wsgi # pipでmod_wsgiをインストール
     <li>
       <p>Apache設定ファイルの確認<br>
         Apacheの設定ファイル<strong>httpd.conf</strong>の設定内容を確認する。<br></p>
-      <pre><code>$ cat /etc/httpd/conf/httpd.conf
+      <pre><code class="language-bash">$ <span class="hljs-built_in">cat</span> /etc/httpd/conf/httpd.conf
 …
 Include conf.modules.d/*.conf  
 IncludeOptional conf.d/*.conf 
@@ -112,12 +112,12 @@ IncludeOptional conf.d/*.conf
       <p>WSGI設定ファイル作成<br>
         <code>/etc/httpd/conf.modules.d</code>配下に下記の内容で<strong>django-wsgi.conf</strong>を作成する。<br>
       </p>
-      <pre><code>LoadModule wsgi_module  /var/www/vops/lib64/python3.6/site-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so
+      <pre><code class="language-bash">LoadModule wsgi_module  /var/www/vops/lib64/python3.6/site-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so
 </code></pre>
       <ul>
         <li>補足<br>
           ※ wsgi_moduleのファイルパスは、findで確認。<br>
-          <pre><code>$ find /var/www -name 'mod_*.so'
+          <pre><code class="language-bash">$ find /var/www -name <span class="hljs-string">&#x27;mod_*.so&#x27;</span>
 </code></pre>
         </li>
       </ul>
@@ -126,37 +126,37 @@ IncludeOptional conf.d/*.conf
       <p>仮想ホスト設定ファイル作成<br>
         <code>/etc/httpd/conf.d</code>配下に下記の内容で<strong>django.conf</strong>を作成する。<br>
       </p>
-      <pre><code>NameVirtualHost *:80
-NameVirtualHost *:443
-WSGISocketPrefix run/wsgi
+      <pre><code class="language-apache"><span class="hljs-attribute">NameVirtualHost</span> *:<span class="hljs-number">80</span>
+<span class="hljs-attribute">NameVirtualHost</span> *:<span class="hljs-number">443</span>
+<span class="hljs-attribute">WSGISocketPrefix</span> run/wsgi
 
-&lt;VirtualHost *:443&gt;… (※1)
-    ServerName example.com … (※2)
-    SSLEngine On … (※3)
-    SSLCertificateFile /etc/letsencrypt/live/example.com/cert.pem … (※4)
-    SSLCertificateKeyFile  /etc/letsencrypt/live/example.com/privkey.pem … (※4)
+<span class="hljs-section">&lt;VirtualHost *<span class="hljs-number">:443</span>&gt;</span>… (※<span class="hljs-attribute">1</span>)
+    <span class="hljs-attribute">ServerName</span> example.com … (※<span class="hljs-number">2</span>)
+    <span class="hljs-attribute">SSLEngine</span> <span class="hljs-literal">On</span> … (※<span class="hljs-number">3</span>)
+    <span class="hljs-attribute">SSLCertificateFile</span> /etc/letsencrypt/live/example.com/cert.pem … (※<span class="hljs-number">4</span>)
+    <span class="hljs-attribute">SSLCertificateKeyFile</span>  /etc/letsencrypt/live/example.com/privkey.pem … (※<span class="hljs-number">4</span>)
 
-    WSGIDaemonProcess example.com processes=2 threads=15 python-home=/var/www/vops python-path=/var/www/vops/lib64/python3.6/site-packages … (※5)
-    WSGIProcessGroup example.com … (※6)
-    WSGIScriptAlias / /var/www/vops/ops/ops/wsgi.py … (※7)
+    <span class="hljs-attribute">WSGIDaemonProcess</span> example.com processes=<span class="hljs-number">2</span> threads=<span class="hljs-number">15</span> python-home=/var/www/vops python-path=/var/www/vops/lib64/python3.<span class="hljs-number">6</span>/site-packages … (※<span class="hljs-number">5</span>)
+    <span class="hljs-attribute">WSGIProcessGroup</span> example.com … (※<span class="hljs-number">6</span>)
+    <span class="hljs-attribute">WSGIScriptAlias</span> / /var/www/vops/ops/ops/wsgi.py … (※<span class="hljs-number">7</span>)
 
-    Alias /static /var/www/vops/ops/macuos/static … (※8)
-    &lt;Directory /var/www/vops/ops/macuos/static&gt; 
-        Require all granted
-    &lt;/Directory&gt;
+    <span class="hljs-attribute">Alias</span> /static /var/www/vops/ops/macuos/static … (※<span class="hljs-number">8</span>)
+    <span class="hljs-section">&lt;Directory /var/www/vops/ops/macuos/static&gt;</span> 
+        <span class="hljs-attribute">Require</span> <span class="hljs-literal">all</span> granted
+    <span class="hljs-section">&lt;/Directory&gt;</span>
 
-    &lt;Directory /var/www/vops/ops/ops&gt; … (※9)
-        &lt;Files wsgi.py&gt;
-            Require all granted
-        &lt;/Files&gt;
-    &lt;/Directory&gt;
-&lt;/VirtualHost&gt;
-&lt;VirtualHost *:80&gt;… (※10)
-    ServerName example.com
-    RewriteEngine on
-    RewriteCond %{HTTPS} off
-    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
-&lt;/VirtualHost&gt;
+    <span class="hljs-section">&lt;Directory /var/www/vops/ops/ops&gt;</span> … (※<span class="hljs-attribute">9</span>)
+        <span class="hljs-section">&lt;Files wsgi.py&gt;</span>
+            <span class="hljs-attribute">Require</span> <span class="hljs-literal">all</span> granted
+        <span class="hljs-section">&lt;/Files&gt;</span>
+    <span class="hljs-section">&lt;/Directory&gt;</span>
+<span class="hljs-section">&lt;/VirtualHost&gt;</span>
+<span class="hljs-section">&lt;VirtualHost *<span class="hljs-number">:80</span>&gt;</span>… (※<span class="hljs-attribute">10</span>)
+    <span class="hljs-attribute">ServerName</span> example.com
+    <span class="hljs-attribute">RewriteEngine</span> <span class="hljs-literal">on</span>
+    <span class="hljs-attribute">RewriteCond</span> <span class="hljs-variable">%{HTTPS}</span> <span class="hljs-literal">off</span>
+    <span class="hljs-attribute">RewriteRule</span> ^(.*)$ https://<span class="hljs-variable">%{HTTP_HOST}</span><span class="hljs-variable">%{REQUEST_URI}</span><span class="hljs-meta"> [R=301,L]</span>
+<span class="hljs-section">&lt;/VirtualHost&gt;</span>
 </code></pre>
       <ul>
         <li>上記注釈<br>
