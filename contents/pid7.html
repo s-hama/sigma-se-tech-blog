@@ -8,14 +8,14 @@
       <p>ホームディレクトリに<code>.vimrc</code>ファイルを作成<br>
         <code>.vimrc</code>に設定を追記することでVim に反映される。<br>
       </p>
-      <pre><code>touch ~/.vimrc
+      <pre><code class="language-bash"><span class="hljs-built_in">touch</span> ~/.vimrc
 </code></pre>
     </li>
     <li>
       <p>Pythonを使う上で最低限必要な<strong>自動インデント</strong>と<strong>シンタックスハイライト</strong>のみ設定<br></p>
-      <pre><code>$ vim ~/.vimrc
- filetype plugin indenton    &quot; 自動インデントの設定
- syntax on    &quot; シンタックスハイライトの設定
+      <pre><code class="language-bash">$ vim ~/.vimrc
+ filetype plugin indenton    <span class="hljs-comment"># 自動インデントの設定</span>
+ syntax on    <span class="hljs-comment"># シンタックスハイライトの設定</span>
 </code></pre>
     </li>
   </ul>
@@ -24,24 +24,24 @@
     <li>
       <p>ホームディレクトリに<code>.vim/ftplugin/python.vim</code>ファイルを作成<br>
         設定ファイルをファイルタイプ別に分割できるため、Pythonスクリプト専用の設定を定義することができる。<br></p>
-      <pre><code>$ mkdir ~/.vim
-$ mkdir ~/.vim/ftplugin
-$ touch ~/.vim/ftplugin/python.vim
+      <pre><code class="language-bash">$ <span class="hljs-built_in">mkdir</span> ~/.vim
+$ <span class="hljs-built_in">mkdir</span> ~/.vim/ftplugin
+$ <span class="hljs-built_in">touch</span> ~/.vim/ftplugin/python.vim
 </code></pre>
     </li>
     <li>
       <p>Vimの設定を追記<br>
         下記は、Pythonコミュニティが推奨する<strong>PEP8 ※1, 2：コーディング規約</strong>に準拠した設定となる。<br>
-        ※1 PEP8（en） : <a
+        ※1 PEP8（en）：<a class="link-secondary"
           href="https://www.python.org/dev/peps/pep-0008/">https://www.python.org/dev/peps/pep-0008/</a><br>
-        ※2 PEP8（ja） : <a href="https://github.com/mumumu/pep8-ja">https://github.com/mumumu/pep8-ja</a><br></p>
-      <pre><code>$ vim ~/.vim/ftplugin/python.vim
- setlocal expandtab    &quot; タブをスペースに置き換える設定
- setlocal tabstop=4    &quot; タブのインデント幅を4に設定
- setlocal shiftwidth=4    &quot; 自動インデント時の幅を4に設定
- setlocal softtabstop=0    &quot; キーボードから入るタブの数
- autocmd BufWritePre * :%s/\s\+$//ge    &quot; 保存時、行末スペースを除去する
- setlocal textwidth=80    &quot; 行折り返しを80文字に設定
+        ※2 PEP8（ja）：<a class="link-secondary" href="https://github.com/mumumu/pep8-ja">https://github.com/mumumu/pep8-ja</a><br></p>
+      <pre><code class="language-bash">$ vim ~/.vim/ftplugin/python.vim
+ setlocal expandtab    <span class="hljs-comment"># タブをスペースに置き換える設定</span>
+ setlocal tabstop=4    <span class="hljs-comment"># タブのインデント幅を4に設定</span>
+ setlocal shiftwidth=4    <span class="hljs-comment"># 自動インデント時の幅を4に設定</span>
+ setlocal softtabstop=0    <span class="hljs-comment"># キーボードから入るタブの数</span>
+ autocmd BufWritePre * :%s/\s\+$//ge    <span class="hljs-comment"># 保存時、行末スペースを除去する</span>
+ setlocal textwidth=80    <span class="hljs-comment"># 行折り返しを80文字に設定</span>
 </code></pre>
     </li>
   </ul>
@@ -51,11 +51,11 @@ $ touch ~/.vim/ftplugin/python.vim
       Pythonで多く使用されているコードチェックツール<strong>flake8</strong>をインストールする。<br>
       下記、<code>pip show flake8</code>のRequires(依存ライブラリ)にもある通り、flake8は、pyflakes、pycodestyle、mccabe
       3つライブラリをラップしているため、それぞれ個別のチェックも可能。<br>
-      <pre><code>$ pip install flake8
+      <pre><code class="language-bash">$ pip install flake8
 $ pip show flake8
  Name: flake8
  Version: 3.6.0
- Summary: the modular source code checker: pep8, pyflakes and co
+ Summary: the modular <span class="hljs-built_in">source</span> code checker: pep8, pyflakes and co
  Home-page: https://gitlab.com/pycqa/flake8
  Author: Tarek Ziade
  Author-email: tarek@ziade.org
@@ -70,7 +70,7 @@ $ pip show flake8
   <ul>
     <li>
       <p><strong>flake8</strong> : コードチェック<br></p>
-      <pre><code>$ flake8 example.py
+      <pre><code class="language-bash">$ flake8 example.py
  example.py:11:1: E302 expected 2 blank lines, found 1
  example.py:12:21: W291 trailing whitespace
 …
@@ -78,14 +78,14 @@ $ pip show flake8
     </li>
     <li>
       <p><strong>pyflakes</strong> : コードチェック<br></p>
-      <pre><code>$ pyflakes example.py
- example.py:74: undefined name 'Http404'
+      <pre><code class="language-bash">$ pyflakes example.py
+ example.py:74: undefined name <span class="hljs-string">&#x27;Http404&#x27;</span>
 …
 </code></pre>
     </li>
     <li>
       <p><strong>pycodestyle</strong> : PEP8に準拠しているかチェック<br></p>
-      <pre><code>$ pycodestyle example.py
+      <pre><code class="language-bash">$ pycodestyle example.py
  example.py:10:1: W293 blank line contains whitespace
  example.py:11:1: E302 expected 2 blank lines, found 1
  example.py:12:21: W291 trailing whitespace
@@ -95,15 +95,15 @@ $ pip show flake8
     <li>
       <p><strong>mccabe</strong> : 循環的複雑度のチェック<br>
         <strong>flake8</strong>ではデフォルト無効になっているため、下記のように <code>--max-complexity</code>を指定すれば循環的複雑度のチェックが可能となる。<br>
-        ※ 参考URLより抜粋 : <a
+        ※ 参考URLより抜粋 : <a class="link-secondary"
           href="https://github.com/pycqa/mccabe#plugin-for-flake8">https://github.com/pycqa/mccabe#plugin-for-flake8</a><br>
       </p>
-      <pre><code>$ flake8 --max-complexity 10 coolproject
+      <pre><code class="language-bash">$ flake8 --max-complexity 10 coolproject
   ...
-  coolproject/mod.py:1204:1: C901 'CoolFactory.prepare' is too complex (14)
+  coolproject/mod.py:1204:1: C901 <span class="hljs-string">&#x27;CoolFactory.prepare&#x27;</span> is too complex (14)
 </code></pre>
     </li>
   </ul>
   <br>
-  その他、**flake8**には、**flake8-docstrings**や**flake8-import-order**など色々なプラグインが用意されており、必要に応じてカスタマイズすることができる。
+  その他、<strong>flake8</strong>には、<strong>flake8-docstrings</strong>や<strong>flake8-import-order</strong>など色々なプラグインが用意されており、必要に応じてカスタマイズすることができる。
 </div>
