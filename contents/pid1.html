@@ -20,7 +20,7 @@
     <li>ここでは、英語圏のコミュニティが大きく、日本語情報が豊富で個人的に使い慣れているCentOSを選んだ。</li>
     <li>CentOS7_x64_x84(標準)をインストール
       インストールは、SAKURA VPS管理者用のコントロールパネルからGUI操作でインストールする。
-      <pre><code>$ cat /etc/redhat-release
+      <pre><code class="language-bash">$ <span class="hljs-built_in">cat</span> /etc/redhat-release
 CentOS Linux release 7.4.1708 (Core)
 </code></pre>
     </li>
@@ -37,7 +37,7 @@ CentOS Linux release 7.4.1708 (Core)
     <li>
       <p>VPS側のネームサーバー設定（さくらのVPS）<br>
         DNS設定からドメインの追加を行う。</p>
-      <pre><code>ホスト名: example.com
+        <pre><code>ホスト名: example.com
 種別: A
 内容: VPSのIPアドレス
 TTL: 3600
@@ -60,19 +60,19 @@ TTL: 3600
     <li>
       <p>rootでログインできないようにする。<br>
         ログイン用の一般ユーザーを作成する。</p>
-      <pre><code>$ adduser vpsuser
+      <pre><code class="language-bash">$ adduser vpsuser
 $ passwd *******
 </code></pre>
       <p>SSHの設定変更<br>
         rootで直接アクセス出来ないようにする。</p>
-      <pre><code>$ vim /etc/ssh/sshd_config
+      <pre><code class="language-bash">$ vim /etc/ssh/sshd_config
 </code></pre>
       <p>→ <code>PermitRootLogin no</code>がコメントアウトされていたら解除する。</p>
     </li>
     <li>
       <p>公開鍵認証の設定<br>
         公開鍵認証でのみログインするようにする。</p>
-      <pre><code>$ vim /etc/ssh/sshd_config
+      <pre><code class="language-bash">$ vim /etc/ssh/sshd_config
 </code></pre>
       <p>→ <code>PasswordAuthentication no</code>がコメントアウトされていたら解除する。</p>
     </li>

@@ -55,14 +55,14 @@ https://github.com からアカウント登録(Sign up)する。
 通信手段は、SSHを利用する。
 - id_rsa(秘密鍵)、id_rsa.pub(公開鍵)の生成<br>
 homeディレクトリに`.ssh`フォルダを作成後、そのフォルダに移動し、`ssh-keygen`を実行。
-  ```
+  ```bash
   $ mkdir ~/.ssh
   $ cd ~/.ssh
   $ ssh-keygen -t rsa -C "GitHubに登録したメールアドレス"
   Generating public/private rsa key pair.
-  Enter file in which to save the key (/root/.ssh/id_rsa):        # Enter押下
-  Enter passphrase (empty for no passphrase):        # 新規のパスワードを入力
-  Enter same passphrase again:        # 確認用のパスワードを入力
+  Enter file in which to save the key (/root/.ssh/id_rsa):    # Enter押下
+  Enter passphrase (empty for no passphrase):    # 新規のパスワードを入力
+  Enter same passphrase again:    # 確認用のパスワードを入力
   Your identification has been saved in /root/.ssh/id_rsa.
   Your public key has been saved in /root/.ssh/id_rsa.pub.
   The key fingerprint is:
@@ -70,7 +70,7 @@ homeディレクトリに`.ssh`フォルダを作成後、そのフォルダに�
   ```
 
 - 秘密鍵、公開鍵の生成確認<br>
-  ```
+  ```bash
   $ ls ~/.ssh
   id_rsa  id_rsa.pub
   ```
@@ -78,11 +78,11 @@ homeディレクトリに`.ssh`フォルダを作成後、そのフォルダに�
 - 秘密鍵、パスフレーズの登録<br>
 `ssh-add`で、SSH接続時に**パスワード入力を省略する**設定を行う。
 `ssh-add`は、OSによって実行方法が若干違うので注意。
-  ```
+  ```bash
   $ eval `ssh-agent`    # ssh-agent起動（evalなしだと環境変数の設定が必要）
   $ ssh-add ~/.ssh/id_rsa
   $ ssh-add -l    # 登録確認
-  2048 ********** /root/.ssh/id_rsa (RSA)   # このように表示されば正常に登録されている。
+  2048 ********** /root/.ssh/id_rsa (RSA)    # このように表示されば正常に登録されている
   ```
 
 - GitHubに公開鍵を登録<br>
@@ -122,13 +122,13 @@ homeディレクトリに`.ssh`フォルダを作成後、そのフォルダに�
 ### [git clone] : リモートリポジトリの複製
 上記で作成したリモートリポジトリをclone(複製)する。
 - Gitの作業フォルダ作成
-  ```
+  ```bash
   $ mkdir ~/gitlocalrep
   $ cd gitlocalrep
   ```
 
 - リモートリポジトリをclone 
-  ```
+  ```bash
   $ git clone git@github.com:sigma-se/exrep.git    # 下記※のパスを入力
   Cloning into 'exrep'...
   Enter passphrase for key '/root/.ssh/id_rsa':    # パスフレーズを入力
@@ -143,15 +143,15 @@ homeディレクトリに`.ssh`フォルダを作成後、そのフォルダに�
 - 現在のブランチ確認<br>
 アスタリスク(*)があるブランチが現在の作業ブランチとなる。<br>
 ※ 今回は、cloneしただけなのでmastarブランチのみ。
-  ```
-  $ cd ~/gitlocalrep/exrep    # cloneしたディレクトリに移動。
+  ```bash
+  $ cd ~/gitlocalrep/exrep    # cloneしたディレクトリに移動
   $ git branch    # ブランチの確認
    * master
   ```
 
 - topicbranchブランチの作成<br>
 `git branch`と一緒に名前を指定することで、新規にブランチが作成される。<br>
-  ```
+  ```bash
   $ git branch topicbranch  #「topicbranch」ブランチを作成
   $ git branch    # ブランチの確認
   * master
@@ -159,7 +159,7 @@ homeディレクトリに`.ssh`フォルダを作成後、そのフォルダに�
   ```
 
 - topicbranchブランチに切り替え<br>
-  ```
+  ```bash
   $ git checkout topicbranch
   Switched to branch 'topicbranch'
   $ git branch
@@ -169,7 +169,7 @@ homeディレクトリに`.ssh`フォルダを作成後、そのフォルダに�
 
 - （補足）ブランチ作成と切り替えを同時に実行<br>
 上記の`git branch topicbranch`と`git checkout topicbranch`は、`git checkout -b`で一度で実行することができる。
-  ```
+  ```bash
   $ git checkout -b topicbranch
   Switched to branch 'topicbranch'
   $ git branch

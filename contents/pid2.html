@@ -13,7 +13,7 @@
   <h3 id="apachehttpdインストール">Apache(httpd)インストール</h3>
   <ul>
     <li>インストール実行後、<code>Complete!</code>で正常終了。
-      <pre><code>$ yum install httpd
+      <pre><code class="language-bash">$ yum install httpd
 </code></pre>
     </li>
   </ul>
@@ -22,10 +22,10 @@
     <li>
       <p>CentOS7は、デフォルトでファイアウォールが有効なため、http、httpsも遮断されている状態なのでこの通信を許容するように設定変更する。<br>
         後にSSL/TSL化するため、ここでhttpsも一緒に許容しておく。</p>
-      <pre><code>$ systemctl start httpd # Apacheの起動
-$ firewall-cmd --add-service=http --zone=public --permanent # http通信の許容
-$ firewall-cmd --add-service=https --zone=public --permanent # https通信の許容
-$ systemctl restart firewalld # ファイアウォールの再起動
+      <pre><code class="language-bash">$ systemctl start httpd    <span class="hljs-comment"># Apacheの起動</span>
+$ firewall-cmd --add-service=http --zone=public --permanent    <span class="hljs-comment"># http通信の許容</span>
+$ firewall-cmd --add-service=https --zone=public --permanent    <span class="hljs-comment"># https通信の許容</span>
+$ systemctl restart firewalld    <span class="hljs-comment"># ファイアウォールの再起動</span>
 </code></pre>
     </li>
     <li>
@@ -36,12 +36,12 @@ $ systemctl restart firewalld # ファイアウォールの再起動
   <h3 id="httpd自動起動の設定">httpd自動起動の設定</h3>
   <ul>
     <li>サーバー起動時にhttpdも自動で起動するように設定する。
-      <pre><code>$ systemctl enable httpd
+      <pre><code class="language-bash">$ systemctl <span class="hljs-built_in">enable</span> httpd
 </code></pre>
     </li>
     <li>自動起動の設定確認<br>
       <code>httpd.service enabled</code>と表示されれば設定成功。
-      <pre><code>$ systemctl list-unit-files -t service
+      <pre><code class="language-bash">$ systemctl list-unit-files -t service
 </code></pre>
     </li>
   </ul>
@@ -49,15 +49,15 @@ $ systemctl restart firewalld # ファイアウォールの再起動
   <ul>
     <li>
       <p>vpsuser(所有者グループ)やapache(所有者)でもDocumentRoot配下(/var/www/html) が編集できるように権限変更する。</p>
-      <pre><code>$ cd /var/www
-$ chown apache:vpsuser html 
-$ chmod 775 html
+      <pre><code class="language-bash">$ <span class="hljs-built_in">cd</span> /var/www
+$ <span class="hljs-built_in">chown</span> apache:vpsuser html 
+$ <span class="hljs-built_in">chmod</span> 775 html
 </code></pre>
     </li>
     <li>
       <p>仮のindexで表示確認<br>
         /var/www/htmlの直下にindex.htmlを新規作成後、httpで自身のドメイン(http://example.com)にアクセスし表示されれば設定成功。</p>
-      <pre><code>$ systemctl list-unit-files -t service
+      <pre><code class="language-bash">$ systemctl list-unit-files -t service
 </code></pre>
     </li>
   </ul>
@@ -67,18 +67,18 @@ $ chmod 775 html
       <p>httpsのサービス解放<br>
         「--permanent」でOSを再起動しても設定が変わらないように設定を恒久化する。
         「--zone=public」で明示的にzoneをpublicに割当てる。<br></p>
-      <pre><code>$ firewall-cmd --permanent --zone=public --add-service=https
+      <pre><code class="language-bash">$ firewall-cmd --permanent --zone=public --add-service=https
 </code></pre>
     </li>
     <li>
       <p>設定を反映させるためfirewalldを再起動する</p>
-      <pre><code>$ systemctl restart firewalld
+      <pre><code class="language-bash">$ systemctl restart firewalld
 </code></pre>
     </li>
     <li>
       <p>httpsの解放確認<br>
         servicesにhttpsと表示されれば解放成功。</p>
-      <pre><code>$ firewall-cmd --list-all
+      <pre><code class="language-bash">$ firewall-cmd --list-all
  public (active)
   target: default
   icmp-block-inversion: no
@@ -103,24 +103,24 @@ $ chmod 775 html
       <p>mod_sslインストール<br>
         <strong>Apache</strong>を<strong>SSL/TLS</strong>に対応させる。
       </p>
-      <pre><code>$ yum install mod_ssl # mod_sslインストール
+      <pre><code class="language-bash">$ yum install mod_ssl    <span class="hljs-comment"># mod_sslインストール</span>
 </code></pre>
     </li>
     <li>
       <p>起動確認
         <code>active(running)</code>であることを確認する。<br>
       </p>
-      <pre><code>$ systemctl restart httpd
+      <pre><code class="language-bash">$ systemctl restart httpd
 $ systemctl status httpd
 * httpd.service - The Apache HTTP Server
    Loaded: loaded (/usr/lib/systemd/system/httpd.service; enabled; vendor preset: disabled)
    Active: active (running) since Fri 2018-09-14 21:54:42 JST; 1h 40min ago
      Docs: man:httpd(8)
            man:apachectl(8)
-  Process: 3887 ExecStop=/bin/kill -WINCH ${MAINPID} (code=exited, status=0/SUCCESS)
-  Process: 24271 ExecReload=/usr/sbin/httpd $OPTIONS -k graceful (code=exited, status=0/SUCCESS)
+  Process: 3887 ExecStop=/bin/kill -WINCH <span class="hljs-variable">${MAINPID}</span> (code=exited, status=0/SUCCESS)
+  Process: 24271 ExecReload=/usr/sbin/httpd <span class="hljs-variable">$OPTIONS</span> -k graceful (code=exited, status=0/SUCCESS)
  Main PID: 3895 (httpd)
-   Status: &quot;Total requests: 49; Current requests/sec: 0; Current traffic:   0 B/sec&quot;
+   Status: <span class="hljs-string">&quot;Total requests: 49; Current requests/sec: 0; Current traffic:   0 B/sec&quot;</span>
    CGroup: /system.slice/httpd.service
            |-3895 /usr/sbin/httpd -DFOREGROUND
            |-3896 /usr/sbin/httpd -DFOREGROUND
@@ -142,19 +142,19 @@ $ systemctl status httpd
       <p>EPELリポジトリのインストール<br>
         <strong>EPEL</strong>は、CentOSで標準搭載されていないパッケージをyumでインストール可能にするためのリポジトリ。
       </p>
-      <pre><code>$ yum install epel-release
+      <pre><code class="language-bash">$ yum install epel-release
 </code></pre>
     </li>
     <li>
       <p>Certbotのインストール<br>
         <strong>Certbot</strong>は、<strong>Let's Encrypt</strong>で使用するクライアントソフトウェアで、SSL/TLSサーバー証明書の取得、及び更新作業を自動化してくれる。
       </p>
-      <pre><code>$ yum install epel-release
+      <pre><code class="language-bash">$ yum install epel-release
 </code></pre>
     </li>
     <li>
       <p>CertbotでSSL証明書を取得する</p>
-      <pre><code>$ sudo certbot --authenticator standalone --installer apache -d example.com --pre-hook &quot;apachectl stop&quot; --post-hook &quot;apachectl start&quot;
+      <pre><code class="language-bash">$ sudo certbot --authenticator standalone --installer apache -d example.com --pre-hook <span class="hljs-string">&quot;apachectl stop&quot;</span> --post-hook <span class="hljs-string">&quot;apachectl start&quot;</span>
 </code></pre>
     </li>
     <li>
@@ -170,11 +170,11 @@ $ systemctl status httpd
   <ul>
     <li>
       <p>Apacheを停止して現在の証明書を強制的に再発行する。</p>
-      <pre><code>$ sudo systemctl stop httpd # Apache停止
-$ sudo certbot renew --force-renewal --dry-run # 仮実施
-$ openssl x509 -in /etc/letsencrypt/live/example.com/fullchain.pem -noout -dates # 有効期限の確認
-$ sudo certbot renew --force-renewal # 本番実施：証明書再発行
-$ sudo systemctl start httpd # Apache起動
+      <pre><code class="language-bash">$ sudo systemctl stop httpd    <span class="hljs-comment"># Apache停止</span>
+$ sudo certbot renew --force-renewal --dry-run    <span class="hljs-comment"># 仮実施</span>
+$ openssl x509 -<span class="hljs-keyword">in</span> /etc/letsencrypt/live/example.com/fullchain.pem -noout -dates    <span class="hljs-comment"># 有効期限の確認</span>
+$ sudo certbot renew --force-renewal    <span class="hljs-comment"># 本番実施：証明書再発行</span>
+$ sudo systemctl start httpd    <span class="hljs-comment"># Apache起動</span>
 </code></pre>
     </li>
     <li>
