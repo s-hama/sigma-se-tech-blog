@@ -47,7 +47,7 @@
   <ul>
     <li>
       <p>Githubのアカウント登録
-        <a href="https://github.com">https://github.com</a> からアカウント登録(Sign up)する。
+        <a class="link-secondary" href="https://github.com">https://github.com</a> からアカウント登録(Sign up)する。
       </p>
     </li>
     <li>
@@ -73,22 +73,22 @@
     <li>
       <p>id_rsa(秘密鍵)、id_rsa.pub(公開鍵)の生成<br>
         homeディレクトリに<code>.ssh</code>フォルダを作成後、そのフォルダに移動し、<code>ssh-keygen</code>を実行。</p>
-      <pre><code>$ mkdir ~/.ssh
-$ cd ~/.ssh
-$ ssh-keygen -t rsa -C &quot;GitHubに登録したメールアドレス&quot;
+      <pre><code class="language-bash">$ <span class="hljs-built_in">mkdir</span> ~/.ssh
+$ <span class="hljs-built_in">cd</span> ~/.ssh
+$ ssh-keygen -t rsa -C <span class="hljs-string">&quot;GitHubに登録したメールアドレス&quot;</span>
 Generating public/private rsa key pair.
-Enter file in which to save the key (/root/.ssh/id_rsa):        # Enter押下
-Enter passphrase (empty for no passphrase):        # 新規のパスワードを入力
-Enter same passphrase again:        # 確認用のパスワードを入力
-Your identification has been saved in /root/.ssh/id_rsa.
-Your public key has been saved in /root/.ssh/id_rsa.pub.
+Enter file <span class="hljs-keyword">in</span> <span class="hljs-built_in">which</span> to save the key (/root/.ssh/id_rsa):    <span class="hljs-comment"># Enter押下</span>
+Enter passphrase (empty <span class="hljs-keyword">for</span> no passphrase):    <span class="hljs-comment"># 新規のパスワードを入力</span>
+Enter same passphrase again:    <span class="hljs-comment"># 確認用のパスワードを入力</span>
+Your identification has been saved <span class="hljs-keyword">in</span> /root/.ssh/id_rsa.
+Your public key has been saved <span class="hljs-keyword">in</span> /root/.ssh/id_rsa.pub.
 The key fingerprint is:
 …
 </code></pre>
     </li>
     <li>
       <p>秘密鍵、公開鍵の生成確認<br></p>
-      <pre><code>$ ls ~/.ssh
+      <pre><code class="language-bash">$ <span class="hljs-built_in">ls</span> ~/.ssh
 id_rsa  id_rsa.pub
 </code></pre>
     </li>
@@ -97,10 +97,10 @@ id_rsa  id_rsa.pub
         <code>ssh-add</code>で、SSH接続時に<strong>パスワード入力を省略する</strong>設定を行う。
         <code>ssh-add</code>は、OSによって実行方法が若干違うので注意。
       </p>
-      <pre><code>$ eval `ssh-agent`    # ssh-agent起動（evalなしだと環境変数の設定が必要）
+      <pre><code class="language-bash">$ <span class="hljs-built_in">eval</span> `ssh-agent`    <span class="hljs-comment"># ssh-agent起動（evalなしだと環境変数の設定が必要）</span>
 $ ssh-add ~/.ssh/id_rsa
-$ ssh-add -l    # 登録確認
-2048 ********** /root/.ssh/id_rsa (RSA)   # このように表示されば正常に登録されている。
+$ ssh-add -l    <span class="hljs-comment"># 登録確認</span>
+2048 ********** /root/.ssh/id_rsa (RSA)    <span class="hljs-comment"># このように表示されば正常に登録されている</span>
 </code></pre>
     </li>
     <li>
@@ -121,9 +121,9 @@ $ ssh-add -l    # 登録確認
 The authenticity of host 'github.com (192.30.255.113)' can't be established.
 RSA key fingerprint is **********.
 RSA key fingerprint is **********.
-Are you sure you want to continue connecting (yes/no)? yes    # 接続を継続するかの確認（yesを入力）
+Are you sure you want to continue connecting (yes/no)? yes    <span class="hljs-comment"># 接続を継続するかの確認（yesを入力）</span>
 Warning: Permanently added 'github.com,192.30.255.113' (RSA) to the list of known hosts.
-Enter passphrase for key '/root/.ssh/id_rsa':    # 上記、[ ssh-keygen ]で登録したパスワードを入力
+Enter passphrase for key '/root/.ssh/id_rsa':    <span class="hljs-comment"># 上記、[ ssh-keygen ]で登録したパスワードを入力</span>
 PTY allocation request failed on channel 0
 Hi ! You've successfully authenticated, but GitHub does not provide shell access.
 Connection to github.com closed.
@@ -146,17 +146,17 @@ Connection to github.com closed.
   <ul>
     <li>
       <p>Gitの作業フォルダ作成</p>
-      <pre><code>$ mkdir ~/gitlocalrep
-$ cd gitlocalrep
+      <pre><code class="language-bash">$ <span class="hljs-built_in">mkdir</span> ~/gitlocalrep
+$ <span class="hljs-built_in">cd</span> gitlocalrep
 </code></pre>
     </li>
     <li>
       <p>リモートリポジトリをclone</p>
-      <pre><code>$ git clone git@github.com:sigma-se/exrep.git    # 下記※のパスを入力
-Cloning into 'exrep'...
-Enter passphrase for key '/root/.ssh/id_rsa':    # パスフレーズを入力
-warning: You appear to have cloned an empty repository.   # 空のディレクトリである警告
-$ ls    # 確認
+      <pre><code class="language-bash">$ git <span class="hljs-built_in">clone</span> git@github.com:sigma-se/exrep.git    <span class="hljs-comment"># 下記※のパスを入力</span>
+Cloning into <span class="hljs-string">&#x27;exrep&#x27;</span>...
+Enter passphrase <span class="hljs-keyword">for</span> key <span class="hljs-string">&#x27;/root/.ssh/id_rsa&#x27;</span>:    <span class="hljs-comment"># パスフレーズを入力</span>
+warning: You appear to have cloned an empty repository.   <span class="hljs-comment"># 空のディレクトリである警告</span>
+$ <span class="hljs-built_in">ls</span>    <span class="hljs-comment"># 確認</span>
 exrep
 </code></pre>
       <p>※ リモートリポジトリの<strong>Quick
@@ -170,8 +170,8 @@ exrep
       <p>現在のブランチ確認<br>
         アスタリスク(*)があるブランチが現在の作業ブランチとなる。<br>
         ※ 今回は、cloneしただけなのでmastarブランチのみ。</p>
-      <pre><code>$ cd ~/gitlocalrep/exrep    # cloneしたディレクトリに移動。
-$ git branch    # ブランチの確認
+      <pre><code class="language-bash">$ <span class="hljs-built_in">cd</span> ~/gitlocalrep/exrep    <span class="hljs-comment"># cloneしたディレクトリに移動</span>
+$ git branch    <span class="hljs-comment"># ブランチの確認</span>
  * master
 </code></pre>
     </li>
@@ -179,16 +179,16 @@ $ git branch    # ブランチの確認
       <p>topicbranchブランチの作成<br>
         <code>git branch</code>と一緒に名前を指定することで、新規にブランチが作成される。<br>
       </p>
-      <pre><code>$ git branch topicbranch  #「topicbranch」ブランチを作成
-$ git branch    # ブランチの確認
+      <pre><code class="language-bash">$ git branch topicbranch  <span class="hljs-comment">#「topicbranch」ブランチを作成</span>
+$ git branch    <span class="hljs-comment"># ブランチの確認</span>
 * master
   topicbranch
 </code></pre>
     </li>
     <li>
       <p>topicbranchブランチに切り替え<br></p>
-      <pre><code>$ git checkout topicbranch
-Switched to branch 'topicbranch'
+      <pre><code class="language-bash">$ git checkout topicbranch
+Switched to branch <span class="hljs-string">&#x27;topicbranch&#x27;</span>
 $ git branch
   master
 * topicbranch
@@ -198,16 +198,16 @@ $ git branch
       <p>（補足）ブランチ作成と切り替えを同時に実行<br>
         上記の<code>git branch topicbranch</code>と<code>git checkout topicbranch</code>は、<code>git checkout -b</code>で一度で実行することができる。
       </p>
-      <pre><code>$ git checkout -b topicbranch
-Switched to branch 'topicbranch'
+      <pre><code class="language-bash">$ git checkout -b topicbranch
+Switched to branch <span class="hljs-string">&#x27;topicbranch&#x27;</span>
 $ git branch
   master
 * topicbranch
-</code></pre>
+</code><</pre>
     </li>
   </ul>
   <p>以上で開発準備完了。<br><br>
     以降は、ローカルリポジトリ(ブランチ)からリモートリポジトリに対して、pull、commit, push等の操作を行いバージョン管理する流れとなる。<br>
-    参考 : <a href="https://sigma-se.com/detail/6/">Git - 状態管理の概念と基本操作 : status, add, commit, diff, reset, push, pull,
+    参考 : <a class="link-secondary" href="https://sigma-se.com/detail/6/">Git - 状態管理の概念と基本操作 : status, add, commit, diff, reset, push, pull,
       checkout</a></p>
 </div>
