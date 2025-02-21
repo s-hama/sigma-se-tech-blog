@@ -17,3 +17,16 @@ Pythonのバージョン問わず、`python`コマンドを実行することで
    Type "help", "copyright", "credits" or "license" for more information.
    >>>
   ```
+
+- 対話モードの実行<br>
+例えば、`sys.path`を確認したい場合、実際のコーディングと同じ要領で`sys`をインポート後、`sys.path`を実行することで、結果（pathの一覧）が表示される。<br>
+  ```
+  $ python　# 対話モード起動 (マイナーバージョンまで指定した python3.6 でも同じ動作)
+   [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
+   Type "help", "copyright", "credits" or "license" for more information.
+   >>> import sys
+   >>> sys.path
+   ['', '/usr/lib64/python36.zip', '/usr/lib64/python3.6', '/usr/lib64/python3.6/lib-dynload', 
+   '/var/www/vops/lib64/python3.6/site-packages','/var/www/vops/lib/python3.6/site-packages']
+   >>>
+  ```
