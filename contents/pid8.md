@@ -30,3 +30,13 @@ Pythonのバージョン問わず、`python`コマンドを実行することで
    '/var/www/vops/lib64/python3.6/site-packages','/var/www/vops/lib/python3.6/site-packages']
    >>>
   ```
+
+- 対話モードの終了<br>
+「Ctrl」+「D」押下または、`exit()`を実行する。<br>
+  ```
+  $ python
+   Python 3.6.4 (default, Dec 19 2017, 14:48:12)
+   [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
+   Type "help", "copyright", "credits" or "license" for more information.
+   >>> exit()
+  ```
