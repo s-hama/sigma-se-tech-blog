@@ -58,3 +58,27 @@ Pythonのバージョン問わず、`python`コマンドを実行することで
    >>>
   ```
   `sys`をインポートしていないので当然エラーが発生する。
+
+- **PYTHONSTARTUP**に`import sys`を追記<br>
+ホームディレクトりに`.pythonstartup`を作成後、環境変数「PYTHONSTARTUP」に`.pythonstartup`を設定し、`import sys`を追記する。<br>
+  ```
+  $ touch  ~/.pythonstartup    # 空ファイル新規作成
+  $ vim  ~/.pythonstartup    # import sys を追記
+   import sys
+  $ export PYTHONSTARTUP=~/.pythonstartup    # 環境変数「PYTHONSTARTUP」に .pythonstartup を設定
+  ```
+
+- 再度対話モードで`sys.path`を実行<br>
+  ```
+  $ python
+   Python 3.6.4 (default, Dec 19 2017, 14:48:12)
+   [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
+   Type "help", "copyright", "credits" or "license" for more information.
+   >>> sys.path
+   ['', '/usr/lib64/python36.zip', '/usr/lib64/python3.6', '/usr/lib64/python3.6/lib-dynload', 
+   '/var/www/vops/lib64/python3.6/site-packages', '/var/www/vops/lib/python3.6/site-packages']
+   >>>
+  ```
+  `.pythonstartup`を読み込んで`sys`をインポート後、正常に`sys.path`の結果が表示されている。
+
+上記の要領で、Pythonの標準ライブラリなどの共通モジュールを環境変数(PYTHONSTARTUP)に設定しておくと対話モードのコーディングが簡潔になる。
