@@ -9,10 +9,10 @@ Python - 対話モード（インタプリタ）: 使用例と環境変数（PYT
 - 対話モードの起動<br>
 Pythonのバージョン問わず、`python`コマンドを実行することで**対話モード**が起動する。<br>
 対話モードでは、入力待ち状態を表す「>>>」の後に直接コードを書いて実行することができる。<br>
-  ```
+  ```bash
   $ python -V    # バージョン確認
    Python 3.6.4
-  $ python　# 対話モード起動 (マイナーバージョンまでを指定しても可)
+  $ python    # 対話モード起動 (マイナーバージョンまでを指定しても可)
    [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
    Type "help", "copyright", "credits" or "license" for more information.
    >>>
@@ -20,8 +20,8 @@ Pythonのバージョン問わず、`python`コマンドを実行することで
 
 - 対話モードの実行<br>
 例えば、`sys.path`を確認したい場合、実際のコーディングと同じ要領で`sys`をインポート後、`sys.path`を実行することで、結果（pathの一覧）が表示される。<br>
-  ```
-  $ python　# 対話モード起動 (マイナーバージョンまで指定した python3.6 でも同じ動作)
+  ```bash
+  $ python    # 対話モード起動 (マイナーバージョンまで指定した python3.6 でも同じ動作)
    [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
    Type "help", "copyright", "credits" or "license" for more information.
    >>> import sys
@@ -33,7 +33,7 @@ Pythonのバージョン問わず、`python`コマンドを実行することで
 
 - 対話モードの終了<br>
 「Ctrl」+「D」押下または、`exit()`を実行する。<br>
-  ```
+  ```bash
   $ python
    Python 3.6.4 (default, Dec 19 2017, 14:48:12)
    [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
@@ -46,7 +46,7 @@ Pythonのバージョン問わず、`python`コマンドを実行することで
 以下は、簡単な例として上記、**対話モードの実行**で記述した`sys.path`を`import sys`なしで実行できるように事前に環境変数`PYTHONSTARTUP`に設定する手順。<br>
 
 - 確環境変数未設定で`sys.path`を実行<br>
-  ```
+  ```bash
   $ python
    Python 3.6.4 (default, Dec 19 2017, 14:48:12)
    [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
@@ -61,15 +61,15 @@ Pythonのバージョン問わず、`python`コマンドを実行することで
 
 - **PYTHONSTARTUP**に`import sys`を追記<br>
 ホームディレクトりに`.pythonstartup`を作成後、環境変数「PYTHONSTARTUP」に`.pythonstartup`を設定し、`import sys`を追記する。<br>
-  ```
+  ```bash
   $ touch  ~/.pythonstartup    # 空ファイル新規作成
   $ vim  ~/.pythonstartup    # import sys を追記
    import sys
-  $ export PYTHONSTARTUP=~/.pythonstartup    # 環境変数「PYTHONSTARTUP」に .pythonstartup を設定
+  $ export PYTHONSTARTUP=~/.pythonstartup    # 環境変数「PYTHONSTARTUP」にpythonstartup を設定
   ```
 
 - 再度対話モードで`sys.path`を実行<br>
-  ```
+  ```bash
   $ python
    Python 3.6.4 (default, Dec 19 2017, 14:48:12)
    [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
@@ -86,7 +86,7 @@ Pythonのバージョン問わず、`python`コマンドを実行することで
 ### その他、対話モードの補足
 - 最後に実行されたコードを再度実行する<br>
 最後に実行したコードは、変数_（アンダーバー）に格納されているため、_（アンダーバー）を実行することで再実行できる。<br>
-  ```
+  ```bash
   $ python
    [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
    Type "help", "copyright", "credits" or "license" for more information.
@@ -102,7 +102,7 @@ Pythonのバージョン問わず、`python`コマンドを実行することで
 
 - 任意のファイルを実行後、対話モードを起動<br>
 **-i**オプションでファイルパスを指定すると、対話モードに入る前に任意のファイルを実行できる。<br>
-  ```
+  ```bash
   $ python -i example.py
   >>>
   ```
@@ -110,7 +110,7 @@ Pythonのバージョン問わず、`python`コマンドを実行することで
 - **IPython**の導入<br>
 対話モードをデバッガーのように利用できる**IPython**というパッケージもある。<br>
 IPythonをインストールするとTABキーでの補完、シェルコマンドの使用、pythonデバッガー(pdb)との連携ができるようになる。<br>
-  ```
+  ```bash
   $ pip install ipython
   ```
 
@@ -118,7 +118,7 @@ IPythonをインストールするとTABキーでの補完、シェルコマン�
 対話モードでも`import this`で原文確認できる。<br>
 以下は、**The Zen of Python**は、Pythonの開発者の一人「Tim Peters」によって書かれた**Pythonらしさ**を端的にまとめた文章。<br>
   - 原文
-    ```
+    ```bash
     $ python
     Python 3.6.4 (default, Dec 19 2017, 14:48:12)
     [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
