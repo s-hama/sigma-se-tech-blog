@@ -16,4 +16,19 @@ $ python    <span class="hljs-comment"># 対話モード起動 (マイナーバ�
  &gt;&gt;&gt;
 </code></pre>
     </li>
+    <li>
+      <p>対話モードの実行<br>
+        例えば、<code>sys.path</code>を確認したい場合、実際のコーディングと同じ要領で<code>sys</code>をインポート後、<code>sys.path</code>を実行することで、結果（pathの一覧）が表示される。<br>
+      </p>
+      <pre><code class="language-bash">$ python    <span class="hljs-comment"># 対話モード起動 (マイナーバージョンまで指定した python3.6 でも同じ動作)</span>
+ [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
+ Type <span class="hljs-string">&quot;help&quot;</span>, <span class="hljs-string">&quot;copyright&quot;</span>, <span class="hljs-string">&quot;credits&quot;</span> or <span class="hljs-string">&quot;license&quot;</span> <span class="hljs-keyword">for</span> more information.
+ &gt;&gt;&gt; import sys
+ &gt;&gt;&gt; sys.path
+ [<span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python36.zip&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python3.6&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python3.6/lib-dynload&#x27;</span>, 
+ <span class="hljs-string">&#x27;/var/www/vops/lib64/python3.6/site-packages&#x27;</span>,<span class="hljs-string">&#x27;/var/www/vops/lib/python3.6/site-packages&#x27;</span>]
+ &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
 </div>
