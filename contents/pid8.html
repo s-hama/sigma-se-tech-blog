@@ -41,4 +41,24 @@ $ python    <span class="hljs-comment"># 対話モード起動 (マイナーバ�
 </code></pre>
     </li>
   </ul>
+  <h3 id="環境変数pythonstartupの設定">環境変数（PYTHONSTARTUP）の設定</h3>
+  <p>対話モードでは、環境変数<code>PYTHONSTARTUP</code>に指定したスクリプトを最初に実行する。<br>
+    以下は、簡単な例として上記、<strong>対話モードの実行</strong>で記述した<code>sys.path</code>を<code>import sys</code>なしで実行できるように事前に環境変数<code>PYTHONSTARTUP</code>に設定する手順。<br>
+  </p>
+  <ul>
+    <li>
+      <p>確環境変数未設定で<code>sys.path</code>を実行<br></p>
+      <pre><code class="language-bash">$ python
+ Python 3.6.4 (default, Dec 19 2017, 14:48:12)
+ [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
+ Type <span class="hljs-string">&quot;help&quot;</span>, <span class="hljs-string">&quot;copyright&quot;</span>, <span class="hljs-string">&quot;credits&quot;</span> or <span class="hljs-string">&quot;license&quot;</span> <span class="hljs-keyword">for</span> more information.
+ &gt;&gt;&gt; sys.path
+ Traceback (most recent call last):
+   File <span class="hljs-string">&quot;&quot;</span>, line 1, <span class="hljs-keyword">in</span> 
+ NameError: name <span class="hljs-string">&#x27;sys&#x27;</span> is not defined
+ &gt;&gt;&gt;
+</code></pre>
+      <p><code>sys</code>をインポートしていないので当然エラーが発生する。</p>
+    </li>
+  </ul>
 </div>
