@@ -60,5 +60,29 @@ $ python    <span class="hljs-comment"># 対話モード起動 (マイナーバ�
 </code></pre>
       <p><code>sys</code>をインポートしていないので当然エラーが発生する。</p>
     </li>
+    <li>
+      <p><strong>PYTHONSTARTUP</strong>に<code>import sys</code>を追記<br>
+        ホームディレクトりに<code>.pythonstartup</code>を作成後、環境変数「PYTHONSTARTUP」に<code>.pythonstartup</code>を設定し、<code>import sys</code>を追記する。<br>
+      </p>
+      <pre><code class="language-bash">$ <span class="hljs-built_in">touch</span>  ~/.pythonstartup    <span class="hljs-comment"># 空ファイル新規作成</span>
+$ vim  ~/.pythonstartup    <span class="hljs-comment"># import sys を追記</span>
+ import sys
+$ <span class="hljs-built_in">export</span> PYTHONSTARTUP=~/.pythonstartup    <span class="hljs-comment"># 環境変数「PYTHONSTARTUP」にpythonstartup を設定</span>
+</code></pre>
+    </li>
+    <li>
+      <p>再度対話モードで<code>sys.path</code>を実行<br></p>
+      <pre><code class="language-bash">$ python
+ Python 3.6.4 (default, Dec 19 2017, 14:48:12)
+ [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
+ Type <span class="hljs-string">&quot;help&quot;</span>, <span class="hljs-string">&quot;copyright&quot;</span>, <span class="hljs-string">&quot;credits&quot;</span> or <span class="hljs-string">&quot;license&quot;</span> <span class="hljs-keyword">for</span> more information.
+ &gt;&gt;&gt; sys.path
+ [<span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python36.zip&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python3.6&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python3.6/lib-dynload&#x27;</span>, 
+ <span class="hljs-string">&#x27;/var/www/vops/lib64/python3.6/site-packages&#x27;</span>, <span class="hljs-string">&#x27;/var/www/vops/lib/python3.6/site-packages&#x27;</span>]
+ &gt;&gt;&gt;
+</code></pre>
+      <p><code>.pythonstartup</code>を読み込んで<code>sys</code>をインポート後、正常に<code>sys.path</code>の結果が表示されている。</p>
+    </li>
   </ul>
+  <p>上記の要領で、Pythonの標準ライブラリなどの共通モジュールを環境変数(PYTHONSTARTUP)に設定しておくと対話モードのコーディングが簡潔になる。</p>
 </div>
