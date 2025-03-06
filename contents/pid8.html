@@ -1,0 +1,204 @@
+<div class="post-body">
+  <h2 id="目的">目的</h2>
+  <p>この記事では、Pythonの対話モード（インタプリタ）の使用例と環境変数（PYTHONSTARTUP）の設定方法について説明する。</p>
+  <h2 id="実施内容">実施内容</h2>
+  <h3 id="対話モードの使用例">対話モードの使用例</h3>
+  <ul>
+    <li>
+      <p>対話モードの起動<br>
+        Pythonのバージョン問わず、<code>python</code>コマンドを実行することで<strong>対話モード</strong>が起動する。<br>
+        対話モードでは、入力待ち状態を表す「&gt;&gt;&gt;」の後に直接コードを書いて実行することができる。<br></p>
+      <pre><code class="language-bash">$ python -V    <span class="hljs-comment"># バージョン確認</span>
+ Python 3.6.4
+$ python    <span class="hljs-comment"># 対話モード起動 (マイナーバージョンまでを指定しても可)</span>
+ [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
+ Type <span class="hljs-string">&quot;help&quot;</span>, <span class="hljs-string">&quot;copyright&quot;</span>, <span class="hljs-string">&quot;credits&quot;</span> or <span class="hljs-string">&quot;license&quot;</span> <span class="hljs-keyword">for</span> more information.
+ &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>対話モードの実行<br>
+        例えば、<code>sys.path</code>を確認したい場合、実際のコーディングと同じ要領で<code>sys</code>をインポート後、<code>sys.path</code>を実行することで、結果（pathの一覧）が表示される。<br>
+      </p>
+      <pre><code class="language-bash">$ python    <span class="hljs-comment"># 対話モード起動 (マイナーバージョンまで指定した python3.6 でも同じ動作)</span>
+ [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
+ Type <span class="hljs-string">&quot;help&quot;</span>, <span class="hljs-string">&quot;copyright&quot;</span>, <span class="hljs-string">&quot;credits&quot;</span> or <span class="hljs-string">&quot;license&quot;</span> <span class="hljs-keyword">for</span> more information.
+ &gt;&gt;&gt; import sys
+ &gt;&gt;&gt; sys.path
+ [<span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python36.zip&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python3.6&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python3.6/lib-dynload&#x27;</span>, 
+ <span class="hljs-string">&#x27;/var/www/vops/lib64/python3.6/site-packages&#x27;</span>,<span class="hljs-string">&#x27;/var/www/vops/lib/python3.6/site-packages&#x27;</span>]
+ &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>対話モードの終了<br>
+        「Ctrl」+「D」押下または、<code>exit()</code>を実行する。<br></p>
+      <pre><code class="language-bash">$ python
+ Python 3.6.4 (default, Dec 19 2017, 14:48:12)
+ [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
+ Type <span class="hljs-string">&quot;help&quot;</span>, <span class="hljs-string">&quot;copyright&quot;</span>, <span class="hljs-string">&quot;credits&quot;</span> or <span class="hljs-string">&quot;license&quot;</span> <span class="hljs-keyword">for</span> more information.
+ &gt;&gt;&gt; <span class="hljs-built_in">exit</span>()
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="環境変数pythonstartupの設定">環境変数（PYTHONSTARTUP）の設定</h3>
+  <p>対話モードでは、環境変数<code>PYTHONSTARTUP</code>に指定したスクリプトを最初に実行する。<br>
+    以下は、簡単な例として上記、<strong>対話モードの実行</strong>で記述した<code>sys.path</code>を<code>import sys</code>なしで実行できるように事前に環境変数<code>PYTHONSTARTUP</code>に設定する手順。<br>
+  </p>
+  <ul>
+    <li>
+      <p>確環境変数未設定で<code>sys.path</code>を実行<br></p>
+      <pre><code class="language-bash">$ python
+ Python 3.6.4 (default, Dec 19 2017, 14:48:12)
+ [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
+ Type <span class="hljs-string">&quot;help&quot;</span>, <span class="hljs-string">&quot;copyright&quot;</span>, <span class="hljs-string">&quot;credits&quot;</span> or <span class="hljs-string">&quot;license&quot;</span> <span class="hljs-keyword">for</span> more information.
+ &gt;&gt;&gt; sys.path
+ Traceback (most recent call last):
+   File <span class="hljs-string">&quot;&quot;</span>, line 1, <span class="hljs-keyword">in</span> 
+ NameError: name <span class="hljs-string">&#x27;sys&#x27;</span> is not defined
+ &gt;&gt;&gt;
+</code></pre>
+      <p><code>sys</code>をインポートしていないので当然エラーが発生する。</p>
+    </li>
+    <li>
+      <p><strong>PYTHONSTARTUP</strong>に<code>import sys</code>を追記<br>
+        ホームディレクトりに<code>.pythonstartup</code>を作成後、環境変数「PYTHONSTARTUP」に<code>.pythonstartup</code>を設定し、<code>import sys</code>を追記する。<br>
+      </p>
+      <pre><code class="language-bash">$ <span class="hljs-built_in">touch</span>  ~/.pythonstartup    <span class="hljs-comment"># 空ファイル新規作成</span>
+$ vim  ~/.pythonstartup    <span class="hljs-comment"># import sys を追記</span>
+ import sys
+$ <span class="hljs-built_in">export</span> PYTHONSTARTUP=~/.pythonstartup    <span class="hljs-comment"># 環境変数「PYTHONSTARTUP」にpythonstartup を設定</span>
+</code></pre>
+    </li>
+    <li>
+      <p>再度対話モードで<code>sys.path</code>を実行<br></p>
+      <pre><code class="language-bash">$ python
+ Python 3.6.4 (default, Dec 19 2017, 14:48:12)
+ [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
+ Type <span class="hljs-string">&quot;help&quot;</span>, <span class="hljs-string">&quot;copyright&quot;</span>, <span class="hljs-string">&quot;credits&quot;</span> or <span class="hljs-string">&quot;license&quot;</span> <span class="hljs-keyword">for</span> more information.
+ &gt;&gt;&gt; sys.path
+ [<span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python36.zip&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python3.6&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python3.6/lib-dynload&#x27;</span>, 
+ <span class="hljs-string">&#x27;/var/www/vops/lib64/python3.6/site-packages&#x27;</span>, <span class="hljs-string">&#x27;/var/www/vops/lib/python3.6/site-packages&#x27;</span>]
+ &gt;&gt;&gt;
+</code></pre>
+      <p><code>.pythonstartup</code>を読み込んで<code>sys</code>をインポート後、正常に<code>sys.path</code>の結果が表示されている。</p>
+    </li>
+  </ul>
+  <p>上記の要領で、Pythonの標準ライブラリなどの共通モジュールを環境変数(PYTHONSTARTUP)に設定しておくと対話モードのコーディングが簡潔になる。</p>
+  <h3 id="その他対話モードの補足">その他、対話モードの補足</h3>
+  <ul>
+    <li>
+      <p>最後に実行されたコードを再度実行する<br>
+        最後に実行したコードは、変数_（アンダーバー）に格納されているため、_（アンダーバー）を実行することで再実行できる。<br></p>
+      <pre><code class="language-bash">$ python
+ [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
+ Type <span class="hljs-string">&quot;help&quot;</span>, <span class="hljs-string">&quot;copyright&quot;</span>, <span class="hljs-string">&quot;credits&quot;</span> or <span class="hljs-string">&quot;license&quot;</span> <span class="hljs-keyword">for</span> more information.
+ &gt;&gt;&gt; import sys
+ &gt;&gt;&gt; sys.path
+ [<span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python36.zip&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python3.6&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python3.6/lib-dynload&#x27;</span>, 
+ <span class="hljs-string">&#x27;/var/www/vops/lib64/python3.6/site-packages&#x27;</span>, <span class="hljs-string">&#x27;/var/www/vops/lib/python3.6/site-packages&#x27;</span>]
+ &gt;&gt;&gt; _
+ [<span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python36.zip&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python3.6&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python3.6/lib-dynload&#x27;</span>, 
+ <span class="hljs-string">&#x27;/var/www/vops/lib64/python3.6/site-packages&#x27;</span>, <span class="hljs-string">&#x27;/var/www/vops/lib/python3.6/site-packages&#x27;</span>]
+ &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>任意のファイルを実行後、対話モードを起動<br>
+        <strong>-i</strong>オプションでファイルパスを指定すると、対話モードに入る前に任意のファイルを実行できる。<br>
+      </p>
+      <pre><code class="language-bash">$ python -i example.py
+&gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p><strong>IPython</strong>の導入<br>
+        対話モードをデバッガーのように利用できる<strong>IPython</strong>というパッケージもある。<br>
+        IPythonをインストールするとTABキーでの補完、シェルコマンドの使用、pythonデバッガー(pdb)との連携ができるようになる。<br></p>
+      <pre><code class="language-bash">$ pip install ipython
+</code></pre>
+    </li>
+    <li>
+      <p>Python開発者の心構え（The Zen of Python）<br>
+        対話モードでも<code>import this</code>で原文確認できる。<br>
+        以下は、<strong>The Zen of Python</strong>は、Pythonの開発者の一人「Tim
+        Peters」によって書かれた<strong>Pythonらしさ</strong>を端的にまとめた文章。<br></p>
+      <ul>
+        <li>
+          <p>原文</p>
+          <pre><code class="language-bash">$ python
+Python 3.6.4 (default, Dec 19 2017, 14:48:12)
+[GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
+Type <span class="hljs-string">&quot;help&quot;</span>, <span class="hljs-string">&quot;copyright&quot;</span>, <span class="hljs-string">&quot;credits&quot;</span> or <span class="hljs-string">&quot;license&quot;</span> <span class="hljs-keyword">for</span> more information.
+&gt;&gt;&gt; import this
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+</code></pre>
+        </li>
+        <li>
+          <p>和訳</p>
+          <pre><code>The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+醜いより美しいほうがいい。
+Explicit is better than implicit.
+暗示するより明示するほうがいい。
+Simple is better than complex.
+複雑であるよりは平易であるほうがいい。
+Complex is better than complicated.
+それでも、込み入っているよりは複雑であるほうがまし。
+Flat is better than nested.
+ネストは浅いほうがいい。
+Sparse is better than dense.
+密集しているよりは隙間があるほうがいい。
+Readability counts.
+読みやすいことは善である。
+Special cases aren't special enough to break the rules.
+特殊であることはルールを破る理由にならない。
+Although practicality beats purity.
+しかし、実用性を求めると純粋さが失われることがある。
+Errors should never pass silently.
+エラーは隠すな、無視するな。
+Unless explicitly silenced.
+ただし、わざと隠されているのなら見逃せ。
+In the face of ambiguity, refuse the temptation to guess.
+曖昧なものに出逢ったら、その意味を適当に推測してはいけない。
+There should be one-- and preferably only one --obvious way to do it.
+何かいいやり方があるはずだ。誰が見ても明らかな、たったひとつのやり方が。
+Although that way may not be obvious at first unless you're Dutch.
+そのやり方は一目見ただけではわかりにくいかもしれない。オランダ人にだけわかりやすいなんてこともあるかもしれない。
+Now is better than never.
+ずっとやらないでいるよりは、今やれ。
+Although never is often better than *right* now.
+でも、今&quot;すぐ&quot;にやるよりはやらないほうがマシなことが多い。
+If the implementation is hard to explain, it's a bad idea.
+コードの内容を説明するのが難しいのなら、それは悪い実装である。
+If the implementation is easy to explain, it may be a good idea.
+コードの内容を容易に説明できるのなら、おそらくそれはよい実装である。
+Namespaces are one honking great idea -- let's do more of those!
+名前空間は優れたアイデアであるため、積極的に利用すべきである。
+</code></pre>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
