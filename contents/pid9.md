@@ -31,3 +31,12 @@ Python - 標準デバッガー（Pdb）: 使用例と基本操作方法
   8 step = add(1, 2, 3)
   9 step = add(4, 5, 6)
   ```
+
+- `debug_example.py`を実行<br>
+6行目の`step = 0`で止まり、入力待ちを表す`(Pdb)`が表示される。
+  ```bash
+  $ python /var/www/vops/ops/macuos/debug_example.py
+   > /var/www/vops/ops/macuos/debug_example.py(6)()
+   -> step = 0
+   (Pdb)
+  ```
