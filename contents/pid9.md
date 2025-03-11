@@ -40,3 +40,34 @@ Python - 標準デバッガー（Pdb）: 使用例と基本操作方法
    -> step = 0
    (Pdb)
   ```
+
+- ステップ実行でそれぞれ変数の値を確認<br>
+以下、6行目～9行目までステップ実行し、最後に変数`step`の値を確認する。<br>
+ステップ実行は、`s`、変数の確認は、**p <変数名>**を入力する。<br>
+ステップ実行毎に`>`でどの行であるか、`->`で実行コードが確認できる。
+  ```bash
+  $ python /var/www/vops/ops/macuos/debug_example.py
+   > /var/www/vops/ops/macuos/debug_example.py(6)()
+   -> step = 0
+   (Pdb) s    # ステップ実行のsを入力
+   > /var/www/vops/ops/macuos/debug_example.py(8)()
+   -> step = add(1, 2, 3)
+   (Pdb) s    # ステップ実行のsを入力
+   --Call--
+   > /var/www/vops/ops/macuos/debug_example.py(1)add()
+   -> def add(a, b, c):
+   (Pdb) s    # ステップ実行のsを入力
+   > /var/www/vops/ops/macuos/debug_example.py(2)add()
+   -> return a + b + c
+   (Pdb) s    # ステップ実行のsを入力
+   --Return--
+   > /var/www/vops/ops/macuos/debug_example.py(2)add()->6
+   -> return a + b + c
+   (Pdb) s    # ステップ実行のsを入力
+   > /var/www/vops/ops/macuos/debug_example.py(9)()
+   -> step = add(4, 5, 6)
+   (Pdb) s    # ステップ実行のsを入力
+   (Pdb) p step    # 変数「step」の確認
+   15
+  ```
+
