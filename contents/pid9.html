@@ -1,4 +1,20 @@
 <div class="post-body">
   <h2 id="目的">目的</h2>
   <p>この記事では、Pythonの標準デバッガー（Pdb）の使用例と基本操作方法について説明する。</p>
+  <h2 id="実施内容">実施内容</h2>
+  <h3 id="pdbの使用例">Pdbの使用例</h3>
+  <ul>
+    <li>
+      <p>説明用のサンプルプログラムを作成<br>
+        説明用に下記<code>debug_sample.py</code>を作成する。<br></p>
+        <pre><code class="language-python"><span class="hljs-number">1</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">a, b, c</span>):
+<span class="hljs-number">2</span>     <span class="hljs-keyword">return</span> a + b + c
+<span class="hljs-number">3</span> 
+<span class="hljs-number">4</span> step = <span class="hljs-number">0</span>
+<span class="hljs-number">5</span>
+<span class="hljs-number">6</span> step = add(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>)
+<span class="hljs-number">7</span> step = add(<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>)
+</code></pre>
+    </li>
+  </ul>
 </div>
