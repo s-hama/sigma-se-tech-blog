@@ -16,5 +16,19 @@
 <span class="hljs-number">7</span> step = add(<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>)
 </code></pre>
     </li>
+    <li>
+      <p>4行目に<code>import pdb; pdb.set_trace()</code>を挿入<br>
+        この状態で4行目の直後となる6行目の<code>step = 0</code>がブレイクポイントとなる。</p>
+        <pre><code class="language-python"><span class="hljs-number">1</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">a, b, c</span>):
+<span class="hljs-number">2</span>     <span class="hljs-keyword">return</span> a + b + c
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span> <span class="hljs-keyword">import</span> pdb; pdb.set_trace()
+<span class="hljs-number">5</span>
+<span class="hljs-number">6</span> step = <span class="hljs-number">0</span>
+<span class="hljs-number">7</span>
+<span class="hljs-number">8</span> step = add(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>)
+<span class="hljs-number">9</span> step = add(<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>)
+</code></pre>
+    </li>
   </ul>
 </div>
