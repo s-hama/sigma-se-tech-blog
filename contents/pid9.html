@@ -39,5 +39,35 @@
  (Pdb)
 </code></pre>
     </li>
+    <li>
+      <p>ステップ実行でそれぞれ変数の値を確認<br>
+        以下、6行目～9行目までステップ実行し、最後に変数<code>step</code>の値を確認する。<br>
+        ステップ実行は、<code>s</code>、変数の確認は、<strong>p &lt;変数名&gt;</strong>を入力する。<br>
+        ステップ実行毎に<code>&gt;</code>でどの行であるか、<code>-&gt;</code>で実行コードが確認できる。</p>
+        <pre><code class="language-bash">$ python /var/www/vops/ops/macuos/debug_example.py
+ &gt; /var/www/vops/ops/macuos/debug_example.py(6)()
+ -&gt; step = 0
+ (Pdb) s    <span class="hljs-comment"># ステップ実行のsを入力</span>
+ &gt; /var/www/vops/ops/macuos/debug_example.py(8)()
+ -&gt; step = add(1, 2, 3)
+ (Pdb) s    <span class="hljs-comment"># ステップ実行のsを入力</span>
+ --Call--
+ &gt; /var/www/vops/ops/macuos/debug_example.py(1)add()
+ -&gt; def add(a, b, c):
+ (Pdb) s    <span class="hljs-comment"># ステップ実行のsを入力</span>
+ &gt; /var/www/vops/ops/macuos/debug_example.py(2)add()
+ -&gt; <span class="hljs-built_in">return</span> a + b + c
+ (Pdb) s    <span class="hljs-comment"># ステップ実行のsを入力</span>
+ --Return--
+ &gt; /var/www/vops/ops/macuos/debug_example.py(2)add()-&gt;6
+ -&gt; <span class="hljs-built_in">return</span> a + b + c
+ (Pdb) s    <span class="hljs-comment"># ステップ実行のsを入力</span>
+ &gt; /var/www/vops/ops/macuos/debug_example.py(9)()
+ -&gt; step = add(4, 5, 6)
+ (Pdb) s    <span class="hljs-comment"># ステップ実行のsを入力</span>
+ (Pdb) p step    <span class="hljs-comment"># 変数「step」の確認</span>
+ 15
+</code></pre>
+    </li>
   </ul>
 </div>
