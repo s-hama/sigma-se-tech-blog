@@ -70,4 +70,44 @@
 </code></pre>
     </li>
   </ul>
+  <h3 id="pdbの基本操作方法">Pdbの基本操作方法</h3>
+  <p>以下、よく使用するPdbコマンド。</p>
+  <ul>
+    <li>
+      <p>[<code>s</code>] or [<code>step</code>]<br>
+        ステップイン : <strong>行単位</strong>でステップ実行する。</p>
+    </li>
+    <li>
+      <p>[<code>n</code>] or [<code>next</code>]<br>
+        ステップオーバー : <strong>行単位</strong>で実行する。
+        ※ 関数の中は停止しない。</p>
+    </li>
+    <li>
+      <p>[<code>r</code>] or [<code>return</code>]<br>
+        ステップアウト : 関数単位で実行する。
+        ※ 実行中の関数が返るまで実行する。</p>
+    </li>
+    <li>
+      <p>[<code>c</code>] or [<code>continue</code>]<br>
+        次回の<strong>ブレークポイントまで停止せず</strong>実行する。</p>
+    </li>
+    <li>
+      <p>[<code>l</code>] or [<code>list</code>]<br>
+        現在停止行の<strong>前後のソース</strong>を表示する。</p>
+    </li>
+    <li>
+      <p>[<code>a</code>] or [<code>largs</code>]<br>
+        現在停止している<strong>関数の引数</strong>を表示する。</p>
+    </li>
+    <li>
+      <p>[<strong>p &lt;変数名&gt;</strong>]<br>
+        <strong>変数の値</strong>を表示する。
+      </p>
+    </li>
+    <li>
+      <p>[<code>q</code>] or [<code>quit</code>]<br>
+        <strong>Pdbデバッガー</strong>を終了する。
+      </p>
+    </li>
+  </ul>
 </div>
