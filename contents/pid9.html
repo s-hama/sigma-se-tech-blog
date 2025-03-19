@@ -1,0 +1,113 @@
+<div class="post-body">
+  <h2 id="目的">目的</h2>
+  <p>この記事では、Pythonの標準デバッガー（Pdb）の使用例と基本操作方法について説明する。</p>
+  <h2 id="実施内容">実施内容</h2>
+  <h3 id="pdbの使用例">Pdbの使用例</h3>
+  <ul>
+    <li>
+      <p>説明用のサンプルプログラムを作成<br>
+        説明用に下記<code>debug_sample.py</code>を作成する。<br></p>
+        <pre><code class="language-python"><span class="hljs-number">1</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">a, b, c</span>):
+<span class="hljs-number">2</span>     <span class="hljs-keyword">return</span> a + b + c
+<span class="hljs-number">3</span> 
+<span class="hljs-number">4</span> step = <span class="hljs-number">0</span>
+<span class="hljs-number">5</span>
+<span class="hljs-number">6</span> step = add(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>)
+<span class="hljs-number">7</span> step = add(<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>)
+</code></pre>
+    </li>
+    <li>
+      <p>4行目に<code>import pdb; pdb.set_trace()</code>を挿入<br>
+        この状態で4行目の直後となる6行目の<code>step = 0</code>がブレイクポイントとなる。</p>
+        <pre><code class="language-python"><span class="hljs-number">1</span> <span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">a, b, c</span>):
+<span class="hljs-number">2</span>     <span class="hljs-keyword">return</span> a + b + c
+<span class="hljs-number">3</span>
+<span class="hljs-number">4</span> <span class="hljs-keyword">import</span> pdb; pdb.set_trace()
+<span class="hljs-number">5</span>
+<span class="hljs-number">6</span> step = <span class="hljs-number">0</span>
+<span class="hljs-number">7</span>
+<span class="hljs-number">8</span> step = add(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>)
+<span class="hljs-number">9</span> step = add(<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>)
+</code></pre>
+    </li>
+    <li>
+      <p><code>debug_example.py</code>を実行<br>
+        6行目の<code>step = 0</code>で止まり、入力待ちを表す<code>(Pdb)</code>が表示される。</p>
+        <pre><code class="language-bash">$ python /var/www/vops/ops/macuos/debug_example.py
+ &gt; /var/www/vops/ops/macuos/debug_example.py(6)()
+ -&gt; step = 0
+ (Pdb)
+</code></pre>
+    </li>
+    <li>
+      <p>ステップ実行でそれぞれ変数の値を確認<br>
+        以下、6行目～9行目までステップ実行し、最後に変数<code>step</code>の値を確認する。<br>
+        ステップ実行は、<code>s</code>、変数の確認は、<strong>p &lt;変数名&gt;</strong>を入力する。<br>
+        ステップ実行毎に<code>&gt;</code>でどの行であるか、<code>-&gt;</code>で実行コードが確認できる。</p>
+        <pre><code class="language-bash">$ python /var/www/vops/ops/macuos/debug_example.py
+ &gt; /var/www/vops/ops/macuos/debug_example.py(6)()
+ -&gt; step = 0
+ (Pdb) s    <span class="hljs-comment"># ステップ実行のsを入力</span>
+ &gt; /var/www/vops/ops/macuos/debug_example.py(8)()
+ -&gt; step = add(1, 2, 3)
+ (Pdb) s    <span class="hljs-comment"># ステップ実行のsを入力</span>
+ --Call--
+ &gt; /var/www/vops/ops/macuos/debug_example.py(1)add()
+ -&gt; def add(a, b, c):
+ (Pdb) s    <span class="hljs-comment"># ステップ実行のsを入力</span>
+ &gt; /var/www/vops/ops/macuos/debug_example.py(2)add()
+ -&gt; <span class="hljs-built_in">return</span> a + b + c
+ (Pdb) s    <span class="hljs-comment"># ステップ実行のsを入力</span>
+ --Return--
+ &gt; /var/www/vops/ops/macuos/debug_example.py(2)add()-&gt;6
+ -&gt; <span class="hljs-built_in">return</span> a + b + c
+ (Pdb) s    <span class="hljs-comment"># ステップ実行のsを入力</span>
+ &gt; /var/www/vops/ops/macuos/debug_example.py(9)()
+ -&gt; step = add(4, 5, 6)
+ (Pdb) s    <span class="hljs-comment"># ステップ実行のsを入力</span>
+ (Pdb) p step    <span class="hljs-comment"># 変数「step」の確認</span>
+ 15
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="pdbの基本操作方法">Pdbの基本操作方法</h3>
+  <p>以下、よく使用するPdbコマンド。</p>
+  <ul>
+    <li>
+      <p>[<code>s</code>] or [<code>step</code>]<br>
+        ステップイン : <strong>行単位</strong>でステップ実行する。</p>
+    </li>
+    <li>
+      <p>[<code>n</code>] or [<code>next</code>]<br>
+        ステップオーバー : <strong>行単位</strong>で実行する。
+        ※ 関数の中は停止しない。</p>
+    </li>
+    <li>
+      <p>[<code>r</code>] or [<code>return</code>]<br>
+        ステップアウト : 関数単位で実行する。
+        ※ 実行中の関数が返るまで実行する。</p>
+    </li>
+    <li>
+      <p>[<code>c</code>] or [<code>continue</code>]<br>
+        次回の<strong>ブレークポイントまで停止せず</strong>実行する。</p>
+    </li>
+    <li>
+      <p>[<code>l</code>] or [<code>list</code>]<br>
+        現在停止行の<strong>前後のソース</strong>を表示する。</p>
+    </li>
+    <li>
+      <p>[<code>a</code>] or [<code>largs</code>]<br>
+        現在停止している<strong>関数の引数</strong>を表示する。</p>
+    </li>
+    <li>
+      <p>[<strong>p &lt;変数名&gt;</strong>]<br>
+        <strong>変数の値</strong>を表示する。
+      </p>
+    </li>
+    <li>
+      <p>[<code>q</code>] or [<code>quit</code>]<br>
+        <strong>Pdbデバッガー</strong>を終了する。
+      </p>
+    </li>
+  </ul>
+</div>
