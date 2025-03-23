@@ -26,3 +26,34 @@ Django - Django Debug Toolbar : 導入手順と設定方法
    You should consider upgrading via the 'pip install --upgrade pip' command.
   ```
   上記でインストールが完了。<br>
+
+### django-debug-toolbarの設定追加
+- settings.pyの設定<br>
+settings.pyの最低限必要な設定を変更する。<br>
+  - DEBUGモードの変更<br>
+  `DEBUG`を`True`に変更する。
+    ```bash
+    $ vim /var/www/vops/ops/ops/settings.py
+     … (省略)…
+     DEBUG = True    # DEBUGモードをTrueに変更
+     … (省略)…
+    ```
+
+  - INSTALLED_APPSへ追加<br>
+  `INSTALLED_APPS`に`'debug_toolbar'`を追記する。
+  `'debug_toolbar'`が`'django.contrib.staticfiles'`よりも**後ろ**になるよう注意。
+    ```bash
+    $ vim /var/www/vops/ops/ops/settings.py
+     … (省略)…
+     INSTALLED_APPS = [
+         'macuos',
+         'django.contrib.admin',
+         'django.contrib.auth',
+         'django.contrib.contenttypes',
+         'django.contrib.sessions',
+         'django.contrib.messages',
+         'django.contrib.staticfiles',
+         'debug_toolbar'    # ← 追記：'django.contrib.staticfiles' よりも後ろに設定
+     ]
+     … (省略)…
+    ```
