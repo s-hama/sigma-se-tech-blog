@@ -57,3 +57,32 @@ settings.pyの最低限必要な設定を変更する。<br>
      ]
      … (省略)…
     ```
+
+  - MIDDLEWAREへ追加<br>
+  `MIDDLEWARE`に`'debug_toolbar.middleware.DebugToolbarMiddleware'`を追記する。
+    ```bash
+    $ vim /var/www/vops/ops/ops/settings.py
+     … (省略)…
+     MIDDLEWARE = [
+         'django.middleware.security.SecurityMiddleware',
+         'django.contrib.sessions.middleware.SessionMiddleware',
+         'django.middleware.common.CommonMiddleware',
+         'django.middleware.csrf.CsrfViewMiddleware',
+         'django.contrib.auth.middleware.AuthenticationMiddleware',
+         'django.contrib.messages.middleware.MessageMiddleware',
+         'django.middleware.clickjacking.XFrameOptionsMiddleware',
+         'debug_toolbar.middleware.DebugToolbarMiddleware'   # ← 追記
+     ]
+     … (省略)…
+    ```
+
+  - INTERNAL_IPSの追加<br>
+  `INTERNAL_IPS`を追記する。<br>
+    ```bash
+    $ vim /var/www/vops/ops/ops/settings.py
+     … (省略)…
+    INTERNAL_IPS = ['127.0.0.1']   # 追加
+     … (省略)…
+    ```
+    ※ INTERNAL_IPSは、このIPアドレスで接続されたときのみ、django-debug-toolbar が表示される設定項目であるため、ローカル開発時は、localhost の '127.0.0.1' を設定する。<br>
+    ローカルではない別サーバーでDjangoを動かしている場合は、開発マシンのグローバルIPアドレスを入力すること。
