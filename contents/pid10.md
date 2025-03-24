@@ -86,3 +86,18 @@ settings.pyの最低限必要な設定を変更する。<br>
     ```
     ※ INTERNAL_IPSは、このIPアドレスで接続されたときのみ、django-debug-toolbar が表示される設定項目であるため、ローカル開発時は、localhost の '127.0.0.1' を設定する。<br>
     ローカルではない別サーバーでDjangoを動かしている場合は、開発マシンのグローバルIPアドレスを入力すること。
+
+- urls.pyの設定
+`urlpatterns`に`Debug Toolbar`を追加する。<br>
+  - `urlpatterns`に`Debug Toolbar`を追加<br>
+    ```bash
+    $ vim /var/www/vops/ops/ops/urls.py
+     … (省略)…
+     if settings.DEBUG:    # この if 文 (5STEP) を追加する。
+         import debug_toolbar
+         urlpatterns = [
+             url(r'^__debug__/', include(debug_toolbar.urls))
+         ] + urlpatterns
+     … (省略)…
+    ```
+  以上で設定は完了。
