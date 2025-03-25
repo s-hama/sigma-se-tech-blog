@@ -101,3 +101,18 @@ settings.pyの最低限必要な設定を変更する。<br>
      … (省略)…
     ```
   以上で設定は完了。
+
+### Debug Toolbarの表示確認
+管理者画面や作成したWebアプリの画面に接続すると右側に`Debug Toolbar`が表示される。
+![pid10_1](/static/tblog/img/pid10_1.png)
+
+- CSSが効いてない場合の対処
+staticファイルのロード先を別フォルダに設定している場合は、CSSが効いてない状態で表示されている可能性がある。<br>
+その場合は、下記コマンドでインストール先を特定し、その直下にある`debug_toolbar/static/debug_toolbar`ディレクトリをstaticファイルのロード先ディレクトリ直下にコピーすること。
+  ```bash
+  $ pip show django-debug-toolbar
+   … (省略)…
+   Location: /var/www/vops/lib/python3.6/site-packages    # django-debug-toolbar のインストール先を確認
+   … (省略)…
+  $ cp -r /var/www/vops/lib/python3.6/site-packages/debug_toolbar/static/debug_toolbar [staticファイルのロード先フォルダ]
+  ```
