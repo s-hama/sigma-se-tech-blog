@@ -28,4 +28,43 @@ Collecting sqlparse&gt;=0.2.0 (from django-debug-toolbar)
       上記でインストールが完了。<br>
     </li>
   </ul>
+  <h3 id="django-debug-toolbarの設定追加">django-debug-toolbarの設定追加</h3>
+  <ul>
+    <li>
+      <p>settings.pyの設定<br>
+        settings.pyの最低限必要な設定を変更する。<br></p>
+      <ul>
+        <li>
+          <p>DEBUGモードの変更<br>
+            <code>DEBUG</code>を<code>True</code>に変更する。
+          </p>
+          <pre><code class="language-bash">$ vim /var/www/vops/ops/ops/settings.py
+ … (省略)…
+ DEBUG = True    <span class="hljs-comment"># DEBUGモードをTrueに変更</span>
+ … (省略)…
+</code></pre>
+        </li>
+        <li>
+          <p>INSTALLED_APPSへ追加<br>
+            <code>INSTALLED_APPS</code>に<code>'debug_toolbar'</code>を追記する。
+            <code>'debug_toolbar'</code>が<code>'django.contrib.staticfiles'</code>よりも<strong>後ろ</strong>になるよう注意。
+          </p>
+          <pre><code class="language-bash">$ vim /var/www/vops/ops/ops/settings.py
+ … (省略)…
+ INSTALLED_APPS = [
+     <span class="hljs-string">&#x27;macuos&#x27;</span>,
+     <span class="hljs-string">&#x27;django.contrib.admin&#x27;</span>,
+     <span class="hljs-string">&#x27;django.contrib.auth&#x27;</span>,
+     <span class="hljs-string">&#x27;django.contrib.contenttypes&#x27;</span>,
+     <span class="hljs-string">&#x27;django.contrib.sessions&#x27;</span>,
+     <span class="hljs-string">&#x27;django.contrib.messages&#x27;</span>,
+     <span class="hljs-string">&#x27;django.contrib.staticfiles&#x27;</span>,
+     <span class="hljs-string">&#x27;debug_toolbar&#x27;</span>    <span class="hljs-comment"># ← 追記：&#x27;django.contrib.staticfiles&#x27; よりも後ろに設定</span>
+ ]
+ … (省略)…
+</code></pre>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </div>
