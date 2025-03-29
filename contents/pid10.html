@@ -64,6 +64,38 @@ Collecting sqlparse&gt;=0.2.0 (from django-debug-toolbar)
  … (省略)…
 </code></pre>
         </li>
+        <li>
+          <p>MIDDLEWAREへ追加<br>
+            <code>MIDDLEWARE</code>に<code>'debug_toolbar.middleware.DebugToolbarMiddleware'</code>を追記する。
+          </p>
+          <pre><code class="language-bash">$ vim /var/www/vops/ops/ops/settings.py
+ … (省略)…
+ MIDDLEWARE = [
+     <span class="hljs-string">&#x27;django.middleware.security.SecurityMiddleware&#x27;</span>,
+     <span class="hljs-string">&#x27;django.contrib.sessions.middleware.SessionMiddleware&#x27;</span>,
+     <span class="hljs-string">&#x27;django.middleware.common.CommonMiddleware&#x27;</span>,
+     <span class="hljs-string">&#x27;django.middleware.csrf.CsrfViewMiddleware&#x27;</span>,
+     <span class="hljs-string">&#x27;django.contrib.auth.middleware.AuthenticationMiddleware&#x27;</span>,
+     <span class="hljs-string">&#x27;django.contrib.messages.middleware.MessageMiddleware&#x27;</span>,
+     <span class="hljs-string">&#x27;django.middleware.clickjacking.XFrameOptionsMiddleware&#x27;</span>,
+     <span class="hljs-string">&#x27;debug_toolbar.middleware.DebugToolbarMiddleware&#x27;</span>   <span class="hljs-comment"># ← 追記</span>
+ ]
+ … (省略)…
+</code></pre>
+        </li>
+        <li>
+          <p>INTERNAL_IPSの追加<br>
+            <code>INTERNAL_IPS</code>を追記する。<br>
+          </p>
+          <pre><code class="language-bash">$ vim /var/www/vops/ops/ops/settings.py
+ … (省略)…
+INTERNAL_IPS = [<span class="hljs-string">&#x27;127.0.0.1&#x27;</span>]   <span class="hljs-comment"># 追加</span>
+ … (省略)…
+</code></pre>
+          <p>※ INTERNAL_IPSは、このIPアドレスで接続されたときのみ、django-debug-toolbar が表示される設定項目であるため、ローカル開発時は、localhost の '127.0.0.1'
+            を設定する。<br>
+            ローカルではない別サーバーでDjangoを動かしている場合は、開発マシンのグローバルIPアドレスを入力すること。</p>
+        </li>
       </ul>
     </li>
   </ul>
