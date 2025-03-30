@@ -98,5 +98,24 @@ INTERNAL_IPS = [<span class="hljs-string">&#x27;127.0.0.1&#x27;</span>]   <span 
         </li>
       </ul>
     </li>
+    <li>
+      <p>urls.pyの設定
+        <code>urlpatterns</code>に<code>Debug Toolbar</code>を追加する。<br>
+      </p>
+      <ul>
+        <li><code>urlpatterns</code>に<code>Debug Toolbar</code>を追加<br>
+          <pre><code class="language-bash">$ vim /var/www/vops/ops/ops/urls.py
+ … (省略)…
+ <span class="hljs-keyword">if</span> settings.DEBUG:    <span class="hljs-comment"># この if 文 (5STEP) を追加する。</span>
+     import debug_toolbar
+     urlpatterns = [
+         url(r<span class="hljs-string">&#x27;^__debug__/&#x27;</span>, include(debug_toolbar.urls))
+     ] + urlpatterns
+ … (省略)…
+</code></pre>
+        </li>
+      </ul>
+      <p>以上で設定は完了。</p>
+    </li>
   </ul>
 </div>
