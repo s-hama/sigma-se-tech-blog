@@ -118,4 +118,20 @@ INTERNAL_IPS = [<span class="hljs-string">&#x27;127.0.0.1&#x27;</span>]   <span 
       <p>以上で設定は完了。</p>
     </li>
   </ul>
+  <h3 id="debug-toolbarの表示確認">Debug Toolbarの表示確認</h3>
+  <p>管理者画面や作成したWebアプリの画面に接続すると右側に<code>Debug Toolbar</code>が表示される。
+    <img src="/static/tblog/img/pid10_1.png" alt="pid10_1">
+  </p>
+  <ul>
+    <li>CSSが効いてない場合の対処
+      staticファイルのロード先を別フォルダに設定している場合は、CSSが効いてない状態で表示されている可能性がある。<br>
+      その場合は、下記コマンドでインストール先を特定し、その直下にある<code>debug_toolbar/static/debug_toolbar</code>ディレクトリをstaticファイルのロード先ディレクトリ直下にコピーすること。
+      <pre><code>$ pip show django-debug-toolbar
+ … (省略)…
+ Location: /var/www/vops/lib/python3.6/site-packages    # django-debug-toolbar のインストール先を確認
+ … (省略)…
+$ cp -r /var/www/vops/lib/python3.6/site-packages/debug_toolbar/static/debug_toolbar [staticファイルのロード先フォルダ]
+</code></pre>
+    </li>
+  </ul>
 </div>
