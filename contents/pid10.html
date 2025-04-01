@@ -1,0 +1,137 @@
+<div class="post-body">
+  <h2 id="目的">目的</h2>
+  <p>この記事では、Django Debug Toolbarの導入手順と設定方法について説明する。</p>
+  <h2 id="実施内容">実施内容</h2>
+  <h3 id="django-debug-toolbarの導入">django-debug-toolbarの導入</h3>
+  <p>
+    <code>django-debug-toolbar</code>は、開発時に必要になってくる<code>セッション情報 </code>や<code>リクエスト/レスポンス情報</code>、そして<code>実行したSQL</code>などリアルタイムで様々な情報を確認できるプラグイン。<br>
+  </p>
+  <ul>
+    <li>django-debug-toolbarのインストール<br>
+      ここでは、仮想環境上で<code>Django</code>が動いているため、仮想環境に<code>django-debug-toolbar</code>をインストールする。<br>
+      ※ 詳細は、<a class="link-secondary"
+        href="https://sigma-se.com/detail/3/#:~:text=V%0APython%203.6.4-,Django%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB,-venv%E3%81%A7%E4%BB%AE%E6%83%B3">Djangoインストール</a>を参照。
+        <pre><code class="language-bash">$ <span class="hljs-built_in">source</span> /var/www/vops/bin/activate
+(vops) $ pip install django-debug-toolbar
+Collecting django-debug-toolbar
+　  Downloading https://files.pythonhosted.org/packages/97/c6/523fc2ca98119d21c709bbc47217b1d5fd17c6f9449ef32490889363d97d/django_debug_toolbar-1.10.1-py2.py3-none-any.whl (207kB)
+    100% |<span class="hljs-comment">################################| 215kB 10.0MB/s</span>
+Collecting sqlparse&gt;=0.2.0 (from django-debug-toolbar)
+  Downloading https://files.pythonhosted.org/packages/65/85/20bdd72f4537cf2c4d5d005368d502b2f464ede22982e724a82c86268eda/sqlparse-0.2.4-py2.py3-none-any.whl
+ Requirement already satisfied: Django&gt;=1.11 <span class="hljs-keyword">in</span> /var/www/vops/lib/python3.6/site-packages (from django-debug-toolbar) (2.0.2)
+ Requirement already satisfied: pytz <span class="hljs-keyword">in</span> /var/www/vops/lib/python3.6/site-packages (from Django&gt;=1.11-&gt;django-debug-toolbar) (2018.3)
+ Installing collected packages: sqlparse, django-debug-toolbar
+ Successfully installed django-debug-toolbar-1.10.1 sqlparse-0.2.4
+ You are using pip version 10.0.1, however version 18.1 is available.
+ You should consider upgrading via the <span class="hljs-string">&#x27;pip install --upgrade pip&#x27;</span> <span class="hljs-built_in">command</span>.
+</code></pre>
+      上記でインストールが完了。<br>
+    </li>
+  </ul>
+  <h3 id="django-debug-toolbarの設定追加">django-debug-toolbarの設定追加</h3>
+  <ul>
+    <li>
+      <p>settings.pyの設定<br>
+        settings.pyの最低限必要な設定を変更する。<br></p>
+      <ul>
+        <li>
+          <p>DEBUGモードの変更<br>
+            <code>DEBUG</code>を<code>True</code>に変更する。
+          </p>
+          <pre><code class="language-bash">$ vim /var/www/vops/ops/ops/settings.py
+ … (省略)…
+ DEBUG = True    <span class="hljs-comment"># DEBUGモードをTrueに変更</span>
+ … (省略)…
+</code></pre>
+        </li>
+        <li>
+          <p>INSTALLED_APPSへ追加<br>
+            <code>INSTALLED_APPS</code>に<code>'debug_toolbar'</code>を追記する。
+            <code>'debug_toolbar'</code>が<code>'django.contrib.staticfiles'</code>よりも<strong>後ろ</strong>になるよう注意。
+          </p>
+          <pre><code class="language-bash">$ vim /var/www/vops/ops/ops/settings.py
+ … (省略)…
+ INSTALLED_APPS = [
+     <span class="hljs-string">&#x27;macuos&#x27;</span>,
+     <span class="hljs-string">&#x27;django.contrib.admin&#x27;</span>,
+     <span class="hljs-string">&#x27;django.contrib.auth&#x27;</span>,
+     <span class="hljs-string">&#x27;django.contrib.contenttypes&#x27;</span>,
+     <span class="hljs-string">&#x27;django.contrib.sessions&#x27;</span>,
+     <span class="hljs-string">&#x27;django.contrib.messages&#x27;</span>,
+     <span class="hljs-string">&#x27;django.contrib.staticfiles&#x27;</span>,
+     <span class="hljs-string">&#x27;debug_toolbar&#x27;</span>    <span class="hljs-comment"># ← 追記：&#x27;django.contrib.staticfiles&#x27; よりも後ろに設定</span>
+ ]
+ … (省略)…
+</code></pre>
+        </li>
+        <li>
+          <p>MIDDLEWAREへ追加<br>
+            <code>MIDDLEWARE</code>に<code>'debug_toolbar.middleware.DebugToolbarMiddleware'</code>を追記する。
+          </p>
+          <pre><code class="language-bash">$ vim /var/www/vops/ops/ops/settings.py
+ … (省略)…
+ MIDDLEWARE = [
+     <span class="hljs-string">&#x27;django.middleware.security.SecurityMiddleware&#x27;</span>,
+     <span class="hljs-string">&#x27;django.contrib.sessions.middleware.SessionMiddleware&#x27;</span>,
+     <span class="hljs-string">&#x27;django.middleware.common.CommonMiddleware&#x27;</span>,
+     <span class="hljs-string">&#x27;django.middleware.csrf.CsrfViewMiddleware&#x27;</span>,
+     <span class="hljs-string">&#x27;django.contrib.auth.middleware.AuthenticationMiddleware&#x27;</span>,
+     <span class="hljs-string">&#x27;django.contrib.messages.middleware.MessageMiddleware&#x27;</span>,
+     <span class="hljs-string">&#x27;django.middleware.clickjacking.XFrameOptionsMiddleware&#x27;</span>,
+     <span class="hljs-string">&#x27;debug_toolbar.middleware.DebugToolbarMiddleware&#x27;</span>   <span class="hljs-comment"># ← 追記</span>
+ ]
+ … (省略)…
+</code></pre>
+        </li>
+        <li>
+          <p>INTERNAL_IPSの追加<br>
+            <code>INTERNAL_IPS</code>を追記する。<br>
+          </p>
+          <pre><code class="language-bash">$ vim /var/www/vops/ops/ops/settings.py
+ … (省略)…
+INTERNAL_IPS = [<span class="hljs-string">&#x27;127.0.0.1&#x27;</span>]   <span class="hljs-comment"># 追加</span>
+ … (省略)…
+</code></pre>
+          <p>※ INTERNAL_IPSは、このIPアドレスで接続されたときのみ、django-debug-toolbar が表示される設定項目であるため、ローカル開発時は、localhost の '127.0.0.1'
+            を設定する。<br>
+            ローカルではない別サーバーでDjangoを動かしている場合は、開発マシンのグローバルIPアドレスを入力すること。</p>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>urls.pyの設定
+        <code>urlpatterns</code>に<code>Debug Toolbar</code>を追加する。<br>
+      </p>
+      <ul>
+        <li><code>urlpatterns</code>に<code>Debug Toolbar</code>を追加<br>
+          <pre><code class="language-bash">$ vim /var/www/vops/ops/ops/urls.py
+ … (省略)…
+ <span class="hljs-keyword">if</span> settings.DEBUG:    <span class="hljs-comment"># この if 文 (5STEP) を追加する。</span>
+     import debug_toolbar
+     urlpatterns = [
+         url(r<span class="hljs-string">&#x27;^__debug__/&#x27;</span>, include(debug_toolbar.urls))
+     ] + urlpatterns
+ … (省略)…
+</code></pre>
+        </li>
+      </ul>
+      <p>以上で設定は完了。</p>
+    </li>
+  </ul>
+  <h3 id="debug-toolbarの表示確認">Debug Toolbarの表示確認</h3>
+  <p>管理者画面や作成したWebアプリの画面に接続すると右側に<code>Debug Toolbar</code>が表示される。
+    <img src="/static/tblog/img/pid10_1.png" alt="pid10_1">
+  </p>
+  <ul>
+    <li>CSSが効いてない場合の対処
+      staticファイルのロード先を別フォルダに設定している場合は、CSSが効いてない状態で表示されている可能性がある。<br>
+      その場合は、下記コマンドでインストール先を特定し、その直下にある<code>debug_toolbar/static/debug_toolbar</code>ディレクトリをstaticファイルのロード先ディレクトリ直下にコピーすること。
+      <pre><code>$ pip show django-debug-toolbar
+ … (省略)…
+ Location: /var/www/vops/lib/python3.6/site-packages    # django-debug-toolbar のインストール先を確認
+ … (省略)…
+$ cp -r /var/www/vops/lib/python3.6/site-packages/debug_toolbar/static/debug_toolbar [staticファイルのロード先フォルダ]
+</code></pre>
+    </li>
+  </ul>
+</div>
