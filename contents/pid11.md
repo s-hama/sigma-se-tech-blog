@@ -25,3 +25,7 @@ Webアプリで使用されている**モジュール（フレームワーク、
     Total CPU time」にHTML、CSS、Javascriptに関するサーバー処理とクライアントでレタリングする時間を加えた時間。
     - Resource usage > Context switches<br>
     voluntary context switchesは、複数のプロセスを効率良く実行するため、自発的にコンテキストスイッチを実行した回数でinvoluntary context switchesは、実行優先度が高いプロセスを実行するために、強制的にコンテキストスイッチを実行した回数。
+
+3. Settings<br>
+**settings.py**を一覧で確認できる。<br>
+![pid11_3](/static/tblog/img/pid11_3.png)
