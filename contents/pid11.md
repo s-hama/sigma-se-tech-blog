@@ -29,3 +29,7 @@ Webアプリで使用されている**モジュール（フレームワーク、
 3. Settings<br>
 **settings.py**を一覧で確認できる。<br>
 ![pid11_3](/static/tblog/img/pid11_3.png)
+
+4. Headers<br>
+**HTTP**の**リクエストヘッダー情報**、**レスポンスヘッダー情報**を確認できる。<br>
+![pid11_4](/static/tblog/img/pid11_4.png)
