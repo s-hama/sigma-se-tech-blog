@@ -33,3 +33,7 @@ Webアプリで使用されている**モジュール（フレームワーク、
 4. Headers<br>
 **HTTP**の**リクエストヘッダー情報**、**レスポンスヘッダー情報**を確認できる。<br>
 ![pid11_4](/static/tblog/img/pid11_4.png)
+
+5. Request<br>
+ViewやCookie、Sessionなどの**リクエスト情報**を確認できる。<br>
+![pid11_5](/static/tblog/img/pid11_5.png)
