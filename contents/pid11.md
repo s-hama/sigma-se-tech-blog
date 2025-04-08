@@ -37,3 +37,11 @@ Webアプリで使用されている**モジュール（フレームワーク、
 5. Request<br>
 ViewやCookie、Sessionなどの**リクエスト情報**を確認できる。<br>
 ![pid11_5](/static/tblog/img/pid11_5.png)
+
+6. SQL<br>
+画面が表示されるまでに**実行されたSQL文**をはじめ、それぞれに要した**実行時間**や**Stacktrace**を確認できる。<br>
+![pid11_6](/static/tblog/img/pid11_6.png)
+
+7. Static Files<br>
+画面を表示する際に読み込んだ**Staticファイル**を確認できる。<br>
+![pid11_7](/static/tblog/img/pid11_7.png)
