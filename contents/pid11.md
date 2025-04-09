@@ -45,3 +45,11 @@ ViewやCookie、Sessionなどの**リクエスト情報**を確認できる。<b
 7. Static Files<br>
 画面を表示する際に読み込んだ**Staticファイル**を確認できる。<br>
 ![pid11_7](/static/tblog/img/pid11_7.png)
+
+8. Templates<br>
+画面を表示する際に使用された継承も含む**Templateファイル**を確認できる。<br>
+![pid11_8](/static/tblog/img/pid11_8.png)
+
+9. Cache<br>
+画面を表示する際に利用された**キャッシュバックエンド情報**を確認できる。<br>
+![pid11_9](/static/tblog/img/pid11_9.png)
