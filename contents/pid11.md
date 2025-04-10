@@ -53,3 +53,15 @@ ViewやCookie、Sessionなどの**リクエスト情報**を確認できる。<b
 9. Cache<br>
 画面を表示する際に利用された**キャッシュバックエンド情報**を確認できる。<br>
 ![pid11_9](/static/tblog/img/pid11_9.png)
+
+10.  Signals<br>
+FrameWorkに備わっている各アクション単位での通知の受け渡し一覧。<br>
+![pid11_10](/static/tblog/img/pid11_10.png)
+
+11.  Logging<br>
+loggingモジュールで出力したログが確認できる。<br>
+![pid11_11](/static/tblog/img/pid11_11.png)
+
+12.  Intercept redirects<br>
+デフォルト無効であるチェックボックスを有効にすると**リダイレクトが中断**されるようになる。<br>
+※ リダイレクト処理をデバッグするときに使用する。
