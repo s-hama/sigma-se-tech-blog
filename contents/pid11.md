@@ -65,3 +65,24 @@ loggingモジュールで出力したログが確認できる。<br>
 12.  Intercept redirects<br>
 デフォルト無効であるチェックボックスを有効にすると**リダイレクトが中断**されるようになる。<br>
 ※ リダイレクト処理をデバッグするときに使用する。
+
+### 表示パネルのカスタマイズ
+上記デフォルトパネルは、**settings.py**の`DEBUG_TOOLBAR_PANELS`に設定されている。
+- settings.pyの`DEBUG_TOOLBAR_PANELS`（デフォルト）
+下記`DEBUG_TOOLBAR_PANELS`を変更することで**パネルの並び替え**や**削除**、**追加**ができるようになる。
+  ```ini
+  DEBUG_TOOLBAR_PANELS = [
+      'debug_toolbar.panels.versions.VersionsPanel',
+      'debug_toolbar.panels.timer.TimerPanel',
+      'debug_toolbar.panels.settings.SettingsPanel',
+      'debug_toolbar.panels.headers.HeadersPanel',
+      'debug_toolbar.panels.request.RequestPanel',
+      'debug_toolbar.panels.sql.SQLPanel',
+      'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+      'debug_toolbar.panels.templates.TemplatesPanel',
+      'debug_toolbar.panels.cache.CachePanel',
+      'debug_toolbar.panels.signals.SignalsPanel',
+      'debug_toolbar.panels.logging.LoggingPanel',
+      'debug_toolbar.panels.redirects.RedirectsPanel'
+  ]
+  ```
