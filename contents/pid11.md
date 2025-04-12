@@ -86,3 +86,23 @@ loggingモジュールで出力したログが確認できる。<br>
       'debug_toolbar.panels.redirects.RedirectsPanel'
   ]
   ```
+
+- **プロファイリング情報**の追加例
+  ```ini
+  DEBUG_TOOLBAR_PANELS = [
+      'debug_toolbar.panels.versions.VersionsPanel',
+      'debug_toolbar.panels.timer.TimerPanel',
+      'debug_toolbar.panels.settings.SettingsPanel',
+      'debug_toolbar.panels.headers.HeadersPanel',
+      'debug_toolbar.panels.request.RequestPanel',
+      'debug_toolbar.panels.sql.SQLPanel',
+      'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+      'debug_toolbar.panels.templates.TemplatesPanel',
+      'debug_toolbar.panels.cache.CachePanel',
+      'debug_toolbar.panels.signals.SignalsPanel',
+      'debug_toolbar.panels.logging.LoggingPanel',
+      'debug_toolbar.panels.profiling.ProfilingPanel'    # 追記
+  ]
+  ```
+  末尾に追加した**プロファイリング情報**が確認できるようになる。<br>
+  ![pid11_12](/static/tblog/img/pid11_12.png)
