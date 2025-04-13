@@ -106,3 +106,7 @@ loggingモジュールで出力したログが確認できる。<br>
   ```
   末尾に追加した**プロファイリング情報**が確認できるようになる。<br>
   ![pid11_12](/static/tblog/img/pid11_12.png)
+
+- その他のパネルについて
+下記**サードパーティ製**のパネルを参照。<br>
+https://django-debug-toolbar.readthedocs.io/en/stable/panels.html#third-party-panels
