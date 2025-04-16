@@ -11,5 +11,25 @@
         <img src="/static/tblog/img/pid11_1.png" alt="pid11_1">
       </p>
     </li>
+    <li>
+      <p>Time（時刻）<br>
+        現在の画面が表示されるまでの<strong>各処理に要した時間</strong>が確認できる。<br>
+        <img src="/static/tblog/img/pid11_2.png" alt="pid11_2"><br>
+      </p>
+      <ul>
+        <li>Resource usage &gt; User CPU time<br>
+          クライアントからリクエストを受信してからページ構成を準備するまでの時間。</li>
+        <li>Resource usage &gt; System CPU time<br>
+          「User CPU time」の後にサーバーがレスポンス情報を作成し、クライアントに返すまでの時間。</li>
+        <li>Resource usage &gt; Total CPU time<br>
+          リクエストを受信してからクライアントに返すまでの時間。<br>
+          （「User CPU time」 + 「System CPU time」 の合計）</li>
+        <li>Resource usage &gt; Elapsed time<br>
+          Total CPU time」にHTML、CSS、Javascriptに関するサーバー処理とクライアントでレタリングする時間を加えた時間。</li>
+        <li>Resource usage &gt; Context switches<br>
+          voluntary context switchesは、複数のプロセスを効率良く実行するため、自発的にコンテキストスイッチを実行した回数でinvoluntary context
+          switchesは、実行優先度が高いプロセスを実行するために、強制的にコンテキストスイッチを実行した回数。</li>
+      </ul>
+    </li>
   </ol>
 </div>
