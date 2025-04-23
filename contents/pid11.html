@@ -91,4 +91,28 @@
         ※ リダイレクト処理をデバッグするときに使用する。</p>
     </li>
   </ol>
+  <h3 id="表示パネルのカスタマイズ">表示パネルのカスタマイズ</h3>
+  <p>上記デフォルトパネルは、<strong>settings.py</strong>の<code>DEBUG_TOOLBAR_PANELS</code>に設定されている。</p>
+  <ul>
+    <li>
+      <p>settings.pyの<code>DEBUG_TOOLBAR_PANELS</code>（デフォルト）
+        下記<code>DEBUG_TOOLBAR_PANELS</code>を変更することで<strong>パネルの並び替え</strong>や<strong>削除</strong>、<strong>追加</strong>ができるようになる。
+      </p>
+      <pre><code class="language-ini"><span class="hljs-attr">DEBUG_TOOLBAR_PANELS</span> = [
+    <span class="hljs-string">&#x27;debug_toolbar.panels.versions.VersionsPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.timer.TimerPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.settings.SettingsPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.headers.HeadersPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.request.RequestPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.sql.SQLPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.staticfiles.StaticFilesPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.templates.TemplatesPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.cache.CachePanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.signals.SignalsPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.logging.LoggingPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.redirects.RedirectsPanel&#x27;</span>
+]
+</code></pre>
+    </li>
+  </ul>
 </div>
