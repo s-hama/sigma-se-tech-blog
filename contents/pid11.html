@@ -114,5 +114,26 @@
 ]
 </code></pre>
     </li>
+    <li>
+      <p><strong>プロファイリング情報</strong>の追加例</p>
+      <pre><code class="language-ini"><span class="hljs-attr">DEBUG_TOOLBAR_PANELS</span> = [
+    <span class="hljs-string">&#x27;debug_toolbar.panels.versions.VersionsPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.timer.TimerPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.settings.SettingsPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.headers.HeadersPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.request.RequestPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.sql.SQLPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.staticfiles.StaticFilesPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.templates.TemplatesPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.cache.CachePanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.signals.SignalsPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.logging.LoggingPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.profiling.ProfilingPanel&#x27;</span>    <span class="hljs-comment"># 追記</span>
+]
+</code></pre>
+      <p>末尾に追加した<strong>プロファイリング情報</strong>が確認できるようになる。<br>
+        <img src="/static/tblog/img/pid11_12.png" alt="pid11_12">
+      </p>
+    </li>
   </ul>
 </div>
