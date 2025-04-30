@@ -20,3 +20,18 @@ Python自体は、動的言語(非コンパイル型言語)で**数値演算が�
    Installing collected packages: numpy
    Successfully installed numpy-1.15.4
   ```
+
+### NumPyの使用方法
+- 配列の定義と型の確認<br>
+NumPy配列は、Python配列を引数を基に**numpy.ndarray型**で生成される。<br>
+下記サンプルでは、Python配列`[0.5, 1.5, 2.5, 3.5, 4.5, 5.5]`を基にNumPy配列`[0.5, 1.5, 2.5, 3.5, 4.5, 5.5]`(numpy.ndarray型) を生成している。
+  ```bash
+  $ python
+   >>> import numpy as np
+   >>> list = np.array([0.5, 1.5, 2.5, 3.5, 4.5, 5.5])
+   >>> print(list)
+   [0.5 1.5 2.5 3.5 4.5 5.5]
+   >>> type(list)
+   <class 'numpy.ndarray'>
+   >>>
+  ```
