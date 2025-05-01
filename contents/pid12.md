@@ -35,3 +35,22 @@ NumPy配列は、Python配列を引数を基に**numpy.ndarray型**で生成さ�
    <class 'numpy.ndarray'>
    >>>
   ```
+
+- 一次元配列同士の四則演算<br>
+**要素数が同じ**である場合、それぞれの要素同士で四則演算が可能。<br>
+※ 但し、下記ブロードキャストは例外で 要素数が一致していなくても 四則演算が可能。
+  ```bash
+  $ python
+   >>> import numpy as np
+   >>> list_a = np.array([1.0, 2.0, 3.0])
+   >>> list_b = np.array([2.0, 2.5, 3.0])
+   >>> list_a + list_b    # 加算
+   array([3. , 4.5, 6. ])
+   >>> list_a - list_b    # 減算
+   array([-1. , -0.5,  0. ])
+   >>> list_a * list_b    # 乗算
+   array([2., 5., 9.])
+   >>> list_a / list_b    # 除算
+   array([0.5, 0.8, 1. ])
+   >>>
+  ```
