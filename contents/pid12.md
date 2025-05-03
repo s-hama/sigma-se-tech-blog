@@ -89,3 +89,66 @@ NumPy配列は、Python配列を引数を基に**numpy.ndarray型**で生成さ�
      dtype('int64')
     >>>
     ```
+
+- ブロードキャスト<br>
+NumPyでは、ブロードキャストという機能により、下記3つの例のように**形状(行列)が異なる配列**でも演算が可能。
+  - 一次元配列とスカラ値（単一の数値）<br>
+    一次元配列とスカラ値｢2｣との四則演算。
+    ```bash
+    $ python
+     >>> import numpy as np
+     >>> list_a = np.array([1.0, 2.0, 3.0])
+     >>> list_a + 2    # 加算
+     array([3., 4., 5.])
+     >>> list_a - 2    # 減算
+     array([-1.,  0.,  1.])
+     >>> list_a * 2    # 乗算
+     array([2., 4., 6.])
+     >>> list_a / 2    # 除算
+     array([0.5, 1. , 1.5])
+     >>>
+    ```
+  - 多次元配列とスカラ値<br>
+    多次元配列とスカラ値｢16｣との四則演算。
+    ```bash
+    $ python
+     >>> import numpy as np
+     >>> matrix_a + 16    # 加算
+     array([[17, 18],
+             [19, 20]])
+     >>> matrix_a - 16    # 減算
+     array([[-15, -14],
+             [-13, -12]])
+     >>> matrix_a * 16    # 乗算
+     array([[16, 32],
+             [48, 64]])
+     >>> matrix_a / 16    # 除算
+     array([[0.0625, 0.125 ],
+             [0.1875, 0.25  ]])
+     >>>
+    ```
+  - 多次元配列と一次元配列<br>
+    多次元配列と一次元配列との四則演算。
+    ```bash
+    $ python
+     >>> import numpy as np
+     >>> matrix_a = np.array([[1, 2], [4, 8], [16, 32]])
+     >>> matrix_b = np.array([2, 4])
+     >>> matrix_a + matrix_b    # 加算
+     array([[ 3,  6],
+             [ 6, 12],
+             [18, 36]])
+     >>> matrix_a - matrix_b    # 減算
+     array([[-1, -2],
+             [ 2,  4],
+             [14, 28]])
+     >>> matrix_a * matrix_b    # 乗算
+     array([[  2,   8],
+             [  8,  32],
+             [ 32, 128]])
+     >>> matrix_a / matrix_b    # 除算
+     array([[0.5, 0.5],
+             [2. , 2. ],
+             [8. , 8. ]])
+     >>>
+    ```
