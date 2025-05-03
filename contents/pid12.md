@@ -54,3 +54,38 @@ NumPy配列は、Python配列を引数を基に**numpy.ndarray型**で生成さ�
    array([0.5, 0.8, 1. ])
    >>>
   ```
+
+- 多次元配列（行列）の四則演算<br>
+上記一次元配列同士の四則演算と同様に**行列が同じ**である場合、それぞれの要素同士で四則演算が可能。
+  ```bash
+  $ python
+   >>> matrix_b = np.array([[5, 10], [15, 20]])
+   >>> matrix_a + matrix_b    # 加算
+   array([[ 6, 12],
+           [18, 24]])
+   >>> matrix_a - matrix_b    # 減算
+   array([[ -4,  -8],
+           [-12, -16]])
+   >>> matrix_a * matrix_b    # 乗算
+   array([[ 5, 20],
+           [45, 80]])
+   >>> matrix_a / matrix_b    # 除算
+   array([[0.2, 0.2],
+           [0.2, 0.2]])
+   >>>
+  ```
+  - 形状とデータ型の確認<br>
+  shapeで形状 (行列) を、dtypeでデータ型を確認できる。
+    ```bash
+    $ python
+     >>> import numpy as np
+     >>> matrix_a = np.array([[1, 2], [3, 4]])
+     >>> print(matrix_a)
+     [[1 2]
+       [3 4]]
+     >>> matrix_a.shape    # 形状の確認
+     (2, 2)
+     >>> matrix_a.dtype    # データ型の確認
+     dtype('int64')
+    >>>
+    ```
