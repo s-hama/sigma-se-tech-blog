@@ -152,3 +152,64 @@ NumPyでは、ブロードキャストという機能により、下記3つの�
              [8. , 8. ]])
      >>>
     ```
+
+- 各要素の取得<br>
+  - インデックスで要素を指定<br>
+    他言語と同様にNumPyでもインデックス0から始まり、下記要領でアクセスできる。
+    ```bash
+    $ python
+     >>> import numpy as np
+     >>> matrix_c = np.array([[1, 5], [10, 15], [20, 25]])
+     >>> print(matrix_c)
+     [[ 1  5]
+       [10 15]
+       [20 25]]
+     >>> matrix_c[0]    # 行 1
+     array([1, 5])
+     >>> matrix_c[1]    # 行 2
+     array([10, 15])
+     >>> matrix_c[2]    # 行 3
+     array([20, 25])
+     >>> matrix_c[0][0]    # 行 1 、列 1
+     1
+     >>> matrix_c[0][1]    # 行 1 、列 2
+     5
+     >>> matrix_c[1][0]    # 行 2 、列 1
+     10
+     >>> matrix_c[1][1]    # 行 2 、列 2
+     15
+     >>> matrix_c[2][0]    # 行 3 、列 1
+     20
+     >>> matrix_c[2][1]    # 行 3 、列 2
+     25
+     >>>
+    ```
+  - 配列で要素を指定<br>
+    インデックスだけでなく一次元配列に対して、配列で要素を指定することもできる。
+    ```bash
+    $ python
+     >>> import numpy as np
+     >>> matrix_d = np.array([1, 5,10, 15, 20, 25])
+     >>> print(matrix_d)
+     [ 1  5 10 15 20 25]
+     >>> matrix_d[np.array([1, 3, 5])]    # インデックス 1, 3, 5 (2、4、6個目)を指定
+     array([ 5, 15, 25])
+     >>>
+    ```
+  - 任意の条件で要素を指定<br>
+    ```bash
+    $ python
+     >>> import numpy as np
+     >>> matrix_e = np.array([1, 5, 2, 10, 3, 15, 4, 20, 5, 25])
+     >>> matrix_e > 4    # 一次元配列に対して直接比較する
+     array([False, True, False, True, False, True, False,  True, True, True])
+     >>> matrix_e[matrix_e > 4]    # 上記の結果がTrueの要素のみ抽出する
+     array([ 5, 10, 15, 20,  5, 25])
+     >>>
+     >>> matrix_e[matrix_e == 5]   # 5のみ抽出する
+     array([5, 5])
+     >>>
+    ```
+<br>
+【参考文献】<br>
+斎藤 康毅 (2018) 『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
