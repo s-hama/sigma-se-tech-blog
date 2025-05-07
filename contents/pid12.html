@@ -19,4 +19,22 @@
 </code></pre>
     </li>
   </ul>
+  <h3 id="numpyの使用方法">NumPyの使用方法</h3>
+  <ul>
+    <li>
+      <p>配列の定義と型の確認<br>
+        NumPy配列は、Python配列を引数を基に<strong>numpy.ndarray型</strong>で生成される。<br>
+        下記サンプルでは、Python配列<code>[0.5, 1.5, 2.5, 3.5, 4.5, 5.5]</code>を基にNumPy配列<code>[0.5, 1.5, 2.5, 3.5, 4.5, 5.5]</code>(numpy.ndarray型)
+        を生成している。</p>
+        <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; import numpy as np
+ &gt;&gt;&gt; list = np.array([0.5, 1.5, 2.5, 3.5, 4.5, 5.5])
+ &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list)
+ [0.5 1.5 2.5 3.5 4.5 5.5]
+ &gt;&gt;&gt; <span class="hljs-built_in">type</span>(list)
+ &lt;class <span class="hljs-string">&#x27;numpy.ndarray&#x27;</span>&gt;
+ &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
 </div>
