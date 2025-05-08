@@ -36,5 +36,25 @@
  &gt;&gt;&gt;
 </code></pre>
     </li>
+    <li>
+      <p>一次元配列同士の四則演算<br>
+        <strong>要素数が同じ</strong>である場合、それぞれの要素同士で四則演算が可能。<br>
+        ※ 但し、下記ブロードキャストは例外で 要素数が一致していなくても 四則演算が可能。
+      </p>
+      <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; import numpy as np
+ &gt;&gt;&gt; list_a = np.array([1.0, 2.0, 3.0])
+ &gt;&gt;&gt; list_b = np.array([2.0, 2.5, 3.0])
+ &gt;&gt;&gt; list_a + list_b    <span class="hljs-comment"># 加算</span>
+ array([3. , 4.5, 6. ])
+ &gt;&gt;&gt; list_a - list_b    <span class="hljs-comment"># 減算</span>
+ array([-1. , -0.5,  0. ])
+ &gt;&gt;&gt; list_a * list_b    <span class="hljs-comment"># 乗算</span>
+ array([2., 5., 9.])
+ &gt;&gt;&gt; list_a / list_b    <span class="hljs-comment"># 除算</span>
+ array([0.5, 0.8, 1. ])
+ &gt;&gt;&gt;
+</code></pre>
+    </li>
   </ul>
 </div>
