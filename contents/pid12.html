@@ -56,5 +56,42 @@
  &gt;&gt;&gt;
 </code></pre>
     </li>
+    <li>
+      <p>多次元配列（行列）の四則演算<br>
+        上記一次元配列同士の四則演算と同様に<strong>行列が同じ</strong>である場合、それぞれの要素同士で四則演算が可能。</p>
+        <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; matrix_b = np.array([[5, 10], [15, 20]])
+ &gt;&gt;&gt; matrix_a + matrix_b    <span class="hljs-comment"># 加算</span>
+ array([[ 6, 12],
+         [18, 24]])
+ &gt;&gt;&gt; matrix_a - matrix_b    <span class="hljs-comment"># 減算</span>
+ array([[ -4,  -8],
+         [-12, -16]])
+ &gt;&gt;&gt; matrix_a * matrix_b    <span class="hljs-comment"># 乗算</span>
+ array([[ 5, 20],
+         [45, 80]])
+ &gt;&gt;&gt; matrix_a / matrix_b    <span class="hljs-comment"># 除算</span>
+ array([[0.2, 0.2],
+         [0.2, 0.2]])
+ &gt;&gt;&gt;
+</code></pre>
+      <ul>
+        <li>形状とデータ型の確認<br>
+          shapeで形状 (行列) を、dtypeでデータ型を確認できる。
+          <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; import numpy as np
+ &gt;&gt;&gt; matrix_a = np.array([[1, 2], [3, 4]])
+ &gt;&gt;&gt; <span class="hljs-built_in">print</span>(matrix_a)
+ [[1 2]
+   [3 4]]
+ &gt;&gt;&gt; matrix_a.shape    <span class="hljs-comment"># 形状の確認</span>
+ (2, 2)
+ &gt;&gt;&gt; matrix_a.dtype    <span class="hljs-comment"># データ型の確認</span>
+ dtype(<span class="hljs-string">&#x27;int64&#x27;</span>)
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+      </ul>
+    </li>
   </ul>
 </div>
