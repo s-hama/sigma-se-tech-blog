@@ -93,5 +93,71 @@
         </li>
       </ul>
     </li>
+    <li>
+      <p>ブロードキャスト<br>
+        NumPyでは、ブロードキャストという機能により、下記3つの例のように<strong>形状(行列)が異なる配列</strong>でも演算が可能。</p>
+      <ul>
+        <li>一次元配列とスカラ値（単一の数値）<br>
+          一次元配列とスカラ値｢2｣との四則演算。
+          <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; import numpy as np
+ &gt;&gt;&gt; list_a = np.array([1.0, 2.0, 3.0])
+ &gt;&gt;&gt; list_a + 2    <span class="hljs-comment"># 加算</span>
+ array([3., 4., 5.])
+ &gt;&gt;&gt; list_a - 2    <span class="hljs-comment"># 減算</span>
+ array([-1.,  0.,  1.])
+ &gt;&gt;&gt; list_a * 2    <span class="hljs-comment"># 乗算</span>
+ array([2., 4., 6.])
+ &gt;&gt;&gt; list_a / 2    <span class="hljs-comment"># 除算</span>
+ array([0.5, 1. , 1.5])
+ &gt;&gt;&gt;
+</code></pre>
+        </li>
+        <li>多次元配列とスカラ値<br>
+          多次元配列とスカラ値｢16｣との四則演算。
+          <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; import numpy as np
+ &gt;&gt;&gt; matrix_a + 16    <span class="hljs-comment"># 加算</span>
+ array([[17, 18],
+         [19, 20]])
+ &gt;&gt;&gt; matrix_a - 16    <span class="hljs-comment"># 減算</span>
+ array([[-15, -14],
+         [-13, -12]])
+ &gt;&gt;&gt; matrix_a * 16    <span class="hljs-comment"># 乗算</span>
+ array([[16, 32],
+         [48, 64]])
+ &gt;&gt;&gt; matrix_a / 16    <span class="hljs-comment"># 除算</span>
+ array([[0.0625, 0.125 ],
+         [0.1875, 0.25  ]])
+ &gt;&gt;&gt;
+</code></pre>
+        </li>
+        <li>多次元配列と一次元配列<br>
+          多次元配列と一次元配列との四則演算。
+          <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; import numpy as np
+ &gt;&gt;&gt; matrix_a = np.array([[1, 2], [4, 8], [16, 32]])
+ &gt;&gt;&gt; matrix_b = np.array([2, 4])
+ &gt;&gt;&gt; matrix_a + matrix_b    <span class="hljs-comment"># 加算</span>
+ array([[ 3,  6],
+         [ 6, 12],
+         [18, 36]])
+ &gt;&gt;&gt; matrix_a - matrix_b    <span class="hljs-comment"># 減算</span>
+ array([[-1, -2],
+         [ 2,  4],
+         [14, 28]])
+ &gt;&gt;&gt; matrix_a * matrix_b    <span class="hljs-comment"># 乗算</span>
+ array([[  2,   8],
+         [  8,  32],
+         [ 32, 128]])
+ &gt;&gt;&gt; matrix_a / matrix_b    <span class="hljs-comment"># 除算</span>
+ array([[0.5, 0.5],
+         [2. , 2. ],
+         [8. , 8. ]])
+ &gt;&gt;&gt;
+</code></pre>
+        </li>
+      </ul>
+    </li>
   </ul>
 </div>
