@@ -35,3 +35,26 @@ Python - Matplotlib : matplotlib.pyplotの使用方法
   ```
   ※ 以降でmatplotlib.pyplotの使用方法について基本的な部分しか触れないため、詳細な使用方法については、下記チュートリアルで確認すること。<br>
   Matplotlibチュートリアル：https://matplotlib.org/tutorials/index.html<br>
+
+### Matplotlibの使用方法
+- 区間、描画精度、グラフタイトル、軸ラベルの設定と表示<br>
+二次関数**y = x^2**を例に区間、描画精度、グラフタイトル、軸ラベルの設定を行いグラフ表示する。
+  ```bash
+  $ python
+   >>> import numpy as np
+   >>> import matplotlib.pyplot as plt
+   >>> x = np.arange(0, 20, 0.01)    # 区間を0～20 まで、描画制度を 0.01 刻みに設定
+   >>> y = x**2
+   >>> plt.title("y = x^2\n# arange:0, 20, 0.01, xlabel:x, ylabel:y")    # グラフタイトルを設定
+     Text(0.5, 1.0, 'y = x^2\n# arange:0, 20, 0.01, xlabel:x, ylabel:y')
+   >>> plt.xlabel("x")    # x軸のラベルを設定
+     Text(0.5, 0, 'x')
+   >>> plt.ylabel("y")    # y軸のラベルを設定
+     Text(0, 0.5, 'y')
+   >>> plt.plot(x,y)    # グラフの描画
+     [<matplotlib.lines.Line2D object at 0x7fa0a479eb70>]
+   >>> plt.savefig('/var/www/projs/sweb/static/tblog/img/pid13_1.png')    # 各自の環境に合わせ、任意のパス、ファイル名を指定
+  ```
+  - 上記で出力したグラフ「pid13_1.png」
+  ![pid13_1](/static/tblog/img/pid13_1.png)
+
