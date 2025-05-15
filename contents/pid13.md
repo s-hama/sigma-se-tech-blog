@@ -58,3 +58,28 @@ Python - Matplotlib : matplotlib.pyplotの使用方法
   - 上記で出力したグラフ「pid13_1.png」
   ![pid13_1](/static/tblog/img/pid13_1.png)
 
+- 2つのグラフ、凡例の設定と表示<br>
+三角関数**y = sin(x)**と**y = cos(x)**を例に凡例の設定を行い、2つのグラフを表示する。
+  ```bash
+  $ python
+   >>> import numpy as np
+   >>> import matplotlib.pyplot as plt
+   >>> x = np.arange(0, 6, 0.01)    # 区間を0～6 まで、描画制度を 0.01 刻みに設定
+   >>> plt.title("y = sin(x), y = cos(x)\n# arange:0, 6, 0.01, xlabel:x, ylabel:y, legend:sin&cos")    # グラフタイトルを設定
+   Text(0.5, 1.0, 'y = sin(x), y = cos(x)\n# arange:0, 6, 0.01, xlabel:x, ylabel:y, legend:sin&cos')
+   >>> plt.xlabel("x")    # x軸のラベルを設定
+     Text(0.5, 0, 'x')
+   >>> plt.ylabel("y")    # y軸のラベルを設定
+     Text(0, 0.5, 'y')
+   >>> y_sin = np.sin(x)
+   >>> y_cos = np.cos(x)
+   >>> plt.plot(x, y_sin, label="sin")   # グラフの描画 ※実線で描画 ( デフォルト )
+     [<matplotlib.lines.Line2D object at 0x7fde03617fd0>]
+   >>> plt.plot(x, y_cos, linestyle="--", label="cos")    # グラフの描画 ※破線で描画
+     [<matplotlib.lines.Line2D object at 0x7fde03625048>]
+   >>> plt.legend()    # 凡例の描画
+     <matplotlib.legend.Legend object at 0x7fde03625358>
+   >>> plt.savefig('/var/www/projs/sweb/static/tblog/img/pid13_2.png')    # 各自の環境に合わせ、任意のパス、ファイル名を指定
+  ```
+  - 上記で出力したグラフ「pid13_2.png」
+  ![pid13_2](/static/tblog/img/pid13_2.png)
