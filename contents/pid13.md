@@ -83,3 +83,26 @@ Python - Matplotlib : matplotlib.pyplotの使用方法
   ```
   - 上記で出力したグラフ「pid13_2.png」
   ![pid13_2](/static/tblog/img/pid13_2.png)
+
+- **imread**を使った画像表示<br>
+`matplotlib.imagen`の`imread`によって読み込んだ画像を`pyplot.imshow`で表示する。<br>
+※ あらかじめ任意の画像を準備して`imread`で読み込み`imshow`で表示する。
+
+  - 任意の画像「pid13_3.png」を準備<br>
+  ![pid13_3](/static/tblog/img/pid13_3.png)
+
+  - 「pid13_3.png」を`imread`で読み込み`imshow`で表示し、ファイル名を「pid13_4.png」として出力
+    ```bash
+    $ python
+     >>> import matplotlib.pyplot as plt
+     >>> from matplotlib.image import imread
+     >>> img = imread('/var/www/projs/sweb/static/tblog/img/pid13_3.png')    # 任意の画像をimgに読込み
+     >>> plt.imshow(img)    # 画像表示
+     <matplotlib.image.AxesImage object at 0x7f4b80106f60>
+     >>> plt.title('b_id36_3.png Read with image.imread \n and output as b_id36_4.png in pyplot.imshow')    # グラフタイトルを設定
+     >>> plt.savefig('/var/www/projs/sweb/static/tblog/img/pid13_4.png')
+    ```
+
+  - 上記で出力したグラフ「pid13_4.png」
+  ![pid13_4](/static/tblog/img/pid13_4.png)
+
