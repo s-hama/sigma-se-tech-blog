@@ -106,3 +106,11 @@ Python - Matplotlib : matplotlib.pyplotの使用方法
   - 上記で出力したグラフ「pid13_4.png」
   ![pid13_4](/static/tblog/img/pid13_4.png)
 
+- その他のグラフ<br>
+上記以外にも`numpy.random`を使った分散図やヒストグラムなど様々なグラフに対応している。<br>
+より詳細な使用方法は、下記ユーザーズガイドを参考。<br>
+Matplotlibユーザーズガイド：https://matplotlib.org/users/index.html
+
+<br>
+【参考文献】<br>
+斎藤 康毅 (2018) 『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
