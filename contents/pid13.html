@@ -34,4 +34,31 @@
         href="https://matplotlib.org/tutorials/index.html">https://matplotlib.org/tutorials/index.html</a><br>
     </li>
   </ul>
+  <h3 id="matplotlibの使用方法">Matplotlibの使用方法</h3>
+  <ul>
+    <li>
+      <p>区間、描画精度、グラフタイトル、軸ラベルの設定と表示<br>
+        二次関数<strong>y = x^2</strong>を例に区間、描画精度、グラフタイトル、軸ラベルの設定を行いグラフ表示する。</p>
+      <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; import numpy as np
+ &gt;&gt;&gt; import matplotlib.pyplot as plt
+ &gt;&gt;&gt; x = np.arange(0, 20, 0.01)    <span class="hljs-comment"># 区間を0～20 まで、描画制度を 0.01 刻みに設定</span>
+ &gt;&gt;&gt; y = x**2
+ &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;y = x^2\n# arange:0, 20, 0.01, xlabel:x, ylabel:y&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
+   Text(0.5, 1.0, <span class="hljs-string">&#x27;y = x^2\n# arange:0, 20, 0.01, xlabel:x, ylabel:y&#x27;</span>)
+ &gt;&gt;&gt; plt.xlabel(<span class="hljs-string">&quot;x&quot;</span>)    <span class="hljs-comment"># x軸のラベルを設定</span>
+   Text(0.5, 0, <span class="hljs-string">&#x27;x&#x27;</span>)
+ &gt;&gt;&gt; plt.ylabel(<span class="hljs-string">&quot;y&quot;</span>)    <span class="hljs-comment"># y軸のラベルを設定</span>
+   Text(0, 0.5, <span class="hljs-string">&#x27;y&#x27;</span>)
+ &gt;&gt;&gt; plt.plot(x,y)    <span class="hljs-comment"># グラフの描画</span>
+   [&lt;matplotlib.lines.Line2D object at 0x7fa0a479eb70&gt;]
+ &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;/var/www/projs/sweb/static/tblog/img/pid13_1.png&#x27;</span>)    <span class="hljs-comment"># 各自の環境に合わせ、任意のパス、ファイル名を指定</span>
+</code></pre>
+      <ul>
+        <li>上記で出力したグラフ「pid13_1.png」
+          <img src="/static/tblog/img/pid13_1.png" alt="pid13_1">
+        </li>
+      </ul>
+    </li>
+  </ul>
 </div>
