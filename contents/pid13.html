@@ -60,5 +60,34 @@
         </li>
       </ul>
     </li>
+    <li>
+      <p>2つのグラフ、凡例の設定と表示<br>
+        三角関数<strong>y = sin(x)</strong>と<strong>y = cos(x)</strong>を例に凡例の設定を行い、2つのグラフを表示する。</p>
+      <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; import numpy as np
+ &gt;&gt;&gt; import matplotlib.pyplot as plt
+ &gt;&gt;&gt; x = np.arange(0, 6, 0.01)    <span class="hljs-comment"># 区間を0～6 まで、描画制度を 0.01 刻みに設定</span>
+ &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;y = sin(x), y = cos(x)\n# arange:0, 6, 0.01, xlabel:x, ylabel:y, legend:sin&amp;cos&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
+ Text(0.5, 1.0, <span class="hljs-string">&#x27;y = sin(x), y = cos(x)\n# arange:0, 6, 0.01, xlabel:x, ylabel:y, legend:sin&amp;cos&#x27;</span>)
+ &gt;&gt;&gt; plt.xlabel(<span class="hljs-string">&quot;x&quot;</span>)    <span class="hljs-comment"># x軸のラベルを設定</span>
+   Text(0.5, 0, <span class="hljs-string">&#x27;x&#x27;</span>)
+ &gt;&gt;&gt; plt.ylabel(<span class="hljs-string">&quot;y&quot;</span>)    <span class="hljs-comment"># y軸のラベルを設定</span>
+   Text(0, 0.5, <span class="hljs-string">&#x27;y&#x27;</span>)
+ &gt;&gt;&gt; y_sin = np.sin(x)
+ &gt;&gt;&gt; y_cos = np.cos(x)
+ &gt;&gt;&gt; plt.plot(x, y_sin, label=<span class="hljs-string">&quot;sin&quot;</span>)   <span class="hljs-comment"># グラフの描画 ※実線で描画 ( デフォルト )</span>
+   [&lt;matplotlib.lines.Line2D object at 0x7fde03617fd0&gt;]
+ &gt;&gt;&gt; plt.plot(x, y_cos, linestyle=<span class="hljs-string">&quot;--&quot;</span>, label=<span class="hljs-string">&quot;cos&quot;</span>)    <span class="hljs-comment"># グラフの描画 ※破線で描画</span>
+   [&lt;matplotlib.lines.Line2D object at 0x7fde03625048&gt;]
+ &gt;&gt;&gt; plt.legend()    <span class="hljs-comment"># 凡例の描画</span>
+   &lt;matplotlib.legend.Legend object at 0x7fde03625358&gt;
+ &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;/var/www/projs/sweb/static/tblog/img/pid13_2.png&#x27;</span>)    <span class="hljs-comment"># 各自の環境に合わせ、任意のパス、ファイル名を指定</span>
+</code></pre>
+      <ul>
+        <li>上記で出力したグラフ「pid13_2.png」
+          <img src="/static/tblog/img/pid13_2.png" alt="pid13_2">
+        </li>
+      </ul>
+    </li>
   </ul>
 </div>
