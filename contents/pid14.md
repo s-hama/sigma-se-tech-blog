@@ -10,3 +10,15 @@ MathJaxは、**MathML**、**LaTeX**、**AsciiMath**で記述された数式を�
 ※ MathMLの対応ブラウザについては、2018年1月時点で**Firefox**、**Safari**、**iOS Safari**のみ。<br>
 より詳細な使用方法は、公式ドキュメントを参考。<br>
 MathML3ドキュメント：https://www.w3.org/TR/MathML3/
+
+## 実施内容
+### MathJaxの導入
+導入はJavaScriptの読み込みのみ。
+
+- MathJax.jsを読み込む<br>
+  ```html
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  ```
+  URLパラメータのconfigを**TeX-MML-AM_CHTML**と指定することにより、**MathML**、**LaTeX**、**AsciiMath**すべて認識できる状態となる。<br>
+  LaTeXのみ認識するのであれば、**TeX-AMS_CHTML**とするなど色々な設定方法があるため、詳細については下記ドキュメントを参考。<br>
+  ※ https://docs.mathjax.org/en/latest/config-files.html<br>
