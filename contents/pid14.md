@@ -308,3 +308,94 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
       </mtable>
     </math>
     ```
+
+### LaTeXの表示サンプル
+  続いてLaTeX。<br>
+  以下、表示サンプルを記載する。
+- 二次方程式の解
+  - 表示 
+    <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
+    \[
+     x = \frac{-b\pm\sqrt{b^{2}-4ac}}{2a}
+    \]
+    </div>
+  - マークアップ
+    ```bash
+    \[
+     x = \frac{-b\pm\sqrt{b^{2}-4ac}}{2a}
+    \]
+    ```
+
+- 絶対値の定義
+  - 表示 
+    <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
+    \[
+     |x| = \begin{cases}
+       x & \text{\(x\ge0\) のとき} \\
+       -x & \text{\(x<0\) のとき}
+     \end{cases}
+    \]
+    </div>
+  - マークアップ
+    ```bash
+    \[
+     |x| = \begin{cases}
+       x & \text{\(x\ge0\) のとき} \\
+       -x & \text{\(x<0\) のとき}
+     \end{cases}
+    \end{cases}
+    \]
+    ```
+
+- \(f(x)\)の導関数
+  - 表示 
+    <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
+    \[
+     f’(x) = \lim_{\Delta x \to 0} \frac{ f(x+\Delta x) - f(x) }{\Delta x}
+    \]
+    </div>
+  - マークアップ
+    ```bash
+    \[
+     f’(x) = \lim_{\Delta x \to 0} \frac{ f(x+\Delta x) - f(x) }{\Delta x}
+    \]
+    ```
+
+- ガウス積分
+  - 表示 
+    <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
+    \[
+     f’(x) = \lim_{\Delta x \to 0} \frac{ f(x+\Delta x) - f(x) }{\Delta x}
+    \]
+    </div>
+  - マークアップ
+    ```bash
+    \[
+     \int_{-\infty}^{\infty} e^{-x^{2}} \, dx = \sqrt{\pi}
+    \]
+    ```
+
+- n × n行列
+  - 表示 
+    <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
+    \[
+    A = \begin{pmatrix}
+    a_{11} & a_{12} & \ldots & a_{1n} \\
+    a_{21} & a_{22} & \ldots & a_{2n} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    a_{n1} & a_{n2} & \ldots & a_{nn}
+    \end{pmatrix}
+    \]
+    </div>
+  - マークアップ
+    ```bash
+    \[
+     A = \begin{pmatrix}
+     a_{11} & a_{12} & \ldots & a_{1n} \\
+     a_{21} & a_{22} & \ldots & a_{2n} \\
+     \vdots & \vdots & \ddots & \vdots \\
+     a_{n1} & a_{n2} & \ldots & a_{nn}
+     \end{pmatrix}
+    \]
+    ```
+  
