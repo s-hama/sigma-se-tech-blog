@@ -7,4 +7,17 @@
   <p>※ MathMLの対応ブラウザについては、2018年1月時点で<strong>Firefox</strong>、<strong>Safari</strong>、<strong>iOS Safari</strong>のみ。<br>
     より詳細な使用方法は、公式ドキュメントを参考。<br>
     MathML3ドキュメント：<a class="link-secondary" href="https://www.w3.org/TR/MathML3/">https://www.w3.org/TR/MathML3/</a></p>
+  <h2 id="実施内容">実施内容</h2>
+  <h3 id="mathjaxの導入">MathJaxの導入</h3>
+  <p>導入はJavaScriptの読み込みのみ。</p>
+  <ul>
+    <li>MathJax.jsを読み込む<br>
+      <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span> <span class="hljs-attr">async</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+      URLパラメータのconfigを<strong>TeX-MML-AM_CHTML</strong>と指定することにより、<strong>MathML</strong>、<strong>LaTeX</strong>、<strong>AsciiMath</strong>すべて認識できる状態となる。<br>
+      LaTeXのみ認識するのであれば、<strong>TeX-AMS_CHTML</strong>とするなど色々な設定方法があるため、詳細については下記ドキュメントを参考。<br>
+      ※ <a
+        class="link-secondary" href="https://docs.mathjax.org/en/latest/config-files.html">https://docs.mathjax.org/en/latest/config-files.html</a><br>
+    </li>
+  </ul>
 </div>
