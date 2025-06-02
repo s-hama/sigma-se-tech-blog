@@ -75,4 +75,255 @@
       </ul>
     </li>
   </ul>
+  <h3 id="mathmlの表示サンプル">MathMLの表示サンプル</h3>
+  <p>以下、表示サンプルを記載する。</p>
+  <ul>
+    <li>
+      <p>黄金比</p>
+      <ul>
+        <li>表示<div style="margin-left: 1rem; font-size: 1.8em; margin-top: 0.25em;">
+            <math>
+              <mfrac>
+                <mrow>
+                  <mn>1</mn>
+                  <mo>+</mo>
+                  <msqrt>
+                    <mn>5</mn>
+                  </msqrt>
+                </mrow>
+                <mn>2</mn>
+              </mfrac>
+            </math>
+          </div><br>
+        </li>
+        <li>マークアップ
+          <pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">math</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">mfrac</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">mrow</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">mn</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">mn</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>+<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">msqrt</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">mn</span>&gt;</span>5<span class="hljs-tag">&lt;/<span class="hljs-name">mn</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">msqrt</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">mrow</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">mn</span>&gt;</span>2<span class="hljs-tag">&lt;/<span class="hljs-name">mn</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">mfrac</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">math</span>&gt;</span>
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>極限値</p>
+      <ul>
+        <li>表示<div style="margin-left: 1rem; font-size: 1.5em; margin-top: 0.25em;">
+            <math>
+              <munder>
+                <mi>lim</mi>
+                <mrow>
+                  <mi>x</mi>
+                  <mo>→</mo>
+                  <mn>0</mn>
+                </mrow>
+              </munder>
+              <mfrac>
+                <mrow>
+                  <mi>sin</mi>
+                  <mo>⁡</mo>
+                  <mi>x</mi>
+                </mrow>
+                <mi>x</mi>
+              </mfrac>
+              <mo>=</mo>
+              <mn>1</mn>
+            </math>
+          </div><br>
+        </li>
+        <li>マークアップ
+          <pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">math</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">munder</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>lim<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">mrow</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>x<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>→<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">mn</span>&gt;</span>0<span class="hljs-tag">&lt;/<span class="hljs-name">mn</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">mrow</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">munder</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">mfrac</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">mrow</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>sin<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>⁡<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>x<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">mrow</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>x<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">mfrac</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>=<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">mn</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">mn</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">math</span>&gt;</span>
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>逆行列</p>
+      <ul>
+        <li>表示<div style="margin-left: 1rem; font-size: 1.2em; margin-top: 0.25em;">
+            <math>
+              <mtable>
+                <mtr>
+                  <mtd>
+                    <mi>A</mi>
+                    <mo>=</mo>
+                    <mfenced>
+                      <mtable>
+                        <mtr>
+                          <mtd>
+                            <mi>a</mi>
+                          </mtd>
+                          <mtd>
+                            <mi>b</mi>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd>
+                            <mi>c</mi>
+                          </mtd>
+                          <mtd>
+                            <mi>d</mi>
+                          </mtd>
+                        </mtr>
+                      </mtable>
+                    </mfenced>
+                  </mtd>
+                </mtr>
+                <mtr>
+                  <mtd>
+                    <msup>
+                      <mi>A</mi>
+                      <mrow>
+                        <mo>-</mo>
+                        <mn>1</mn>
+                      </mrow>
+                    </msup>
+                    <mo>=</mo>
+                    <mfrac>
+                      <mn>1</mn>
+                      <mrow>
+                        <mi>a</mi>
+                        <mo></mo>
+                        <mi>d</mi>
+                        <mo>-</mo>
+                        <mi>b</mi>
+                        <mo></mo>
+                        <mi>c</mi>
+                      </mrow>
+                    </mfrac>
+                    <mo></mo>
+                    <mfenced>
+                      <mtable>
+                        <mtr>
+                          <mtd>
+                            <mi>d</mi>
+                          </mtd>
+                          <mtd>
+                            <mo>-</mo>
+                            <mi>b</mi>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd>
+                            <mo>-</mo>
+                            <mi>c</mi>
+                          </mtd>
+                          <mtd>
+                            <mi>a</mi>
+                          </mtd>
+                        </mtr>
+                      </mtable>
+                    </mfenced>
+                  </mtd>
+                </mtr>
+              </mtable>
+            </math>
+          </div><br>
+        </li>
+        <li>マークアップ
+          <pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">math</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">mtable</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">mtr</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>A<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>=<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">mfenced</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">mtable</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mtr</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>a<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>b<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">mtr</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mtr</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>c<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>d<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">mtr</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">mtable</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">mfenced</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">mtr</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">mtr</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">msup</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>A<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">mrow</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>-<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mn</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">mn</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">mrow</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">msup</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>=<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">mfrac</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">mn</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">mn</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">mrow</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>a<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>d<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>-<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>b<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>c<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">mrow</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">mfrac</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">mfenced</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">mtable</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mtr</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>d<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>-<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>b<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">mtr</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mtr</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>-<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>c<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>a<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">mtr</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">mtable</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">mfenced</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">mtr</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">mtable</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">math</span>&gt;</span>
+</code></pre>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </div>
