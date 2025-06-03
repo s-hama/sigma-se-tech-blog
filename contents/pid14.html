@@ -326,4 +326,108 @@
       </ul>
     </li>
   </ul>
+  <h3 id="latexの表示サンプル">LaTeXの表示サンプル</h3>
+  <p>続いてLaTeX。<br>
+    以下、表示サンプルを記載する。</p>
+  <ul>
+    <li>
+      <p>二次方程式の解</p>
+      <ul>
+        <li>表示<div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
+            \[
+            x = \frac{-b\pm\sqrt{b^{2}-4ac}}{2a}
+            \]
+          </div>
+        </li>
+        <li>マークアップ
+          <pre><code class="language-bash">\[
+ x = \frac{-b\pm\sqrt{b^{2}-4ac}}{2a}
+\]
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>絶対値の定義</p>
+      <ul>
+        <li>表示<div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
+            \[
+            |x| = \begin{cases}
+            x & \text{\(x\ge0\) のとき} \\
+            -x & \text{\(x<0\) のとき} \end{cases} \] </div>
+        </li>
+        <li>マークアップ
+          <pre><code class="language-bash">\[
+ |x| = \begin{cases}
+   x &amp; \text{\(x\ge0\) のとき} \\
+   -x &amp; \text{\(x&lt;0\) のとき}
+ \end{cases}
+\end{cases}
+\]
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>(f(x))の導関数</p>
+      <ul>
+        <li>表示<div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
+            \[
+            f’(x) = \lim_{\Delta x \to 0} \frac{ f(x+\Delta x) - f(x) }{\Delta x}
+            \]
+          </div>
+        </li>
+        <li>マークアップ
+          <pre><code class="language-bash">\[
+ f’(x) = \lim_{\Delta x \to 0} \frac{ f(x+\Delta x) - f(x) }{\Delta x}
+\]
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>ガウス積分</p>
+      <ul>
+        <li>表示<div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
+            \[
+            f’(x) = \lim_{\Delta x \to 0} \frac{ f(x+\Delta x) - f(x) }{\Delta x}
+            \]
+          </div>
+        </li>
+        <li>マークアップ
+          <pre><code class="language-bash">\[
+ \int_{-\infty}^{\infty} e^{-x^{2}} \, dx = \sqrt{\pi}
+\]
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>n × n行列</p>
+      <ul>
+        <li>表示<div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
+            \[
+            A = \begin{pmatrix}
+            a_{11} & a_{12} & \ldots & a_{1n} \\
+            a_{21} & a_{22} & \ldots & a_{2n} \\
+            \vdots & \vdots & \ddots & \vdots \\
+            a_{n1} & a_{n2} & \ldots & a_{nn}
+            \end{pmatrix}
+            \]
+          </div>
+        </li>
+        <li>マークアップ
+          <pre><code class="language-bash">\[
+ A = \begin{pmatrix}
+ a_{11} &amp; a_{12} &amp; \ldots &amp; a_{1n} \\
+ a_{21} &amp; a_{22} &amp; \ldots &amp; a_{2n} \\
+ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+ a_{n1} &amp; a_{n2} &amp; \ldots &amp; a_{nn}
+ \end{pmatrix}
+\]
+</code></pre>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </div>
