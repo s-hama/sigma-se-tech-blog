@@ -1,0 +1,433 @@
+<div div class="post-body">
+  <h2 id="目的">目的</h2>
+  <p>この記事では、MathJaxの導入説明とMathML、LaTeXの数式表示サンプルを記載する。</p>
+  <p>
+    MathJaxは、<strong>MathML</strong>、<strong>LaTeX</strong>、<strong>AsciiMath</strong>で記述された数式をウェブブラウザ上で表示するためのJavaScriptライブラリ。<br>
+    また、ブラウザ依存せず、如何なる環境下でも動作を保証するクロスブラウザ仕様となる。<br></p>
+  <p>※ MathMLの対応ブラウザについては、2018年1月時点で<strong>Firefox</strong>、<strong>Safari</strong>、<strong>iOS Safari</strong>のみ。<br>
+    より詳細な使用方法は、公式ドキュメントを参考。<br>
+    MathML3ドキュメント：<a class="link-secondary" href="https://www.w3.org/TR/MathML3/">https://www.w3.org/TR/MathML3/</a></p>
+  <h2 id="実施内容">実施内容</h2>
+  <h3 id="mathjaxの導入">MathJaxの導入</h3>
+  <p>導入はJavaScriptの読み込みのみ。</p>
+  <ul>
+    <li>MathJax.jsを読み込む<br>
+      <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span> <span class="hljs-attr">async</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+      URLパラメータのconfigを<strong>TeX-MML-AM_CHTML</strong>と指定することにより、<strong>MathML</strong>、<strong>LaTeX</strong>、<strong>AsciiMath</strong>すべて認識できる状態となる。<br>
+      LaTeXのみ認識するのであれば、<strong>TeX-AMS_CHTML</strong>とするなど色々な設定方法があるため、詳細については下記ドキュメントを参考。<br>
+      ※ <a
+        class="link-secondary" href="https://docs.mathjax.org/en/latest/config-files.html">https://docs.mathjax.org/en/latest/config-files.html</a><br>
+    </li>
+  </ul>
+  <h3 id="mathmlの要素">MathMLの要素</h3>
+  <p>基本<code>&lt;math&gt;</code>内に、下記で記載するMathMLの<strong>mnタグ</strong>や<strong>moタグ</strong>など記述する形になる。<br></p>
+  <ul>
+    <li>
+      <p>MathMLの全要素<br>
+        ※ より詳細なルールや使用方法は下記を参考。<br>
+        <a
+          class="link-secondary" href="https://developer.mozilla.org/ja/docs/Web/MathML/Element/math">https://developer.mozilla.org/ja/docs/Web/MathML/Element/math</a>
+      </p>
+      <ul>
+        <li><code>&lt;math&gt;</code>：トップレベル要素</li>
+        <li><code>&lt;maction&gt;</code>：部分式にバインドされたアクション</li>
+        <li><code>&lt;maligngroup&gt;</code>：揃えグループ</li>
+        <li><code>&lt;malignmark&gt;</code>：揃えポイント</li>
+        <li><code>&lt;menclose&gt;</code>：囲みコンテンツ</li>
+        <li><code>&lt;merror&gt;</code>：囲み構文エラーメッセージ</li>
+        <li><code>&lt;mfenced&gt;</code>：括弧</li>
+        <li><code>&lt;mfrac&gt;</code>：分数</li>
+        <li><code>&lt;mglyph&gt;</code>：非標準記号の表示</li>
+        <li><code>&lt;mi&gt;</code>：識別子</li>
+        <li><code>&lt;mlabeledtr&gt;</code>：表または行列のラベル付き行</li>
+        <li><code>&lt;mlongdiv&gt;</code>：割り算の筆算表記</li>
+        <li><code>&lt;mmultiscripts&gt;</code>：前置字とテンソル添字</li>
+        <li><code>&lt;mn&gt;</code>：数字</li>
+        <li><code>&lt;mo&gt;</code>：演算子</li>
+        <li><code>&lt;mover&gt;</code>：真上付き</li>
+        <li><code>&lt;mpadded&gt;</code>：コンテンツまわりの空白</li>
+        <li><code>&lt;mphantom&gt;</code>：予約スペースを持つ不可視コンテンツ</li>
+        <li><code>&lt;mroot&gt;</code>：累乗根</li>
+        <li><code>&lt;mrow&gt;</code>：グループ化された部分式</li>
+        <li><code>&lt;ms&gt;</code>：文字列リテラル</li>
+        <li><code>&lt;mscarries&gt;</code>：carries などのアノテーション</li>
+        <li><code>&lt;mscarry&gt;</code>：Single carry, <mscarries> の子要素</li>
+        <li><code>&lt;msgroup&gt;</code>：<mstack> および <mlongdiv> 要素のグループ化された行</li>
+        <li><code>&lt;msline&gt;</code>：<mstack> 要素内の水平線</li>
+        <li><code>&lt;mspace&gt;</code>：空白</li>
+        <li><code>&lt;msqrt&gt;</code>：平方根</li>
+        <li><code>&lt;msrow&gt;</code>：<mstack> 要素の行</li>
+        <li><code>&lt;mstack&gt;</code>：スタック揃え</li>
+        <li><code>&lt;mstyle&gt;</code>：書式変更</li>
+        <li><code>&lt;msub&gt;</code>：下付き</li>
+        <li><code>&lt;msup&gt;</code>：上付き</li>
+        <li><code>&lt;msubsup&gt;</code>：下付き上付きの組</li>
+        <li><code>&lt;mtable&gt;</code>：表または行列</li>
+        <li><code>&lt;mtd&gt;</code>：表または行列のセル</li>
+        <li><code>&lt;mtext&gt;</code>：テキスト</li>
+        <li><code>&lt;mtr&gt;</code>：表または行列の列</li>
+        <li><code>&lt;munder&gt;</code>：真下付き</li>
+        <li><code>&lt;munderover&gt;</code>：真下付きと真上付きの組</li>
+        <li><code>&lt;semantics&gt;</code>：セマンティックアノテーション用のコンテナ</li>
+        <li><code>&lt;annotation&gt;</code>：Data アノテーション</li>
+        <li><code>&lt;annotation-xml&gt;</code>：XML アノテーション</li>
+      </ul>
+    </li>
+  </ul>
+  <h3 id="mathmlの表示サンプル">MathMLの表示サンプル</h3>
+  <p>以下、表示サンプルを記載する。</p>
+  <ul>
+    <li>
+      <p>黄金比</p>
+      <ul>
+        <li>表示<div style="margin-left: 1rem; font-size: 1.8em; margin-top: 0.25em;">
+            <math>
+              <mfrac>
+                <mrow>
+                  <mn>1</mn>
+                  <mo>+</mo>
+                  <msqrt>
+                    <mn>5</mn>
+                  </msqrt>
+                </mrow>
+                <mn>2</mn>
+              </mfrac>
+            </math>
+          </div><br>
+        </li>
+        <li>マークアップ
+          <pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">math</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">mfrac</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">mrow</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">mn</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">mn</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>+<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">msqrt</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">mn</span>&gt;</span>5<span class="hljs-tag">&lt;/<span class="hljs-name">mn</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">msqrt</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">mrow</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">mn</span>&gt;</span>2<span class="hljs-tag">&lt;/<span class="hljs-name">mn</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">mfrac</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">math</span>&gt;</span>
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>極限値</p>
+      <ul>
+        <li>表示<div style="margin-left: 1rem; font-size: 1.5em; margin-top: 0.25em;">
+            <math>
+              <munder>
+                <mi>lim</mi>
+                <mrow>
+                  <mi>x</mi>
+                  <mo>→</mo>
+                  <mn>0</mn>
+                </mrow>
+              </munder>
+              <mfrac>
+                <mrow>
+                  <mi>sin</mi>
+                  <mo>⁡</mo>
+                  <mi>x</mi>
+                </mrow>
+                <mi>x</mi>
+              </mfrac>
+              <mo>=</mo>
+              <mn>1</mn>
+            </math>
+          </div><br>
+        </li>
+        <li>マークアップ
+          <pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">math</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">munder</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>lim<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">mrow</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>x<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>→<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">mn</span>&gt;</span>0<span class="hljs-tag">&lt;/<span class="hljs-name">mn</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">mrow</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">munder</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">mfrac</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">mrow</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>sin<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>⁡<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>x<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">mrow</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>x<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">mfrac</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>=<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">mn</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">mn</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">math</span>&gt;</span>
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>逆行列</p>
+      <ul>
+        <li>表示<div style="margin-left: 1rem; font-size: 1.2em; margin-top: 0.25em;">
+            <math>
+              <mtable>
+                <mtr>
+                  <mtd>
+                    <mi>A</mi>
+                    <mo>=</mo>
+                    <mfenced>
+                      <mtable>
+                        <mtr>
+                          <mtd>
+                            <mi>a</mi>
+                          </mtd>
+                          <mtd>
+                            <mi>b</mi>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd>
+                            <mi>c</mi>
+                          </mtd>
+                          <mtd>
+                            <mi>d</mi>
+                          </mtd>
+                        </mtr>
+                      </mtable>
+                    </mfenced>
+                  </mtd>
+                </mtr>
+                <mtr>
+                  <mtd>
+                    <msup>
+                      <mi>A</mi>
+                      <mrow>
+                        <mo>-</mo>
+                        <mn>1</mn>
+                      </mrow>
+                    </msup>
+                    <mo>=</mo>
+                    <mfrac>
+                      <mn>1</mn>
+                      <mrow>
+                        <mi>a</mi>
+                        <mo></mo>
+                        <mi>d</mi>
+                        <mo>-</mo>
+                        <mi>b</mi>
+                        <mo></mo>
+                        <mi>c</mi>
+                      </mrow>
+                    </mfrac>
+                    <mo></mo>
+                    <mfenced>
+                      <mtable>
+                        <mtr>
+                          <mtd>
+                            <mi>d</mi>
+                          </mtd>
+                          <mtd>
+                            <mo>-</mo>
+                            <mi>b</mi>
+                          </mtd>
+                        </mtr>
+                        <mtr>
+                          <mtd>
+                            <mo>-</mo>
+                            <mi>c</mi>
+                          </mtd>
+                          <mtd>
+                            <mi>a</mi>
+                          </mtd>
+                        </mtr>
+                      </mtable>
+                    </mfenced>
+                  </mtd>
+                </mtr>
+              </mtable>
+            </math>
+          </div><br>
+        </li>
+        <li>マークアップ
+          <pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">math</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">mtable</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">mtr</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>A<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>=<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">mfenced</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">mtable</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mtr</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>a<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>b<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">mtr</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mtr</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>c<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>d<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">mtr</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">mtable</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">mfenced</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">mtr</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">mtr</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">msup</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>A<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">mrow</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>-<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mn</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">mn</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">mrow</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">msup</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>=<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">mfrac</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">mn</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">mn</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">mrow</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>a<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>d<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>-<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>b<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>c<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">mrow</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">mfrac</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">mfenced</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">mtable</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mtr</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>d<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>-<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>b<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">mtr</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mtr</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>-<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>c<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>a<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">mtr</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">mtable</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">mfenced</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">mtr</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">mtable</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">math</span>&gt;</span>
+</code></pre>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <h3 id="latexの表示サンプル">LaTeXの表示サンプル</h3>
+  <p>続いてLaTeX。<br>
+    以下、表示サンプルを記載する。</p>
+  <ul>
+    <li>
+      <p>二次方程式の解</p>
+      <ul>
+        <li>表示<div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
+            \[
+            x = \frac{-b\pm\sqrt{b^{2}-4ac}}{2a}
+            \]
+          </div>
+        </li>
+        <li>マークアップ
+          <pre><code class="language-bash">\[
+ x = \frac{-b\pm\sqrt{b^{2}-4ac}}{2a}
+\]
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>絶対値の定義</p>
+      <ul>
+        <li>表示<div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
+            \[
+            |x| = \begin{cases}
+            x & \text{\(x\ge0\) のとき} \\
+            -x & \text{\(x<0\) のとき} \end{cases} \] </div>
+        </li>
+        <li>マークアップ
+          <pre><code class="language-bash">\[
+ |x| = \begin{cases}
+   x &amp; \text{\(x\ge0\) のとき} \\
+   -x &amp; \text{\(x&lt;0\) のとき}
+ \end{cases}
+\end{cases}
+\]
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>(f(x))の導関数</p>
+      <ul>
+        <li>表示<div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
+            \[
+            f’(x) = \lim_{\Delta x \to 0} \frac{ f(x+\Delta x) - f(x) }{\Delta x}
+            \]
+          </div>
+        </li>
+        <li>マークアップ
+          <pre><code class="language-bash">\[
+ f’(x) = \lim_{\Delta x \to 0} \frac{ f(x+\Delta x) - f(x) }{\Delta x}
+\]
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>ガウス積分</p>
+      <ul>
+        <li>表示<div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
+            \[
+            f’(x) = \lim_{\Delta x \to 0} \frac{ f(x+\Delta x) - f(x) }{\Delta x}
+            \]
+          </div>
+        </li>
+        <li>マークアップ
+          <pre><code class="language-bash">\[
+ \int_{-\infty}^{\infty} e^{-x^{2}} \, dx = \sqrt{\pi}
+\]
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>n × n行列</p>
+      <ul>
+        <li>表示<div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
+            \[
+            A = \begin{pmatrix}
+            a_{11} & a_{12} & \ldots & a_{1n} \\
+            a_{21} & a_{22} & \ldots & a_{2n} \\
+            \vdots & \vdots & \ddots & \vdots \\
+            a_{n1} & a_{n2} & \ldots & a_{nn}
+            \end{pmatrix}
+            \]
+          </div>
+        </li>
+        <li>マークアップ
+          <pre><code class="language-bash">\[
+ A = \begin{pmatrix}
+ a_{11} &amp; a_{12} &amp; \ldots &amp; a_{1n} \\
+ a_{21} &amp; a_{22} &amp; \ldots &amp; a_{2n} \\
+ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+ a_{n1} &amp; a_{n2} &amp; \ldots &amp; a_{nn}
+ \end{pmatrix}
+\]
+</code></pre>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
