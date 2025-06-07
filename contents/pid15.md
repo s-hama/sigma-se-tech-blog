@@ -57,3 +57,46 @@ y =
 </div>
 
 となり上記\\(（C）\\)のように表すことができる。
+
+### 単純パーセプトロンを論理回路表現
+上記数式\\(（A）\\)の**入力信号が2つある単純パーセプトロン**をANDゲート、NANDゲート、ORゲートで表現し、Pythonの実装サンプルを用いてそれぞれ説明する。
+
+- **1. ANDゲート**の単純パーセプトロンサンプル<br>
+  - ANDゲート真理値表
+    <table class="table" style="width: 50%;">
+      <thead>
+        <tr>
+          <th scope="col">\(x_{1}\)</th>
+          <th scope="col">\(x_{2}\)</th>
+          <th scope="col">\(y\)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>1</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>1</td><td>0</td></tr>
+        <tr><td>1</td><td>1</td><td>1</td></tr>
+      </tbody>
+    </table>
+  - Pyhonサンプル<br>
+  上記のANDゲートを満たすパラメータとなるように \\(w_{1}, w_{2}, \theta\\) を \\((w_{1}, w_{2}, \theta) = (0.5, 0.5, 0.9)\\) と置いて、Pyhonで表現してみる。
+    ```bash
+    $ python
+    >>> def AND(x1, x2):
+    ...     w1, w2, theta = 0.5, 0.5, 0.9
+    ...     y = x1*w1 + x2*w2
+    ...     if y <= theta:
+    ...         return 0
+    ...     elif y > theta:
+    ...         return 1
+    ...
+    >>> AND(0, 0)    # ANDゲートのパラメータ x1 = 0, x2 = 0 ⇒ y = 0
+    0
+    >>> AND(1, 0)    # ANDゲートのパラメータ x1 = 1, x2 = 0 ⇒ y = 0
+    0
+    >>> AND(0, 1)    # ANDゲートのパラメータ x1 = 0, x2 = 1 ⇒ y = 0
+    0
+    >>> AND(1, 1)    # ANDゲートのパラメータ x1 = 1, x2 = 1 ⇒ y = 1
+    1
+    >>>
+    ```
