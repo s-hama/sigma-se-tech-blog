@@ -100,3 +100,43 @@ y =
     1
     >>>
     ```
+
+- **2. NANDゲート**の単純パーセプトロンサンプル
+  - NANDゲート真理値表
+    <table class="table" style="width: 50%;">
+      <thead>
+        <tr>
+          <th scope="col">\(x_{1}\)</th>
+          <th scope="col">\(x_{2}\)</th>
+          <th scope="col">\(y\)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>0</td><td>0</td><td>1</td></tr>
+        <tr><td>1</td><td>0</td><td>1</td></tr>
+        <tr><td>0</td><td>1</td><td>1</td></tr>
+        <tr><td>1</td><td>1</td><td>0</td></tr>
+      </tbody>
+    </table>
+  - Pyhonサンプル<br>
+  上記 **1.** と同様に上記のNANDゲートを満たすパラメータ \\(w_{1}, w_{2}, \theta\\) を \\((w_{1}, w_{2}, \theta) = (-0.5, -0.5, -0.9)\\) と置いて、Pyhonで表現したもの。
+    ```bash
+    $ python
+    >>> def NAND(x1, x2):
+    ...     w1, w2, theta = -0.5, -0.5, -0.9
+    ...     y = x1*w1 + x2*w2
+    ...     if y <= theta:
+    ...         return 0
+    ...     elif y > theta:
+    ...         return 1
+    ...
+    >>> NAND(0, 0)    # NANDゲートのパラメータ x1 = 0, x2 = 0 ⇒ y = 1
+    1
+    >>> NAND(1, 0)    # NANDゲートのパラメータ x1 = 1, x2 = 0 ⇒ y = 1
+    1
+    >>> NAND(0, 1)    # NANDゲートのパラメータ x1 = 0, x2 = 1 ⇒ y = 1
+    1
+    >>> NAND(1, 1)    # NANDゲートのパラメータ x1 = 1, x2 = 1 ⇒ y = 0
+    0
+    >>>
+    ```
