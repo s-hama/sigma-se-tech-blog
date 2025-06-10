@@ -187,3 +187,62 @@ y =
 
 上記 **1.** ～ **3.** のパラメータ決定（\\(w_{1}\\)（重み1）, \\(w_{2}\\)（重み2）, \\(\theta\\)（閾値））では、AND、NAND、ORの真理値表を満たすように人間が事前に考えて記載しているが、**機械学習ではこのパラメータ を決定する作業**をすべてコンピュータに任せている。<br>
 （人間がパーセプトロンの構造を考えてコンピュータに様々な学習データを与え、コンピュータは膨大な数のパラメータ決定を繰り返し、結果の正確さや妥当性を高めていく）
+
+### 単純パーセプトロンの一般的な表現
+上記\\(（A）\\)、\\(（B）\\)、\\(（C）\\)で不等式の右辺を閾値 \\(\theta\\)とし、**単純パーセプトロンの動作原理**で説明したが、可視性や利便上表現を少し変える。
+
+理屈は閾値 \\(\theta\\) と同じだが、\\(-\theta\\) をバイアス \\(b\\) と表現を変え、上記\\(（A）\\)を以下\\(（D）\\)のように表す。<br>
+※\\(（A）\\)から閾値 \\(\theta\\) を左辺に移項し、\\(-\theta\\) を \\(b\\) に置き換えている。<br>
+バイアスとは「ゲタをはく」という意味があり、入力がオール \\(0\\) の時、どれだけ値を上乗せするかという意味を持つ。
+<div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+\[
+y =
+{\small
+\begin{cases}
+0 \hspace{5pt}\text{if}\hspace{5pt}x_{1}w_{1} + x_{2}w_{2} \leqq \theta \\
+1 \hspace{5pt}\text{if}\hspace{5pt}x_{1}w_{1} + x_{2}w_{2} > \theta
+\end{cases}\hspace{5mm}･･･（A）
+}
+\]
+</div>
+
+閾値 \\(\theta\\) を左辺に移項し、\\(-\theta\\) を \\(b\\) に置換。
+<div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+\[
+{\small
+y =
+\begin{cases}
+0 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} \leqq 0 \\
+1 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} > 0
+\end{cases}\hspace{5mm}･･･（D）
+}
+\]
+</div>
+
+そして上記\\(（D）\\)の入力信号を \\(n\\) 個とし、
+<div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+\[
+{\small
+y =
+\begin{cases}
+0 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + … +  x_{n}w_{n}\leqq 0 \\
+1 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + … +  x_{n}w_{n} > 0
+\end{cases}\hspace{5mm}･･･（E）
+}
+\]
+</div>
+
+さらにまとめて
+
+<div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+\[
+{\small
+y =
+\begin{cases}
+0 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=0}^{n} x_{i}w_{i} + b \leqq 0 \\
+1 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=0}^{n} x_{i}w_{i} + b > 0
+\end{cases}\hspace{5mm}･･･（F）
+}
+\]
+</div>
+と表現できる。
