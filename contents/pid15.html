@@ -114,5 +114,64 @@
         </li>
       </ul>
     </li>
-  </ul>
-</div>
+    <li>
+      <p><strong>2. NANDゲート</strong>の単純パーセプトロンサンプル</p>
+      <ul>
+        <li>NANDゲート真理値表<table class="table" style="width: 50%;">
+            <thead>
+              <tr>
+                <th scope="col">\(x_{1}\)</th>
+                <th scope="col">\(x_{2}\)</th>
+                <th scope="col">\(y\)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+              </tr>
+            </tbody>
+          </table>
+        </li>
+        <li>Pyhonサンプル<br>
+          上記 <strong>1.</strong> と同様に上記のNANDゲートを満たすパラメータ \(w_{1}, w_{2}, \theta\) を \((w_{1}, w_{2}, \theta) = (-0.5,
+          -0.5, -0.9)\) と置いて、Pyhonで表現したもの。
+          <pre><code class="language-bash">$ python
+&gt;&gt;&gt; def NAND(x1, x2):
+...     w1, w2, theta = -0.5, -0.5, -0.9
+...     y = x1*w1 + x2*w2
+...     <span class="hljs-keyword">if</span> y &lt;= theta:
+...         <span class="hljs-built_in">return</span> 0
+...     <span class="hljs-keyword">elif</span> y &gt; theta:
+...         <span class="hljs-built_in">return</span> 1
+...
+&gt;&gt;&gt; NAND(0, 0)    <span class="hljs-comment"># NANDゲートのパラメータ x1 = 0, x2 = 0 ⇒ y = 1</span>
+1
+&gt;&gt;&gt; NAND(1, 0)    <span class="hljs-comment"># NANDゲートのパラメータ x1 = 1, x2 = 0 ⇒ y = 1</span>
+1
+&gt;&gt;&gt; NAND(0, 1)    <span class="hljs-comment"># NANDゲートのパラメータ x1 = 0, x2 = 1 ⇒ y = 1</span>
+1
+&gt;&gt;&gt; NAND(1, 1)    <span class="hljs-comment"># NANDゲートのパラメータ x1 = 1, x2 = 1 ⇒ y = 0</span>
+0
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+      </ul>
+    </li>
+ </div>
