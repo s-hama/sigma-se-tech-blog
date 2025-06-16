@@ -51,4 +51,68 @@
     \]
   </div>
   <p>となり上記\(（C）\)のように表すことができる。</p>
+  <h3 id="単純パーセプトロンを論理回路表現">単純パーセプトロンを論理回路表現</h3>
+  <p>上記数式\(（A）\)の<strong>入力信号が2つある単純パーセプトロン</strong>をANDゲート、NANDゲート、ORゲートで表現し、Pythonの実装サンプルを用いてそれぞれ説明する。</p>
+  <ul>
+    <li>
+      <p><strong>1. ANDゲート</strong>の単純パーセプトロンサンプル<br></p>
+      <ul>
+        <li>ANDゲート真理値表<table class="table" style="width: 50%;">
+            <thead>
+              <tr>
+                <th scope="col">\(x_{1}\)</th>
+                <th scope="col">\(x_{2}\)</th>
+                <th scope="col">\(y\)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+              </tr>
+            </tbody>
+          </table>
+        </li>
+        <li>Pyhonサンプル<br>
+          上記のANDゲートを満たすパラメータとなるように \(w_{1}, w_{2}, \theta\) を \((w_{1}, w_{2}, \theta) = (0.5, 0.5, 0.9)\)
+          と置いて、Pyhonで表現してみる。
+          <pre><code class="language-bash">$ python
+&gt;&gt;&gt; def AND(x1, x2):
+...     w1, w2, theta = 0.5, 0.5, 0.9
+...     y = x1*w1 + x2*w2
+...     <span class="hljs-keyword">if</span> y &lt;= theta:
+...         <span class="hljs-built_in">return</span> 0
+...     <span class="hljs-keyword">elif</span> y &gt; theta:
+...         <span class="hljs-built_in">return</span> 1
+...
+&gt;&gt;&gt; AND(0, 0)    <span class="hljs-comment"># ANDゲートのパラメータ x1 = 0, x2 = 0 ⇒ y = 0</span>
+0
+&gt;&gt;&gt; AND(1, 0)    <span class="hljs-comment"># ANDゲートのパラメータ x1 = 1, x2 = 0 ⇒ y = 0</span>
+0
+&gt;&gt;&gt; AND(0, 1)    <span class="hljs-comment"># ANDゲートのパラメータ x1 = 0, x2 = 1 ⇒ y = 0</span>
+0
+&gt;&gt;&gt; AND(1, 1)    <span class="hljs-comment"># ANDゲートのパラメータ x1 = 1, x2 = 1 ⇒ y = 1</span>
+1
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </div>
