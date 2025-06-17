@@ -174,4 +174,72 @@
         </li>
       </ul>
     </li>
- </div>
+    <li>
+      <p><strong>3. ORゲート</strong>の単純パーセプトロンサンプル</p>
+      <ul>
+        <li>ORゲート真理値表<table class="table" style="width: 50%;">
+            <thead>
+              <tr>
+                <th scope="col">\(x_{1}\)</th>
+                <th scope="col">\(x_{2}\)</th>
+                <th scope="col">\(y\)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+              </tr>
+            </tbody>
+          </table>
+        </li>
+        <li>Pyhonサンプル<br>
+          上記 <strong>1.</strong>、<strong>2.</strong> と同様に上記のORゲートを満たすパラメータ \(w_{1}, w_{2}, \theta\) を \((w_{1}, w_{2},
+          \theta) = (0.9, 0.9, -0.5)\) と置いて、Pyhonで表現したもの。
+          <pre><code class="language-bash">$ python
+&gt;&gt;&gt; def OR(x1, x2):
+...     w1, w2, theta = 0.9, 0.9, 0.5
+...     y = x1*w1 + x2*w2
+...     <span class="hljs-keyword">if</span> y &lt;= theta:
+...         <span class="hljs-built_in">return</span> 0
+...     <span class="hljs-keyword">elif</span> y &gt; theta:
+...         <span class="hljs-built_in">return</span> 1
+...
+&gt;&gt;&gt; OR(0, 0)    <span class="hljs-comment"># ORゲートのパラメータ x1 = 0, x2 = 0 ⇒ y = 0</span>
+0
+&gt;&gt;&gt; OR(1, 0)    <span class="hljs-comment"># ORゲートのパラメータ x1 = 1, x2 = 0 ⇒ y = 1</span>
+1
+&gt;&gt;&gt; OR(0, 1)    <span class="hljs-comment"># ORゲートのパラメータ x1 = 0, x2 = 1 ⇒ y = 1</span>
+1
+&gt;&gt;&gt; OR(1, 1)    <span class="hljs-comment"># ORゲートのパラメータ x1 = 1, x2 = 1 ⇒ y = 1</span>
+1
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <p>上記 <strong>1.</strong> ～ <strong>3.</strong> のPythonサンプルにて、関数 AND、NAND、OR を定義しているが、パラメータ \(w_{1}\)（重み1）,
+    \(w_{2}\)（重み2）, \(\theta\)（閾値）以外は、<strong>すべて同じロジック</strong>となっている。</p>
+  <p>この結果からも分かるように全く同じ構造のパーセプトロンでも、<strong>パラメータ次第でAND、NAND、ORの論理回路を表現する</strong>ことができる。</p>
+  <p>上記 <strong>1.</strong> ～ <strong>3.</strong> のパラメータ決定（\(w_{1}\)（重み1）, \(w_{2}\)（重み2）,
+    \(\theta\)（閾値））では、AND、NAND、ORの真理値表を満たすように人間が事前に考えて記載しているが、<strong>機械学習ではこのパラメータ
+      を決定する作業</strong>をすべてコンピュータに任せている。<br>
+    （人間がパーセプトロンの構造を考えてコンピュータに様々な学習データを与え、コンピュータは膨大な数のパラメータ決定を繰り返し、結果の正確さや妥当性を高めていく）</p>
+</div>
