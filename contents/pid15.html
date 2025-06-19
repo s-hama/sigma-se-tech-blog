@@ -295,4 +295,32 @@
     \]
   </div>
   と表現できる。
+  <h3 id="単純パーセプトロンの実装サンプル">単純パーセプトロンの実装サンプル</h3>
+  <p>上記\(（D）\)を<strong>ANDゲートで表現した</strong>実装サンプルを説明する。</p>
+  <p>もちろん、<strong>単純パーセプトロンの動作原理</strong>の解説と同様に\(（D）\)についても NANDゲート、ORゲートは、パラメータ\(w_{1}\)（重み1）,\(w_{2}\)（重み2）,
+    \(b\)（バイアス）を変えることで表現できる。</p>
+  <pre><code class="language-bash">$ python
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; def AND(x1, x2):
+...     x = np.array([x1, x2])    <span class="hljs-comment"># 入力</span>
+...     w = np.array([0.5, 0.5])    <span class="hljs-comment"># 重み</span>
+...     b = -0.7    <span class="hljs-comment"># バイアス</span>
+...     y = np.sum(w*x) + b    <span class="hljs-comment"># ･･･ （＊）</span>
+...     <span class="hljs-keyword">if</span> y &lt;= 0:
+...         <span class="hljs-built_in">return</span> 0
+...     <span class="hljs-keyword">else</span>:
+...         <span class="hljs-built_in">return</span> 1
+...
+&gt;&gt;&gt; AND(0, 0)
+0
+&gt;&gt;&gt; AND(1, 0)
+0
+&gt;&gt;&gt; AND(0, 1)
+0
+&gt;&gt;&gt; AND(1, 1)
+1
+&gt;&gt;&gt;
+</code></pre>
+  <p>互いの配列要素が同じNumPy配列の乗算は、<strong>要素同士が乗算される</strong>ため、要素が\(n\)個であっても、上記実装サンプル（＊）の一行で実行できる。</p>
+  <p>重み（\(w_{1}\), \(w_{2}\)）の程度にもよるが、基準となるニューロン発火のしやすさ（出力が1となる度合）は、<strong>バイアス</strong>（\(b\)）が要となる。</p>
 </div>
