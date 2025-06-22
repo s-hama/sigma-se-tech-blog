@@ -111,6 +111,5 @@ Python - Matplotlib : matplotlib.pyplotの使用方法
 より詳細な使用方法は、下記ユーザーズガイドを参考。<br>
 Matplotlibユーザーズガイド：https://matplotlib.org/users/index.html
 
-<br>
-【参考文献】<br>
-斎藤 康毅 (2018) 『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
+### 参考文献
+- 斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
