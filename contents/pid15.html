@@ -1,0 +1,330 @@
+<div class="post-body">
+  <h2 id="目的">目的</h2>
+  <p>この記事では、単純パーセプトロンの概念と簡単な実装サンプルについて記載する。</p>
+  <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
+  <h3 id="パーセプトロンとは">パーセプトロンとは</h3>
+  <p>アメリカの心理学者・計算機科学者であるフランク・ローゼンブラットが1943年に発表された最初の<strong>人工ニューロン</strong>（形式ニューロン）の考え方を基に1957年に考案したアルゴリズム。<br>
+    ※ 形式ニューロンとは、<strong>脳神経細胞</strong>（ニューロン）をモデル化したニューロンのことを指す。</p>
+  <p>パーセプトロンは、ニューラルネットワークやディープラーニングなどAI分野の礎になっており、これらを理解する上では必要不可欠な概念となる。</p>
+  <p>
+    パーセプトロンには、<strong>入力層</strong>と<strong>出力層</strong>のみの2層からなる<strong>単純パーセプトロン</strong>と多層からなる<strong>多層パーセプトロン</strong>があるが、ここでは<strong>単純パーセプトロン</strong>についての簡単な実装サンプルについて記載する。
+  </p>
+  <h3 id="単純パーセプトロンの動作原理">単純パーセプトロンの動作原理</h3>
+  <p><strong>入力信号が2つ</strong>である場合を例にすると、<strong>入力信号</strong> \(x_{1}\), \(x_{2}\) と<strong>重み</strong> \(w_{1}\),
+    \(w_{2}\) があった時、それぞれを乗算した<strong>合計</strong> \(x_{1}w_{1} + x_{2}w_{2}\) が<strong>閾値</strong> \(\theta\)
+    以下である場合、出力信号 \(y\) を \(0\) で出力し、閾値 \(\theta\) より大きければ、出力信号 \(y\) を\(1\) で出力する。<br>
+    ※ 閾値 \(\theta\) を超え、\(y = 1\) となるとき「ニューロンが発火する」と表現することもある。</p>
+  <p>これが単純パーセプトロンの動作原理で下記は、<strong>上記の説明を数式</strong>で表したもの。</p>
+  <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    {\small
+    y =
+    \begin{cases}
+    0 \hspace{5pt}\text{if}\hspace{5pt}x_{1}w_{1} + x_{2}w_{2} \leqq \theta\\
+    1 \hspace{5pt}\text{if}\hspace{5pt}x_{1}w_{1} + x_{2}w_{2} > \theta
+    \end{cases}\hspace{5mm}･･･（A）
+    }
+    \]
+  </div>
+  <p>そして、上記\(（A）\)の<strong>入力信号</strong>を \(n\) 個とし、一般化すると</p>
+  <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    y =
+    {\small
+    \begin{cases}
+    0 \hspace{5pt}\text{if}\hspace{5pt}x_{1}w_{1} + … + x_{n}w_{n}\leqq \theta\\
+    1 \hspace{5pt}\text{if}\hspace{5pt}x_{1}w_{1} + … + x_{n}w_{n} > \theta
+    \end{cases}\hspace{5mm}･･･（B）
+    }
+    \]
+  </div>
+  <p>さらにまとめて</p>
+  <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    {\small
+    y =
+    \begin{cases}
+    0 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=0}^{n} x_{i}w_{i} \leqq \theta\\
+    1 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=0}^{n} x_{i}w_{i} > \theta
+    \end{cases}\hspace{5mm}･･･（C）
+    }
+    \]
+  </div>
+  <p>となり上記\(（C）\)のように表すことができる。</p>
+  <h3 id="単純パーセプトロンを論理回路表現">単純パーセプトロンを論理回路表現</h3>
+  <p>上記数式\(（A）\)の<strong>入力信号が2つある単純パーセプトロン</strong>をANDゲート、NANDゲート、ORゲートで表現し、Pythonの実装サンプルを用いてそれぞれ説明する。</p>
+  <ul>
+    <li>
+      <p><strong>1. ANDゲート</strong>の単純パーセプトロンサンプル<br></p>
+      <ul>
+        <li>ANDゲート真理値表<table class="table" style="width: 50%;">
+            <thead>
+              <tr>
+                <th scope="col">\(x_{1}\)</th>
+                <th scope="col">\(x_{2}\)</th>
+                <th scope="col">\(y\)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+              </tr>
+            </tbody>
+          </table>
+        </li>
+        <li>Pyhonサンプル<br>
+          上記のANDゲートを満たすパラメータとなるように \(w_{1}, w_{2}, \theta\) を \((w_{1}, w_{2}, \theta) = (0.5, 0.5, 0.9)\)
+          と置いて、Pyhonで表現してみる。
+          <pre><code class="language-bash">$ python
+&gt;&gt;&gt; def AND(x1, x2):
+...     w1, w2, theta = 0.5, 0.5, 0.9
+...     y = x1*w1 + x2*w2
+...     <span class="hljs-keyword">if</span> y &lt;= theta:
+...         <span class="hljs-built_in">return</span> 0
+...     <span class="hljs-keyword">elif</span> y &gt; theta:
+...         <span class="hljs-built_in">return</span> 1
+...
+&gt;&gt;&gt; AND(0, 0)    <span class="hljs-comment"># ANDゲートのパラメータ x1 = 0, x2 = 0 ⇒ y = 0</span>
+0
+&gt;&gt;&gt; AND(1, 0)    <span class="hljs-comment"># ANDゲートのパラメータ x1 = 1, x2 = 0 ⇒ y = 0</span>
+0
+&gt;&gt;&gt; AND(0, 1)    <span class="hljs-comment"># ANDゲートのパラメータ x1 = 0, x2 = 1 ⇒ y = 0</span>
+0
+&gt;&gt;&gt; AND(1, 1)    <span class="hljs-comment"># ANDゲートのパラメータ x1 = 1, x2 = 1 ⇒ y = 1</span>
+1
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p><strong>2. NANDゲート</strong>の単純パーセプトロンサンプル</p>
+      <ul>
+        <li>NANDゲート真理値表<table class="table" style="width: 50%;">
+            <thead>
+              <tr>
+                <th scope="col">\(x_{1}\)</th>
+                <th scope="col">\(x_{2}\)</th>
+                <th scope="col">\(y\)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+              </tr>
+            </tbody>
+          </table>
+        </li>
+        <li>Pyhonサンプル<br>
+          上記 <strong>1.</strong> と同様に上記のNANDゲートを満たすパラメータ \(w_{1}, w_{2}, \theta\) を \((w_{1}, w_{2}, \theta) = (-0.5,
+          -0.5, -0.9)\) と置いて、Pyhonで表現したもの。
+          <pre><code class="language-bash">$ python
+&gt;&gt;&gt; def NAND(x1, x2):
+...     w1, w2, theta = -0.5, -0.5, -0.9
+...     y = x1*w1 + x2*w2
+...     <span class="hljs-keyword">if</span> y &lt;= theta:
+...         <span class="hljs-built_in">return</span> 0
+...     <span class="hljs-keyword">elif</span> y &gt; theta:
+...         <span class="hljs-built_in">return</span> 1
+...
+&gt;&gt;&gt; NAND(0, 0)    <span class="hljs-comment"># NANDゲートのパラメータ x1 = 0, x2 = 0 ⇒ y = 1</span>
+1
+&gt;&gt;&gt; NAND(1, 0)    <span class="hljs-comment"># NANDゲートのパラメータ x1 = 1, x2 = 0 ⇒ y = 1</span>
+1
+&gt;&gt;&gt; NAND(0, 1)    <span class="hljs-comment"># NANDゲートのパラメータ x1 = 0, x2 = 1 ⇒ y = 1</span>
+1
+&gt;&gt;&gt; NAND(1, 1)    <span class="hljs-comment"># NANDゲートのパラメータ x1 = 1, x2 = 1 ⇒ y = 0</span>
+0
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p><strong>3. ORゲート</strong>の単純パーセプトロンサンプル</p>
+      <ul>
+        <li>ORゲート真理値表<table class="table" style="width: 50%;">
+            <thead>
+              <tr>
+                <th scope="col">\(x_{1}\)</th>
+                <th scope="col">\(x_{2}\)</th>
+                <th scope="col">\(y\)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+              </tr>
+            </tbody>
+          </table>
+        </li>
+        <li>Pyhonサンプル<br>
+          上記 <strong>1.</strong>、<strong>2.</strong> と同様に上記のORゲートを満たすパラメータ \(w_{1}, w_{2}, \theta\) を \((w_{1}, w_{2},
+          \theta) = (0.9, 0.9, -0.5)\) と置いて、Pyhonで表現したもの。
+          <pre><code class="language-bash">$ python
+&gt;&gt;&gt; def OR(x1, x2):
+...     w1, w2, theta = 0.9, 0.9, 0.5
+...     y = x1*w1 + x2*w2
+...     <span class="hljs-keyword">if</span> y &lt;= theta:
+...         <span class="hljs-built_in">return</span> 0
+...     <span class="hljs-keyword">elif</span> y &gt; theta:
+...         <span class="hljs-built_in">return</span> 1
+...
+&gt;&gt;&gt; OR(0, 0)    <span class="hljs-comment"># ORゲートのパラメータ x1 = 0, x2 = 0 ⇒ y = 0</span>
+0
+&gt;&gt;&gt; OR(1, 0)    <span class="hljs-comment"># ORゲートのパラメータ x1 = 1, x2 = 0 ⇒ y = 1</span>
+1
+&gt;&gt;&gt; OR(0, 1)    <span class="hljs-comment"># ORゲートのパラメータ x1 = 0, x2 = 1 ⇒ y = 1</span>
+1
+&gt;&gt;&gt; OR(1, 1)    <span class="hljs-comment"># ORゲートのパラメータ x1 = 1, x2 = 1 ⇒ y = 1</span>
+1
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <p>上記 <strong>1.</strong> ～ <strong>3.</strong> のPythonサンプルにて、関数 AND、NAND、OR を定義しているが、パラメータ \(w_{1}\)（重み1）,
+    \(w_{2}\)（重み2）, \(\theta\)（閾値）以外は、<strong>すべて同じロジック</strong>となっている。</p>
+  <p>この結果からも分かるように全く同じ構造のパーセプトロンでも、<strong>パラメータ次第でAND、NAND、ORの論理回路を表現する</strong>ことができる。</p>
+  <p>上記 <strong>1.</strong> ～ <strong>3.</strong> のパラメータ決定（\(w_{1}\)（重み1）, \(w_{2}\)（重み2）,
+    \(\theta\)（閾値））では、AND、NAND、ORの真理値表を満たすように人間が事前に考えて記載しているが、<strong>機械学習ではこのパラメータ
+      を決定する作業</strong>をすべてコンピュータに任せている。<br>
+    （人間がパーセプトロンの構造を考えてコンピュータに様々な学習データを与え、コンピュータは膨大な数のパラメータ決定を繰り返し、結果の正確さや妥当性を高めていく）</p>
+  <h3 id="単純パーセプトロンの一般的な表現">単純パーセプトロンの一般的な表現</h3>
+  <p>上記\(（A）\)、\(（B）\)、\(（C）\)で不等式の右辺を閾値 \(\theta\)とし、<strong>単純パーセプトロンの動作原理</strong>で説明したが、可視性や利便上表現を少し変える。</p>
+  <p>理屈は閾値 \(\theta\) と同じだが、\(-\theta\) をバイアス \(b\) と表現を変え、上記\(（A）\)を以下\(（D）\)のように表す。<br>
+    ※\(（A）\)から閾値 \(\theta\) を左辺に移項し、\(-\theta\) を \(b\) に置き換えている。<br>
+    バイアスとは「ゲタをはく」という意味があり、入力がオール \(0\) の時、どれだけ値を上乗せするかという意味を持つ。</p>
+  <div style="display: flex; margin-left: 1rem; font-size: 1.4em; margin-top: -0.75em;">
+    \[
+    y =
+    {\small
+    \begin{cases}
+    0 \hspace{5pt}\text{if}\hspace{5pt}x_{1}w_{1} + x_{2}w_{2} \leqq \theta \\
+    1 \hspace{5pt}\text{if}\hspace{5pt}x_{1}w_{1} + x_{2}w_{2} > \theta
+    \end{cases}\hspace{5mm}･･･（A）
+    }
+    \]
+  </div>
+  <p>閾値 \(\theta\) を左辺に移項し、\(-\theta\) を \(b\) に置換。</p>
+  <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    {\small
+    y =
+    \begin{cases}
+    0 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} \leqq 0 \\
+    1 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} > 0
+    \end{cases}\hspace{5mm}･･･（D）
+    }
+    \]
+  </div>
+  <p>そして上記\(（D）\)の入力信号を \(n\) 個とし、</p>
+  <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    {\small
+    y =
+    \begin{cases}
+    0 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + … + x_{n}w_{n}\leqq 0 \\
+    1 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + … + x_{n}w_{n} > 0
+    \end{cases}\hspace{5mm}･･･（E）
+    }
+    \]
+  </div>
+  <p>さらにまとめて</p>
+  <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    {\small
+    y =
+    \begin{cases}
+    0 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=0}^{n} x_{i}w_{i} + b \leqq 0 \\
+    1 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=0}^{n} x_{i}w_{i} + b > 0
+    \end{cases}\hspace{5mm}･･･（F）
+    }
+    \]
+  </div>
+  と表現できる。
+  <h3 id="単純パーセプトロンの実装サンプル">単純パーセプトロンの実装サンプル</h3>
+  <p>上記\(（D）\)を<strong>ANDゲートで表現した</strong>実装サンプルを説明する。</p>
+  <p>もちろん、<strong>単純パーセプトロンの動作原理</strong>の解説と同様に\(（D）\)についても NANDゲート、ORゲートは、パラメータ\(w_{1}\)（重み1）,\(w_{2}\)（重み2）,
+    \(b\)（バイアス）を変えることで表現できる。</p>
+  <pre><code class="language-bash">$ python
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; def AND(x1, x2):
+...     x = np.array([x1, x2])    <span class="hljs-comment"># 入力</span>
+...     w = np.array([0.5, 0.5])    <span class="hljs-comment"># 重み</span>
+...     b = -0.7    <span class="hljs-comment"># バイアス</span>
+...     y = np.sum(w*x) + b    <span class="hljs-comment"># ･･･ （＊）</span>
+...     <span class="hljs-keyword">if</span> y &lt;= 0:
+...         <span class="hljs-built_in">return</span> 0
+...     <span class="hljs-keyword">else</span>:
+...         <span class="hljs-built_in">return</span> 1
+...
+&gt;&gt;&gt; AND(0, 0)
+0
+&gt;&gt;&gt; AND(1, 0)
+0
+&gt;&gt;&gt; AND(0, 1)
+0
+&gt;&gt;&gt; AND(1, 1)
+1
+&gt;&gt;&gt;
+</code></pre>
+  <p>互いの配列要素が同じNumPy配列の乗算は、<strong>要素同士が乗算される</strong>ため、要素が\(n\)個であっても、上記実装サンプル（＊）の一行で実行できる。</p>
+  <p>重み（\(w_{1}\), \(w_{2}\)）の程度にもよるが、基準となるニューロン発火のしやすさ（出力が1となる度合）は、<strong>バイアス</strong>（\(b\)）が要となる。</p>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
+  </ul>
+</div>
