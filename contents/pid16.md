@@ -92,3 +92,21 @@ Python - AI : 多層パーセプトロンの概念と実装サンプル
 下記グラフの <span style="color:blue">**△**</span> と <span style="color:red">**△**</span> で領域を分けているように、**非線形**でしか分けることができない。
 
   ![pid16_2](/static/tblog/img/pid16_2.png)
+
+### 多層パーセプトロンの概念
+上記で触れたの通り、単純パーセプトロン（入力層と出力層のみの2層）では、XORゲートを表現できないが**多層パーセプトロン**（入力層が多層）だとそれが**可能**になる。
+
+単純パーセプトロンの説明で触れてきた**AND、NAND、ORゲート**を下記 **1.** ～ **3.** で組み合わせれば、**4. XORゲートの真理値表**の通り、多層パーセプトロンを表現できる。
+
+- **1.** NANDゲート
+  <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+  \[
+  {\small
+  s_{1} =
+  \begin{cases}
+  0 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} \leqq 0 \\
+  1 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} > 0
+  \end{cases}
+  }
+  \]
+  </div>
