@@ -123,3 +123,16 @@ Python - AI : 多層パーセプトロンの概念と実装サンプル
   }
   \]
   </div>
+
+- **3.** ANDゲート
+  <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+  \[
+  {\small
+  y =
+  \begin{cases}
+  0 \hspace{5pt}\text{if}\hspace{5pt}b + s_{1}w_{1} + s_{2}w_{2} \leqq 0 \\
+  1 \hspace{5pt}\text{if}\hspace{5pt}b + s_{1}w_{1} + s_{2}w_{2} > 0
+  \end{cases}
+  }
+  \]
+  </div>
