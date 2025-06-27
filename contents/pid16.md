@@ -136,3 +136,29 @@ Python - AI : 多層パーセプトロンの概念と実装サンプル
   }
   \]
   </div>
+
+- **4.** XORゲートの真理値表<br>
+  上記 **1.** ～ **3.** の単純パーセプトロンを左辺 \\(s_{1}\\), \\(s_{2}\\), \\(y\\) で結合すると、下記 **XORゲートの真理値表**として表現することができる。
+  <table class="table" style="width: 100%; margin-bottom: 2em;">
+    <thead>
+      <tr>
+        <th scope="col">\(x_{1}\)</th>
+        <th scope="col">\(x_{2}\)</th>
+        <th scope="col">\(s_{1}\)</th>
+        <th scope="col">\(s_{2}\)</th>
+        <th scope="col">\(y\)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>入力値1</td><td>入力値2</td><td>1. の出力</td><td>2. の出力</td><td>3. の出力</td></tr>
+      <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+      <tr><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td></tr>
+      <tr><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+      <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+    </tbody>
+  </table>
+
+  - 補足
+    - 入力値1（\\(x_{1}\\)）、入力値2（\\(x_{2}\\)）のNANDゲートが **1. の出力**（\\(s_{1}\\)）となる。
+    - 入力値1（\\(x_{1}\\)）、入力値2（\\(x_{2}\\)）のORゲートが **2. の出力**（\\(s_{2}\\)）となる。
+    - 1.の出力（\\(s_{1}\\)）、2.の出力（\\(s_{2}\\)）のANDゲートが **3. の出力**（\\(y\\)）となる。
