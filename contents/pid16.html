@@ -119,4 +119,25 @@
       <p><img src="/static/tblog/img/pid16_2.png" alt="pid16_2"></p>
     </li>
   </ul>
+  <h3 id="多層パーセプトロンの概念">多層パーセプトロンの概念</h3>
+  <p>上記で触れたの通り、単純パーセプトロン（入力層と出力層のみの2層）では、XORゲートを表現できないが<strong>多層パーセプトロン</strong>（入力層が多層）だとそれが<strong>可能</strong>になる。
+  </p>
+  <p>単純パーセプトロンの説明で触れてきた<strong>AND、NAND、ORゲート</strong>を下記 <strong>1.</strong> ～ <strong>3.</strong> で組み合わせれば、<strong>4.
+      XORゲートの真理値表</strong>の通り、多層パーセプトロンを表現できる。</p>
+  <ul>
+    <li>
+      <p><strong>1.</strong> NANDゲート</p>
+      <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+        \[
+        {\small
+        s_{1} =
+        \begin{cases}
+        0 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} \leqq 0 \\
+        1 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} > 0
+        \end{cases}
+        }
+        \]
+      </div>
+    </li>
+  </ul>
 </div>
