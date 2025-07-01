@@ -1,4 +1,122 @@
 <div class="post-body">
   <h2 id="目的">目的</h2>
   <p>この記事では、多層パーセプトロンの概念と簡単な実装サンプルについて記載する。</p>
+  <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
+  <h3 id="単純パーセプトロンの限界">単純パーセプトロンの限界</h3>
+  <p><a class="link-secondary" href="https://sigma-se.com/detail/15/">前の記事</a> で単純パーセプトロンを<strong>AND、NAND、OR
+      の論理回路</strong>で実装できることを説明したが、<strong>排他的論理和</strong>と呼ばれる下記<strong>XORゲート</strong>になると、以下で示す<strong>非線形</strong>でしか
+    \(0\) と \(1\) の領域を分けられない。<br>
+    （単純パーセプトロンは、線形（直線）でしか \(0\) と \(1\) の領域を分けられない。）</p>
+  <ul>
+    <li>
+      <p><strong>XORゲート</strong>の真理値表</p>
+      <table class="table" style="width: 50%; margin-bottom: 2em;">
+        <thead>
+          <tr>
+            <th scope="col">\(x_{1}\)</th>
+            <th scope="col">\(x_{2}\)</th>
+            <th scope="col">\(y\)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>0</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>下記の入力値が2つあるパーセプトロン\(（A）\)に対して、ORゲートを満たす、パラメータ \((b, w_{1}, w_{2}) = (-0.5, 1.0, 1.0)\) を与えた場合を例にその根拠を説明する。</p>
+      <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+        \[
+        {\small
+        y =
+        \begin{cases}
+        0 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} \leqq 0 \\
+        1 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} > 0
+        \end{cases}\hspace{5mm}･･･（A）
+        }
+        \]
+      </div>
+      <p>パラメータ \((b, w_{1}, w_{2}) = (-0.5, 1.0, 1.0)\) を指定すると</p>
+      <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+        \[
+        {\small
+        y =
+        \begin{cases}
+        0 \hspace{5pt}\text{if}\hspace{5pt}-0.5 + x_{1} + x_{2} \leqq 0 \\
+        1 \hspace{5pt}\text{if}\hspace{5pt}-0.5 + x_{1} + x_{2} > 0
+        \end{cases}\hspace{5mm}･･･（B）
+        }
+        \]
+      </div>
+      <p>よって、上記\(（B）\)の境界線は</p>
+      <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+        \[
+        {\small
+        -0.5 + x_{1} + x_{2} = 0\hspace{5mm}･･･（C）
+        }
+        \]
+      </div>
+      <p>となるため、下記グラフが<strong>境界線</strong>となる。</p>
+      <p><img src="/static/tblog/img/pid16_1.png" alt="pid16_1"></p>
+      <p>そして、グラフ上の4つの点「<strong>△</strong>」は、下記ORゲートの真理値表で \(y = 0\) となる <span
+          style="color:red"><strong>△</strong></span> と \(y = 1\) となる <span style="color:blue"><strong>△</strong></span>
+        を表している。</p>
+      <table class="table" style="width: 50%; margin-bottom: 2em;">
+        <thead>
+          <tr>
+            <th scope="col">\(x_{1}\)</th>
+            <th scope="col">\(x_{2}\)</th>
+            <th scope="col">\(y\)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>0</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>このように\(（B）\) は、 \(0\) と \(1\) の領域を<strong>線形</strong>（直線）で分けることができる。
+        <br>
+        一方、冒頭で触れた<strong>XORゲート</strong>になると、上記<strong>XORゲートの真理値表</strong>の通り、\((x_{1}, x_{2}) = (1, 1)\) の時、\(y=0\)
+        となるため、
+        下記グラフの <span style="color:blue"><strong>△</strong></span> と <span style="color:red"><strong>△</strong></span>
+        で領域を分けているように、<strong>非線形</strong>でしか分けることができない。
+      </p>
+      <p><img src="/static/tblog/img/pid16_2.png" alt="pid16_2"></p>
+    </li>
+  </ul>
 </div>
