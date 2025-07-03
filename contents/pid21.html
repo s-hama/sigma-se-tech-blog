@@ -1,0 +1,255 @@
+<div class="post-body">
+  <h2 id="目的">目的</h2>
+  <p>この記事では、MNISTデータセットを使用した推論バッチ処理の実装サンプルについて説明する。</p>
+  <h2 id="実施内容">実施内容</h2>
+  <h3 id="mnistデータセットの概要">MNISTデータセットの概要</h3>
+  <p><strong>MNIST</strong>（Modified National Institute of Standards and Technology database）は、手書き数字（0～9）の画像データセットで、機械学習の入門や性能評価によく使用される。</p>
+  <ul>
+    <li>データセット構成<br>
+      <ul>
+        <li>訓練データ：60,000枚</li>
+        <li>テストデータ：10,000枚</li>
+        <li>画像サイズ：28×28ピクセル（グレースケール）</li>
+        <li>クラス数：10クラス（0～9の数字）</li>
+      </ul>
+    </li>
+  </ul>
+  <h3 id="環境準備">環境準備</h3>
+  <p>推論バッチ処理を実装するために必要なライブラリをインストールする。</p>
+  <ul>
+    <li>必要ライブラリのインストール
+      <pre><code class="language-bash">$ pip install tensorflow numpy matplotlib
+ Collecting tensorflow
+   Downloading tensorflow-2.13.0-cp39-cp39-linux_x86_64.whl (524.1MB)
+     100% |################################| 524.1MB 2.1MB/s
+ Collecting numpy&gt;=1.20.0
+   Downloading numpy-1.24.3-cp39-cp39-linux_x86_64.whl (17.3MB)
+     100% |################################| 17.3MB 8.5MB/s
+ Collecting matplotlib&gt;=3.5.0
+   Downloading matplotlib-3.7.1-cp39-cp39-linux_x86_64.whl (11.6MB)
+     100% |################################| 11.6MB 9.2MB/s
+ Successfully installed tensorflow-2.13.0 numpy-1.24.3 matplotlib-3.7.1
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="学習済みモデルの作成">学習済みモデルの作成</h3>
+  <p>まず、MNISTデータセットを使用してシンプルなニューラルネットワークモデルを作成し、学習を行う。</p>
+  <ul>
+    <li>モデル作成と学習のサンプルコード
+      <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; import tensorflow as tf
+ &gt;&gt;&gt; from tensorflow import keras
+ &gt;&gt;&gt; import numpy as np
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># MNISTデータセットの読み込み</span>
+ &gt;&gt;&gt; (x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># データの前処理（正規化）</span>
+ &gt;&gt;&gt; x_train = x_train.astype(<span class="hljs-string">'float32'</span>) / 255.0
+ &gt;&gt;&gt; x_test = x_test.astype(<span class="hljs-string">'float32'</span>) / 255.0
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># モデルの構築</span>
+ &gt;&gt;&gt; model = keras.Sequential([
+ ...     keras.layers.Flatten(input_shape=(28, 28)),
+ ...     keras.layers.Dense(128, activation=<span class="hljs-string">'relu'</span>),
+ ...     keras.layers.Dropout(0.2),
+ ...     keras.layers.Dense(10, activation=<span class="hljs-string">'softmax'</span>)
+ ... ])
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># モデルのコンパイル</span>
+ &gt;&gt;&gt; model.compile(optimizer=<span class="hljs-string">'adam'</span>,
+ ...               loss=<span class="hljs-string">'sparse_categorical_crossentropy'</span>,
+ ...               metrics=[<span class="hljs-string">'accuracy'</span>])
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># モデルの学習</span>
+ &gt;&gt;&gt; model.fit(x_train, y_train, epochs=5, validation_split=0.1)
+ Epoch 1/5
+ 1688/1688 [==============================] - 4s 2ms/step - loss: 0.2985 - accuracy: 0.9134 - val_loss: 0.1421 - val_accuracy: 0.9578
+ Epoch 2/5
+ 1688/1688 [==============================] - 3s 2ms/step - loss: 0.1442 - accuracy: 0.9571 - val_loss: 0.1087 - val_accuracy: 0.9678
+ Epoch 3/5
+ 1688/1688 [==============================] - 3s 2ms/step - loss: 0.1087 - accuracy: 0.9674 - val_loss: 0.0889 - val_accuracy: 0.9728
+ Epoch 4/5
+ 1688/1688 [==============================] - 3s 2ms/step - loss: 0.0889 - accuracy: 0.9728 - val_loss: 0.0789 - val_accuracy: 0.9758
+ Epoch 5/5
+ 1688/1688 [==============================] - 3s 2ms/step - loss: 0.0789 - accuracy: 0.9758 - val_loss: 0.0721 - val_accuracy: 0.9778
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># モデルの保存</span>
+ &gt;&gt;&gt; model.save(<span class="hljs-string">'mnist_model.h5'</span>)
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="バッチ推論の実装">バッチ推論の実装</h3>
+  <p>学習済みモデルを使用して、複数の画像に対してバッチ処理で推論を行う実装サンプル。</p>
+  <ul>
+    <li>バッチ推論の基本実装
+      <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; import tensorflow as tf
+ &gt;&gt;&gt; import numpy as np
+ &gt;&gt;&gt; import matplotlib.pyplot as plt
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># 学習済みモデルの読み込み</span>
+ &gt;&gt;&gt; model = tf.keras.models.load_model(<span class="hljs-string">'mnist_model.h5'</span>)
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># テストデータの読み込み</span>
+ &gt;&gt;&gt; (_, _), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
+ &gt;&gt;&gt; x_test = x_test.astype(<span class="hljs-string">'float32'</span>) / 255.0
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># バッチサイズの設定</span>
+ &gt;&gt;&gt; batch_size = 32
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># バッチ推論の実行</span>
+ &gt;&gt;&gt; def batch_predict(model, data, batch_size):
+ ...     predictions = []
+ ...     <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(0, len(data), batch_size):
+ ...         batch = data[i:i+batch_size]
+ ...         pred = model.predict(batch, verbose=0)
+ ...         predictions.extend(pred)
+ ...     <span class="hljs-built_in">return</span> np.array(predictions)
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># 推論実行</span>
+ &gt;&gt;&gt; predictions = batch_predict(model, x_test, batch_size)
+ &gt;&gt;&gt; predicted_classes = np.argmax(predictions, axis=1)
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># 精度の計算</span>
+ &gt;&gt;&gt; accuracy = np.mean(predicted_classes == y_test)
+ &gt;&gt;&gt; print(f<span class="hljs-string">"バッチ推論精度: {accuracy:.4f}"</span>)
+ バッチ推論精度: 0.9778
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="推論結果の可視化">推論結果の可視化</h3>
+  <p>バッチ推論の結果を可視化して確認する。</p>
+  <ul>
+    <li>推論結果の表示サンプル
+      <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; <span class="hljs-comment"># 推論結果の可視化</span>
+ &gt;&gt;&gt; def visualize_predictions(images, true_labels, predictions, num_samples=10):
+ ...     fig, axes = plt.subplots(2, 5, figsize=(12, 6))
+ ...     axes = axes.ravel()
+ ...     
+ ...     <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(num_samples):
+ ...         axes[i].imshow(images[i], cmap=<span class="hljs-string">'gray'</span>)
+ ...         predicted_label = np.argmax(predictions[i])
+ ...         true_label = true_labels[i]
+ ...         color = <span class="hljs-string">'green'</span> <span class="hljs-keyword">if</span> predicted_label == true_label <span class="hljs-keyword">else</span> <span class="hljs-string">'red'</span>
+ ...         axes[i].set_title(f<span class="hljs-string">'予測: {predicted_label}, 正解: {true_label}'</span>, color=color)
+ ...         axes[i].axis(<span class="hljs-string">'off'</span>)
+ ...     
+ ...     plt.tight_layout()
+ ...     plt.savefig(<span class="hljs-string">'/static/tblog/img/pid21_1.png'</span>)
+ ...     plt.show()
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># 最初の10枚の結果を可視化</span>
+ &gt;&gt;&gt; visualize_predictions(x_test[:10], y_test[:10], predictions[:10])
+</code></pre>
+      <ul>
+        <li>上記で出力した可視化結果「pid21_1.png」
+          <img src="/static/tblog/img/pid21_1.png" alt="pid21_1">
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <h3 id="高速化のための最適化">高速化のための最適化</h3>
+  <p>バッチ推論の処理速度を向上させるための最適化手法。</p>
+  <ul>
+    <li>TensorFlow Liteを使用した最適化
+      <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; <span class="hljs-comment"># TensorFlow Liteモデルへの変換</span>
+ &gt;&gt;&gt; converter = tf.lite.TFLiteConverter.from_keras_model(model)
+ &gt;&gt;&gt; converter.optimizations = [tf.lite.Optimize.DEFAULT]
+ &gt;&gt;&gt; tflite_model = converter.convert()
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># TensorFlow Liteモデルの保存</span>
+ &gt;&gt;&gt; with open(<span class="hljs-string">'mnist_model.tflite'</span>, <span class="hljs-string">'wb'</span>) as f:
+ ...     f.write(tflite_model)
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># TensorFlow Liteインタープリターの使用</span>
+ &gt;&gt;&gt; interpreter = tf.lite.Interpreter(model_content=tflite_model)
+ &gt;&gt;&gt; interpreter.allocate_tensors()
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># 入力・出力テンソルの取得</span>
+ &gt;&gt;&gt; input_details = interpreter.get_input_details()
+ &gt;&gt;&gt; output_details = interpreter.get_output_details()
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># TensorFlow Liteでの推論</span>
+ &gt;&gt;&gt; def tflite_predict(interpreter, input_data):
+ ...     interpreter.set_tensor(input_details[0][<span class="hljs-string">'index'</span>], input_data)
+ ...     interpreter.invoke()
+ ...     <span class="hljs-built_in">return</span> interpreter.get_tensor(output_details[0][<span class="hljs-string">'index'</span>])
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># 推論速度の比較</span>
+ &gt;&gt;&gt; import time
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># 通常のモデルでの推論時間</span>
+ &gt;&gt;&gt; start_time = time.time()
+ &gt;&gt;&gt; _ = model.predict(x_test[:1000], verbose=0)
+ &gt;&gt;&gt; normal_time = time.time() - start_time
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># TensorFlow Liteでの推論時間</span>
+ &gt;&gt;&gt; start_time = time.time()
+ &gt;&gt;&gt; <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(1000):
+ ...     _ = tflite_predict(interpreter, x_test[i:i+1])
+ &gt;&gt;&gt; tflite_time = time.time() - start_time
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; print(f<span class="hljs-string">"通常モデル推論時間: {normal_time:.4f}秒"</span>)
+ &gt;&gt;&gt; print(f<span class="hljs-string">"TensorFlow Lite推論時間: {tflite_time:.4f}秒"</span>)
+ &gt;&gt;&gt; print(f<span class="hljs-string">"速度向上率: {normal_time/tflite_time:.2f}倍"</span>)
+ 通常モデル推論時間: 0.8234秒
+ TensorFlow Lite推論時間: 0.4567秒
+ 速度向上率: 1.80倍
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="gpu-を使用した高速化">GPU を使用した高速化</h3>
+  <p>CUDA対応GPUを使用してバッチ推論を高速化する方法。</p>
+  <ul>
+    <li>GPU設定と推論の実装
+      <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; <span class="hljs-comment"># GPU使用可能性の確認</span>
+ &gt;&gt;&gt; print(<span class="hljs-string">"GPU使用可能:"</span>, tf.config.list_physical_devices(<span class="hljs-string">'GPU'</span>))
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># GPU メモリ制限の設定</span>
+ &gt;&gt;&gt; gpus = tf.config.experimental.list_physical_devices(<span class="hljs-string">'GPU'</span>)
+ &gt;&gt;&gt; <span class="hljs-keyword">if</span> gpus:
+ ...     try:
+ ...         <span class="hljs-keyword">for</span> gpu <span class="hljs-keyword">in</span> gpus:
+ ...             tf.config.experimental.set_memory_growth(gpu, True)
+ ...     except RuntimeError as e:
+ ...         print(e)
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># GPU上でのバッチ推論</span>
+ &gt;&gt;&gt; with tf.device(<span class="hljs-string">'/GPU:0'</span>):
+ ...     gpu_predictions = model.predict(x_test, batch_size=128, verbose=1)
+ 313/313 [==============================] - 2s 6ms/step
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># CPU vs GPU の推論時間比較</span>
+ &gt;&gt;&gt; import time
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># CPU での推論</span>
+ &gt;&gt;&gt; with tf.device(<span class="hljs-string">'/CPU:0'</span>):
+ ...     start_time = time.time()
+ ...     cpu_pred = model.predict(x_test[:1000], verbose=0)
+ ...     cpu_time = time.time() - start_time
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; <span class="hljs-comment"># GPU での推論</span>
+ &gt;&gt;&gt; with tf.device(<span class="hljs-string">'/GPU:0'</span>):
+ ...     start_time = time.time()
+ ...     gpu_pred = model.predict(x_test[:1000], verbose=0)
+ ...     gpu_time = time.time() - start_time
+ &gt;&gt;&gt; 
+ &gt;&gt;&gt; print(f<span class="hljs-string">"CPU推論時間: {cpu_time:.4f}秒"</span>)
+ &gt;&gt;&gt; print(f<span class="hljs-string">"GPU推論時間: {gpu_time:.4f}秒"</span>)
+ &gt;&gt;&gt; print(f<span class="hljs-string">"GPU速度向上率: {cpu_time/gpu_time:.2f}倍"</span>)
+ CPU推論時間: 0.8234秒
+ GPU推論時間: 0.2145秒
+ GPU速度向上率: 3.84倍
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>Yann LeCun, Corinna Cortes, Christopher J.C. Burges（1998）『THE MNIST DATABASE of handwritten digits』<a href="http://yann.lecun.com/exdb/mnist/" class="link-secondary">http://yann.lecun.com/exdb/mnist/</a></li>
+    <li>TensorFlow公式ドキュメント：<a href="https://www.tensorflow.org/" class="link-secondary">https://www.tensorflow.org/</a></li>
+  </ul>
+</div>
