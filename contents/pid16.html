@@ -167,5 +167,66 @@
         \]
       </div>
     </li>
+    <li>
+      <p><strong>4.</strong> XORゲートの真理値表<br>
+        上記 <strong>1.</strong> ～ <strong>3.</strong> の単純パーセプトロンを左辺 \(s_{1}\), \(s_{2}\), \(y\) で結合すると、下記
+        <strong>XORゲートの真理値表</strong>として表現することができる。</p>
+      <table class="table" style="width: 100%; margin-bottom: 2em;">
+        <thead>
+          <tr>
+            <th scope="col">\(x_{1}\)</th>
+            <th scope="col">\(x_{2}\)</th>
+            <th scope="col">\(s_{1}\)</th>
+            <th scope="col">\(s_{2}\)</th>
+            <th scope="col">\(y\)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>入力値1</td>
+            <td>入力値2</td>
+            <td>1. の出力</td>
+            <td>2. の出力</td>
+            <td>3. の出力</td>
+          </tr>
+          <tr>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>1</td>
+            <td>0</td>
+          </tr>
+        </tbody>
+      </table>
+      <ul>
+        <li>補足
+          <ul>
+            <li>入力値1（\(x_{1}\)）、入力値2（\(x_{2}\)）のNANDゲートが <strong>1. の出力</strong>（\(s_{1}\)）となる。</li>
+            <li>入力値1（\(x_{1}\)）、入力値2（\(x_{2}\)）のORゲートが <strong>2. の出力</strong>（\(s_{2}\)）となる。</li>
+            <li>1.の出力（\(s_{1}\)）、2.の出力（\(s_{2}\)）のANDゲートが <strong>3. の出力</strong>（\(y\)）となる。</li>
+        </li>
+      </ul>
+    </li>
   </ul>
 </div>
