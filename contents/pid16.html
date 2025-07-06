@@ -276,5 +276,29 @@
 </code></pre>
       <p>あとは、上記（＊1）～（＊3）それぞれの引数と戻り値を上記<strong>XORゲートの真理値表</strong>に合わせて実装するだけ。</p>
     </li>
+    <li>
+      <p>XORゲートの実装サンプル</p>
+      <pre><code class="language-bash">&gt;&gt;&gt; def XOR(x1, x2):    <span class="hljs-comment"># XORゲートの定義</span>
+...     s1 = NAND(x1, x2)
+...     s2 = OR(x1, x2)
+...     y = AND(s1, s2)
+...     <span class="hljs-built_in">return</span> y
+...
+&gt;&gt;&gt; XOR(0, 0)    <span class="hljs-comment"># （＊4） 0 を出力</span>
+0
+&gt;&gt;&gt; XOR(1, 0)    <span class="hljs-comment"># （＊5） 1 を出力</span>
+1
+&gt;&gt;&gt; XOR(0, 1)    <span class="hljs-comment"># （＊6） 1 を出力</span>
+1
+&gt;&gt;&gt; XOR(1, 1)    <span class="hljs-comment"># （＊7） 0 を出力</span>
+0
+</code></pre>
+      <p>上記（＊4）～（＊7）の通り、<strong>XORゲート</strong>が実装できた。<br>
+        （<strong>XORゲートの真理値表</strong>の \(y\) が出力できている。）</p>
+    </li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
   </ul>
 </div>
