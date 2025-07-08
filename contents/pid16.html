@@ -1,0 +1,304 @@
+<div class="post-body">
+  <h2 id="目的">目的</h2>
+  <p>この記事では、多層パーセプトロンの概念と簡単な実装サンプルについて記載する。</p>
+  <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
+  <h3 id="単純パーセプトロンの限界">単純パーセプトロンの限界</h3>
+  <p><a class="link-secondary" href="https://sigma-se.com/detail/15/">前の記事</a> で単純パーセプトロンを<strong>AND、NAND、OR
+      の論理回路</strong>で実装できることを説明したが、<strong>排他的論理和</strong>と呼ばれる下記<strong>XORゲート</strong>になると、以下で示す<strong>非線形</strong>でしか
+    \(0\) と \(1\) の領域を分けられない。<br>
+    （単純パーセプトロンは、線形（直線）でしか \(0\) と \(1\) の領域を分けられない。）</p>
+  <ul>
+    <li>
+      <p><strong>XORゲート</strong>の真理値表</p>
+      <table class="table" style="width: 50%; margin-bottom: 2em;">
+        <thead>
+          <tr>
+            <th scope="col">\(x_{1}\)</th>
+            <th scope="col">\(x_{2}\)</th>
+            <th scope="col">\(y\)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>0</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>下記の入力値が2つあるパーセプトロン\(（A）\)に対して、ORゲートを満たす、パラメータ \((b, w_{1}, w_{2}) = (-0.5, 1.0, 1.0)\) を与えた場合を例にその根拠を説明する。</p>
+      <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+        \[
+        {\small
+        y =
+        \begin{cases}
+        0 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} \leqq 0 \\
+        1 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} > 0
+        \end{cases}\hspace{5mm}･･･（A）
+        }
+        \]
+      </div>
+      <p>パラメータ \((b, w_{1}, w_{2}) = (-0.5, 1.0, 1.0)\) を指定すると</p>
+      <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+        \[
+        {\small
+        y =
+        \begin{cases}
+        0 \hspace{5pt}\text{if}\hspace{5pt}-0.5 + x_{1} + x_{2} \leqq 0 \\
+        1 \hspace{5pt}\text{if}\hspace{5pt}-0.5 + x_{1} + x_{2} > 0
+        \end{cases}\hspace{5mm}･･･（B）
+        }
+        \]
+      </div>
+      <p>よって、上記\(（B）\)の境界線は</p>
+      <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+        \[
+        {\small
+        -0.5 + x_{1} + x_{2} = 0\hspace{5mm}･･･（C）
+        }
+        \]
+      </div>
+      <p>となるため、下記グラフが<strong>境界線</strong>となる。</p>
+      <p><img src="/static/tblog/img/pid16_1.png" alt="pid16_1"></p>
+      <p>そして、グラフ上の4つの点「<strong>△</strong>」は、下記ORゲートの真理値表で \(y = 0\) となる <span
+          style="color:red"><strong>△</strong></span> と \(y = 1\) となる <span style="color:blue"><strong>△</strong></span>
+        を表している。</p>
+      <table class="table" style="width: 50%; margin-bottom: 2em;">
+        <thead>
+          <tr>
+            <th scope="col">\(x_{1}\)</th>
+            <th scope="col">\(x_{2}\)</th>
+            <th scope="col">\(y\)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>0</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>このように\(（B）\) は、 \(0\) と \(1\) の領域を<strong>線形</strong>（直線）で分けることができる。
+        <br>
+        一方、冒頭で触れた<strong>XORゲート</strong>になると、上記<strong>XORゲートの真理値表</strong>の通り、\((x_{1}, x_{2}) = (1, 1)\) の時、\(y=0\)
+        となるため、
+        下記グラフの <span style="color:blue"><strong>△</strong></span> と <span style="color:red"><strong>△</strong></span>
+        で領域を分けているように、<strong>非線形</strong>でしか分けることができない。
+      </p>
+      <p><img src="/static/tblog/img/pid16_2.png" alt="pid16_2"></p>
+    </li>
+  </ul>
+  <h3 id="多層パーセプトロンの概念">多層パーセプトロンの概念</h3>
+  <p>上記で触れたの通り、単純パーセプトロン（入力層と出力層のみの2層）では、XORゲートを表現できないが<strong>多層パーセプトロン</strong>（入力層が多層）だとそれが<strong>可能</strong>になる。
+  </p>
+  <p>単純パーセプトロンの説明で触れてきた<strong>AND、NAND、ORゲート</strong>を下記 <strong>1.</strong> ～ <strong>3.</strong> で組み合わせれば、<strong>4.
+      XORゲートの真理値表</strong>の通り、多層パーセプトロンを表現できる。</p>
+  <ul>
+    <li>
+      <p><strong>1.</strong> NANDゲート</p>
+      <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+        \[
+        {\small
+        s_{1} =
+        \begin{cases}
+        0 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} \leqq 0 \\
+        1 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} > 0
+        \end{cases}
+        }
+        \]
+      </div>
+    </li>
+    <li>
+      <p><strong>2.</strong> ORゲート</p>
+      <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+        \[
+        {\small
+        s_{2} =
+        \begin{cases}
+        0 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} \leqq 0 \\
+        1 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} > 0
+        \end{cases}
+        }
+        \]
+      </div>
+    </li>
+    <li>
+      <p><strong>3.</strong> ANDゲート</p>
+      <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+        \[
+        {\small
+        y =
+        \begin{cases}
+        0 \hspace{5pt}\text{if}\hspace{5pt}b + s_{1}w_{1} + s_{2}w_{2} \leqq 0 \\
+        1 \hspace{5pt}\text{if}\hspace{5pt}b + s_{1}w_{1} + s_{2}w_{2} > 0
+        \end{cases}
+        }
+        \]
+      </div>
+    </li>
+    <li>
+      <p><strong>4.</strong> XORゲートの真理値表<br>
+        上記 <strong>1.</strong> ～ <strong>3.</strong> の単純パーセプトロンを左辺 \(s_{1}\), \(s_{2}\), \(y\) で結合すると、下記
+        <strong>XORゲートの真理値表</strong>として表現することができる。</p>
+      <table class="table" style="width: 100%; margin-bottom: 2em;">
+        <thead>
+          <tr>
+            <th scope="col">\(x_{1}\)</th>
+            <th scope="col">\(x_{2}\)</th>
+            <th scope="col">\(s_{1}\)</th>
+            <th scope="col">\(s_{2}\)</th>
+            <th scope="col">\(y\)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>入力値1</td>
+            <td>入力値2</td>
+            <td>1. の出力</td>
+            <td>2. の出力</td>
+            <td>3. の出力</td>
+          </tr>
+          <tr>
+            <td>0</td>
+            <td>0</td>
+            <td>1</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>0</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>1</td>
+            <td>0</td>
+            <td>1</td>
+            <td>0</td>
+          </tr>
+        </tbody>
+      </table>
+      <ul>
+        <li>補足
+          <ul>
+            <li>入力値1（\(x_{1}\)）、入力値2（\(x_{2}\)）のNANDゲートが <strong>1. の出力</strong>（\(s_{1}\)）となる。</li>
+            <li>入力値1（\(x_{1}\)）、入力値2（\(x_{2}\)）のORゲートが <strong>2. の出力</strong>（\(s_{2}\)）となる。</li>
+            <li>1.の出力（\(s_{1}\)）、2.の出力（\(s_{2}\)）のANDゲートが <strong>3. の出力</strong>（\(y\)）となる。</li>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  </li>
+  </ul>
+  <h3 id="多層パーセプトロンの実装サンプル">多層パーセプトロンの実装サンプル</h3>
+  <p>最後に実装サンプル。</p>
+  <ul>
+    <li>
+      <p>AND、NAND、ORゲートを定義<br>
+        <a class="link-secondary"
+          href="https://sigma-se.com/detail/15/#:~:text=%E3%81%A8%E8%A1%A8%E7%8F%BE%E3%81%A7%E3%81%8D%E3%82%8B%E3%80%82-,%E5%8D%98%E7%B4%94%E3%83%91%E3%83%BC%E3%82%BB%E3%83%97%E3%83%88%E3%83%AD%E3%83%B3%E3%81%AE%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB">前の記事
+          &gt; 単純パーセプトロンの実装サンプル</a> で触れている<strong>ANDゲート</strong>に加え、パラメータ \(w_{1}\)（重み1）, \(w_{2}\)（重み2）,
+        \(b\)（バイアス）を<strong>NANDゲート</strong>、<strong>ORゲート</strong>の真理値表を満たすように変え、以下のように定義する。
+      </p>
+      <pre><code class="language-bash">$ python
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; def AND(x1, x2):    <span class="hljs-comment"># （＊1）ANDゲートの定義</span>
+...     x = np.array([x1, x2])    <span class="hljs-comment"># 入力</span>
+...     w = np.array([0.5, 0.5])    <span class="hljs-comment"># 重み</span>
+...     b = -0.7    <span class="hljs-comment"># バイアス</span>
+...     tmp = np.sum(w*x) + b
+...     <span class="hljs-keyword">if</span> tmp &lt;= 0:
+...         <span class="hljs-built_in">return</span> 0
+...     <span class="hljs-keyword">else</span>:
+...         <span class="hljs-built_in">return</span> 1
+...
+&gt;&gt;&gt; def NAND(x1, x2):    <span class="hljs-comment"># （＊2）NANDゲートの定義</span>
+...     x = np.array([x1, x2])    <span class="hljs-comment"># 入力</span>
+...     w = np.array([-0.5, -0.5])    <span class="hljs-comment"># 重み</span>
+...     b = 0.7    <span class="hljs-comment"># バイアス</span>
+...     tmp = np.sum(w*x) + b
+...     <span class="hljs-keyword">if</span> tmp &lt;= 0:
+...         <span class="hljs-built_in">return</span> 0
+...     <span class="hljs-keyword">else</span>:
+...         <span class="hljs-built_in">return</span> 1
+...
+&gt;&gt;&gt; def OR(x1, x2):    <span class="hljs-comment"># （＊3）ORゲートの定義</span>
+...     x = np.array([x1, x2])    <span class="hljs-comment"># 入力</span>
+...     w = np.array([0.5, 0.5])    <span class="hljs-comment"># 重み</span>
+...     b = -0.2    <span class="hljs-comment"># バイアス</span>
+...     tmp = np.sum(w*x) + b
+...     <span class="hljs-keyword">if</span> tmp &lt;= 0:
+...         <span class="hljs-built_in">return</span> 0
+...     <span class="hljs-keyword">else</span>:
+...         <span class="hljs-built_in">return</span> 1
+...
+</code></pre>
+      <p>あとは、上記（＊1）～（＊3）それぞれの引数と戻り値を上記<strong>XORゲートの真理値表</strong>に合わせて実装するだけ。</p>
+    </li>
+    <li>
+      <p>XORゲートの実装サンプル</p>
+      <pre><code class="language-bash">&gt;&gt;&gt; def XOR(x1, x2):    <span class="hljs-comment"># XORゲートの定義</span>
+...     s1 = NAND(x1, x2)
+...     s2 = OR(x1, x2)
+...     y = AND(s1, s2)
+...     <span class="hljs-built_in">return</span> y
+...
+&gt;&gt;&gt; XOR(0, 0)    <span class="hljs-comment"># （＊4） 0 を出力</span>
+0
+&gt;&gt;&gt; XOR(1, 0)    <span class="hljs-comment"># （＊5） 1 を出力</span>
+1
+&gt;&gt;&gt; XOR(0, 1)    <span class="hljs-comment"># （＊6） 1 を出力</span>
+1
+&gt;&gt;&gt; XOR(1, 1)    <span class="hljs-comment"># （＊7） 0 を出力</span>
+0
+</code></pre>
+      <p>上記（＊4）～（＊7）の通り、<strong>XORゲート</strong>が実装できた。<br>
+        （<strong>XORゲートの真理値表</strong>の \(y\) が出力できている。）</p>
+    </li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
+  </ul>
+</div>
