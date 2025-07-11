@@ -99,3 +99,70 @@ h(x) = \frac{1}{1+e^{-x}}\hspace{5mm}･･･（E）
 ※ \\(e=2.718281828…\\) は、無理数で自然対数の低を表し、ネイピア数という。
 
 以降、**ステップ関数とシグモイド関数の実装サンプル**と**その違い**について記載する。
+
+### ステップ関数の実装サンプル
+下記（＊1）は、\\(x>0\\) を基準にそれが真であれば、\\(1\\)、そうでなければ \\(0\\) を出力するステップ関数の実装サンプル。
+
+```bash
+$ python
+ >>> import numpy as np
+ >>> def step_func(x):    # （＊1） ステップ関数の定義
+ ...     y = x > 0
+ ...     return y.astype(np.int)
+ ...
+```
+
+上記引数の \\(x\\) を（＊2）のNumPy配列で定義する。
+```bash
+$ python
+ >>> x = np.array([-0.5, 0.5, 1.5])    # （＊2） NumPy配列の定義
+ >>> x    # （＊3）NumPy配列の確認
+ array([-0.5,  0.5,  1.5])
+```
+
+ここで（＊4）の通り、\\(x\\) を \\(x > 0\\) とするとbool値のNumPy配列が返さる。
+```bash
+$ python
+ >>> x > 0    # （＊4） NumPy配列をbool値で表示
+ array([False,  True,  True])
+```
+
+さらに（＊5）でこの \\(x > 0\\) をastypeでint変換している。
+```bash
+$ python
+ >>> (x > 0).astype(np.int)    # （＊5） NumPy配列のbool値を 0：false、1：true で表示
+ array([0, 1, 1])
+ >>>
+```
+
+よって、（＊2）の引数 \\(x = [-0.5, 0.5, 1.5]\\) が戻り値となる（＊5）のNumPy配列が \\(x = [0, 1, 1]\\) で出力されている。<br>
+さらに、（＊1）を numpy.array の表現に書き換えると（＊6）のように \\(1\\) STEPで表現することができる。
+```bash
+$ python
+ >>> import numpy as np
+ >>> import matplotlib.pylab as plt
+ >>> def step_func(x):    # （＊6） ステップ関数の定義
+ ...    return np.array(x > 0, dtype=np.int)
+ ...
+```
+
+上記（＊6）のグラフ出力
+```bash
+ >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5 まで、描画制度を 0.1 刻みに設定
+ >>> y = step_func(x)    # （＊6） ステップ関数をコール
+ >>> plt.title("step_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
+ Text(0.5, 1.0, 'step_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y')
+ >>> plt.ylim(-0.1, 1.1)    # y軸の範囲を設定
+ (-0.1, 1.1)
+ >>> plt.xlabel("x")    # x軸のラベルを設定
+ Text(0.5, 0, 'x')
+ >>> plt.ylabel("y")    # y軸のラベルを設定
+ Text(0, 0.5, 'y')
+ >>> plt.plot(x, y)    # グラフの描画
+ [&lt;matplotlib.lines.Line2D object at 0x7f7e0a48e2b0&gt;]
+ >>> plt.savefig('/var/www/vops/ops/macuos/static/macuos/img/b_id40_2.png')    # グラフの出力
+```
+
+![pid17_2](/static/tblog/img/pid17_2.png)
+
+上記グラフの通り \\(x = 0\\) を境に \\(y\\) が \\(0\\) から \\(1\\) に切り替わっており、階段状になっていることからステップ関数は、階段関数とも呼ばれている。
