@@ -166,3 +166,41 @@ $ python
 ![pid17_2](/static/tblog/img/pid17_2.png)
 
 上記グラフの通り \\(x = 0\\) を境に \\(y\\) が \\(0\\) から \\(1\\) に切り替わっており、階段状になっていることからステップ関数は、階段関数とも呼ばれている。
+
+### シグモイド関数の実装サンプル
+上記、**シグモイド関数**\\(（E）\\)の \\(e^{-x}\\) を**NumPy**で書き換えるだけで良く、下記 \\(1\\) STEPのみ。
+```bash
+$ python
+ >>> import numpy as np
+ >>> import matplotlib.pylab as plt
+ >>> def sigmoid_func(x):    # （＊7） シグモイド関数の定義
+ ...     return 1 / (1 + np.exp(-x))    # 自然対数の低 (e) の -x 乗
+ ...
+```
+
+引数に関しては、ステップ関数と同様にNumPy配列を渡すとNumPy配列で出力される。
+```bash
+ >>> x = np.array([-3.0, -2.0, -1.0, 0, 1.0, 2.0, 3.0])
+ >>> sigmoid_func(x)
+ array([0.04742587, 0.11920292, 0.26894142, 0.5, 0.73105858, 0.88079708, 0.95257413])
+ >>>
+```
+
+上記（＊7）のグラフ出力
+```bash
+ >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5 まで、描画制度を 0.1 刻みに設定
+ >>> y = sigmoid_func(x)    # （＊7） シグモイド関数をコール
+ >>> plt.title("sigmoid_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
+ Text(0.5, 1.0, 'sigmoid_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y')
+ >>> plt.ylim(-0.1, 1.1)    # y軸の範囲を設定
+ (-0.1, 1.1)
+ >>> plt.xlabel("x")    # x軸のラベルを設定
+ Text(0.5, 0, 'x')
+ >>> plt.ylabel("y")    # y軸のラベルを設定
+ Text(0, 0.5, 'y')
+ >>> plt.plot(x, y)
+ [&lt;matplotlib.lines.Line2D object at 0x7ff62b64fcf8&gt;]
+ >>> plt.savefig('/var/www/vops/ops/macuos/static/macuos/img/b_id40_3.png')    # グラフの出力
+```
+
+![pid17_3](/static/tblog/img/pid17_3.png)
