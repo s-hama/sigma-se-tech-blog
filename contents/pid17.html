@@ -66,4 +66,25 @@
   <p>従ってパーセプトロンは、活性化関数に分類される<strong>ステップ関数</strong>を用いて表現されてる。</p>
   <p>この活性化関数は、<strong>ステップ関数</strong>ではなく、次項で触れる<strong>シグモイト関数</strong>を用いることで、自動学習が可能なニューラルネットワークを表現できるようになる。</p>
   <p>※ 単純/多層パーセプトロンでは、意図した論理回路が実現するように適切な \(w\)（重み）を人力で判断しなければならなかったが、ニューラルネットワークでは、その判断を自動学習できるようになる。</p>
+  <h3 id="ニューラルネットワークと活性化関数シグモイド関数">ニューラルネットワークと活性化関数（シグモイド関数）</h3>
+  <p>ニューラルネットワークで使用される活性化関数の一つに<strong>シグモイド関数</strong>（sigmoid function）がある。</p>
+  <p>前項で触れたパーセプトロンもニューラルネットワークも入力値を関数で変換し出力してるが、
+    その違いは、<strong>ステップ関数</strong>であるか<strong>シグモイド関数</strong>であるかだけの違い。</p>
+  <p>ここで深く掘り下げないが一般的なシグモイド関数は、下記\(（D）\)で表される実関数を指している。</p>
+  <div
+    style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    h(x) = \frac{1}{1+e^{-ax}}\hspace{5mm}･･･（D）
+    \]
+  </div>
+  <p>\(a\) は、ゲイン（増幅値）と呼ばれ、\(a = 1\)
+    とした下記\(（E）\)は、<strong>神経細胞が持つ性質をモデル化したもの</strong>として用いられており、<strong>標準シグモイド関数</strong>という。</p>
+  <div
+    style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    h(x) = \frac{1}{1+e^{-x}}\hspace{5mm}･･･（E）
+    \]
+  </div>
+  <p>※ \(e=2.718281828…\) は、無理数で自然対数の低を表し、ネイピア数という。</p>
+  <p>以降、<strong>ステップ関数とシグモイド関数の実装サンプル</strong>と<strong>その違い</strong>について記載する。</p>
 </div>
