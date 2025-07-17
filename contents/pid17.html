@@ -87,4 +87,56 @@
   </div>
   <p>※ \(e=2.718281828…\) は、無理数で自然対数の低を表し、ネイピア数という。</p>
   <p>以降、<strong>ステップ関数とシグモイド関数の実装サンプル</strong>と<strong>その違い</strong>について記載する。</p>
+  <h3 id="ステップ関数の実装サンプル">ステップ関数の実装サンプル</h3>
+  <p>下記（＊1）は、\(x&gt;0\) を基準にそれが真であれば、\(1\)、そうでなければ \(0\) を出力するステップ関数の実装サンプル。</p>
+  <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; import numpy as np
+ &gt;&gt;&gt; def step_func(x):    <span class="hljs-comment"># （＊1） ステップ関数の定義</span>
+ ...     y = x &gt; 0
+ ...     <span class="hljs-built_in">return</span> y.astype(np.int)
+ ...
+</code></pre>
+  <p>上記引数の \(x\) を（＊2）のNumPy配列で定義する。</p>
+  <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; x = np.array([-0.5, 0.5, 1.5])    <span class="hljs-comment"># （＊2） NumPy配列の定義</span>
+ &gt;&gt;&gt; x    <span class="hljs-comment"># （＊3）NumPy配列の確認</span>
+ array([-0.5,  0.5,  1.5])
+</code></pre>
+  <p>ここで（＊4）の通り、\(x\) を \(x &gt; 0\) とするとbool値のNumPy配列が返さる。</p>
+  <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; x &gt; 0    <span class="hljs-comment"># （＊4） NumPy配列をbool値で表示</span>
+ array([False,  True,  True])
+</code></pre>
+  <p>さらに（＊5）でこの \(x &gt; 0\) をastypeでint変換している。</p>
+  <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; (x &gt; 0).astype(np.int)    <span class="hljs-comment"># （＊5） NumPy配列のbool値を 0：false、1：true で表示</span>
+ array([0, 1, 1])
+ &gt;&gt;&gt;
+</code></pre>
+  <p>よって、（＊2）の引数 \(x = [-0.5, 0.5, 1.5]\) が戻り値となる（＊5）のNumPy配列が \(x = [0, 1, 1]\) で出力されている。<br>
+    さらに、（＊1）を numpy.array の表現に書き換えると（＊6）のように \(1\) STEPで表現することができる。</p>
+  <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; import numpy as np
+ &gt;&gt;&gt; import matplotlib.pylab as plt
+ &gt;&gt;&gt; def step_func(x):    <span class="hljs-comment"># （＊6） ステップ関数の定義</span>
+ ...    <span class="hljs-built_in">return</span> np.array(x &gt; 0, dtype=np.int)
+ ...
+</code></pre>
+  <p>上記（＊6）のグラフ出力</p>
+  <pre><code class="language-bash"> &gt;&gt;&gt; x = np.arange(-5.0, 5.0, 0.1)    <span class="hljs-comment"># 区間を-5～5 まで、描画制度を 0.1 刻みに設定</span>
+ &gt;&gt;&gt; y = step_func(x)    <span class="hljs-comment"># （＊6） ステップ関数をコール</span>
+ &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;step_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
+ Text(0.5, 1.0, <span class="hljs-string">&#x27;step_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&#x27;</span>)
+ &gt;&gt;&gt; plt.ylim(-0.1, 1.1)    <span class="hljs-comment"># y軸の範囲を設定</span>
+ (-0.1, 1.1)
+ &gt;&gt;&gt; plt.xlabel(<span class="hljs-string">&quot;x&quot;</span>)    <span class="hljs-comment"># x軸のラベルを設定</span>
+ Text(0.5, 0, <span class="hljs-string">&#x27;x&#x27;</span>)
+ &gt;&gt;&gt; plt.ylabel(<span class="hljs-string">&quot;y&quot;</span>)    <span class="hljs-comment"># y軸のラベルを設定</span>
+ Text(0, 0.5, <span class="hljs-string">&#x27;y&#x27;</span>)
+ &gt;&gt;&gt; plt.plot(x, y)    <span class="hljs-comment"># グラフの描画</span>
+ [&amp;lt;matplotlib.lines.Line2D object at 0x7f7e0a48e2b0&amp;gt;]
+ &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;/var/www/vops/ops/macuos/static/macuos/img/b_id40_2.png&#x27;</span>)    <span class="hljs-comment"># グラフの出力</span>
+</code></pre>
+  <p><img src="/static/tblog/img/pid17_2.png" alt="pid17_2"></p>
+  <p>上記グラフの通り \(x = 0\) を境に \(y\) が \(0\) から \(1\) に切り替わっており、階段状になっていることからステップ関数は、階段関数とも呼ばれている。</p>
 </div>
