@@ -1,0 +1,64 @@
+<svg viewBox="0 -30 510 290" preserveAspectRatio="xMidYMid meet"
+     xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto;">
+  <style>
+    text, foreignObject div {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+                   "Noto Sans", "Liberation Sans", Arial, sans-serif,
+                   "Apple Color Emoji", "Segoe UI Emoji",
+                   "Segoe UI Symbol", "Noto Color Emoji";
+    }
+  </style>
+  <!-- 定義: 矢印 -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="5"
+      orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="rgb(73, 80, 87)"/>
+    </marker>
+  </defs>
+  <!-- バイアスノード -->
+  <circle cx="100" cy="50" r="30" stroke="rgb(73, 80, 87)" stroke-width="1" fill="white"/>
+  <text x="96" y="56" font-size="16" fill="rgb(73, 80, 87)">1</text>
+  <text x="10" y="10" font-size="16" fill="rgb(73, 80, 87)">バイアス（b = 1）</text>
+
+  <!-- 入力ノード X1 -->
+  <circle cx="100" cy="130" r="30" stroke="rgb(73, 80, 87)" stroke-width="1" fill="white"/>
+  <text x="93.5" y="136" font-size="16" fill="rgb(73, 80, 87)">X₁</text>
+  <text x="10" y="95" font-size="16" fill="rgb(73, 80, 87)">入力値1</text>
+  
+  <!-- 入力ノード X2 -->
+  <circle cx="100" cy="210" r="30" stroke="rgb(73, 80, 87)" stroke-width="1" fill="white"/>
+  <text x="93.5" y="216" font-size="16" fill="rgb(73, 80, 87)">X₂</text>
+  <text x="10" y="175" font-size="16" fill="rgb(73, 80, 87)">入力値2</text>
+
+  <!-- 中間ノード a -->
+  <circle cx="280" cy="130" r="20" stroke="rgb(73, 80, 87)" stroke-width="1" fill="white"/>
+  <text x="275.5" y="134" font-size="16" fill="rgb(73, 80, 87)">a</text>
+
+  <!-- 出力ノード h(a) -->
+  <circle cx="375" cy="130" r="35" stroke="rgb(73, 80, 87)" stroke-width="1" fill="white"/>
+  <text x="360" y="136" font-size="16" fill="rgb(73, 80, 87)">h(a)</text>
+
+  <!-- 最終出力 y -->
+  <circle cx="455" cy="130" r="25" stroke="rgb(73, 80, 87)" stroke-width="1" fill="white"/>
+  <text x="451.5" y="134.5" font-size="16" fill="rgb(73, 80, 87)">y</text>
+
+  <!-- 外枠（出力を囲む円） -->
+  <circle cx="405" cy="130" r="90" stroke="rgb(73, 80, 87)" stroke-width="1" fill="none"/>
+
+  <!-- 矢印: 入力 → a -->
+  <line x1="130" y1="50" x2="258" y2="115" stroke="rgb(73, 80, 87)" stroke-width="1" marker-end="url(#arrow)" />
+  <line x1="130" y1="130" x2="253" y2="130" stroke="rgb(73, 80, 87)" stroke-width="1" marker-end="url(#arrow)" />
+  <line x1="130" y1="210" x2="258" y2="145" stroke="rgb(73, 80, 87)" stroke-width="1" marker-end="url(#arrow)" />
+
+  <!-- 矢印: a → h(a) -->
+  <line x1="300" y1="130" x2="334" y2="130" stroke="rgb(73, 80, 87)" stroke-width="1" marker-end="url(#arrow)" />
+
+  <!-- 矢印: h(a) ＝ y -->
+  <line x1="414" y1="128" x2="425" y2="128" stroke="rgb(73, 80, 87)" stroke-width="1" />
+  <line x1="414" y1="132" x2="425" y2="132" stroke="rgb(73, 80, 87)" stroke-width="1" />
+  
+  <!-- 重みラベル -->
+  <text x="181.5" y="71" font-size="16" fill="rgb(73, 80, 87)">b</text>
+  <text x="180" y="123" font-size="16" fill="rgb(73, 80, 87)">w₁</text>
+  <text x="180" y="200" font-size="16" fill="rgb(73, 80, 87)">w₂</text>
+</svg>
