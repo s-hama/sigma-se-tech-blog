@@ -137,3 +137,46 @@ $ python
  >>>
 ```
 ![pid18_3](/static/tblog/img/pid18_3.png)
+
+### 恒等関数
+**出力層**で使われる線形の**活性化関数**に分類される。
+
+- 定義<br>
+\\(x\\) をそのまま出力する。
+<div style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+\[
+{\normalsize
+h(x) = x
+}
+\]
+</div>
+
+
+- 実装
+```bash
+$ python
+ >>> import numpy as np
+ >>> import matplotlib.pylab as plt
+ >>> def koutou_func(x):    # 恒等関数の定義
+ ...     return x
+ ...
+```
+
+- グラフ出力
+```bash
+$ python
+ >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5 まで、描画制度を 0.1 刻みに設定
+ >>> y = koutou_func(x)    # 恒等関数をコール
+ >>> plt.title("koutou_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
+ Text(0.5, 1.0, 'koutou_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y')
+ >>> plt.xlabel("x")    # x軸のラベルを設定
+ Text(0.5, 0, 'x')
+ >>> plt.ylabel("y")    # y軸のラベルを設定
+ Text(0, 0.5, 'y')
+ >>> plt.plot(x, y)
+ [&lt;matplotlib.lines.Line2D object at 0x7fba4d928f60&gt;]
+ >>> plt.savefig('/var/www/vops/ops/macuos/static/macuos/img/pid18_4.png')
+ >>>
+
+```
+![pid18_4](/static/tblog/img/pid18_4.png)
