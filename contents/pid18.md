@@ -180,3 +180,48 @@ $ python
 
 ```
 ![pid18_4](/static/tblog/img/pid18_4.png)
+
+### ソフトマックス関数
+**分類問題**で使われる非線形の**活性化関数**に分類される。
+
+- 定義<br>
+\\(n \leqq k\\) の時、\\(k\\) 番目の出力 \\(h(x_{k})\\) を表す。
+<div style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+\[
+{\normalsize
+h(x_{k}) = \frac{e^{x_{k}}}{\sum_{i=1}^{n} e^{x_{i}}}
+}
+\]
+</div>
+
+- 実装
+```bash
+$ python
+ >>> def softmax_func(x):    # ソフトマックス関数の定義
+ ...     exp_x = np.exp(x)
+ ...     sum_exp_x = np.sum(exp_x)
+ ...     y = exp_x / sum_exp_x
+ ...     return y
+ ...    
+```
+
+- グラフ出力
+```bash
+$ python
+ >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5 まで、描画制度を 0.1 刻みに設定
+ >>> y = koutou_func(x)    # ソフトマックス関数をコール
+ >>> plt.title("softmax_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
+ Text(0.5, 1.0, 'softmax_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y')
+ >>> plt.xlabel("x")    # x軸のラベルを設定
+ Text(0.5, 0, 'x')
+ >>> plt.ylabel("y")    # y軸のラベルを設定
+ Text(0, 0.5, 'y')
+ >>> plt.plot(x, y)
+ [&lt;matplotlib.lines.Line2D object at 0x7ff04a9c4d68&gt;]
+ >>> plt.savefig('/var/www/vops/ops/macuos/static/macuos/img/pid18_5.png')
+ >>>
+```
+![pid18_5](/static/tblog/img/pid18_5.png)
+
+### 参考文献
+- 斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
