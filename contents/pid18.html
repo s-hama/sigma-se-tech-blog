@@ -1,4 +1,53 @@
 <div class="post-body">
   <h2 id="目的">目的</h2>
   <p>この記事では、活性化関数であるステップ、シグモイド、ReLU、恒等関数、ソフトマックス関数関数の実装サンプルについて記載する。</p>
+  <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
+  <h3 id="ステップ関数">ステップ関数</h3>
+  <p><a class="link-secondary" href="https://sigma-se.com/detail/17/">前の記事 &gt; ニューラルネットワークの活性化関数と実装サンプル</a>
+    で触れた<strong>ステップ関数</strong>で、線形の<strong>活性化関数</strong>であり<strong>階段関数</strong>とも呼ばれる。</p>
+  <ul>
+    <li>定義<br>
+      \(x\) が \(0\) より大きければ、\(1\) を出力し、\(0\) 以下であれば \(0\) を出力する。</li>
+  </ul>
+  <div
+    style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    {\normalsize
+    h(x) =
+    \begin{cases}
+    0 \hspace{5pt}\text{if}\hspace{5pt}x \leqq 0 \\
+    1 \hspace{5pt}\text{if}\hspace{5pt}x > 0
+    \end{cases}
+    }
+    \]
+  </div>
+  <ul>
+    <li>実装</li>
+  </ul>
+  <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; import numpy as np
+ &gt;&gt;&gt; import matplotlib.pylab as plt
+ &gt;&gt;&gt; def step_func(x):    <span class="hljs-comment"># ステップ関数の定義</span>
+ ...    <span class="hljs-built_in">return</span> np.array(x &gt; 0, dtype=np.int)
+ ...
+</code></pre>
+  <ul>
+    <li>グラフ出力</li>
+  </ul>
+  <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; x = np.arange(-5.0, 5.0, 0.1)    <span class="hljs-comment"># 区間を-5～5 まで、描画制度を 0.1 刻みに設定</span>
+ &gt;&gt;&gt; y = step_func(x)    <span class="hljs-comment"># ステップ関数をコール</span>
+ &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;step_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
+ Text(0.5, 1.0, <span class="hljs-string">&#x27;step_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&#x27;</span>)
+ &gt;&gt;&gt; plt.ylim(-0.1, 1.1)    <span class="hljs-comment"># y軸の範囲を設定</span>
+ (-0.1, 1.1)
+ &gt;&gt;&gt; plt.xlabel(<span class="hljs-string">&quot;x&quot;</span>)    <span class="hljs-comment"># x軸のラベルを設定</span>
+ Text(0.5, 0, <span class="hljs-string">&#x27;x&#x27;</span>)
+ &gt;&gt;&gt; plt.ylabel(<span class="hljs-string">&quot;y&quot;</span>)    <span class="hljs-comment"># y軸のラベルを設定</span>
+ Text(0, 0.5, <span class="hljs-string">&#x27;y&#x27;</span>)
+ &gt;&gt;&gt; plt.plot(x, y)    <span class="hljs-comment"># グラフの描画</span>
+ [&amp;lt;matplotlib.lines.Line2D object at 0x7fc13041e278&amp;gt;]
+ &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;/var/www/vops/ops/macuos/static/macuos/img/pid18_1.png&#x27;</span>))    <span class="hljs-comment"># グラフの出力</span>
+</code></pre>
+  <p><img src="/static/tblog/img/pid18_1.png" alt="pid18_1"></p>
 </div>
