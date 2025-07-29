@@ -50,4 +50,46 @@
  &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;/var/www/vops/ops/macuos/static/macuos/img/pid18_1.png&#x27;</span>))    <span class="hljs-comment"># グラフの出力</span>
 </code></pre>
   <p><img src="/static/tblog/img/pid18_1.png" alt="pid18_1"></p>
+  <h3 id="シグモイド関数">シグモイド関数</h3>
+  <p><a class="link-secondary" href="https://sigma-se.com/detail/17/">前の記事 &gt; ニューラルネットワークの活性化関数と実装サンプル</a>
+    で触れた<strong>シグモイド関数</strong>で、非線形のの<strong>活性化関数</strong>に分類される。</p>
+  <ul>
+    <li>定義<br>
+      出力値は、\(x\) が小さいほど \(0\) になく近づき、\(x\) が大きいほど \(1\) に限りなく近づく。</li>
+  </ul>
+  <div
+    style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    h(x) = \frac{1}{1+e^{-x}}
+    \]
+  </div>
+  <ul>
+    <li>実装</li>
+  </ul>
+  <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; import numpy as np
+ &gt;&gt;&gt; import matplotlib.pylab as plt
+ &gt;&gt;&gt; def sigmoid_func(x):    <span class="hljs-comment"># シグモイド関数の定義</span>
+ ...     <span class="hljs-built_in">return</span> 1 / (1 + np.exp(-x))    <span class="hljs-comment"># 自然対数の低 (e) の -x 乗</span>
+ ...
+</code></pre>
+  <ul>
+    <li>グラフ出力</li>
+  </ul>
+  <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; x = np.arange(-5.0, 5.0, 0.1)    <span class="hljs-comment"># 区間を-5～5 まで、描画制度を 0.1 刻みに設定</span>
+ &gt;&gt;&gt; y = sigmoid_func(x)    <span class="hljs-comment"># シグモイド関数をコール</span>
+ &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;sigmoid_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
+ Text(0.5, 1.0, <span class="hljs-string">&#x27;sigmoid_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&#x27;</span>)
+ &gt;&gt;&gt; plt.ylim(-0.1, 1.1)    <span class="hljs-comment"># y軸の範囲を設定</span>
+ (-0.1, 1.1)
+ &gt;&gt;&gt; plt.xlabel(<span class="hljs-string">&quot;x&quot;</span>)    <span class="hljs-comment"># x軸のラベルを設定</span>
+ Text(0.5, 0, <span class="hljs-string">&#x27;x&#x27;</span>)
+ &gt;&gt;&gt; plt.ylabel(<span class="hljs-string">&quot;y&quot;</span>)    <span class="hljs-comment"># y軸のラベルを設定</span>
+ Text(0, 0.5, <span class="hljs-string">&#x27;y&#x27;</span>)
+ &gt;&gt;&gt; plt.plot(x, y)
+ [&amp;lt;matplotlib.lines.Line2D object at 0x7f727fbc1be0&amp;gt;]
+ &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;/var/www/vops/ops/macuos/static/macuos/img/pid18_2.png&#x27;</span>)    <span class="hljs-comment"># グラフの出力</span>
+</code></pre>
+  <p><img src="/static/tblog/img/pid18_2.png" alt="pid18_2"></p>
 </div>
