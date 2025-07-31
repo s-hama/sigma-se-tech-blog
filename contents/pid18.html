@@ -139,4 +139,47 @@
  &gt;&gt;&gt;
 </code></pre>
   <p><img src="/static/tblog/img/pid18_3.png" alt="pid18_3"></p>
+  <h3 id="恒等関数">恒等関数</h3>
+  <p><strong>出力層</strong>で使われる線形の<strong>活性化関数</strong>に分類される。</p>
+  <ul>
+    <li>定義<br>
+      \(x\) をそのまま出力する。</li>
+  </ul>
+  <div
+    style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    {\normalsize
+    h(x) = x
+    }
+    \]
+  </div>
+  <ul>
+    <li>実装</li>
+  </ul>
+  <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; import numpy as np
+ &gt;&gt;&gt; import matplotlib.pylab as plt
+ &gt;&gt;&gt; def koutou_func(x):    <span class="hljs-comment"># 恒等関数の定義</span>
+ ...     <span class="hljs-built_in">return</span> x
+ ...
+</code></pre>
+  <ul>
+    <li>グラフ出力</li>
+  </ul>
+  <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; x = np.arange(-5.0, 5.0, 0.1)    <span class="hljs-comment"># 区間を-5～5 まで、描画制度を 0.1 刻みに設定</span>
+ &gt;&gt;&gt; y = koutou_func(x)    <span class="hljs-comment"># 恒等関数をコール</span>
+ &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;koutou_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
+ Text(0.5, 1.0, <span class="hljs-string">&#x27;koutou_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&#x27;</span>)
+ &gt;&gt;&gt; plt.xlabel(<span class="hljs-string">&quot;x&quot;</span>)    <span class="hljs-comment"># x軸のラベルを設定</span>
+ Text(0.5, 0, <span class="hljs-string">&#x27;x&#x27;</span>)
+ &gt;&gt;&gt; plt.ylabel(<span class="hljs-string">&quot;y&quot;</span>)    <span class="hljs-comment"># y軸のラベルを設定</span>
+ Text(0, 0.5, <span class="hljs-string">&#x27;y&#x27;</span>)
+ &gt;&gt;&gt; plt.plot(x, y)
+ [&amp;lt;matplotlib.lines.Line2D object at 0x7fba4d928f60&amp;gt;]
+ &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;/var/www/vops/ops/macuos/static/macuos/img/pid18_4.png&#x27;</span>)
+ &gt;&gt;&gt;
+
+</code></pre>
+  <p><img src="/static/tblog/img/pid18_4.png" alt="pid18_4"></p>
 </div>
