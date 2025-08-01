@@ -182,4 +182,51 @@
 
 </code></pre>
   <p><img src="/static/tblog/img/pid18_4.png" alt="pid18_4"></p>
+  <h3 id="ソフトマックス関数">ソフトマックス関数</h3>
+  <p><strong>分類問題</strong>で使われる非線形の<strong>活性化関数</strong>に分類される。</p>
+  <ul>
+    <li>定義<br>
+      \(n \leqq k\) の時、\(k\) 番目の出力 \(h(x_{k})\) を表す。</li>
+  </ul>
+  <div
+    style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    {\normalsize
+    h(x_{k}) = \frac{e^{x_{k}}}{\sum_{i=1}^{n} e^{x_{i}}}
+    }
+    \]
+  </div>
+  <ul>
+    <li>実装</li>
+  </ul>
+  <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; def softmax_func(x):    <span class="hljs-comment"># ソフトマックス関数の定義</span>
+ ...     exp_x = np.exp(x)
+ ...     sum_exp_x = np.sum(exp_x)
+ ...     y = exp_x / sum_exp_x
+ ...     <span class="hljs-built_in">return</span> y
+ ...    
+</code></pre>
+  <ul>
+    <li>グラフ出力</li>
+  </ul>
+  <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; x = np.arange(-5.0, 5.0, 0.1)    <span class="hljs-comment"># 区間を-5～5 まで、描画制度を 0.1 刻みに設定</span>
+ &gt;&gt;&gt; y = koutou_func(x)    <span class="hljs-comment"># ソフトマックス関数をコール</span>
+ &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;softmax_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
+ Text(0.5, 1.0, <span class="hljs-string">&#x27;softmax_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&#x27;</span>)
+ &gt;&gt;&gt; plt.xlabel(<span class="hljs-string">&quot;x&quot;</span>)    <span class="hljs-comment"># x軸のラベルを設定</span>
+ Text(0.5, 0, <span class="hljs-string">&#x27;x&#x27;</span>)
+ &gt;&gt;&gt; plt.ylabel(<span class="hljs-string">&quot;y&quot;</span>)    <span class="hljs-comment"># y軸のラベルを設定</span>
+ Text(0, 0.5, <span class="hljs-string">&#x27;y&#x27;</span>)
+ &gt;&gt;&gt; plt.plot(x, y)
+ [&amp;lt;matplotlib.lines.Line2D object at 0x7ff04a9c4d68&amp;gt;]
+ &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;/var/www/vops/ops/macuos/static/macuos/img/pid18_5.png&#x27;</span>)
+ &gt;&gt;&gt;
+</code></pre>
+  <p><img src="/static/tblog/img/pid18_5.png" alt="pid18_5"></p>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
+  </ul>
 </div>
