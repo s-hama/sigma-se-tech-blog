@@ -135,3 +135,40 @@ Falseの場合、入力画像は1 * 28 * 28 の3次元配列として格納さ�
 引数 one_hot_label は、ラベルを **one_hot表現で格納するか**Bool値で設定する。<br>
 one_hot 表現の場合は、正解となるラベルのみ 1 でそれ以外は、0 の配列となる。<br>
 戻り値は、（訓練画像, 訓練ラベル）, （テスト画像, テストラベル）の形式でMNISTデータを返す。
+
+### 画像データ表示確認
+`ch03/mnist_show.py`に訓練画像1枚目「5」の確認用ソースコードが記載されている。<br>
+下記は、この中の`show`にあたる箇所を`save`に置換え、画像ファイルを出力するサンプル。
+```bash
+$ python
+ >>> import sys, os
+ >>> sys.path.append(os.pardir)
+ >>> import numpy as np
+ >>> from dataset.mnist import load_mnist
+ >>> from PIL import Image
+ >>>
+ >>> def img_save(img):
+ ...     pil_img = Image.fromarray(np.uint8(img))
+ ...     pil_img.save('/var/www/vops/ops/macuos/static/macuos/img/pid19_1.png')    # ＊1 mnist_show.py では、pil_img.show()
+ ...
+ >>> (x_train, t_train), (x_test, t_test) = load_mnist(flatten=True, normalize=False)
+ >>>
+ >>> img = x_train[0]
+ >>> label = t_train[0]
+ >>> print(label)
+ 5
+ >>> print(img.shape)
+ (784,)
+ >>> img = img.reshape(28, 28)
+ >>> print(img.shape)
+ (28, 28)
+ >>> img_save(img)    # ＊1 mnist_show.py では、img_show()
+ >>>
+```
+
+- pid19_1.png<br>
+期待通り、数字の手書き画像「5」が出力された。<br>
+![pid19_1](/static/tblog/img/pid19_1.png)
+
+### 参考文献
+- 斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
