@@ -1,0 +1,255 @@
+<div class="post-body">
+  <h2 id="目的">目的</h2>
+  <p>この記事では、MNISTのダウンロード方法についての簡単な実装サンプルについて記載する。</p>
+  <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
+  <h3 id="mnistとは">MNISTとは</h3>
+  <p><strong>MNIST</strong>（Mixed National Institute of Standards and Technology
+    database）とは、数字画像（1～9）から構成され、手書き数字の訓練画像が60,000枚、テスト画像が10,000枚が用意された画像データセットのことで、機械学習の分野で最も利用されている。</p>
+  <p>
+    また、手書き数字の訓練画像が60,000枚、テスト画像が10,000枚の「1枚」に対して<strong>画像データ</strong>と<strong>その画像の正解となるラベルデータ</strong>がペアとなっており、下記の4つのファイルで構成されている。
+  </p>
+  <ul>
+    <li>train-images-idx3-ubyte : 学習用 画像データセット（60,000枚）</li>
+    <li>train-labels-idx1-ubyte : 学習用 ラベルデータセット（60,000個）</li>
+    <li>t10k-images-idx3-ubyte : 検証用 画像データセット（10,000枚）</li>
+    <li>t10k-labels-idx1-ubyte : 検証用 ラベルデータセット（10,000個）</li>
+  </ul>
+  <h3 id="mnistのデータ仕様">MNISTのデータ仕様</h3>
+  <p>機械学習では画像を数値として扱う必要があるため、<strong>バイナリデータ</strong>となっており、画像とラベルデータが紐付いている。</p>
+  <p>※ 下記、画像、ラベルのデータフォーマットについては、下記サイトを参考に記載。<br>
+    参考URL（WEB ARCH LABO）：<a class="link-secondary"
+      href="https://weblabo.oscasierra.net/python/ai-mnist-data-detail.html">https://weblabo.oscasierra.net/python/ai-mnist-data-detail.html</a>
+  </p>
+  <p>以下、画像とラベルのフォーマット仕様。</p>
+  <ul>
+    <li>
+      <p>画像データのフォーマット（train-images-idx3-ubyte、t10k-images-idx3-ubyte）</p>
+      <table class="table" style="width: 100%; margin-bottom: 2em;">
+        <thead>
+          <tr>
+            <th scope="col">offset</th>
+            <th scope="col">type</th>
+            <th scope="col">value</th>
+            <th scope="col">description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0000</td>
+            <td>32 bit integer</td>
+            <td>0x00000803(2051)</td>
+            <td>識別子（定数）</td>
+          </tr>
+          <tr>
+            <td>0004</td>
+            <td>32 bit integer</td>
+            <td>60000</td>
+            <td>画像データの数</td>
+          </tr>
+          <tr>
+            <td>0008</td>
+            <td>32 bit integer</td>
+            <td>28</td>
+            <td>1画像あたりのデータ行数</td>
+          </tr>
+          <tr>
+            <td>0012</td>
+            <td>32 bit integer</td>
+            <td>28</td>
+            <td>1画像あたりのデータ列数</td>
+          </tr>
+          <tr>
+            <td>0016</td>
+            <td>unsigned byte</td>
+            <td>0 ～ 255</td>
+            <td>1つめの画像の1ピクセル目の値</td>
+          </tr>
+          <tr>
+            <td>0017</td>
+            <td>unsigned byte</td>
+            <td>0 ～ 255</td>
+            <td>1つめの画像の2ピクセル目の値</td>
+          </tr>
+          <tr>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+          </tr>
+          <tr>
+            <td>xxxx</td>
+            <td>unsigned byte</td>
+            <td>0 ～ 255</td>
+            <td>最後の画像の784ピクセル目の値</td>
+          </tr>
+        </tbody>
+      </table>
+    </li>
+    <li>
+      <p>ラベルデータのフォーマット（train-labels-idx1-ubyte、t10k-labels-idx1-ubyte）</p>
+      <table class="table" style="width: 100%; margin-bottom: 2em;">
+        <thead>
+          <tr>
+            <th scope="col">offset</th>
+            <th scope="col">type</th>
+            <th scope="col">value</th>
+            <th scope="col">description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0000</td>
+            <td>32 bit integer</td>
+            <td>0x00000803(2049)</td>
+            <td>識別子（定数）</td>
+          </tr>
+          <tr>
+            <td>0004</td>
+            <td>32 bit integer</td>
+            <td>60000 or 10000</td>
+            <td>ラベルデータの数</td>
+          </tr>
+          <tr>
+            <td>0008</td>
+            <td>unsigned byte</td>
+            <td>0 ～ 9</td>
+            <td>1つ目のデータのラベル</td>
+          </tr>
+          <tr>
+            <td>0009</td>
+            <td>unsigned byte</td>
+            <td>0 ～ 9</td>
+            <td>2つ目のデータのラベル</td>
+          </tr>
+          <tr>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+          </tr>
+          <tr>
+            <td>xxxx</td>
+            <td>unsigned byte</td>
+            <td>0 ～ 9</td>
+            <td>最後のデータのラベル</td>
+          </tr>
+        </tbody>
+      </table>
+    </li>
+  </ul>
+  <h3 id="mnistのダウンロード">MNISTのダウンロード</h3>
+  <p>下記、<code>mnist.py</code>を使用し、MNISTをダウンロードする。</p>
+  <p>Git（deep-learning-from-scratch）：<a class="link-secondary"
+      href="https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/dataset/mnist.py">https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/dataset/mnist.py</a>
+  </p>
+  <ul>
+    <li>
+      <p>リポジトリをクローン</p>
+      <pre><code class="language-bash">$ <span class="hljs-built_in">cd</span> gitlocalrep
+$ git <span class="hljs-built_in">clone</span> https://github.com/oreilly-japan/deep-learning-from-scratch.git
+Cloning into <span class="hljs-string">&#x27;deep-learning-from-scratch&#x27;</span>...
+remote: Enumerating objects: 381, <span class="hljs-keyword">done</span>.
+remote: Total 381 (delta 0), reused 0 (delta 0), pack-reused 381
+Receiving objects: 100% (381/381), 4.93 MiB | 4.16 MiB/s, <span class="hljs-keyword">done</span>.
+Resolving deltas: 100% (197/197), <span class="hljs-keyword">done</span>.
+</code></pre>
+    </li>
+    <li>
+      <p>カレントディレクトに移動<br>
+        <code>mnist.py</code>の利用時は、カレントディレクトを ch01、ch02、ch03 … ch08 のいずれかで実施する必要がある。<br>
+        ここでは、ch03から実施する。
+      </p>
+      <pre><code class="language-bash">$ <span class="hljs-built_in">cd</span> deep-learning-from-scratch/ch03
+</code></pre>
+    </li>
+    <li>
+      <p>ダウンロード<br>
+        下記、load_mnistによってMNISTデータセットのダウンロードを行っているが、初回のみオンラインである必要があり数分かかる。<br />
+        初回で読み込み時に<code>pickle</code>というローカルファイルが作成され、ダウンロード結果を保持しているので、2回目以降は、オフラインかつ、すぐに処理が終わる。<br />
+        ※ Pythonの<code>pickle</code>は、プログラム実行中のオブジェクト情報をファイルとして保存できる機能。</p>
+      <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; import sys, os
+ &gt;&gt;&gt; sys.path.append(os.pardir)    <span class="hljs-comment"># 親ディレクトリのファイルをインポートするための設定</span>
+ &gt;&gt;&gt; from dataset.mnist import load_mnist
+ &gt;&gt;&gt;
+ &gt;&gt;&gt; (x_train, t_train), (x_test, t_test) = load_mnist(flatten=True, normalize=False)    <span class="hljs-comment"># MNISTデータセットのダウンロード</span>
+ Downloading train-images-idx3-ubyte.gz ...
+ Done
+ Downloading train-labels-idx1-ubyte.gz ...
+ Done
+ Downloading t10k-images-idx3-ubyte.gz ...
+ Done
+ Downloading t10k-labels-idx1-ubyte.gz ...
+ Done
+ Converting train-images-idx3-ubyte.gz to NumPy Array ...
+ Done
+ Converting train-labels-idx1-ubyte.gz to NumPy Array ...
+ Done
+ Converting t10k-images-idx3-ubyte.gz to NumPy Array ...
+ Done
+ Converting t10k-labels-idx1-ubyte.gz to NumPy Array ...
+ Done
+ Creating pickle file ...
+ Done!
+ &gt;&gt;&gt;
+ &gt;&gt;&gt; <span class="hljs-built_in">print</span>(x_train.shape)    <span class="hljs-comment"># データ形状の確認：学習用 ラベルデータセット</span>
+ (60000, 784)
+ &gt;&gt;&gt; <span class="hljs-built_in">print</span>(t_train.shape)    <span class="hljs-comment"># データ形状の確認：学習用 画像データセット</span>
+ (60000,)
+ &gt;&gt;&gt; <span class="hljs-built_in">print</span>(x_test.shape)    <span class="hljs-comment"># データ形状の確認：検証用 ラベルデータセット</span>
+ (10000, 784)
+ &gt;&gt;&gt; <span class="hljs-built_in">print</span>(t_test.shape)    <span class="hljs-comment"># データ形状の確認：検証用 画像データセット</span>
+ (10000,)
+ &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>load_mnist関数の概要<br>
+        引数 normalize は、入力画像を<strong>0.0 ～ 1.0 に正規化するかどうか</strong>Bool値で設定する。<br>
+        Falseの場合、入力画像のピクセルは 0 ～ 255 となる。<br>
+        引数 flatten は、入力画像を<strong>1次元にするかどうか</strong>Bool 値で設定する。<br>
+        Falseの場合、入力画像は1 * 28 * 28 の3次元配列として格納され、Trueの場合、1次元配列(要素：784)として格納される。<br>
+        引数 one_hot_label は、ラベルを <strong>one_hot表現で格納するか</strong>Bool値で設定する。<br>
+        one_hot 表現の場合は、正解となるラベルのみ 1 でそれ以外は、0 の配列となる。<br>
+        戻り値は、（訓練画像, 訓練ラベル）, （テスト画像, テストラベル）の形式でMNISTデータを返す。</p>
+    </li>
+  </ul>
+  <h3 id="画像データ表示確認">画像データ表示確認</h3>
+  <p><code>ch03/mnist_show.py</code>に訓練画像1枚目「5」の確認用ソースコードが記載されている。<br>
+    下記は、この中の<code>show</code>にあたる箇所を<code>save</code>に置換え、画像ファイルを出力するサンプル。</p>
+  <pre><code class="language-bash">$ python
+ &gt;&gt;&gt; import sys, os
+ &gt;&gt;&gt; sys.path.append(os.pardir)
+ &gt;&gt;&gt; import numpy as np
+ &gt;&gt;&gt; from dataset.mnist import load_mnist
+ &gt;&gt;&gt; from PIL import Image
+ &gt;&gt;&gt;
+ &gt;&gt;&gt; def img_save(img):
+ ...     pil_img = Image.fromarray(np.uint8(img))
+ ...     pil_img.save(<span class="hljs-string">&#x27;/var/www/vops/ops/macuos/static/macuos/img/pid19_1.png&#x27;</span>)    <span class="hljs-comment"># ＊1 mnist_show.py では、pil_img.show()</span>
+ ...
+ &gt;&gt;&gt; (x_train, t_train), (x_test, t_test) = load_mnist(flatten=True, normalize=False)
+ &gt;&gt;&gt;
+ &gt;&gt;&gt; img = x_train[0]
+ &gt;&gt;&gt; label = t_train[0]
+ &gt;&gt;&gt; <span class="hljs-built_in">print</span>(label)
+ 5
+ &gt;&gt;&gt; <span class="hljs-built_in">print</span>(img.shape)
+ (784,)
+ &gt;&gt;&gt; img = img.reshape(28, 28)
+ &gt;&gt;&gt; <span class="hljs-built_in">print</span>(img.shape)
+ (28, 28)
+ &gt;&gt;&gt; img_save(img)    <span class="hljs-comment"># ＊1 mnist_show.py では、img_show()</span>
+ &gt;&gt;&gt;
+</code></pre>
+  <ul>
+    <li>pid19_1.png<br>
+      期待通り、数字の手書き画像「5」が出力された。<br>
+      <img src="/static/tblog/img/pid19_1.png" alt="pid19_1">
+    </li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
+  </ul>
+</div>
