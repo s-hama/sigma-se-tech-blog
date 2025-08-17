@@ -58,3 +58,47 @@ MNISTのダウンロードについては、[前の記事 > Python - AI : MNIST�
   ※ predict(network, x)のsigmoid, softmaxについては、下記を参考。<br>
   ・[Python - AI : ニューラルネットワークの活性化関数と実装サンプル](https://sigma-se.com/detail/17/)<br>
   ・[Python - AI : 活性化関数の実装サンプルまとめ（ステップ、シグモイド、ReLU、恒等関数、ソフトマックス関数）](https://sigma-se.com/detail/18/)
+
+### 推論処理の実行
+- ch03/neuralnet_mnist.py内の実行処理
+  ```python
+  x, t = get_data()    # … 1.
+  network = init_network()    # … 2.
+
+  accuracy_cnt = 0
+  for i in range(len(x)):    # … 3.
+      y = predict(network, x[i])    # … 4.
+      p= np.argmax(y)    # … 5.
+      if p == t[i]:    # … 6.
+          accuracy_cnt += 1    # … 7.
+
+  print("Accuracy:" + str(float(accuracy_cnt) / len(x)))    # … 8.
+  ```
+
+- 実行処理の解説<br>
+  1. `get_data()`でMNISTデータセットを取得。<br>
+  2. `init_network()`でpickleファイルを読み込む。<br>
+  3. \\(x\\)の画像データ60000枚をfor文でループ。<br>
+  4. 1枚の画像データに対して`predict(network, x[i])`を実行し、下記のNumPy配列のように数字0～9それぞれの確立を出力。<br>
+    ※ 0である確率：20%、1である確率：10%、2である確率：4%、… 9である確率：5%
+      ```python
+      [ 0.2, 0.1, 0.04 , … , 0.05  ]    # 0 ～ 9 それぞれの確率 (20%, 10%, 4%,  … , 5%)
+      ```
+  5. 「4.」の結果であるNumPy配列\\(y\\)に対して、最も確率が高い要素のインデックスを取得。<br>
+  6. 推論処理出した「5.」の予測結果が正解ラベル\\(t\\)と一致しているかチェック。<br>
+  7. 一致していれば、認識制度を加算。<br> 
+  8. 最後に正解率を出力。<br>
+
+- 実行結果<br>
+実際に上記を対話モードで実行すると`Accuracy:0.9352`が出力される。
+  ```python
+  $ cd gitlocalrep
+  $ cd deep-learning-from-scratch/ch03
+  $ source /var/www/vops/bin/activate
+  $ python neuralnet_mnist.py
+  Accuracy:0.9352
+  ```
+  上記実装サンプルでは、93％程度の精度だったが、実際のニューラルネットワークでは、さらにニューラルネットワークの構造や「4.」の関数`predict`内の処理にあたる学習方法を工夫し、99％以上の精度を出していく。
+
+### 参考文献
+- 斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
