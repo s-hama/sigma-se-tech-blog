@@ -11,4 +11,50 @@
   <p>MNISTのダウンロードについては、<a class="link-secondary"
       href="https://sigma-se.com/detail/19/#:~:text=%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E3%83%A9%E3%83%99%E3%83%AB-,MNIST%E3%81%AE%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89,-%E4%B8%8B%E8%A8%98%E3%80%81mnist">前の記事
       &gt; Python - AI : MNISTのダウンロード方法（手書き数字画像セットを取込む）&gt; MNISTのダウンロード</a>を参照</p>
+  <h3 id="推論処理のニューロン構成と関数定義">推論処理のニューロン構成と関数定義</h3>
+  <ul>
+    <li>
+      <p>ニューロン構成について<br>
+        入力層：784個（画像データ28 x 28 = 784（px））<br>
+        隠れ層1：50（任意の値）<br>
+        隠れ層2：100（任意の値）<br>
+        出力層：10（数字0～9の10クラス）</p>
+    </li>
+    <li>
+      <p>実装サンプル（関数定義）<br>
+        以下、ch03/neuralnet_mnist.py内の3つの関数定義。<br></p>
+      <pre><code class="language-python"><span class="hljs-keyword">import</span> sys, os
+sys.path.append(os.pardir) <span class="hljs-comment"># 親ディレクトリのファイルをインポートするための設定</span>
+<span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-keyword">import</span> pickle
+<span class="hljs-keyword">from</span> dataset.mnist <span class="hljs-keyword">import</span> load_mnist
+<span class="hljs-keyword">from</span> common.functions <span class="hljs-keyword">import</span> sigmoid, softmax
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">get_data</span>():
+    (x_train, t_train), (x_test, t_test) = load_mnist(normalize=<span class="hljs-literal">True</span>, flatten=<span class="hljs-literal">True</span>, one_hot_label=<span class="hljs-literal">False</span>)
+    <span class="hljs-keyword">return</span> x_test, t_test
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">init_network</span>():
+    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;sample_weight.pkl&quot;</span>, <span class="hljs-string">&#x27;rb&#x27;</span>) <span class="hljs-keyword">as</span> f:
+    network = pickle.load(f)
+    <span class="hljs-keyword">return</span> network
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">predict</span>(<span class="hljs-params">network, x</span>):
+    W1, W2, W3 = network[<span class="hljs-string">&#x27;W1&#x27;</span>], network[<span class="hljs-string">&#x27;W2&#x27;</span>], network[<span class="hljs-string">&#x27;W3&#x27;</span>]
+    b1, b2, b3 = network[<span class="hljs-string">&#x27;b1&#x27;</span>], network[<span class="hljs-string">&#x27;b2&#x27;</span>], network[<span class="hljs-string">&#x27;b3&#x27;</span>]
+    a1 = np.dot(x, W1) + b1
+    z1 = sigmoid(a1)
+    a2 = np.dot(z1, W2) + b2
+    z2 = sigmoid(a2)
+    a3 = np.dot(z2, W3) + b3
+    y = softmax(a3)
+    <span class="hljs-keyword">return</span> y
+</code></pre>
+      <p><code>init_network()</code>では、pickleファイルとなる<code>sample_weight.pkl</code>を読み込んでいる。</p>
+      <p>※ pickleファイルには、重みとバイアスのパラメータがdictionary型で保存されている。<br>
+        ※ predict(network, x)のsigmoid, softmaxについては、下記を参考。<br>
+        ・<a class="link-secondary" href="https://sigma-se.com/detail/17/">Python - AI : ニューラルネットワークの活性化関数と実装サンプル</a><br>
+        ・<a class="link-secondary" href="https://sigma-se.com/detail/18/">Python - AI : 活性化関数の実装サンプルまとめ（ステップ、シグモイド、ReLU、恒等関数、ソフトマックス関数）</a></p>
+    </li>
+  </ul>
 </div>
