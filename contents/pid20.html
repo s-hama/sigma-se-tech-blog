@@ -57,4 +57,56 @@ sys.path.append(os.pardir) <span class="hljs-comment"># 親ディレクトリの
         ・<a class="link-secondary" href="https://sigma-se.com/detail/18/">Python - AI : 活性化関数の実装サンプルまとめ（ステップ、シグモイド、ReLU、恒等関数、ソフトマックス関数）</a></p>
     </li>
   </ul>
+  <h3 id="推論処理の実行">推論処理の実行</h3>
+  <ul>
+    <li>
+      <p>ch03/neuralnet_mnist.py内の実行処理</p>
+      <pre><code class="language-python">x, t = get_data()    <span class="hljs-comment"># … 1.</span>
+network = init_network()    <span class="hljs-comment"># … 2.</span>
+
+accuracy_cnt = <span class="hljs-number">0</span>
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(x)):    <span class="hljs-comment"># … 3.</span>
+    y = predict(network, x[i])    <span class="hljs-comment"># … 4.</span>
+    p= np.argmax(y)    <span class="hljs-comment"># … 5.</span>
+    <span class="hljs-keyword">if</span> p == t[i]:    <span class="hljs-comment"># … 6.</span>
+        accuracy_cnt += <span class="hljs-number">1</span>    <span class="hljs-comment"># … 7.</span>
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Accuracy:&quot;</span> + <span class="hljs-built_in">str</span>(<span class="hljs-built_in">float</span>(accuracy_cnt) / <span class="hljs-built_in">len</span>(x)))    <span class="hljs-comment"># … 8.</span>
+</code></pre>
+    </li>
+    <li>
+      <p>実行処理の解説<br></p>
+      <ol>
+        <li><code>get_data()</code>でMNISTデータセットを取得。<br></li>
+        <li><code>init_network()</code>でpickleファイルを読み込む。<br></li>
+        <li>\(x\)の画像データ60000枚をfor文でループ。<br></li>
+        <li>1枚の画像データに対して<code>predict(network, x[i])</code>を実行し、下記のNumPy配列のように数字0～9それぞれの確立を出力。<br>
+          ※ 0である確率：20%、1である確率：10%、2である確率：4%、… 9である確率：5%
+          <pre><code class="language-python">[ <span class="hljs-number">0.2</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.04</span> , … , <span class="hljs-number">0.05</span>  ]    <span class="hljs-comment"># 0 ～ 9 それぞれの確率 (20%, 10%, 4%,  … , 5%)</span>
+</code></pre>
+        </li>
+        <li>「4.」の結果であるNumPy配列\(y\)に対して、最も確率が高い要素のインデックスを取得。<br></li>
+        <li>推論処理出した「5.」の予測結果が正解ラベル\(t\)と一致しているかチェック。<br></li>
+        <li>一致していれば、認識制度を加算。<br></li>
+        <li>最後に正解率を出力。<br></li>
+      </ol>
+    </li>
+    <li>
+      <p>実行結果<br>
+        実際に上記を対話モードで実行すると<code>Accuracy:0.9352</code>が出力される。</p>
+      <pre><code class="language-python">$ cd gitlocalrep
+$ cd deep-learning-<span class="hljs-keyword">from</span>-scratch/ch03
+$ source /var/www/vops/<span class="hljs-built_in">bin</span>/activate
+$ python neuralnet_mnist.py
+Accuracy:<span class="hljs-number">0.9352</span>
+</code></pre>
+      <p>
+        上記実装サンプルでは、93％程度の精度だったが、実際のニューラルネットワークでは、さらにニューラルネットワークの構造や「4.」の関数<code>predict</code>内の処理にあたる学習方法を工夫し、99％以上の精度を出していく。
+      </p>
+    </li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
+  </ul>
 </div>
