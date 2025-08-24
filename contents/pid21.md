@@ -52,3 +52,18 @@ for i in range(0, len(x), batch_size):    # 書き換え
 
 print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
 ```
+
+### 推論バッチ処理の実行
+
+上記の実行部分は、`ch03/neuralnet_mnist.py`の実行部分を**100個単位**でバッチ実行しているため、`ch03/neuralnet_mnist_batch.py`内の実行部分を実行すると`neuralnet_mnist.py`の実行時と同じ`Accuracy:0.9352`が出力される。
+
+- 対話モードで確認
+    ```bash
+    $ cd gitlocalrep
+    $ cd deep-learning-from-scratch/ch03
+    $ source /var/www/vops/bin/activate
+    $ python neuralnet_mnist_batch.py
+        Accuracy:0.9352
+    ```
+
+    しかし、これでは`ch03/neuralnet_mnist_batch.py`内の実行部分で具体的にどのような型でどのような値がどのように変化しているのかイメージが難しいため、次項のサンプルで解説する。
