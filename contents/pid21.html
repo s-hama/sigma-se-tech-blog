@@ -1,4 +1,54 @@
 <div class="post-body">
   <h2 id="目的">目的</h2>
   <p>この記事では、MNISTを使った推論バッチ処理についての簡単な実装サンプルを記載する。</p>
+  <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
+  <h3 id="推論バッチ処理の実行準備">推論バッチ処理の実行準備</h3>
+  <p><a
+      href="https://sigma-se.com/detail/20/#:~:text=%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB-,%E6%8E%A8%E8%AB%96%E5%87%A6%E7%90%86%E3%81%AE%E5%AE%9F%E8%A1%8C%E6%BA%96%E5%82%99,-%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E3%81%AE%E3%80%8E%E3%82%BC" class="link-secondary">前の記事
+      &gt; Python - AI : MNISTを使ったニューラルネットワークの推論処理と実装サンプル &gt; 推論処理の実行準備</a>
+    でダウンロードした<code>ch03/neuralnet_mnist_batch.py</code>を使ってバッチ処理を説明する。</p>
+  <p>※
+    <code>ch03/neuralnet_mnist_batch.py</code>は、<code>ch03/neuralnet_mnist.py</code>の実行部分をバッチ処理に書き換えたもの（下記Pythonコードのコメントの「#
+    追記」「# 書き換え」の部分）で、3つの関数については全く同じ。</p>
+  <pre><code class="language-python"><span class="hljs-keyword">import</span> sys, os
+sys.path.append(os.pardir)    <span class="hljs-comment"># 親ディレクトリのファイルをインポートするための設定</span>
+<span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-keyword">import</span> pickle
+<span class="hljs-keyword">from</span> dataset.mnist <span class="hljs-keyword">import</span> load_mnist
+<span class="hljs-keyword">from</span> common.functions <span class="hljs-keyword">import</span> sigmoid, softmax
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">get_data</span>():
+    (x_train, t_train), (x_test, t_test) = load_mnist(normalize=<span class="hljs-literal">True</span>, flatten=<span class="hljs-literal">True</span>, one_hot_label=<span class="hljs-literal">False</span>)
+    <span class="hljs-keyword">return</span> x_test, t_test
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">init_network</span>():
+    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;sample_weight.pkl&quot;</span>, <span class="hljs-string'">'rb'</span>) <span class="hljs-keyword">as</span> f:
+        network = pickle.load(f)
+    <span class="hljs-keyword">return</span> network
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">predict</span>(<span class="hljs-params">network, x</span>):
+    W1, W2, W3 = network[<span class="hljs-string">'W1'</span>], network[<span class="hljs-string">'W2'</span>], network[<span class="hljs-string">'W3'</span>]
+    b1, b2, b3 = network[<span class="hljs-string">'b1'</span>], network[<span class="hljs-string">'b2'</span>], network[<span class="hljs-string">'b3'</span>]
+    a1 = np.dot(x, W1) + b1
+    z1 = sigmoid(a1)
+    a2 = np.dot(z1, W2) + b2
+    z2 = sigmoid(a2)
+    a3 = np.dot(z2, W3) + b3
+    y = softmax(a3)
+    <span class="hljs-keyword">return</span> y
+
+x, t = get_data()
+network = init_network()
+
+batch_size = <span class="hljs-number">100</span>    <span class="hljs-comment"># 追記</span>
+accuracy_cnt = <span class="hljs-number">0</span>
+
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-built_in">len</span>(x), batch_size):    <span class="hljs-comment"># 書き換え</span>
+    x_batch = x[i:i+batch_size]           <span class="hljs-comment"># 書き換え</span>
+    y_batch = predict(network, x_batch)   <span class="hljs-comment"># 書き換え</span>
+    p = np.argmax(y_batch, axis=<span class="hljs-number">1</span>)        <span class="hljs-comment"># 書き換え</span>
+    accuracy_cnt += np.<span class="hljs-built_in">sum</span>(p == t[i:i+batch_size])    <span class="hljs-comment"># 書き換え</span>
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Accuracy:&quot;</span> + <span class="hljs-built_in">str</span>(<span class="hljs-built_in">float</span>(accuracy_cnt) / <span class="hljs-built_in">len</span>(x)))
+</code></pre>
 </div>
