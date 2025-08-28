@@ -51,4 +51,22 @@ accuracy_cnt = <span class="hljs-number">0</span>
 
 <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Accuracy:&quot;</span> + <span class="hljs-built_in">str</span>(<span class="hljs-built_in">float</span>(accuracy_cnt) / <span class="hljs-built_in">len</span>(x)))
 </code></pre>
+  <h3 id="推論バッチ処理の実行">推論バッチ処理の実行</h3>
+  <p>
+    上記の実行部分は、<code>ch03/neuralnet_mnist.py</code>の実行部分を<strong>100個単位</strong>でバッチ実行しているため、<code>ch03/neuralnet_mnist_batch.py</code>内の実行部分を実行すると<code>neuralnet_mnist.py</code>の実行時と同じ<code>Accuracy:0.9352</code>が出力される。
+  </p>
+  <ul>
+    <li>
+      <p>対話モードで確認</p>
+      <pre><code class="language-bash">$ <span class="hljs-built_in">cd</span> gitlocalrep
+$ <span class="hljs-built_in">cd</span> deep-learning-from-scratch/ch03
+$ <span class="hljs-built_in">source</span> /var/www/vops/bin/activate
+$ python neuralnet_mnist_batch.py
+    Accuracy:0.9352
+</code></pre>
+      <p>
+        しかし、これでは<code>ch03/neuralnet_mnist_batch.py</code>内の実行部分で具体的にどのような型でどのような値がどのように変化しているのかイメージが難しいため、次項のサンプルで解説する。
+      </p>
+    </li>
+  </ul>
 </div>
