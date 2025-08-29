@@ -69,4 +69,100 @@ $ python neuralnet_mnist_batch.py
       </p>
     </li>
   </ul>
+  <h3 id="推論バッチ処理の解説">推論バッチ処理の解説</h3>
+  <p>実行部分（Pythonコードのコメントの「# 追記」「# 書き換え」の部分）を（＊1）〜（＊6）と置く。</p>
+  <pre><code class="language-python">x, t = get_data()
+network = init_network()
+
+batch_size = <span class="hljs-number">100</span>    <span class="hljs-comment"># （＊1）</span>
+accuracy_cnt = <span class="hljs-number">0</span>
+
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-built_in">len</span>(x), batch_size):    <span class="hljs-comment"># （＊2）</span>
+    x_batch = x[i:i+batch_size]           <span class="hljs-comment"># （＊3）</span>
+    y_batch = predict(network, x_batch)   <span class="hljs-comment"># （＊4）</span>
+    p = np.argmax(y_batch, axis=<span class="hljs-number">1</span>)        <span class="hljs-comment"># （＊5）</span>
+    accuracy_cnt += np.<span class="hljs-built_in">sum</span>(p == t[i:i+batch_size])    <span class="hljs-comment"># （＊6）</span>
+
+<span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Accuracy:&quot;</span> + <span class="hljs-built_in">str</span>(<span class="hljs-built_in">float</span>(accuracy_cnt) / <span class="hljs-built_in">len</span>(x)))
+</code></pre>
+  <ul>
+    <li>
+      <p>（＊1）どの程度のバッチ（束）で処理するかの<strong>バッチ数</strong></p>
+    </li>
+    <li>
+      <p>（＊2）0 ～ len(x) のインデックスで増加幅が100となる \(i\)（1周の処理対象が100要素）のループ処理<br>
+        <code>range</code>は、指定した開始と終了時のインデックスで配列を作成する。<br>
+        第3引数は、増加するスパンを指定できる。
+      </p>
+      <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">list</span>(<span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-number">10</span>))   <span class="hljs-comment"># 0 ～ 10 までの配列</span>
+[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">list</span>(<span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>, <span class="hljs-number">10</span>))   <span class="hljs-comment"># 5 ～ 10 までの配列</span>
+[<span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">list</span>(<span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, <span class="hljs-number">27</span>, <span class="hljs-number">3</span>))   <span class="hljs-comment"># 1 ～ 27 までのインデックスを3ずつ増加</span>
+[<span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-number">7</span>, <span class="hljs-number">10</span>, <span class="hljs-number">13</span>, <span class="hljs-number">16</span>, <span class="hljs-number">19</span>, <span class="hljs-number">22</span>, <span class="hljs-number">25</span>]
+</code></pre>
+    </li>
+    <li>
+      <p>（＊3）xの \(i\) ～ \(i\) + batch_size の配列をx_batchに取得<br>
+        ループ1週目は、\(i\) = 0 なのでx_batchには0～99の配列が格納される。<br>
+        ループ2週目は、\(i\) = 100 なのでx_batchには、100～199の配列が格納される。</p>
+    </li>
+    <li>
+      <p>（＊4）<code>predict</code>の結果をy_batchに取得<br>
+        <code>predict(network, x_batch)</code>のsigmoid, softmaxについては下記を参考。<br>
+      </p>
+      <ul>
+        <li><a href="https://sigma-se.com/detail/17/" class="link-secondary">Python - AI : ニューラルネットワークの活性化関数と実装サンプル</a><br></li>
+        <li><a href="https://sigma-se.com/detail/18/" class="link-secondary">Python - AI : 活性化関数の実装サンプルまとめ（ステップ、シグモイド、ReLU、恒等関数、ソフトマックス関数）</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>（＊5）<code>np.argmax</code>で<strong>y_batchの最大値となるインデックス</strong>を取得</p>
+      <ul>
+        <li><code>axis=1</code>は、それぞれの行を対象に最大値を取るインデックスを抽出するオプション
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-meta">&gt;&gt;&gt; </span>x = np.array([[<span class="hljs-number">0.1</span>, <span class="hljs-number">0.3</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.9</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">0.3</span>, <span class="hljs-number">0.9</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.4</span>, <span class="hljs-number">0.8</span>], [<span class="hljs-number">0.9</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.5</span>]])
+<span class="hljs-meta">&gt;&gt;&gt; </span>y = np.argmax(x, axis=<span class="hljs-number">1</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(y)
+[<span class="hljs-number">3</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span>]
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+        <li>同様に<code>axis=0</code>は、それぞれの列を対象に最大値を取るインデックスを抽出するオプション
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-meta">&gt;&gt;&gt; </span>x = np.array([[<span class="hljs-number">0.1</span>, <span class="hljs-number">0.3</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.9</span>, <span class="hljs-number">0.5</span>], [<span class="hljs-number">0.3</span>, <span class="hljs-number">0.9</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.4</span>, <span class="hljs-number">0.8</span>], [<span class="hljs-number">0.9</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.5</span>]])
+<span class="hljs-meta">&gt;&gt;&gt; </span>y = np.argmax(x, axis=<span class="hljs-number">0</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(y)
+[<span class="hljs-number">2</span> <span class="hljs-number">1</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>]
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>（＊6）バッチ単位で抽出した結果pと正解tを比較し、<strong>一致している個数（合計値）</strong>を取得</p>
+      <ul>
+        <li>sum（bool値）の例
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-meta">&gt;&gt;&gt; </span>p = np.array([<span class="hljs-number">0.1</span>, <span class="hljs-number">0.3</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.9</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.3</span>, <span class="hljs-number">0.9</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.4</span>, <span class="hljs-number">0.8</span>])
+<span class="hljs-meta">&gt;&gt;&gt; </span>t = np.array([<span class="hljs-number">0.1</span>, <span class="hljs-number">0.4</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.9</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.4</span>, <span class="hljs-number">0.9</span>, <span class="hljs-number">0.2</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">0.9</span>])
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(p==t)
+[ <span class="hljs-literal">True</span> <span class="hljs-literal">False</span>  <span class="hljs-literal">True</span>  <span class="hljs-literal">True</span>  <span class="hljs-literal">True</span> <span class="hljs-literal">False</span>  <span class="hljs-literal">True</span> <span class="hljs-literal">False</span> <span class="hljs-literal">False</span> <span class="hljs-literal">False</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>np.<span class="hljs-built_in">sum</span>(p==t)
+<span class="hljs-number">5</span>
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
+  </ul>
 </div>
