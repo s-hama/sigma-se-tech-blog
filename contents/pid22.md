@@ -90,3 +90,15 @@ $ python
 >>> mean_squared_error(np.array(y), np.array(t))
 0.0
 ```
+
+### 交差エントロピー誤差の定義
+交差エントロピー誤差（cross entropy error）は、クロスエントロピーとも呼ばれ、ターゲットとなる2つの変数のうち、一方を自然対数（底は \\(e\\)）として双方の積総和にマイナスをかけた値を取る。
+
+この2つの変数のうち \\(y_{k}\\) をニューラルネットワークの出力、もう1つの \\(t_{k}\\) を**教師データ（訓練データ）**とする。<br>
+※ \\(k\\) はデータの次元数
+<div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+\[
+E = -\sum_{i=1}^{n} t_{k} \log y_{k}
+\]
+\end{cases}\hspace{5mm}･･･（B）
+</div>
