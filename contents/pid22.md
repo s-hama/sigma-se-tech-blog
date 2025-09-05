@@ -102,3 +102,77 @@ E = -\sum_{i=1}^{n} t_{k} \log y_{k}
 \]
 \end{cases}\hspace{5mm}･･･（B）
 </div>
+
+### 交差エントロピー誤差と実装サンプル
+前項と同様に、10個の要素からなるデータを例に解説する。
+
+```python
+$ python
+>>> y = [0.1, 0.05, 0.6, 0.0, 0.05, 0.1, 0.0, 0.1, 0.0, 0.0]
+>>> t = [0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
+```
+
+\\(y_{k}\\)、\\(t_{k}\\) と同様に \\(k=10\\) となる \\(y\\) は、**ソフトマックス関数の出力値**で \\(t\\) は、**正解のみ1**、**不正解は0**を取る。
+
+そして、上記 \\(（B）\\) の \\(t_{k}\\) は、不正解が0となる9つは積も必ず0となる。
+よって、結局は正解1である \\(y_{k}\\)、**つまり0.6の自然対数にマイナスをかけた値**である
+<div style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+\[
+-\log 0.6 = 0.51
+\]
+</div>
+のみとなる。<br>
+
+前項でわざとはずした下記の結果であれば
+<div style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+\[
+-\log 0.1 = 2.30
+\]
+</div>
+
+となるため、結果(損失値)が高くなっていることが分かる。
+
+これをPythonで書くと
+```python
+delta = 1e-7
+-np.sum(t * np.log(y + delta))
+```
+となる。
+
+※ \\(delta = 1e-7\\) は、\\(y_{k}\\) が0となる \\(\log(0)\\) によってマイナスの無限大に発散しないよう微量なdeltaを足し込んでいる。
+
+関数で定義し、上記の \\(y\\) と \\(t\\) で実行してみる。
+
+```python
+$ python
+>>> import numpy as np
+>>> def cross_entropy_error(y, t):
+...     delta = 1e-7
+...     return -np.sum(t * np.log(y + delta))
+...
+>>> y = [0.1, 0.05, 0.6, 0.0, 0.05, 0.1, 0.0, 0.1, 0.0, 0.0]
+>>> t = [0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
+>>> cross_entropy_error(np.array(y), np.array(t))
+0.510825457099338
+```
+
+正解である2が60%となる上記cross_entropy_errorの結果は、**約0.510**となった。
+
+わざとはずして不正解である2が10%となる \\(y\\) だと
+```python
+$ python
+>>> import numpy as np
+>>> def cross_entropy_error(y, t):
+...     delta = 1e-7
+...     return -np.sum(t * np.log(y + delta))
+...
+>>> y = [0.1, 0.05, 0.1, 0.0, 0.05, 0.1, 0.0, 0.6, 0.0, 0.0]
+>>> t = [0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
+>>> cross_entropy_error(np.array(y), np.array(t))
+2.302584092994546
+```
+
+結果は約2.302となり、**約4倍（損失が4倍）**まで大きくなり、前項と同様に妥当な**損失値が得られている**ことが分かる。
+
+### 参考文献
+- 斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
