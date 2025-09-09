@@ -17,4 +17,67 @@
         E = \frac{1}{2}\sum_{i=1}^{n} (y_{k}-t_{k})^2\hspace{5mm}･･･（A）
         \]
     </div>
+    <h3 id="2乗和誤差の実装サンプル">2乗和誤差の実装サンプル</h3>
+    <p><a href="https://sigma-se.com/detail/19/" class="link-secondary">Python - AI : MNISTのダウンロード方法（手書き数字画像セットを取込む）</a>
+        で触れたMNISTデータセットを用いたと想定して、10個の要素からなるデータを例に解説する。</p>
+    <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
+</code></pre>
+    <ul>
+        <li>\(k=10\) は、10個の要素からなるデータでMNISTで扱うデータ数（0～9の数字）</li>
+        <li>\(y_{k}\) にあたる \(y\) は、ニューラルネットワークの出力でソフトマックス関数出力値（確率）<br>
+            ※ この出力値の算出処理については、<a
+                href="https://sigma-se.com/detail/20/#:~:text=%E6%8E%A8%E8%AB%96%E5%87%A6%E7%90%86%E3%81%AE%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%AD%E3%83%B3%E6%A7%8B%E6%88%90%E3%81%A8%E9%96%A2%E6%95%B0%E5%AE%9A%E7%BE%A9" class="link-secondary">Python
+                - AI : MNISTを使ったニューラルネットワークの推論処理と実装サンプル&gt; 推論処理のニューロン構成と関数定義</a> の<strong>predict関数</strong>を参考。</li>
+        <li>\(t_{k}\) にあたる \(t\) は、教師データでMNISTであらかじめ準備されている正解表す配列（1が正解）</li>
+        <li>\(y\) と \(t\) は、それぞれの要素同士が対となっている
+            <ul>
+                <li>要素1：数字画像が0の確率が10%（0.1）→ 不正解（0）</li>
+                <li>要素2：数字画像が1の確率が5%（0.05）→ 不正解（0）</li>
+                <li>要素3：数字画像が2の確率が60%（0.6）→ 正解（1）</li>
+                <li>要素4：数字画像が3の確率が0%（0.0）→ 不正解（0）</li>
+                <li>要素5：数字画像が4の確率が5%（0.05）→ 不正解（0）</li>
+                <li>要素6：数字画像が5の確率が10%（0.1）→ 不正解（0）</li>
+                <li>要素7：数字画像が6の確率が0%（0.0）→ 不正解（0）</li>
+                <li>要素8：数字画像が7の確率が10%（0.1）→ 不正解（0）</li>
+                <li>要素9：数字画像が8の確率が0%（0.0）→ 不正解（0）</li>
+                <li>要素10：数字画像が9の確率が0%（0.0）→ 不正解（0）</li>
+            </ul>
+        </li>
+    </ul>
+    <p>上記 \(（A）\) は、この要素別の \(y\) と \(t\) の差を2乗した総和を2で割ったものでPythonで書くと</p>
+    <pre><code class="language-python"><span class="hljs-number">0.5</span> * np.<span class="hljs-built_in">sum</span>((y-t)**<span class="hljs-number">2</span>)
+</code></pre>
+    <p>となる。</p>
+    <p>これを関数で定義し、上記の \(y\) と \(t\) で実行してみる。</p>
+    <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">mean_squared_error</span>(<span class="hljs-params">y, t</span>):
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">return</span> <span class="hljs-number">0.5</span> * np.<span class="hljs-built_in">sum</span>((y-t)**<span class="hljs-number">2</span>)
+...
+<span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>mean_squared_error(np.array(y), np.array(t))
+<span class="hljs-number">0.09750000000000003</span>
+</code></pre>
+    <p>正解である2が60%となり、上記mean_squared_errorの結果は、<strong>約0.0975</strong>となった。</p>
+    <p>試しにわざとはずして不正解である7が60%となる \(y\) で結果を見てみると</p>
+    <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">mean_squared_error</span>(<span class="hljs-params">y, t</span>):
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">return</span> <span class="hljs-number">0.5</span> * np.<span class="hljs-built_in">sum</span>((y-t)**<span class="hljs-number">2</span>)
+...
+<span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>mean_squared_error(np.array(y), np.array(t))
+<span class="hljs-number">0.5975</span>
+</code></pre>
+    <p>結果は0.5975となり、<strong>約6倍（損失が6倍）</strong>まで大きくなってしまう。</p>
+    <p>ちなみに正解である2が100%となる下記 \(y\) だと、結果は<strong>0</strong>となり、損失が<strong>0（間違った予測し）</strong>ということになる。</p>
+    <pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">1.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>mean_squared_error(np.array(y), np.array(t))
+<span class="hljs-number">0.0</span>
+</code></pre>
 </div>
