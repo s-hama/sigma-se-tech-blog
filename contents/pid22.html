@@ -90,4 +90,65 @@
         E = -\sum_{i=1}^{n} t_{k} \log y_{k}\hspace{5mm}･･･（B）
         \]
     </div>
+    <h3 id="交差エントロピー誤差と実装サンプル">交差エントロピー誤差と実装サンプル</h3>
+    <p>前項と同様に、10個の要素からなるデータを例に解説する。</p>
+    <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
+</code></pre>
+    <p>\(y_{k}\)、\(t_{k}\) と同様に \(k=10\) となる \(y\) は、<strong>ソフトマックス関数の出力値</strong>で \(t\)
+        は、<strong>正解のみ1</strong>、<strong>不正解は0</strong>を取る。</p>
+    <p>そして、上記 \(（B）\) の \(t_{k}\) は、不正解が0となる9つは積も必ず0となる。
+        よって、結局は正解1である \(y_{k}\)、<strong>つまり0.6の自然対数にマイナスをかけた値</strong>である</p>
+    <div
+        style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+        \[
+        -\log 0.6 = 0.51
+        \]
+    </div>
+    のみとなる。<br>
+    <p>前項でわざとはずした下記の結果であれば</p>
+    <div
+        style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+        \[
+        -\log 0.1 = 2.30
+        \]
+    </div>
+    <p>となるため、結果(損失値)が高くなっていることが分かる。</p>
+    <p>これをPythonで書くと</p>
+    <pre><code class="language-python">delta = <span class="hljs-number">1e-7</span>
+-np.<span class="hljs-built_in">sum</span>(t * np.log(y + delta))
+</code></pre>
+    <p>となる。</p>
+    <p>※ \(delta = 1e-7\) は、\(y_{k}\) が0となる \(\log(0)\) によってマイナスの無限大に発散しないよう微量なdeltaを足し込んでいる。</p>
+    <p>関数で定義し、上記の \(y\) と \(t\) で実行してみる。</p>
+    <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">cross_entropy_error</span>(<span class="hljs-params">y, t</span>):
+<span class="hljs-meta">... </span>    delta = <span class="hljs-number">1e-7</span>
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">return</span> -np.<span class="hljs-built_in">sum</span>(t * np.log(y + delta))
+...
+<span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>cross_entropy_error(np.array(y), np.array(t))
+<span class="hljs-number">0.510825457099338</span>
+</code></pre>
+    <p>正解である2が60%となる上記cross_entropy_errorの結果は、<strong>約0.510</strong>となった。</p>
+    <p>わざとはずして不正解である2が10%となる \(y\) だと</p>
+    <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">cross_entropy_error</span>(<span class="hljs-params">y, t</span>):
+<span class="hljs-meta">... </span>    delta = <span class="hljs-number">1e-7</span>
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">return</span> -np.<span class="hljs-built_in">sum</span>(t * np.log(y + delta))
+...
+<span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>cross_entropy_error(np.array(y), np.array(t))
+<span class="hljs-number">2.302584092994546</span>
+</code></pre>
+    <p>結果は約2.302となり、<strong>約4倍（損失が4倍）</strong>まで大きくなり、前項と同様に妥当な<strong>損失値が得られている</strong>ことが分かる。</p>
+    <h3 id="参考文献">参考文献</h3>
+    <ul>
+        <li>斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
+    </ul>
 </div>
