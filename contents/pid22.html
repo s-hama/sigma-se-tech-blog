@@ -1,0 +1,154 @@
+<div class="post-body">
+    <h2 id="目的">目的</h2>
+    <p>この記事では、損失関数の紹介と簡単な実装サンプルについて記載する。</p>
+    <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
+    <h3 id="ニューラルネットワークで使用する損失関数">ニューラルネットワークで使用する損失関数</h3>
+    <p>ニューラルネットワークの学習とは、<strong>訓練データを基に意図した結果となる最適な重みパラメータを判別する</strong>ことを指す。</p>
+    <p>学習するためには、<strong>損失関数</strong>というニューラルネットワークの性能の悪さを表す指標を基準に、その値が<strong>最も小さくなる重み</strong>となるように<strong>自己探索（最適な重みパラメータを探す）</strong>していくことになる。
+    </p>
+    <p>ここでは、有名な損失関数である<strong>2乗和誤差</strong>、<strong>交差エントロピー誤差</strong>について、簡単なPython実装サンプルを使って解説する。</p>
+    <h3 id="2乗和誤差の定義">2乗和誤差の定義</h3>
+    <p>2乗和誤差（mean squared error）は、残差平方和とも呼ばれ、<strong>ターゲットとなる2つの変数差の2乗を総和し、2で割った値</strong>を取る。</p>
+    <p>この2つの変数のうち \(y_{k}\) をニューラルネットワークの出力、もう1つの \(t_{k}\) を教師データ（訓練データ）と置く。<br>
+        ※ \(k\) はデータの次元数</p>
+    <div
+        style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+        \[
+        E = \frac{1}{2}\sum_{i=1}^{n} (y_{k}-t_{k})^2\hspace{5mm}･･･（A）
+        \]
+    </div>
+    <h3 id="2乗和誤差の実装サンプル">2乗和誤差の実装サンプル</h3>
+    <p><a href="https://sigma-se.com/detail/19/" class="link-secondary">Python - AI : MNISTのダウンロード方法（手書き数字画像セットを取込む）</a>
+        で触れたMNISTデータセットを用いたと想定して、10個の要素からなるデータを例に解説する。</p>
+    <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
+</code></pre>
+    <ul>
+        <li>\(k=10\) は、10個の要素からなるデータでMNISTで扱うデータ数（0～9の数字）</li>
+        <li>\(y_{k}\) にあたる \(y\) は、ニューラルネットワークの出力でソフトマックス関数出力値（確率）<br>
+            ※ この出力値の算出処理については、<a
+                href="https://sigma-se.com/detail/20/#:~:text=%E6%8E%A8%E8%AB%96%E5%87%A6%E7%90%86%E3%81%AE%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%AD%E3%83%B3%E6%A7%8B%E6%88%90%E3%81%A8%E9%96%A2%E6%95%B0%E5%AE%9A%E7%BE%A9" class="link-secondary">Python
+                - AI : MNISTを使ったニューラルネットワークの推論処理と実装サンプル&gt; 推論処理のニューロン構成と関数定義</a> の<strong>predict関数</strong>を参考。</li>
+        <li>\(t_{k}\) にあたる \(t\) は、教師データでMNISTであらかじめ準備されている正解表す配列（1が正解）</li>
+        <li>\(y\) と \(t\) は、それぞれの要素同士が対となっている
+            <ul>
+                <li>要素1：数字画像が0の確率が10%（0.1）→ 不正解（0）</li>
+                <li>要素2：数字画像が1の確率が5%（0.05）→ 不正解（0）</li>
+                <li>要素3：数字画像が2の確率が60%（0.6）→ 正解（1）</li>
+                <li>要素4：数字画像が3の確率が0%（0.0）→ 不正解（0）</li>
+                <li>要素5：数字画像が4の確率が5%（0.05）→ 不正解（0）</li>
+                <li>要素6：数字画像が5の確率が10%（0.1）→ 不正解（0）</li>
+                <li>要素7：数字画像が6の確率が0%（0.0）→ 不正解（0）</li>
+                <li>要素8：数字画像が7の確率が10%（0.1）→ 不正解（0）</li>
+                <li>要素9：数字画像が8の確率が0%（0.0）→ 不正解（0）</li>
+                <li>要素10：数字画像が9の確率が0%（0.0）→ 不正解（0）</li>
+            </ul>
+        </li>
+    </ul>
+    <p>上記 \(（A）\) は、この要素別の \(y\) と \(t\) の差を2乗した総和を2で割ったものでPythonで書くと</p>
+    <pre><code class="language-python"><span class="hljs-number">0.5</span> * np.<span class="hljs-built_in">sum</span>((y-t)**<span class="hljs-number">2</span>)
+</code></pre>
+    <p>となる。</p>
+    <p>これを関数で定義し、上記の \(y\) と \(t\) で実行してみる。</p>
+    <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">mean_squared_error</span>(<span class="hljs-params">y, t</span>):
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">return</span> <span class="hljs-number">0.5</span> * np.<span class="hljs-built_in">sum</span>((y-t)**<span class="hljs-number">2</span>)
+...
+<span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>mean_squared_error(np.array(y), np.array(t))
+<span class="hljs-number">0.09750000000000003</span>
+</code></pre>
+    <p>正解である2が60%となり、上記mean_squared_errorの結果は、<strong>約0.0975</strong>となった。</p>
+    <p>試しにわざとはずして不正解である7が60%となる \(y\) で結果を見てみると</p>
+    <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">mean_squared_error</span>(<span class="hljs-params">y, t</span>):
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">return</span> <span class="hljs-number">0.5</span> * np.<span class="hljs-built_in">sum</span>((y-t)**<span class="hljs-number">2</span>)
+...
+<span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>mean_squared_error(np.array(y), np.array(t))
+<span class="hljs-number">0.5975</span>
+</code></pre>
+    <p>結果は0.5975となり、<strong>約6倍（損失が6倍）</strong>まで大きくなってしまう。</p>
+    <p>ちなみに正解である2が100%となる下記 \(y\) だと、結果は<strong>0</strong>となり、損失が<strong>0（間違った予測し）</strong>ということになる。</p>
+    <pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">1.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>mean_squared_error(np.array(y), np.array(t))
+<span class="hljs-number">0.0</span>
+</code></pre>
+    <h3 id="交差エントロピー誤差の定義">交差エントロピー誤差の定義</h3>
+    <p>交差エントロピー誤差（cross entropy error）は、クロスエントロピーとも呼ばれ、ターゲットとなる2つの変数のうち、一方を自然対数（底は \(e\)）として双方の積総和にマイナスをかけた値を取る。</p>
+    <p>この2つの変数のうち \(y_{k}\) をニューラルネットワークの出力、もう1つの \(t_{k}\) を<strong>教師データ（訓練データ）</strong>とする。<br>
+        ※ \(k\) はデータの次元数</p>
+    <div
+        style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+        \[
+        E = -\sum_{i=1}^{n} t_{k} \log y_{k}\hspace{5mm}･･･（B）
+        \]
+    </div>
+    <h3 id="交差エントロピー誤差と実装サンプル">交差エントロピー誤差と実装サンプル</h3>
+    <p>前項と同様に、10個の要素からなるデータを例に解説する。</p>
+    <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
+</code></pre>
+    <p>\(y_{k}\)、\(t_{k}\) と同様に \(k=10\) となる \(y\) は、<strong>ソフトマックス関数の出力値</strong>で \(t\)
+        は、<strong>正解のみ1</strong>、<strong>不正解は0</strong>を取る。</p>
+    <p>そして、上記 \(（B）\) の \(t_{k}\) は、不正解が0となる9つは積も必ず0となる。
+        よって、結局は正解1である \(y_{k}\)、<strong>つまり0.6の自然対数にマイナスをかけた値</strong>である</p>
+    <div
+        style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+        \[
+        -\log 0.6 = 0.51
+        \]
+    </div>
+    のみとなる。<br>
+    <p>前項でわざとはずした下記の結果であれば</p>
+    <div
+        style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+        \[
+        -\log 0.1 = 2.30
+        \]
+    </div>
+    <p>となるため、結果(損失値)が高くなっていることが分かる。</p>
+    <p>これをPythonで書くと</p>
+    <pre><code class="language-python">delta = <span class="hljs-number">1e-7</span>
+-np.<span class="hljs-built_in">sum</span>(t * np.log(y + delta))
+</code></pre>
+    <p>となる。</p>
+    <p>※ \(delta = 1e-7\) は、\(y_{k}\) が0となる \(\log(0)\) によってマイナスの無限大に発散しないよう微量なdeltaを足し込んでいる。</p>
+    <p>関数で定義し、上記の \(y\) と \(t\) で実行してみる。</p>
+    <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">cross_entropy_error</span>(<span class="hljs-params">y, t</span>):
+<span class="hljs-meta">... </span>    delta = <span class="hljs-number">1e-7</span>
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">return</span> -np.<span class="hljs-built_in">sum</span>(t * np.log(y + delta))
+...
+<span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>cross_entropy_error(np.array(y), np.array(t))
+<span class="hljs-number">0.510825457099338</span>
+</code></pre>
+    <p>正解である2が60%となる上記cross_entropy_errorの結果は、<strong>約0.510</strong>となった。</p>
+    <p>わざとはずして不正解である2が10%となる \(y\) だと</p>
+    <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">cross_entropy_error</span>(<span class="hljs-params">y, t</span>):
+<span class="hljs-meta">... </span>    delta = <span class="hljs-number">1e-7</span>
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">return</span> -np.<span class="hljs-built_in">sum</span>(t * np.log(y + delta))
+...
+<span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>cross_entropy_error(np.array(y), np.array(t))
+<span class="hljs-number">2.302584092994546</span>
+</code></pre>
+    <p>結果は約2.302となり、<strong>約4倍（損失が4倍）</strong>まで大きくなり、前項と同様に妥当な<strong>損失値が得られている</strong>ことが分かる。</p>
+    <h3 id="参考文献">参考文献</h3>
+    <ul>
+        <li>斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
+    </ul>
+</div>
