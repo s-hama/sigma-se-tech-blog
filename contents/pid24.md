@@ -82,3 +82,47 @@ $ python
  ...
  >>>
 ```
+
+### 数値微分の例（Python実装サンプル）
+2次関数 \\(y = 0.05x^{2} + 0.5x \\) を例にした関数`func_ex`を定義し、イメージしやすいようグラフ描画もしておく。
+
+```python
+$ python
+ >>> import numpy as np
+ >>> import matplotlib.pyplot as plt
+ >>>
+ >>> def func_ex(x):
+ ...     return 0.05*x**2 + 0.5*x
+ >>>
+ >>> x = np.arange(0.0, 20.0, 0.1)    # 区間を0～20 まで、描画制度を 0.1 刻みに設定
+ >>> y = func_ex(x)
+ >>>
+ >>> plt.title("y = 0.05x^2+0.5x \n# arange:0, 20, 0.1, xlabel:x, ylabel:f(x)")    # グラフタイトルを設定
+ Text(0.5, 1.0, 'y = 0.05x^2+0.5x \n# arange:0, 20, 0.1, xlabel:x, ylabel:f(x)')
+ >>> plt.xlabel("x")    # x軸のラベルを設定
+ Text(0.5, 0, 'x')
+ >>> plt.ylabel("f(x)")    # y軸のラベルを設定
+ Text(0, 0.5, 'f(x)')
+ >>> plt.plot(x,y)    # グラフの描画
+ [<matplotlib.lines.Line2D object at 0x7f1f0e6f5be0>]
+ >>> plt.savefig('/static/tblog/img/pid24_1.png')
+ >>>
+```
+
+![pid24_1](/static/tblog/img/pid24_1.png)
+
+そして上記**数値微分の関数定義（Python実装サンプル）**で定義した数値微分の関数`num_dif`にこの2次関数の \\(x = 5 \\) の場合と、\\(x = 10\\) の場合を例に結果を出してみる。
+
+```python
+$ python
+ >>> num_dif(func_ex, 5)
+ 0.9999999999976694
+ >>> num_dif(func_ex, 10)
+ 1.4999999999965041
+ >>>
+```
+
+真の微分では、\\(f(x) = 0.05x^{2} + 0.5x \\) ⇒ \\(f’(x) = 0.1x + 0.5 \\) より、\\(x = 5\\) の場合は \\(1.0 \\) 、\\(x = 10\\) の場合は \\(1.5 \\) となるので、\\(0.9999…\\) と \\(1.4999…\\) という結果は、**非常に小さい誤差で数値微分できている**ことになる。
+
+### 参考文献
+- 斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
