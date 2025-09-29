@@ -20,4 +20,26 @@
   <p>
     また、この<strong>連続性をもつこと</strong>とは、<strong>損失関数の結果が実数である</strong>ということになるが、<strong>実数と実数の間に隙間はない</strong>ので、いくらでも際限なく損失関数の<strong>極微量な区間の微分結果を探索する</strong>ことができ、ここに微分の性質が利用されている。
   </p>
+  <h3 id="微分のおさらい">微分のおさらい</h3>
+  <p>微分とは、簡単に言うと<strong>極微量な区間である点 \(f(x)\), \(f(x+\Delta x)\) の変化量（傾き、勾配）を表したもの</strong>。</p>
+  <p>そして、厳密に言うとこの極微量な区間 \(f(x)\), \(f(x+\Delta x)\) の差を<strong>限りなく \(0\) に近づけた時の変化量</strong>を表しており、一般的に下記のように定義される。</p>
+  <div
+    style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    f’(x) = \frac{df(x)}{dx}
+    \]
+  </div>
+  <div
+    style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    \frac{df(x)}{dx} = \lim_{\Delta x \to 0} \frac{ f(x+\Delta x) - f(x) }{\Delta x}
+    \]
+  </div>
+  <p>※ \(f’(x)\) と \(\frac{df(x)}{dx}\) は、\(f(x)\) を \(x\) で微分した結果（導関数）を表す記号。</p>
+  <p>また、この記事で解説しているニューラルネットワークでの微分は、この極微量な区間 \((f(x), f(x+\Delta x))\)
+    の差を<strong>プログラム言語の型の認識できる程度の微量なもの</strong>であることを前提としている。<br>
+    （プログラム言語の型の認識できるレベルで\(0\)に近づけるため、微量な誤差が発生するため。）</p>
+  <p>この微分を <strong>数値微分</strong>と表現し、下記誤差がない高校数学の解析的な微分（真の微分）と区別する。</p>
+  <p>高校数学の微分「\(y = x^{n}\) ⇒ \(y’ = nx^{n-1}\)」は、<strong>誤差がない解析的な微分</strong>（真の微分）であり、上記の定義に従い、区間 \((f(x), f(x+\Delta
+    x))\) の差を限りなく \(0\) に近づけた値を作業的に計算し求めている。</p>
 </div>
