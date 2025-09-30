@@ -42,4 +42,31 @@
   <p>この微分を <strong>数値微分</strong>と表現し、下記誤差がない高校数学の解析的な微分（真の微分）と区別する。</p>
   <p>高校数学の微分「\(y = x^{n}\) ⇒ \(y’ = nx^{n-1}\)」は、<strong>誤差がない解析的な微分</strong>（真の微分）であり、上記の定義に従い、区間 \((f(x), f(x+\Delta
     x))\) の差を限りなく \(0\) に近づけた値を作業的に計算し求めている。</p>
+  <h3 id="数値微分の関数定義python実装サンプル">数値微分の関数定義（Python実装サンプル）</h3>
+  <p>上記で触れたが数値微分なので<strong>プログラム言語の型の認識できるレベル</strong>でなければならない。</p>
+  <p>もし、\(h\) を下記のように \(10^{-50}\) とし、NumPy.float32の型が認識できないほどの微量な値である場合、<strong>丸め誤差</strong>により、\(0.0\) となってしまう。</p>
+  <pre><code class="language-python">$ python
+ &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">num_dif</span>(<span class="hljs-params">f, x</span>):
+ ...     h = <span class="hljs-number">10e-50</span>
+ ...     <span class="hljs-keyword">return</span> (f(x+h) - f(x)) / h
+ ...
+ &gt;&gt;&gt;
+</code></pre>
+  <p>従って、NumPy.float32型で丸目誤差がでないラインである \(10^{-4} = 0.0001\) となる必要がある。</p>
+  <pre><code class="language-python">$ python
+ &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">num_dif</span>(<span class="hljs-params">f, x</span>):
+ ...     h = <span class="hljs-number">1e-4</span>
+ ...     <span class="hljs-keyword">return</span> (f(x+h) - f(x)) / h
+ ...
+ &gt;&gt;&gt;
+</code></pre>
+  <p>しかし、数学的に見ると \(10^{-4} = 0.0001\) でも十分大きな値なので、誤差を減らす工夫として、\(f(x+\Delta x) - f(x) \) の<strong>正の増加分</strong>だけでなく
+    \(f(x) - f(x-\Delta x)\) となる<strong>負の増加分</strong>の変化も加味した中心差分という方法を取り、下記のように実装する。</p>
+  <pre><code class="language-python">$ python
+ &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">num_dif</span>(<span class="hljs-params">f, x</span>):
+ ...     h = <span class="hljs-number">1e-4</span>
+ ...     <span class="hljs-keyword">return</span> (f(x+h) - f(x-h)) / (<span class="hljs-number">2</span>*h)
+ ...
+ &gt;&gt;&gt;
+</code></pre>
 </div>
