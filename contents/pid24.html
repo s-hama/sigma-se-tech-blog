@@ -69,4 +69,43 @@
  ...
  &gt;&gt;&gt;
 </code></pre>
+  <h3 id="数値微分の例python実装サンプル">数値微分の例（Python実装サンプル）</h3>
+  <p>2次関数 \(y = 0.05x^{2} + 0.5x \) を例にした関数<code>func_ex</code>を定義し、イメージしやすいようグラフ描画もしておく。</p>
+  <pre><code class="language-python">$ python
+ &gt;&gt;&gt; <span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+ &gt;&gt;&gt; <span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt
+ &gt;&gt;&gt;
+ &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">func_ex</span>(<span class="hljs-params">x</span>):
+ ...     <span class="hljs-keyword">return</span> <span class="hljs-number">0.05</span>*x**<span class="hljs-number">2</span> + <span class="hljs-number">0.5</span>*x
+ &gt;&gt;&gt;
+ &gt;&gt;&gt; x = np.arange(<span class="hljs-number">0.0</span>, <span class="hljs-number">20.0</span>, <span class="hljs-number">0.1</span>)    <span class="hljs-comment"># 区間を0～20 まで、描画制度を 0.1 刻みに設定</span>
+ &gt;&gt;&gt; y = func_ex(x)
+ &gt;&gt;&gt;
+ &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;y = 0.05x^2+0.5x \n# arange:0, 20, 0.1, xlabel:x, ylabel:f(x)&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
+ Text(<span class="hljs-number">0.5</span>, <span class="hljs-number">1.0</span>, <span class="hljs-string">&#x27;y = 0.05x^2+0.5x \n# arange:0, 20, 0.1, xlabel:x, ylabel:f(x)&#x27;</span>)
+ &gt;&gt;&gt; plt.xlabel(<span class="hljs-string">&quot;x&quot;</span>)    <span class="hljs-comment"># x軸のラベルを設定</span>
+ Text(<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-string">&#x27;x&#x27;</span>)
+ &gt;&gt;&gt; plt.ylabel(<span class="hljs-string">&quot;f(x)&quot;</span>)    <span class="hljs-comment"># y軸のラベルを設定</span>
+ Text(<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-string">&#x27;f(x)&#x27;</span>)
+ &gt;&gt;&gt; plt.plot(x,y)    <span class="hljs-comment"># グラフの描画</span>
+ [&lt;matplotlib.lines.Line2D <span class="hljs-built_in">object</span> at <span class="hljs-number">0x7f1f0e6f5be0</span>&gt;]
+ &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;/static/tblog/img/pid24_1.png&#x27;</span>)
+ &gt;&gt;&gt;
+</code></pre>
+  <p><img src="/static/tblog/img/pid24_1.png" alt="pid24_1"></p>
+  <p>そして上記 <strong>数値微分の関数定義（Python実装サンプル）</strong>で定義した数値微分の関数<code>num_dif</code>にこの2次関数の \(x = 5 \) の場合と、\(x = 10\) の場合を例に結果を出してみる。
+  </p>
+  <pre><code class="language-python">$ python
+ &gt;&gt;&gt; num_dif(func_ex, <span class="hljs-number">5</span>)
+ <span class="hljs-number">0.9999999999976694</span>
+ &gt;&gt;&gt; num_dif(func_ex, <span class="hljs-number">10</span>)
+ <span class="hljs-number">1.4999999999965041</span>
+ &gt;&gt;&gt;
+</code></pre>
+  <p>真の微分では、\(f(x) = 0.05x^{2} + 0.5x \) ⇒ \(f’(x) = 0.1x + 0.5 \) より、\(x = 5\) の場合は \(1.0 \) 、\(x = 10\) の場合は \(1.5 \)
+    となるので、\(0.9999…\) と \(1.4999…\) という結果は、<strong>非常に小さい誤差で数値微分できている</strong>ことになる。</p>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
+  </ul>
 </div>
