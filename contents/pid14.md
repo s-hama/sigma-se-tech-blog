@@ -101,7 +101,7 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
 
 - 極限値
   - 表示
-    <div style="margin-left: 1rem; font-size: 1.5em; margin-top: 0.25em;">
+    <div style="display: flex; overflow-x: auto; white-space: nowrap; height: 4.5rem; margin-left: 1rem; font-size: 1.5em; margin-top: 0.25em;">
       <math>
         <munder>
           <mi>lim</mi>
@@ -149,7 +149,7 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
 
 - 逆行列
   - 表示
-    <div style="margin-left: 1rem; font-size: 1.2em; margin-top: 0.25em;">
+    <div style="display: flex; overflow-x: auto; white-space: nowrap; height: 10rem; margin-left: 1rem; font-size: 1.2em; margin-top: 0.25em;">
       <math>
         <mtable>
           <mtr>
