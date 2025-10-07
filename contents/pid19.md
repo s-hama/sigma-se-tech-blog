@@ -22,7 +22,7 @@ Python - AI : MNISTのダウンロード方法（手書き数字画像セット�
 
 以下、画像とラベルのフォーマット仕様。
 - 画像データのフォーマット（train-images-idx3-ubyte、t10k-images-idx3-ubyte）
-  <table class="table" style="width: 100%; margin-bottom: 2em;">
+  <table class="table" style="width: 100%; margin-bottom: 2em; table-layout: fixed;">
     <thead>
       <tr>
         <th scope="col">offset</th>
@@ -44,7 +44,7 @@ Python - AI : MNISTのダウンロード方法（手書き数字画像セット�
   </table>
 
 - ラベルデータのフォーマット（train-labels-idx1-ubyte、t10k-labels-idx1-ubyte）
-  <table class="table" style="width: 100%; margin-bottom: 2em;">
+  <table class="table" style="width: 100%; margin-bottom: 2em; table-layout: fixed;">
     <thead>
       <tr>
         <th scope="col">offset</th>

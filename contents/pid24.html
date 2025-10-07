@@ -1,0 +1,111 @@
+<div class="post-body">
+  <h2 id="目的">目的</h2>
+  <p>この記事では、損失関数と数値微分について簡単な実装サンプルを記載する。</p>
+  <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
+  <h3 id="損失関数と微分の関係">損失関数と微分の関係</h3>
+  <p>
+    前の記事でも触れた交差エントロピー誤差などの損失関数が取る値は、<strong>小さいほど正解に近づいている</strong>が、もちろんそこで終わりではなく<strong>今の結果より正解に近い</strong>パラメータ候補（重み、バイアス）を決めてさらに正解に近づけなければ意味がない。
+  </p>
+  <p>そこで基準になるのが<strong>重みパラメータの微分結果（勾配値）</strong>である。</p>
+  <p>具体的な説明は割愛するが、<strong>一つの重みパラメータの微分結果</strong>と<strong>損失関数の結果</strong>は、密接な関係にある。</p>
+  <p>
+    <strong>微分結果が負</strong>であれば、正の方向に重みパラメータを変化させることで損失関数の結果も小さくなり、同様に<strong>微分結果が正</strong>であれば、負の方向に重みパラメータを変化させることで損失関数の結果も小さくなる。
+  </p>
+  <p>この要領で重みパラメータを変化幅を少しずつ減らしながらこの作業を繰り返すことで、<strong>微分結果が \(0\) に収束し、その結果、損失関数の結果も \(0\) に収束する</strong>ことになる。</p>
+  <p>但し、この概念を理解する上で注意しなければならないのが <a class="link-secondary"
+      href="https://sigma-se.com/detail/18/#:~:text=%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB-,%E3%82%B9%E3%83%86%E3%83%83%E3%83%97%E9%96%A2%E6%95%B0,-%E5%89%8D%E3%81%AE%E8%A8%98%E4%BA%8B">Python
+      - AI : 活性化関数の実装サンプルまとめ（ステップ、シグモイド、ReLU、恒等関数、ソフトマックス関数）&gt; ステップ関数</a> のように、<strong>\(x = 0\) 以外の値で微分結果が
+      \(0\)（勾配が\(0\)）となるような損失関数</strong>では、そもそも正解に近づけようがないため、微分する意味がない。</p>
+  <p>つまり、<strong>損失関数は連続（曲線状の変化をしている）でなければ</strong>、微分する意味がない。</p>
+  <p>
+    また、この<strong>連続性をもつこと</strong>とは、<strong>損失関数の結果が実数である</strong>ということになるが、<strong>実数と実数の間に隙間はない</strong>ので、いくらでも際限なく損失関数の<strong>極微量な区間の微分結果を探索する</strong>ことができ、ここに微分の性質が利用されている。
+  </p>
+  <h3 id="微分のおさらい">微分のおさらい</h3>
+  <p>微分とは、簡単に言うと<strong>極微量な区間である点 \(f(x)\), \(f(x+\Delta x)\) の変化量（傾き、勾配）を表したもの</strong>。</p>
+  <p>そして、厳密に言うとこの極微量な区間 \(f(x)\), \(f(x+\Delta x)\) の差を<strong>限りなく \(0\) に近づけた時の変化量</strong>を表しており、一般的に下記のように定義される。</p>
+  <div
+    style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    f’(x) = \frac{df(x)}{dx}
+    \]
+  </div>
+  <div
+    style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    \frac{df(x)}{dx} = \lim_{\Delta x \to 0} \frac{ f(x+\Delta x) - f(x) }{\Delta x}
+    \]
+  </div>
+  <p>※ \(f’(x)\) と \(\frac{df(x)}{dx}\) は、\(f(x)\) を \(x\) で微分した結果（導関数）を表す記号。</p>
+  <p>また、この記事で解説しているニューラルネットワークでの微分は、この極微量な区間 \((f(x), f(x+\Delta x))\)
+    の差を<strong>プログラム言語の型の認識できる程度の微量なもの</strong>であることを前提としている。<br>
+    （プログラム言語の型の認識できるレベルで\(0\)に近づけるため、微量な誤差が発生するため。）</p>
+  <p>この微分を <strong>数値微分</strong>と表現し、下記誤差がない高校数学の解析的な微分（真の微分）と区別する。</p>
+  <p>高校数学の微分「\(y = x^{n}\) ⇒ \(y’ = nx^{n-1}\)」は、<strong>誤差がない解析的な微分</strong>（真の微分）であり、上記の定義に従い、区間 \((f(x), f(x+\Delta
+    x))\) の差を限りなく \(0\) に近づけた値を作業的に計算し求めている。</p>
+  <h3 id="数値微分の関数定義python実装サンプル">数値微分の関数定義（Python実装サンプル）</h3>
+  <p>上記で触れたが数値微分なので<strong>プログラム言語の型の認識できるレベル</strong>でなければならない。</p>
+  <p>もし、\(h\) を下記のように \(10^{-50}\) とし、NumPy.float32の型が認識できないほどの微量な値である場合、<strong>丸め誤差</strong>により、\(0.0\) となってしまう。</p>
+  <pre><code class="language-python">$ python
+ &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">num_dif</span>(<span class="hljs-params">f, x</span>):
+ ...     h = <span class="hljs-number">10e-50</span>
+ ...     <span class="hljs-keyword">return</span> (f(x+h) - f(x)) / h
+ ...
+ &gt;&gt;&gt;
+</code></pre>
+  <p>従って、NumPy.float32型で丸目誤差がでないラインである \(10^{-4} = 0.0001\) となる必要がある。</p>
+  <pre><code class="language-python">$ python
+ &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">num_dif</span>(<span class="hljs-params">f, x</span>):
+ ...     h = <span class="hljs-number">1e-4</span>
+ ...     <span class="hljs-keyword">return</span> (f(x+h) - f(x)) / h
+ ...
+ &gt;&gt;&gt;
+</code></pre>
+  <p>しかし、数学的に見ると \(10^{-4} = 0.0001\) でも十分大きな値なので、誤差を減らす工夫として、\(f(x+\Delta x) - f(x) \) の<strong>正の増加分</strong>だけでなく
+    \(f(x) - f(x-\Delta x)\) となる<strong>負の増加分</strong>の変化も加味した中心差分という方法を取り、下記のように実装する。</p>
+  <pre><code class="language-python">$ python
+ &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">num_dif</span>(<span class="hljs-params">f, x</span>):
+ ...     h = <span class="hljs-number">1e-4</span>
+ ...     <span class="hljs-keyword">return</span> (f(x+h) - f(x-h)) / (<span class="hljs-number">2</span>*h)
+ ...
+ &gt;&gt;&gt;
+</code></pre>
+  <h3 id="数値微分の例python実装サンプル">数値微分の例（Python実装サンプル）</h3>
+  <p>2次関数 \(y = 0.05x^{2} + 0.5x \) を例にした関数<code>func_ex</code>を定義し、イメージしやすいようグラフ描画もしておく。</p>
+  <pre><code class="language-python">$ python
+ &gt;&gt;&gt; <span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+ &gt;&gt;&gt; <span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt
+ &gt;&gt;&gt;
+ &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">func_ex</span>(<span class="hljs-params">x</span>):
+ ...     <span class="hljs-keyword">return</span> <span class="hljs-number">0.05</span>*x**<span class="hljs-number">2</span> + <span class="hljs-number">0.5</span>*x
+ &gt;&gt;&gt;
+ &gt;&gt;&gt; x = np.arange(<span class="hljs-number">0.0</span>, <span class="hljs-number">20.0</span>, <span class="hljs-number">0.1</span>)    <span class="hljs-comment"># 区間を0～20 まで、描画制度を 0.1 刻みに設定</span>
+ &gt;&gt;&gt; y = func_ex(x)
+ &gt;&gt;&gt;
+ &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;y = 0.05x^2+0.5x \n# arange:0, 20, 0.1, xlabel:x, ylabel:f(x)&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
+ Text(<span class="hljs-number">0.5</span>, <span class="hljs-number">1.0</span>, <span class="hljs-string">&#x27;y = 0.05x^2+0.5x \n# arange:0, 20, 0.1, xlabel:x, ylabel:f(x)&#x27;</span>)
+ &gt;&gt;&gt; plt.xlabel(<span class="hljs-string">&quot;x&quot;</span>)    <span class="hljs-comment"># x軸のラベルを設定</span>
+ Text(<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-string">&#x27;x&#x27;</span>)
+ &gt;&gt;&gt; plt.ylabel(<span class="hljs-string">&quot;f(x)&quot;</span>)    <span class="hljs-comment"># y軸のラベルを設定</span>
+ Text(<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-string">&#x27;f(x)&#x27;</span>)
+ &gt;&gt;&gt; plt.plot(x,y)    <span class="hljs-comment"># グラフの描画</span>
+ [&lt;matplotlib.lines.Line2D <span class="hljs-built_in">object</span> at <span class="hljs-number">0x7f1f0e6f5be0</span>&gt;]
+ &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;/static/tblog/img/pid24_1.png&#x27;</span>)
+ &gt;&gt;&gt;
+</code></pre>
+  <p><img src="/static/tblog/img/pid24_1.png" alt="pid24_1"></p>
+  <p>そして上記 <strong>数値微分の関数定義（Python実装サンプル）</strong>で定義した数値微分の関数<code>num_dif</code>にこの2次関数の \(x = 5 \) の場合と、\(x = 10\) の場合を例に結果を出してみる。
+  </p>
+  <pre><code class="language-python">$ python
+ &gt;&gt;&gt; num_dif(func_ex, <span class="hljs-number">5</span>)
+ <span class="hljs-number">0.9999999999976694</span>
+ &gt;&gt;&gt; num_dif(func_ex, <span class="hljs-number">10</span>)
+ <span class="hljs-number">1.4999999999965041</span>
+ &gt;&gt;&gt;
+</code></pre>
+  <p>真の微分では、\(f(x) = 0.05x^{2} + 0.5x \) ⇒ \(f’(x) = 0.1x + 0.5 \) より、\(x = 5\) の場合は \(1.0 \) 、\(x = 10\) の場合は \(1.5 \)
+    となるので、\(0.9999…\) と \(1.4999…\) という結果は、<strong>非常に小さい誤差で数値微分できている</strong>ことになる。</p>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
+  </ul>
+</div>

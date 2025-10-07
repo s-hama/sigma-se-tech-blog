@@ -90,7 +90,7 @@
           </table>
         </li>
         <li>Pyhonサンプル<br>
-          上記のANDゲートを満たすパラメータとなるように \(w_{1}, w_{2}, \theta\) を \((w_{1}, w_{2}, \theta) = (0.5, 0.5, 0.9)\)
+          上記のANDゲートを満たすパラメータとなるように \(w_{1}, w_{2}, \theta\) を \((w_{1}, w_{2}, \theta)\) \(= (0.5, 0.5, 0.9)\)
           と置いて、Pyhonで表現してみる。
           <pre><code class="language-bash">$ python
 &gt;&gt;&gt; def AND(x1, x2):
@@ -150,7 +150,7 @@
           </table>
         </li>
         <li>Pyhonサンプル<br>
-          上記 <strong>1.</strong> と同様に上記のNANDゲートを満たすパラメータ \(w_{1}, w_{2}, \theta\) を \((w_{1}, w_{2}, \theta) = (-0.5,
+          上記 <strong>1.</strong> と同様に上記のNANDゲートを満たすパラメータ \(w_{1}, w_{2}, \theta\) を \((w_{1}, w_{2}, \theta)\) \(= (-0.5,
           -0.5, -0.9)\) と置いて、Pyhonで表現したもの。
           <pre><code class="language-bash">$ python
 &gt;&gt;&gt; def NAND(x1, x2):
@@ -211,7 +211,7 @@
         </li>
         <li>Pyhonサンプル<br>
           上記 <strong>1.</strong>、<strong>2.</strong> と同様に上記のORゲートを満たすパラメータ \(w_{1}, w_{2}, \theta\) を \((w_{1}, w_{2},
-          \theta) = (0.9, 0.9, -0.5)\) と置いて、Pyhonで表現したもの。
+          \theta)\) \(= (0.9, 0.9, -0.5)\) と置いて、Pyhonで表現したもの。
           <pre><code class="language-bash">$ python
 &gt;&gt;&gt; def OR(x1, x2):
 ...     w1, w2, theta = 0.9, 0.9, 0.5
@@ -247,7 +247,7 @@
   <p>理屈は閾値 \(\theta\) と同じだが、\(-\theta\) をバイアス \(b\) と表現を変え、上記\(（A）\)を以下\(（D）\)のように表す。<br>
     ※\(（A）\)から閾値 \(\theta\) を左辺に移項し、\(-\theta\) を \(b\) に置き換えている。<br>
     バイアスとは「ゲタをはく」という意味があり、入力がオール \(0\) の時、どれだけ値を上乗せするかという意味を持つ。</p>
-  <div style="display: flex; margin-left: 1rem; font-size: 1.4em; margin-top: -0.75em;">
+  <div style="display: flex; margin-left: 1rem; font-size: 1.4em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
     \[
     y =
     {\small
