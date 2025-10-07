@@ -26,7 +26,7 @@ Python - AI : 多層パーセプトロンの概念と実装サンプル
     </tbody>
   </table>
 
-  下記の入力値が2つあるパーセプトロン\\(（A）\\)に対して、ORゲートを満たす、パラメータ \\((b, w_{1}, w_{2}) = (-0.5, 1.0, 1.0)\\) を与えた場合を例にその根拠を説明する。
+  下記の入力値が2つあるパーセプトロン\\(（A）\\)に対して、ORゲートを満たす、パラメータ \\((b, w_{1}, w_{2})\\) \\(= (-0.5, 1.0, 1.0)\\) を与えた場合を例にその根拠を説明する。
 
   <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
   \[
@@ -40,7 +40,7 @@ Python - AI : 多層パーセプトロンの概念と実装サンプル
   \]
   </div>
 
-  パラメータ \\((b, w_{1}, w_{2}) = (-0.5, 1.0, 1.0)\\) を指定すると
+  パラメータ \\((b, w_{1}, w_{2})\\) \\(= (-0.5, 1.0, 1.0)\\) を指定すると
 
   <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
   \[

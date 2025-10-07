@@ -96,7 +96,7 @@ Python - Matplotlib : matplotlib.pyplotの使用方法
     $ python
      >>> import matplotlib.pyplot as plt
      >>> from matplotlib.image import imread
-     >>> img = imread('/var/www/projs/sweb/static/tblog/img/pid13_3.png')    # 任意の画像をimgに読込み
+     >>> img = imread('/var/www/projs/sweb/static/tblog/img/pid13_3.png')    # 任意の画像をimgに読み込み
      >>> plt.imshow(img)    # 画像表示
      <matplotlib.image.AxesImage object at 0x7f4b80106f60>
      >>> plt.title('b_id36_3.png Read with image.imread \n and output as b_id36_4.png in pyplot.imshow')    # グラフタイトルを設定
