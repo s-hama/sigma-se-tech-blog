@@ -42,3 +42,51 @@ Python - AI : 勾配降下法の実装サンプル
   - [Python - AI : 多層パーセプトロンの概念と実装サンプル](https://sigma-se.com/detail/16/)
   - [Python - AI : ニューラルネットワークの活性化関数と実装サンプル](https://sigma-se.com/detail/17/)
 
+
+### 勾配降下法のPython実装サンプル
+[Python - AI : 偏微分と勾配の実装サンプル > 勾配のPython実装サンプル](https://sigma-se.com/detail/25/#:~:text=%E3%81%AB%E9%81%8E%E3%81%8E%E3%81%AA%E3%81%84%E3%80%82-,%E5%8B%BE%E9%85%8D%E3%81%AEPython%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB,-%E4%B8%8A%E8%A8%98%E3%81%A7%E3%80%81) で解説した**勾配関数**（num_gradient）を使用する。
+
+- **勾配関数**（num_gradient）
+    ```python
+    $ python
+        >>> import numpy as np
+        >>>
+        >>> def num_gradient(f,x):    # 勾配関数
+        ...     h = 1e-4
+        ...     grad = np.zeros_like(x)    # xと同じ形状の配列で値がすべて 0
+        ...
+        ...     for idx in range(x.size):    # x の次元分ループする。 (下記例は、5.0, 10.0 の 2 周ループ)
+        ...         idx_val = x[idx]
+        ...         x[idx] = idx_val + h    # f(x + h)の算出。
+        ...         fxh1 = f(x)
+        ...
+        ...         x[idx] = idx_val - h    # f(x - h)の算出。
+        ...         fxh2 = f(x)
+        ...
+        ...         grad[idx] = (fxh1 - fxh2) / (2 * h)
+        ...         x[idx] = idx_val    # 値をループ先頭の状態に戻す。
+        ...     return grad
+        ...
+        >>>
+    ```
+
+- 勾配法の実装サンプル<br>
+    この**勾配関数**（num_gradient）をラップした形の**勾配法**となる上記\\(（A）\\)と\\(（B）\\)の実装サンプル。
+    ```python
+        >>> # 上記対話モードの続き
+        >>> def gradient_descent(f, init_x, lr=0.01, step_num=100):
+        ...     x = init_x
+        ...
+        ...     for i in range(step_num):
+        ...         grad = num_gradient(f, x)    # 上記 勾配関数「num_gradient」をコール
+        ...         x -= lr * grad    # (A)、(B) の実装箇所
+        ...
+        ...     return x
+        ...
+        >>>
+    ```
+    ※ `gradient_descent`の引数
+    - 第1引数「f」：最適化したい関数
+    - 第2引数「init_x」：初期値
+    - 第3引数「lr」：学習率
+    - 第4引数「step_num」：勾配を繰り返す回数
