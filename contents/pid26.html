@@ -1,4 +1,51 @@
 <div class="post-body">
   <h2 id="目的">目的</h2>
   <p>この記事では、勾配降下法についての実装サンプルを記載する。</p>
+  <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
+  <h3 id="勾配法とは">勾配法とは</h3>
+  <p>
+    下記の記事で<strong>数値微分による勾配</strong>と<strong>偏微分による勾配</strong>について解説したが、これらの<strong>勾配</strong>では、ある点を基準に実施した<strong>勾配が示す方向</strong>が分かっても<strong>どの程度その方向に</strong>進むと最小値（損失関数の結果が最小）に近づくかまで分からない。
+  </p>
+  <ul>
+    <li><a href="https://sigma-se.com/detail/24/" class="link-secondary">Python - AI : 損失関数と数値微分（勾配）の実装サンプル</a></li>
+    <li><a href="https://sigma-se.com/detail/25/" class="link-secondary">Python - AI : 偏微分と勾配の実装サンプル</a></li>
+  </ul>
+  <p>
+    そこでより正確な<strong>最小値</strong>を求めるために、この<strong>勾配</strong>を複数回実施して、その勾配が示す方向に基準をずらしながら<strong>損失関数の結果が最小となる値</strong>を探していく。
+  </p>
+  <p>これを<strong>勾配法</strong>といい、最小値を探す<strong>勾配降下法</strong>と最大値を探す<strong>勾配上昇法</strong>に分類される。<br>
+    ※ ニューラルネットワークの学習では、<strong>勾配降下法</strong>が多く用いられている。</p>
+  <p>
+    ニューラルネットワークでも最適な<strong>重み</strong>や<strong>バイアス</strong>を学習時に決定するため、<strong>勾配法</strong>を用いて<strong>損失関数の結果が最小となる値</strong>を算出していくことになる。
+  </p>
+  <p>変数が \(x_{0}\) と \(x_{1}\) の2つである場合を例に<strong>勾配降下法</strong>を数式で表現すると</p>
+  <div
+    style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    x_{0} = x_{0} - μ\frac{∂\ (x_{0}, x_{1})}{∂x_{0}}\hspace{5mm}･･･（A）
+    \]
+  </div>
+  <div
+    style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    x_{1} = x_{1} - μ\frac{∂\ (x_{0}, x_{1})}{∂x_{1}}\hspace{5mm}･･･（B）
+    \]
+  </div>
+  <p>と表せ、<strong>\(μ\)</strong>
+    を<strong>学習率</strong>といい、複数回の勾配を実施するにあたって前回の勾配が示す方向へどのくらい進めるかの<strong>基準値</strong>となる。<br>
+    （勾配1回に対し、\(（A）\)と\(（B）\)をそれぞれ一回実施する。）</p>
+  <p>※ \(\displaystyle \frac{∂\ (x_{0}, x_{1})}{∂x_{0}}\) と \(\displaystyle \frac{∂\ (x_{0}, x_{1})}{∂x_{1}}\) の<strong>偏微分</strong>については、<a
+      href="https://sigma-se.com/detail/25/#:~:text=%E3%81%AB%E9%81%8E%E3%81%8E%E3%81%AA%E3%81%84%E3%80%82-,%E5%8B%BE%E9%85%8D%E3%81%AEPython%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB,-%E4%B8%8A%E8%A8%98%E3%81%A7%E3%80%81" class="link-secondary">Python
+      - AI : 偏微分と勾配の実装サンプル &gt; 勾配のPython実装サンプル</a> を参考のこと。</p>
+  <ul>
+    <li><strong>学習率</strong>についての補足<br>
+      下記の記事で触れている<strong>重み</strong>は、機械学習アルゴリズムにより自動で変化していくが、<strong>学習率</strong>は、あらかじめ人の手で設定するパラメータとなり、深層学習では勾配法によって、<strong>最適化できない（しない）<strong>パラメータになる。<br>
+          （このようなパラメータを</strong>ハイパーパラメータ</strong>という。）
+      <ul>
+        <li><a href="https://sigma-se.com/detail/15/" class="link-secondary">Python - AI : 単純パーセプトロンの概念と実装サンプル</a></li>
+        <li><a href="https://sigma-se.com/detail/16/" class="link-secondary">Python - AI : 多層パーセプトロンの概念と実装サンプル</a></li>
+        <li><a href="https://sigma-se.com/detail/17/" class="link-secondary">Python - AI : ニューラルネットワークの活性化関数と実装サンプル</a></li>
+      </ul>
+    </li>
+  </ul>
 </div>
