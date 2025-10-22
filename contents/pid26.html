@@ -101,4 +101,51 @@
       </ul>
     </li>
   </ul>
+  <h3 id="勾配降下法の実装サンプル実行例">勾配降下法の実装サンプル実行例</h3>
+  <p>最後に実行サンプル。</p>
+  <ul>
+    <li>
+      <p>勾配法の実行例<br>
+        関数 \(f(x_{0}, x_{1}) = x^2_{0} + x^2_{1}\) で \(x_{0} = -15.0\) 、\(x_{1} = 20\)
+        とした時の勾配法<code>gradient_descent</code>の実行例。</p>
+      <pre><code class="language-python">    &gt;&gt;&gt; <span class="hljs-comment"># ↑↑↑ 上記対話モードの続き</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">func_ex</span>(<span class="hljs-params">x</span>):
+    ...     <span class="hljs-keyword">return</span> x[<span class="hljs-number">0</span>]**<span class="hljs-number">2</span> + x[<span class="hljs-number">1</span>]**<span class="hljs-number">2</span>
+    ...
+    &gt;&gt;&gt; init_x = np.array([-<span class="hljs-number">15.0</span>, <span class="hljs-number">20.0</span>])
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; gradient_descent(func_ex, init_x=init_x, lr=<span class="hljs-number">0.1</span>, step_num=<span class="hljs-number">100</span>)
+    array([-<span class="hljs-number">3.05555396e-09</span>,  <span class="hljs-number">4.07407195e-09</span>])
+    &gt;&gt;&gt;
+</code></pre>
+      <p>※ <code>gradient_descent</code>の引数</p>
+      <ul>
+        <li>関数「f」：\(f(x_{0}, x_{1})\) \(= x^2_{0} + x^2_{1}\)</li>
+        <li>初期値「init_x」： \(x_{0} = -15.0\) 、\(x_{1} = 20\)</li>
+        <li>学習率「lr」：0.1</li>
+        <li>勾配繰返「step_num」：100</li>
+      </ul>
+      <p>初期値 <strong>init_x</strong>：\(x_{0} = -15.0\) 、\(x_{1} = 20\) の実行結果は、\(x_{0}\) \(= -3.05555396e-09\) 、\(x_{1}\) \(= 4.07407195e-09\) となり、真の最小値が \(x_{0} = 0\) 、\(x_{1} = 0\) なのでほぼ正しい結果となっていることが分かる。</p>
+      <p>※ \(e\)について<br>
+        -3.05555396e-09 ≒ -3.1 * 10のマイナス9乗 ≒ -0.0000000031
+        4.07407195e-09 ≒ 4.1 * 10のマイナス9乗 ≒ 0.0000000041</p>
+      <p>試しに、学習率を<strong>極端に増減</strong>させてみると</p>
+      <pre><code class="language-python">    &gt;&gt;&gt; <span class="hljs-comment"># 上記対話モードの続き</span>
+    &gt;&gt;&gt; gradient_descent(func_ex, init_x=init_x, lr=<span class="hljs-number">10</span>, step_num=<span class="hljs-number">100</span>)
+    array([ <span class="hljs-number">3.10343509e+12</span>, -<span class="hljs-number">8.05258867e+12</span>])
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; gradient_descent(func_ex, init_x=init_x, lr=<span class="hljs-number">1e-10</span>, step_num=<span class="hljs-number">100</span>)
+    array([-<span class="hljs-number">14.9999997</span>,  <span class="hljs-number">19.9999996</span>])
+    &gt;&gt;&gt;
+</code></pre>
+      <p>学習率を \(10\) とした場合、\(x_{0}\) \(= 3.10343509e+12\) 、\(x_{1}\) \(= -8.05258867e+12\) となりプラス方向に大きく発散している。</p>
+      <p>これは、学習率が大きすぎることを意味しており、反対に学習率を \(1e-10\) と \(0\) に近づけすぎると \(x_{0} = -14.9999997\) 、\(x_{1} = 19.9999996\)
+        となり初期値とほぼ同じ値が出力され、学習率が小さすぎることを意味している。</p>
+      <p>実際のニューラルネットワークの学習においても、以上のように妥当な<strong>学習率</strong>を事前に決め、<strong>勾配</strong>を繰り返し、真の最小値を求めていくことになる。</p>
+    </li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
+  </ul>
 </div>
