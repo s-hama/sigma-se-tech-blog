@@ -1,0 +1,151 @@
+<div class="post-body">
+  <h2 id="目的">目的</h2>
+  <p>この記事では、勾配降下法についての実装サンプルを記載する。</p>
+  <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
+  <h3 id="勾配法とは">勾配法とは</h3>
+  <p>
+    下記の記事で<strong>数値微分による勾配</strong>と<strong>偏微分による勾配</strong>について解説したが、これらの<strong>勾配</strong>では、ある点を基準に実施した<strong>勾配が示す方向</strong>が分かっても<strong>どの程度その方向に</strong>進むと最小値（損失関数の結果が最小）に近づくかまで分からない。
+  </p>
+  <ul>
+    <li><a href="https://sigma-se.com/detail/24/" class="link-secondary">Python - AI : 損失関数と数値微分（勾配）の実装サンプル</a></li>
+    <li><a href="https://sigma-se.com/detail/25/" class="link-secondary">Python - AI : 偏微分と勾配の実装サンプル</a></li>
+  </ul>
+  <p>
+    そこでより正確な<strong>最小値</strong>を求めるために、この<strong>勾配</strong>を複数回実施して、その勾配が示す方向に基準をずらしながら<strong>損失関数の結果が最小となる値</strong>を探していく。
+  </p>
+  <p>これを<strong>勾配法</strong>といい、最小値を探す<strong>勾配降下法</strong>と最大値を探す<strong>勾配上昇法</strong>に分類される。<br>
+    ※ ニューラルネットワークの学習では、<strong>勾配降下法</strong>が多く用いられている。</p>
+  <p>
+    ニューラルネットワークでも最適な<strong>重み</strong>や<strong>バイアス</strong>を学習時に決定するため、<strong>勾配法</strong>を用いて<strong>損失関数の結果が最小となる値</strong>を算出していくことになる。
+  </p>
+  <p>変数が \(x_{0}\) と \(x_{1}\) の2つである場合を例に<strong>勾配降下法</strong>を数式で表現すると</p>
+  <div
+    style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    x_{0} = x_{0} - μ\frac{∂\ (x_{0}, x_{1})}{∂x_{0}}\hspace{5mm}･･･（A）
+    \]
+  </div>
+  <div
+    style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    x_{1} = x_{1} - μ\frac{∂\ (x_{0}, x_{1})}{∂x_{1}}\hspace{5mm}･･･（B）
+    \]
+  </div>
+  <p>と表せ、<strong>\(μ\)</strong>
+    を<strong>学習率</strong>といい、複数回の勾配を実施するにあたって前回の勾配が示す方向へどのくらい進めるかの<strong>基準値</strong>となる。<br>
+    （勾配1回に対し、\(（A）\)と\(（B）\)をそれぞれ一回実施する。）</p>
+  <p>※ \(\displaystyle \frac{∂\ (x_{0}, x_{1})}{∂x_{0}}\) と \(\displaystyle \frac{∂\ (x_{0}, x_{1})}{∂x_{1}}\) の<strong>偏微分</strong>については、<a
+      href="https://sigma-se.com/detail/25/#:~:text=%E3%81%AB%E9%81%8E%E3%81%8E%E3%81%AA%E3%81%84%E3%80%82-,%E5%8B%BE%E9%85%8D%E3%81%AEPython%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB,-%E4%B8%8A%E8%A8%98%E3%81%A7%E3%80%81" class="link-secondary">Python
+      - AI : 偏微分と勾配の実装サンプル &gt; 勾配のPython実装サンプル</a> を参考のこと。</p>
+  <ul>
+    <li><strong>学習率</strong>についての補足<br>
+      下記の記事で触れている<strong>重み</strong>は、機械学習アルゴリズムにより自動で変化していくが、<strong>学習率</strong>は、あらかじめ人の手で設定するパラメータとなり、深層学習では勾配法によって、<strong>最適化できない（しない）<strong>パラメータになる。<br>
+          （このようなパラメータを</strong>ハイパーパラメータ</strong>という。）
+      <ul>
+        <li><a href="https://sigma-se.com/detail/15/" class="link-secondary">Python - AI : 単純パーセプトロンの概念と実装サンプル</a></li>
+        <li><a href="https://sigma-se.com/detail/16/" class="link-secondary">Python - AI : 多層パーセプトロンの概念と実装サンプル</a></li>
+        <li><a href="https://sigma-se.com/detail/17/" class="link-secondary">Python - AI : ニューラルネットワークの活性化関数と実装サンプル</a></li>
+      </ul>
+    </li>
+  </ul>
+  <h3 id="勾配降下法のpython実装サンプル">勾配降下法のPython実装サンプル</h3>
+  <p><a
+      href="https://sigma-se.com/detail/25/#:~:text=%E3%81%AB%E9%81%8E%E3%81%8E%E3%81%AA%E3%81%84%E3%80%82-,%E5%8B%BE%E9%85%8D%E3%81%AEPython%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB,-%E4%B8%8A%E8%A8%98%E3%81%A7%E3%80%81" class="link-secondary">Python
+      - AI : 偏微分と勾配の実装サンプル &gt; 勾配のPython実装サンプル</a> で解説した<strong>勾配関数</strong>（num_gradient）を使用する。</p>
+  <ul>
+    <li>
+      <p><strong>勾配関数</strong>（num_gradient）</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">num_gradient</span>(<span class="hljs-params">f,x</span>):    <span class="hljs-comment"># 勾配関数</span>
+    ...     h = <span class="hljs-number">1e-4</span>
+    ...     grad = np.zeros_like(x)    <span class="hljs-comment"># xと同じ形状の配列で値がすべて 0</span>
+    ...
+    ...     <span class="hljs-keyword">for</span> idx <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(x.size):    <span class="hljs-comment"># x の次元分ループする。 (下記例は、5.0, 10.0 の 2 周ループ)</span>
+    ...         idx_val = x[idx]
+    ...         x[idx] = idx_val + h    <span class="hljs-comment"># f(x + h)の算出。</span>
+    ...         fxh1 = f(x)
+    ...
+    ...         x[idx] = idx_val - h    <span class="hljs-comment"># f(x - h)の算出。</span>
+    ...         fxh2 = f(x)
+    ...
+    ...         grad[idx] = (fxh1 - fxh2) / (<span class="hljs-number">2</span> * h)
+    ...         x[idx] = idx_val    <span class="hljs-comment"># 値をループ先頭の状態に戻す。</span>
+    ...     <span class="hljs-keyword">return</span> grad
+    ...
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>勾配法の実装サンプル<br>
+        この<strong>勾配関数</strong>（num_gradient）をラップした形の<strong>勾配法</strong>となる上記\(（A）\)と\(（B）\)の実装サンプル。</p>
+      <pre><code class="language-python">    &gt;&gt;&gt; <span class="hljs-comment"># 上記対話モードの続き</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">gradient_descent</span>(<span class="hljs-params">f, init_x, lr=<span class="hljs-number">0.01</span>, step_num=<span class="hljs-number">100</span></span>):
+    ...     x = init_x
+    ...
+    ...     <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(step_num):
+    ...         grad = num_gradient(f, x)    <span class="hljs-comment"># 上記 勾配関数「num_gradient」をコール</span>
+    ...         x -= lr * grad    <span class="hljs-comment"># (A)、(B) の実装箇所</span>
+    ...
+    ...     <span class="hljs-keyword">return</span> x
+    ...
+    &gt;&gt;&gt;
+</code></pre>
+      <p>※ <code>gradient_descent</code>の引数</p>
+      <ul>
+        <li>第1引数「f」：最適化したい関数</li>
+        <li>第2引数「init_x」：初期値</li>
+        <li>第3引数「lr」：学習率</li>
+        <li>第4引数「step_num」：勾配を繰り返す回数</li>
+      </ul>
+    </li>
+  </ul>
+  <h3 id="勾配降下法の実装サンプル実行例">勾配降下法の実装サンプル実行例</h3>
+  <p>最後に実行サンプル。</p>
+  <ul>
+    <li>
+      <p>勾配法の実行例<br>
+        関数 \(f(x_{0}, x_{1}) = x^2_{0} + x^2_{1}\) で \(x_{0} = -15.0\) 、\(x_{1} = 20\)
+        とした時の勾配法<code>gradient_descent</code>の実行例。</p>
+      <pre><code class="language-python">    &gt;&gt;&gt; <span class="hljs-comment"># ↑↑↑ 上記対話モードの続き</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">func_ex</span>(<span class="hljs-params">x</span>):
+    ...     <span class="hljs-keyword">return</span> x[<span class="hljs-number">0</span>]**<span class="hljs-number">2</span> + x[<span class="hljs-number">1</span>]**<span class="hljs-number">2</span>
+    ...
+    &gt;&gt;&gt; init_x = np.array([-<span class="hljs-number">15.0</span>, <span class="hljs-number">20.0</span>])
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; gradient_descent(func_ex, init_x=init_x, lr=<span class="hljs-number">0.1</span>, step_num=<span class="hljs-number">100</span>)
+    array([-<span class="hljs-number">3.05555396e-09</span>,  <span class="hljs-number">4.07407195e-09</span>])
+    &gt;&gt;&gt;
+</code></pre>
+      <p>※ <code>gradient_descent</code>の引数</p>
+      <ul>
+        <li>関数「f」：\(f(x_{0}, x_{1})\) \(= x^2_{0} + x^2_{1}\)</li>
+        <li>初期値「init_x」： \(x_{0} = -15.0\) 、\(x_{1} = 20\)</li>
+        <li>学習率「lr」：0.1</li>
+        <li>勾配繰返「step_num」：100</li>
+      </ul>
+      <p>初期値 <strong>init_x</strong>：\(x_{0} = -15.0\) 、\(x_{1} = 20\) の実行結果は、\(x_{0}\) \(= -3.05555396e-09\) 、\(x_{1}\) \(= 4.07407195e-09\) となり、真の最小値が \(x_{0} = 0\) 、\(x_{1} = 0\) なのでほぼ正しい結果となっていることが分かる。</p>
+      <p>※ \(e\)について<br>
+        -3.05555396e-09 ≒ -3.1 * 10のマイナス9乗 ≒ -0.0000000031
+        4.07407195e-09 ≒ 4.1 * 10のマイナス9乗 ≒ 0.0000000041</p>
+      <p>試しに、学習率を<strong>極端に増減</strong>させてみると</p>
+      <pre><code class="language-python">    &gt;&gt;&gt; <span class="hljs-comment"># 上記対話モードの続き</span>
+    &gt;&gt;&gt; gradient_descent(func_ex, init_x=init_x, lr=<span class="hljs-number">10</span>, step_num=<span class="hljs-number">100</span>)
+    array([ <span class="hljs-number">3.10343509e+12</span>, -<span class="hljs-number">8.05258867e+12</span>])
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; gradient_descent(func_ex, init_x=init_x, lr=<span class="hljs-number">1e-10</span>, step_num=<span class="hljs-number">100</span>)
+    array([-<span class="hljs-number">14.9999997</span>,  <span class="hljs-number">19.9999996</span>])
+    &gt;&gt;&gt;
+</code></pre>
+      <p>学習率を \(10\) とした場合、\(x_{0}\) \(= 3.10343509e+12\) 、\(x_{1}\) \(= -8.05258867e+12\) となりプラス方向に大きく発散している。</p>
+      <p>これは、学習率が大きすぎることを意味しており、反対に学習率を \(1e-10\) と \(0\) に近づけすぎると \(x_{0} = -14.9999997\) 、\(x_{1} = 19.9999996\)
+        となり初期値とほぼ同じ値が出力され、学習率が小さすぎることを意味している。</p>
+      <p>実際のニューラルネットワークの学習においても、以上のように妥当な<strong>学習率</strong>を事前に決め、<strong>勾配</strong>を繰り返し、真の最小値を求めていくことになる。</p>
+    </li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
+  </ul>
+</div>
