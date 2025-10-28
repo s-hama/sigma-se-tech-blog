@@ -146,4 +146,4 @@ print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
         ```
 
 ### 参考文献
-- 斎藤 康毅（2018）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
+- 斎藤 康毅（\\(2018\\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
