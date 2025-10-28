@@ -1,4 +1,39 @@
 <div class="post-body">
   <h2 id="目的">目的</h2>
   <p>この記事では、重みに対する勾配法（勾配降下法）の実装サンプルを記載する。</p>
+  <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
+  <h3 id="重みに対する勾配法とは">重みに対する勾配法とは</h3>
+  <p><strong>重み</strong>は、正解に対して<strong>入力値</strong>がどれだけ影響するかを示す<strong>重要度</strong>を表す。</p>
+  <p>
+    <strong>重み</strong>という言葉からは全くイメージできない意味を持つが、これは英語の<strong>Weigh</strong>を直訳し、<strong>重み</strong>となっているからであり、本来は<strong>大切さ</strong>、<strong>価値</strong>、<strong>重要性</strong>という意味で命名されている。
+  </p>
+  <p>そして、この<strong>重み</strong>（重要度）は、一般的に<strong>Weigh</strong>の \(w\) を取り、\(w_{0}\)、\(w_{1}\)、\(w_{2}\)
+    …で表現され、<strong>評価的に具体的な数値を入れてみて損失結果を計る</strong>ためのパラメータとなる。</p>
+  <p>ニューラルネットワークでは、この<strong>重み</strong>に対して、<a href="https://sigma-se.com/detail/26/" class="link-secondary">Python - AI : 勾配降下法の実装サンプル</a>
+    で解説した<strong>勾配降下法</strong>を実施し、最適な<strong>重み</strong>を求めていく。</p>
+  <p>また、下記に示す行列のよう色々なパターンの<strong>重み</strong>を行列計算で一斉に<strong>偏微分</strong>し、最適な<strong>重み</strong>を求めていく。</p>
+  <div
+    style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    W =
+    \begin{pmatrix}
+    w_{11} & w_{12} & w_{13} \\
+    w_{21} & w_{22} & w_{23} \\
+    \end{pmatrix}
+    \]
+  </div>
+  <div
+    style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    \frac{∂L}{∂W} =
+    \begin{pmatrix}
+    \frac{∂L}{∂w_{11}} & \frac{∂L}{∂w_{12}} & \frac{∂L}{∂w_{13}} \\
+    \frac{∂L}{∂w_{21}} & \frac{∂L}{∂w_{22}} & \frac{∂L}{∂w_{23}} \\
+    \end{pmatrix}
+    \]
+  </div>
+  <p>\(W\) は、一斉に偏微分しようとしている2行3列の<strong>重み</strong>達。<br>
+    \(L\) は、対象となる<strong>損失関数</strong>で \(\displaystyle \frac{∂L}{∂W}\) の各要素で偏微分し、<strong>損失関数</strong>\(L\)
+    の<strong>勾配</strong>を求めている。</p>
+  <p>以降は、この<strong>勾配</strong>を求める実装サンプルについて記載する。</p>
 </div>
