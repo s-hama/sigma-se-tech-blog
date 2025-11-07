@@ -3,3 +3,55 @@ Python - 組込みデータ型まとめ : immutable, mutable, iterable, sequence
 
 ## 目的
 この記事では、Pythonを扱う上で頻繁に登場する組込みデータ型の特性を表す用語について記載する。
+
+## 各データ型の特性
+
+### イミュータブル（immutable）: 同一アドレスで変更不可
+
+同一オブジェクト（アドレスが同一）での値の変更ができないオブジェクト。<br>
+そのため、値を変更すると別オブジェクト（別のアドレス）として再生成される。
+
+- イミュータブルな型: Python公式ページのドキュメント
+  - [bool 型](https://docs.python.org/ja/3/library/functions.html#bool)
+  - [int 型](https://docs.python.org/ja/3/library/functions.html#int)
+  - [float 型](https://docs.python.org/ja/3/library/functions.html#float)
+  - [complex 型](https://docs.python.org/ja/3/library/functions.html#complex)
+  - [str 型](https://docs.python.org/ja/3/library/stdtypes.html#str)
+  - [tuple 型](https://docs.python.org/ja/3/library/stdtypes.html#tuple)
+  - [range 型](https://docs.python.org/ja/3/library/stdtypes.html#range)
+  - [bytes 型](https://docs.python.org/ja/3/library/stdtypes.html#bytes)
+  - [file object 型](https://docs.python.org/ja/3/glossary.html#term-file-object)
+
+- int型（イミュータブル）を例に変更前の値と変更後の値のアドレスを比較
+    ```python
+    $ python
+        # int_a を int型 の 1で定義
+        >>> int_a = 1
+        >>> type(int_a)
+        <class 'int'>
+        # int_a のアドレスを確認
+        >>> id(int_a)
+        139837241521312
+        # int_a を 2 に変更
+        >>> int_a = 2
+        # int_a のアドレスを確認 ⇒ 変更前と別アドレスとなる。
+        >>> id(int_a)
+        139837241521344
+    ```
+
+- bool型（イミュータブル）を例に変更前の値と変更後の値のアドレスを比較
+    ```python
+    $ python
+        # bool_a を bool型の False で定義
+        >>> bool_a = False
+        >>> type(bool_a)
+        <class 'bool'>
+        # bool_a のアドレスを確認
+        >>> id(bool_a)
+        139837241113440
+        # bool_a を True に変更
+        >>> bool_a = True
+        # bool_a のアドレスを確認 ⇒ 変更前と別アドレスとなる。
+        >>> id(bool_a)
+        139837241113408
+    ```
