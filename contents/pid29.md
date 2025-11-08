@@ -55,3 +55,35 @@ Python - 組込みデータ型まとめ : immutable, mutable, iterable, sequence
         >>> id(bool_a)
         139837241113408
     ```
+
+### ミュータブル（mutable）: 同一アドレスで変更可
+
+同一オブジェクト（アドレスが同一）で値を変更できるオブジェクト。<br>
+（値を変更してもアドレスが変わらない。）
+
+また、オブジェクトの一部を変更できるデータ型は、オブジェクトの中身を頻繁に編集することを前提としているため、アドレスが変わらない（わざわざ変える必要がない）ミュータブルとなっている。
+
+- ミュータブルな型: Python公式ページのドキュメント
+  - [list 型](https://docs.python.org/ja/3/library/stdtypes.html#list)
+  - [dict 型](https://docs.python.org/ja/3/library/stdtypes.html#dict)
+  - [set 型](https://docs.python.org/ja/3/library/stdtypes.html#set)
+  - [bytearray 型](https://docs.python.org/ja/3/library/stdtypes.html#bytearray)
+
+- list型（ミュータブル）を例に変更前の値と変更後の値のアドレスを比較
+    ```python
+    $ python
+        # list_a を list型で定義
+        >>> list_a = [1, 2, 3, 4, 5]
+        >>> type(list_a)
+        <class 'list'>
+        # list_a のアドレスを確認
+        >>> id(list_a)
+        139837220876360
+        # list_a に 7 を追加
+        >>> list_a.append(7)
+        >>> print(list_a)
+        [1, 2, 3, 4, 5, 7]
+        # list_a のアドレスを確認 ⇒ 変更前と同一アドレスとなっている。
+        >>> id(list_a)
+        139837220876360
+    ```
