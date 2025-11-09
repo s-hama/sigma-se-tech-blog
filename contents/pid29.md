@@ -87,3 +87,46 @@ Python - 組込みデータ型まとめ : immutable, mutable, iterable, sequence
         >>> id(list_a)
         139837220876360
     ```
+
+### イテラブル（iterable）: 反復抽出可
+
+要素を一つずつ抽出し、反復処理ができるオブジェクト。<br>
+（特殊な加工なしで for文のループ対象として使用できるオブジェクト）
+
+また、ミュータブルオブジェクトはすべてイテラブルなオブジェクトとなる。
+
+- イテラブルな型: Python公式ページのドキュメント
+  - [str 型](https://docs.python.org/ja/3/library/stdtypes.html#str)
+  - [list 型](https://docs.python.org/ja/3/library/stdtypes.html#list)
+  - [tuple 型](https://docs.python.org/ja/3/library/stdtypes.html#tuple)
+  - [range 型](https://docs.python.org/ja/3/library/stdtypes.html#range)
+  - [dict 型](https://docs.python.org/ja/3/library/stdtypes.html#dict)
+  - [set 型](https://docs.python.org/ja/3/library/stdtypes.html#set)
+  - [bytes 型](https://docs.python.org/ja/3/library/stdtypes.html#bytes)
+  - [bytearray 型](https://docs.python.org/ja/3/library/stdtypes.html#bytearray)
+  - [file object 型](https://docs.python.org/ja/3/glossary.html#term-file-object)
+
+- イテラブルの反復処理使用例
+    ```python
+    $ python
+        # list_a を list型で定義
+        >>> list_a = [1, 2, 3]
+        >>> type(list_a)
+        <class 'list'>
+        # 要素を出力する 反復処理
+        >>> for element in list_a:
+        ...     print(element)
+        ...
+        1
+        2
+        3
+        # str_a を str型で定義
+        >>> str_a = "abc"
+        # 要素を出力する 反復処理
+        >>> for element in str_a:
+        ...     print(element)
+        ...
+        a
+        b
+        c
+    ```
