@@ -130,3 +130,38 @@ Python - 組込みデータ型まとめ : immutable, mutable, iterable, sequence
         b
         c
     ```
+
+### シーケンス（sequence）: インデックス指定可
+
+インデックスを指定して直接要素にアクセスできるオブジェクト。
+
+また、ミュータブルと同様にシーケンスオブジェクトはすべてイテラブルなオブジェクトとなる。
+
+- シーケンスな型: Python公式ページのドキュメント
+  - [str 型](https://docs.python.org/ja/3/library/stdtypes.html#str)
+  - [list 型](https://docs.python.org/ja/3/library/stdtypes.html#list)
+  - [tuple 型](https://docs.python.org/ja/3/library/stdtypes.html#tuple)
+  - [range 型](https://docs.python.org/ja/3/library/stdtypes.html#range)
+  - [bytes 型](https://docs.python.org/ja/3/library/stdtypes.html#bytes)
+  - [bytearray 型](https://docs.python.org/ja/3/library/stdtypes.html#bytearray)
+
+- シーケンスオブジェクトからインデックスを指定した抽出例
+    ```python
+    $ python
+        # list_a を list型で定義
+        >>> list_a = [1, 2, 3]
+        >>> print(list_a[0])    # インデックス 0 を指定
+        1
+        >>> print(list_a[1])    # インデックス 1 を指定
+        2
+        >>> print(list_a[2])    # インデックス 2 を指定
+        3
+        # str_a を str型で定義
+        >>> str_a = "abcdefg"
+        >>> print(str_a[1])    # インデックス 1 を指定
+        'b'
+        >>> print(str_a[3])    # インデックス 3 を指定
+        'd'
+        >>> print(str_a[5])    # インデックス 5 を指定
+        'f'
+    ```
