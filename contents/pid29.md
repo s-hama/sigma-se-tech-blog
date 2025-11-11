@@ -165,3 +165,27 @@ Python - 組込みデータ型まとめ : immutable, mutable, iterable, sequence
         >>> print(str_a[5])    # インデックス 5 を指定
         'f'
     ```
+
+### マッピング（mapping）: 連想配列
+
+任意に決めたキーで要素を抽出することができるオブジェクト。
+
+シーケンスオブジェクトがインデックスを指定して抽出するのに対し、マッピングオブジェクトは、オブジェクト生成時に自作したキーを指定して抽出する。<br>
+※ 一般的に連想配列と言われる配列のこと。
+
+- マッピング型は、dict型のみ: Python公式ページのドキュメント
+  - [dict 型](https://docs.python.org/ja/3/library/stdtypes.html#dict)
+
+- dict型（マッピング）からキーを指定した抽出例
+    ```python
+    $ python
+        >>> dict_a = {"s1":123, "s2":456, "s3":789}
+        >>> type(dict_a)
+        <class 'dict'>
+        >>> print(dict_a["s1"])
+        123
+        >>> print(dict_a["s2"])
+        456
+        >>> print(dict_a["s3"])
+        789
+    ```
