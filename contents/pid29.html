@@ -1,4 +1,58 @@
 <div class="post-body">
   <h2 id="目的">目的</h2>
   <p>この記事では、Pythonを扱う上で頻繁に登場する組込みデータ型の特性を表す用語について記載する。</p>
+  <h2 id="各データ型の特性">各データ型の特性</h2>
+  <h3 id="イミュータブルimmutable--同一アドレスで変更不可">イミュータブル（immutable）: 同一アドレスで変更不可</h3>
+  <p>同一オブジェクト（アドレスが同一）での値の変更ができないオブジェクト。<br>
+    そのため、値を変更すると別オブジェクト（別のアドレス）として再生成される。</p>
+  <ul>
+    <li>
+      <p>イミュータブルな型: Python公式ページのドキュメント</p>
+      <ul>
+        <li><a href="https://docs.python.org/ja/3/library/functions.html#bool" class="link-secondary">bool 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/functions.html#int" class="link-secondary">int 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/functions.html#float" class="link-secondary">float 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/functions.html#complex" class="link-secondary">complex 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#str" class="link-secondary">str 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#tuple" class="link-secondary">tuple 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#range" class="link-secondary">range 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#bytes" class="link-secondary">bytes 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/glossary.html#term-file-object" class="link-secondary">file object 型</a></li>
+      </ul>
+    </li>
+    <li>
+      <p>int型（イミュータブル）を例に変更前の値と変更後の値のアドレスを比較</p>
+      <pre><code class="language-python">$ python
+    <span class="hljs-comment"># int_a を int型 の 1で定義</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">1</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(int_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;int&#x27;</span>&gt;
+    <span class="hljs-comment"># int_a のアドレスを確認</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(int_a)
+    <span class="hljs-number">139837241521312</span>
+    <span class="hljs-comment"># int_a を 2 に変更</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">2</span>
+    <span class="hljs-comment"># int_a のアドレスを確認 ⇒ 変更前と別アドレスとなる。</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(int_a)
+    <span class="hljs-number">139837241521344</span>
+</code></pre>
+    </li>
+    <li>
+      <p>bool型（イミュータブル）を例に変更前の値と変更後の値のアドレスを比較</p>
+      <pre><code class="language-python">$ python
+    <span class="hljs-comment"># bool_a を bool型の False で定義</span>
+    &gt;&gt;&gt; bool_a = <span class="hljs-literal">False</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(bool_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bool&#x27;</span>&gt;
+    <span class="hljs-comment"># bool_a のアドレスを確認</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(bool_a)
+    <span class="hljs-number">139837241113440</span>
+    <span class="hljs-comment"># bool_a を True に変更</span>
+    &gt;&gt;&gt; bool_a = <span class="hljs-literal">True</span>
+    <span class="hljs-comment"># bool_a のアドレスを確認 ⇒ 変更前と別アドレスとなる。</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(bool_a)
+    <span class="hljs-number">139837241113408</span>
+</code></pre>
+    </li>
+  </ul>
 </div>
