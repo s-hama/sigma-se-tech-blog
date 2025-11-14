@@ -55,4 +55,38 @@
 </code></pre>
     </li>
   </ul>
+  <h3 id="ミュータブルmutable--同一アドレスで変更可">ミュータブル（mutable）: 同一アドレスで変更可</h3>
+  <p>同一オブジェクト（アドレスが同一）で値を変更できるオブジェクト。<br>
+    （値を変更してもアドレスが変わらない。）</p>
+  <p>また、オブジェクトの一部を変更できるデータ型は、オブジェクトの中身を頻繁に編集することを前提としているため、アドレスが変わらない（わざわざ変える必要がない）ミュータブルとなっている。</p>
+  <ul>
+    <li>
+      <p>ミュータブルな型: Python公式ページのドキュメント</p>
+      <ul>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#list" class="link-secondary">list 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#dict" class="link-secondary">dict 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#set" class="link-secondary">set 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#bytearray" class="link-secondary">bytearray 型</a></li>
+      </ul>
+    </li>
+    <li>
+      <p>list型（ミュータブル）を例に変更前の値と変更後の値のアドレスを比較</p>
+      <pre><code class="language-python">$ python
+    <span class="hljs-comment"># list_a を list型で定義</span>
+    &gt;&gt;&gt; list_a = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(list_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;list&#x27;</span>&gt;
+    <span class="hljs-comment"># list_a のアドレスを確認</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(list_a)
+    <span class="hljs-number">139837220876360</span>
+    <span class="hljs-comment"># list_a に 7 を追加</span>
+    &gt;&gt;&gt; list_a.append(<span class="hljs-number">7</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a)
+    [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">7</span>]
+    <span class="hljs-comment"># list_a のアドレスを確認 ⇒ 変更前と同一アドレスとなっている。</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(list_a)
+    <span class="hljs-number">139837220876360</span>
+</code></pre>
+    </li>
+  </ul>
 </div>
