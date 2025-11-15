@@ -89,4 +89,49 @@
 </code></pre>
     </li>
   </ul>
+  <h3 id="イテラブルiterable--反復抽出可">イテラブル（iterable）: 反復抽出可</h3>
+  <p>要素を一つずつ抽出し、反復処理ができるオブジェクト。<br>
+    （特殊な加工なしで for文のループ対象として使用できるオブジェクト）</p>
+  <p>また、ミュータブルオブジェクトはすべてイテラブルなオブジェクトとなる。</p>
+  <ul>
+    <li>
+      <p>イテラブルな型: Python公式ページのドキュメント</p>
+      <ul>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#str" class="link-secondary">str 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#list" class="link-secondary">list 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#tuple" class="link-secondary">tuple 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#range" class="link-secondary">range 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#dict" class="link-secondary">dict 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#set" class="link-secondary">set 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#bytes" class="link-secondary">bytes 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#bytearray" class="link-secondary">bytearray 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/glossary.html#term-file-object" class="link-secondary">file object 型</a></li>
+      </ul>
+    </li>
+    <li>
+      <p>イテラブルの反復処理使用例</p>
+      <pre><code class="language-python">$ python
+    <span class="hljs-comment"># list_a を list型で定義</span>
+    &gt;&gt;&gt; list_a = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(list_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;list&#x27;</span>&gt;
+    <span class="hljs-comment"># 要素を出力する 反復処理</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> list_a:
+    ...     <span class="hljs-built_in">print</span>(element)
+    ...
+    <span class="hljs-number">1</span>
+    <span class="hljs-number">2</span>
+    <span class="hljs-number">3</span>
+    <span class="hljs-comment"># str_a を str型で定義</span>
+    &gt;&gt;&gt; str_a = <span class="hljs-string">"abc"</span>
+    <span class="hljs-comment"># 要素を出力する 反復処理</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> str_a:
+    ...     <span class="hljs-built_in">print</span>(element)
+    ...
+    a
+    b
+    c
+</code></pre>
+    </li>
+  </ul>
 </div>
