@@ -171,4 +171,30 @@
 </code></pre>
     </li>
   </ul>
+  <h3 id="マッピングmapping--連想配列">マッピング（mapping）: 連想配列</h3>
+  <p>任意に決めたキーで要素を抽出することができるオブジェクト。</p>
+  <p>シーケンスオブジェクトがインデックスを指定して抽出するのに対し、マッピングオブジェクトは、オブジェクト生成時に自作したキーを指定して抽出する。<br>
+    ※ 一般的に連想配列と言われる配列のこと。</p>
+  <ul>
+    <li>
+      <p>マッピング型は、dict型のみ: Python公式ページのドキュメント</p>
+      <ul>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#dict" class="link-secondary">dict 型</a></li>
+      </ul>
+    </li>
+    <li>
+      <p>dict型（マッピング）からキーを指定した抽出例</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; dict_a = {<span class="hljs-string">"s1"</span>:<span class="hljs-number">123</span>, <span class="hljs-string">"s2"</span>:<span class="hljs-number">456</span>, <span class="hljs-string">"s3"</span>:<span class="hljs-number">789</span>}
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(dict_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;dict&#x27;</span>&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_a[<span class="hljs-string">"s1"</span>])
+    <span class="hljs-number">123</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_a[<span class="hljs-string">"s2"</span>])
+    <span class="hljs-number">456</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_a[<span class="hljs-string">"s3"</span>])
+    <span class="hljs-number">789</span>
+</code></pre>
+    </li>
+  </ul>
 </div>
