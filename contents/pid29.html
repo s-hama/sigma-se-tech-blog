@@ -1,0 +1,200 @@
+<div class="post-body">
+  <h2 id="目的">目的</h2>
+  <p>この記事では、Pythonを扱う上で頻繁に登場する組込みデータ型の特性を表す用語について記載する。</p>
+  <h2 id="各データ型の特性">各データ型の特性</h2>
+  <h3 id="イミュータブルimmutable--同一アドレスで変更不可">イミュータブル（immutable）: 同一アドレスで変更不可</h3>
+  <p>同一オブジェクト（アドレスが同一）での値の変更ができないオブジェクト。<br>
+    そのため、値を変更すると別オブジェクト（別のアドレス）として再生成される。</p>
+  <ul>
+    <li>
+      <p>イミュータブルな型: Python公式ページのドキュメント</p>
+      <ul>
+        <li><a href="https://docs.python.org/ja/3/library/functions.html#bool" class="link-secondary">bool 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/functions.html#int" class="link-secondary">int 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/functions.html#float" class="link-secondary">float 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/functions.html#complex" class="link-secondary">complex 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#str" class="link-secondary">str 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#tuple" class="link-secondary">tuple 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#range" class="link-secondary">range 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#bytes" class="link-secondary">bytes 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/glossary.html#term-file-object" class="link-secondary">file object 型</a></li>
+      </ul>
+    </li>
+    <li>
+      <p>int型（イミュータブル）を例に変更前の値と変更後の値のアドレスを比較</p>
+      <pre><code class="language-python">$ python
+    <span class="hljs-comment"># int_a を int型 の 1で定義</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">1</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(int_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;int&#x27;</span>&gt;
+    <span class="hljs-comment"># int_a のアドレスを確認</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(int_a)
+    <span class="hljs-number">139837241521312</span>
+    <span class="hljs-comment"># int_a を 2 に変更</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">2</span>
+    <span class="hljs-comment"># int_a のアドレスを確認 ⇒ 変更前と別アドレスとなる。</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(int_a)
+    <span class="hljs-number">139837241521344</span>
+</code></pre>
+    </li>
+    <li>
+      <p>bool型（イミュータブル）を例に変更前の値と変更後の値のアドレスを比較</p>
+      <pre><code class="language-python">$ python
+    <span class="hljs-comment"># bool_a を bool型の False で定義</span>
+    &gt;&gt;&gt; bool_a = <span class="hljs-literal">False</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(bool_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bool&#x27;</span>&gt;
+    <span class="hljs-comment"># bool_a のアドレスを確認</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(bool_a)
+    <span class="hljs-number">139837241113440</span>
+    <span class="hljs-comment"># bool_a を True に変更</span>
+    &gt;&gt;&gt; bool_a = <span class="hljs-literal">True</span>
+    <span class="hljs-comment"># bool_a のアドレスを確認 ⇒ 変更前と別アドレスとなる。</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(bool_a)
+    <span class="hljs-number">139837241113408</span>
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="ミュータブルmutable--同一アドレスで変更可">ミュータブル（mutable）: 同一アドレスで変更可</h3>
+  <p>同一オブジェクト（アドレスが同一）で値を変更できるオブジェクト。<br>
+    （値を変更してもアドレスが変わらない。）</p>
+  <p>また、オブジェクトの一部を変更できるデータ型は、オブジェクトの中身を頻繁に編集することを前提としているため、アドレスが変わらない（わざわざ変える必要がない）ミュータブルとなっている。</p>
+  <ul>
+    <li>
+      <p>ミュータブルな型: Python公式ページのドキュメント</p>
+      <ul>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#list" class="link-secondary">list 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#dict" class="link-secondary">dict 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#set" class="link-secondary">set 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#bytearray" class="link-secondary">bytearray 型</a></li>
+      </ul>
+    </li>
+    <li>
+      <p>list型（ミュータブル）を例に変更前の値と変更後の値のアドレスを比較</p>
+      <pre><code class="language-python">$ python
+    <span class="hljs-comment"># list_a を list型で定義</span>
+    &gt;&gt;&gt; list_a = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(list_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;list&#x27;</span>&gt;
+    <span class="hljs-comment"># list_a のアドレスを確認</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(list_a)
+    <span class="hljs-number">139837220876360</span>
+    <span class="hljs-comment"># list_a に 7 を追加</span>
+    &gt;&gt;&gt; list_a.append(<span class="hljs-number">7</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a)
+    [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">7</span>]
+    <span class="hljs-comment"># list_a のアドレスを確認 ⇒ 変更前と同一アドレスとなっている。</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(list_a)
+    <span class="hljs-number">139837220876360</span>
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="イテラブルiterable--反復抽出可">イテラブル（iterable）: 反復抽出可</h3>
+  <p>要素を一つずつ抽出し、反復処理ができるオブジェクト。<br>
+    （特殊な加工なしで for文のループ対象として使用できるオブジェクト）</p>
+  <p>また、ミュータブルオブジェクトはすべてイテラブルなオブジェクトとなる。</p>
+  <ul>
+    <li>
+      <p>イテラブルな型: Python公式ページのドキュメント</p>
+      <ul>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#str" class="link-secondary">str 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#list" class="link-secondary">list 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#tuple" class="link-secondary">tuple 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#range" class="link-secondary">range 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#dict" class="link-secondary">dict 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#set" class="link-secondary">set 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#bytes" class="link-secondary">bytes 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#bytearray" class="link-secondary">bytearray 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/glossary.html#term-file-object" class="link-secondary">file object 型</a></li>
+      </ul>
+    </li>
+    <li>
+      <p>イテラブルの反復処理使用例</p>
+      <pre><code class="language-python">$ python
+    <span class="hljs-comment"># list_a を list型で定義</span>
+    &gt;&gt;&gt; list_a = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(list_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;list&#x27;</span>&gt;
+    <span class="hljs-comment"># 要素を出力する 反復処理</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> list_a:
+    ...     <span class="hljs-built_in">print</span>(element)
+    ...
+    <span class="hljs-number">1</span>
+    <span class="hljs-number">2</span>
+    <span class="hljs-number">3</span>
+    <span class="hljs-comment"># str_a を str型で定義</span>
+    &gt;&gt;&gt; str_a = <span class="hljs-string">"abc"</span>
+    <span class="hljs-comment"># 要素を出力する 反復処理</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> str_a:
+    ...     <span class="hljs-built_in">print</span>(element)
+    ...
+    a
+    b
+    c
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="シーケンスsequence--インデックス指定可">シーケンス（sequence）: インデックス指定可</h3>
+  <p>インデックスを指定して直接要素にアクセスできるオブジェクト。</p>
+  <p>また、ミュータブルと同様にシーケンスオブジェクトはすべてイテラブルなオブジェクトとなる。</p>
+  <ul>
+    <li>
+      <p>シーケンスな型: Python公式ページのドキュメント</p>
+      <ul>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#str" class="link-secondary">str 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#list" class="link-secondary">list 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#tuple" class="link-secondary">tuple 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#range" class="link-secondary">range 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#bytes" class="link-secondary">bytes 型</a></li>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#bytearray" class="link-secondary">bytearray 型</a></li>
+      </ul>
+    </li>
+    <li>
+      <p>シーケンスオブジェクトからインデックスを指定した抽出例</p>
+      <pre><code class="language-python">$ python
+    <span class="hljs-comment"># list_a を list型で定義</span>
+    &gt;&gt;&gt; list_a = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a[<span class="hljs-number">0</span>])    <span class="hljs-comment"># インデックス 0 を指定</span>
+    <span class="hljs-number">1</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a[<span class="hljs-number">1</span>])    <span class="hljs-comment"># インデックス 1 を指定</span>
+    <span class="hljs-number">2</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a[<span class="hljs-number">2</span>])    <span class="hljs-comment"># インデックス 2 を指定</span>
+    <span class="hljs-number">3</span>
+    <span class="hljs-comment"># str_a を str型で定義</span>
+    &gt;&gt;&gt; str_a = <span class="hljs-string">"abcdefg"</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(str_a[<span class="hljs-number">1</span>])    <span class="hljs-comment"># インデックス 1 を指定</span>
+    <span class="hljs-string">&#x27;b&#x27;</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(str_a[<span class="hljs-number">3</span>])    <span class="hljs-comment"># インデックス 3 を指定</span>
+    <span class="hljs-string">&#x27;d&#x27;</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(str_a[<span class="hljs-number">5</span>])    <span class="hljs-comment"># インデックス 5 を指定</span>
+    <span class="hljs-string">&#x27;f&#x27;</span>
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="マッピングmapping--連想配列">マッピング（mapping）: 連想配列</h3>
+  <p>任意に決めたキーで要素を抽出することができるオブジェクト。</p>
+  <p>シーケンスオブジェクトがインデックスを指定して抽出するのに対し、マッピングオブジェクトは、オブジェクト生成時に自作したキーを指定して抽出する。<br>
+    ※ 一般的に連想配列と言われる配列のこと。</p>
+  <ul>
+    <li>
+      <p>マッピング型は、dict型のみ: Python公式ページのドキュメント</p>
+      <ul>
+        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#dict" class="link-secondary">dict 型</a></li>
+      </ul>
+    </li>
+    <li>
+      <p>dict型（マッピング）からキーを指定した抽出例</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; dict_a = {<span class="hljs-string">"s1"</span>:<span class="hljs-number">123</span>, <span class="hljs-string">"s2"</span>:<span class="hljs-number">456</span>, <span class="hljs-string">"s3"</span>:<span class="hljs-number">789</span>}
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(dict_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;dict&#x27;</span>&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_a[<span class="hljs-string">"s1"</span>])
+    <span class="hljs-number">123</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_a[<span class="hljs-string">"s2"</span>])
+    <span class="hljs-number">456</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_a[<span class="hljs-string">"s3"</span>])
+    <span class="hljs-number">789</span>
+</code></pre>
+    </li>
+  </ul>
+</div>
