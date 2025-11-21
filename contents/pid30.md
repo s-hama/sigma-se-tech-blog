@@ -192,3 +192,64 @@ Python - 組込みデータ型まとめ : bool , int, float, complex
         9223372036854775807
         >>>
     ```
+
+### float型 : 浮動小数点数型
+
+float型は、\\(64\\)ビットの浮動小数点数表現（倍精度浮動小数点数）であり、C言語の倍精度浮動小数点数型である`double`を使用して実装されている。
+
+他言語の多くは、\\(32\\)ビットの浮動小数点数表現（単精度浮動小数点数）をfloat\\(64\\)、ビットの浮動小数点数表現（倍精度浮動小数点数）をdoubleとして型が分かれているが、Pythonは倍精度浮動小数点数をfloatとし\\(32\\)ビットの単精度浮動小数点数の型はない。
+
+- 定義例
+    ```python
+    $ python
+        >>> float_a = 1.0e5    # float型の変数float_aを100000.0で定義
+        >>> print(float_a)
+        100000.0
+        >>> type(float_a)
+        <class 'float'>
+        >>>
+        >>> float_b = 1.2345    # 固定小数点数でfloat_bを定義
+        >>> float_b
+        1.2345
+        >>> type(float_b)    # 固定小数点数もfloatとして扱われる
+        <class 'float'>
+        >>>
+    ```
+
+- 型の特性
+  - イミュータブルオブジェクト : 同一アドレスで変更不可<br>
+  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF>) を参照
+
+- 最大値と最小値
+int型と同様にCPUに依存する。
+
+- 64ビットマシンの場合<br>
+    正の最大値 \\(1.79769313\\)\\(48623157e+308\\)<br>
+    正規化数の正の最小値 \\(2.2250738\\)\\(585072014e-308\\)<br>
+    負の最小値 \\(-1.797693\\)\\(1348623157e+308\\)<br>
+    ※ 正規化数
+
+- 最大・最小は、**float_info**でも確認できる。
+    ```python
+    $ python
+        >>> import sys
+        >>>
+        >>> print(sys.float_info.max)    # 最大値
+        1.7976931348623157e+308
+        >>>
+        >>> 1.8e+308    # 最大値を超える数値は「inf」と表現される。
+        inf
+        >>>
+        >>> print(sys.float_info.min)    # 正規化数の正の最小値
+        2.2250738585072014e-308
+        >>>
+        >>> -sys.float_info.max    # 負の最小値
+        -1.7976931348623157e+308
+        >>>
+        >>> -1.8e+308    # 最小値を下回る数値は「inf」と表現される。
+        -inf
+        >>>
+        >>> sys.float_info    # float_infoの情報すべて
+        sys.float_info(max=1.7976931348623157e+308, max_exp=1024, max_10_exp=308, min=2.2250738585072014e-308, min_exp=-1021, min_10_exp=-307, dig=15, mant_dig=53, epsilon=2.220446049250313e-16, radix=2, rounds=1)
+        >>>
+    ```
