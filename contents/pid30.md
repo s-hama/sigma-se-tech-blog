@@ -253,3 +253,93 @@ int型と同様にCPUに依存する。
         sys.float_info(max=1.7976931348623157e+308, max_exp=1024, max_10_exp=308, min=2.2250738585072014e-308, min_exp=-1021, min_10_exp=-307, dig=15, mant_dig=53, epsilon=2.220446049250313e-16, radix=2, rounds=1)
         >>>
     ```
+
+### complex型 : 複素数型
+
+complex型は、**実部**と**虚部**で構成され、虚部は虚数単位（\\(2\\)乗して\\(-1\\)となる）の \\(j\\) と表現する。<br>
+※ 数学の虚数単位は、\\(i\\)（imaginary part）で表現されるが、工学での \\(i\\) は、他の単位で使用されているケースがあり、混乱を招くため \\(j\\) が使われている。
+
+- 定義例
+    ```python
+    $ python
+        >>> complex_a = 5 + 5j    # complex型の変数 complex_a を5 + 5jで定義
+        >>> type(complex_a)
+        <class 'complex'>
+        >>>
+        >>> complex_b = 5 + 5J    # jは大文字でも可
+        >>> type(complex_b)
+        <class 'complex'>
+        >>>
+        >>> complex_c = 5j    # 実部は省略可能
+        >>> type(complex_c)
+        <class 'complex'>
+        >>>
+        >>> complex_d = 5.5e5+5j    # 実部をfloat型で定義
+        >>> type(complex_d)
+        <class 'complex'>
+        >>>
+        >>> print(complex_d)
+        (550000+5j)
+        >>>
+    ```
+
+- 最大値と最小値
+実部と虚部の値はそれぞれ **浮動小数点**でfloat型なのでfloat型と同様にCPUに依存する。
+
+- 型の特性
+  - イミュータブルオブジェクト : 同一アドレスで変更不可<br>
+  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF>) を参照
+
+- 実部、虚部を別々に取得
+    ```python
+    $ python
+        >>> complex_a = 5 + 50j
+        >>> print(complex_a.real)    # 実部の値を取得
+        5.0
+        >>> print(complex_a.imag)    # 虚部の値を取得
+        50.0
+        >>>
+    ```
+
+- 虚数の性質確認
+    ```python
+    $ python
+        >>> complex_a = 123j   # complex型の変数 complex_a を123jで定義
+        >>> type(complex_a)
+        >>> complex_b = complex_a * complex_a    # 123jを二乗する
+        >>> print(complex_b)    # -15129の実部のみとなる
+        (-15129+0j)
+        >>> type(complex_b)
+        <class 'complex'>
+        >>>
+    ```
+
+- 使用上の注意
+  - 虚数部が \\(1\\) の場合、数学と違い省略できない。
+  ```python
+  $ python
+      >>> complex_a = 5 + j    # 虚数部を数学と同じように省略するとNameErrorとなる。
+      Traceback (most recent call last):
+        File "<stdin>", line 1, in <module>
+      NameError: name 'j' is not defined
+      >>>
+      >>> complex_b = 5 + 1j    # 虚数部を1jと明示すること。
+      >>> type(complex_b)
+      <class 'complex'>
+      >>>
+  ```
+- \\(j\\) は、予約語でないため、単独で宣言できてしまうので注意<br>
+    complex型に関係なく、全く別の変数として定義できるため、誤用にも注意。
+    ```python
+    $ python
+        >>> j = 12345    # int型で12345を定義
+        >>>
+        >>> complex_a = 5 + j     # 上記1jと記載しない場合、NameErrorが発生しない。
+        >>> print(complex_a)    # 12345 + 5 の演算結果となっている。
+        12350
+        >>>
+        >>> complex_b = 5 + 1j    # 1jと記載した場合、int型 ( j ) と区別される。
+        >>> print(complex_b)
+        (5+1j)
+        >>>
+    ```
