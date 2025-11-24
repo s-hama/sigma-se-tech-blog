@@ -1,4 +1,141 @@
 <div class="post-body">
   <h2 id="目的">目的</h2>
   <p>この記事では、Pythonが扱う組込みデータ型（bool, int, float, complex）の基本的な操作方法について記載する。</p>
+  <h2 id="各データ型の操作方法">各データ型の操作方法</h2>
+  <h3 id="bool型--真偽リテラル">bool型 : 真偽リテラル</h3>
+  <p>論理型とも呼ばれ、予約語である<code>True</code>または、<code>False</code>のいずれかの値を取る。</p>
+  <ul>
+    <li>
+      <p>定義例</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; bool_a = <span class="hljs-literal">True</span>    <span class="hljs-comment"># bool型の変数bool_aをTrueで定義</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(bool_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bool&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; bool_a = <span class="hljs-literal">False</span>    <span class="hljs-comment"># 変数bool_aをFalseに更新</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(bool_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bool&#x27;</span>&gt;
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>型の特性</p>
+      <ul>
+        <li>
+          <p>イミュータブルオブジェクト : 同一アドレスで変更不可<br>
+            <a class="link-secondary"
+              href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF">Python
+              - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a>
+            を参照
+          </p>
+        </li>
+        <li>
+          <p>bool型はint型のサブクラス</p>
+          <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-built_in">issubclass</span>(<span class="hljs-built_in">bool</span>, <span class="hljs-built_in">int</span>)    <span class="hljs-comment"># 第1引数が第2引数のサブクラスである場合にTrueを返す。</span>
+    <span class="hljs-literal">True</span>
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>int型のサブクラスであることによる振る舞い</p>
+      <ul>
+        <li>数値型 \(0\)、\(1\)と同義
+          <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-literal">True</span> == <span class="hljs-number">1</span>    <span class="hljs-comment"># Trueは、1と同義</span>
+    <span class="hljs-literal">True</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-literal">False</span> == <span class="hljs-number">0</span>    <span class="hljs-comment"># Falseは、0と同義</span>
+    <span class="hljs-literal">True</span>
+    &gt;&gt;&gt;
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>数値型と同義であるため、四則演算ができる</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-literal">True</span> + <span class="hljs-literal">True</span> + <span class="hljs-literal">True</span>   <span class="hljs-comment"># 加算</span>
+    <span class="hljs-number">3</span>
+    &gt;&gt;&gt; <span class="hljs-number">6</span> - <span class="hljs-literal">False</span>   <span class="hljs-comment"># 減算</span>
+    <span class="hljs-number">5</span>
+    &gt;&gt;&gt; <span class="hljs-number">100</span> * <span class="hljs-literal">False</span>   <span class="hljs-comment"># 乗算</span>
+    <span class="hljs-number">0</span>
+    &gt;&gt;&gt; <span class="hljs-number">100</span> / <span class="hljs-literal">True</span>   <span class="hljs-comment"># 除算</span>
+    <span class="hljs-number">100.0</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 総和もとれる (Pythonでは頻繁に登場する)</span>
+    &gt;&gt;&gt; bool_list_a = [<span class="hljs-literal">True</span>, <span class="hljs-literal">True</span>, <span class="hljs-literal">False</span>, <span class="hljs-literal">True</span>, <span class="hljs-literal">True</span>, <span class="hljs-literal">True</span>, <span class="hljs-literal">False</span>]
+    &gt;&gt;&gt; <span class="hljs-built_in">sum</span>(bool_list_a)    <span class="hljs-comment"># 和 : 1 + 1 + 0 + 1 + 1 + 1 + 0</span>
+    <span class="hljs-number">5</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>判定基準<br>
+        Falseと判定されるオブジェクト</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># False : bool型のFalse</span>
+    ... <span class="hljs-built_in">bool</span>(<span class="hljs-literal">False</span>)
+    <span class="hljs-literal">False</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># None : 何もないことを示すオブジェクト ( 多言語で良く見かける null は、Pythonでは None と表現する )</span>
+    ... <span class="hljs-built_in">bool</span>(<span class="hljs-literal">None</span>)
+    <span class="hljs-literal">False</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 0 : int型(整数)のゼロ</span>
+    ... <span class="hljs-built_in">bool</span>(<span class="hljs-number">0</span>)
+    <span class="hljs-literal">False</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 0.0 :  float型(浮動小数点数)のゼロ</span>
+    ... <span class="hljs-built_in">bool</span>(<span class="hljs-number">0.0</span>)
+    <span class="hljs-literal">False</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 0j :  complex型(複素数)のゼロ</span>
+    ... <span class="hljs-built_in">bool</span>(<span class="hljs-number">0j</span>)
+    <span class="hljs-literal">False</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># Decimal(0) :  decimal型のゼロ ※ decimal型は組込みデータ型でない</span>
+    ... <span class="hljs-keyword">from</span> decimal <span class="hljs-keyword">import</span> Decimal    <span class="hljs-comment"># decimal型は組込みデータ型でない</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">bool</span>(Decimal(<span class="hljs-number">0</span>))
+    <span class="hljs-literal">False</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># Fraction(0, 1) :  fraction型(有理数)のゼロ</span>
+    ... <span class="hljs-keyword">from</span> fractions <span class="hljs-keyword">import</span> Fraction    <span class="hljs-comment"># fraction型は組込みデータ型でない</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">bool</span>(Fraction(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>))
+    <span class="hljs-literal">False</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># &#x27;&#x27; : str型(文字列)の空文字</span>
+    ... <span class="hljs-built_in">bool</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+    <span class="hljs-literal">False</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># [] : list型(配列)の空配列</span>
+    ... <span class="hljs-built_in">bool</span>([])
+    <span class="hljs-literal">False</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># {} : dict型(連想配列)の空配列</span>
+    ... <span class="hljs-built_in">bool</span>({})
+    <span class="hljs-literal">False</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># () : tuple型(タプル)の空配列</span>
+    ... <span class="hljs-built_in">bool</span>(())
+    <span class="hljs-literal">False</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># set() : set型(集合)の空配列</span>
+    ... <span class="hljs-built_in">bool</span>(<span class="hljs-built_in">set</span>())
+    <span class="hljs-literal">False</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># range(0) : range型(数値配列)の空配列</span>
+    ... <span class="hljs-built_in">bool</span>(<span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>))
+    <span class="hljs-literal">False</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>Trueと判定されるオブジェクト<br>
+        上記、Falseと判定されるオブジェクト以外のオブジェクトすべてTrueと判定される。</p>
+    </li>
+  </ul>
 </div>
