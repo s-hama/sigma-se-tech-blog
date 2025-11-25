@@ -138,4 +138,77 @@
         上記、Falseと判定されるオブジェクト以外のオブジェクトすべてTrueと判定される。</p>
     </li>
   </ul>
+  <h3 id="int型--数値整数">int型 : 数値（整数）</h3>
+  <p>整数型で \(10\)進数以外に \(2\)進数、\(8\)進数、\(16\)進数を表現できる。</p>
+  <p>※ Python\(2\) までは、末尾に \(l\) や \(L\) を付けることでlong型（長整数型）となりint型とlong型は、区別されていたが、Python\(3\) から統合され、長整数もint型として扱われるようになった。</p>
+  <ul>
+    <li>
+      <p>定義例</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 10進数 : そのまま整数を格納</span>
+    ... int_a = <span class="hljs-number">12345</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(int_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;int&#x27;</span>&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a)    <span class="hljs-comment"># 値を10進数で出力</span>
+    <span class="hljs-number">12345</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 2進数 : 頭に「0b」または「0B」を付加して格納</span>
+    ... int_a2 = <span class="hljs-number">0b100</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(int_a2)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;int&#x27;</span>&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a2)    <span class="hljs-comment"># 値を10進数で出力</span>
+    <span class="hljs-number">4</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 8進数 : 頭に「0o」または「0O」を付加して格納</span>
+    ... int_a8 = <span class="hljs-number">0o100</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(int_a8)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;int&#x27;</span>&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a8)    <span class="hljs-comment"># 値を10進数で出力</span>
+    <span class="hljs-number">64</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 16進数 : 頭に「0x」または「0X」を付加して格納</span>
+    ... int_a16 = <span class="hljs-number">0x100</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(int_a16)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;int&#x27;</span>&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a16)    <span class="hljs-comment"># 値を10進数で出力</span>
+    <span class="hljs-number">256</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>型の特性</p>
+      <ul>
+        <li>イミュータブルオブジェクト : 同一アドレスで変更不可<br>
+          <a class="link-secondary"
+            href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF">Python
+            - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a> を参照
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>最大値と最小値<br>
+        実質、CPUに依存するので上限、下限はない。</p>
+    </li>
+    <li>
+      <p>\(32\)ビットマシンの場合<br>
+        最大 \(2,147,483,647\) :（\(2^{31} - 1\) \(= 2147483647\)）<br>
+        最小 \(-2,147,483,648\) :（\(- 2^{31}\) \(= -2147483648\)）</p>
+    </li>
+    <li>
+      <p>\(62\)ビットマシンの場合<br>
+        最大 \(9,223,372,036\)\(,854,775,807\) :（\(2^{63} - 1\) \(= 922337203\)\(6854775807\)）<br>
+        最小 \(-9,223,372,036\)\(,854,775,808\) :（\(- 2^{63}\) \(= -922337203\)\(6854775808\)）</p>
+    </li>
+    <li>
+      <p>最大は、<strong>maxsize</strong>で確認できる<br>
+        ※ 下記、対話モード実施環境のCPUは、\(64\)ビット。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-keyword">import</span> sys
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(sys.maxsize)
+    <span class="hljs-number">9223372036854775807</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
 </div>
