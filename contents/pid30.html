@@ -211,4 +211,74 @@
 </code></pre>
     </li>
   </ul>
+  <h3 id="float型--浮動小数点数型">float型 : 浮動小数点数型</h3>
+  <p>float型は、\(64\)ビットの浮動小数点数表現（倍精度浮動小数点数）であり、C言語の倍精度浮動小数点数型である<code>double</code>を使用して実装されている。</p>
+  <p>
+    他言語の多くは、\(32\)ビットの浮動小数点数表現（単精度浮動小数点数）をfloat\(64\)、ビットの浮動小数点数表現（倍精度浮動小数点数）をdoubleとして型が分かれているが、Pythonは倍精度浮動小数点数をfloatとし\(32\)ビットの単精度浮動小数点数の型はない。
+  </p>
+  <ul>
+    <li>
+      <p>定義例</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; float_a = <span class="hljs-number">1.0e5</span>    <span class="hljs-comment"># float型の変数float_aを100000.0で定義</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
+    <span class="hljs-number">100000.0</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(float_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;float&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; float_b = <span class="hljs-number">1.2345</span>    <span class="hljs-comment"># 固定小数点数でfloat_bを定義</span>
+    &gt;&gt;&gt; float_b
+    <span class="hljs-number">1.2345</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(float_b)    <span class="hljs-comment"># 固定小数点数もfloatとして扱われる</span>
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;float&#x27;</span>&gt;
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>型の特性</p>
+      <ul>
+        <li>イミュータブルオブジェクト : 同一アドレスで変更不可<br>
+          <a class="link-secondary"
+            href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF">Python
+            - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a> を参照
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>最大値と最小値
+        int型と同様にCPUに依存する。</p>
+    </li>
+    <li>
+      <p>64ビットマシンの場合<br>
+        正の最大値 \(1.79769313\)\(48623157e+308\)<br>
+        正規化数の正の最小値 \(2.2250738\)\(585072014e-308\)<br>
+        負の最小値 \(-1.797693\)\(1348623157e+308\)<br>
+        ※ 正規化数</p>
+    </li>
+    <li>
+      <p>最大・最小は、<strong>float_info</strong>でも確認できる。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-keyword">import</span> sys
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(sys.float_info.<span class="hljs-built_in">max</span>)    <span class="hljs-comment"># 最大値</span>
+    <span class="hljs-number">1.7976931348623157e+308</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-number">1.8e+308</span>    <span class="hljs-comment"># 最大値を超える数値は「inf」と表現される。</span>
+    inf
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(sys.float_info.<span class="hljs-built_in">min</span>)    <span class="hljs-comment"># 正規化数の正の最小値</span>
+    <span class="hljs-number">2.2250738585072014e-308</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; -sys.float_info.<span class="hljs-built_in">max</span>    <span class="hljs-comment"># 負の最小値</span>
+    -<span class="hljs-number">1.7976931348623157e+308</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; -<span class="hljs-number">1.8e+308</span>    <span class="hljs-comment"># 最小値を下回る数値は「inf」と表現される。</span>
+    -inf
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; sys.float_info    <span class="hljs-comment"># float_infoの情報すべて</span>
+    sys.float_info(<span class="hljs-built_in">max</span>=<span class="hljs-number">1.7976931348623157e+308</span>, max_exp=<span class="hljs-number">1024</span>, max_10_exp=<span class="hljs-number">308</span>, <span class="hljs-built_in">min</span>=<span class="hljs-number">2.2250738585072014e-308</span>, min_exp=-<span class="hljs-number">1021</span>, min_10_exp=-<span class="hljs-number">307</span>, dig=<span class="hljs-number">15</span>, mant_dig=<span class="hljs-number">53</span>, epsilon=<span class="hljs-number">2.220446049250313e-16</span>, radix=<span class="hljs-number">2</span>, rounds=<span class="hljs-number">1</span>)
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
 </div>
