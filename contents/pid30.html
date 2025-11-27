@@ -281,4 +281,104 @@
 </code></pre>
     </li>
   </ul>
+  <h3 id="complex型--複素数型">complex型 : 複素数型</h3>
+  <p>complex型は、<strong>実部</strong>と<strong>虚部</strong>で構成され、虚部は虚数単位（\(2\)乗して\(-1\)となる）の \(j\) と表現する。<br>
+    ※ 数学の虚数単位は、\(i\)（imaginary part）で表現されるが、工学での \(i\) は、他の単位で使用されているケースがあり、混乱を招くため \(j\) が使われている。</p>
+  <ul>
+    <li>
+      <p>定義例</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; complex_a = <span class="hljs-number">5</span> + <span class="hljs-number">5j</span>    <span class="hljs-comment"># complex型の変数 complex_a を5 + 5jで定義</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(complex_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;complex&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; complex_b = <span class="hljs-number">5</span> + <span class="hljs-number">5J</span>    <span class="hljs-comment"># jは大文字でも可</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(complex_b)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;complex&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; complex_c = <span class="hljs-number">5j</span>    <span class="hljs-comment"># 実部は省略可能</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(complex_c)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;complex&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; complex_d = <span class="hljs-number">5.5e5</span>+<span class="hljs-number">5j</span>    <span class="hljs-comment"># 実部をfloat型で定義</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(complex_d)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;complex&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_d)
+    (<span class="hljs-number">550000</span>+<span class="hljs-number">5j</span>)
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>最大値と最小値
+        実部と虚部の値はそれぞれ <strong>浮動小数点</strong>でfloat型なのでfloat型と同様にCPUに依存する。</p>
+    </li>
+    <li>
+      <p>型の特性</p>
+      <ul>
+        <li>イミュータブルオブジェクト : 同一アドレスで変更不可<br>
+          <a class="link-secondary"
+            href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF">Python
+            - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a> を参照
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>実部、虚部を別々に取得</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; complex_a = <span class="hljs-number">5</span> + <span class="hljs-number">50j</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_a.real)    <span class="hljs-comment"># 実部の値を取得</span>
+    <span class="hljs-number">5.0</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_a.imag)    <span class="hljs-comment"># 虚部の値を取得</span>
+    <span class="hljs-number">50.0</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>虚数の性質確認</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; complex_a = <span class="hljs-number">123j</span>   <span class="hljs-comment"># complex型の変数 complex_a を123jで定義</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(complex_a)
+    &gt;&gt;&gt; complex_b = complex_a * complex_a    <span class="hljs-comment"># 123jを二乗する</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_b)    <span class="hljs-comment"># -15129の実部のみとなる</span>
+    (-<span class="hljs-number">15129</span>+<span class="hljs-number">0j</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(complex_b)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;complex&#x27;</span>&gt;
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>使用上の注意</p>
+      <ul>
+        <li>虚数部が \(1\) の場合、数学と違い省略できない。</li>
+      </ul>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; complex_a = <span class="hljs-number">5</span> + j    <span class="hljs-comment"># 虚数部を数学と同じように省略するとNameErrorとなる。</span>
+    Traceback (most recent call last):
+      File <span class="hljs-string">"&lt;stdin&gt;"</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
+    NameError: name <span class="hljs-string">&#x27;j&#x27;</span> <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> defined
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; complex_b = <span class="hljs-number">5</span> + <span class="hljs-number">1j</span>    <span class="hljs-comment"># 虚数部を1jと明示すること。</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(complex_b)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;complex&#x27;</span>&gt;
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>\(j\) は、予約語でないため、単独で宣言できてしまうので注意<br>
+        complex型に関係なく、全く別の変数として定義できるため、誤用にも注意。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; j = <span class="hljs-number">12345</span>    <span class="hljs-comment"># int型で12345を定義</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; complex_a = <span class="hljs-number">5</span> + j     <span class="hljs-comment"># 上記1jと記載しない場合、NameErrorが発生しない。</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_a)    <span class="hljs-comment"># 12345 + 5 の演算結果となっている。</span>
+    <span class="hljs-number">12350</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; complex_b = <span class="hljs-number">5</span> + <span class="hljs-number">1j</span>    <span class="hljs-comment"># 1jと記載した場合、int型 ( j ) と区別される。</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_b)
+    (<span class="hljs-number">5</span>+<span class="hljs-number">1j</span>)
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
 </div>
