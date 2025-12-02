@@ -507,3 +507,101 @@ list型は**ミュータブルオブジェクト**であるため、appendやins
         [..., 'count', 'index', ...]
         >>>
     ```
+
+### range型 : 範囲指定
+
+range型は、for文のループ対象など**範囲指定**を目的としたオブジェクトを作成する。
+
+- 型の特性
+  - イミュータブルオブジェクト
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF>)
+  - イテラブルオブジェクト
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF>)
+  - シーケンスオブジェクト
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%EF%BC%88sequence%EF%BC%89%3A%20%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9%E6%8C%87%E5%AE%9A%E5%8F%AF>)
+
+
+- 定義例<br>
+**開始位置**（デフォルト 0）、**終了位置**、**増加幅**（デフォルト\\(1\\)）を指定し定義する。<br>
+※ range型のオブジェクト要素を可視化するため、list型に変換した出力をしている。
+    ```python
+    $ python
+        >>> # 開始位置、増加幅を省略（デフォルト適用）し、終了位置のみ指定した定義
+        >>> range_a = range(5)
+        >>> print(range_a)
+        range(0, 5)
+        >>> type(range_a)
+        <class 'range'>
+        >>> list(range_a)
+        [0, 1, 2, 3, 4]
+        >>>
+        >>> # 開始位置、増加幅を省略（デフォルト適用）し、終了位置をマイナスで定義
+        >>> range_b = range(-5)
+        >>> print(range_b)
+        range(0, -5)
+        >>> type(range_b)
+        <class 'range'>
+        >>> list(range_b)    # 開始位置（デフォルト 0）～終了位置 -5 となるため、区間なしと見なされる
+        []
+        >>>
+        >>> # 増加幅を省略（デフォルト適用）し、開始位置 5、終了位置 10 を指定した定義
+        >>> range_c = range(5, 10)
+        >>> print(range_c)
+        range(5, 10)
+        >>> type(range_c)
+        <class 'range'>
+        >>> list(range_c)
+        [5, 6, 7, 8, 9]
+        >>>
+        >>> # 増加幅を省略（デフォルト適用）し、開始位置 -5、終了位置 -10 を指定した定義
+        >>> range_d = range(-5, -10)
+        >>> print(range_d)
+        range(-5, -10)
+        >>> list(range_d)    # 開始位置 -5～終了位置 -10 となるため、区間なしと見なされる
+        []
+        >>>
+        >>> # 増加幅を省略（デフォルト適用）し、開始位置 -5、終了位置 0 を指定した定義
+        >>> range_e = range(-5, 0)
+        >>> print(range_e)
+        range(-5, 0)
+        >>> list(range_e)
+        [-5, -4, -3, -2, -1]
+        >>>
+        >>> # 開始位置 1、終了位置 10、増加幅 2 を指定した定義
+        >>> range_f = range(1, 10, 2)
+        >>> print(range_f)
+        range(1, 10, 2)
+        >>> type(range_f)
+        <class 'range'>
+        >>> list(range_f)
+        [1, 3, 5, 7, 9]
+        >>>
+        >>> # 開始位置 1、終了位置 10、増加幅 -2 を指定した定義
+        >>> range_g = range(1, 10, -2)
+        >>> print(range_g)
+        range(1, 10, -2)
+        >>> type(range_g)
+        <class 'range'>
+        >>> list(range_g)    # 開始位置 1～終了位置 10 と増加しているが、増加幅 -2 なので区間なしと見なされる
+        []
+        >>>
+        >>> # 開始位置 10、終了位置 1、増加幅 -2 を指定した定義
+        >>> range_h = range(10, 1, -2)
+        >>> print(range_h)
+        range(10, 1, -2)
+        >>> type(range_h)
+        <class 'range'>
+        >>> list(range_h)
+        [10, 8, 6, 4, 2]
+        >>>
+    ```
+
+- float型を指定した定義<br>
+range型の生成時、float型は指定できないためリスト内包表記で表現する。
+    ```python
+    $ python
+        >>> # 開始位置 5、終了位置 50、増加幅 5 を指定し、リスト内包表記で10で割る
+        >>> [i / 10 for i in range(5, 50, 5)]
+        [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5]
+        >>>
+    ```
