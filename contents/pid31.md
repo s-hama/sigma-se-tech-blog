@@ -605,3 +605,155 @@ range型の生成時、float型は指定できないためリスト内包表記�
         [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5]
         >>>
     ```
+
+### dict型 : 連想配列型（辞書型）
+
+dict型（辞書型）は、データのキーと値がワンセットになった配列。<br>
+※ 多言語のほとんどは、**連想配列**と呼ばれる。
+- 型の特性
+  - イミュータブルオブジェクト
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF>)
+  - イテラブルオブジェクト
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF>)
+  - マッピングオブジェクト
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > マッピング（mapping）: 連想配列](<https://sigma-se.com/detail/29/#:~:text=%E3%83%9E%E3%83%83%E3%83%94%E3%83%B3%E3%82%B0%EF%BC%88mapping%EF%BC%89%3A%20%E9%80%A3%E6%83%B3%E9%85%8D%E5%88%97>)
+
+- 定義例
+    ```python
+    $ python
+        >>> # キーと値のセットで定義
+        >>> dict_a = {'key1': 100, 'key2': 200, 'key3': 300}
+        >>> print(dict_a)
+        {'key1': 100, 'key2': 200, 'key3': 300}
+        >>> type(dict_a)
+        <class 'dict'>
+        >>>
+        >>> # 同じキーを定義した場合、後勝ちで上書かれる
+        >>> # ※エラーにならないので注意。
+        >>> dict_b = {'key1': 100, 'key2': 200, 'key3': 300, 'key1': 400}
+        >>> print(dict_b)
+        {'key1': 400, 'key2': 200, 'key3': 300}
+        >>> type(dict_b)
+        <class 'dict'>
+        >>>
+        >>> # コンストラクタを使用した定義
+        >>> dict_c = dict(key1=100, key2=200, key3=300)
+        >>> print(dict_c)
+        {'key1': 100, 'key2': 200, 'key3': 300}
+        >>> type(dict_c)
+        <class 'dict'>
+        >>>
+        >>> # コンストラクタを使用した変換
+        >>> # ※ list型、tuple型が指定できる
+        >>> dict_d = dict([('key1', 100), ('key2', 200), ('key3', 300)])
+        >>> dict_d
+        {'key1': 100, 'key2': 200, 'key3': 300}
+        >>> type(dict_d)
+        <class 'dict'>
+        >>>
+    ```
+
+- dict要素の取得
+    ```python
+    $ python
+        >>> dict_a = {'key1': 100, 'key2': 200, 'key3': 300}
+        >>>
+        >>> # すべてのキーを取得
+        >>> dict_a.keys()
+        dict_keys(['key1', 'key2', 'key3'])
+        >>>
+        >>> # すべての値を取得
+        >>> dict_a.values()
+        dict_values([100, 200, 300])
+        >>>
+        >>> # すべてのキーと値を取得
+        >>> dict_a.items()
+        dict_items([('key1', 100), ('key2', 200), ('key3', 300)])
+        >>>
+        >>> # キーを指定して値を取得
+        >>> print(dict_a['key1'])
+        100
+        >>>
+    ```
+
+- dict要素の追加、変更、削除
+    ```python
+    $ python
+        >>> dict_a = {'key1': 100, 'key2': 200, 'key3': 300}
+        >>>
+        >>> # キーを指定して追加
+        >>> dict_a['key4'] = 400
+        >>> print(dict_a)
+        {'key1': 100, 'key2': 200, 'key3': 300, 'key4': 400}
+        >>>
+        >>> # キーを指定して追加（すでにキーがあれば変更なし）
+        >>> dict_a.setdefault('key5', 500)
+        500
+        >>> print(dict_a)
+        {'key1': 100, 'key2': 200, 'key3': 300, 'key4': 400, 'key5': 500}
+        >>>
+        >>> # キーを指定して変更
+        >>> dict_a['key4'] = 444
+        >>> print(dict_a)
+        {'key1': 100, 'key2': 200, 'key3': 300, 'key4': 444, 'key5': 500}
+        >>>
+        >>> # キーを指定して削除（pop）
+        >>> dict_a.pop('key4')
+        444
+        >>> print(dict_a)
+        {'key1': 100, 'key2': 200, 'key3': 300, 'key5': 500}
+        >>>
+        >>> # キーを指定して削除（del）
+        >>> del dict_a['key3']
+        >>> print(dict_a)
+        {'key1': 100, 'key2': 200, 'key5': 500}
+        >>>
+    ```
+
+- 変更時の注意<br>
+dict型は代入時、参照渡しするため代入元のdict型に影響を与えたくない場合、**copy**を使用すること。
+    ```python
+    $ python
+        >>> # copyを使用しない場合
+        >>> dict_a = {'key1': 100, 'key2': 200, 'key3': 300}
+        >>>
+        >>> dict_a_temp = dict_a
+        >>> dict_a_temp['key2'] = 999    # 代入先のdict型を変更する
+        >>>
+        >>> print(dict_a_temp)
+        {'key1': 100, 'key2': 999, 'key3': 300}
+        >>> print(dict_a)
+        {'key1': 100, 'key2': 999, 'key3': 300}    # 代入元のdict型も変更されている
+        >>>
+        >>> # copyを使用した場合
+        >>> dict_b = {'key1': 100, 'key2': 200, 'key3': 300}
+        >>>
+        >>> dict_b_temp = dict_b.copy()
+        >>> dict_b_temp['key2'] = 999    # 代入先のdict型を変更する
+        >>>
+        >>> print(dict_b_temp)
+        {'key1': 100, 'key2': 999, 'key3': 300}
+        >>> print(dict_b)
+        {'key1': 100, 'key2': 200, 'key3': 300}    # 代入元のdict型は変更されていない
+        >>>
+    ```
+
+- dict型の結合<br>
+str型、list型、tuple型のように**+演算子**で結合ができない。
+    ```python
+    $ python
+        >>> # updateで dict_a に dict_b を追加する（重複キーは後者で上書き）
+        >>> dict_a = {'key1': 100, 'key2': 200, 'key3': 300}
+        >>> dict_b = {'key4': 400, 'key1': 999, 'key2': 999}
+        >>> dict_a.update(dict_b)
+        >>> print(dict_a)
+        {'key1': 999, 'key2': 999, 'key3': 300, 'key4': 400}
+        >>>
+        >>> # updateを使用しない場合
+        >>> dict_a = {'key1': 100, 'key2': 200, 'key3': 300}
+        >>> dict_b = {'key4': 400, 'key5': 500, 'key6': 600}
+        >>> dict_c = {**dict_a, **dict_b}
+        >>> print(dict_c)
+        {'key1': 100, 'key2': 200, 'key3': 300, 'key4': 400, 'key5': 500, 'key6': 600}
+        >>>
+    ```
