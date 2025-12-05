@@ -1,4 +1,170 @@
 <div class="post-body">
   <h2 id="目的">目的</h2>
   <p>この記事では、Pythonが扱う組込みデータ型（str、list、tuple、range、dict）の基本的な操作方法について記載する。</p>
+  <h2 id="各データ型の操作方法">各データ型の操作方法</h2>
+  <h3 id="str型--文字列型">str型 : 文字列型</h3>
+  <p>文字列（Unicode文字）の並びを表す型。</p>
+  <p>
+    Unicodeは<strong>文字集合</strong>であり、Unicodeの符号化方式（文字コード）である<strong>UTF-8</strong>や<strong>UTF-16</strong>と混同しないように注意。<br>
+    例えば、別の文字集合である<strong>JISX0208</strong>なら<strong>符号化方式</strong>は、<strong>ISO-2022-JP</strong>（通称JISコード）か<strong>Shift-JIS</strong>となるように、文字集合に対応する符号化方式（文字コード）は決まっている。
+  </p>
+  <ul>
+    <li>
+      <p>型の特性</p>
+      <ul>
+        <li>イミュータブルオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a>
+            </li>
+          </ul>
+        </li>
+        <li>イテラブルオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イテラブル（iterable）: 反復抽出可</a></li>
+          </ul>
+        </li>
+        <li>シーケンスオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%EF%BC%88sequence%EF%BC%89%3A%20%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9%E6%8C%87%E5%AE%9A%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; シーケンス（sequence）: インデックス指定可</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>定義例</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 変数 str_a をシングルクォーテーションで囲んで定義</span>
+    &gt;&gt;&gt; str_a = <span class="hljs-string">&#x27;abc&#x27;</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(str_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;str&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 変数 str_b をダブルクォーテーションで囲んで定義</span>
+    &gt;&gt;&gt; str_b = <span class="hljs-string">&quot;abc&quot;</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(str_b)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;str&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 変数 str_c をトリプルクォート（シングルクォーテーション）で囲んで定義</span>
+    &gt;&gt;&gt; str_c = <span class="hljs-string">&#x27;&#x27;&#x27;hij
+    ... klmn&#x27;&#x27;&#x27;</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(str_c)    <span class="hljs-comment"># 定義文字として改行（\n）を認識する</span>
+    hij
+    klmn
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(str_c)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;str&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 変数 str_d をトリプルクォート（ダブルクォーテーション）で囲んで定義</span>
+    &gt;&gt;&gt; str_d = <span class="hljs-string">&quot;&quot;&quot;abc
+    ... defg&quot;&quot;&quot;</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(str_d)    <span class="hljs-comment"># 定義文字として改行（\n）を認識する</span>
+    abc
+defg
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(str_d)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;str&#x27;</span>&gt;
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>エスケープの使用例</p>
+      <ul>
+        <li>よく使用されるエスケープシーケンス<br>
+          <table class="table" style="width: 100%;">
+            <thead>
+              <tr>
+                <th scope="col">エスケープシーケンス</th>
+                <th scope="col">説明</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>\\</td>
+                <td>バックスラッシュ（\\）</td>
+              </tr>
+              <tr>
+                <td>\\'</td>
+                <td>シングルクォーテーション（'）</td>
+              </tr>
+              <tr>
+                <td>\\"</td>
+                <td>ダブルクォーテーション（"）</td>
+              </tr>
+              <tr>
+                <td>\n</td>
+                <td>ASCII 行送り（LF）</td>
+              </tr>
+              <tr>
+                <td>\r</td>
+                <td>ASCII 復帰（CR）</td>
+              </tr>
+              <tr>
+                <td>\t</td>
+                <td>ASCII 水平タブ（TAB）</td>
+              </tr>
+            </tbody>
+          </table>
+          ※ エスケープ（\\）は、特別な意味を持つ文字を無効化する。
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>主な使用例</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 行送りLF（改行）</span>
+    &gt;&gt;&gt; str_a = <span class="hljs-string">&quot;abcdefg\nhijklmn&quot;</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(str_a)
+    abcdefg
+    hijklmn
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 水平タブ（TAB）</span>
+    &gt;&gt;&gt; str_b = <span class="hljs-string">&quot;abcdefg\thijklmn&quot;</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(str_b)
+    abcdefg	hijklmn
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># シングルクォーテーション（&#x27;）</span>
+    &gt;&gt;&gt; str_c = <span class="hljs-string">&quot;abc&#x27;def&#x27;ghi&quot;</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(str_c)
+    abc<span class="hljs-string">&#x27;def&#x27;</span>ghi
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># ダブルクォーテーション（&quot;）</span>
+    &gt;&gt;&gt; str_d = <span class="hljs-string">&#x27;abc&quot;def&quot;ghi&#x27;</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(str_d)
+    abc<span class="hljs-string">&quot;def&quot;</span>ghi
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>ダブルクォーテーションで囲む場合、シングルクォーテーションのエスケープ（\）は省略可能</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; str_a = <span class="hljs-string">&quot;This is a &quot;</span>string<span class="hljs-string">&quot;&quot;</span>    <span class="hljs-comment"># エスケープがないとエラーとなる</span>
+    File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>
+        str_a = <span class="hljs-string">&quot;This is a &quot;</span>string<span class="hljs-string">&quot;&quot;</span>
+    SyntaxError: invalid syntax
+    &gt;&gt;&gt; str_b = <span class="hljs-string">&#x27;This is a &quot;string&quot;&#x27;</span>    <span class="hljs-comment"># シングルクォーテーションで囲った場合はエスケープは不要</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(str_b)
+    This <span class="hljs-keyword">is</span> a <span class="hljs-string">&quot;string&quot;</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>シングルクォーテーションで囲む場合、ダブルクォーテーションのエスケープ（\）は省略可能</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; str_a = <span class="hljs-string">&#x27;Let\&#x27;s&#x27;</span>    <span class="hljs-comment"># エスケープがないとエラーとなる</span>
+    File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>
+        str_a = <span class="hljs-string">&#x27;Let&#x27;</span>s<span class="hljs-string">&#x27;
+                    ^
+    SyntaxError: invalid syntax
+    &gt;&gt;&gt; str_a = &quot;Let&#x27;</span>s<span class="hljs-string">&quot;    # ダブルクォーテーションで囲った場合はエスケープは不要
+    &gt;&gt;&gt; print(str_a)
+    Let&#x27;s
+    &gt;&gt;&gt;
+</span></code></pre>
+    </li>
+  </ul>
 </div>
