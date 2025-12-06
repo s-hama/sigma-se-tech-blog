@@ -167,4 +167,200 @@ defg
 </span></code></pre>
     </li>
   </ul>
+  <h3 id="list型--配列型">list型 : 配列型</h3>
+  <p>論理型や数値型、文字列型など任意の型を配列として定義する。</p>
+  <ul>
+    <li>
+      <p>型の特性</p>
+      <ul>
+        <li>ミュータブルオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88mutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; ミュータブル（mutable）: 同一アドレスで変更可</a></li>
+          </ul>
+        </li>
+        <li>イテラブルオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イテラブル（iterable）: 反復抽出可</a></li>
+          </ul>
+        </li>
+        <li>シーケンスオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%EF%BC%88sequence%EF%BC%89%3A%20%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9%E6%8C%87%E5%AE%9A%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; シーケンス（sequence）: インデックス指定可</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>定義例</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 変数 list_a を空配列で定義</span>
+    &gt;&gt;&gt; list_a = []
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(list_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;list&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 変数 list_b をコンストラクタを用いて空配列で定義</span>
+    &gt;&gt;&gt; list_b = <span class="hljs-built_in">list</span>()
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(list_b)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;list&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 要素数と初期値を指定して定義する</span>
+    &gt;&gt;&gt; list_c = [<span class="hljs-number">0</span>]*<span class="hljs-number">10</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_c)
+    [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 変数 list_d を int型の1次元配列で定義</span>
+    &gt;&gt;&gt; list_d = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_d)
+    [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(list_d)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;list&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 変数 list_f を string型の1次元配列で定義</span>
+    &gt;&gt;&gt; list_f = [<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-string">&#x27;d&#x27;</span>, <span class="hljs-string">&#x27;e&#x27;</span>]
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(list_f)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;list&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 変数 list_g を string型とint型の2次元配列で定義</span>
+    &gt;&gt;&gt; list_g = [[<span class="hljs-string">&#x27;typeA&#x27;</span>,<span class="hljs-number">1000</span>], [<span class="hljs-string">&#x27;typeB&#x27;</span>, <span class="hljs-number">2000</span>], [<span class="hljs-string">&#x27;typeC&#x27;</span>, <span class="hljs-number">3000</span>]]
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(list_g)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;list&#x27;</span>&gt;
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>list要素の取得</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 変数 list_a を string型の1次元配列で定義</span>
+    &gt;&gt;&gt; list_a = [<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-string">&#x27;d&#x27;</span>, <span class="hljs-string">&#x27;e&#x27;</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 出現回数の取得</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a.count(<span class="hljs-string">&#x27;c&#x27;</span>))
+    <span class="hljs-number">1</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 1番目を取得</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a[<span class="hljs-number">0</span>])
+    a
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 4番目（末尾が起点）を取得</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a[-<span class="hljs-number">2</span>])
+    d
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 1番目から3番目まで取得</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a[<span class="hljs-number">0</span>:<span class="hljs-number">3</span>])
+    [<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 先頭（1番目）から最後（5番目）まで取得</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a[:])
+    [<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-string">&#x27;d&#x27;</span>, <span class="hljs-string">&#x27;e&#x27;</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 3番目から最後（5番目）まで取得</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a[<span class="hljs-number">2</span>:])
+    [<span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-string">&#x27;d&#x27;</span>, <span class="hljs-string">&#x27;e&#x27;</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 4番目（末尾が起点）から最後（5番目）まで取得</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a[-<span class="hljs-number">2</span>:])
+    [<span class="hljs-string">&#x27;d&#x27;</span>, <span class="hljs-string">&#x27;e&#x27;</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 先頭（1番目）から最後（5番目）まで一つ飛ばしで取得</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a[::<span class="hljs-number">2</span>])
+    [<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-string">&#x27;e&#x27;</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># list内包表記でfor文の結果を取得</span>
+    &gt;&gt;&gt; list_b = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
+    &gt;&gt;&gt; [list_b_row <span class="hljs-keyword">for</span> list_b_row <span class="hljs-keyword">in</span> list_b <span class="hljs-keyword">if</span> list_b_row &gt; <span class="hljs-number">2</span>]
+    [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>list要素の追加、変更、削除</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 末尾に要素を追加</span>
+    &gt;&gt;&gt; list_a = [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; list_a.append(<span class="hljs-number">60</span>)
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a)
+    [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>, <span class="hljs-number">60</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 5番目と6番目の間に要素を挿入</span>
+    &gt;&gt;&gt; list_b = [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; list_b.insert(<span class="hljs-number">5</span>, <span class="hljs-number">55</span>)
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_b)
+    [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>, <span class="hljs-number">55</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 要素を結合</span>
+    &gt;&gt;&gt; list_a = [<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-string">&#x27;d&#x27;</span>, <span class="hljs-string">&#x27;e&#x27;</span>]
+    &gt;&gt;&gt; list_b = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># list_aとlist_b の結合結果を表示（list_a、list_bは書き変わらない）</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a + list_b)
+    [<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-string">&#x27;d&#x27;</span>, <span class="hljs-string">&#x27;e&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># list_a の末尾に list_b を結合</span>
+    &gt;&gt;&gt; list_a.extend(list_b)
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a)
+    [<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-string">&#x27;d&#x27;</span>, <span class="hljs-string">&#x27;e&#x27;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 5番目の要素を変更</span>
+    &gt;&gt;&gt; list_c = [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>]
+    &gt;&gt;&gt; list_c[<span class="hljs-number">4</span>] = <span class="hljs-number">55</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_c)
+    [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">55</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 3番目の要素を削除</span>
+    &gt;&gt;&gt; list_d = [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; list_d.pop(<span class="hljs-number">2</span>)
+    <span class="hljs-number">30</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_d)
+    [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 末尾の要素を削除</span>
+    &gt;&gt;&gt; list_e = [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; list_e.pop()
+    <span class="hljs-number">50</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_e)
+    [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 値 x を持つ最初の要素を削除</span>
+    &gt;&gt;&gt; list_f = [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>, <span class="hljs-number">60</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; list_f.remove(<span class="hljs-number">40</span>)
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_f)
+    [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">50</span>, <span class="hljs-number">60</span>]
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>list要素の並び替え</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; list_a = [<span class="hljs-number">10</span>, <span class="hljs-number">40</span>, <span class="hljs-number">30</span>, <span class="hljs-number">20</span>, <span class="hljs-number">50</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 昇順に並び替え</span>
+    &gt;&gt;&gt; list_a.sort()
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a)
+    [<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 降順に並び替え</span>
+    &gt;&gt;&gt; list_a.reverse()
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a)
+    [<span class="hljs-number">50</span>, <span class="hljs-number">40</span>, <span class="hljs-number">30</span>, <span class="hljs-number">20</span>, <span class="hljs-number">10</span>]
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
 </div>
