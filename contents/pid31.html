@@ -363,4 +363,231 @@ defg
 </code></pre>
     </li>
   </ul>
+  <hr>
+  <h3 id="tuple型--定数の配列型">tuple型 : 定数の配列型</h3>
+  <p>tuple型は、list型と表記が似ているが、処理速度に重点を置いているため、list型に比べ使用メモリが小さくなっている。<br>
+    その分、同一アドレスでの要素の<strong>追加</strong>、<strong>削除</strong>、<strong>変更</strong>ができないイミュータブルオブジェクトであるため、<strong>定数配列</strong>とも呼ばれる。
+  </p>
+  <ul>
+    <li>
+      <p>型の特性</p>
+      <ul>
+        <li>イミュータブルオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a>
+            </li>
+          </ul>
+        </li>
+        <li>イテラブルオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イテラブル（iterable）: 反復抽出可</a></li>
+          </ul>
+        </li>
+        <li>シーケンスオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%EF%BC%88sequence%EF%BC%89%3A%20%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9%E6%8C%87%E5%AE%9A%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; シーケンス（sequence）: インデックス指定可</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>定義例<br>
+        要素数が一つの場合を除き、list型とtuple型の定義例の違いは、大カッコ<strong>[]</strong>であるか小カッコ<strong>()</strong>であるかの違いのみ。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 変数 tuple_a を空配列で定義</span>
+    &gt;&gt;&gt; tuple_a = ()
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(tuple_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;tuple&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 変数 tuple_b をコンストラクタを用いて空配列で定義</span>
+    &gt;&gt;&gt; tuple_b = <span class="hljs-built_in">tuple</span>()
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(tuple_b)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;tuple&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 変数 tuple_c を int型の1次元配列で定義</span>
+    &gt;&gt;&gt; tuple_c = (<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(tuple_c)
+    (<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(tuple_c)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;tuple&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 変数 tuple_d を string型の1次元配列で定義</span>
+    &gt;&gt;&gt; tuple_d = (<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-string">&#x27;d&#x27;</span>, <span class="hljs-string">&#x27;e&#x27;</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(tuple_d)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;tuple&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 数値と文字列のtuple型 変数 tuple_e を定義</span>
+    &gt;&gt;&gt; tuple_e = (<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-string">&#x27;five&#x27;</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(tuple_e)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;tuple&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 変数 tuple_f を string型とint型の2次元配列で定義</span>
+    &gt;&gt;&gt; tuple_f = ((<span class="hljs-number">1</span>, <span class="hljs-string">&#x27;one&#x27;</span>), (<span class="hljs-number">2</span>, <span class="hljs-string">&#x27;two&#x27;</span>))
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(tuple_f)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;tuple&#x27;</span>&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(tuple_f)
+    ((<span class="hljs-number">1</span>, <span class="hljs-string">&#x27;one&#x27;</span>), (<span class="hljs-number">2</span>, <span class="hljs-string">&#x27;two&#x27;</span>))
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># （注意）要素数が一つのtuple型の定義は、カンマが必要</span>
+    &gt;&gt;&gt; tuple_g = (<span class="hljs-number">0</span>)    <span class="hljs-comment"># 数値要素が一つでカンマがないとint型の 0として定義される</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(tuple_g)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;int&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; tuple_h = (<span class="hljs-number">0</span>,)    <span class="hljs-comment"># 末尾にカンマを付けるとtuple型として定義される</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(tuple_h)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;tuple&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; tuple_i = (<span class="hljs-string">&#x27;zero&#x27;</span>)    <span class="hljs-comment"># 文字列要素が一つでカンマがないとstr型の zeroとして定義される</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(tuple_i)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;str&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; tuple_j = (<span class="hljs-string">&#x27;zero&#x27;</span>,)    <span class="hljs-comment"># 末尾にカンマを付けるとtuple型として定義される</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(tuple_j)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;tuple&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; tuple_k = <span class="hljs-number">0</span>,    <span class="hljs-comment"># カッコがない状態で末尾にカンマを付けてもtuple型として定義される</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(tuple_k)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;tuple&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; tuple_l = <span class="hljs-string">&#x27;zero&#x27;</span>,
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(tuple_l)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;tuple&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 初期値の5を10回繰り返して定義する</span>
+    &gt;&gt;&gt; tuple_m = (<span class="hljs-number">5</span>,)*<span class="hljs-number">10</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(tuple_m)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;tuple&#x27;</span>&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(tuple_m)
+    (<span class="hljs-number">5</span>, <span class="hljs-number">5</span>, <span class="hljs-number">5</span>, <span class="hljs-number">5</span>, <span class="hljs-number">5</span>, <span class="hljs-number">5</span>, <span class="hljs-number">5</span>, <span class="hljs-number">5</span>, <span class="hljs-number">5</span>, <span class="hljs-number">5</span>)
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; tuple_n = (<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>) * <span class="hljs-number">5</span>    <span class="hljs-comment"># 要素が2つ以上ある場合も同様の定義となる</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(tuple_n)
+    (<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>)
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>tuple要素の取得<br>
+        要素の取得も、list型とtuple型の違いは、大カッコ<strong>[]</strong>であるか小カッコ<strong>()</strong>であるかの違いのみ。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 変数 tuple_a を string型の1次元配列で定義</span>
+    &gt;&gt;&gt; tuple_a = (<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-string">&#x27;d&#x27;</span>, <span class="hljs-string">&#x27;e&#x27;</span>)
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 出現回数の取得</span>
+    &gt;&gt;&gt; tuple_a.count(<span class="hljs-string">&#x27;c&#x27;</span>)
+    <span class="hljs-number">1</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 1番目を取得</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(tuple_a[<span class="hljs-number">0</span>])
+    a
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 4番目（末尾が起点）を取得</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(tuple_a[-<span class="hljs-number">2</span>])
+    d
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 1番目から3番目まで取得</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(tuple_a[<span class="hljs-number">0</span>:<span class="hljs-number">3</span>])
+    (<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>)
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 先頭（1番目）から最後（5番目）まで取得</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(tuple_a[:])
+    (<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-string">&#x27;d&#x27;</span>, <span class="hljs-string">&#x27;e&#x27;</span>)
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 3番目から最後（5番目）まで取得</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(tuple_a[<span class="hljs-number">2</span>:])
+    (<span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-string">&#x27;d&#x27;</span>, <span class="hljs-string">&#x27;e&#x27;</span>)
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 4番目（末尾が起点）から最後（5番目）まで取得</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(tuple_a[-<span class="hljs-number">2</span>:])
+    (<span class="hljs-string">&#x27;d&#x27;</span>, <span class="hljs-string">&#x27;e&#x27;</span>)
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 先頭（1番目）から最後（5番目）まで一つ飛ばしで取得</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(tuple_a[::<span class="hljs-number">2</span>])
+    (<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-string">&#x27;e&#x27;</span>)
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># tuple内包表記でfor文の結果を取得</span>
+    &gt;&gt;&gt; tuple_b = (<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">tuple</span>([tuple_b_row <span class="hljs-keyword">for</span> tuple_b_row <span class="hljs-keyword">in</span> tuple_b <span class="hljs-keyword">if</span> tuple_b_row &gt; <span class="hljs-number">2</span>])
+    (<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>)
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>tuple型要素の追加、変更、削除<br>
+        tuple型は、<strong>イミュータブルオブジェクト</strong>であるため要素個別の変更ができない。<br></p>
+      <ul>
+        <li>
+          <p>同一アドレス（変数の再定義なし）である場合、追加・変更・削除はすべてエラーになる</p>
+          <pre><code class="language-python">$ python
+    &gt;&gt;&gt; tuple_a = (<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(tuple_a)    <span class="hljs-comment"># idを確認</span>
+    <span class="hljs-number">139970050305480</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; tuple_a[<span class="hljs-number">0</span>] = <span class="hljs-number">11</span>    <span class="hljs-comment"># id=139970050305480のオブジェクトの1番目を変更</span>
+    Traceback (most recent call last):
+    File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
+    TypeError: <span class="hljs-string">&#x27;tuple&#x27;</span> <span class="hljs-built_in">object</span> does <span class="hljs-keyword">not</span> support item assignment
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-keyword">del</span> tuple_a[<span class="hljs-number">2</span>]    <span class="hljs-comment"># id=139970050305480のオブジェクトの3番目を削除</span>
+    Traceback (most recent call last):
+    File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
+    TypeError: <span class="hljs-string">&#x27;tuple&#x27;</span> <span class="hljs-built_in">object</span> doesn<span class="hljs-string">&#x27;t support item deletion
+    &gt;&gt;&gt;
+</span></code></pre>
+        </li>
+        <li>
+          <p>同一アドレスでない場合（変数の再定義する）の追加・変更・削除は、<strong>別アドレスで定義される</strong>ためエラーにならない</p>
+          <pre><code class="language-python">$ python
+    &gt;&gt;&gt; tuple_a = (<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(tuple_a)    <span class="hljs-comment"># idを確認</span>
+    <span class="hljs-number">139970050305480</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; tuple_a = (<span class="hljs-number">15</span>, <span class="hljs-number">25</span>, <span class="hljs-number">35</span>)    <span class="hljs-comment"># (15, 25, 35)で別アドレスとして再定義（元のオブジェクトは抹消される）</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(tuple_a)
+    (<span class="hljs-number">15</span>, <span class="hljs-number">25</span>, <span class="hljs-number">35</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(tuple_a)    <span class="hljs-comment"># 上記のidと違う</span>
+    <span class="hljs-number">139970050305840</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; tuple_a += (<span class="hljs-number">45</span>, <span class="hljs-number">55</span>)    <span class="hljs-comment"># (15, 25, 35, 45, 55)で別アドレスとして再定義（元のオブジェクトは抹消される）</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(tuple_a)
+    (<span class="hljs-number">15</span>, <span class="hljs-number">25</span>, <span class="hljs-number">35</span>, <span class="hljs-number">45</span>, <span class="hljs-number">55</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(tuple_a)    <span class="hljs-comment"># 上記のidと違う</span>
+    <span class="hljs-number">139970050257232</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; tuple_a = tuple_a + (<span class="hljs-number">45</span>, <span class="hljs-number">55</span>, <span class="hljs-number">65</span>)    <span class="hljs-comment"># (15, 25, 35) + (45, 55, 65) で別アドレスとして再定義（元のオブジェクトは抹消される）</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(tuple_a)
+    (<span class="hljs-number">15</span>, <span class="hljs-number">25</span>, <span class="hljs-number">35</span>, <span class="hljs-number">45</span>, <span class="hljs-number">55</span>, <span class="hljs-number">65</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(tuple_a)    <span class="hljs-comment"># 上記のidと違う</span>
+    <span class="hljs-number">139970072464168</span>
+    &gt;&gt;&gt;
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>その他補足<br>
+        list型は<strong>ミュータブルオブジェクト</strong>であるため、appendやinsertやremoveなど、様々なメソッドが準備されているが、tuple型は<strong>イミュータブルオブジェクト</strong>なので、countとindexの\(2\)つだけ。
+      </p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; list_a = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(list_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;list&#x27;</span>&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">dir</span>(list_a)
+    [..., <span class="hljs-string">&#x27;append&#x27;</span>, ..., <span class="hljs-string">&#x27;count&#x27;</span>, ..., <span class="hljs-string">&#x27;index&#x27;</span>, ..., <span class="hljs-string">&#x27;remove&#x27;</span>, ...]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; tuple_a = (<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(tuple_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;tuple&#x27;</span>&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">dir</span>(tuple_a)
+    [..., <span class="hljs-string">&#x27;count&#x27;</span>, <span class="hljs-string">&#x27;index&#x27;</span>, ...]
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
 </div>
