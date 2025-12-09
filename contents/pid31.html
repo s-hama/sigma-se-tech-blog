@@ -707,4 +707,176 @@ defg
 </code></pre>
     </li>
   </ul>
+  <h3 id="dict型--連想配列型辞書型">dict型 : 連想配列型（辞書型）</h3>
+  <p>dict型（辞書型）は、データのキーと値がワンセットになった配列。<br>
+    ※ 多言語のほとんどは、<strong>連想配列</strong>と呼ばれる。</p>
+  <ul>
+    <li>
+      <p>型の特性</p>
+      <ul>
+        <li>イミュータブルオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a>
+            </li>
+          </ul>
+        </li>
+        <li>イテラブルオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イテラブル（iterable）: 反復抽出可</a></li>
+          </ul>
+        </li>
+        <li>マッピングオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%83%9E%E3%83%83%E3%83%94%E3%83%B3%E3%82%B0%EF%BC%88mapping%EF%BC%89%3A%20%E9%80%A3%E6%83%B3%E9%85%8D%E5%88%97">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; マッピング（mapping）: 連想配列</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>定義例</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># キーと値のセットで定義</span>
+    &gt;&gt;&gt; dict_a = {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>}
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_a)
+    {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>}
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(dict_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;dict&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 同じキーを定義した場合、後勝ちで上書かれる</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># ※エラーにならないので注意。</span>
+    &gt;&gt;&gt; dict_b = {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>, <span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">400</span>}
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_b)
+    {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">400</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>}
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(dict_b)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;dict&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># コンストラクタを使用した定義</span>
+    &gt;&gt;&gt; dict_c = <span class="hljs-built_in">dict</span>(key1=<span class="hljs-number">100</span>, key2=<span class="hljs-number">200</span>, key3=<span class="hljs-number">300</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_c)
+    {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>}
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(dict_c)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;dict&#x27;</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># コンストラクタを使用した変換</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># ※ list型、tuple型が指定できる</span>
+    &gt;&gt;&gt; dict_d = <span class="hljs-built_in">dict</span>([(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-number">100</span>), (<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-number">200</span>), (<span class="hljs-string">&#x27;key3&#x27;</span>, <span class="hljs-number">300</span>)])
+    &gt;&gt;&gt; dict_d
+    {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>}
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(dict_d)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;dict&#x27;</span>&gt;
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>dict要素の取得</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; dict_a = {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>}
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># すべてのキーを取得</span>
+    &gt;&gt;&gt; dict_a.keys()
+    dict_keys([<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-string">&#x27;key3&#x27;</span>])
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># すべての値を取得</span>
+    &gt;&gt;&gt; dict_a.values()
+    dict_values([<span class="hljs-number">100</span>, <span class="hljs-number">200</span>, <span class="hljs-number">300</span>])
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># すべてのキーと値を取得</span>
+    &gt;&gt;&gt; dict_a.items()
+    dict_items([(<span class="hljs-string">&#x27;key1&#x27;</span>, <span class="hljs-number">100</span>), (<span class="hljs-string">&#x27;key2&#x27;</span>, <span class="hljs-number">200</span>), (<span class="hljs-string">&#x27;key3&#x27;</span>, <span class="hljs-number">300</span>)])
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># キーを指定して値を取得</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_a[<span class="hljs-string">&#x27;key1&#x27;</span>])
+    <span class="hljs-number">100</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>dict要素の追加、変更、削除</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; dict_a = {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>}
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># キーを指定して追加</span>
+    &gt;&gt;&gt; dict_a[<span class="hljs-string">&#x27;key4&#x27;</span>] = <span class="hljs-number">400</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_a)
+    {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>, <span class="hljs-string">&#x27;key4&#x27;</span>: <span class="hljs-number">400</span>}
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># キーを指定して追加（すでにキーがあれば変更なし）</span>
+    &gt;&gt;&gt; dict_a.setdefault(<span class="hljs-string">&#x27;key5&#x27;</span>, <span class="hljs-number">500</span>)
+    <span class="hljs-number">500</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_a)
+    {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>, <span class="hljs-string">&#x27;key4&#x27;</span>: <span class="hljs-number">400</span>, <span class="hljs-string">&#x27;key5&#x27;</span>: <span class="hljs-number">500</span>}
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># キーを指定して変更</span>
+    &gt;&gt;&gt; dict_a[<span class="hljs-string">&#x27;key4&#x27;</span>] = <span class="hljs-number">444</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_a)
+    {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>, <span class="hljs-string">&#x27;key4&#x27;</span>: <span class="hljs-number">444</span>, <span class="hljs-string">&#x27;key5&#x27;</span>: <span class="hljs-number">500</span>}
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># キーを指定して削除（pop）</span>
+    &gt;&gt;&gt; dict_a.pop(<span class="hljs-string">&#x27;key4&#x27;</span>)
+    <span class="hljs-number">444</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_a)
+    {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>, <span class="hljs-string">&#x27;key5&#x27;</span>: <span class="hljs-number">500</span>}
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># キーを指定して削除（del）</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">del</span> dict_a[<span class="hljs-string">&#x27;key3&#x27;</span>]
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_a)
+    {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key5&#x27;</span>: <span class="hljs-number">500</span>}
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>変更時の注意<br>
+        dict型は代入時、参照渡しするため代入元のdict型に影響を与えたくない場合、<strong>copy</strong>を使用すること。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># copyを使用しない場合</span>
+    &gt;&gt;&gt; dict_a = {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>}
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; dict_a_temp = dict_a
+    &gt;&gt;&gt; dict_a_temp[<span class="hljs-string">&#x27;key2&#x27;</span>] = <span class="hljs-number">999</span>    <span class="hljs-comment"># 代入先のdict型を変更する</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_a_temp)
+    {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">999</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>}
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_a)
+    {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">999</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>}    <span class="hljs-comment"># 代入元のdict型も変更されている</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># copyを使用した場合</span>
+    &gt;&gt;&gt; dict_b = {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>}
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; dict_b_temp = dict_b.copy()
+    &gt;&gt;&gt; dict_b_temp[<span class="hljs-string">&#x27;key2&#x27;</span>] = <span class="hljs-number">999</span>    <span class="hljs-comment"># 代入先のdict型を変更する</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_b_temp)
+    {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">999</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>}
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_b)
+    {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>}    <span class="hljs-comment"># 代入元のdict型は変更されていない</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>dict型の結合<br>
+        str型、list型、tuple型のように**+演算子**で結合ができない。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># updateで dict_a に dict_b を追加する（重複キーは後者で上書き）</span>
+    &gt;&gt;&gt; dict_a = {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>}
+    &gt;&gt;&gt; dict_b = {<span class="hljs-string">&#x27;key4&#x27;</span>: <span class="hljs-number">400</span>, <span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">999</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">999</span>}
+    &gt;&gt;&gt; dict_a.update(dict_b)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_a)
+    {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">999</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">999</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>, <span class="hljs-string">&#x27;key4&#x27;</span>: <span class="hljs-number">400</span>}
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># updateを使用しない場合</span>
+    &gt;&gt;&gt; dict_a = {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>}
+    &gt;&gt;&gt; dict_b = {<span class="hljs-string">&#x27;key4&#x27;</span>: <span class="hljs-number">400</span>, <span class="hljs-string">&#x27;key5&#x27;</span>: <span class="hljs-number">500</span>, <span class="hljs-string">&#x27;key6&#x27;</span>: <span class="hljs-number">600</span>}
+    &gt;&gt;&gt; dict_c = {**dict_a, **dict_b}
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_c)
+    {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>, <span class="hljs-string">&#x27;key4&#x27;</span>: <span class="hljs-number">400</span>, <span class="hljs-string">&#x27;key5&#x27;</span>: <span class="hljs-number">500</span>, <span class="hljs-string">&#x27;key6&#x27;</span>: <span class="hljs-number">600</span>}
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
 </div>
