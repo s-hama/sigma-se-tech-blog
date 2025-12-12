@@ -309,3 +309,85 @@ set型は、**重複した要素**がなく、要素に**順番を**持たない
     True
     >>>
     ```
+
+### bytes型 : バイト
+
+bytes型は、**byte**のイミュータブルオブジェクト（同一アドレスで変更不可）。
+
+str型の表記と似ているが先頭に**b**が付き、bytes型をエンコードするとstr型となり、bytes型をデコードするとstr型に戻る。
+
+- 型の特性
+  - イミュータブルオブジェクト
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF>)
+  - イテラブルオブジェクト
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF>)
+  - シーケンスオブジェクト
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%EF%BC%88sequence%EF%BC%89%3A%20%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9%E6%8C%87%E5%AE%9A%E5%8F%AF>)
+
+- 定義例
+    ```python
+    $ python
+    >>> # シングルクォーテーションで定義
+    >>> byte_a = b'abcde'
+    >>> print(byte_a)
+    b'abcde'
+    >>> type(byte_a)
+    <class 'bytes'>
+    >>>
+    >>> # ダブルクォーテーションで定義
+    >>> byte_b = b"abcde"
+    >>> print(byte_b)
+    b'abcde'
+    >>> type(byte_b)
+    <class 'bytes'>
+    >>>
+    >>> # トリプルクォーテーションで定義
+    >>> byte_c = b"""abcde
+    ... fghij"""
+    >>> print(byte_c)
+    b'abcde\nfghij'
+    >>> type(byte_c)
+    <class 'bytes'>
+    >>>
+    >>> # コンストラクタで定義
+    >>> byte_d = bytes(b'abc')
+    >>> print(byte_d)
+    b'abc'
+    >>> type(byte_d)
+    <class 'bytes'>
+    >>>
+    >>> # コンストラクタで文字コードを指定
+    >>> byte_f = bytes('abc', 'utf-8')
+    >>> print(byte_f)
+    b'abc'
+    >>> type(byte_f)
+    <class 'bytes'>
+    >>>
+    >>> # ※ 上記でbを付加すると、デフォルトASCIIとなるのでUTF-8でないとエラーが発生する。
+    >>> byte_f = bytes(b'abc', 'utf-8')
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    TypeError: encoding without a string argument
+    >>>
+    ```
+
+- bytesとstrの変換<br>
+    ※ 文字コードを指定し、**encode**でbytes型に、**decode**でstr型に変換できる。
+    ```python
+    $ python
+    >>> # str型の文字列をUTF-8でエンコード(bytes型に変換)
+    >>> str_a = 'abcde'
+    >>> byte_a = str_a.encode('utf-8')
+    >>> print(byte_a)
+    b'abcde'
+    >>> type(byte_a)
+    <class 'bytes'>
+    >>>
+    >>> # 上記に続き、bytes型の文字列をUTF-8でデコード(str型に変換)
+    >>> str_b = byte_a.decode('utf-8')
+    >>> print(str_b)
+    'abcde'
+    >>> type(str_b)
+    <class 'str'>
+    >>>
+    ```
