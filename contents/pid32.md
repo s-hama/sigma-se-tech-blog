@@ -391,3 +391,115 @@ str型の表記と似ているが先頭に**b**が付き、bytes型をエンコ�
     <class 'str'>
     >>>
     ```
+
+### bytearray型 : バイト配列
+
+bytearray型は、bytes型の配列版で文字コードを指定しない場合（デフォルト）は、ASCIIでエンコードされる。
+
+各要素の入れ替えを前提としたミュータブルオブジェクト（同一アドレスで変更可）。
+
+- 型の特性
+  - ミュータブルオブジェクト
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > ミュータブル（mutable）: 同一アドレスで変更可](<https://sigma-se.com/detail/29/#:~:text=%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88mutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E5%8F%AF>)
+  - イテラブルオブジェクト
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF>)
+  - シーケンスオブジェクト
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%EF%BC%88sequence%EF%BC%89%3A%20%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9%E6%8C%87%E5%AE%9A%E5%8F%AF>)
+
+- 定義例
+    ```python
+    $ python
+    >>> # 要素一つで定義
+    >>> bytearray_a = bytearray(b'abc')
+    >>> print(bytearray_a)
+    bytearray(b'abc')
+    >>> type(bytearray_a)
+    <class 'bytearray'>
+    >>> list(bytearray_a)
+    [97, 98, 99]
+    >>>
+    >>> # 要素一つと文字コードを指定して定義
+    >>> bytearray_b = bytearray('abc', 'utf-8')
+    >>> bytearray_b
+    bytearray(b'abc')
+    >>> type(bytearray_b)
+    <class 'bytearray'>
+    >>> list(bytearray_b)
+    [97, 98, 99]
+    >>>
+    >>> # 要素一つと文字コードを指定して定義（ひらがな）
+    >>> bytearray_c = bytearray('あいえうお', 'UTF-8')
+    >>> list(bytearray_c)
+    [227, 129, 130, 227, 129, 132, 227, 129, 136, 227, 129, 134, 227, 129, 138]
+    >>>
+    ```
+
+- 要素の追加、変更、削除
+    ```python
+    $ python
+    >>> # 要素を一つ追加
+    >>> bytearray_a = bytearray(b'abc')
+    >>> bytearray_a.append(100)
+    >>> print(bytearray_a)
+    bytearray(b'abcd')
+    >>> list(bytearray_a)
+    [97, 98, 99, 100]
+    >>>
+    >>> # 指定した要素を追加（複数）
+    >>> bytearray_b = bytearray(b'abc')
+    >>> bytearray_b.extend([100, 101])
+    >>> print(bytearray_b)
+    bytearray(b'abcde')
+    >>> list(bytearray_b)
+    [97, 98, 99, 100, 101]
+    >>>
+    >>> # 変更
+    >>> bytearray_c = bytearray(b'abc')
+    >>> list(bytearray_c)
+    [97, 98, 99]
+    >>> bytearray_c[1] = 99    # 99(c)に変更
+    >>> print(bytearray_c)
+    bytearray(b'acc')
+    >>> list(bytearray_c)
+    [97, 99, 99]
+    >>>
+    >>> # 削除
+    >>> bytearray_d = bytearray(b'abc')
+    >>> list(bytearray_d)
+    [97, 98, 99]
+    >>> bytearray_d.remove(98)
+    >>> print(bytearray_d)
+    bytearray(b'ac')
+    >>> list(bytearray_d)
+    [97, 99]
+    >>>
+    >>> # 複数存在する場合は、最初の要素を取り除く
+    >>> bytearray_e = bytearray(b'abcabc')
+    >>> list(bytearray_e)
+    [97, 98, 99, 97, 98, 99]
+    >>> bytearray_e.remove(98)
+    >>> print(bytearray_e)
+    bytearray(b'acabc')
+    >>> list(bytearray_e)
+    [97, 99, 97, 98, 99]
+    >>>
+    ```
+
+- 要素の並び替え
+    ```python
+    $ python
+    >>> # 逆順に並び替え
+    >>> bytearray_a = bytearray(b'abcde')
+    >>> bytearray_a.reverse()
+    >>> print(bytearray_a)
+    bytearray(b'edcba')
+    >>> list(bytearray_a)
+    [101, 100, 99, 98, 97]
+    >>>
+    >>> # ※戻り値はNoneなので注意
+    >>> bytearray_b = bytearray(b'abcde')
+    >>> bytearray_c = bytearray_b.reverse()
+    >>> print(bytearray_c)
+    None
+    >>>
+    ```
