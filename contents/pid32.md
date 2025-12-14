@@ -503,3 +503,275 @@ bytearray型は、bytes型の配列版で文字コードを指定しない場合
     None
     >>>
     ```
+
+### fileobject型 : ファイル操作オブジェクト
+
+fileobject型は、ファイル操作（読み書き、入出力）を行う型で、ファイルの内容取得や編集、新規作成などの一連のファイル操作が可能。 
+
+- 型の特性 
+  - イミュータブルオブジェクト
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF>)
+  - イテラブルオブジェクト
+    -  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF>)
+
+- 定義例<br>
+  open()でファイルを開き、処理終了時にclose()で閉じる。<br>
+  open()の第\\(1\\)引数にファイルパスを指定して定義する。<br>
+  第2引数のmodeは、読み書きの指定やテキスト or バイナリの指定に使用する。<br>
+
+  - `mode`の種類
+    - `r`：読込モード（書込不可）
+    - `w`：書込モード（読込不可）
+    - `a`：追加・書込モード（読込不可）
+    - `r+`：読込・書込モード
+    - `w+`：ファイルを空にした状態で、読込・書込モード
+    - `a+`：読込・書込モードで開いて、追加モード（ファイルの末尾に追加）
+    - `b`：バイナリモードで開いて、上記`mode`と併用する。
+
+  - 下記サンプルでは`~/data/sample.txt`を事前に作成している前提
+    ```python
+    $ python
+    >>> # テキストファイルをopen() で開く。
+    >>> fPath = '~/data/sample.txt'
+    >>> tFile = open(fPath)
+    >>> # テキストであるため、io.TextIOWrapperとして定義される。
+    >>> type(tFile)
+    <class '_io.TextIOWrapper'>
+    >>> # 開いたら必ず閉じる。
+    >>> tFile.close()
+    >>>
+    >>> # withブロックを使してブロック終了時に自動クローズする。
+    >>> with open(fPath) as tFile:
+    ...     type(tFile)
+    ...
+    <class '_io.TextIOWrapper'>
+    >>>
+    ```
+    また、今どこで作業しているかは`getcwd()`で取得できる。
+    ```python
+    $ python
+    >>> # カレント（作業）ディレクトリの取得
+    >>> import os
+    >>> os.getcwd()
+    '/home/hama'
+    >>>
+    ```
+
+- `mode='r'`：読込モード（書込不可）<br>
+  modeの引数なしでデフォルト **'r'** で open() するため、省略する。<br>
+  以下、open(mode='r')で開いた後の読込方法。<br>
+  ※ 下記サンプルでは`~/data/sample.txt`を事前に作成している前提。<br>
+  ```python
+  line1 work file sample
+  line2 work file sample
+  line3 work file sample
+  line4 work file sample
+  line5 work file sample
+  ```
+
+  - `read()`：全行読込
+      ```python
+      $ python
+      >>> # read()で全文読込
+      >>> fPath = '~/data/sample.txt'
+      >>> with open(fPath) as tFile:
+      ...     fLines = tFile.read()
+      ...     type(fLines)
+      ...     print(fLines)
+      ...
+      <class 'str'>
+      line1 work file sample
+      line2 work file sample
+      line3 work file sample
+      line4 work file sample
+      line5 work file sample
+      >>>
+      ```
+  - `readlines()`：リスト型で全行読込<br>
+      ```python
+      $ python
+      >>> # readlines()で行分割したリスト型で全行読込
+      >>> fPath = '~/data/sample.txt'
+      >>> with open(fPath) as tFile:
+      ...     fLines = tFile.readlines()
+      ...     type(fLines)
+      ...     print(fLines)
+      ...
+      <class 'list'>
+      ['line1 work file sample\n', 'line2 work file sample\n', 'line3 work file sample\n', 'line4 work file sample\n', 'line5 work file sample\n']
+      >>>
+      >>> # ※ 改行コードを排除して取得する場合
+      >>> fPath = '/root/data/sample.txt'
+      >>> with open(fPath) as tFile:
+      ...     fLines = [line.strip() for line in tFile.readlines()]
+      ...     print(fLines)
+      ...
+      ['line1 work file sample', 'line2 work file sample', 'line3 work file sample', 'line4 work file sample', 'line5 work file sample']
+      >>>
+      ```
+  - `readline()`：1行ずつ読込
+      ```python
+      $ python
+      >>> # readline()で1行ずつ読込
+      >>> fPath = '/root/data/sample.txt'
+      >>> with open(fPath) as tFile:
+      ...     fLine = tFile.readline()    # 1行目 読込
+      ...     print(fLine)
+      ...     fLine = tFile.readline()    # 2行目 読込
+      ...     print(fLine)
+      ...     fLine = tFile.readline()    # 3行目 読込
+      ...     print(fLine)
+      ...
+      line1 work file sample
+      
+      line2 work file sample
+      
+      line3 work file sample
+      
+      >>>
+      >>> # readline()で1行ずつ末尾まで読込
+      >>> fPath = '/root/data/sample.txt'
+      >>> with open(fPath) as tFile:
+      ...     while True:
+      ...         fLine = tFile.readline()
+      ...         print(fLine)
+      ...         if not fLine:
+      ...             break
+      ...
+      line1 work file sample
+      
+      line2 work file sample
+      
+      line3 work file sample
+      
+      line4 work file sample
+      
+      line5 work file sample
+      
+      >>>
+      ```
+
+- `mode='w'`：書込モード（読込不可）<br>
+  以下、open(mode='w')で開いた後の書込方法。<br>
+  ※ 下記サンプルでは`~/data`フォルダがあることが事前。<br>
+
+  - `write()`：新規作成
+      ```python
+      $ python
+      >>> # write()でファイルを新規作成
+      >>> fPath = '~/data/newsample.txt'
+      >>> fInput = 'line1 new work file sample'
+      >>>
+      >>> with open(fPath, mode='w') as tFile:
+      ...     tFile.write(fInput)
+      ...
+      26
+      >>> # read()で全行読込
+      >>> with open(fPath) as tFile:
+      ...     print(tFile.read())
+      ...
+      line1 new work file sample
+      >>>
+      ```
+  - `write()`：書込（上書き）<br>
+    ※ 上記の続き（newsample.txtが作成済）
+      ```python
+      $ python
+      >>> fPath = '~/data/newsample.txt'
+      >>> # read()で全行読込
+      >>> with open(fPath) as tFile:
+      ...     print(tFile.read())
+      ...
+      line1 new work file sample
+      >>>
+      >>> # write()で書込（上書き）
+      >>> fInput = 'edit new work file sample'
+      >>> with open(fPath, mode='w') as tFile:
+      ...     tFile.write(fInput)
+      ...
+      24
+      >>> # 'line1 new work file sample' が上書きされている。
+      >>> with open(fPath) as tFile:
+      ...     print(tFile.read())
+      ...
+      edit new work file sample
+      >>>
+      ```
+
+  - `writelines()`：リスト型で全行書込
+      ```python
+      $ python
+      >>> fPath = '~/data/newsample.txt'
+      >>> # writelines()でリスト型を全行書込
+      >>> fInput = ['line1', 'line2', 'line3', 'line4', 'line5']
+      >>> with open(fPath, mode='w') as tFile:
+      ...     tFile.writelines(fInput)
+      ...
+      >>> with open(fPath) as tFile:
+      ...     print(tFile.read())
+      ...
+      line1line2line3line4line5
+      >>>
+      >>> # ※ 改行コードを排除して書込する場合
+      >>> fPath = '~/data/newsample.txt'
+      >>> fInput = ['line1', 'line2', 'line3', 'line4', 'line5']
+      >>> with open(fPath, mode='w') as tFile:
+      ...     tFile.write('\n'.join(fInput))
+      ...
+      29
+      >>> with open(fPath) as tFile:
+      ...     print(tFile.read())
+      ...
+      line1
+      line2
+      line3
+      line4
+      line5
+      >>>
+      ```
+  - `pass`で空ファイルを新規作成<br>
+      ```python
+      $ python
+      >>> fPath = '~/data/empty.txt'
+      >>> # 空ファイルを新規作成
+      >>> with open(fPath, mode='w'):
+      ...     pass    # 何もしない
+      ...
+      >>> # 空ファイルの内容を出力
+      >>> with open(fPath) as tFile:
+      ...     print(tFile.read())
+      ...
+      >>>
+      ```
+
+- `mode='a'`：追加・書込モード（読込不可）<br>
+  以下、open(mode='a') で開いた後の書込方法。<br>
+  ※ 下記サンプルでは、`~/data/sample.txt`を事前に作成している前提。<br>
+  ```python
+  line1 work file sample
+  line2 work file sample
+  line3 work file sample
+  line4 work file sample
+  line5 work file sample
+  ```
+
+  - `write()`：末尾に追加
+      ```python
+      $ python
+      >>> # write()で末尾に追加
+      >>> fPath = '~/data/sample.txt'
+      >>> fAdd = '\nline6 work file sample'    # 改行コードも込み
+      >>> with open(fPath, mode='a') as tFile:
+      ...     tFile.writelines(fAdd)
+      ...
+      >>> with open(fPath) as tFile:
+      ...     print(tFile.read())
+      ...
+      line1 work file sample
+      line2 work file sample
+      line3 work file sample
+      line4 work file sample
+      line5 work file sample
+      line6 work file sample
+      >>>
+      ```
