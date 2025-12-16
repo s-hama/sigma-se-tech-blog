@@ -1,4 +1,325 @@
 <div class="post-body">
   <p>Python - 組込みデータ型まとめ : set, bytes, bytearray, fileobject</p>
   <p>この記事では、Pythonが扱う組込みデータ型（set、bytes、bytearray、fileobject）の基本的な操作方法について記載する。</p>
+  <h2 id="各データ型の操作方法">各データ型の操作方法</h2>
+  <h3 id="set型--集合">set型 : 集合</h3>
+  <p>set型は、<strong>重複した要素</strong>がなく、要素に<strong>順番を</strong>持たない配列のような集合。</p>
+  <p>記述は、dict型と同じ中カッコ<strong>{}</strong>で囲み、<strong>キーが無い状態</strong>（値のみ）で定義する。</p>
+  <ul>
+    <li>
+      <p>型の特性</p>
+      <ul>
+        <li>ミュータブルオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88mutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; ミュータブル（mutable）: 同一アドレスで変更可</a></li>
+          </ul>
+        </li>
+        <li>イテラブルオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イテラブル（iterable）: 反復抽出可</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>定義例</p>
+      <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 1 ～ 5 の数値を昇順で定義</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_a)
+{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(set_a)
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;set&#x27;</span>&gt;
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 1 ～ 5 の数値を順不同、重複ありで定義</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_b = {<span class="hljs-number">5</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_b)     <span class="hljs-comment"># 重複は無視される</span>
+{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(set_b)
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;set&#x27;</span>&gt;
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># イミュータブルな型であれば、異なる型でも定義できる</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_c = {<span class="hljs-number">1</span>, <span class="hljs-string">&#x27;one&#x27;</span>, (<span class="hljs-string">&#x27;two&#x27;</span>, <span class="hljs-number">2</span>)}
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_c)
+{<span class="hljs-string">&#x27;one&#x27;</span>, <span class="hljs-number">1</span>, (<span class="hljs-string">&#x27;two&#x27;</span>, <span class="hljs-number">2</span>)}
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(set_c)
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;set&#x27;</span>&gt;
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 【注意】空集合 {} で定義するとdict型となる</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_d = {}
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_d)
+{}
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(set_d)
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;dict&#x27;</span>&gt;
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># コンストラクタを用いて空集合を定義</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_e = <span class="hljs-built_in">set</span>()
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_e)
+<span class="hljs-built_in">set</span>()
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(set_e)
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;set&#x27;</span>&gt;
+&gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>set型要素の追加、削除<br>
+        ※ 他の型とは違い<strong>pop</strong>は、ランダムで要素を削除することに注意。</p>
+      <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 要素を追加</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_a.add(<span class="hljs-number">5</span>)    <span class="hljs-comment"># int型で追加</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_a.add(<span class="hljs-string">&#x27;str add&#x27;</span>)    <span class="hljs-comment"># str型で追加</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_a)
+{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-string">&#x27;str add&#x27;</span>}
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 指定した要素を削除</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ※要素が存在しない場合はエラー</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_b = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_b.remove(<span class="hljs-number">3</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_b)
+{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_c = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_c.remove(<span class="hljs-number">100</span>)    <span class="hljs-comment"># 要素がないためエラー</span>
+Traceback (most recent call last):
+  File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
+KeyError: <span class="hljs-number">100</span>
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 指定した要素を削除（要素が存在しない場合も正常終了）</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_d = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_d.discard(<span class="hljs-number">2</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_d)
+{<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_d.discard(<span class="hljs-number">100</span>)    <span class="hljs-comment"># 要素が存在しない場合もエラーにならずなにもしない</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_d)
+{<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># すべての要素を削除</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_e = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_e.clear()
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_e)
+<span class="hljs-built_in">set</span>()
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ランダムで要素を削除</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_f = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_f.pop())
+<span class="hljs-number">1</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_f)
+{<span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+&gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>集合演算</p>
+      <ul>
+        <li>
+          <p>和集合（| 演算子 or union）</p>
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># | 演算子を用いた和集合</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_b = {<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_c = set_a | set_b
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_c)
+{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># unionを用いた和集合</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_d = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_e = {<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_f = set_d.union(set_e)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_f)
+{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># unionを用いた和集合（複数の引数を指定できる）</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_g = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_h = {<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_i = {<span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_j = set_g.union(set_h, set_i)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_j)
+{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>}
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+        <li>
+          <p>積集合（&amp; 演算子 or intersection）</p>
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># &amp; 演算子を用いた積集合</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_b = {<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_a = set_a &amp; set_b
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_a)
+{<span class="hljs-number">3</span>}
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># intersectionを用いた積集合</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_c = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_d = {<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_c = set_c.intersection(set_d)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_c)
+{<span class="hljs-number">3</span>}
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># intersectionを用いた積集合（複数の引数を指定できる）</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_e = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_f = {<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_g = {<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_h = set_e.intersection(set_f, set_g)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_h)
+{<span class="hljs-number">3</span>}
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+        <li>
+          <p>差集合（- 演算子 or difference）</p>
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># - 演算子を用いた差集合</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_b = {<span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_c = set_a - set_b
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_c)
+{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>}
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># differenceを用いた差集合</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_d = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_e = {<span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_f = set_d.difference(set_e)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_f)
+{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>}
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># differenceに複数パラメータを指定</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_g = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_h = {<span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_i = {<span class="hljs-number">1</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_j = set_g.difference(set_h, set_i)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_j)
+{<span class="hljs-number">2</span>, <span class="hljs-number">3</span>}
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+        <li>
+          <p>対象差集合（^ 演算子 or symmetric_difference）<br>
+            積集合の逆（どちらか一方にあるものを取得する）で排他的論理和（XOR）と同義。</p>
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ^ 演算子を用いた対象差集合</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_b = {<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_c = set_a ^ set_b
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_c)
+{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>}
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># symmetric_differenceを用いた対象差集合</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_d = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_e = {<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_f = set_d.symmetric_difference(set_e)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_f)
+{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>}
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># symmetric_differenceに複数のパラメータは指定できない</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_g = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_h = {<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_j = {<span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_k = set_g.symmetric_difference(set_h, set_j)
+Traceback (most recent call last):
+  File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
+TypeError: symmetric_difference() takes exactly one argument (<span class="hljs-number">2</span> given)
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+        <li>
+          <p>部分集合の判定（&lt;=演算子 or issubset）<br>
+            ※ 以下、サンプルコードでは集合<code>set_b</code>が集合<code>set_a</code>の部分集合であるかを判定している。</p>
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># &lt;= を用いた判定</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_b = {<span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_c = set_b &lt;= set_a
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_c)
+<span class="hljs-literal">True</span>
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># issubsetを用いた判定</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_d = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_e = {<span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_f = set_e.issubset(set_d)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_f)
+<span class="hljs-literal">True</span>
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+        <li>
+          <p>上位集合か判定（&gt;= or issuperset）<br>
+            ※ 以下、サンプルコードでは、集合<code>set_b</code>が集合<code>set_a</code>の上位集合であるかを判定している。</p>
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># &gt;= を用いた判定</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_b = {<span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_c = set_a &gt;= set_b
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_a)
+<span class="hljs-literal">True</span>
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># issupersetを用いた判定</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_d = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_e = {<span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_f = set_d.issuperset(set_e)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_f)
+<span class="hljs-literal">True</span>
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+        <li>
+          <p>真部分集合の判定（&lt; 演算子 or &gt; 演算子）<br>
+            双方が完全一致でする集合である場合、<strong>部分集合</strong>であり、<strong>上位集合</strong>でもあるが、<strong>真部分集合</strong>ではない。<br>
+            真部分集合であるかの判定は &lt;演算子 または、&gt;演算子を使う。<br></p>
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 完全一致する場合、部分集合の判定は真となる</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_b = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_c = set_a &lt;= set_b
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_c)
+<span class="hljs-literal">True</span>
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 完全一致する場合、上位集合の判定は真となる</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_d = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_e = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_f = set_e &gt;= set_d
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_f)
+<span class="hljs-literal">True</span>
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 完全一致する場合、真部分集合の判定は偽となる</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_g = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_h = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_i = set_h &lt; set_g
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_i)
+<span class="hljs-literal">False</span>
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_k = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_l = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_m = set_l &gt; set_k
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_m)
+<span class="hljs-literal">False</span>
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+        <li>
+          <p>重複要素の有無を判定（isdisjoint）</p>
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 重複要素がある場合</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_b = {<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_c = set_a.isdisjoint(set_b)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_c)
+<span class="hljs-literal">False</span>
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 重複要素がない場合</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_d = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_e = {<span class="hljs-number">6</span>, <span class="hljs-number">7</span>}
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_f = set_d.isdisjoint(set_e)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_f)
+<span class="hljs-literal">True</span>
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </div>
