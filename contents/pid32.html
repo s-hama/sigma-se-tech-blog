@@ -322,4 +322,104 @@ TypeError: symmetric_difference() takes exactly one argument (<span class="hljs-
       </ul>
     </li>
   </ul>
+  <h3 id="bytes型--バイト">bytes型 : バイト</h3>
+  <p>bytes型は、<strong>byte</strong>のイミュータブルオブジェクト（同一アドレスで変更不可）。</p>
+  <p>str型の表記と似ているが先頭に<strong>b</strong>が付き、bytes型をエンコードするとstr型となり、bytes型をデコードするとstr型に戻る。</p>
+  <ul>
+    <li>
+      <p>型の特性</p>
+      <ul>
+        <li>イミュータブルオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a>
+            </li>
+          </ul>
+        </li>
+        <li>イテラブルオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イテラブル（iterable）: 反復抽出可</a></li>
+          </ul>
+        </li>
+        <li>シーケンスオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%EF%BC%88sequence%EF%BC%89%3A%20%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9%E6%8C%87%E5%AE%9A%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; シーケンス（sequence）: インデックス指定可</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>定義例</p>
+      <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># シングルクォーテーションで定義</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>byte_a = <span class="hljs-string">b&#x27;abcde&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(byte_a)
+<span class="hljs-string">b&#x27;abcde&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(byte_a)
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bytes&#x27;</span>&gt;
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ダブルクォーテーションで定義</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>byte_b = <span class="hljs-string">b&quot;abcde&quot;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(byte_b)
+<span class="hljs-string">b&#x27;abcde&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(byte_b)
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bytes&#x27;</span>&gt;
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># トリプルクォーテーションで定義</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>byte_c = <span class="hljs-string">b&quot;&quot;&quot;abcde
+<span class="hljs-meta">... </span>fghij&quot;&quot;&quot;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(byte_c)
+<span class="hljs-string">b&#x27;abcde\nfghij&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(byte_c)
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bytes&#x27;</span>&gt;
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># コンストラクタで定義</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>byte_d = <span class="hljs-built_in">bytes</span>(<span class="hljs-string">b&#x27;abc&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(byte_d)
+<span class="hljs-string">b&#x27;abc&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(byte_d)
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bytes&#x27;</span>&gt;
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># コンストラクタで文字コードを指定</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>byte_f = <span class="hljs-built_in">bytes</span>(<span class="hljs-string">&#x27;abc&#x27;</span>, <span class="hljs-string">&#x27;utf-8&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(byte_f)
+<span class="hljs-string">b&#x27;abc&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(byte_f)
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bytes&#x27;</span>&gt;
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ※ 上記でbを付加すると、デフォルトASCIIとなるのでUTF-8でないとエラーが発生する。</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>byte_f = <span class="hljs-built_in">bytes</span>(<span class="hljs-string">b&#x27;abc&#x27;</span>, <span class="hljs-string">&#x27;utf-8&#x27;</span>)
+Traceback (most recent call last):
+  File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
+TypeError: encoding without a string argument
+&gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>bytesとstrの変換<br>
+        ※ 文字コードを指定し、<strong>encode</strong>でbytes型に、<strong>decode</strong>でstr型に変換できる。</p>
+      <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># str型の文字列をUTF-8でエンコード(bytes型に変換)</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>str_a = <span class="hljs-string">&#x27;abcde&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>byte_a = str_a.encode(<span class="hljs-string">&#x27;utf-8&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(byte_a)
+<span class="hljs-string">b&#x27;abcde&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(byte_a)
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bytes&#x27;</span>&gt;
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 上記に続き、bytes型の文字列をUTF-8でデコード(str型に変換)</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>str_b = byte_a.decode(<span class="hljs-string">&#x27;utf-8&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(str_b)
+<span class="hljs-string">&#x27;abcde&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(str_b)
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;str&#x27;</span>&gt;
+&gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
 </div>
