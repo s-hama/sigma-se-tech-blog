@@ -422,4 +422,133 @@ TypeError: encoding without a string argument
 </code></pre>
     </li>
   </ul>
+  <h3 id="bytearray型--バイト配列">bytearray型 : バイト配列</h3>
+  <p>bytearray型は、bytes型の配列版で文字コードを指定しない場合（デフォルト）は、ASCIIでエンコードされる。</p>
+  <p>各要素の入れ替えを前提としたミュータブルオブジェクト（同一アドレスで変更可）。</p>
+  <ul>
+    <li>
+      <p>型の特性</p>
+      <ul>
+        <li>ミュータブルオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88mutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; ミュータブル（mutable）: 同一アドレスで変更可</a></li>
+          </ul>
+        </li>
+        <li>イテラブルオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イテラブル（iterable）: 反復抽出可</a></li>
+          </ul>
+        </li>
+        <li>シーケンスオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%EF%BC%88sequence%EF%BC%89%3A%20%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9%E6%8C%87%E5%AE%9A%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; シーケンス（sequence）: インデックス指定可</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>定義例</p>
+      <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 要素一つで定義</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>bytearray_a = <span class="hljs-built_in">bytearray</span>(<span class="hljs-string">b&#x27;abc&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(bytearray_a)
+<span class="hljs-built_in">bytearray</span>(<span class="hljs-string">b&#x27;abc&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(bytearray_a)
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bytearray&#x27;</span>&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">list</span>(bytearray_a)
+[<span class="hljs-number">97</span>, <span class="hljs-number">98</span>, <span class="hljs-number">99</span>]
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 要素一つと文字コードを指定して定義</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>bytearray_b = <span class="hljs-built_in">bytearray</span>(<span class="hljs-string">&#x27;abc&#x27;</span>, <span class="hljs-string">&#x27;utf-8&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span>bytearray_b
+<span class="hljs-built_in">bytearray</span>(<span class="hljs-string">b&#x27;abc&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(bytearray_b)
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bytearray&#x27;</span>&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">list</span>(bytearray_b)
+[<span class="hljs-number">97</span>, <span class="hljs-number">98</span>, <span class="hljs-number">99</span>]
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 要素一つと文字コードを指定して定義（ひらがな）</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>bytearray_c = <span class="hljs-built_in">bytearray</span>(<span class="hljs-string">&#x27;あいえうお&#x27;</span>, <span class="hljs-string">&#x27;UTF-8&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">list</span>(bytearray_c)
+[<span class="hljs-number">227</span>, <span class="hljs-number">129</span>, <span class="hljs-number">130</span>, <span class="hljs-number">227</span>, <span class="hljs-number">129</span>, <span class="hljs-number">132</span>, <span class="hljs-number">227</span>, <span class="hljs-number">129</span>, <span class="hljs-number">136</span>, <span class="hljs-number">227</span>, <span class="hljs-number">129</span>, <span class="hljs-number">134</span>, <span class="hljs-number">227</span>, <span class="hljs-number">129</span>, <span class="hljs-number">138</span>]
+&gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>要素の追加、変更、削除</p>
+      <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 要素を一つ追加</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>bytearray_a = <span class="hljs-built_in">bytearray</span>(<span class="hljs-string">b&#x27;abc&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span>bytearray_a.append(<span class="hljs-number">100</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(bytearray_a)
+<span class="hljs-built_in">bytearray</span>(<span class="hljs-string">b&#x27;abcd&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">list</span>(bytearray_a)
+[<span class="hljs-number">97</span>, <span class="hljs-number">98</span>, <span class="hljs-number">99</span>, <span class="hljs-number">100</span>]
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 指定した要素を追加（複数）</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>bytearray_b = <span class="hljs-built_in">bytearray</span>(<span class="hljs-string">b&#x27;abc&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span>bytearray_b.extend([<span class="hljs-number">100</span>, <span class="hljs-number">101</span>])
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(bytearray_b)
+<span class="hljs-built_in">bytearray</span>(<span class="hljs-string">b&#x27;abcde&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">list</span>(bytearray_b)
+[<span class="hljs-number">97</span>, <span class="hljs-number">98</span>, <span class="hljs-number">99</span>, <span class="hljs-number">100</span>, <span class="hljs-number">101</span>]
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 変更</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>bytearray_c = <span class="hljs-built_in">bytearray</span>(<span class="hljs-string">b&#x27;abc&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">list</span>(bytearray_c)
+[<span class="hljs-number">97</span>, <span class="hljs-number">98</span>, <span class="hljs-number">99</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>bytearray_c[<span class="hljs-number">1</span>] = <span class="hljs-number">99</span>    <span class="hljs-comment"># 99(c)に変更</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(bytearray_c)
+<span class="hljs-built_in">bytearray</span>(<span class="hljs-string">b&#x27;acc&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">list</span>(bytearray_c)
+[<span class="hljs-number">97</span>, <span class="hljs-number">99</span>, <span class="hljs-number">99</span>]
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 削除</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>bytearray_d = <span class="hljs-built_in">bytearray</span>(<span class="hljs-string">b&#x27;abc&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">list</span>(bytearray_d)
+[<span class="hljs-number">97</span>, <span class="hljs-number">98</span>, <span class="hljs-number">99</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>bytearray_d.remove(<span class="hljs-number">98</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(bytearray_d)
+<span class="hljs-built_in">bytearray</span>(<span class="hljs-string">b&#x27;ac&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">list</span>(bytearray_d)
+[<span class="hljs-number">97</span>, <span class="hljs-number">99</span>]
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 複数存在する場合は、最初の要素を取り除く</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>bytearray_e = <span class="hljs-built_in">bytearray</span>(<span class="hljs-string">b&#x27;abcabc&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">list</span>(bytearray_e)
+[<span class="hljs-number">97</span>, <span class="hljs-number">98</span>, <span class="hljs-number">99</span>, <span class="hljs-number">97</span>, <span class="hljs-number">98</span>, <span class="hljs-number">99</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span>bytearray_e.remove(<span class="hljs-number">98</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(bytearray_e)
+<span class="hljs-built_in">bytearray</span>(<span class="hljs-string">b&#x27;acabc&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">list</span>(bytearray_e)
+[<span class="hljs-number">97</span>, <span class="hljs-number">99</span>, <span class="hljs-number">97</span>, <span class="hljs-number">98</span>, <span class="hljs-number">99</span>]
+&gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>要素の並び替え</p>
+      <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 逆順に並び替え</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>bytearray_a = <span class="hljs-built_in">bytearray</span>(<span class="hljs-string">b&#x27;abcde&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span>bytearray_a.reverse()
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(bytearray_a)
+<span class="hljs-built_in">bytearray</span>(<span class="hljs-string">b&#x27;edcba&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">list</span>(bytearray_a)
+[<span class="hljs-number">101</span>, <span class="hljs-number">100</span>, <span class="hljs-number">99</span>, <span class="hljs-number">98</span>, <span class="hljs-number">97</span>]
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ※戻り値はNoneなので注意</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>bytearray_b = <span class="hljs-built_in">bytearray</span>(<span class="hljs-string">b&#x27;abcde&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span>bytearray_c = bytearray_b.reverse()
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(bytearray_c)
+<span class="hljs-literal">None</span>
+&gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
 </div>
