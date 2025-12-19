@@ -551,4 +551,302 @@ TypeError: encoding without a string argument
 </code></pre>
     </li>
   </ul>
+  <h3 id="fileobject型--ファイル操作オブジェクト">fileobject型 : ファイル操作オブジェクト</h3>
+  <p>fileobject型は、ファイル操作（読み書き、入出力）を行う型で、ファイルの内容取得や編集、新規作成などの一連のファイル操作が可能。</p>
+  <ul>
+    <li>
+      <p>型の特性</p>
+      <ul>
+        <li>イミュータブルオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a>
+            </li>
+          </ul>
+        </li>
+        <li>イテラブルオブジェクト
+          <ul>
+            <li><a class="link-secondary"
+                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イテラブル（iterable）: 反復抽出可</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>定義例<br>
+        open()でファイルを開き、処理終了時にclose()で閉じる。<br>
+        open()の第\(1\)引数にファイルパスを指定して定義する。<br>
+        第2引数のmodeは、読み書きの指定やテキスト or バイナリの指定に使用する。<br></p>
+      <ul>
+        <li>
+          <p><code>mode</code>の種類</p>
+          <ul>
+            <li><code>r</code>：読込モード（書込不可）</li>
+            <li><code>w</code>：書込モード（読込不可）</li>
+            <li><code>a</code>：追加・書込モード（読込不可）</li>
+            <li><code>r+</code>：読込・書込モード</li>
+            <li><code>w+</code>：ファイルを空にした状態で、読込・書込モード</li>
+            <li><code>a+</code>：読込・書込モードで開いて、追加モード（ファイルの末尾に追加）</li>
+            <li><code>b</code>：バイナリモードで開いて、上記<code>mode</code>と併用する。</li>
+          </ul>
+        </li>
+        <li>
+          <p>下記サンプルでは<code>~/data/sample.txt</code>を事前に作成している前提</p>
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># テキストファイルをopen() で開く。</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/sample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>tFile = <span class="hljs-built_in">open</span>(fPath)
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># テキストであるため、io.TextIOWrapperとして定義される。</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(tFile)
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;_io.TextIOWrapper&#x27;</span>&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 開いたら必ず閉じる。</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>tFile.close()
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># withブロックを使してブロック終了時に自動クローズする。</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">type</span>(tFile)
+...
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;_io.TextIOWrapper&#x27;</span>&gt;
+&gt;&gt;&gt;
+</code></pre>
+          <p>また、今どこで作業しているかは<code>getcwd()</code>で取得できる。</p>
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># カレント（作業）ディレクトリの取得</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> os
+<span class="hljs-meta">&gt;&gt;&gt; </span>os.getcwd()
+<span class="hljs-string">&#x27;/home/hama&#x27;</span>
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p><code>mode='r'</code>：読込モード（書込不可）<br>
+        modeの引数なしでデフォルト <strong>'r'</strong> で open() するため、省略する。<br>
+        以下、open(mode='r')で開いた後の読込方法。<br>
+        ※ 下記サンプルでは<code>~/data/sample.txt</code>を事前に作成している前提。<br></p>
+      <pre><code class="language-python">line1 work file sample
+line2 work file sample
+line3 work file sample
+line4 work file sample
+line5 work file sample
+</code></pre>
+      <ul>
+        <li><code>read()</code>：全行読込
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># read()で全文読込</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/sample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">... </span>    fLines = tFile.read()
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">type</span>(fLines)
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(fLines)
+...
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;str&#x27;</span>&gt;
+line1 work file sample
+line2 work file sample
+line3 work file sample
+line4 work file sample
+line5 work file sample
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+        <li><code>readlines()</code>：リスト型で全行読込<br>
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># readlines()で行分割したリスト型で全行読込</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/sample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">... </span>    fLines = tFile.readlines()
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">type</span>(fLines)
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(fLines)
+...
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;list&#x27;</span>&gt;
+[<span class="hljs-string">&#x27;line1 work file sample\n&#x27;</span>, <span class="hljs-string">&#x27;line2 work file sample\n&#x27;</span>, <span class="hljs-string">&#x27;line3 work file sample\n&#x27;</span>, <span class="hljs-string">&#x27;line4 work file sample\n&#x27;</span>, <span class="hljs-string">&#x27;line5 work file sample\n&#x27;</span>]
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ※ 改行コードを排除して取得する場合</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;/root/data/sample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">... </span>    fLines = [line.strip() <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> tFile.readlines()]
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(fLines)
+...
+[<span class="hljs-string">&#x27;line1 work file sample&#x27;</span>, <span class="hljs-string">&#x27;line2 work file sample&#x27;</span>, <span class="hljs-string">&#x27;line3 work file sample&#x27;</span>, <span class="hljs-string">&#x27;line4 work file sample&#x27;</span>, <span class="hljs-string">&#x27;line5 work file sample&#x27;</span>]
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+        <li><code>readline()</code>：1行ずつ読込
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># readline()で1行ずつ読込</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;/root/data/sample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">... </span>    fLine = tFile.readline()    <span class="hljs-comment"># 1行目 読込</span>
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(fLine)
+<span class="hljs-meta">... </span>    fLine = tFile.readline()    <span class="hljs-comment"># 2行目 読込</span>
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(fLine)
+<span class="hljs-meta">... </span>    fLine = tFile.readline()    <span class="hljs-comment"># 3行目 読込</span>
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(fLine)
+...
+line1 work file sample
+
+line2 work file sample
+
+line3 work file sample
+
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># readline()で1行ずつ末尾まで読込</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;/root/data/sample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
+<span class="hljs-meta">... </span>        fLine = tFile.readline()
+<span class="hljs-meta">... </span>        <span class="hljs-built_in">print</span>(fLine)
+<span class="hljs-meta">... </span>        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> fLine:
+<span class="hljs-meta">... </span>            <span class="hljs-keyword">break</span>
+...
+line1 work file sample
+
+line2 work file sample
+
+line3 work file sample
+
+line4 work file sample
+
+line5 work file sample
+
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p><code>mode='w'</code>：書込モード（読込不可）<br>
+        以下、open(mode='w')で開いた後の書込方法。<br>
+        ※ 下記サンプルでは<code>~/data</code>フォルダがあることが事前。<br></p>
+      <ul>
+        <li>
+          <p><code>write()</code>：新規作成</p>
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># write()でファイルを新規作成</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/newsample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fInput = <span class="hljs-string">&#x27;line1 new work file sample&#x27;</span>
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">... </span>    tFile.write(fInput)
+...
+<span class="hljs-number">26</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># read()で全行読込</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(tFile.read())
+...
+line1 new work file sample
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+        <li>
+          <p><code>write()</code>：書込（上書き）<br>
+            ※ 上記の続き（newsample.txtが作成済）</p>
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/newsample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># read()で全行読込</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(tFile.read())
+...
+line1 new work file sample
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># write()で書込（上書き）</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fInput = <span class="hljs-string">&#x27;edit new work file sample&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">... </span>    tFile.write(fInput)
+...
+<span class="hljs-number">24</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># &#x27;line1 new work file sample&#x27; が上書きされている。</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(tFile.read())
+...
+edit new work file sample
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+        <li>
+          <p><code>writelines()</code>：リスト型で全行書込</p>
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/newsample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># writelines()でリスト型を全行書込</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fInput = [<span class="hljs-string">&#x27;line1&#x27;</span>, <span class="hljs-string">&#x27;line2&#x27;</span>, <span class="hljs-string">&#x27;line3&#x27;</span>, <span class="hljs-string">&#x27;line4&#x27;</span>, <span class="hljs-string">&#x27;line5&#x27;</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">... </span>    tFile.writelines(fInput)
+...
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(tFile.read())
+...
+line1line2line3line4line5
+&gt;&gt;&gt;
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ※ 改行コードを排除して書込する場合</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/newsample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fInput = [<span class="hljs-string">&#x27;line1&#x27;</span>, <span class="hljs-string">&#x27;line2&#x27;</span>, <span class="hljs-string">&#x27;line3&#x27;</span>, <span class="hljs-string">&#x27;line4&#x27;</span>, <span class="hljs-string">&#x27;line5&#x27;</span>]
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">... </span>    tFile.write(<span class="hljs-string">&#x27;\n&#x27;</span>.join(fInput))
+...
+<span class="hljs-number">29</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(tFile.read())
+...
+line1
+line2
+line3
+line4
+line5
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+        <li>
+          <p><code>pass</code>で空ファイルを新規作成<br></p>
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/empty.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 空ファイルを新規作成</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;w&#x27;</span>):
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">pass</span>    <span class="hljs-comment"># 何もしない</span>
+...
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 空ファイルの内容を出力</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(tFile.read())
+...
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p><code>mode='a'</code>：追加・書込モード（読込不可）<br>
+        以下、open(mode='a') で開いた後の書込方法。<br>
+        ※ 下記サンプルでは、<code>~/data/sample.txt</code>を事前に作成している前提。<br></p>
+      <pre><code class="language-python">line1 work file sample
+line2 work file sample
+line3 work file sample
+line4 work file sample
+line5 work file sample
+</code></pre>
+      <ul>
+        <li><code>write()</code>：末尾に追加
+          <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># write()で末尾に追加</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/sample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fAdd = <span class="hljs-string">&#x27;\nline6 work file sample&#x27;</span>    <span class="hljs-comment"># 改行コードも込み</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;a&#x27;</span>) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">... </span>    tFile.writelines(fAdd)
+...
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(tFile.read())
+...
+line1 work file sample
+line2 work file sample
+line3 work file sample
+line4 work file sample
+line5 work file sample
+line6 work file sample
+&gt;&gt;&gt;
+</code></pre>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </div>
