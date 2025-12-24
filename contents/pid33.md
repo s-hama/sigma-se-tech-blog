@@ -135,3 +135,88 @@ Python - 算術演算子まとめ : +, -, *, /, //, **
         (-2+2j)
         >>>
     ```
+
+### 乗算（*）・除算（/・//）・剰余（%）
+  - 乗算（*）<br>
+    ※ 四則演算の**乗算**と同じ結果。
+    ```python
+    $ python
+        >>>
+        >>> # int型の 2に 2 を乗算
+        >>> int_a = 2 * 2
+        >>> print(int_a)
+        4
+        >>> # float型の -2.0に 2.5 を乗算
+        >>> float_a = -2.0 * 2.5
+        >>> print(float_a)
+        -5.0
+        >>> # complex型の 2 + 2j に -2.0 を乗算
+        >>> complex_a = -2.0 * (2 + 2j)
+        >>> print(complex_a)
+        (-4-4j)
+        >>>
+    ```
+
+- 除算（/）<br>
+    ※ 四則演算の**除算**と同じ結果。
+    ```python
+    $ python
+        >>>
+        >>> # int型の 6 を 2 で除算
+        >>> int_a = 6 / 2
+        >>> print(int_a)
+        3.0
+        >>> # float型の -6.5 を 0.5 で除算
+        >>> float_a = -6.5 / 0.5
+        >>> print(float_a)
+        -13.0
+        >>> # complex型の 2 + 2j を 2 で除算
+        >>> complex_a = (2 + 2j) / 2
+        >>> print(complex_a)
+        (1+1j)
+        >>>
+    ```
+
+- 除算（//） ※商のみ<br>
+    除算（//）は、演算結果の**商（整数部のみ）**を返す。
+    ```python
+    $ python
+        >>>
+        >>> # int型の 6 を 2 で除算 (//)
+        >>> int_a = 5 // 2
+        >>> print(int_a)
+        2.0
+        >>> # float型の -6.5 を 0.5 で除算 (//)
+        >>> float_a = -5.5 // 0.2
+        >>> print(float_a)
+        -28.0
+        >>> # complex型の除算 (//)はできない
+        >>> complex_a = 3j // 2
+        Traceback (most recent call last):
+        File "<stdin>", line 1, in <module>
+        TypeError: "can't take floor of complex number."
+        >>>
+    ```
+
+- 剰余（%）<br>
+    除算の演算結果の**余り**を返す。
+    ```python
+    $ python
+        >>>
+        >>> # int型の 5 に 2 の剰余
+        >>> int_a = 5 % 2
+        >>> print(int_a)
+        1
+        >>>
+        >>> # float型の 5.5 に 2.5 の剰余
+        >>> float_a = 5.5 % 2.5
+        >>> print(float_a)
+        0.5
+        >>>
+        >>> # complex型に剰余はできない
+        >>> complex_a = 5j % 2
+        Traceback (most recent call last):
+        File "<stdin>", line 1, in <module>
+        TypeError: "can't mod complex numbers."
+        >>>
+    ```
