@@ -78,4 +78,57 @@
         href="https://sigma-se.com/detail/30/#:~:text=rounds%3D1)%0A%20%20%20%20%3E%3E%3E-,complex%E5%9E%8B%20%3A%20%E8%A4%87%E7%B4%A0%E6%95%B0%E5%9E%8B,-complex%E5%9E%8B%E3%81%AF">Python
         - 組込みデータ型まとめ : bool , int, float, complex &gt; complex型 : 複素数型</a></li>
   </ul>
+  <h3 id="単項プラスマイナス演算子-">単項プラス・マイナス演算子（+／-）</h3>
+  <ul>
+    <li>
+      <p>単項プラス演算子（+）<br>
+        単項プラス演算子は、少し特殊で対象値に付加しても符号（もちろん値）の変化はない。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 5 に単項プラス演算子を付加して出力</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">5</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(+int_a)
+    <span class="hljs-number">5</span>
+    &gt;&gt;&gt;
+</code></pre>
+      <p>上記の通り、int型に単項プラス演算子を付加しても結果は同じだが、boolean型からint型の<strong>暗黙的な変換</strong>を利用してコーディングするケースがある。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># boolean を定義し、単項プラス演算子でintに変換</span>
+    &gt;&gt;&gt; bool_a = <span class="hljs-literal">False</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bool_a)
+    <span class="hljs-literal">False</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(+bool_a)
+    <span class="hljs-number">0</span>
+    &gt;&gt;&gt; bool_b = <span class="hljs-literal">True</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bool_b)
+    <span class="hljs-literal">True</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(+bool_b)
+    <span class="hljs-number">1</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>単項マイナス演算子（-）<br>
+        単項マイナス演算子は、対象値の符号を反転する。<br>
+        ※ <strong>-1</strong> を掛けた結果が欲しいような場合に使用する。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># int型の 5 に単項マイナス演算子を付加して出力</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">5</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(-int_a)
+    -<span class="hljs-number">5</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 単項マイナス演算子を 2 回付加して出力</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(-(-int_a))
+    <span class="hljs-number">5</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># complex型の 1 - 2j に単項マイナス演算子を付加して出力</span>
+    &gt;&gt;&gt; complex_a = - (<span class="hljs-number">1</span> - <span class="hljs-number">2j</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_a)
+    (-<span class="hljs-number">1</span>+<span class="hljs-number">2j</span>)
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
 </div>
