@@ -81,3 +81,94 @@ Python - 複合代入演算子まとめ : +=, -=, *=, /=, //=, %=, **=
         (-5+15j)
         >>>
     ```
+
+### 乗算（*=）・除算（/=・//=）・剰余（%=）
+- 乗算（*=）<br>
+    ※ a = a * b と同義（簡略表記したもの）
+    ```python
+    $ python
+        >>> # int型の 2 に 3 を乗算複合代入
+        >>> int_a = 2
+        >>> int_a *= 3
+        >>> print(int_a)
+        6
+        >>> # float型の 2.5 に -3.0 を乗算複合代入
+        >>> float_a = 2.5
+        >>> float_a *= -3.0
+        >>> print(float_a)
+        -7.5
+        >>> # complex型の 5 + 2j に 2 - 5j を乗算複合代入
+        >>> complex_a = 5 + 2j
+        >>> complex_a *= 2 - 5j
+        >>> print(complex_a)
+        (20-21j)
+        >>>
+    ```
+
+- 除算（/=）<br>
+    ※ a = a / b と同義（簡略表記したもの）
+    ```python
+    $ python
+        >>> # int型の 6 に 2 を除算複合代入
+        >>> int_a = 6
+        >>> int_a /= 2
+        >>> print(int_a)
+        3.0
+        >>> # float型の 5.5 に -0.5 を除算複合代入
+        >>> float_a = 5.5
+        >>> float_a /= -0.5
+        >>> print(float_a)
+        -11.0
+        >>> # complex型の 2 + 2j に 1 + 1j を除算複合代入
+        >>> complex_a = 2 + 2j
+        >>> complex_a /= 1 + 1j
+        >>> print(complex_a)
+        (2+0j)
+        >>>
+    ```
+
+- 除算（//=） ※商のみ<br>
+    ※ a = a // b と同義（簡略表記したもの）
+    ```python
+    $ python
+        >>> # int型の 11 に 3 を除算（//）複合代入
+        >>> int_a = 11
+        >>> int_a //= 3
+        >>> print(int_a)
+        3
+        >>> # float型の 3.3 に 0.2 を除算（//）複合代入
+        >>> float_a = 3.3
+        >>> float_a //= 0.2
+        >>> print(float_a)
+        16.0
+        >>> # complex型の除算（//）はできない
+        >>> complex_a = 3 + 3j
+        >>> complex_a //= 2 + 2j
+        Traceback (most recent call last):
+        File "<stdin>", line 1, in <module>
+        TypeError: can't take floor of complex number.
+        >>>
+    ```
+
+- 剰余（%=）<br>
+    ※ a = a % b と同義（簡略表記したもの）
+    ```python
+    $ python
+        >>> # int型の 9 に 2 を剰余複合代入
+        >>> int_a = 9
+        >>> int_a %= 2
+        >>> print(int_a)
+        1
+        >>> # float型の 6.5 に 2 を剰余複合代入
+        >>> float_a = 6.5
+        >>> float_a %= 2
+        >>> print(float_a)
+        0.5
+        >>> # complex型に剰余はできない
+        >>> complex_a = 3 + 3j
+        >>> complex_a %= 2
+        Traceback (most recent call last):
+        File "<stdin>", line 1, in <module>
+        TypeError: can't mod complex numbers.
+        >>>
+    ```
