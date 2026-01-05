@@ -172,3 +172,29 @@ Python - 複合代入演算子まとめ : +=, -=, *=, /=, //=, %=, **=
         TypeError: can't mod complex numbers.
         >>>
     ```
+
+### べき乗（**=）
+※ a = a ** b と同義（簡略表記したもの）
+```python
+$ python
+    >>> # int型の 2 に 4 をべき乗複合代入
+    >>> int_a = 2
+    >>> int_a **= 4
+    >>> print(int_a)
+    16
+    >>> # float型の 2.5 に 2 をべき乗複合代入
+    >>> float_a = 2.5
+    >>> float_a **= 2
+    >>> print(float_a)
+    6.25
+    >>> # complex型の 2 + 2j に 2 をべき乗複合代入
+    >>> complex_a = 2 + 2j
+    >>> complex_a **= 2
+    >>> print(complex_a)
+    8j
+    >>>
+```
+
+
+### 参考文献
+- 金城 俊哉（\\(2018\\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム
