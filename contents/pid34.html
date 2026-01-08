@@ -68,4 +68,51 @@
         href="https://sigma-se.com/detail/30/#:~:text=rounds%3D1)%0A%20%20%20%20%3E%3E%3E-,complex%E5%9E%8B%20%3A%20%E8%A4%87%E7%B4%A0%E6%95%B0%E5%9E%8B,-complex%E5%9E%8B%E3%81%AF">Python
         - 組込みデータ型まとめ : bool , int, float, complex &gt; complex型 : 複素数型</a></li>
   </ul>
+  <h3 id="加算減算-">加算（+=）・減算（-=）</h3>
+  <ul>
+    <li>
+      <p>加算（+=）<br>
+        ※ a = a + b と同義（簡略表記したもの）</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># int型の 2 に 3 を加算複合代入</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">2</span>
+    &gt;&gt;&gt; int_a += <span class="hljs-number">3</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a)
+    <span class="hljs-number">5</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># float型の 3.5 に 3.6 を加算複合代入</span>
+    &gt;&gt;&gt; float_a = <span class="hljs-number">3.5</span>
+    &gt;&gt;&gt; float_a += <span class="hljs-number">3.6</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
+    <span class="hljs-number">7.1</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># complex型の 4 + 4j に 5 + 5j を加算複合代入</span>
+    &gt;&gt;&gt; complex_a = <span class="hljs-number">4</span> + <span class="hljs-number">4j</span>
+    &gt;&gt;&gt; complex_a += <span class="hljs-number">5</span> + <span class="hljs-number">5j</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_a)
+    (<span class="hljs-number">9</span>+<span class="hljs-number">9j</span>)
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>減算（-=）<br>
+        ※ a = a - b と同義（簡略表記したもの）</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># int型の 5 に 3 を減算複合代入</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">5</span>
+    &gt;&gt;&gt; int_a -= <span class="hljs-number">3</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a)
+    <span class="hljs-number">2</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># float型の 5.0 に -5.9 を減算複合代入</span>
+    &gt;&gt;&gt; float_a = <span class="hljs-number">5.0</span>
+    &gt;&gt;&gt; float_a -= -<span class="hljs-number">5.9</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
+    <span class="hljs-number">10.9</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># complex型の 5 + 5j に 10 + 10j を減算複合代入</span>
+    &gt;&gt;&gt; complex_a = <span class="hljs-number">5</span> + <span class="hljs-number">5j</span>
+    &gt;&gt;&gt; complex_a -= <span class="hljs-number">10</span> - <span class="hljs-number">10j</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_a)
+    (-<span class="hljs-number">5</span>+<span class="hljs-number">15j</span>)
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
 </div>
