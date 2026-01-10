@@ -115,4 +115,97 @@
 </code></pre>
     </li>
   </ul>
+  <h3 id="乗算除算剰余">乗算（*=）・除算（/=・//=）・剰余（%=）</h3>
+  <ul>
+    <li>
+      <p>乗算（*=）<br>
+        ※ a = a * b と同義（簡略表記したもの）</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># int型の 2 に 3 を乗算複合代入</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">2</span>
+    &gt;&gt;&gt; int_a *= <span class="hljs-number">3</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a)
+    <span class="hljs-number">6</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># float型の 2.5 に -3.0 を乗算複合代入</span>
+    &gt;&gt;&gt; float_a = <span class="hljs-number">2.5</span>
+    &gt;&gt;&gt; float_a *= -<span class="hljs-number">3.0</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
+    -<span class="hljs-number">7.5</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># complex型の 5 + 2j に 2 - 5j を乗算複合代入</span>
+    &gt;&gt;&gt; complex_a = <span class="hljs-number">5</span> + <span class="hljs-number">2j</span>
+    &gt;&gt;&gt; complex_a *= <span class="hljs-number">2</span> - <span class="hljs-number">5j</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_a)
+    (<span class="hljs-number">20</span>-<span class="hljs-number">21j</span>)
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>除算（/=）<br>
+        ※ a = a / b と同義（簡略表記したもの）</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># int型の 6 に 2 を除算複合代入</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">6</span>
+    &gt;&gt;&gt; int_a /= <span class="hljs-number">2</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a)
+    <span class="hljs-number">3.0</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># float型の 5.5 に -0.5 を除算複合代入</span>
+    &gt;&gt;&gt; float_a = <span class="hljs-number">5.5</span>
+    &gt;&gt;&gt; float_a /= -<span class="hljs-number">0.5</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
+    -<span class="hljs-number">11.0</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># complex型の 2 + 2j に 1 + 1j を除算複合代入</span>
+    &gt;&gt;&gt; complex_a = <span class="hljs-number">2</span> + <span class="hljs-number">2j</span>
+    &gt;&gt;&gt; complex_a /= <span class="hljs-number">1</span> + <span class="hljs-number">1j</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_a)
+    (<span class="hljs-number">2</span>+<span class="hljs-number">0j</span>)
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>除算（//=） ※商のみ<br>
+        ※ a = a // b と同義（簡略表記したもの）</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># int型の 11 に 3 を除算（//）複合代入</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">11</span>
+    &gt;&gt;&gt; int_a //= <span class="hljs-number">3</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a)
+    <span class="hljs-number">3</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># float型の 3.3 に 0.2 を除算（//）複合代入</span>
+    &gt;&gt;&gt; float_a = <span class="hljs-number">3.3</span>
+    &gt;&gt;&gt; float_a //= <span class="hljs-number">0.2</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
+    <span class="hljs-number">16.0</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># complex型の除算（//）はできない</span>
+    &gt;&gt;&gt; complex_a = <span class="hljs-number">3</span> + <span class="hljs-number">3j</span>
+    &gt;&gt;&gt; complex_a //= <span class="hljs-number">2</span> + <span class="hljs-number">2j</span>
+    Traceback (most recent call last):
+    File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
+    TypeError: can<span class="hljs-string">&#x27;t take floor of complex number.
+    &gt;&gt;&gt;
+</span></code></pre>
+    </li>
+    <li>
+      <p>剰余（%=）<br>
+        ※ a = a % b と同義（簡略表記したもの）</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># int型の 9 に 2 を剰余複合代入</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">9</span>
+    &gt;&gt;&gt; int_a %= <span class="hljs-number">2</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a)
+    <span class="hljs-number">1</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># float型の 6.5 に 2 を剰余複合代入</span>
+    &gt;&gt;&gt; float_a = <span class="hljs-number">6.5</span>
+    &gt;&gt;&gt; float_a %= <span class="hljs-number">2</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
+    <span class="hljs-number">0.5</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># complex型に剰余はできない</span>
+    &gt;&gt;&gt; complex_a = <span class="hljs-number">3</span> + <span class="hljs-number">3j</span>
+    &gt;&gt;&gt; complex_a %= <span class="hljs-number">2</span>
+    Traceback (most recent call last):
+    File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
+    TypeError: can<span class="hljs-string">&#x27;t mod complex numbers.
+    &gt;&gt;&gt;
+</span></code></pre>
+    </li>
+  </ul>
 </div>
