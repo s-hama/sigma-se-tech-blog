@@ -35,3 +35,39 @@ Python - 論理演算子まとめ : or, and, not
         <tr><td>not</td><td>not a</td><td>a の否定</td></tr>
     </tbody>
     </table>
+
+### True/Falseの判定基準
+
+論理演算で最も重要となるTrue/Falseの判定基準として、**空文字**や**空リスト**等も`False`と判定される。<br>
+下記一覧で示す要素以外は、すべて`True`として判定される。
+
+- False判定一覧
+    <table class="table" style="width: 80%;">
+    <thead>
+        <tr>
+        <th scope="col">False判定となる要素</th>
+        <th scope="col">説明</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>False</td><td>bool型のFalse</td></tr>
+        <tr><td>None</td><td>何もないことを示すオブジェクト（≒多言語のNull）</td></tr>
+        <tr><td>0</td><td>int型（整数）のゼロ</td></tr>
+        <tr><td>0.0</td><td>float型（浮動小数点数）のゼロ</td></tr>
+        <tr><td>0j</td><td>complex型（複素数）のゼロ</td></tr>
+        <tr><td>Decimal(0)</td><td>decimal型のゼロ</td></tr>
+        <tr><td>Fraction(0, 1)</td><td>fraction型（有理数）のゼロ</td></tr>
+        <tr><td>''</td><td>str型（文字列）の空文字</td></tr>
+        <tr><td>[]</td><td>list型（配列）の空配列</td></tr>
+        <tr><td>{}</td><td>dict型（連想配列）の空配列</td></tr>
+        <tr><td>()</td><td>tuple型（タプル）の空配列</td></tr>
+        <tr><td>set()</td><td>set型（集合）の空配列</td></tr>
+        <tr><td>range(0)</td><td>range型（数値配列）の空配列</td></tr>
+    </tbody>
+    </table>
+<br>
+
+※ 各実装サンプルについては、下記ページを参考。
+- [Python - 組込みデータ型まとめ : bool , int, float, complex > bool型 : 真偽リテラル](<https://sigma-se.com/detail/30/#:~:text=%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E8%A8%98%E8%BC%89%E3%81%99%E3%82%8B%E3%80%82-,bool%E5%9E%8B%20%3A%20%E7%9C%9F%E5%81%BD%E3%83%AA%E3%83%86%E3%83%A9%E3%83%AB,-%E8%AB%96%E7%90%86%E5%9E%8B%E3%81%A8%E3%82%82>)
+
+以降、論理演算子に関する簡単な実装サンプルを対話モード（インタプリタ）で解説する。
