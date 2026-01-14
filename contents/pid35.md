@@ -71,3 +71,63 @@ Python - 論理演算子まとめ : or, and, not
 - [Python - 組込みデータ型まとめ : bool , int, float, complex > bool型 : 真偽リテラル](<https://sigma-se.com/detail/30/#:~:text=%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E8%A8%98%E8%BC%89%E3%81%99%E3%82%8B%E3%80%82-,bool%E5%9E%8B%20%3A%20%E7%9C%9F%E5%81%BD%E3%83%AA%E3%83%86%E3%83%A9%E3%83%AB,-%E8%AB%96%E7%90%86%E5%9E%8B%E3%81%A8%E3%82%82>)
 
 以降、論理演算子に関する簡単な実装サンプルを対話モード（インタプリタ）で解説する。
+
+### 論理和（or）
+`a and b`は、前方から評価していき`True`となる要素が見つかった時点で（**ショートサーキット**と呼ぶ）その要素を返す。<br>
+a、b共にFalseである場合は、末尾の要素`b`を返す。
+
+- 論理和パターン
+    <table class="table" style="width: 80%;">
+    <thead>
+        <tr>
+        <th scope="col">a の評価</th>
+        <th scope="col">b の評価</th>
+        <th scope="col">a or b の評価</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>True</td><td>False</td><td>a の評価</td></tr>
+        <tr><td>False</td><td>True</td><td>b の評価</td></tr>
+        <tr><td>True</td><td>True</td><td>a の評価</td></tr>
+        <tr><td>False</td><td>False</td><td>b の評価</td></tr>
+    </tbody>
+    </table>
+
+- 論理和 実装サンプル（論理和パターン）
+    ```python
+    $ python
+        >>> # True or False (int型 or int型)
+        >>> bool_a = 1 or 0
+        >>> print(bool_a)
+        1
+        >>> # False or True (float型 or float型)
+        >>> bool_b = 0.0 or 1.0
+        >>> print(bool_b)
+        1.0
+        >>> # True or True (complex型 or complex型)
+        >>> bool_c = 1j or 2j
+        >>> print(bool_c)
+        1j
+        >>> # False or False (list型 or dict型)
+        >>> bool_d = [] or {}
+        >>> print(bool_d)
+        {}
+        >>>
+    ```
+
+- ショートサーキットの例<br>
+    一度に複数の論理和を行う場合、ショートサーキットの性質を利用し、Trueになる可能性が高い評価対象を前方に記載することで、不要な演算を省くことができる。
+    ```python
+    $ python
+        >>> # 先頭の 2 (True) のみで評価が返される。
+        >>> # 以降の 0 (False)、1 (True) は評価しない。
+        >>> bool_a = 2 or 0 or 1
+        >>> print(bool_a)
+        2
+        >>> # 2項目の 4 (True) で評価が返される。
+        >>> # 以降の 3 (True)、2 (True)、1 (True) は評価しない。
+        >>> bool_b = 0 or 4 or 3 or 2 or 1
+        >>> print(bool_b)
+        4
+        >>>
+    ```
