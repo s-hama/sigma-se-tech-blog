@@ -131,3 +131,63 @@ a、b共にFalseである場合は、末尾の要素`b`を返す。
         4
         >>>
     ```
+
+### 論理積（and）
+`a and b`は、前方から評価していき`False`となる要素が見つかった時点（ショートサーキット）でその要素を返す。
+a、b共にTrueである場合は、末尾の要素`b`を返す。
+
+- 論理積パターン
+    <table class="table" style="width: 80%;">
+    <thead>
+        <tr>
+        <th scope="col">a の評価</th>
+        <th scope="col">b の評価</th>
+        <th scope="col">a and b の評価</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td>True</td><td>False</td><td>b の評価</td></tr>
+        <tr><td>False</td><td>True</td><td>a の評価</td></tr>
+        <tr><td>True</td><td>True</td><td>b の評価</td></tr>
+        <tr><td>False</td><td>False</td><td>a の評価</td></tr>
+    </tbody>
+    </table>
+
+- 論理積 実装サンプル（論理積パターン）
+    ```python
+    $ python
+        >>> # True and False (int型 and int型)
+        >>> bool_a = 1 and 0
+        >>> print(bool_a)
+        0
+        >>> # False and True (float型 and float型)
+        >>> bool_b = 0.0 and 1.0
+        >>> print(bool_b)
+        0.0
+        >>> # True and True (complex型 and complex型)
+        >>> bool_c = 1j and 2j
+        >>> print(bool_c)
+        2j
+        >>> # False and False (list型 and dict型)
+        >>> bool_d = [] and {}
+        >>> print(bool_d)
+        []
+        >>>
+    ```
+
+- ショートサーキットの例
+    上記の論理和と同様に、一度に複数の論理積を行う場合、ショートサーキットの性質を利用し、Falseになる可能性が高い評価対象を前方に記載することで、不要な演算を省くことができる。
+    ```python
+    $ python
+        >>> # 先頭の 0 (False) のみで評価が返される。
+        >>> # 以降の 1 (True)、2 (True) は評価しない。
+        >>> bool_a = 0 and 1 and 2
+        >>> print(bool_a)
+        0
+        >>> # 3項目の 0 (False) で評価が返される。
+        >>> # 以降の 4 (True)、5 (True) は評価しない。
+        >>> bool_b = 1 and 2 and 0 and 4 and 5
+        >>> print(bool_b)
+        0
+        >>>
+    ```
