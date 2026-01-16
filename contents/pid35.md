@@ -191,3 +191,44 @@ a、b共にTrueである場合は、末尾の要素`b`を返す。
         0
         >>>
     ```
+
+### 論理否定（not）
+`not x`は、対象`x`を否定した結果をbool型で返す。<br>
+`False`なら`True`を返し、`True`なら`False`を返す。
+
+- 論理否定 実装サンプル
+    ```python
+    $ python
+        >>> # int型 0 の否定
+        >>> bool_a = not 0
+        >>> print(bool_a)
+        True
+        >>> # int型 1 の否定
+        >>> bool_b = not 1
+        >>> print(bool_b)
+        False
+        >>> # float型 0.0 の否定
+        >>> bool_c = not 0.0
+        >>> print(bool_c)
+        True
+        >>> # float型 2.5 の否定
+        >>> bool_d = not 2.5
+        >>> print(bool_d)
+        False
+        >>> # complex型 0j の否定
+        >>> bool_e = not 0j
+        >>> print(bool_e)
+        True
+        >>> # complex型 1j の否定
+        >>> bool_f = not 1j
+        >>> print(bool_f)
+        False
+        >>> # int型 1 and int型 2 and int型 0 の否定
+        >>> bool_g = not (1 and 2 and 0)
+        >>> print(bool_g)
+        True
+        >>>
+    ```
+
+### 参考文献
+- 金城 俊哉（\\(2018\\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム
