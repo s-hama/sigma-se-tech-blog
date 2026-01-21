@@ -218,4 +218,82 @@
 </code></pre>
     </li>
   </ul>
+  <h3 id="論理積and">論理積（and）</h3>
+  <p><code>a and b</code>は、前方から評価していき<code>False</code>となる要素が見つかった時点（ショートサーキット）でその要素を返す。
+    a、b共にTrueである場合は、末尾の要素<code>b</code>を返す。</p>
+  <ul>
+    <li>
+      <p>論理積パターン</p>
+      <table class="table" style="width: 80%;">
+        <thead>
+          <tr>
+            <th scope="col">a の評価</th>
+            <th scope="col">b の評価</th>
+            <th scope="col">a and b の評価</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>True</td>
+            <td>False</td>
+            <td>b の評価</td>
+          </tr>
+          <tr>
+            <td>False</td>
+            <td>True</td>
+            <td>a の評価</td>
+          </tr>
+          <tr>
+            <td>True</td>
+            <td>True</td>
+            <td>b の評価</td>
+          </tr>
+          <tr>
+            <td>False</td>
+            <td>False</td>
+            <td>a の評価</td>
+          </tr>
+        </tbody>
+      </table>
+    </li>
+    <li>
+      <p>論理積 実装サンプル（論理積パターン）</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># True and False (int型 and int型)</span>
+    &gt;&gt;&gt; bool_a = <span class="hljs-number">1</span> <span class="hljs-keyword">and</span> <span class="hljs-number">0</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bool_a)
+    <span class="hljs-number">0</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># False and True (float型 and float型)</span>
+    &gt;&gt;&gt; bool_b = <span class="hljs-number">0.0</span> <span class="hljs-keyword">and</span> <span class="hljs-number">1.0</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bool_b)
+    <span class="hljs-number">0.0</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># True and True (complex型 and complex型)</span>
+    &gt;&gt;&gt; bool_c = <span class="hljs-number">1j</span> <span class="hljs-keyword">and</span> <span class="hljs-number">2j</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bool_c)
+    <span class="hljs-number">2j</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># False and False (list型 and dict型)</span>
+    &gt;&gt;&gt; bool_d = [] <span class="hljs-keyword">and</span> {}
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bool_d)
+    []
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>ショートサーキットの例
+        上記の論理和と同様に、一度に複数の論理積を行う場合、ショートサーキットの性質を利用し、Falseになる可能性が高い評価対象を前方に記載することで、不要な演算を省くことができる。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 先頭の 0 (False) のみで評価が返される。</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 以降の 1 (True)、2 (True) は評価しない。</span>
+    &gt;&gt;&gt; bool_a = <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-number">1</span> <span class="hljs-keyword">and</span> <span class="hljs-number">2</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bool_a)
+    <span class="hljs-number">0</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 3項目の 0 (False) で評価が返される。</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 以降の 4 (True)、5 (True) は評価しない。</span>
+    &gt;&gt;&gt; bool_b = <span class="hljs-number">1</span> <span class="hljs-keyword">and</span> <span class="hljs-number">2</span> <span class="hljs-keyword">and</span> <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-number">4</span> <span class="hljs-keyword">and</span> <span class="hljs-number">5</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bool_b)
+    <span class="hljs-number">0</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
 </div>
