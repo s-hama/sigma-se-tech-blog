@@ -296,4 +296,47 @@
 </code></pre>
     </li>
   </ul>
+  <h3 id="論理否定not">論理否定（not）</h3>
+  <p><code>not x</code>は、対象<code>x</code>を否定した結果をbool型で返す。<br>
+    <code>False</code>なら<code>True</code>を返し、<code>True</code>なら<code>False</code>を返す。
+  </p>
+  <ul>
+    <li>論理否定 実装サンプル
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># int型 0 の否定</span>
+    &gt;&gt;&gt; bool_a = <span class="hljs-keyword">not</span> <span class="hljs-number">0</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bool_a)
+    <span class="hljs-literal">True</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># int型 1 の否定</span>
+    &gt;&gt;&gt; bool_b = <span class="hljs-keyword">not</span> <span class="hljs-number">1</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bool_b)
+    <span class="hljs-literal">False</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># float型 0.0 の否定</span>
+    &gt;&gt;&gt; bool_c = <span class="hljs-keyword">not</span> <span class="hljs-number">0.0</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bool_c)
+    <span class="hljs-literal">True</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># float型 2.5 の否定</span>
+    &gt;&gt;&gt; bool_d = <span class="hljs-keyword">not</span> <span class="hljs-number">2.5</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bool_d)
+    <span class="hljs-literal">False</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># complex型 0j の否定</span>
+    &gt;&gt;&gt; bool_e = <span class="hljs-keyword">not</span> <span class="hljs-number">0j</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bool_e)
+    <span class="hljs-literal">True</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># complex型 1j の否定</span>
+    &gt;&gt;&gt; bool_f = <span class="hljs-keyword">not</span> <span class="hljs-number">1j</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bool_f)
+    <span class="hljs-literal">False</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># int型 1 and int型 2 and int型 0 の否定</span>
+    &gt;&gt;&gt; bool_g = <span class="hljs-keyword">not</span> (<span class="hljs-number">1</span> <span class="hljs-keyword">and</span> <span class="hljs-number">2</span> <span class="hljs-keyword">and</span> <span class="hljs-number">0</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bool_g)
+    <span class="hljs-literal">True</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>金城 俊哉（\(2018\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム</li>
+  </ul>
 </div>
