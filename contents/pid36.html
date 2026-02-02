@@ -49,4 +49,25 @@
     </li>
   </ul>
   <p>以降、ビット演算子に関する簡単な実装サンプルを対話モード（インタプリタ）で解説する。</p>
+  <h3 id="論理和-or--">論理和 OR（ | ）</h3>
+  <p><code>a|b</code> は、ビット単位（同じ桁同士）で、\(1\) が少なくとも一つ存在すれば \(1\) を返し、\(1\) が存在しなければ \(0\) を返す。</p>
+  <p>※ 使用用途<br>
+    特定のビットを強制的に \(1\)（ON）にしたい場合、対応するビットを \(1\) とし、それ以外は、元のままとすることで、特定のビットのみ \(1\) に変更することができる。</p>
+  <ul>
+    <li>実装サンプル
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 0100 の 末尾2桁 を 1 (ON) にする</span>
+    &gt;&gt;&gt; bit_a = <span class="hljs-number">0b0100</span>
+    &gt;&gt;&gt; bit_b = <span class="hljs-number">0b0111</span>
+    &gt;&gt;&gt; bit_c = bit_a | bit_b
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (10 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bit_c)
+    <span class="hljs-number">7</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (2 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">bin</span>(bit_c))
+    <span class="hljs-number">0b111</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
 </div>
