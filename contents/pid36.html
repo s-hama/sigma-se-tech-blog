@@ -70,4 +70,25 @@
 </code></pre>
     </li>
   </ul>
+  <h3 id="排他的論理和-xor--">排他的論理和 XOR（ ^ ）</h3>
+  <p><code>a^b</code> は、ビット単位（同じ桁同士）で双方が一致すれば \(0\) を返し、違っていれば \(1\) を返す。</p>
+  <p>※ 使用用途<br>
+    特定のビットを強制的に反転させたい場合、対応するビットに特定ビットの反転値を指定し、それ以外は、元のままとすることで、特定のビットのみ反転させることができる。</p>
+  <ul>
+    <li>実装サンプル
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 1111 の 先頭 2桁 は 0 (OFF)に、末尾2桁 は 1 (反転)とする。</span>
+    &gt;&gt;&gt; bit_a = <span class="hljs-number">0b1111</span>
+    &gt;&gt;&gt; bit_b = <span class="hljs-number">0b1100</span>
+    &gt;&gt;&gt; bit_c = bit_a ^ bit_b
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (10 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bit_c)
+    <span class="hljs-number">3</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (2 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">bin</span>(bit_c))
+    <span class="hljs-number">0b11</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
 </div>
