@@ -91,4 +91,25 @@
 </code></pre>
     </li>
   </ul>
+  <h3 id="論理積-and--">論理積 AND（ &amp; ）</h3>
+  <p><code>a&amp;b</code> は、ビット単位（同じ桁同士）で互いに \(1\) である場合 \(1\) を返し、互いに \(1\) でない場合 \(0\) を返す。</p>
+  <p>※ 使用用途<br>
+    特定のビットを強制的に \(0\)（OFF）としたい場合、対応するビットを \(0\) とし、それ以外は、元のままとすることで、特定のビットのみ \(1\) に変更することができる。</p>
+  <ul>
+    <li>実装サンプル
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 1111 の 末尾3桁 を 0 (OFF) にする</span>
+    &gt;&gt;&gt; bit_a = <span class="hljs-number">0b1111</span>
+    &gt;&gt;&gt; bit_b = <span class="hljs-number">0b1000</span>
+    &gt;&gt;&gt; bit_c = bit_a &amp; bit_b
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (10 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bit_c)
+    <span class="hljs-number">8</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (2 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">bin</span>(bit_c))
+    <span class="hljs-number">0b1000</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
 </div>
