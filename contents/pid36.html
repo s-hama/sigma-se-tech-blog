@@ -175,4 +175,26 @@
     <li>\(0b100000000\)\(-0b11110101\) \(= 0b110\) ※「2.」の補数</li>
     <li>\(-1\) * \(0b110 = - 0b110\) ※「3.」に \(-1\) を掛ける（符号反転）</li>
   </ol>
+  <h3 id="左シフト--">左シフト（ << ）</h3>
+  <p><code>a&lt;&lt;b</code> は、<code>b</code> の桁数分 左にシフトし、空白となった右側の桁は \(0\) で埋められる。</p>
+  <p>※ 使用用途<br>
+    元の値を \(2\) のプラスべき乗倍する場合に使用する。<br>
+    ※ 左に \(1\) シフトすると \(2\)倍(\(\displaystyle 2^1\)乗)、\(2\)シフトすると \(4\)倍(\(\displaystyle 2^2\)) … \(n\) シフトすると
+    \(2\)の\(n\)乗倍といった増え方をする</p>
+  <ul>
+    <li>実装サンプル
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 0b10101111(10 進数で175)を左に2シフトする</span>
+    &gt;&gt;&gt; bit_a = <span class="hljs-number">0b10101111</span>
+    &gt;&gt;&gt; bit_b = bit_a << <span class="hljs-number">2</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (10 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bit_b)    <span class="hljs-comment"># 175の4(2の2乗)倍となる</span>
+    <span class="hljs-number">700</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (2 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">bin</span>(bit_b))    <span class="hljs-comment"># 左に2シフトし、空白となった右側の2桁は 0 となる</span>
+    <span class="hljs-number">0b1010111100</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
 </div>
