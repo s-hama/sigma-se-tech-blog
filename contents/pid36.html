@@ -197,4 +197,41 @@
 </code></pre>
     </li>
   </ul>
+  <h3 id="右シフト--">右シフト（ >> ）</h3>
+  <p><code>a&gt;&gt;b</code> は、<code>b</code> の桁数分、右にシフトし、空白となった左側の桁は \(0\) で埋められ、最下位より右に溢れたビットは破棄される。</p>
+  <p>※ 使用用途<br>
+    元の値を \(2\) のマイナスべき乗倍する場合に使用する。<br>
+    ※ 右に \(1\) シフトすると \(\displaystyle \frac{1}{2}\)倍(\(\displaystyle 2^{-1}\)乗)、\(2\)シフトすると \(\displaystyle
+    \frac{1}{4}\)倍(\(\displaystyle 2^{-2}\)乗) … \(n\)シフトすると \(2^{-n}\)乗倍といった増え方をする。</p>
+  <ul>
+    <li>実装サンプル
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 0b10000000(10 進数で128)を右に2シフトする</span>
+    &gt;&gt;&gt; bit_a = <span class="hljs-number">0b10000000</span>
+    &gt;&gt;&gt; bit_b = bit_a >> <span class="hljs-number">2</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (10 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bit_b)    <span class="hljs-comment">#   128の1/4(2のマイナス2乗)倍となる</span>
+    <span class="hljs-number">32</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (2 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">bin</span>(bit_b))    <span class="hljs-comment"># 右に2シフトし、最下位より右に溢れたビット(00)は破棄となる</span>
+    <span class="hljs-number">0b100000</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># ※割り切れない場合</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 0b10101111(10 進数で163)を右に2シフトする</span>
+    &gt;&gt;&gt; bit_c = <span class="hljs-number">0b10100011</span>
+    &gt;&gt;&gt; bit_d = bit_c >> <span class="hljs-number">2</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (10 進数)   </span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bit_d)    <span class="hljs-comment"># 割り切れない場合、小数点第1位を四捨五入</span>
+    <span class="hljs-number">40</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (2 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">bin</span>(bit_d))    <span class="hljs-comment"># 右に2シフトし、最下位より右に溢れたビット(11)は破棄となる</span>
+    <span class="hljs-number">0b101000</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>金城 俊哉（\(2018\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム</li>
+  </ul>
 </div>
