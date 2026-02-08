@@ -1,0 +1,237 @@
+<div class="post-body">
+  <h2 id="目的">目的</h2>
+  <p>この記事では、Pythonで使用するビット演算子の基本的な使い方について記載する。</p>
+  <h2 id="各ビット演算子の使い方と実装サンプル">各ビット演算子の使い方と実装サンプル</h2>
+  <h3 id="ビット演算子の種類">ビット演算子の種類</h3>
+  <p><strong>ビット演算子</strong>は、\(2\)進数で表したint型の各ビットに対する演算子で、論理演算や反転、シフト等、以下の種類がある。</p>
+  <ul>
+    <li>ビット演算子一覧 <table class="table" style="width: 100%;">
+        <thead>
+          <tr>
+            <th scope="col">演算子</th>
+            <th scope="col">使用例</th>
+            <th scope="col">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>|</td>
+            <td>a | b</td>
+            <td>aとbのビット単位の論理和</td>
+          </tr>
+          <tr>
+            <td>^</td>
+            <td>a ^ b</td>
+            <td>aとbのビット単位の排他的論理和</td>
+          </tr>
+          <tr>
+            <td>&</td>
+            <td>a & b</td>
+            <td>aとbのビット単位の論理積</td>
+          </tr>
+          <tr>
+            <td>~</td>
+            <td>~a</td>
+            <td>aのビット単位の反転（否定）</td>
+          </tr>
+          <tr>
+            <td><<</td>
+            <td>a << b</td>
+            <td>aをbビット分、左にシフト</td>
+          </tr>
+          <tr>
+            <td>>></td>
+            <td>a >> b</td>
+            <td>aをbビット分、右にシフト</td>
+          </tr>
+        </tbody>
+      </table>
+    </li>
+  </ul>
+  <p>以降、ビット演算子に関する簡単な実装サンプルを対話モード（インタプリタ）で解説する。</p>
+  <h3 id="論理和-or--">論理和 OR（ | ）</h3>
+  <p><code>a|b</code> は、ビット単位（同じ桁同士）で、\(1\) が少なくとも一つ存在すれば \(1\) を返し、\(1\) が存在しなければ \(0\) を返す。</p>
+  <p>※ 使用用途<br>
+    特定のビットを強制的に \(1\)（ON）にしたい場合、対応するビットを \(1\) とし、それ以外は、元のままとすることで、特定のビットのみ \(1\) に変更することができる。</p>
+  <ul>
+    <li>実装サンプル
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 0100 の 末尾2桁 を 1 (ON) にする</span>
+    &gt;&gt;&gt; bit_a = <span class="hljs-number">0b0100</span>
+    &gt;&gt;&gt; bit_b = <span class="hljs-number">0b0111</span>
+    &gt;&gt;&gt; bit_c = bit_a | bit_b
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (10 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bit_c)
+    <span class="hljs-number">7</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (2 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">bin</span>(bit_c))
+    <span class="hljs-number">0b111</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="排他的論理和-xor--">排他的論理和 XOR（ ^ ）</h3>
+  <p><code>a^b</code> は、ビット単位（同じ桁同士）で双方が一致すれば \(0\) を返し、違っていれば \(1\) を返す。</p>
+  <p>※ 使用用途<br>
+    特定のビットを強制的に反転させたい場合、対応するビットに特定ビットの反転値を指定し、それ以外は、元のままとすることで、特定のビットのみ反転させることができる。</p>
+  <ul>
+    <li>実装サンプル
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 1111 の 先頭 2桁 は 0 (OFF)に、末尾2桁 は 1 (反転)とする。</span>
+    &gt;&gt;&gt; bit_a = <span class="hljs-number">0b1111</span>
+    &gt;&gt;&gt; bit_b = <span class="hljs-number">0b1100</span>
+    &gt;&gt;&gt; bit_c = bit_a ^ bit_b
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (10 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bit_c)
+    <span class="hljs-number">3</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (2 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">bin</span>(bit_c))
+    <span class="hljs-number">0b11</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="論理積-and--">論理積 AND（ &amp; ）</h3>
+  <p><code>a&amp;b</code> は、ビット単位（同じ桁同士）で互いに \(1\) である場合 \(1\) を返し、互いに \(1\) でない場合 \(0\) を返す。</p>
+  <p>※ 使用用途<br>
+    特定のビットを強制的に \(0\)（OFF）としたい場合、対応するビットを \(0\) とし、それ以外は、元のままとすることで、特定のビットのみ \(1\) に変更することができる。</p>
+  <ul>
+    <li>実装サンプル
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 1111 の 末尾3桁 を 0 (OFF) にする</span>
+    &gt;&gt;&gt; bit_a = <span class="hljs-number">0b1111</span>
+    &gt;&gt;&gt; bit_b = <span class="hljs-number">0b1000</span>
+    &gt;&gt;&gt; bit_c = bit_a &amp; bit_b
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (10 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bit_c)
+    <span class="hljs-number">8</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (2 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">bin</span>(bit_c))
+    <span class="hljs-number">0b1000</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="反転-not--">反転 NOT（ ~ ）</h3>
+  <p><code>~a</code> は、反転した結果を返すが、一般的な各ビットをそのまま反転した値を返すわけではなく、この反転（＊1）した値に加え、その \(2\) の補数（＊2）に \(-1\) を掛けた値（符号反転）を返す。
+  </p>
+  <p>（＊1）以降、この一般的な反転結果のことを利便上、単純反転と呼ぶ。
+    （＊2）以降、2の補数を利便上、補数と呼ぶ。
+    （2の補数は、対象値の有効桁数 + \(1\) で \(2\) をべき乗した数から対象値を減算した結果となる。）</p>
+  <p>これは、Pythonのint型に上限、下限がなく（CPUに依存する）、上の桁が無限に \(0\) となる想定であるため、反転した後も上の桁が無限に \(1\) となる。</p>
+  <p>そのため、より短い表現で済むように補数に \(-1\) を掛けた値（符号反転）で表現している。<br>
+    ※ 桁数が限定された演算において、対象の値と対象値に \(-1\) を掛けた値（符号反転）は、同値となり上記は、この性質を利用し表現している。</p>
+  <p>結局、<code>~a</code> も <code>a</code> を単純反転した補数に \(-1\) を掛けた値（符号反転）も、一般化すると \(- ( a + 1 )\)
+    で求められるが、その経緯を以降の実装サンプルで解説する。</p>
+  <ul>
+    <li>
+      <p>実装サンプル : <code>~a</code> が \(- ( a + 1 )\) となる確認<br>
+        ※ \(2\)進数 \(0101\)\((\)\(10\)進数：\(5\)\()\)を反転する。<br></p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 0b0101 を反転する</span>
+    &gt;&gt;&gt; bit_a = <span class="hljs-number">0b0101</span>
+    &gt;&gt;&gt; bit_b = ~bit_a
+    &gt;&gt;&gt; <span class="hljs-comment"># ① 演算結果 (10 進数) ※ - ( a + 1 ) と一致</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bit_b)
+    -<span class="hljs-number">6</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># ② 演算結果 (2 進数) ※ - ( a + 1 ) と一致</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">bin</span>(bit_b))
+    -<span class="hljs-number">0b110</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>実装サンプル : <code>a</code> を単純反転した補数に \(-1\) を掛けた値（符号反転）が \(- ( a + 1 )\) となる確認<br>
+        ※ \(2\)進数 \(0101\)\((\)\(10\)進数：\(5\)\()\)を反転する。<br></p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 0b0101 を単純反転する (排他的論理和)</span>
+    &gt;&gt;&gt; bit_a = <span class="hljs-number">0b0101</span> ^ <span class="hljs-number">0b1111</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">bin</span>(bit_a))
+    <span class="hljs-number">0b1010</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 0b1010 の補数を求める</span>
+    &gt;&gt;&gt; bit_b = <span class="hljs-number">0b10000</span> - bit_a
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">bin</span>(bit_b))
+    <span class="hljs-number">0b110</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 0b110 に -1 を掛ける(符号反転)</span>
+    &gt;&gt;&gt; bit_c = -<span class="hljs-number">1</span> * bit_b
+    &gt;&gt;&gt; <span class="hljs-comment"># （＊3）演算結果 (10 進数) ※ - ( a + 1 ) と一致</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bit_c)
+    -<span class="hljs-number">6</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># （＊4）演算結果 (2 進数) ※ - ( a + 1 ) と一致</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">bin</span>(bit_c))
+    -<span class="hljs-number">0b110</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
+  <p>上記 （＊3）、（＊4）の通り、反転結果は \(- ( a + 1 )\) となっている。<br>
+    \(2\)進数：\(0b0101\) \(= - ( 0b0101 + 1 )\) \(= - 0b0110\) \(= - 0b110\)<br>
+    \(10\)進数：\(5 = - ( 5 + 1 ) = - 6\)</p>
+  <p>※ これは、同値の性質より、対象が \(4\) 桁でなくても補数をどこまで大きく考えても同じ結果となる。
+    以下に示す通り、\(8\) 桁まで範囲を広げ、単純反転しても補数を取るため、結果は変わらない。</p>
+  <ol>
+    <li>\(0b00001010\) ※ \(2\)進数 \(0101\)\((\)\(10\)進数：\(5\)\()\)</li>
+    <li>\(0b11110101\) ※「1.」 の単純反転</li>
+    <li>\(0b100000000\)\(-0b11110101\) \(= 0b110\) ※「2.」の補数</li>
+    <li>\(-1\) * \(0b110 = - 0b110\) ※「3.」に \(-1\) を掛ける（符号反転）</li>
+  </ol>
+  <h3 id="左シフト--">左シフト（ << ）</h3>
+  <p><code>a&lt;&lt;b</code> は、<code>b</code> の桁数分 左にシフトし、空白となった右側の桁は \(0\) で埋められる。</p>
+  <p>※ 使用用途<br>
+    元の値を \(2\) のプラスべき乗倍する場合に使用する。<br>
+    ※ 左に \(1\) シフトすると \(2\)倍(\(\displaystyle 2^1\)乗)、\(2\)シフトすると \(4\)倍(\(\displaystyle 2^2\)) … \(n\) シフトすると
+    \(2\)の\(n\)乗倍といった増え方をする</p>
+  <ul>
+    <li>実装サンプル
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 0b10101111(10 進数で175)を左に2シフトする</span>
+    &gt;&gt;&gt; bit_a = <span class="hljs-number">0b10101111</span>
+    &gt;&gt;&gt; bit_b = bit_a << <span class="hljs-number">2</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (10 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bit_b)    <span class="hljs-comment"># 175の4(2の2乗)倍となる</span>
+    <span class="hljs-number">700</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (2 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">bin</span>(bit_b))    <span class="hljs-comment"># 左に2シフトし、空白となった右側の2桁は 0 となる</span>
+    <span class="hljs-number">0b1010111100</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="右シフト--">右シフト（ >> ）</h3>
+  <p><code>a&gt;&gt;b</code> は、<code>b</code> の桁数分、右にシフトし、空白となった左側の桁は \(0\) で埋められ、最下位より右に溢れたビットは破棄される。</p>
+  <p>※ 使用用途<br>
+    元の値を \(2\) のマイナスべき乗倍する場合に使用する。<br>
+    ※ 右に \(1\) シフトすると \(\displaystyle \frac{1}{2}\)倍(\(\displaystyle 2^{-1}\)乗)、\(2\)シフトすると \(\displaystyle
+    \frac{1}{4}\)倍(\(\displaystyle 2^{-2}\)乗) … \(n\)シフトすると \(2^{-n}\)乗倍といった増え方をする。</p>
+  <ul>
+    <li>実装サンプル
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 0b10000000(10 進数で128)を右に2シフトする</span>
+    &gt;&gt;&gt; bit_a = <span class="hljs-number">0b10000000</span>
+    &gt;&gt;&gt; bit_b = bit_a >> <span class="hljs-number">2</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (10 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bit_b)    <span class="hljs-comment">#   128の1/4(2のマイナス2乗)倍となる</span>
+    <span class="hljs-number">32</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (2 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">bin</span>(bit_b))    <span class="hljs-comment"># 右に2シフトし、最下位より右に溢れたビット(00)は破棄となる</span>
+    <span class="hljs-number">0b100000</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># ※割り切れない場合</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 0b10101111(10 進数で163)を右に2シフトする</span>
+    &gt;&gt;&gt; bit_c = <span class="hljs-number">0b10100011</span>
+    &gt;&gt;&gt; bit_d = bit_c >> <span class="hljs-number">2</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (10 進数)   </span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bit_d)    <span class="hljs-comment"># 割り切れない場合、小数点第1位を四捨五入</span>
+    <span class="hljs-number">40</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># 演算結果 (2 進数)</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">bin</span>(bit_d))    <span class="hljs-comment"># 右に2シフトし、最下位より右に溢れたビット(11)は破棄となる</span>
+    <span class="hljs-number">0b101000</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>金城 俊哉（\(2018\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム</li>
+  </ul>
+</div>
