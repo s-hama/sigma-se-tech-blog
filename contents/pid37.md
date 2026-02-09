@@ -3,3 +3,74 @@ Python - 高階関数と畳込み : map, filter, reduce
 
 ## 目的
 この記事では、Pythonで使用する高階関数（map, filter, reduce）の基本的な使い方について記載する。
+
+## 高階関数の説明と実装サンプル
+
+### 高階関数とは
+
+Pythonでは、関数もオブジェクトと同じように捉えるため、関数を引数や戻り値に指定したり、関数に対して別の関数やオブジェクトを代入することができる。
+
+この性質を利用して、関数を引数に持ったり、関数を戻り値で返す関数を**高階関数**（higher-order function）という。
+
+以下、**関数を引数に持つ場合**、**戻り値に持つ場合**、**引数と戻り値の両方に持つ場合**それぞれの簡単な実装サンプルを記載する。
+
+- 関数を引数に持つ高階関数
+    ```python
+    $ python
+        >>> # 関数 p_func を引数に持つ、高階関数 h_order_func を定義
+        >>> def h_order_func(p_func):
+        ...     p_func()
+        ...
+        >>> # メッセージを出力する関数 print_msg を定義
+        >>> def print_msg():
+        ...     print('executed print_msg')
+        ...
+        >>> # 高階関数 h_order_func の引数に関数 print_msg を指定して実行
+        >>> h_order_func(print_msg)
+        executed print_msg
+        >>>
+    ```
+
+- 関数を戻り値に持つ高階関数
+    ```python
+    $ python
+        >>> # 関数 add_param を戻り値に持つ、高階関数 h_order_func を定義
+        >>> def h_order_func(x):
+        ...     def add_param(y):
+        ...         return x + y
+        ...     return add_param
+        ...
+        >>> #  h_order_func(5)の戻り値である add_param(y) に 10 を指定して実行
+        >>> h_order_func(5)(10)
+        15
+        >>>
+        >>> #  ※ h_order_func(5) の 戻り値は、下記の add_param(y) の定義となり、x が 5 に置き換わっている状態となる
+        ...     def add_param(y):
+        ...         return 5 + y
+        >>>
+    ```
+
+- 関数を引数と戻り値の両方に持つ高階関数
+    ```python
+    $ python
+        >>> # 関数 func を引数に持ち、戻り値に add_func 持つ、高階関数 h_order_func を定義
+        >>> def h_order_func(func):
+        ...     def add_func(x, y):
+        ...         return func(x) + y
+        ...     return add_func
+        ...
+        >>> # 5 を加算する関数 add_five を定義
+        >>> def add_five(x):
+        ...     return x + 5
+        >>>
+        >>> #  h_order_func(add_five)の戻り値である add_func(x, y) に 1, 2 を指定して実行
+        >>> h_order_func(add_five)(1, 2)
+        8
+        >>>
+        >>> #  ※ h_order_func(add_five) の 戻り値は、下記の add_func(x, y) の定義となり、関数 func(x) が 関数 add_five(x) に置き換えられた状態となる
+        ...     def add_func(x, y):
+        ...         return x + 5 + y
+        >>>
+    ```
+
+以降、高階関数 `map`, `filter`, `reduce` を簡単な実装サンプルで解説する。
