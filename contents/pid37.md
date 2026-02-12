@@ -166,3 +166,50 @@ Pythonでは、関数もオブジェクトと同じように捉えるため、�
         [1, 2]
         >>>
     ```
+
+### reduce（畳込み演算）
+
+`reduce(function, iterable [, initializer])` は、**畳み込み演算** と呼ばれ、第 \\(2\\) 引数（iterable）に指定したイテレータの2つの要素に対して、左から順に第 \\(1\\) 引数（function）を実行していき、これをイテレータの最終要素まで繰り返し、1つの結果を返す。
+
+そのため、第 \\(1\\) 引数（function）の引数は、**必ず2つ** であることが前提となる。
+
+**第3引数**（initializer）は、初期値を指定することができる。
+初期値を指定した場合、最初の演算は、**初期値** と第 \\(2\\) 引数（iterable）の先頭要素で第 \\(1\\) 引数（function）を実行する。
+
+※ **内包表記** は、**畳込み演算** に対応していないため、**reduce** は、内包表記で表現できない。
+
+- 実装サンプル
+    ```python
+    $ python
+        >>> # functoolsからインポート
+        >>> from functools import reduce
+        >>>
+        >>> # 第1引数の関数を定義（差を返す）
+        >>> def minus(p1, p2):
+        ...     return p1 - p2
+        ...
+        >>> # 第2引数のlist型を定義
+        >>> list_a = [-5, -4, -3, -2, -1]
+        >>>
+        >>> # minus と list_a で reduce を実行
+        >>> print(reduce(minus, list_a))
+        5
+        >>>
+        >>> # 第3引数に -6 を指定
+        >>> result = reduce(minus, list_a, -6)
+        >>> print(result)
+        9
+        >>>
+
+    ```
+- 上記の実装サンプルをラムダ式で記述
+    ```python
+    $ python
+        >>> result = reduce(lambda x, y: x - y, list_a)
+        >>> print(result)
+        5
+        >>>
+    ```
+
+### 参考文献
+- 金城 俊哉（\\(2018\\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム
