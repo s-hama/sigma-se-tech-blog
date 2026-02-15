@@ -68,4 +68,51 @@
     </li>
   </ul>
   <p>以降、高階関数 <code>map</code>, <code>filter</code>, <code>reduce</code> を簡単な実装サンプルで解説する。</p>
+  <h3 id="map要素別の演算">map（要素別の演算）</h3>
+  <p><code>map(function, iterable)</code> は、第 \(2\) 引数（iterable）に指定したイテレータ（各要素の反復処理ができるインターフェース）の各要素に対して、第
+    \(1\)引数（function）を実行した結果をイテレータで返す。</p>
+  <ul>
+    <li>
+      <p>実装サンプル</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 第1引数の関数を定義（3倍にするだけ）</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">triple</span>(<span class="hljs-params">p</span>):
+    ...    <span class="hljs-keyword">return</span> p * <span class="hljs-number">3</span>
+    ...
+    &gt;&gt;&gt; <span class="hljs-comment"># 第2引数のlist型を定義</span>
+    &gt;&gt;&gt; list_a = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># mapを実行</span>
+    &gt;&gt;&gt; result = <span class="hljs-built_in">map</span>(triple, list_a)
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># map型のイテレータで返ってくる</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(result)
+    &lt;<span class="hljs-built_in">map</span> <span class="hljs-built_in">object</span> at <span class="hljs-number">0x7f59b53cc5c0</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># list型にキャストし、中身を確認</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(result))
+    [<span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">9</span>, <span class="hljs-number">12</span>, <span class="hljs-number">15</span>]
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>上記の実装サンプルをラムダ式で記述</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; result = <span class="hljs-built_in">map</span>(<span class="hljs-keyword">lambda</span> x: x * <span class="hljs-number">3</span>, list_a)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(result))
+    [<span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">9</span>, <span class="hljs-number">12</span>, <span class="hljs-number">15</span>]
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>上記の実装サンプルのmapを使用せず内包表記で記述</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># map(triple, list_a) と同義</span>
+    &gt;&gt;&gt; result = (triple(p) <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> list_a)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(result))
+    [<span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">9</span>, <span class="hljs-number">12</span>, <span class="hljs-number">15</span>]
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
 </div>
