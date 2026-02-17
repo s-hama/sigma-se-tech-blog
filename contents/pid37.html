@@ -162,4 +162,48 @@
 </code></pre>
     </li>
   </ul>
+  <h3 id="reduce畳込み演算">reduce（畳込み演算）</h3>
+  <p><code>reduce(function, iterable [, initializer])</code> は、<strong>畳み込み演算</strong> と呼ばれ、第 \(2\)
+    引数（iterable）に指定したイテレータの2つの要素に対して、左から順に第 \(1\) 引数（function）を実行していき、これをイテレータの最終要素まで繰り返し、1つの結果を返す。</p>
+  <p>そのため、第 \(1\) 引数（function）の引数は、<strong>必ず2つ</strong> であることが前提となる。</p>
+  <p><strong>第3引数</strong>（initializer）は、初期値を指定することができる。
+    初期値を指定した場合、最初の演算は、<strong>初期値</strong> と第 \(2\) 引数（iterable）の先頭要素で第 \(1\) 引数（function）を実行する。</p>
+  <p>※ <strong>内包表記</strong> は、<strong>畳込み演算</strong> に対応していないため、<strong>reduce</strong> は、内包表記で表現できない。</p>
+  <ul>
+    <li>実装サンプル
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># functoolsからインポート</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">from</span> functools <span class="hljs-keyword">import</span> reduce
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 第1引数の関数を定義（差を返す）</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">minus</span>(<span class="hljs-params">p1, p2</span>):
+    ...     <span class="hljs-keyword">return</span> p1 - p2
+    ...
+    &gt;&gt;&gt; <span class="hljs-comment"># 第2引数のlist型を定義</span>
+    &gt;&gt;&gt; list_a = [-<span class="hljs-number">5</span>, -<span class="hljs-number">4</span>, -<span class="hljs-number">3</span>, -<span class="hljs-number">2</span>, -<span class="hljs-number">1</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># minus と list_a で reduce を実行</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(reduce(minus, list_a))
+    <span class="hljs-number">5</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 第3引数に -6 を指定</span>
+    &gt;&gt;&gt; result = reduce(minus, list_a, -<span class="hljs-number">6</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(result)
+    <span class="hljs-number">9</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>上記の実装サンプルをラムダ式で記述
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; result = reduce(<span class="hljs-keyword">lambda</span> x, y: x - y, list_a)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(result)
+    <span class="hljs-number">5</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>金城 俊哉（\(2018\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム</li>
+  </ul>
 </div>
