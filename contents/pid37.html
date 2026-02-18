@@ -1,0 +1,209 @@
+<div class="post-body">
+  <h2 id="目的">目的</h2>
+  <p>この記事では、Pythonで使用する高階関数（map, filter, reduce）の基本的な使い方について記載する。</p>
+  <h2 id="高階関数の説明と実装サンプル">高階関数の説明と実装サンプル</h2>
+  <h3 id="高階関数とは">高階関数とは</h3>
+  <p>Pythonでは、関数もオブジェクトと同じように捉えるため、関数を引数や戻り値に指定したり、関数に対して別の関数やオブジェクトを代入することができる。</p>
+  <p>この性質を利用して、関数を引数に持ったり、関数を戻り値で返す関数を<strong>高階関数</strong>（higher-order function）という。</p>
+  <p>以下、<strong>関数を引数に持つ場合</strong>、<strong>戻り値に持つ場合</strong>、<strong>引数と戻り値の両方に持つ場合</strong>それぞれの簡単な実装サンプルを記載する。</p>
+  <ul>
+    <li>
+      <p>関数を引数に持つ高階関数</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 関数 p_func を引数に持つ、高階関数 h_order_func を定義</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">h_order_func</span>(<span class="hljs-params">p_func</span>):
+    ...     p_func()
+    ...
+    &gt;&gt;&gt; <span class="hljs-comment"># メッセージを出力する関数 print_msg を定義</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">print_msg</span>():
+    ...     <span class="hljs-built_in">print</span>(<span class="hljs-string">'executed print_msg'</span>)
+    ...
+    &gt;&gt;&gt; <span class="hljs-comment"># 高階関数 h_order_func の引数に関数 print_msg を指定して実行</span>
+    &gt;&gt;&gt; h_order_func(print_msg)
+    executed print_msg
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>関数を戻り値に持つ高階関数</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 関数 add_param を戻り値に持つ、高階関数 h_order_func を定義</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">h_order_func</span>(<span class="hljs-params">x</span>):
+    ...     <span class="hljs-keyword">def</span> <span class="hljs-title function_">add_param</span>(<span class="hljs-params">y</span>):
+    ...         <span class="hljs-keyword">return</span> x + y
+    ...     <span class="hljs-keyword">return</span> add_param
+    ...
+    &gt;&gt;&gt; <span class="hljs-comment">#  h_order_func(5)の戻り値である add_param(y) に 10 を指定して実行</span>
+    &gt;&gt;&gt; h_order_func(<span class="hljs-number">5</span>)(<span class="hljs-number">10</span>)
+    <span class="hljs-number">15</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment">#  ※ h_order_func(5) の 戻り値は、下記の add_param(y) の定義となり、x が 5 に置き換わっている状態となる</span>
+    ...     <span class="hljs-keyword">def</span> <span class="hljs-title function_">add_param</span>(<span class="hljs-params">y</span>):
+    ...         <span class="hljs-keyword">return</span> <span class="hljs-number">5</span> + y
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>関数を引数と戻り値の両方に持つ高階関数</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 関数 func を引数に持ち、戻り値に add_func 持つ、高階関数 h_order_func を定義</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">h_order_func</span>(<span class="hljs-params">func</span>):
+    ...     <span class="hljs-keyword">def</span> <span class="hljs-title function_">add_func</span>(<span class="hljs-params">x, y</span>):
+    ...         <span class="hljs-keyword">return</span> func(x) + y
+    ...     <span class="hljs-keyword">return</span> add_func
+    ...
+    &gt;&gt;&gt; <span class="hljs-comment"># 5 を加算する関数 add_five を定義</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">add_five</span>(<span class="hljs-params">x</span>):
+    ...     <span class="hljs-keyword">return</span> x + <span class="hljs-number">5</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment">#  h_order_func(add_five)の戻り値である add_func(x, y) に 1, 2 を指定して実行</span>
+    &gt;&gt;&gt; h_order_func(add_five)(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
+    <span class="hljs-number">8</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment">#  ※ h_order_func(add_five) の 戻り値は、下記の add_func(x, y) の定義となり、関数 func(x) が 関数 add_five(x) に置き換えられた状態となる</span>
+    ...     <span class="hljs-keyword">def</span> <span class="hljs-title function_">add_func</span>(<span class="hljs-params">x, y</span>):
+    ...         <span class="hljs-keyword">return</span> x + <span class="hljs-number">5</span> + y
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
+  <p>以降、高階関数 <code>map</code>, <code>filter</code>, <code>reduce</code> を簡単な実装サンプルで解説する。</p>
+  <h3 id="map要素別の演算">map（要素別の演算）</h3>
+  <p><code>map(function, iterable)</code> は、第 \(2\) 引数（iterable）に指定したイテレータ（各要素の反復処理ができるインターフェース）の各要素に対して、第
+    \(1\)引数（function）を実行した結果をイテレータで返す。</p>
+  <ul>
+    <li>
+      <p>実装サンプル</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 第1引数の関数を定義（3倍にするだけ）</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">triple</span>(<span class="hljs-params">p</span>):
+    ...    <span class="hljs-keyword">return</span> p * <span class="hljs-number">3</span>
+    ...
+    &gt;&gt;&gt; <span class="hljs-comment"># 第2引数のlist型を定義</span>
+    &gt;&gt;&gt; list_a = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># mapを実行</span>
+    &gt;&gt;&gt; result = <span class="hljs-built_in">map</span>(triple, list_a)
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># map型のイテレータで返ってくる</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(result)
+    &lt;<span class="hljs-built_in">map</span> <span class="hljs-built_in">object</span> at <span class="hljs-number">0x7f59b53cc5c0</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># list型にキャストし、中身を確認</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(result))
+    [<span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">9</span>, <span class="hljs-number">12</span>, <span class="hljs-number">15</span>]
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>上記の実装サンプルをラムダ式で記述</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; result = <span class="hljs-built_in">map</span>(<span class="hljs-keyword">lambda</span> x: x * <span class="hljs-number">3</span>, list_a)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(result))
+    [<span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">9</span>, <span class="hljs-number">12</span>, <span class="hljs-number">15</span>]
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>上記の実装サンプルのmapを使用せず内包表記で記述</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># map(triple, list_a) と同義</span>
+    &gt;&gt;&gt; result = (triple(p) <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> list_a)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(result))
+    [<span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">9</span>, <span class="hljs-number">12</span>, <span class="hljs-number">15</span>]
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="filter指定要素の除外">filter（指定要素の除外）</h3>
+  <p><code>filter(function, iterable)</code> は、第 \(2\) 引数（iterable）に指定したイテレータの各要素に対して、第 \(1\)
+    引数（function）の実行結果がTrueとなるイテレータを返す。</p>
+  <ul>
+    <li>
+      <p>実装サンプル</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># 第1引数の関数を定義（正であればTrueを返す）</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">is_plus</span>(<span class="hljs-params">p</span>):
+    ...    <span class="hljs-keyword">return</span> p &gt; <span class="hljs-number">0</span>
+    ...
+    &gt;&gt;&gt; <span class="hljs-comment"># 第2引数のlist型を定義</span>
+    &gt;&gt;&gt; list_a = [-<span class="hljs-number">2</span>, -<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># filterを実行</span>
+    &gt;&gt;&gt; result = <span class="hljs-built_in">filter</span>(is_plus, list_a)
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># filter型のイテレータで返ってくる</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(result)
+    &lt;<span class="hljs-built_in">filter</span> <span class="hljs-built_in">object</span> at <span class="hljs-number">0x7f59b53cc668</span>&gt;
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># list型にキャストし、中身を確認</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(result))
+    [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>上記の実装サンプルをラムダ式で記述</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; result = <span class="hljs-built_in">filter</span>(<span class="hljs-keyword">lambda</span> x: x &gt; <span class="hljs-number">0</span>, list_a)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(result))
+    [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>上記の実装サンプルのmapを使用せず内包表記で記述</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># filter(is_plus, list_a) と同義</span>
+    &gt;&gt;&gt; result = (p <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> list_a <span class="hljs-keyword">if</span> is_plus(p))
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(result))
+    [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="reduce畳込み演算">reduce（畳込み演算）</h3>
+  <p><code>reduce(function, iterable [, initializer])</code> は、<strong>畳み込み演算</strong> と呼ばれ、第 \(2\)
+    引数（iterable）に指定したイテレータの2つの要素に対して、左から順に第 \(1\) 引数（function）を実行していき、これをイテレータの最終要素まで繰り返し、1つの結果を返す。</p>
+  <p>そのため、第 \(1\) 引数（function）の引数は、<strong>必ず2つ</strong> であることが前提となる。</p>
+  <p><strong>第3引数</strong>（initializer）は、初期値を指定することができる。
+    初期値を指定した場合、最初の演算は、<strong>初期値</strong> と第 \(2\) 引数（iterable）の先頭要素で第 \(1\) 引数（function）を実行する。</p>
+  <p>※ <strong>内包表記</strong> は、<strong>畳込み演算</strong> に対応していないため、<strong>reduce</strong> は、内包表記で表現できない。</p>
+  <ul>
+    <li>実装サンプル
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-comment"># functoolsからインポート</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">from</span> functools <span class="hljs-keyword">import</span> reduce
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 第1引数の関数を定義（差を返す）</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">minus</span>(<span class="hljs-params">p1, p2</span>):
+    ...     <span class="hljs-keyword">return</span> p1 - p2
+    ...
+    &gt;&gt;&gt; <span class="hljs-comment"># 第2引数のlist型を定義</span>
+    &gt;&gt;&gt; list_a = [-<span class="hljs-number">5</span>, -<span class="hljs-number">4</span>, -<span class="hljs-number">3</span>, -<span class="hljs-number">2</span>, -<span class="hljs-number">1</span>]
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># minus と list_a で reduce を実行</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(reduce(minus, list_a))
+    <span class="hljs-number">5</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 第3引数に -6 を指定</span>
+    &gt;&gt;&gt; result = reduce(minus, list_a, -<span class="hljs-number">6</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(result)
+    <span class="hljs-number">9</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>上記の実装サンプルをラムダ式で記述
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; result = reduce(<span class="hljs-keyword">lambda</span> x, y: x - y, list_a)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(result)
+    <span class="hljs-number">5</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>金城 俊哉（\(2018\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム</li>
+  </ul>
+</div>
