@@ -106,3 +106,209 @@ Python - 例外 : 例外処理と組込み例外クラス
 
 ※ 各項目の詳細は下記マニュアルを参照。
 https://docs.python.org/ja/3.6/library/exceptions.html
+
+### 組込み例外クラスのツリー表示サンプル
+
+以下、前項の組込み例外クラス一覧をツリー表示した実装サンプル。<br>
+`classtree`関数に`BaseException`を渡し、再帰的に`BaseException`を出力している。<br>
+
+※ 参考元：[Pythonの組み込み例外の木構造を見てみる](https://qiita.com/amedama/items/aa840a0a98f720cfc4ca)
+
+- ツリー表示サンプル
+    ```python
+    $ python
+    >>> def classtree(cls, depth=0):
+    ...     if depth == 0:
+    ...         prefix = ''
+    ...     else:
+    ...         prefix = '.' * (depth * 3) + ' '
+    ...     if cls.__name__.lower() == 'error':
+    ...         print('{0}{1} ({2})'.format(prefix, cls.__name__, cls))
+    ...     else:
+    ...         print('{0}{1}'.format(prefix, cls.__name__))
+    ...     for subcls in sorted(cls.__subclasses__(), key=lambda c: c.__name__):
+    ...         classtree(subcls, depth+1)
+    ...
+    >>> if __name__ == '__main__':
+    ...     print('Python Version: {0}'.format(platform.python_version()))
+    ...     print()
+    ...     classtree(BaseException)
+    ...
+    ```
+
+- 上記の実行結果
+    ```python
+    Python Version: 3.6.4
+
+    BaseException
+    ... Exception
+    ...... ArithmeticError
+    ......... FloatingPointError
+    ......... OverflowError
+    ......... ZeroDivisionError
+    ...... AssertionError
+    ...... AttributeError
+    ...... BufferError
+    ...... EOFError
+    ...... Error (<class 'locale.Error'>)
+    ...... ImportError
+    ......... ModuleNotFoundError
+    ......... ZipImportError
+    ...... LookupError
+    ......... CodecRegistryError
+    ......... IndexError
+    ......... KeyError
+    ...... MemoryError
+    ...... NameError
+    ......... UnboundLocalError
+    ...... OSError
+    ......... BlockingIOError
+    ......... ChildProcessError
+    ......... ConnectionError
+    ............ BrokenPipeError
+    ............ ConnectionAbortedError
+    ............ ConnectionRefusedError
+    ............ ConnectionResetError
+    ......... FileExistsError
+    ......... FileNotFoundError
+    ......... InterruptedError
+    ......... IsADirectoryError
+    ......... ItimerError
+    ......... NotADirectoryError
+    ......... PermissionError
+    ......... ProcessLookupError
+    ......... TimeoutError
+    ......... UnsupportedOperation
+    ...... ReferenceError
+    ...... RuntimeError
+    ......... BrokenBarrierError
+    ......... NotImplementedError
+    ......... RecursionError
+    ......... _DeadlockError
+    ...... StopAsyncIteration
+    ...... StopIteration
+    ...... StopTokenizing
+    ...... SubprocessError
+    ......... CalledProcessError
+    ......... TimeoutExpired
+    ...... SyntaxError
+    ......... IndentationError
+    ............ TabError
+    ...... SystemError
+    ......... CodecRegistryError
+    ...... TokenError
+    ...... TypeError
+    ...... ValueError
+    ......... UnicodeError
+    ............ UnicodeDecodeError
+    ............ UnicodeEncodeError
+    ............ UnicodeTranslateError
+    ......... UnsupportedOperation
+    ...... Verbose
+    ...... Warning
+    ......... BytesWarning
+    ......... DeprecationWarning
+    ......... FutureWarning
+    ......... ImportWarning
+    ......... PendingDeprecationWarning
+    ......... ResourceWarning
+    ......... RuntimeWarning
+    ......... SyntaxWarning
+    ......... UnicodeWarning
+    ......... UserWarning
+    ...... _OptionError
+    ...... error (<class 'sre_constants.error'>)
+    ... GeneratorExit
+    ... KeyboardInterrupt
+    ... SystemExit
+    ```
+
+※ エラー：`sre_constants.error`は、正規表現が曖昧な場合に発生するようだが深くは触れない。<br>
+詳しくは、下記を参考。<br>
+[what is sre_constants.error: nothing to repeat](https://stackoverflow.com/questions/12390238/what-is-sre-constants-error-nothing-to-repeat)
+
+また、`help(__builtins__)`からも例外クラスを確認できる。
+
+```python
+$ python
+>>> help(__builtins__)
+
+Help on built-in module builtins:
+
+NAME
+    builtins - Built-in functions, exceptions, and other objects.
+
+DESCRIPTION
+    Noteworthy: None is the `nil' object; Ellipsis represents `...' in slices.
+
+CLASSES
+    object
+        BaseException
+            Exception
+                ArithmeticError
+                    FloatingPointError
+                    OverflowError
+                    ZeroDivisionError
+                AssertionError
+                AttributeError
+                BufferError
+                EOFError
+                ImportError
+                    ModuleNotFoundError
+                LookupError
+                    IndexError
+                    KeyError
+                MemoryError
+                NameError
+                    UnboundLocalError
+                OSError
+                    BlockingIOError
+                    ChildProcessError
+                    ConnectionError
+                        BrokenPipeError
+                        ConnectionAbortedError
+                        ConnectionRefusedError
+                        ConnectionResetError
+                    FileExistsError
+                    FileNotFoundError
+                    InterruptedError
+                    IsADirectoryError
+                    NotADirectoryError
+                    PermissionError
+                    ProcessLookupError
+                    TimeoutError
+                ReferenceError
+                RuntimeError
+                    NotImplementedError
+                    RecursionError
+                StopAsyncIteration
+                StopIteration
+                SyntaxError
+                    IndentationError
+                        TabError
+                SystemError
+                TypeError
+                ValueError
+                    UnicodeError
+                        UnicodeDecodeError
+                        UnicodeEncodeError
+                        UnicodeTranslateError
+                Warning
+                    BytesWarning
+                    DeprecationWarning
+                    FutureWarning
+                    ImportWarning
+                    PendingDeprecationWarning
+                    ResourceWarning
+                    RuntimeWarning
+                    SyntaxWarning
+                    UnicodeWarning
+                    UserWarning
+            GeneratorExit
+            KeyboardInterrupt
+            SystemExit
+            …（以降省略）
+```
+
+### 参考文献
+- 金城 俊哉（\\(2018\\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム
