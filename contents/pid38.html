@@ -1,4 +1,23 @@
 <div class="post-body">
   <h2 id="目的">目的</h2>
   <p>この記事では、Pythonの例外処理と組込み例外クラスそれぞれの概要について記載する。</p>
+  <h2 id="解説と実装サンプル">解説と実装サンプル</h2>
+  <h3 id="例外処理と例外クラス">例外処理と例外クラス</h3>
+  <p>
+    文字通り、<strong>例外</strong>（正常系でない想定外のエラー）が発生した場合に対処する処理を<strong>例外処理</strong>と呼び、Pythonでは、メイン処理を<strong>try句</strong>に、例外処理を<strong>except句</strong>に記載する。</p>
+  <p>また、<strong>except句</strong>に指定する<strong>例外クラス</strong>によって、どの例外をキャッチするか指定することができる。</p>
+  <ul>
+    <li>例外クラス BaseException を指定した場合の構文例
+      <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">try</span>:
+<span class="hljs-meta">... </span>    <span class="hljs-comment"># メイン処理を記載…</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">except</span> BaseException:
+<span class="hljs-meta">... </span>    <span class="hljs-comment"># BaseExceptionクラスでキャッチした場合の例外処理を記載…</span>
+&gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
+  <p>
+    ただし、<code>BaseException</code>は、Pythonすべての組込み<strong>例外クラス</strong>の派生元（基底）となっており、すべての例外キャッチしてしまうため（ユーザーの妨げになる場合もあるため）、<code>Exception</code>クラス等のキャッチしたい目的に応じた<strong>例外クラス</strong>を指定する。
+  </p>
 </div>
