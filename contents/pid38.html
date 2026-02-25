@@ -293,4 +293,208 @@
   <p>※ 各項目の詳細は下記マニュアルを参照。
     <a href="https://docs.python.org/ja/3.6/library/exceptions.html" class="link-secondary">https://docs.python.org/ja/3.6/library/exceptions.html</a>
   </p>
+  <h3 id="組込み例外クラスのツリー表示サンプル">組込み例外クラスのツリー表示サンプル</h3>
+  <p>以下、前項の組込み例外クラス一覧をツリー表示した実装サンプル。<br>
+    <code>classtree</code>関数に<code>BaseException</code>を渡し、再帰的に<code>BaseException</code>を出力している。<br>
+  </p>
+  <p>※ 参考元：<a href="https://qiita.com/amedama/items/aa840a0a98f720cfc4ca" class="link-secondary">Pythonの組み込み例外の木構造を見てみる</a></p>
+  <ul>
+    <li>
+      <p>ツリー表示サンプル</p>
+      <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">classtree</span>(<span class="hljs-params">cls, depth=<span class="hljs-number">0</span></span>):
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">if</span> depth == <span class="hljs-number">0</span>:
+<span class="hljs-meta">... </span>        prefix = <span class="hljs-string">''</span>
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">else</span>:
+<span class="hljs-meta">... </span>        prefix = <span class="hljs-string">'.'</span> * (depth * <span class="hljs-number">3</span>) + <span class="hljs-string">' '</span>
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">if</span> cls.__name__.lower() == <span class="hljs-string">'error'</span>:
+<span class="hljs-meta">... </span>        <span class="hljs-built_in">print</span>(<span class="hljs-string">'{0}{1} ({2})'</span>.<span class="hljs-built_in">format</span>(prefix, cls.__name__, cls))
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">else</span>:
+<span class="hljs-meta">... </span>        <span class="hljs-built_in">print</span>(<span class="hljs-string">'{0}{1}'</span>.<span class="hljs-built_in">format</span>(prefix, cls.__name__))
+<span class="hljs-meta">... </span>    <span class="hljs-keyword">for</span> subcls <span class="hljs-keyword">in</span> <span class="hljs-built_in">sorted</span>(cls.__subclasses__(), key=<span class="hljs-keyword">lambda</span> c: c.__name__):
+<span class="hljs-meta">... </span>        classtree(subcls, depth+<span class="hljs-number">1</span>)
+...
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(<span class="hljs-string">'Python Version: {0}'</span>.<span class="hljs-built_in">format</span>(platform.python_version()))
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>()
+<span class="hljs-meta">... </span>    classtree(BaseException)
+...
+</code></pre>
+    </li>
+    <li>
+      <p>上記の実行結果</p>
+      <pre><code class="language-python">Python Version: <span class="hljs-number">3.6</span><span class="hljs-number">.4</span>
+
+BaseException
+<span class="hljs-meta">... </span>Exception
+...... ArithmeticError
+......... FloatingPointError
+......... OverflowError
+......... ZeroDivisionError
+...... AssertionError
+...... AttributeError
+...... BufferError
+...... EOFError
+...... Error (&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">'locale.Error'</span>&gt;)
+...... ImportError
+......... ModuleNotFoundError
+......... ZipImportError
+...... LookupError
+......... CodecRegistryError
+......... IndexError
+......... KeyError
+...... MemoryError
+...... NameError
+......... UnboundLocalError
+...... OSError
+......... BlockingIOError
+......... ChildProcessError
+......... ConnectionError
+............ BrokenPipeError
+............ ConnectionAbortedError
+............ ConnectionRefusedError
+............ ConnectionResetError
+......... FileExistsError
+......... FileNotFoundError
+......... InterruptedError
+......... IsADirectoryError
+......... ItimerError
+......... NotADirectoryError
+......... PermissionError
+......... ProcessLookupError
+......... TimeoutError
+......... UnsupportedOperation
+...... ReferenceError
+...... RuntimeError
+......... BrokenBarrierError
+......... NotImplementedError
+......... RecursionError
+......... _DeadlockError
+...... StopAsyncIteration
+...... StopIteration
+...... StopTokenizing
+...... SubprocessError
+......... CalledProcessError
+......... TimeoutExpired
+...... SyntaxError
+......... IndentationError
+............ TabError
+...... SystemError
+......... CodecRegistryError
+...... TokenError
+...... TypeError
+...... ValueError
+......... UnicodeError
+............ UnicodeDecodeError
+............ UnicodeEncodeError
+............ UnicodeTranslateError
+......... UnsupportedOperation
+...... Verbose
+...... Warning
+......... BytesWarning
+......... DeprecationWarning
+......... FutureWarning
+......... ImportWarning
+......... PendingDeprecationWarning
+......... ResourceWarning
+......... RuntimeWarning
+......... SyntaxWarning
+......... UnicodeWarning
+......... UserWarning
+...... _OptionError
+...... error (&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">'sre_constants.error'</span>&gt;)
+<span class="hljs-meta">... </span>GeneratorExit
+<span class="hljs-meta">... </span>KeyboardInterrupt
+<span class="hljs-meta">... </span>SystemExit
+</code></pre>
+    </li>
+  </ul>
+  <p>※ エラー：<code>sre_constants.error</code>は、正規表現が曖昧な場合に発生するようだが深くは触れない。<br>
+    詳しくは、下記を参考。<br>
+    <a href="https://stackoverflow.com/questions/12390238/what-is-sre-constants-error-nothing-to-repeat" class="link-secondary">what is sre_constants.error: nothing to repeat</a>
+  </p>
+  <p>また、<code>help(__builtins__)</code>からも例外クラスを確認できる。</p>
+  <pre><code class="language-python">$ python
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">help</span>(__builtins__)
+
+Help on built-<span class="hljs-keyword">in</span> module builtins:
+
+NAME
+    builtins - Built-<span class="hljs-keyword">in</span> functions, exceptions, <span class="hljs-keyword">and</span> other objects.
+
+DESCRIPTION
+    Noteworthy: <span class="hljs-literal">None</span> <span class="hljs-keyword">is</span> the `nil' object; Ellipsis represents `...' <span class="hljs-keyword">in</span> slices.
+
+CLASSES
+    <span class="hljs-built_in">object</span>
+        BaseException
+            Exception
+                ArithmeticError
+                    FloatingPointError
+                    OverflowError
+                    ZeroDivisionError
+                AssertionError
+                AttributeError
+                BufferError
+                EOFError
+                ImportError
+                    ModuleNotFoundError
+                LookupError
+                    IndexError
+                    KeyError
+                MemoryError
+                NameError
+                    UnboundLocalError
+                OSError
+                    BlockingIOError
+                    ChildProcessError
+                    ConnectionError
+                        BrokenPipeError
+                        ConnectionAbortedError
+                        ConnectionRefusedError
+                        ConnectionResetError
+                    FileExistsError
+                    FileNotFoundError
+                    InterruptedError
+                    IsADirectoryError
+                    NotADirectoryError
+                    PermissionError
+                    ProcessLookupError
+                    TimeoutError
+                ReferenceError
+                RuntimeError
+                    NotImplementedError
+                    RecursionError
+                StopAsyncIteration
+                StopIteration
+                SyntaxError
+                    IndentationError
+                        TabError
+                SystemError
+                TypeError
+                ValueError
+                    UnicodeError
+                        UnicodeDecodeError
+                        UnicodeEncodeError
+                        UnicodeTranslateError
+                Warning
+                    BytesWarning
+                    DeprecationWarning
+                    FutureWarning
+                    ImportWarning
+                    PendingDeprecationWarning
+                    ResourceWarning
+                    RuntimeWarning
+                    SyntaxWarning
+                    UnicodeWarning
+                    UserWarning
+            GeneratorExit
+            KeyboardInterrupt
+            SystemExit
+            …（以降省略）
+</code></pre>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>金城 俊哉（\(2018\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム</li>
+  </ul>
 </div>
