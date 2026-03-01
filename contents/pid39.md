@@ -147,3 +147,62 @@ Python - タスク指向型対話 : 状態遷移ベースの環境準備 > MeCab
         $ LANG=ja_JP.UTF8
         $ nkf -w8 --overwrite ~/gitlocalrep/dsbook/mecab-python3_test.py
         ```
+
+### 状態遷移によるタスクを遂行する「SCXML」の概要とインストール
+
+**状態遷移**とは、**状態遷移ベース**または、**ネットワーク方式**とも呼ばれ、天気情報案内を例にすると**場所**や**日付**など、天気情報を取得する（絞込む）ための条件を対話で聞き出し、次の要求状態へと遷移させ、これを繰返し業務遂行する手法のこと。
+
+※ **状態遷移ベース**は、タスク指向型対話システムの遂行手法としては、最もシンプルだが、情報を一つ一つ聞き出すといったシステム主導型の対話になる。
+一問一答でユーザーを問い詰めるような遂行ではなく、一度に複数の情報を受け付ける**フレームベース**という遂行方法もあり、この詳細については、次の記事以降で掲載予定。
+
+また、それぞれの状態遷移や受け付ける動作、組合わせなどの情報を表現するモデルのことを**有限状態オートマトン**（有限状態機械）といい、このモデルを状態遷移させてタスクを遂行する。
+
+**有限状態オートマトン**について、ここで深く触れないが設計から考え出すと非常に大変で現実的ではないため、この記事では、**有限状態オートマトン**を記述するためのマークアップ言語である**SCXML**（State Chart XML）を用いて状態遷移を表現する。
+
+- SCXMLのインストール(PySide2)<br>
+    PythonでGUI作成のために用いられる **Qtライブラリ**の処理系である**Qt for Python**（PySide2）の**QScxmlStateMachine**という **有限状態オートマトン**を表現するクラスを使用する。
+
+    PySide2をインストール(ver.2-5.15.0)
+    ```bash
+    $ source /var/www/vops/bin/activate # 仮想環境起動
+    $ pip3.6 install PySide2 # PySide2をインストール
+    ```
+    上記でPythonから **SCXML** を使えるようになった。
+
+    このページでは、次に記載している **SCXML** 各要素の解説に留め、次の記事以降でPythonから呼び出した実装サンプルについて解説する。
+
+- 天気情報案内の状態遷移図(SCXML)<br>
+    以下、**SCXML** で記載した天気情報案内の状態遷移図。
+
+    states.scxml<br>
+    ```xml
+    <?xml version="1.0" encoding="UTF-8"?>
+    <scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" initial="ask_place">
+      <state id="ask_place">
+        <transition event="place" target="ask_date"/>
+      </state>
+      <state id="ask_date">
+        <transition event="date" target="ask_type"/>
+      </state>
+      <state id="ask_type">
+        <transition event="type" target="tell_info"/>
+      </state>
+      <final id="tell_info"/>
+    </scxml>
+    ```
+
+`state`要素、`final`要素それぞれが一つの状態遷移を表す。
+
+また、その子要素である`transition`の`event`は、ユーザー応答の結果が期待したワードである場合（例えば "place"（場所）でいうと、"福岡県福岡市"など地名を含んでいる場合）、このイベントが発火した状態となりこの場合、`target`に指定されている次の状態 "ask_date" に遷移する。
+
+イベントが期待したワードでなければ、イベントは発火せず、同じ状態遷移を繰り返す。
+
+上記の要領で`ask_place`（地名指定）→ `ask_date`（日時指定）→ `ask_type`（種別：天気 or 気温）と状態遷移が進むと、最後に`final`要素の天気情報の取得結果を返す状態に遷移し、天気情報を返して処理を終了する。
+
+以上で`MeCab`と`SCXML`の環境準備が完了。
+
+### 参考文献
+- 東中 竜一郎、稲葉 通将、水上 雅博（\\(2020\\)）『Pythonでつくる対話システム』株式会社オーム社
+
+### GitHubサポートページ
+- https://github.com/dsbook/dsbook
