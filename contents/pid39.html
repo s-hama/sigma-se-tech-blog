@@ -1,4 +1,21 @@
 <div class="post-body">
   <h2 id="目的">目的</h2>
   <p>この記事では、状態遷移ベースのタスク指向型対話システムを作るために使用する外部ライブラリ<code>MeCab</code>と<code>SCXML</code>の概要とインストールについて記載する。</p>
+  <h2 id="概要の説明と実装サンプル">概要の説明と実装サンプル</h2>
+  <h3 id="タスク指向型対話システム-状態遷移ベース-のシステム構成について">タスク指向型対話システム (状態遷移ベース) のシステム構成について</h3>
+  <p>
+    <strong>タスク指向型</strong>とは、対話システムが特定のタスクを遂行することを指し、これから次の記事以降でも継続して解説する天気情報案内や特定の業務を対象とした予約システム、検索システムなど遂行業務を定めている分類のことをいう。
+  </p>
+  <p>また、これと対極する<strong>非タスク指向型</strong>は、雑談システムなどの特定タスク遂行を目的とせず、遂行業務を定めていない分類のことをいう。</p>
+  <p>
+    システム構成は、<strong>Pythonで作成する対話システム</strong>、<strong>Telegramサーバー</strong>、<strong>Telegramをインストールしたクライアント端末</strong>（Android、iPhone、Windows、Linux、Macなど）の単純な
+    \(3\) 構成でデータベースも使わない。<br>
+    ※ 以降、Telegramインストールした端末を<strong>Telegramクライアント</strong>と表現する。</p>
+  <p>大まかな処理の流れとしては、<strong>Pythonで作成する対話システム</strong>を起動すると、
+    これが<strong>Bot</strong>として<strong>Telegramクライアント</strong>に表示され、ユーザー要求の入力待ち状態となる。</p>
+  <p>そして、ユーザーが要求（入力）すると<strong>Telegramサーバー</strong>を介し、<strong>対話システム</strong>（Bot）の応答制御処理を経て、結果をユーザーに返し、対話をしていく。</p>
+  <p>上記の前提と重複するがこの記事では、外部ライブラリとなる<code>MeCab</code>と<code>SCXML</code>の概要とインストールついて解説する。
+    これ以外にも使用する<code>Telegram</code>、<code>OpenWeatherMap</code>については、次の記事以降で記載している。</p>
+  <p>また、次の記事以降も継続して解説していく、 タスク指向型システムでは、Telegramクライアントが Windows10、Pythonの対話システムが Linux(CentOS7)
+    となるので、コマンドは特に自身の環境に合わせて読替えること。</p>
 </div>
