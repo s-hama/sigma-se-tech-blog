@@ -18,4 +18,130 @@
     これ以外にも使用する<code>Telegram</code>、<code>OpenWeatherMap</code>については、次の記事以降で記載している。</p>
   <p>また、次の記事以降も継続して解説していく、 タスク指向型システムでは、Telegramクライアントが Windows10、Pythonの対話システムが Linux(CentOS7)
     となるので、コマンドは特に自身の環境に合わせて読替えること。</p>
+  <h3 id="対話の文章を解析するmecabの概要とインストール">対話の文章を解析する「MeCab」の概要とインストール</h3>
+  <p>まずは、大前提となる文章解析について<br>
+    対話の文章解析用に形態素解析（＊1）エンジンのオープンソースである<code>MeCab</code>を用いて作成する。<br>
+    （＊1）文章を解析し、最小単位の単語（形態素）に分割すること。</p>
+  <p><code>MeCab</code>について、ここではインストールと呼出し方のみ解説し、理屈や詳細については触れない。</p>
+  <p>※ MeCabについての詳細は、下記サイトを参考。<br>
+    <a href="https://mieruca-ai.com/ai/morphological_analysis_mecab/" class="link-secondary">【技術解説】形態素解析とは？MeCabインストール手順からPythonでの実行例まで</a>
+  </p>
+  <ul>
+    <li>
+      <p>MeCabインストール<br>
+        Groongaレポジトリの追加とパッケージの最新情報を取得し、mecab本体と辞書ファイルをインストールする。<br></p>
+      <ul>
+        <li>Groongaレポジトリ追加
+          <pre><code class="language-bash">$ sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
+</code></pre>
+        </li>
+        <li>パッケージ情報の更新
+          <pre><code class="language-bash">$ sudo yum makecache
+</code></pre>
+        </li>
+        <li>MeCab本体と辞書ファイルをインストール
+          <pre><code class="language-bash">$ sudo yum install mecab mecab-devel mecab-ipadic
+</code></pre>
+        </li>
+        <li>呼出し確認
+          <pre><code class="language-bash">$ mecab
+昨日はいい天気でしたね
+昨日 名詞,副詞可能,*,*,*,*,昨日,キノウ,キノー
+は 助詞,係助詞,*,*,*,*,は,ハ,ワ
+いい 形容詞,自立,*,*,形容詞・イイ,基本形,いい,イイ,イイ
+天気 名詞,一般,*,*,*,*,天気,テンキ,テンキ
+でし 助動詞,*,*,*,特殊・デス,連用形,です,デシ,デシ
+た 助動詞,*,*,*,特殊・タ,基本形,た,タ,タ
+ね 助詞,終助詞,*,*,*,*,ね,ネ,ネ
+EOS
+</code></pre>
+        </li>
+        <li>mecab-python3のインストール<br>
+          最後に上記でインストールしたMeCabをPython3から呼び出せるように<code>mecab-python3</code>をインストールし、Pythonからの呼出しを確認する。
+          <pre><code class="language-bash">$ pip3 install mecab-python3
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>Pythonから呼出し確認<br>
+        以下、呼出し確認のサンプルコード<code>mecab-python3_test.py</code></p>
+      <pre><code class="language-python"><span class="hljs-keyword">import</span> MeCab
+
+mecab = MeCab.Tagger()
+
+<span class="hljs-comment"></span># python3-mecabのバグ回避のため，空文字をparse</span>
+mecab.parse(<span class="hljs-string">&#x27;&#x27;</span>)
+
+<span class="hljs-comment"></span># 標準入力からテキストを受け取る</span>
+text = <span class="hljs-built_in">input</span>(<span class="hljs-string">&quot;&amp;gt;&quot;</span>)
+
+node = mecab.parseToNode(text)
+<span class="hljs-keyword"></span>while</span> node:
+    <span class="hljs-built_in">print</span>(node.surface, node.feature)
+    node = node.<span class="hljs-built_in">next</span>
+</code></pre>
+      <p>
+        このまま、上記サンプルコードを実行すると、3行目の<code>MeCab.Tagger</code>でMeCabのインスタンス生成時に近代文語と言われる<code>unidic-lite</code>のインストール<code>pip install unidic-lite</code>コマンドで実施するようエラーがでる。
+      </p>
+      <ul>
+        <li>
+          <p>対話モード (インタプリタ)で確認</p>
+          <pre><code class="language-python">$ python
+<span class="hljs-meta"></span>&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> MeCab
+&gt;&gt;&gt;
+<span class="hljs-meta"></span>&gt;&gt;&gt; </span>mecab = MeCab.Tagger() <span class="hljs-comment"># MeCabのインスタンス生成</span>
+Failed when trying to initialize MeCab. Some things to check:
+...（省略）...
+Traceback (most recent call last):
+  File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
+  File <span class="hljs-string">&quot;/var/www/vops/lib64/python3.6/site-packages/MeCab/__init__.py&quot;</span>, line <span class="hljs-number">105</span>, <span class="hljs-keyword">in</span> __init__
+    <span class="hljs-built_in">super</span>(Tagger, self).__init__(args)
+RuntimeError
+&gt;&gt;&gt;
+</code></pre>
+          <p>なぜ、<code>unidic-lite</code>が必要なのか、辞書ファイルである<code>mecab-ipadic</code>だけでは不足なのか？についは、調べきれず不明。</p>
+          <p>エラーメッセージの通り<code>unidic-lite</code>をインストールする。</p>
+          <pre><code class="language-bash">$ pip3 install unidic-lite
+</code></pre>
+        </li>
+        <li>
+          <p>再度、呼出し確認<br>
+            今度は、対話モード (インタプリタ)でなくプログラムファイルを実行する。</p>
+          <pre><code class="language-bash">$ python ~/gitlocalrep/dsbook/mecab-python3_test.py
+&gt;昨日はいい天気でしたね
+BOS/EOS,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*
+昨日 名詞,普通名詞,副詞可能,*,*,*,キノウ,昨日,昨日,キノー,昨日,キノー,和,*,*,*,*,キノウ,キノウ,キノウ,キノウ,*,*,<span class="hljs-string">&quot;2,0&quot;</span>,C2,*
+は 助詞,係助詞,*,*,*,*,ハ,は,は,ワ,は,ワ,和,*,*,*,*,ハ,ハ,ハ,ハ,*,*,*,<span class="hljs-string">&quot;動詞%F2@0,名詞%F1,形容詞%F2@-1&quot;</span>,*
+いい 形容詞,非自立可能,*,*,形容詞,連体形-一般,ヨイ,良い,いい,イー,いい,イー,和,*,*,*,*,イイ,イイ,イイ,イイ,*,*,1,C3,*
+天気 名詞,普通名詞,一般,*,*,*,テンキ,天気,天気,テンキ,天気,テンキ,漢,*,*,*,*,テンキ,テンキ,テンキ,テンキ,*,*,1,C1,*
+でし 助動詞,*,*,*,助動詞-デス,連用形-一般,デス,です,でし,デシ,です,デス,和,*,*,*,*,デシ,デス,デシ,デス,*,*,*,<span class="hljs-string">&quot;形容詞%F2@-1,動詞%F2@0,名詞%F2@1&quot;</span>,*
+た 助動詞,*,*,*,助動詞-タ,終止形-一般,タ,た,た,タ,た,タ,和,*,*,*,*,タ,タ,タ,タ,*,*,*,<span class="hljs-string">&quot;動詞%F2@1,形容詞%F4@-2&quot;</span>,*
+ね 助詞,終助詞,*,*,*,*,ネ,ね,ね,ネ,ね,ネ,和,*,*,*,*,ネ,ネ,ネ,ネ,*,*,*,<span class="hljs-string">&quot;動詞%F1,名詞%F1,形容詞%F1&quot;</span>,*
+BOS/EOS,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*
+</code></pre>
+          <p>上記が<strong>形態素解析</strong>した結果となる。</p>
+          <p>また、実行環境によっては 下記（＊2）の文字コードに起因するエラーになるため、下記（＊3）を参考に文字コードを<strong>UTF8</strong>等 に変換後、実行すること。</p>
+          <ul>
+            <li>
+              <p>（＊2）文字コードに起因するエラー</p>
+              <pre><code class="language-bash">$ python ~/gitlocalrep/dsbook/mecab-python3_test.py
+&gt;昨日はいい天気でしたね
+Traceback (most recent call last):
+File <span class="hljs-string">&quot;~/gitlocalrep/dsbook/mecab-python3_test.py&quot;</span>, line 11, <span class="hljs-keyword">in</span> &lt;module&gt;
+    node = mecab.parseToNode(text)
+TypeError: <span class="hljs-keyword">in</span> method <span class="hljs-string">&#x27;Tagger_parseToNode&#x27;</span>, argument 2 of <span class="hljs-built_in">type</span> <span class="hljs-string">&#x27;char const *&#x27;</span>
+</code></pre>
+            </li>
+            <li>
+              <p>（＊3）文字コードをUTF8に変換</p>
+              <pre><code class="language-bash">$ LANG=ja_JP.UTF8
+$ nkf -w8 --overwrite ~/gitlocalrep/dsbook/mecab-python3_test.py
+</code></pre>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </div>
