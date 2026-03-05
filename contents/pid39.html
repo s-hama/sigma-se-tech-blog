@@ -144,4 +144,62 @@ $ nkf -w8 --overwrite ~/gitlocalrep/dsbook/mecab-python3_test.py
       </ul>
     </li>
   </ul>
+  <h3 id="状態遷移によるタスクを遂行するscxmlの概要とインストール">状態遷移によるタスクを遂行する「SCXML」の概要とインストール</h3>
+  <p>
+    <strong>状態遷移</strong>とは、<strong>状態遷移ベース</strong>または、<strong>ネットワーク方式</strong>とも呼ばれ、天気情報案内を例にすると<strong>場所</strong>や<strong>日付</strong>など、天気情報を取得する（絞込む）ための条件を対話で聞き出し、次の要求状態へと遷移させ、これを繰返し業務遂行する手法のこと。
+  </p>
+  <p>※ <strong>状態遷移ベース</strong>は、タスク指向型対話システムの遂行手法としては、最もシンプルだが、情報を一つ一つ聞き出すといったシステム主導型の対話になる。
+    一問一答でユーザーを問い詰めるような遂行ではなく、一度に複数の情報を受け付ける<strong>フレームベース</strong>という遂行方法もあり、この詳細については、次の記事以降で掲載予定。</p>
+  <p>また、それぞれの状態遷移や受け付ける動作、組合わせなどの情報を表現するモデルのことを<strong>有限状態オートマトン</strong>（有限状態機械）といい、このモデルを状態遷移させてタスクを遂行する。</p>
+  <p>
+    <strong>有限状態オートマトン</strong>について、ここで深く触れないが設計から考え出すと非常に大変で現実的ではないため、この記事では、<strong>有限状態オートマトン</strong>を記述するためのマークアップ言語である<strong>SCXML</strong>（State
+    Chart XML）を用いて状態遷移を表現する。</p>
+  <ul>
+    <li>
+      <p>SCXMLのインストール(PySide2)<br>
+        PythonでGUI作成のために用いられる <strong>Qtライブラリ</strong>の処理系である<strong>Qt for
+          Python</strong>（PySide2）の<strong>QScxmlStateMachine</strong>という <strong>有限状態オートマトン</strong>を表現するクラスを使用する。</p>
+      <p>PySide2をインストール(ver.2-5.15.0)</p>
+      <pre><code class="language-bash">$ <span class="hljs-built_in"></span>source</span> /var/www/vops/bin/activate <span class="hljs-comment"># 仮想環境起動</span>
+$ pip3.6 install PySide2 <span class="hljs-comment"># PySide2をインストール</span>
+</code></pre>
+      <p>上記でPythonから <strong>SCXML</strong> を使えるようになった。</p>
+      <p>このページでは、次に記載している <strong>SCXML</strong> 各要素の解説に留め、次の記事以降でPythonから呼び出した実装サンプルについて解説する。</p>
+    </li>
+    <li>
+      <p>天気情報案内の状態遷移図(SCXML)<br>
+        以下、<strong>SCXML</strong> で記載した天気情報案内の状態遷移図。</p>
+      <p>states.scxml<br></p>
+      <pre><code class="language-xml"><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;UTF-8&quot;</span>?&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">scxml</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">&quot;http://www.w3.org/2005/07/scxml&quot;</span> <span class="hljs-attr">version</span>=<span class="hljs-string">&quot;1.0&quot;</span> <span class="hljs-attr">initial</span>=<span class="hljs-string">&quot;ask_place&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">state</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ask_place&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">transition</span> <span class="hljs-attr">event</span>=<span class="hljs-string">&quot;place&quot;</span> <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;ask_date&quot;</span>/&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">state</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">state</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ask_date&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">transition</span> <span class="hljs-attr">event</span>=<span class="hljs-string">&quot;date&quot;</span> <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;ask_type&quot;</span>/&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">state</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">state</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ask_type&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">transition</span> <span class="hljs-attr">event</span>=<span class="hljs-string">&quot;type&quot;</span> <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;tell_info&quot;</span>/&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">state</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">final</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tell_info&quot;</span>/&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">scxml</span>&gt;</span>
+</code></pre>
+    </li>
+  </ul>
+  <p><code>state</code>要素、<code>final</code>要素それぞれが一つの状態遷移を表す。</p>
+  <p>また、その子要素である<code>transition</code>の<code>event</code>は、ユーザー応答の結果が期待したワードである場合（例えば
+    &quot;place&quot;（場所）でいうと、&quot;福岡県福岡市&quot;など地名を含んでいる場合）、このイベントが発火した状態となりこの場合、<code>target</code>に指定されている次の状態
+    &quot;ask_date&quot; に遷移する。</p>
+  <p>イベントが期待したワードでなければ、イベントは発火せず、同じ状態遷移を繰り返す。</p>
+  <p>上記の要領で<code>ask_place</code>（地名指定）→ <code>ask_date</code>（日時指定）→ <code>ask_type</code>（種別：天気 or
+    気温）と状態遷移が進むと、最後に<code>final</code>要素の天気情報の取得結果を返す状態に遷移し、天気情報を返して処理を終了する。</p>
+  <p>以上で<code>MeCab</code>と<code>SCXML</code>の環境準備が完了。</p>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>東中 竜一郎、稲葉 通将、水上 雅博（\(2020\)）『Pythonでつくる対話システム』株式会社オーム社</li>
+  </ul>
+  <h3 id="githubサポートページ">GitHubサポートページ</h3>
+  <ul>
+    <li><a href="https://github.com/dsbook/dsbook" class="link-secondary">https://github.com/dsbook/dsbook</a></li>
+  </ul>
 </div>
