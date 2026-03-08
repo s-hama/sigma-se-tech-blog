@@ -95,3 +95,48 @@ Python - タスク指向型対話 : 状態遷移ベースの環境準備 > OpenW
         {'dt': 1595106000, 'main': {'temp': 24.47, 'feels_like': 26.82, 'temp_min': 24.4, 'temp_max': 24.47, 'pressure': 1010, 'sea_level': 1010, 'grnd_level': 1009, 'humidity': 75, 'temp_kf': 0.07}, 'weather': [{'id': 500, 'main': 'Rain', 'description': '小雨', 'icon': '10d'}], 'clouds': {'all': 100}, 'wind': {'speed': 1.75, 'deg': 161}, 'visibility': 10000, 'pop': 0.54, 'rain': {'3h': 0.25}, 'sys': {'pod': 'd'}, 'dt_txt': '2020-07-18 21:00:00'}
         >>>
     ```
+
+### メッセンジャーアプリ「Telegram」の利用登録と「python-telegram-bot」のインストール
+
+最後に対話で使用するメッセンジャーアプリ`Telegram`の利用登録（アカウント作成）とPythonから`Telegram`を認識できるようにするためのライブラリである`python-telegram-bot`をインストールする。
+
+- Telegramインストーラのダウンロードとアカウント作成<br>
+    下記のTelegramトップページ【Telegram Top】を開き、インストール端末に応じたインストーラを選択し、ダウンロードする。<br>
+    ※ Windowsなら「Telegram for Pc/Mac/Linux」リンク →「Get Telegram for Windows」ボタンでダウンロード。<br>
+    ※ Linuxなら「Telegram for Pc/Mac/Linux」リンク →「Show all platforms」リンク→「Get Telegram for Linux 64 bit」ボタンでダウンロード。
+
+    【Telegram Top】: https://telegram.org
+
+    続いて、ダウンロードしたインストーラを実行後、Telegramを起動し、アカウント作成を行う。<br>
+    ※ 国番号を付加した電話番号を入力後、SMS確認コードの本人確認が必要。
+
+- スクリーンネームの登録とアクセストークンの取得<br>
+    新しいBotの作成とスクリーンネームの登録を行い、アクセストークンを取得する。
+
+    アカウント作成後、左サイドメニュー上部のユーザー検索欄から「@BotFather」で検索し、「Start」ボタンクリックで「@BotFather」と対話できる状態にする。
+
+    以降は、下記のように**Bot名**の入力と**スクリーンネーム**を登録し、アクセストークンを取得する。
+
+    - Bot名の入力（Botの新規作成）<br>
+        「Alright, a new bot. How are we going to call it? Please choose a name for your bot.」と表示されるので、任意のBot名を入力する。<br>
+        ※ 下記サンプルでは「SHamaBot 」と入力している。
+
+    - スクリーンネームの登録<br>
+        「Good. Now let's choose a username for your bot. It must end in `bot`. Like this, for example: TetrisBot or tetris_bot.」<br>と表示されるので、末尾が`bot`で終わるスクリーンネームを入力する。（既に使用されているスクリーンネームは使用不可。）
+
+        ※ 下記サンプルでは、Bot名と同じ「SHamaBot 」で入力したところ、既に使用されているスクリーンネームであったため「sorry this username is already taken. please try something different」とエラーが出ている。<br>
+        そのため「GSHamaBot」の再入力で登録している。
+
+    - アクセストークンの取得<br>
+        スクリーンネームの登録後、「Use this token to access the HTTP API:」の直後にアクセストークンが表示される。
+
+        ※ このアクセストークンが**Telegramクライアント**（Telegramをインストールした端末）と**Pythonの対話システム**が**Telegramのサーバー**を介して互いに連携するための`Key`となる。
+
+        ![pid40_1](/static/tblog/img/pid40_1.png)
+
+- 「python-telegram-bot」のインストール<br>
+    pipからインストールするだけ。<br>
+    これでPythonで記述されたプログラムをTelegramが認識できるようになり、またその逆も可能となる。
+    ```bash
+    $ pip3 install python-telegram-bot
+    ```
