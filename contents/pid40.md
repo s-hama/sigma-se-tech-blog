@@ -140,3 +140,105 @@ Python - タスク指向型対話 : 状態遷移ベースの環境準備 > OpenW
     ```bash
     $ pip3 install python-telegram-bot
     ```
+
+### TelegramBotを使用した対話サンプル（オウム返し）
+
+下記の（＊1）、（＊2）が上記で登録した`@GSHamaBot`のレスポンスをPythonでオウム返しする実装サンプルで、（＊1）のTelegramBotクラスは、GSHamaBot（Telegramサーバー側）との**通信処理**で、（＊2）のEchoSystemクラスは、Botが応答する内容の**制御処理**となる。
+
+- （＊1）TelegramBotクラス（telegram_bot.py）<br>
+    ※ 実行前に **TOKEN** を先ほど取得したアクセストークンに書換えること。
+    ```python
+    from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+
+    # アクセストークン（先ほど発行されたアクセストークンに書換えること）
+    TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
+    class TelegramBot:
+        def __init__(self, system):
+            self.system = system
+
+        def start(self, bot, update):
+            # 辞書型 inputにユーザIDを設定
+            input = {'utt': None, 'sessionId': str(update.message.from_user.id)}
+
+            # システムからの最初の発話をinitial_messageから取得し，送信
+            update.message.reply_text(self.system.initial_message(input)["utt"])
+
+        def message(self, bot, update):
+            # 辞書型 inputにユーザからの発話とユーザIDを設定
+            input = {'utt': update.message.text, 'sessionId': str(update.message.from_user.id)}
+
+            # replyメソッドによりinputから発話を生成
+            system_output = self.system.reply(input)
+
+            # 発話を送信
+            update.message.reply_text(system_output["utt"])
+
+        def run(self):
+            updater = Updater(TOKEN)
+            dp = updater.dispatcher
+            dp.add_handler(CommandHandler("start", self.start))
+            dp.add_handler(MessageHandler(Filters.text, self.message))
+            updater.start_polling()
+            updater.idle()
+    ```
+
+- （＊2）EchoSystemクラス（echo_system.py）<br>
+    ```python
+    from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+    from telegram_bot import TelegramBot
+
+    # ユーザの入力をそのまま返す対話システム．
+    class EchoSystem:
+        def __init__(self):
+            pass
+
+        def initial_message(self, input):
+            return {'utt': 'こんにちは。対話を始めましょう。', 'end':False}
+
+        def reply(self, input):
+            return {"utt": input['utt'], "end": False}
+
+    if __name__ == '__main__':
+        system = EchoSystem()
+        bot = TelegramBot(system)
+        bot.run()
+    ```
+
+  - 以下、実行順に処理の流れを解説
+    - まず、（＊2）EchoSystemクラス（echo_system.py）を実行
+    - （＊2）EchoSystemクラスのメイン処理で自身のインスタンスをTelegramBotクラスのコンストラクタに渡し、（＊1）TelegramBotクラスの runメソッド をコール
+    - （＊1）TelegramBotクラスの runメソッドでは、telegramサーバー側のUpdater関数にてアクセストークンを設定後、自身のstartメソッドをコマンドハンドラとして、messageメソッドをメッセージハンドラとして設定し、コマンドハンドラとメッセージハンドラの受付を開始（待機状態）
+    - Telegramクライアントで「start」ボタンをクリックするとTelegramサーバーがstartコマンドを発行し、上記で設定（待機）していたコマンドハンドラを受付け、startメソッドが実行される
+    - startメソッドでは、まずユーザーの発話情報を保持する input(dict型) オブジェクトを定義し、uttは発話内容、 sessionIdはセッションIDを格納<br>
+        ※ Telegramの対話はすべて、システム側（Bot側）の発話から始まるため、utt（発話内容）は None を設定し、sessionIdには、ユーザーのセッションIDを設定している。
+    - 次に initial_message でBotの初回発話内容を取得後、Telegramサーバー側の reply_text メソッドをコールし、Botの発話内容（ 'utt': 'こんにちは。対話を始めましょう。' ）を送信
+        ※ initial_messageの戻り値dict型のendは、対話の完了フラグ（True:完了、False:継続）<br>
+    - その後、ユーザーがTelegramクライアントから発話すると、上記で設定（待機）していたメッセージハンドラを受付け、messageメソッドが実行される
+    - messageメソッドでは、まずユーザーの発話内容（Telegramサーバー側の text から取得したutt（発話内容））とユーザーのセッションIDでユーザー発話情報inputを定義
+    続けて reply メソッドで発話内容を取得後（＊1）、Telegramサーバー側の reply_text メソッドに発信内容を渡して送信する。<br>
+        （＊1）発話内容は、オウム返し するため、引数の発話内容 input['utt'] をそのまま返している。
+
+
+- 上記「対話サンプル (オウム返し)」の実行確認<br>
+    以下、(1)、(2)の実行確認結果。<br>
+    ※「telegram_bot.py」のアクセストークン(TOKEN)を、自身のものに置き換えることを忘れずに。
+
+    「echo_system.py」の実行にて対話を開始する。
+    ```python
+    $ python ~/gitlocalrep/dsbook/echo_system.py
+    /root/gitlocalrep/dsbook/telegram_bot.py:29: TelegramDeprecationWarning: Old Handler API is deprecated - see https://git.io/fxJuV for details
+    updater = Updater(TOKEN)
+    ```
+
+    上記コンソールが実行中の状態。
+
+    ↓ ユーザーの入力をすべてオウム返しする。<br>
+    ※ 対話(オウム返し)を終了する場合は「Ctrl + C」で終了。<br>
+    ![pid40_2](/static/tblog/img/pid40_2.png)
+
+### 参考文献
+- 東中 竜一郎、稲葉 通将、水上 雅博（\\(2020\\)）『Pythonでつくる対話システム』株式会社オーム社
+
+### GitHubサポートページ
+- https://github.com/dsbook/dsbook
