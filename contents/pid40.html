@@ -144,4 +144,115 @@
 </code></pre>
     </li>
   </ul>
+  <h3 id="telegrambotを使用した対話サンプルオウム返し">TelegramBotを使用した対話サンプル（オウム返し）</h3>
+  <p>
+    下記の（＊1）、（＊2）が上記で登録した<code>@GSHamaBot</code>のレスポンスをPythonでオウム返しする実装サンプルで、（＊1）のTelegramBotクラスは、GSHamaBot（Telegramサーバー側）との<strong>通信処理</strong>で、（＊2）のEchoSystemクラスは、Botが応答する内容の<strong>制御処理</strong>となる。
+  </p>
+  <ul>
+    <li>
+      <p>（＊1）TelegramBotクラス（telegram_bot.py）<br>
+        ※ 実行前に <strong>TOKEN</strong> を先ほど取得したアクセストークンに書換えること。</p>
+      <pre><code class="language-python"><span class="hljs-keyword">from</span> telegram.ext <span class="hljs-keyword">import</span> Updater, CommandHandler, MessageHandler, Filters
+
+<span class="hljs-comment"># アクセストークン（先ほど発行されたアクセストークンに書換えること）</span>
+TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&quot;</span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">TelegramBot</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, system</span>):
+        self.system = system
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">start</span>(<span class="hljs-params">self, bot, update</span>):
+        <span class="hljs-comment"># 辞書型 inputにユーザIDを設定</span>
+        <span class="hljs-built_in">input</span> = {<span class="hljs-string">&#x27;utt&#x27;</span>: <span class="hljs-literal">None</span>, <span class="hljs-string">&#x27;sessionId&#x27;</span>: <span class="hljs-built_in">str</span>(update.message.from_user.<span class="hljs-built_in">id</span>)}
+
+        <span class="hljs-comment"># システムからの最初の発話をinitial_messageから取得し，送信</span>
+        update.message.reply_text(self.system.initial_message(<span class="hljs-built_in">input</span>)[<span class="hljs-string">&quot;utt&quot;</span>])
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">message</span>(<span class="hljs-params">self, bot, update</span>):
+        <span class="hljs-comment"># 辞書型 inputにユーザからの発話とユーザIDを設定</span>
+        <span class="hljs-built_in">input</span> = {<span class="hljs-string">&#x27;utt&#x27;</span>: update.message.text, <span class="hljs-string">&#x27;sessionId&#x27;</span>: <span class="hljs-built_in">str</span>(update.message.from_user.<span class="hljs-built_in">id</span>)}
+
+        <span class="hljs-comment"># replyメソッドによりinputから発話を生成</span>
+        system_output = self.system.reply(<span class="hljs-built_in">input</span>)
+
+        <span class="hljs-comment"># 発話を送信</span>
+        update.message.reply_text(system_output[<span class="hljs-string">&quot;utt&quot;</span>])
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">run</span>(<span class="hljs-params">self</span>):
+        updater = Updater(TOKEN)
+        dp = updater.dispatcher
+        dp.add_handler(CommandHandler(<span class="hljs-string">&quot;start&quot;</span>, self.start))
+        dp.add_handler(MessageHandler(Filters.text, self.message))
+        updater.start_polling()
+        updater.idle()
+</code></pre>
+    </li>
+    <li>
+      <p>（＊2）EchoSystemクラス（echo_system.py）<br></p>
+      <pre><code class="language-python"><span class="hljs-keyword">from</span> telegram.ext <span class="hljs-keyword">import</span> Updater, CommandHandler, MessageHandler, Filters
+<span class="hljs-keyword">from</span> telegram_bot <span class="hljs-keyword">import</span> TelegramBot
+
+<span class="hljs-comment"># ユーザの入力をそのまま返す対話システム．</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">EchoSystem</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-keyword">pass</span>
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">initial_message</span>(<span class="hljs-params">self, <span class="hljs-built_in">input</span></span>):
+        <span class="hljs-keyword">return</span> {<span class="hljs-string">&#x27;utt&#x27;</span>: <span class="hljs-string">&#x27;こんにちは。対話を始めましょう。&#x27;</span>, <span class="hljs-string">&#x27;end&#x27;</span>:<span class="hljs-literal">False</span>}
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">reply</span>(<span class="hljs-params">self, <span class="hljs-built_in">input</span></span>):
+        <span class="hljs-keyword">return</span> {<span class="hljs-string">&quot;utt&quot;</span>: <span class="hljs-built_in">input</span>[<span class="hljs-string">&#x27;utt&#x27;</span>], <span class="hljs-string">&quot;end&quot;</span>: <span class="hljs-literal">False</span>}
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:
+    system = EchoSystem()
+    bot = TelegramBot(system)
+    bot.run()
+</code></pre>
+      <ul>
+        <li>以下、実行順に処理の流れを解説
+          <ul>
+            <li>まず、（＊2）EchoSystemクラス（echo_system.py）を実行</li>
+            <li>（＊2）EchoSystemクラスのメイン処理で自身のインスタンスをTelegramBotクラスのコンストラクタに渡し、（＊1）TelegramBotクラスの runメソッド をコール</li>
+            <li>（＊1）TelegramBotクラスの
+              runメソッドでは、telegramサーバー側のUpdater関数にてアクセストークンを設定後、自身のstartメソッドをコマンドハンドラとして、messageメソッドをメッセージハンドラとして設定し、コマンドハンドラとメッセージハンドラの受付を開始（待機状態）
+            </li>
+            <li>Telegramクライアントで「start」ボタンをクリックするとTelegramサーバーがstartコマンドを発行し、上記で設定（待機）していたコマンドハンドラを受付け、startメソッドが実行される
+            </li>
+            <li>startメソッドでは、まずユーザーの発話情報を保持する input(dict型) オブジェクトを定義し、uttは発話内容、 sessionIdはセッションIDを格納<br>
+              ※ Telegramの対話はすべて、システム側（Bot側）の発話から始まるため、utt（発話内容）は None を設定し、sessionIdには、ユーザーのセッションIDを設定している。</li>
+            <li>次に initial_message でBotの初回発話内容を取得後、Telegramサーバー側の reply_text メソッドをコールし、Botの発話内容（ 'utt':
+              'こんにちは。対話を始めましょう。' ）を送信
+              ※ initial_messageの戻り値dict型のendは、対話の完了フラグ（True:完了、False:継続）<br></li>
+            <li>その後、ユーザーがTelegramクライアントから発話すると、上記で設定（待機）していたメッセージハンドラを受付け、messageメソッドが実行される</li>
+            <li>messageメソッドでは、まずユーザーの発話内容（Telegramサーバー側の text から取得したutt（発話内容））とユーザーのセッションIDでユーザー発話情報inputを定義
+              続けて reply メソッドで発話内容を取得後（＊1）、Telegramサーバー側の reply_text メソッドに発信内容を渡して送信する。<br>
+              （＊1）発話内容は、オウム返し するため、引数の発話内容 input['utt'] をそのまま返している。</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>上記「対話サンプル (オウム返し)」の実行確認<br>
+        以下、(1)、(2)の実行確認結果。<br>
+        ※「telegram_bot.py」のアクセストークン(TOKEN)を、自身のものに置き換えることを忘れずに。</p>
+      <p>「echo_system.py」の実行にて対話を開始する。</p>
+      <pre><code class="language-python">$ python ~/gitlocalrep/dsbook/echo_system.py
+/root/gitlocalrep/dsbook/telegram_bot.py:<span class="hljs-number">29</span>: TelegramDeprecationWarning: Old Handler API <span class="hljs-keyword">is</span> deprecated - see https://git.io/fxJuV <span class="hljs-keyword">for</span> details
+updater = Updater(TOKEN)
+</code></pre>
+      <p>上記コンソールが実行中の状態。</p>
+      <p>↓ ユーザーの入力をすべてオウム返しする。<br>
+        ※ 対話(オウム返し)を終了する場合は「Ctrl + C」で終了。<br>
+        <img src="/static/tblog/img/pid40_2.png" alt="pid40_2">
+      </p>
+    </li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>東中 竜一郎、稲葉 通将、水上 雅博（\(2020\)）『Pythonでつくる対話システム』株式会社オーム社</li>
+  </ul>
+  <h3 id="githubサポートページ">GitHubサポートページ</h3>
+  <ul>
+    <li><a href="https://github.com/dsbook/dsbook" class="link-secondary">https://github.com/dsbook/dsbook</a></li>
+  </ul>
 </div>
