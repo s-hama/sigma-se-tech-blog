@@ -1,0 +1,258 @@
+<div class="post-body">
+  <h2 id="目的">目的</h2>
+  <p>
+    この記事では、状態遷移ベースのタスク指向型対話システムを作るために使用するOpenWeatherMapとTelegramの利用登録、python-telegram-botの使用方法（インストールと対話の実装サンプル）について記載する。
+  </p>
+  <h2 id="概要の説明と実装サンプル">概要の説明と実装サンプル</h2>
+  <h3 id="天気情報を取得するopenweathermapwebapiの概要と利用登録">天気情報を取得する「OpenWeatherMap」WebAPIの概要と利用登録</h3>
+  <p>天気情報は、無償で天気情報を取得できる<code>OpenWeatherMap</code>のWebAPIを用いて取得する。<br>
+    下記トップページにアクセスすると<code>GUI</code>でも天気情報を確認することができる。</p>
+  <p>【OpenWeatherMap】: <a href="https://openweathermap.org/" class="link-secondary">https://openweathermap.org/</a><br></p>
+  <p>また、Freeプランでも毎分最大60回APIをコールでき、3時間毎の天気予報を5日後まで取得できるので学習用としては十分。<br>
+    そして、APIをコールするには、<code>API Key</code>が必要でアカウント作成する必要がある。</p>
+  <ul>
+    <li>
+      <p>OpenWeatherMapのアカウント作成<br>
+        下記のアカウント作成ページ【Create New
+        Account】を開き、<code>Username</code>、<code>Enter email</code>、<code>Password</code>、<code>Repeat password</code>を入力し、「Create
+        Account」ボタンクリックでアカウントを作成する。</p>
+      <p>【Create New Account】: <a
+          href="https://home.openweathermap.org/users/sign_up" class="link-secondary">https://home.openweathermap.org/users/sign_up</a></p>
+      <p>アカウント作成後、ログインした状態で下記のAPIKey確認ページ【api_keys】開くと<code>Key</code>欄にAPIKeyが表示されるので、ここからAPIKeyを確認する。<br>
+        ※ 登録完了のメール本文でもAPIKeyを確認できる。</p>
+      <p>【api_keys】: <a href="https://home.openweathermap.org/api_keys" class="link-secondary">https://home.openweathermap.org/api_keys</a></p>
+      <p>また、PythonからURLへアクセスするため、サードパーティライブラリである<code>Requests</code>が必要。<br>
+        ※ 標準ライブラリ<code>urllib</code>でもアクセスできるが、<code>Requests</code>の方がシンプルであるため、これを使用する。</p>
+    </li>
+    <li>
+      <p>Requestsのインストール</p>
+      <pre><code class="language-bash">$ pip3 install requests
+</code></pre>
+      <p>以上で<code>OpenWeatherMap</code>APIを呼ぶ準備が完了。<br>
+        以下、準備されている2つのAPI<strong>現在の天気情報</strong>と<strong>天気予報</strong>の呼出確認となる。</p>
+    </li>
+    <li>
+      <p>呼出し確認（現在の天気情報）<br>
+        福岡県（県庁）の緯度、経度を指定して現在の天気情報（JSON）を取得する。<br>
+        ※ API呼出しの<code>units=metric</code>は、気温を摂氏で取得する指定とする。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-keyword">import</span> requests
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 福岡県（県庁）の緯度、経度</span>
+    &gt;&gt;&gt; lat = <span class="hljs-number">33.60</span>
+    &gt;&gt;&gt; lon = <span class="hljs-number">130.41</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 自アカウントのAPIKey</span>
+    &gt;&gt;&gt; appid = <span class="hljs-string">&#x27;**********&#x27;</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 現在の天気情報</span>
+    &gt;&gt;&gt; current_weather_url = <span class="hljs-string">&#x27;http://api.openweathermap.org/data/2.5/weather&#x27;</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># API呼出し</span>
+    &gt;&gt;&gt; response = requests.get(<span class="hljs-string">&quot;{}?lat={}&amp;lon={}&amp;lang=ja&amp;units=metric&amp;APPID={}&quot;</span>.<span class="hljs-built_in">format</span>(current_weather_url,lat,lon,appid))
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 結果出力</span>
+    &gt;&gt;&gt; response.json()
+    {<span class="hljs-string">&#x27;coord&#x27;</span>: {<span class="hljs-string">&#x27;lon&#x27;</span>: <span class="hljs-number">130.41</span>, <span class="hljs-string">&#x27;lat&#x27;</span>: <span class="hljs-number">33.6</span>}, <span class="hljs-string">&#x27;weather&#x27;</span>: [{<span class="hljs-string">&#x27;id&#x27;</span>: <span class="hljs-number">803</span>, <span class="hljs-string">&#x27;main&#x27;</span>: <span class="hljs-string">&#x27;Clouds&#x27;</span>, <span class="hljs-string">&#x27;description&#x27;</span>: <span class="hljs-string">&#x27;曇りがち&#x27;</span>, <span class="hljs-string">&#x27;icon&#x27;</span>: <span class="hljs-string">&#x27;04n&#x27;</span>}], <span class="hljs-string">&#x27;base&#x27;</span>: <span class="hljs-string">&#x27;stations&#x27;</span>, <span class="hljs-string">&#x27;main&#x27;</span>: {<span class="hljs-string">&#x27;temp&#x27;</span>: <span class="hljs-number">25.87</span>, <span class="hljs-string">&#x27;feels_like&#x27;</span>: <span class="hljs-number">29.51</span>, <span class="hljs-string">&#x27;temp_min&#x27;</span>: <span class="hljs-number">24.44</span>, <span class="hljs-string">&#x27;temp_max&#x27;</span>: <span class="hljs-number">27.78</span>, <span class="hljs-string">&#x27;pressure&#x27;</span>: <span class="hljs-number">1010</span>, <span class="hljs-string">&#x27;humidity&#x27;</span>: <span class="hljs-number">83</span>}, <span class="hljs-string">&#x27;visibility&#x27;</span>: <span class="hljs-number">10000</span>, <span class="hljs-string">&#x27;wind&#x27;</span>: {<span class="hljs-string">&#x27;speed&#x27;</span>: <span class="hljs-number">2.1</span>, <span class="hljs-string">&#x27;deg&#x27;</span>: <span class="hljs-number">290</span>}, <span class="hljs-string">&#x27;clouds&#x27;</span>: {<span class="hljs-string">&#x27;all&#x27;</span>: <span class="hljs-number">75</span>}, <span class="hljs-string">&#x27;dt&#x27;</span>: <span class="hljs-number">1595079741</span>, <span class="hljs-string">&#x27;sys&#x27;</span>: {<span class="hljs-string">&#x27;type&#x27;</span>: <span class="hljs-number">1</span>, <span class="hljs-string">&#x27;id&#x27;</span>: <span class="hljs-number">7998</span>, <span class="hljs-string">&#x27;country&#x27;</span>: <span class="hljs-string">&#x27;JP&#x27;</span>, <span class="hljs-string">&#x27;sunrise&#x27;</span>: <span class="hljs-number">1595017250</span>, <span class="hljs-string">&#x27;sunset&#x27;</span>: <span class="hljs-number">1595068076</span>}, <span class="hljs-string">&#x27;timezone&#x27;</span>: <span class="hljs-number">32400</span>, <span class="hljs-string">&#x27;id&#x27;</span>: <span class="hljs-number">1863967</span>, <span class="hljs-string">&#x27;name&#x27;</span>: <span class="hljs-string">&#x27;福岡市&#x27;</span>, <span class="hljs-string">&#x27;cod&#x27;</span>: <span class="hljs-number">200</span>}
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>呼出し確認（天気予報）
+        上記と同じ、福岡県（県庁）の緯度、経度を指定して天気予報を取得する。<br>
+        ※ <code>list</code>配列に3時間毎の天気予報（JSON）が格納されいる。<br>
+        （＊1）4つ目以降の<code>list</code>配列は割愛</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt; <span class="hljs-keyword">import</span> requests
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 福岡県（県庁）の緯度、経度</span>
+    &gt;&gt;&gt; lat = <span class="hljs-number">33.60</span>
+    &gt;&gt;&gt; lon = <span class="hljs-number">130.41</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 自アカウントのAPIKey</span>
+    &gt;&gt;&gt; appid = <span class="hljs-string">&#x27;**********&#x27;</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 明日以降の天気情報</span>
+    &gt;&gt;&gt; forecast_url = <span class="hljs-string">&#x27;http://api.openweathermap.org/data/2.5/forecast&#x27;</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># API呼出し</span>
+    response = requests.get(<span class="hljs-string">&quot;{}?lat={}&amp;lon={}&amp;lang=ja&amp;units=metric&amp;APPID={}&quot;</span>.<span class="hljs-built_in">format</span>(forecast_url,lat,lon,appid))
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 結果出力</span>
+    &gt;&gt;&gt; response.json()[<span class="hljs-string">&quot;list&quot;</span>][<span class="hljs-number">0</span>]
+    {<span class="hljs-string">&#x27;dt&#x27;</span>: <span class="hljs-number">1595084400</span>, <span class="hljs-string">&#x27;main&#x27;</span>: {<span class="hljs-string">&#x27;temp&#x27;</span>: <span class="hljs-number">24.97</span>, <span class="hljs-string">&#x27;feels_like&#x27;</span>: <span class="hljs-number">28.68</span>, <span class="hljs-string">&#x27;temp_min&#x27;</span>: <span class="hljs-number">24.37</span>, <span class="hljs-string">&#x27;temp_max&#x27;</span>: <span class="hljs-number">24.97</span>, <span class="hljs-string">&#x27;pressure&#x27;</span>: <span class="hljs-number">1010</span>, <span class="hljs-string">&#x27;sea_level&#x27;</span>: <span class="hljs-number">1010</span>, <span class="hljs-string">&#x27;grnd_level&#x27;</span>: <span class="hljs-number">1009</span>, <span class="hljs-string">&#x27;humidity&#x27;</span>: <span class="hljs-number">79</span>, <span class="hljs-string">&#x27;temp_kf&#x27;</span>: <span class="hljs-number">0.6</span>}, <span class="hljs-string">&#x27;weather&#x27;</span>: [{<span class="hljs-string">&#x27;id&#x27;</span>: <span class="hljs-number">804</span>, <span class="hljs-string">&#x27;main&#x27;</span>: <span class="hljs-string">&#x27;Clouds&#x27;</span>, <span class="hljs-string">&#x27;description&#x27;</span>: <span class="hljs-string">&#x27;厚い雲&#x27;</span>, <span class="hljs-string">&#x27;icon&#x27;</span>: <span class="hljs-string">&#x27;04n&#x27;</span>}], <span class="hljs-string">&#x27;clouds&#x27;</span>: {<span class="hljs-string">&#x27;all&#x27;</span>: <span class="hljs-number">100</span>}, <span class="hljs-string">&#x27'wind&#x27;</span>: {<span class="hljs-string">&#x27;speed&#x27;</span>: <span class="hljs-number">0.72</span>, <span class="hljs-string">&#x27;deg&#x27;</span>: <span class="hljs-number">54</span>}, <span class="hljs-string">&#x27;visibility&#x27;</span>: <span class="hljs-number">10000</span>, <span class="hljs-string">&#x27;pop&#x27;</span>: <span class="hljs-number">0</span>, <span class="hljs-string">&#x27;sys&#x27;</span>: {<span class="hljs-string">&#x27;pod&#x27;</span>: <span class="hljs-string">&#x27;n&#x27;</span>}, <span class="hljs-string">&#x27;dt_txt&#x27;</span>: <span class="hljs-string">&#x27;2020-07-18 15:00:00&#x27;</span>}
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; response.json()[<span class="hljs-string">&quot;list&quot;</span>][<span class="hljs-number">1</span>]
+    {<span class="hljs-string">&#x27;dt&#x27;</span>: <span class="hljs-number">1595095200</span>, <span class="hljs-string">&#x27;main&#x27;</span>: {<span class="hljs-string">&#x27;temp&#x27;</span>: <span class="hljs-number">24.65</span>, <span class="hljs-string">&#x27;feels_like&#x27;</span>: <span class="hljs-number">27.75</span>, <span class="hljs-string">&#x27;temp_min&#x27;</span>: <span class="hljs-number">24.41</span>, <span class="hljs-string">&#x27;temp_max&#x27;</span>: <span class="hljs-number">24.65</span>, <span class="hljs-string">&#x27;pressure&#x27;</span>: <span class="hljs-number">1010</span>, <span class="hljs-string">&#x27;sea_level&#x27;</span>: <span class="hljs-number">1010</span>, <span class="hljs-string">&#x27;grnd_level&#x27;</span>: <span class="hljs-number">1009</span>, <span class="hljs-string">&#x27;humidity&#x27;</span>: <span class="hljs-number">75</span>, <span class="hljs-string">&#x27;temp_kf&#x27;</span>: <span class="hljs-number">0.24</span>}, <span class="hljs-string">&#x27;weather&#x27;</span>: [{<span class="hljs-string">&#x27;id&#x27;</span>: <span class="hljs-number">804</span>, <span class="hljs-string">&#x27;main&#x27;</span>: <span class="hljs-string">&#x27;Clouds&#x27;</span>, <span class="hljs-string">&#x27;description&#x27;</span>: <span class="hljs-string">&#x27;厚い雲&#x27;</span>, <span class="hljs-string">&#x27;icon&#x27;</span>: <span class="hljs-string">&#x27;04n&#x27;</span>}], <span class="hljs-string">&#x27;clouds&#x27;</span>: {<span class="hljs-string">&#x27;all&#x27;</span>: <span class="hljs-number">100</span>}, <span class="hljs-string">&#x27;wind&#x27;</span>: {<span class="hljs-string">&#x27;speed&#x27;</span>: <span class="hljs-number">0.79</span>, <span class="hljs-string">&#x27;deg&#x27;</span>: <span class="hljs-number">157</span>}, <span class="hljs-string">&#x27;visibility&#x27;</span>: <span class="hljs-number">10000</span>, <span class="hljs-string">&#x27;pop&#x27;</span>: <span class="hljs-number">0</span>, <span class="hljs-string">&#x27;sys&#x27;</span>: {<span class="hljs-string">&#x27;pod&#x27;</span>: <span class="hljs-string">&#x27;n&#x27;</span>}, <span class="hljs-string">&#x27;dt_txt&#x27;</span>: <span class="hljs-string">&#x27;2020-07-18 18:00:00&#x27;</span>}
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; response.json()[<span class="hljs-string">&quot;list&quot;</span>][<span class="hljs-number">2</span>]
+    {<span class="hljs-string">&#x27;dt&#x27;</span>: <span class="hljs-number">1595106000</span>, <span class="hljs-string">&#x27;main&#x27;</span>: {<span class="hljs-string">&#x27;temp&#x27;</span>: <span class="hljs-number">24.47</span>, <span class="hljs-string">&#x27;feels_like&#x27;</span>: <span class="hljs-number">26.82</span>, <span class="hljs-string">&#x27;temp_min&#x27;</span>: <span class="hljs-number">24.4</span>, <span class="hljs-string">&#x27;temp_max&#x27;</span>: <span class="hljs-number">24.47</span>, <span class="hljs-string">&#x27;pressure&#x27;</span>: <span class="hljs-number">1010</span>, <span class="hljs-string">&#x27;sea_level&#x27;</span>: <span class="hljs-number">1010</span>, <span class="hljs-string">&#x27;grnd_level&#x27;</span>: <span class="hljs-number">1009</span>, <span class="hljs-string">&#x27;humidity&#x27;</span>: <span class="hljs-number">75</span>, <span class="hljs-string">&#x27;temp_kf&#x27;</span>: <span class="hljs-number">0.07</span>}, <span class="hljs-string">&#x27;weather&#x27;</span>: [{<span class="hljs-string">&#x27;id&#x27;</span>: <span class="hljs-number">500</span>, <span class="hljs-string">&#x27;main&#x27;</span>: <span class="hljs-string">&#x27;Rain&#x27;</span>, <span class="hljs-string">&#x27;description&#x27;</span>: <span class="hljs-string">&#x27;小雨&#x27;</span>, <span class="hljs-string">&#x27;icon&#x27;</span>: <span class="hljs-string">&#x27;10d&#x27;</span>}], <span class="hljs-string">&#x27;clouds&#x27;</span>: {<span class="hljs-string">&#x27;all&#x27;</span>: <span class="hljs-number">100</span>}, <span class="hljs-string">&#x27;wind&#x27;</span>: {<span class="hljs-string">&#x27;speed&#x27;</span>: <span class="hljs-number">1.75</span>, <span class="hljs-string">&#x27;deg&#x27;</span>: <span class="hljs-number">161</span>}, <span class="hljs-string">&#x27;visibility&#x27;</span>: <span class="hljs-number">10000</span>, <span class="hljs-string">&#x27;pop&#x27;</span>: <span class="hljs-number">0.54</span>, <span class="hljs-string">&#x27;rain&#x27;</span>: {<span class="hljs-string">&#x27;3h&#x27;</span>: <span class="hljs-number">0.25</span>}, <span class="hljs-string">&#x27;sys&#x27;</span>: {<span class="hljs-string">&#x27;pod&#x27;</span>: <span class="hljs-string">&#x27;d&#x27;</span>}, <span class="hljs-string">&#x27;dt_txt&#x27;</span>: <span class="hljs-string">&#x27;2020-07-18 21:00:00&#x27;</span>}
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="メッセンジャーアプリtelegramの利用登録とpython-telegram-botのインストール">メッセンジャーアプリ「Telegram」の利用登録と「python-telegram-bot」のインストール
+  </h3>
+  <p>
+    最後に対話で使用するメッセンジャーアプリ<code>Telegram</code>の利用登録（アカウント作成）とPythonから<code>Telegram</code>を認識できるようにするためのライブラリである<code>python-telegram-bot</code>をインストールする。
+  </p>
+  <ul>
+    <li>
+      <p>Telegramインストーラのダウンロードとアカウント作成<br>
+        下記のTelegramトップページ【Telegram Top】を開き、インストール端末に応じたインストーラを選択し、ダウンロードする。<br>
+        ※ Windowsなら「Telegram for Pc/Mac/Linux」リンク →「Get Telegram for Windows」ボタンでダウンロード。<br>
+        ※ Linuxなら「Telegram for Pc/Mac/Linux」リンク →「Show all platforms」リンク→「Get Telegram for Linux 64 bit」ボタンでダウンロード。</p>
+      <p>【Telegram Top】: <a href="https://telegram.org" class="link-secondary">https://telegram.org</a></p>
+      <p>続いて、ダウンロードしたインストーラを実行後、Telegramを起動し、アカウント作成を行う。<br>
+        ※ 国番号を付加した電話番号を入力後、SMS確認コードの本人確認が必要。</p>
+    </li>
+    <li>
+      <p>スクリーンネームの登録とアクセストークンの取得<br>
+        新しいBotの作成とスクリーンネームの登録を行い、アクセストークンを取得する。</p>
+      <p>アカウント作成後、左サイドメニュー上部のユーザー検索欄から「@BotFather」で検索し、「Start」ボタンクリックで「@BotFather」と対話できる状態にする。</p>
+      <p>以降は、下記のように<strong>Bot名</strong>の入力と<strong>スクリーンネーム</strong>を登録し、アクセストークンを取得する。</p>
+      <ul>
+        <li>
+          <p>Bot名の入力（Botの新規作成）<br>
+            「Alright, a new bot. How are we going to call it? Please choose a name for your
+            bot.」と表示されるので、任意のBot名を入力する。<br>
+            ※ 下記サンプルでは「SHamaBot 」と入力している。</p>
+        </li>
+        <li>
+          <p>スクリーンネームの登録<br>
+            「Good. Now let's choose a username for your bot. It must end in <code>bot</code>. Like this, for example:
+            TetrisBot or tetris_bot.」<br>と表示されるので、末尾が<code>bot</code>で終わるスクリーンネームを入力する。（既に使用されているスクリーンネームは使用不可。）</p>
+          <p>※ 下記サンプルでは、Bot名と同じ「SHamaBot 」で入力したところ、既に使用されているスクリーンネームであったため「sorry this username is already taken. please
+            try something different」とエラーが出ている。<br>
+            そのため「GSHamaBot」の再入力で登録している。</p>
+        </li>
+        <li>
+          <p>アクセストークンの取得<br>
+            スクリーンネームの登録後、「Use this token to access the HTTP API:」の直後にアクセストークンが表示される。</p>
+          <p>※
+            このアクセストークンが<strong>Telegramクライアント</strong>（Telegramをインストールした端末）と<strong>Pythonの対話システム</strong>が<strong>Telegramのサーバー</strong>を介して互いに連携するための<code>Key</code>となる。
+          </p>
+          <p><img src="/static/tblog/img/pid40_1.png" alt="pid40_1"></p>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>「python-telegram-bot」のインストール<br>
+        pipからインストールするだけ。<br>
+        これでPythonで記述されたプログラムをTelegramが認識できるようになり、またその逆も可能となる。</p>
+      <pre><code class="language-bash">$ pip3 install python-telegram-bot
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="telegrambotを使用した対話サンプルオウム返し">TelegramBotを使用した対話サンプル（オウム返し）</h3>
+  <p>
+    下記の（＊1）、（＊2）が上記で登録した<code>@GSHamaBot</code>のレスポンスをPythonでオウム返しする実装サンプルで、（＊1）のTelegramBotクラスは、GSHamaBot（Telegramサーバー側）との<strong>通信処理</strong>で、（＊2）のEchoSystemクラスは、Botが応答する内容の<strong>制御処理</strong>となる。
+  </p>
+  <ul>
+    <li>
+      <p>（＊1）TelegramBotクラス（telegram_bot.py）<br>
+        ※ 実行前に <strong>TOKEN</strong> を先ほど取得したアクセストークンに書換えること。</p>
+      <pre><code class="language-python"><span class="hljs-keyword">from</span> telegram.ext <span class="hljs-keyword">import</span> Updater, CommandHandler, MessageHandler, Filters
+
+<span class="hljs-comment"># アクセストークン（先ほど発行されたアクセストークンに書換えること）</span>
+TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&quot;</span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">TelegramBot</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, system</span>):
+        self.system = system
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">start</span>(<span class="hljs-params">self, bot, update</span>):
+        <span class="hljs-comment"># 辞書型 inputにユーザIDを設定</span>
+        <span class="hljs-built_in">input</span> = {<span class="hljs-string">&#x27;utt&#x27;</span>: <span class="hljs-literal">None</span>, <span class="hljs-string">&#x27;sessionId&#x27;</span>: <span class="hljs-built_in">str</span>(update.message.from_user.<span class="hljs-built_in">id</span>)}
+
+        <span class="hljs-comment"># システムからの最初の発話をinitial_messageから取得し，送信</span>
+        update.message.reply_text(self.system.initial_message(<span class="hljs-built_in">input</span>)[<span class="hljs-string">&quot;utt&quot;</span>])
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">message</span>(<span class="hljs-params">self, bot, update</span>):
+        <span class="hljs-comment"># 辞書型 inputにユーザからの発話とユーザIDを設定</span>
+        <span class="hljs-built_in">input</span> = {<span class="hljs-string">&#x27;utt&#x27;</span>: update.message.text, <span class="hljs-string">&#x27;sessionId&#x27;</span>: <span class="hljs-built_in">str</span>(update.message.from_user.<span class="hljs-built_in">id</span>)}
+
+        <span class="hljs-comment"># replyメソッドによりinputから発話を生成</span>
+        system_output = self.system.reply(<span class="hljs-built_in">input</span>)
+
+        <span class="hljs-comment"># 発話を送信</span>
+        update.message.reply_text(system_output[<span class="hljs-string">&quot;utt&quot;</span>])
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">run</span>(<span class="hljs-params">self</span>):
+        updater = Updater(TOKEN)
+        dp = updater.dispatcher
+        dp.add_handler(CommandHandler(<span class="hljs-string">&quot;start&quot;</span>, self.start))
+        dp.add_handler(MessageHandler(Filters.text, self.message))
+        updater.start_polling()
+        updater.idle()
+</code></pre>
+    </li>
+    <li>
+      <p>（＊2）EchoSystemクラス（echo_system.py）<br></p>
+      <pre><code class="language-python"><span class="hljs-keyword">from</span> telegram.ext <span class="hljs-keyword">import</span> Updater, CommandHandler, MessageHandler, Filters
+<span class="hljs-keyword">from</span> telegram_bot <span class="hljs-keyword">import</span> TelegramBot
+
+<span class="hljs-comment"># ユーザの入力をそのまま返す対話システム．</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">EchoSystem</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-keyword">pass</span>
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">initial_message</span>(<span class="hljs-params">self, <span class="hljs-built_in">input</span></span>):
+        <span class="hljs-keyword">return</span> {<span class="hljs-string">&#x27;utt&#x27;</span>: <span class="hljs-string">&#x27;こんにちは。対話を始めましょう。&#x27;</span>, <span class="hljs-string">&#x27;end&#x27;</span>:<span class="hljs-literal">False</span>}
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">reply</span>(<span class="hljs-params">self, <span class="hljs-built_in">input</span></span>):
+        <span class="hljs-keyword">return</span> {<span class="hljs-string">&quot;utt&quot;</span>: <span class="hljs-built_in">input</span>[<span class="hljs-string">&#x27;utt&#x27;</span>], <span class="hljs-string">&quot;end&quot;</span>: <span class="hljs-literal">False</span>}
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:
+    system = EchoSystem()
+    bot = TelegramBot(system)
+    bot.run()
+</code></pre>
+      <ul>
+        <li>以下、実行順に処理の流れを解説
+          <ul>
+            <li>まず、（＊2）EchoSystemクラス（echo_system.py）を実行</li>
+            <li>（＊2）EchoSystemクラスのメイン処理で自身のインスタンスをTelegramBotクラスのコンストラクタに渡し、（＊1）TelegramBotクラスの runメソッド をコール</li>
+            <li>（＊1）TelegramBotクラスの
+              runメソッドでは、telegramサーバー側のUpdater関数にてアクセストークンを設定後、自身のstartメソッドをコマンドハンドラとして、messageメソッドをメッセージハンドラとして設定し、コマンドハンドラとメッセージハンドラの受付を開始（待機状態）
+            </li>
+            <li>Telegramクライアントで「start」ボタンをクリックするとTelegramサーバーがstartコマンドを発行し、上記で設定（待機）していたコマンドハンドラを受付け、startメソッドが実行される
+            </li>
+            <li>startメソッドでは、まずユーザーの発話情報を保持する input(dict型) オブジェクトを定義し、uttは発話内容、 sessionIdはセッションIDを格納<br>
+              ※ Telegramの対話はすべて、システム側（Bot側）の発話から始まるため、utt（発話内容）は None を設定し、sessionIdには、ユーザーのセッションIDを設定している。</li>
+            <li>次に initial_message でBotの初回発話内容を取得後、Telegramサーバー側の reply_text メソッドをコールし、Botの発話内容（ 'utt':
+              'こんにちは。対話を始めましょう。' ）を送信
+              ※ initial_messageの戻り値dict型のendは、対話の完了フラグ（True:完了、False:継続）<br></li>
+            <li>その後、ユーザーがTelegramクライアントから発話すると、上記で設定（待機）していたメッセージハンドラを受付け、messageメソッドが実行される</li>
+            <li>messageメソッドでは、まずユーザーの発話内容（Telegramサーバー側の text から取得したutt（発話内容））とユーザーのセッションIDでユーザー発話情報inputを定義
+              続けて reply メソッドで発話内容を取得後（＊1）、Telegramサーバー側の reply_text メソッドに発信内容を渡して送信する。<br>
+              （＊1）発話内容は、オウム返し するため、引数の発話内容 input['utt'] をそのまま返している。</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>上記「対話サンプル (オウム返し)」の実行確認<br>
+        以下、(1)、(2)の実行確認結果。<br>
+        ※「telegram_bot.py」のアクセストークン(TOKEN)を、自身のものに置き換えることを忘れずに。</p>
+      <p>「echo_system.py」の実行にて対話を開始する。</p>
+      <pre><code class="language-python">$ python ~/gitlocalrep/dsbook/echo_system.py
+/root/gitlocalrep/dsbook/telegram_bot.py:<span class="hljs-number">29</span>: TelegramDeprecationWarning: Old Handler API <span class="hljs-keyword">is</span> deprecated - see https://git.io/fxJuV <span class="hljs-keyword">for</span> details
+updater = Updater(TOKEN)
+</code></pre>
+      <p>上記コンソールが実行中の状態。</p>
+      <p>↓ ユーザーの入力をすべてオウム返しする。<br>
+        ※ 対話(オウム返し)を終了する場合は「Ctrl + C」で終了。<br>
+        <img src="/static/tblog/img/pid40_2.png" alt="pid40_2">
+      </p>
+    </li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>東中 竜一郎、稲葉 通将、水上 雅博（\(2020\)）『Pythonでつくる対話システム』株式会社オーム社</li>
+  </ul>
+  <h3 id="githubサポートページ">GitHubサポートページ</h3>
+  <ul>
+    <li><a href="https://github.com/dsbook/dsbook" class="link-secondary">https://github.com/dsbook/dsbook</a></li>
+  </ul>
+</div>
