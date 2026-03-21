@@ -269,4 +269,275 @@ TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 </code></pre>
         </li>
     </ul>
+    <h3 id="状態遷移ベースの解説">状態遷移ベースの解説</h3>
+    <p>以下、上記の<code>SCXML</code>, <code>WeatherSystem</code>, <code>TelegramBot</code>について実行順に解説する。</p>
+    <ul>
+        <li>
+            <p>最初にWeatherSystemクラス (weather_system.py)を実行</p>
+            <pre><code class="language-bash">$ python ~/gitlocalrep/dsbook/weather_system.py
+/root/gitlocalrep/dsbook/telegram_bot.py:29: TelegramDeprecationWarning: Old Handler API is deprecated - see https://git.io/fxJuV <span class="hljs-keyword">for</span> details
+  updater = Updater(TOKEN)
+</code></pre>
+        </li>
+        <li>
+            <p>WeatherSystemクラスのメイン処理で自身のインスタンスを（＊1）TelegramBotクラスのコンストラクタ（＊2）で連携後、（＊3）TelegramBotクラスの<code>run</code>メソッをコール
+            </p>
+            <pre><code class="language-python">… (省略) …
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:
+    system = WeatherSystem()
+    bot = TelegramBot(system)
+    bot.run()
+</code></pre>
+            <ul>
+                <li>（＊1）WeatherSystemクラスのコンストラクタ<br>
+                    QCoreApplicationでQtモジュールのメインインスタンス「app」を生成し、sessiondicを辞書型(dict)で定義する。
+                    <pre><code class="language-python">… (省略) …
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-comment"># Qtに関するおまじない</span>
+        app = QtCore.QCoreApplication()
+        <span class="hljs-comment"># 対話セッションを管理するための辞書</span>
+        self.sessiondic = {}
+… (省略) …
+</code></pre>
+                </li>
+                <li>（＊2）TelegramBotクラスのコンストラクタ<br>
+                    自身のsystemにWeatherSystemクラスのインスタンスを設定する。
+                    <pre><code class="language-python">… (省略) …
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, system</span>):
+        self.system = system
+… (省略) …
+</code></pre>
+                </li>
+                <li>（＊3）TelegramBotクラスの<code>run</code>メソッド<br>
+                    telegramサーバー側のUpdater関数にてアクセストークンを設定後、自身のstartメソッドをコマンドハンドラとして、messageメソッドをメッセージハンドラとして設定し、コマンドハンドラとメッセージハンドラの受付を開始している。（待機状態）
+                    <pre><code class="language-python">    <span class="hljs-keyword">def</span> <span class="hljs-title function_">run</span>(<span class="hljs-params">self</span>):
+        updater = Updater(TOKEN)
+        dp = updater.dispatcher
+        dp.add_handler(CommandHandler(<span class="hljs-string">&quot;start&quot;</span>, self.start))
+        dp.add_handler(MessageHandler(Filters.text, self.message))
+        updater.start_polling()
+        updater.idle()
+</code></pre>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <p>Telegramクライアントでユーザーがstartコマンドを実行<br>
+                ユーザーが<code>/start</code>と入力するとTelegramサーバーがstartコマンドを発行し、上記で設定（待機）していたコマンドハンドラを受付け、startメソッドが実行される。
+                startメソッドでは、まずユーザーの発話情報を保持する<code>input</code>（dict型）オブジェクトを定義し、<code>utt</code>は発話内容、<code>sessionId</code>はセッションIDを格納する。
+                ※
+                Telegramの対話はすべて、システム側（Bot側）の発話から始まるため、<code>utt</code>は、<code>None</code>を設定し、<code>sessionId</code>には、ユーザーのセッションIDを設定している。
+            </p>
+            <pre><code class="language-python">… (省略) …
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">start</span>(<span class="hljs-params">self, bot, update</span>):
+        <span class="hljs-comment"># 辞書型 inputにユーザIDを設定</span>
+        <span class="hljs-built_in">input</span> = {<span class="hljs-string">&#x27;utt&#x27;</span>: <span class="hljs-literal">None</span>, <span class="hljs-string">&#x27;sessionId&#x27;</span>: <span class="hljs-built_in">str</span>(update.message.from_user.<span class="hljs-built_in">id</span>)}
+        … (省略) …
+</code></pre>
+        </li>
+        <li>
+            <p><code>initial_message</code>メソッドの実行<br>
+                次に<code>initial_message</code>メソッドへ、ユーザー発話情報<code>input</code>を渡し、<code>initial_message</code>メソッドでは、（＊4）のイベントループの初期設定、及び（＊5）の状態遷移の初期設定と（＊6）Botの初回発話内容を作成し返す。
+                そして、戻り値の発話内容(&quot;utt&quot;)をTelegramサーバー側の<code>reply_text</code>メソッドの引数に添え、発話内容を送信する。</p>
+            <ul>
+                <li>（＊4）QEventLoopメソッドにてWeatherSystemクラスのイベントループ（el : イベント待機(監視)を永続実行する仕組み）を同期に設定。</li>
+                <li>（＊5）SCXMLファイルの読み、WeatherSystemクラスにセッションID単位の状態遷移情報（place、date、type）を保持するsessiondicを定義。</li>
+                <li>（＊6）状態遷移を初期に設定後、初期状態の状態遷移ID（&quot;ask_place&quot;）の内容（&quot;地名を言ってください&quot;）を取得し、戻り値でuttと連結したものを返す。<br>
+                    （イベントループのprocessEventsでは、実行中のイベントループロック（処理が重い場合など）により、処理が止まることを回避している。）</li>
+                <li><code>start</code>メソッド
+                    <pre><code class="language-python">… (省略) …
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">start</span>(<span class="hljs-params">self, bot, update</span>):
+        <span class="hljs-comment"># 辞書型 inputにユーザIDを設定</span>
+        <span class="hljs-built_in">input</span> = {<span class="hljs-string">&#x27;utt&#x27;</span>: <span class="hljs-literal">None</span>, <span class="hljs-string">&#x27;sessionId&#x27;</span>: <span class="hljs-built_in">str</span>(update.message.from_user.<span class="hljs-built_in">id</span>)}
+        <span class="hljs-comment"># システムからの最初の発話をinitial_messageから取得し，送信</span>
+        update.message.reply_text(self.system.initial_message(<span class="hljs-built_in">input</span>)[<span class="hljs-string">&quot;utt&quot;</span>])
+… (省略) …
+</code></pre>
+                </li>
+                <li>（＊4）〜（＊6）<code>initial_message</code>メソッド
+                    <pre><code class="language-python">… (省略) …
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">initial_message</span>(<span class="hljs-params">self, <span class="hljs-built_in">input</span></span>):
+        text = <span class="hljs-built_in">input</span>[<span class="hljs-string">&quot;utt&quot;</span>]
+        sessionId = <span class="hljs-built_in">input</span>[<span class="hljs-string">&quot;sessionId&quot;</span>]
+        self.el  = QtCore.QEventLoop()
+        <span class="hljs-comment"># SCXMLファイルの読み込み</span>
+        sm  = QtScxml.QScxmlStateMachine.fromFile(<span class="hljs-string">&#x27;states.scxml&#x27;</span>)
+        <span class="hljs-comment"># セッションIDとセッションに関連する情報を格納した辞書</span>
+        self.sessiondic[sessionId] = {<span class="hljs-string">&quot;statemachine&quot;</span>:sm, <span class="hljs-string">&quot;place&quot;</span>:<span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;date&quot;</span>:<span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;type&quot;</span>:<span class="hljs-string">&quot;&quot;</span>}
+        <span class="hljs-comment"># 初期状態に遷移</span>
+        sm.start()
+        self.el.processEvents()
+        <span class="hljs-comment"># 初期状態の取得</span>
+        current_state = sm.activeStateNames()[<span class="hljs-number">0</span>]
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;current_state=&quot;</span>, current_state)
+        <span class="hljs-comment"># 初期状態に紐づいたシステム発話の取得と出力</span>
+        sysutt = self.uttdic[current_state]
+        <span class="hljs-keyword">return</span> {<span class="hljs-string">&quot;utt&quot;</span>:<span class="hljs-string">&quot;こちらは天気情報案内システムです。&quot;</span> + sysutt, <span class="hljs-string">&quot;end&quot;</span>:<span class="hljs-literal">False</span>}
+… (省略) …
+</code></pre>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <p><code>message</code>メソッドの実行<br>
+                その後、ユーザーがTelegramクライアントから発話したタイミングで上記で設定（待機）していたメッセージハンドラを受付け、messageメソッドが実行される。
+                messageメソッドでは、まずユーザーの発話内容（Telegramサーバー側の text
+                から取得したutt（発話内容））とユーザーのセッションIDでユーザー発話情報<code>input</code>を定義する。</p>
+            <ul>
+                <li><code>message</code>メソッド
+                    <pre><code class="language-python">… (省略) …
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">message</span>(<span class="hljs-params">self, bot, update</span>):
+        <span class="hljs-comment"># 辞書型 inputにユーザからの発話とユーザIDを設定</span>
+        <span class="hljs-built_in">input</span> = {<span class="hljs-string">&#x27;utt&#x27;</span>: update.message.text, <span class="hljs-string">&#x27;sessionId&#x27;</span>: <span class="hljs-built_in">str</span>(update.message.from_user.<span class="hljs-built_in">id</span>)}
+        … (省略) …
+</code></pre>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <p><code>reply</code>メソッドの実行<br>
+                次に<code>reply</code>メソッドへ、ユーザー発話情報<code>input</code>を渡し、<code>reply</code>メソッドにて、次の状態遷移を設定（＊7）する。</p>
+            <ul>
+                <li>（＊7）現在の状態遷移を取得後、その状態遷移と応じた発話内容が有効でない場合、発話前の状態遷移に戻す。発話内容が有効である場合、遷移先を状態遷移情報（sm）に送信（submit）し、WeatherSystemクラスのsessiondicに状態遷移別の有効値を設定
+                    →（＊8）、（＊9）、（＊10）</li>
+                <li>（＊8）状態遷移がask_place（地名指定）で、発話内容に「都道府県」が含まれる場合、有効値と見なし、sessiondicに設定</li>
+                <li>（＊9）状態遷移がask_date（日時）で、発話内容に「今日」または「明日」が含まれる場合、有効値と見なし、sessiondicに設定</li>
+                <li>（＊10）状態遷移がask_type（種別：天気 or 気温）で、発話内容に「天気」または「気温」が含まれる場合、有効値と見なし、sessiondicに設定<br>
+                    （イベントループ<code>el</code>のprocessEventsでは、実行中のイベントループロック（処理が重い場合など）により、処理が止まることを回避している。）
+                    <ul>
+                        <li><code>message</code>メソッド
+                            <pre><code class="language-python">… (省略) …
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">message</span>(<span class="hljs-params">self, bot, update</span>):
+        <span class="hljs-comment"># 辞書型 inputにユーザからの発話とユーザIDを設定</span>
+        <span class="hljs-built_in">input</span> = {<span class="hljs-string">&#x27;utt&#x27;</span>: update.message.text, <span class="hljs-string">&#x27;sessionId&#x27;</span>: <span class="hljs-built_in">str</span>(update.message.from_user.<span class="hljs-built_in">id</span>)}
+        <span class="hljs-comment"># replyメソッドによりinputから発話を生成</span>
+        system_output = self.system.reply(<span class="hljs-built_in">input</span>)
+        <span class="hljs-comment"># 発話を送信</span>
+        update.message.reply_text(system_output[<span class="hljs-string">&quot;utt&quot;</span>])
+… (省略) …
+</code></pre>
+                        </li>
+                        <li>（＊7）〜（＊10）<code>reply</code>メソッド
+                            <pre><code class="language-python">… (省略) …
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">reply</span>(<span class="hljs-params">self, <span class="hljs-built_in">input</span></span>):
+        text = <span class="hljs-built_in">input</span>[<span class="hljs-string">&quot;utt&quot;</span>]
+        sessionId = <span class="hljs-built_in">input</span>[<span class="hljs-string">&quot;sessionId&quot;</span>]
+        sm = self.sessiondic[sessionId][<span class="hljs-string">&quot;statemachine&quot;</span>]
+        current_state = sm.activeStateNames()[<span class="hljs-number">0</span>]
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;current_state=&quot;</span>, current_state)
+        <span class="hljs-comment"># ユーザ入力を用いて状態遷移</span>
+        <span class="hljs-keyword">if</span> current_state == <span class="hljs-string">&quot;ask_place&quot;</span>:
+            place = self.get_place(text)
+            <span class="hljs-keyword">if</span> place != <span class="hljs-string">&quot;&quot;</span>:
+                sm.submitEvent(<span class="hljs-string">&quot;place&quot;</span>)
+                self.el.processEvents()
+                self.sessiondic[sessionId][<span class="hljs-string">&quot;place&quot;</span>] = place
+        <span class="hljs-keyword">elif</span> current_state == <span class="hljs-string">&quot;ask_date&quot;</span>:
+            date = self.get_date(text)
+            <span class="hljs-keyword">if</span> date != <span class="hljs-string">&quot;&quot;</span>:
+                sm.submitEvent(<span class="hljs-string">&quot;date&quot;</span>)
+                self.el.processEvents()
+                self.sessiondic[sessionId][<span class="hljs-string">&quot;date&quot;</span>] = date
+        <span class="hljs-keyword">elif</span> current_state == <span class="hljs-string">&quot;ask_type&quot;</span>:
+            _<span class="hljs-built_in">type</span> = self.get_type(text)
+            <span class="hljs-keyword">if</span> _<span class="hljs-built_in">type</span> != <span class="hljs-string">&quot;&quot;</span>:
+                sm.submitEvent(<span class="hljs-string">&quot;type&quot;</span>)
+                self.el.processEvents()
+                self.sessiondic[sessionId][<span class="hljs-string">&quot;type&quot;</span>] = _<span class="hljs-built_in">type</span>
+        <span class="hljs-comment"># 遷移先の状態を取得</span>
+        current_state = sm.activeStateNames()[<span class="hljs-number">0</span>]
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;current_state=&quot;</span>, current_state)
+        … (省略) …
+</code></pre>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <p>発話内容の送信<br>
+                上記に続き（＊11）、（＊12）で状態遷移を設定後、発話内容を取得し、Telegramサーバー側の<code>reply_text</code>メソッドの引数に添え、発話内容を送信する。</p>
+            <ul>
+                <li>（＊11）遷移先がtell_infoである場合は、（＊13）、（＊14）で天気情報を取得し、発話内容（utt）と対話完了フラグ（end）をTrue（完了）で返す。</li>
+                <li>（＊12）遷移先がtell_infoでない場合は、遷移先に応じた発話内容（utt）と対話完了フラグ（end）をFalse（継続）で返す。</li>
+                <li>（＊13）現在の天気情報取得API（<a href="http://api.openweathermap.org/data/2.5/weather"
+                        class="link-secondary">http://api.openweathermap.org/data/2.5/weather</a>）に
+                    緯度、経度、APPID を渡し、結果をJSON形式で返す。</li>
+                <li>（＊14）未来の天気情報取得API（<a href="http://api.openweathermap.org/data/2.5/forecast"
+                        class="link-secondary">http://api.openweathermap.org/data/2.5/forecast</a>）に
+                    緯度、経度、APPID を渡し、明日正午頃（12時～15時までのどこか）の天気情報を抽出し、JSON形式で返す。</li>
+                <li>（＊11）、（＊12）<code>reply</code>メソッド
+                    <pre><code class="language-python">… (省略) …
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">reply</span>(<span class="hljs-params">self, <span class="hljs-built_in">input</span></span>):
+        … (省略) …
+        <span class="hljs-comment"># 遷移先がtell_infoの場合は情報を伝えて終了</span>
+        <span class="hljs-keyword">if</span> current_state == <span class="hljs-string">&quot;tell_info&quot;</span>:
+            utts = []
+            utts.append(<span class="hljs-string">&quot;お伝えします&quot;</span>)
+            place = self.sessiondic[sessionId][<span class="hljs-string">&quot;place&quot;</span>]
+            date = self.sessiondic[sessionId][<span class="hljs-string">&quot;date&quot;</span>]
+            _<span class="hljs-built_in">type</span> = self.sessiondic[sessionId][<span class="hljs-string">&quot;type&quot;</span>]
+            lat = self.latlondic[place][<span class="hljs-number">0</span>] <span class="hljs-comment"># placeから緯度を取得</span>
+            lon = self.latlondic[place][<span class="hljs-number">1</span>] <span class="hljs-comment"># placeから経度を取得</span>
+            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;lat=&quot;</span>,lat,<span class="hljs-string">&quot;lon=&quot;</span>,lon)
+            <span class="hljs-keyword">if</span> date == <span class="hljs-string">&quot;今日&quot;</span>:
+                cw = self.get_current_weather(lat,lon)
+                <span class="hljs-keyword">if</span> _<span class="hljs-built_in">type</span> == <span class="hljs-string">&quot;天気&quot;</span>:
+                    utts.append(cw[<span class="hljs-string">&quot;weather&quot;</span>][<span class="hljs-number">0</span>][<span class="hljs-string">&quot;description&quot;</span>]+<span class="hljs-string">&quot;です&quot;</span>)
+                <span class="hljs-keyword">elif</span> _<span class="hljs-built_in">type</span> == <span class="hljs-string">&quot;気温&quot;</span>:
+                    utts.append(<span class="hljs-built_in">str</span>(cw[<span class="hljs-string">&quot;main&quot;</span>][<span class="hljs-string">&quot;temp&quot;</span>])+<span class="hljs-string">&quot;度です&quot;</span>)
+            <span class="hljs-keyword">elif</span> date == <span class="hljs-string">&quot;明日&quot;</span>:
+                tw = self.get_tomorrow_weather(lat,lon)
+                <span class="hljs-keyword">if</span> _<span class="hljs-built_in">type</span> == <span class="hljs-string">&quot;天気&quot;</span>:
+                    utts.append(tw[<span class="hljs-string">&quot;weather&quot;</span>][<span class="hljs-number">0</span>][<span class="hljs-string">&quot;description&quot;</span>]+<span class="hljs-string">&quot;です&quot;</span>)
+                <span class="hljs-keyword">elif</span> _<span class="hljs-built_in">type</span> == <span class="hljs-string">&quot;気温&quot;</span>:
+                    utts.append(<span class="hljs-built_in">str</span>(tw[<span class="hljs-string">&quot;main&quot;</span>][<span class="hljs-string">&quot;temp&quot;</span>])+<span class="hljs-string">&quot;度です&quot;</span>)
+            utts.append(<span class="hljs-string">&quot;ご利用ありがとうございました&quot;</span>)
+            <span class="hljs-keyword">del</span> self.sessiondic[sessionId]
+            <span class="hljs-keyword">return</span> {<span class="hljs-string">&quot;utt&quot;</span>:<span class="hljs-string">&quot;。&quot;</span>.join(utts), <span class="hljs-string">&quot;end&quot;</span>: <span class="hljs-literal">True</span>}
+        <span class="hljs-keyword">else</span>:
+            <span class="hljs-comment"># その他の遷移先の場合は状態に紐づいたシステム発話を生成</span>
+            sysutt = self.uttdic[current_state]
+            <span class="hljs-keyword">return</span> {<span class="hljs-string">&quot;utt&quot;</span>:sysutt, <span class="hljs-string">&quot;end&quot;</span>: <span class="hljs-literal">False</span>}
+… (省略) …
+</code></pre>
+                </li>
+                <li>（＊13）<code>get_current_weather</code>メソッド
+                    <pre><code class="language-python">… (省略) …
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_current_weather</span>(<span class="hljs-params">self, lat,lon</span>):
+        <span class="hljs-comment"># 天気情報を取得</span>
+        response = requests.get(<span class="hljs-string">&quot;{}?lat={}&amp;lon={}&amp;lang=ja&amp;units=metric&amp;APPID={}&quot;</span>.<span class="hljs-built_in">format</span>(self.current_weather_url,lat,lon,self.appid))
+        <span class="hljs-keyword">return</span> response.json()
+… (省略) …
+</code></pre>
+                </li>
+                <li>（＊14）<code>get_tomorrow_weather</code>メソッド
+                    <pre><code class="language-python">… (省略) …
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_tomorrow_weather</span>(<span class="hljs-params">self, lat,lon</span>):
+        <span class="hljs-comment"># 今日の時間を取得</span>
+        today = datetime.today()
+        <span class="hljs-comment"># 明日の時間を取得</span>
+        tomorrow = today + timedelta(days=<span class="hljs-number">1</span>)
+        <span class="hljs-comment"># 明日の正午の時間を取得</span>
+        tomorrow_noon = datetime.combine(tomorrow, time(<span class="hljs-number">12</span>,<span class="hljs-number">0</span>))
+        <span class="hljs-comment"># UNIX時間に変換</span>
+        timestamp = tomorrow_noon.timestamp()
+        <span class="hljs-comment"># 天気情報を取得</span>
+        response = requests.get(<span class="hljs-string">&quot;{}?lat={}&amp;lon={}&amp;lang=ja&amp;units=metric&amp;APPID={}&quot;</span>.<span class="hljs-built_in">format</span>(self.forecast_url,lat,lon,self.appid))
+        dic = response.json()
+        <span class="hljs-comment"># 3時間おきの天気情報についてループ</span>
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(dic[<span class="hljs-string">&quot;list&quot;</span>])):
+            <span class="hljs-comment"># i番目の天気情報（UNIX時間）</span>
+            dt = <span class="hljs-built_in">float</span>(dic[<span class="hljs-string">&quot;list&quot;</span>][i][<span class="hljs-string">&quot;dt&quot;</span>])
+            <span class="hljs-comment"># 明日の正午以降のデータになった時点でその天気情報を返す</span>
+            <span class="hljs-keyword">if</span> dt &gt;= timestamp:
+                <span class="hljs-keyword">return</span> dic[<span class="hljs-string">&quot;list&quot;</span>][i]
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>
+… (省略) …
+</code></pre>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <p>このように、ユーザーの入力に応じて状態遷移を制御し、天気情報や気温情報を返す対話システムが実現されている。</p>
 </div>
