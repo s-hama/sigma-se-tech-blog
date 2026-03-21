@@ -1,4 +1,272 @@
 <div class="post-body">
     <h2 id="目的">目的</h2>
     <p>この記事では、天気情報案内（状態遷移ベース）の実装と実行確認について記載する。</p>
+    <p>※ 学習用の簡易的なものであるため、地名の指定は都道府県のみ、取得範囲は今日か明日のみ、種別は天気と気温のみとする。</p>
+    <h2 id="実装内容">実装内容</h2>
+    <h3 id="状態遷移ベースの実装">状態遷移ベースの実装</h3>
+    <p>先行ページで解説した文章解析の<code>MeCab</code>、状態遷移の<code>SCXML</code>、天気情報取得の<code>OpenWeatherMap</code>、メッセンジャーアプリの<code>Telegram</code>を使用して、タスク指向型の天気情報案内対話システムを実装する。
+    </p>
+    <ul>
+        <li>
+            <p>SCXML (states.scxml)<br>
+                以下、天気情報案内の状態遷移。</p>
+            <p>※ 各項目(状態)の解説については、下記先行ページを参照。<br>
+                <a class="link-secondary"
+                    href="https://sigma-se.com/detail/39/#:~:text=%E7%8A%B6%E6%85%8B%E9%81%B7%E7%A7%BB%E3%81%AB%E3%82%88%E3%82%8B%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E9%81%82%E8%A1%8C%E3%81%99%E3%82%8B%E3%80%8CSCXML%E3%80%8D%E3%81%AE%E6%A6%82%E8%A6%81%E3%81%A8%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Python
+                    - タスク指向型対話 : 状態遷移ベースの環境準備 &gt; MeCab, SCXML &gt; 状態遷移によるタスクを遂行する「SCXML」の概要とインストール</a>
+            </p>
+            <pre><code class="language-xml"><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;UTF-8&quot;</span>?&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">scxml</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">&quot;http://www.w3.org/2005/07/scxml&quot;</span> <span class="hljs-attr">version</span>=<span class="hljs-string">&quot;1.0&quot;</span> <span class="hljs-attr">initial</span>=<span class="hljs-string">&quot;ask_place&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">state</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ask_place&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">transition</span> <span class="hljs-attr">event</span>=<span class="hljs-string">&quot;place&quot;</span> <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;ask_date&quot;</span>/&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">state</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">state</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ask_date&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">transition</span> <span class="hljs-attr">event</span>=<span class="hljs-string">&quot;date&quot;</span> <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;ask_type&quot;</span>/&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">state</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">state</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;ask_type&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">transition</span> <span class="hljs-attr">event</span>=<span class="hljs-string">&quot;type&quot;</span> <span class="hljs-attr">target</span>=<span class="hljs-string">&quot;tell_info&quot;</span>/&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">state</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">final</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;tell_info&quot;</span>/&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">scxml</span>&gt;</span>
+</code></pre>
+        </li>
+        <li>
+            <p>WeatherSystemクラス (weather_system.py)<br>
+                Telegramクライアントの発話内容を解析し、状態遷移に応じた応答制御と遷移制御を行う。<br></p>
+            <p>※ 実行前に<code>APPID</code>を自身のものに書換えること。</p>
+            <pre><code class="language-python"><span class="hljs-keyword">import</span> sys
+<span class="hljs-keyword">from</span> PySide2 <span class="hljs-keyword">import</span> QtCore, QtScxml
+<span class="hljs-keyword">import</span> requests
+<span class="hljs-keyword">import</span> json
+<span class="hljs-keyword">from</span> datetime <span class="hljs-keyword">import</span> datetime, timedelta, time
+<span class="hljs-keyword">from</span> telegram.ext <span class="hljs-keyword">import</span> Updater, CommandHandler, MessageHandler, Filters
+<span class="hljs-keyword">from</span> telegram_bot <span class="hljs-keyword">import</span> TelegramBot
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">WeatherSystem</span>:
+
+    <span class="hljs-comment"># 都道府県名のリスト</span>
+    prefs = [<span class="hljs-string">&#x27;三重&#x27;</span>, <span class="hljs-string">&#x27;京都&#x27;</span>, <span class="hljs-string">&#x27;佐賀&#x27;</span>, <span class="hljs-string">&#x27;兵庫&#x27;</span>, <span class="hljs-string">&#x27;北海道&#x27;</span>, <span class="hljs-string">&#x27;千葉&#x27;</span>, <span class="hljs-string">&#x27;和歌山&#x27;</span>, <span class="hljs-string">&#x27;埼玉&#x27;</span>, <span class="hljs-string">&#x27;大分&#x27;</span>,
+            <span class="hljs-string">&#x27;大阪&#x27;</span>, <span class="hljs-string">&#x27;奈良&#x27;</span>, <span class="hljs-string">&#x27;宮城&#x27;</span>, <span class="hljs-string">&#x27;宮崎&#x27;</span>, <span class="hljs-string">&#x27;富山&#x27;</span>, <span class="hljs-string">&#x27;山口&#x27;</span>, <span class="hljs-string">&#x27;山形&#x27;</span>, <span class="hljs-string">&#x27;山梨&#x27;</span>, <span class="hljs-string">&#x27;岐阜&#x27;</span>, <span class="hljs-string">&#x27;岡山&#x27;</span>,
+            <span class="hljs-string">&#x27;岩手&#x27;</span>, <span class="hljs-string">&#x27;島根&#x27;</span>, <span class="hljs-string">&#x27;広島&#x27;</span>, <span class="hljs-string">&#x27;徳島&#x27;</span>, <span class="hljs-string">&#x27;愛媛&#x27;</span>, <span class="hljs-string">&#x27;愛知&#x27;</span>, <span class="hljs-string">&#x27;新潟&#x27;</span>, <span class="hljs-string">&#x27;東京&#x27;</span>,
+            <span class="hljs-string">&#x27;栃木&#x27;</span>, <span class="hljs-string">&#x27;沖縄&#x27;</span>, <span class="hljs-string">&#x27;滋賀&#x27;</span>, <span class="hljs-string">&#x27;熊本&#x27;</span>, <span class="hljs-string">&#x27;石川&#x27;</span>, <span class="hljs-string">&#x27;神奈川&#x27;</span>, <span class="hljs-string">&#x27;福井&#x27;</span>, <span class="hljs-string">&#x27;福岡&#x27;</span>, <span class="hljs-string">&#x27;福島&#x27;</span>, <span class="hljs-string">&#x27;秋田&#x27;</span>,
+            <span class="hljs-string">&#x27;群馬&#x27;</span>, <span class="hljs-string">&#x27;茨城&#x27;</span>, <span class="hljs-string">&#x27;長崎&#x27;</span>, <span class="hljs-string">&#x27;長野&#x27;</span>, <span class="hljs-string">&#x27;青森&#x27;</span>, <span class="hljs-string">&#x27;静岡&#x27;</span>, <span class="hljs-string">&#x27;香川&#x27;</span>, <span class="hljs-string">&#x27;高知&#x27;</span>, <span class="hljs-string">&#x27;鳥取&#x27;</span>, <span class="hljs-string">&#x27;鹿児島&#x27;</span>]
+
+    <span class="hljs-comment"># 都道府県名から緯度と経度を取得するための辞書</span>
+    latlondic = {<span class="hljs-string">&#x27;北海道&#x27;</span>: (<span class="hljs-number">43.06</span>, <span class="hljs-number">141.35</span>), <span class="hljs-string">&#x27;青森&#x27;</span>: (<span class="hljs-number">40.82</span>, <span class="hljs-number">140.74</span>), <span class="hljs-string">&#x27;岩手&#x27;</span>: (<span class="hljs-number">39.7</span>, <span class="hljs-number">141.15</span>), <span class="hljs-string">&#x27;宮城&#x27;</span>: (<span class="hljs-number">38.27</span>, <span class="hljs-number">140.87</span>),
+                <span class="hljs-string">&#x27;秋田&#x27;</span>: (<span class="hljs-number">39.72</span>, <span class="hljs-number">140.1</span>), <span class="hljs-string">&#x27;山形&#x27;</span>: (<span class="hljs-number">38.24</span>, <span class="hljs-number">140.36</span>), <span class="hljs-string">&#x27;福島&#x27;</span>: (<span class="hljs-number">37.75</span>, <span class="hljs-number">140.47</span>), <span class="hljs-string">&#x27;茨城&#x27;</span>: (<span class="hljs-number">36.34</span>, <span class="hljs-number">140.45</span>),
+                <span class="hljs-string">&#x27;栃木&#x27;</span>: (<span class="hljs-number">36.57</span>, <span class="hljs-number">139.88</span>), <span class="hljs-string">&#x27;群馬&#x27;</span>: (<span class="hljs-number">36.39</span>, <span class="hljs-number">139.06</span>), <span class="hljs-string">&#x27;埼玉&#x27;</span>: (<span class="hljs-number">35.86</span>, <span class="hljs-number">139.65</span>), <span class="hljs-string">&#x27;千葉&#x27;</span>: (<span class="hljs-number">35.61</span>, <span class="hljs-number">140.12</span>),
+                <span class="hljs-string">&#x27;東京&#x27;</span>: (<span class="hljs-number">35.69</span>, <span class="hljs-number">139.69</span>), <span class="hljs-string">&#x27;神奈川&#x27;</span>: (<span class="hljs-number">35.45</span>, <span class="hljs-number">139.64</span>), <span class="hljs-string">&#x27;新潟&#x27;</span>: (<span class="hljs-number">37.9</span>, <span class="hljs-number">139.02</span>), <span class="hljs-string">&#x27;富山&#x27;</span>: (<span class="hljs-number">36.7</span>, <span class="hljs-number">137.21</span>),
+                <span class="hljs-string">&#x27;石川&#x27;</span>: (<span class="hljs-number">36.59</span>, <span class="hljs-number">136.63</span>), <span class="hljs-string">&#x27;福井&#x27;</span>: (<span class="hljs-number">36.07</span>, <span class="hljs-number">136.22</span>), <span class="hljs-string">&#x27;山梨&#x27;</span>: (<span class="hljs-number">35.66</span>, <span class="hljs-number">138.57</span>), <span class="hljs-string">&#x27;長野&#x27;</span>: (<span class="hljs-number">36.65</span>, <span class="hljs-number">138.18</span>),
+                <span class="hljs-string">&#x27;岐阜&#x27;</span>: (<span class="hljs-number">35.39</span>, <span class="hljs-number">136.72</span>), <span class="hljs-string">&#x27;静岡&#x27;</span>: (<span class="hljs-number">34.98</span>, <span class="hljs-number">138.38</span>), <span class="hljs-string">&#x27;愛知&#x27;</span>: (<span class="hljs-number">35.18</span>, <span class="hljs-number">136.91</span>), <span class="hljs-string">&#x27;三重&#x27;</span>: (<span class="hljs-number">34.73</span>, <span class="hljs-number">136.51</span>),
+                <span class="hljs-string">&#x27;滋賀&#x27;</span>: (<span class="hljs-number">35.0</span>, <span class="hljs-number">135.87</span>), <span class="hljs-string">&#x27;京都&#x27;</span>: (<span class="hljs-number">35.02</span>, <span class="hljs-number">135.76</span>), <span class="hljs-string">&#x27;大阪&#x27;</span>: (<span class="hljs-number">34.69</span>, <span class="hljs-number">135.52</span>), <span class="hljs-string">&#x27;兵庫&#x27;</span>: (<span class="hljs-number">34.69</span>, <span class="hljs-number">135.18</span>),
+                <span class="hljs-string">&#x27;奈良&#x27;</span>: (<span class="hljs-number">34.69</span>, <span class="hljs-number">135.83</span>), <span class="hljs-string">&#x27;和歌山&#x27;</span>: (<span class="hljs-number">34.23</span>, <span class="hljs-number">135.17</span>), <span class="hljs-string">&#x27;鳥取&#x27;</span>: (<span class="hljs-number">35.5</span>, <span class="hljs-number">134.24</span>), <span class="hljs-string">&#x27;島根&#x27;</span>: (<span class="hljs-number">35.47</span>, <span class="hljs-number">133.05</span>),
+                <span class="hljs-string">&#x27;岡山&#x27;</span>: (<span class="hljs-number">34.66</span>, <span class="hljs-number">133.93</span>), <span class="hljs-string">&#x27;広島&#x27;</span>: (<span class="hljs-number">34.4</span>, <span class="hljs-number">132.46</span>), <span class="hljs-string">&#x27;山口&#x27;</span>: (<span class="hljs-number">34.19</span>, <span class="hljs-number">131.47</span>), <span class="hljs-string">&#x27;徳島&#x27;</span>: (<span class="hljs-number">34.07</span>, <span class="hljs-number">134.56</span>),
+                <span class="hljs-string">&#x27;香川&#x27;</span>: (<span class="hljs-number">34.34</span>, <span class="hljs-number">134.04</span>), <span class="hljs-string">&#x27;愛媛&#x27;</span>: (<span class="hljs-number">33.84</span>, <span class="hljs-number">132.77</span>), <span class="hljs-string">&#x27;高知&#x27;</span>: (<span class="hljs-number">33.56</span>, <span class="hljs-number">133.53</span>), <span class="hljs-string">&#x27;福岡&#x27;</span>: (<span class="hljs-number">33.61</span>, <span class="hljs-number">130.42</span>),
+                <span class="hljs-string">&#x27;佐賀&#x27;</span>: (<span class="hljs-number">33.25</span>, <span class="hljs-number">130.3</span>), <span class="hljs-string">&#x27;長崎&#x27;</span>: (<span class="hljs-number">32.74</span>, <span class="hljs-number">129.87</span>), <span class="hljs-string">&#x27;熊本&#x27;</span>: (<span class="hljs-number">32.79</span>, <span class="hljs-number">130.74</span>), <span class="hljs-string">&#x27;大分&#x27;</span>: (<span class="hljs-number">33.24</span>, <span class="hljs-number">131.61</span>),
+                <span class="hljs-string">&#x27;宮崎&#x27;</span>: (<span class="hljs-number">31.91</span>, <span class="hljs-number">131.42</span>), <span class="hljs-string">&#x27;鹿児島&#x27;</span>: (<span class="hljs-number">31.56</span>, <span class="hljs-number">130.56</span>), <span class="hljs-string">&#x27;沖縄&#x27;</span>: (<span class="hljs-number">26.21</span>, <span class="hljs-number">127.68</span>)}
+
+    <span class="hljs-comment"># 状態とシステム発話を紐づけた辞書</span>
+    uttdic = {<span class="hljs-string">&quot;ask_place&quot;</span>: <span class="hljs-string">&quot;地名を言ってください&quot;</span>,
+            <span class="hljs-string">&quot;ask_date&quot;</span>: <span class="hljs-string">&quot;日付を言ってください&quot;</span>,
+            <span class="hljs-string">&quot;ask_type&quot;</span>: <span class="hljs-string">&quot;情報種別を言ってください&quot;</span>}
+
+    current_weather_url = <span class="hljs-string">&#x27;http://api.openweathermap.org/data/2.5/weather&#x27;</span>
+    forecast_url = <span class="hljs-string">&#x27;http://api.openweathermap.org/data/2.5/forecast&#x27;</span>
+    appid = <span class="hljs-string">&#x27;&#x27;</span> <span class="hljs-comment"># 自身のAPPIDを入れてください</span>
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-comment"># Qtに関するおまじない</span>
+        app = QtCore.QCoreApplication()
+
+        <span class="hljs-comment"># 対話セッションを管理するための辞書</span>
+        self.sessiondic = {}
+
+    <span class="hljs-comment"># テキストから都道府県名を抽出する関数．見つからない場合は空文字を返す．</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_place</span>(<span class="hljs-params">self, text</span>):
+        <span class="hljs-keyword">for</span> pref <span class="hljs-keyword">in</span> self.prefs:
+            <span class="hljs-keyword">if</span> pref <span class="hljs-keyword">in</span> text:
+                <span class="hljs-keyword">return</span> pref
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>
+
+    <span class="hljs-comment"># テキストに「今日」もしくは「明日」があればそれを返す．見つからない場合は空文字を返す．</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_date</span>(<span class="hljs-params">self, text</span>):
+        <span class="hljs-keyword">if</span> <span class="hljs-string">&quot;今日&quot;</span> <span class="hljs-keyword">in</span> text:
+            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;今日&quot;</span>
+        <span class="hljs-keyword">elif</span> <span class="hljs-string">&quot;明日&quot;</span> <span class="hljs-keyword">in</span> text:
+            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;明日&quot;</span>
+        <span class="hljs-keyword">else</span>:
+            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>
+
+    <span class="hljs-comment"># テキストに「天気」もしくは「気温」があればそれを返す．見つからない場合は空文字を返す．</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_type</span>(<span class="hljs-params">self, text</span>):
+        <span class="hljs-keyword">if</span> <span class="hljs-string">&quot;天気&quot;</span> <span class="hljs-keyword">in</span> text:
+            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;天気&quot;</span>
+        <span class="hljs-keyword">elif</span> <span class="hljs-string">&quot;気温&quot;</span> <span class="hljs-keyword">in</span> text:
+            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;気温&quot;</span>
+        <span class="hljs-keyword">else</span>:
+            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_current_weather</span>(<span class="hljs-params">self, lat,lon</span>):
+        <span class="hljs-comment"># 天気情報を取得</span>
+        response = requests.get(<span class="hljs-string">&quot;{}?lat={}&amp;lon={}&amp;lang=ja&amp;units=metric&amp;APPID={}&quot;</span>.<span class="hljs-built_in">format</span>(self.current_weather_url,lat,lon,self.appid))
+        <span class="hljs-keyword">return</span> response.json()
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_tomorrow_weather</span>(<span class="hljs-params">self, lat,lon</span>):
+        <span class="hljs-comment"># 今日の時間を取得</span>
+        today = datetime.today()
+        <span class="hljs-comment"># 明日の時間を取得</span>
+        tomorrow = today + timedelta(days=<span class="hljs-number">1</span>)
+        <span class="hljs-comment"># 明日の正午の時間を取得</span>
+        tomorrow_noon = datetime.combine(tomorrow, time(<span class="hljs-number">12</span>,<span class="hljs-number">0</span>))
+        <span class="hljs-comment"># UNIX時間に変換</span>
+        timestamp = tomorrow_noon.timestamp()
+        <span class="hljs-comment"># 天気情報を取得</span>
+        response = requests.get(<span class="hljs-string">&quot;{}?lat={}&amp;lon={}&amp;lang=ja&amp;units=metric&amp;APPID={}&quot;</span>.<span class="hljs-built_in">format</span>(self.forecast_url,lat,lon,self.appid))
+        dic = response.json()
+        <span class="hljs-comment"># 3時間おきの天気情報についてループ</span>
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(dic[<span class="hljs-string">&quot;list&quot;</span>])):
+            <span class="hljs-comment"># i番目の天気情報（UNIX時間）</span>
+            dt = <span class="hljs-built_in">float</span>(dic[<span class="hljs-string">&quot;list&quot;</span>][i][<span class="hljs-string">&quot;dt&quot;</span>])
+            <span class="hljs-comment"># 明日の正午以降のデータになった時点でその天気情報を返す</span>
+            <span class="hljs-keyword">if</span> dt &gt;= timestamp:
+                <span class="hljs-keyword">return</span> dic[<span class="hljs-string">&quot;list&quot;</span>][i]
+        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">initial_message</span>(<span class="hljs-params">self, <span class="hljs-built_in">input</span></span>):
+        text = <span class="hljs-built_in">input</span>[<span class="hljs-string">&quot;utt&quot;</span>]
+        sessionId = <span class="hljs-built_in">input</span>[<span class="hljs-string">&quot;sessionId&quot;</span>]
+
+        self.el  = QtCore.QEventLoop()
+
+        <span class="hljs-comment"># SCXMLファイルの読み込み</span>
+        sm  = QtScxml.QScxmlStateMachine.fromFile(<span class="hljs-string">&#x27;states.scxml&#x27;</span>)
+
+        <span class="hljs-comment"># セッションIDとセッションに関連する情報を格納した辞書</span>
+        self.sessiondic[sessionId] = {<span class="hljs-string">&quot;statemachine&quot;</span>:sm, <span class="hljs-string">&quot;place&quot;</span>:<span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;date&quot;</span>:<span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;type&quot;</span>:<span class="hljs-string">&quot;&quot;</span>}
+
+        <span class="hljs-comment"># 初期状態に遷移</span>
+        sm.start()
+        self.el.processEvents()
+
+        <span class="hljs-comment"># 初期状態の取得</span>
+        current_state = sm.activeStateNames()[<span class="hljs-number">0</span>]
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;current_state=&quot;</span>, current_state)
+
+        <span class="hljs-comment"># 初期状態に紐づいたシステム発話の取得と出力</span>
+        sysutt = self.uttdic[current_state]
+
+        <span class="hljs-keyword">return</span> {<span class="hljs-string">&quot;utt&quot;</span>:<span class="hljs-string">&quot;こちらは天気情報案内システムです。&quot;</span> + sysutt, <span class="hljs-string">&quot;end&quot;</span>:<span class="hljs-literal">False</span>}
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">reply</span>(<span class="hljs-params">self, <span class="hljs-built_in">input</span></span>):
+        text = <span class="hljs-built_in">input</span>[<span class="hljs-string">&quot;utt&quot;</span>]
+        sessionId = <span class="hljs-built_in">input</span>[<span class="hljs-string">&quot;sessionId&quot;</span>]
+
+        sm = self.sessiondic[sessionId][<span class="hljs-string">&quot;statemachine&quot;</span>]
+        current_state = sm.activeStateNames()[<span class="hljs-number">0</span>]
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;current_state=&quot;</span>, current_state)
+
+        <span class="hljs-comment"># ユーザ入力を用いて状態遷移</span>
+        <span class="hljs-keyword">if</span> current_state == <span class="hljs-string">&quot;ask_place&quot;</span>:
+            place = self.get_place(text)
+            <span class="hljs-keyword">if</span> place != <span class="hljs-string">&quot;&quot;</span>:
+                sm.submitEvent(<span class="hljs-string">&quot;place&quot;</span>)
+                self.el.processEvents()
+                self.sessiondic[sessionId][<span class="hljs-string">&quot;place&quot;</span>] = place
+        <span class="hljs-keyword">elif</span> current_state == <span class="hljs-string">&quot;ask_date&quot;</span>:
+            date = self.get_date(text)
+            <span class="hljs-keyword">if</span> date != <span class="hljs-string">&quot;&quot;</span>:
+                sm.submitEvent(<span class="hljs-string">&quot;date&quot;</span>)
+                self.el.processEvents()
+                self.sessiondic[sessionId][<span class="hljs-string">&quot;date&quot;</span>] = date
+        <span class="hljs-keyword">elif</span> current_state == <span class="hljs-string">&quot;ask_type&quot;</span>:
+            _<span class="hljs-built_in">type</span> = self.get_type(text)
+            <span class="hljs-keyword">if</span> _<span class="hljs-built_in">type</span> != <span class="hljs-string">&quot;&quot;</span>:
+                sm.submitEvent(<span class="hljs-string">&quot;type&quot;</span>)
+                self.el.processEvents()
+                self.sessiondic[sessionId][<span class="hljs-string">&quot;type&quot;</span>] = _<span class="hljs-built_in">type</span>
+
+        <span class="hljs-comment"># 遷移先の状態を取得</span>
+        current_state = sm.activeStateNames()[<span class="hljs-number">0</span>]
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;current_state=&quot;</span>, current_state)
+
+        <span class="hljs-comment"># 遷移先がtell_infoの場合は情報を伝えて終了</span>
+        <span class="hljs-keyword">if</span> current_state == <span class="hljs-string">&quot;tell_info&quot;</span>:
+            utts = []
+            utts.append(<span class="hljs-string">&quot;お伝えします&quot;</span>)
+            place = self.sessiondic[sessionId][<span class="hljs-string">&quot;place&quot;</span>]
+            date = self.sessiondic[sessionId][<span class="hljs-string">&quot;date&quot;</span>]
+            _<span class="hljs-built_in">type</span> = self.sessiondic[sessionId][<span class="hljs-string">&quot;type&quot;</span>]
+
+            lat = self.latlondic[place][<span class="hljs-number">0</span>] <span class="hljs-comment"># placeから緯度を取得</span>
+            lon = self.latlondic[place][<span class="hljs-number">1</span>] <span class="hljs-comment"># placeから経度を取得</span>
+            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;lat=&quot;</span>,lat,<span class="hljs-string">&quot;lon=&quot;</span>,lon)
+            <span class="hljs-keyword">if</span> date == <span class="hljs-string">&quot;今日&quot;</span>:
+                cw = self.get_current_weather(lat,lon)
+                <span class="hljs-keyword">if</span> _<span class="hljs-built_in">type</span> == <span class="hljs-string">&quot;天気&quot;</span>:
+                    utts.append(cw[<span class="hljs-string">&quot;weather&quot;</span>][<span class="hljs-number">0</span>][<span class="hljs-string">&quot;description&quot;</span>]+<span class="hljs-string">&quot;です&quot;</span>)
+                <span class="hljs-keyword">elif</span> _<span class="hljs-built_in">type</span> == <span class="hljs-string">&quot;気温&quot;</span>:
+                    utts.append(<span class="hljs-built_in">str</span>(cw[<span class="hljs-string">&quot;main&quot;</span>][<span class="hljs-string">&quot;temp&quot;</span>])+<span class="hljs-string">&quot;度です&quot;</span>)
+            <span class="hljs-keyword">elif</span> date == <span class="hljs-string">&quot;明日&quot;</span>:
+                tw = self.get_tomorrow_weather(lat,lon)
+                <span class="hljs-keyword">if</span> _<span class="hljs-built_in">type</span> == <span class="hljs-string">&quot;天気&quot;</span>:
+                    utts.append(tw[<span class="hljs-string">&quot;weather&quot;</span>][<span class="hljs-number">0</span>][<span class="hljs-string">&quot;description&quot;</span>]+<span class="hljs-string">&quot;です&quot;</span>)
+                <span class="hljs-keyword">elif</span> _<span class="hljs-built_in">type</span> == <span class="hljs-string">&quot;気温&quot;</span>:
+                    utts.append(<span class="hljs-built_in">str</span>(tw[<span class="hljs-string">&quot;main&quot;</span>][<span class="hljs-string">&quot;temp&quot;</span>])+<span class="hljs-string">&quot;度です&quot;</span>)
+            utts.append(<span class="hljs-string">&quot;ご利用ありがとうございました&quot;</span>)
+            <span class="hljs-keyword">del</span> self.sessiondic[sessionId]
+            <span class="hljs-keyword">return</span> {<span class="hljs-string">&quot;utt&quot;</span>:<span class="hljs-string">&quot;。&quot;</span>.join(utts), <span class="hljs-string">&quot;end&quot;</span>: <span class="hljs-literal">True</span>}
+
+        <span class="hljs-keyword">else</span>:
+            <span class="hljs-comment"># その他の遷移先の場合は状態に紐づいたシステム発話を生成</span>
+            sysutt = self.uttdic[current_state]
+            <span class="hljs-keyword">return</span> {<span class="hljs-string">&quot;utt&quot;</span>:sysutt, <span class="hljs-string">&quot;end&quot;</span>: <span class="hljs-literal">False</span>}
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:
+    system = WeatherSystem()
+    bot = TelegramBot(system)
+    bot.run()
+</code></pre>
+        </li>
+        <li>
+            <p>TelegramBotクラス (telegram_bot.py)<br>
+                先行記事で解説したTelegramサーバー(Bot)との通信処理。<br>
+                Telegramサーバーとの通信を開始し、上記 WeatherSystemクラス(応答制御)の結果をBotに送信する。<br>
+                ※ 実行前に<code>TOKEN</code>を自身のものに書換えること。</p>
+            <pre><code class="language-python"><span class="hljs-keyword">from</span> telegram.ext <span class="hljs-keyword">import</span> Updater, CommandHandler, MessageHandler, Filters
+
+<span class="hljs-comment"># アクセストークン</span>
+TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&quot;</span>
+
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">TelegramBot</span>:
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, system</span>):
+        self.system = system
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">start</span>(<span class="hljs-params">self, bot, update</span>):
+        <span class="hljs-comment"># 辞書型 inputにユーザIDを設定</span>
+        <span class="hljs-built_in">input</span> = {<span class="hljs-string">&#x27;utt&#x27;</span>: <span class="hljs-literal">None</span>, <span class="hljs-string">&#x27;sessionId&#x27;</span>: <span class="hljs-built_in">str</span>(update.message.from_user.<span class="hljs-built_in">id</span>)}
+
+        <span class="hljs-comment"># システムからの最初の発話をinitial_messageから取得し，送信</span>
+        update.message.reply_text(self.system.initial_message(<span class="hljs-built_in">input</span>)[<span class="hljs-string">&quot;utt&quot;</span>])
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">message</span>(<span class="hljs-params">self, bot, update</span>):
+        <span class="hljs-comment"># 辞書型 inputにユーザからの発話とユーザIDを設定</span>
+        <span class="hljs-built_in">input</span> = {<span class="hljs-string">&#x27;utt&#x27;</span>: update.message.text, <span class="hljs-string">&#x27;sessionId&#x27;</span>: <span class="hljs-built_in">str</span>(update.message.from_user.<span class="hljs-built_in">id</span>)}
+
+        <span class="hljs-comment"># replyメソッドによりinputから発話を生成</span>
+        system_output = self.system.reply(<span class="hljs-built_in">input</span>)
+
+        <span class="hljs-comment"># 発話を送信</span>
+        update.message.reply_text(system_output[<span class="hljs-string">&quot;utt&quot;</span>])
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">run</span>(<span class="hljs-params">self</span>):
+        updater = Updater(TOKEN)
+        dp = updater.dispatcher
+        dp.add_handler(CommandHandler(<span class="hljs-string">&quot;start&quot;</span>, self.start))
+        dp.add_handler(MessageHandler(Filters.text, self.message))
+        updater.start_polling()
+        updater.idle()
+</code></pre>
+        </li>
+    </ul>
 </div>
