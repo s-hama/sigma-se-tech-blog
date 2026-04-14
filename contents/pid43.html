@@ -110,5 +110,17 @@ svc.fit(X,Y)
         </li>
       </ul>
     </li>
+    <li>
+      <p>発話情報の変換<br>
+        上記で取得した発話内容<code>sents</code>と発話行為タイプ<code>labels</code>の関連付けを学習させるために発話情報を数値列に変換する必要がある。<br>
+        その作成には<code>TfidfVectorizer</code>を用いて変換する。</p>
+      <p>これを<strong>素性ベクトル</strong>と呼び、後続処理で<strong>ラベル</strong>との関連付け学習を行うために作成している。<br>
+        fit_transformで発話内容<code>sents</code>を素性ベクトルに変換したものが<code>X</code>で、発話情報にある単語の登場頻度と学習データから推測できる単語の重要度をもとに素数ベクトルを自動生成している。
+      </p>
+      <pre><code class="language-python"><span class="hljs-comment"># TfidfVectorizerを用いて，各文をベクトルに変換</span>
+vectorizer = TfidfVectorizer(tokenizer=<span class="hljs-keyword">lambda</span> x:x.split(), ngram_range=(<span class="hljs-number">1</span>,<span class="hljs-number">3</span>))
+X = vectorizer.fit_transform(sents)
+</code></pre>
+    </li>
   </ul>
 </div>
