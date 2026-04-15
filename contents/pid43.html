@@ -122,5 +122,13 @@ vectorizer = TfidfVectorizer(tokenizer=<span class="hljs-keyword">lambda</span> 
 X = vectorizer.fit_transform(sents)
 </code></pre>
     </li>
+    <li>
+      <p>変換後の数値列を<code>Y</code>に保持<br>
+        上記と同様にfit_transformで発話行為タイプ<strong>labels</strong>（ラベル）を数値列に変換したものを<code>Y</code>に保持する。</p>
+      <pre><code class="language-python"><span class="hljs-comment"># LabelEncoderを用いて，ラベルを数値に変換</span>
+label_encoder = LabelEncoder()
+Y = label_encoder.fit_transform(labels)
+</code></pre>
+    </li>
   </ul>
 </div>
