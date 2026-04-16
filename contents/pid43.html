@@ -130,5 +130,14 @@ label_encoder = LabelEncoder()
 Y = label_encoder.fit_transform(labels)
 </code></pre>
     </li>
+    <li>
+      <p>ラベルを取得するモデルを学習させる<br>
+        コメントの通り、発話内容<strong>sents</strong>を素性ベクトル化した<code>X</code>から、発話行為タイプ<strong>labels</strong>（ラベル）を数値列化した<strong>Y</strong>を取得するモデルを<strong>SVM</strong>を用いて学習させている。<br>
+        ※ <strong>モデル</strong>とは素性ベクトルの各要素とラベルとの関連を定義した大量の通知データのこと指す。</p>
+      <pre><code class="language-python"><span class="hljs-comment"># SVMでベクトルからラベルを取得するモデルを学習</span>
+svc = SVC(gamma=<span class="hljs-string">&quot;scale&quot;</span>)
+svc.fit(X,Y)
+</code></pre>
+    </li>
   </ul>
 </div>
