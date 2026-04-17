@@ -139,5 +139,23 @@ svc = SVC(gamma=<span class="hljs-string">&quot;scale&quot;</span>)
 svc.fit(X,Y)
 </code></pre>
     </li>
+    <li>
+      <p>svc.modelに保存<br>
+        最後に素性ベクトル作成時に用いた<code>vectorizer</code>とラベルを数値列化する際に用いた<code>label_encoder</code>、そしてモデル学習時に用いた
+        <strong>svc</strong>達を<strong>dill</strong>を用いて、ファイルに出力する。</p>
+      <pre><code class="language-python"><span class="hljs-comment"># 学習されたモデル等一式を svc.modelに保存</span>
+<span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;svc.model&quot;</span>,<span class="hljs-string">&quot;wb&quot;</span>) <span class="hljs-keyword">as</span> f:
+    dill.dump(vectorizer, f)
+    dill.dump(label_encoder, f)
+    dill.dump(svc, f)
+</code></pre>
+    </li>
+    <li>
+      <p>実行確認<br>
+        上記実装サンプル（train_da_model.py）の実行確認<br>
+        ※ 実行後<code>svc.model</code>が生成されていれば成功。</p>
+      <pre><code class="language-bash">$ python ~/gitlocalrep/dsbook/train_da_model.py
+</code></pre>
+    </li>
   </ul>
 </div>
