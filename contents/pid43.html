@@ -158,4 +158,46 @@ svc.fit(X,Y)
 </code></pre>
     </li>
   </ul>
+  <h3 id="学習結果の確認">学習結果の確認</h3>
+  <p>前項で作成した<code>svc.model</code>が正しく推定できるか以下のテストプログラムを実行して確認する。</p>
+  <ul>
+    <li><code>da_extractor.py</code>（テストプログラム）
+      <pre><code class="language-python"><span class="hljs-keyword">import</span> MeCab
+<span class="hljs-keyword">from</span> sklearn.feature_extraction.text <span class="hljs-keyword">import</span> TfidfVectorizer
+<span class="hljs-keyword">from</span> sklearn.svm <span class="hljs-keyword">import</span> SVC
+<span class="hljs-keyword">from</span> sklearn.preprocessing <span class="hljs-keyword">import</span> LabelEncoder
+<span class="hljs-keyword">import</span> dill
+
+mecab = MeCab.Tagger()
+mecab.parse(<span class="hljs-string">&#x27;&#x27;</span>)
+
+<span class="hljs-comment"># SVMモデルの読み込み</span>
+<span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;svc.model&quot;</span>,<span class="hljs-string">&quot;rb&quot;</span>) <span class="hljs-keyword">as</span> f:
+    vectorizer = dill.load(f)
+    label_encoder = dill.load(f)
+    svc = dill.load(f)
+
+<span class="hljs-comment"># 発話から発話行為タイプを推定  </span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">extract_da</span>(<span class="hljs-params">utt</span>):
+    words = []
+    <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> mecab.parse(utt).splitlines():
+        <span class="hljs-keyword">if</span> line == <span class="hljs-string">&quot;EOS&quot;</span>:
+            <span class="hljs-keyword">break</span>
+        <span class="hljs-keyword">else</span>:
+            word, feature_str = line.split(<span class="hljs-string">&quot;\t&quot;</span>)
+            words.append(word)
+    tokens_str = <span class="hljs-string">&quot; &quot;</span>.join(words)
+    X = vectorizer.transform([tokens_str])
+    Y = svc.predict(X)
+    <span class="hljs-comment"># 数値を対応するラベルに戻す</span>
+    da = label_encoder.inverse_transform(Y)[<span class="hljs-number">0</span>]
+    <span class="hljs-keyword">return</span> da
+
+<span class="hljs-keyword">for</span> utt <span class="hljs-keyword">in</span> [<span class="hljs-string">&quot;大阪の明日の天気&quot;</span>,<span class="hljs-string">&quot;もう一度はじめから&quot;</span>,<span class="hljs-string">&quot;東京じゃなくて&quot;</span>]:
+    da = extract_da(utt)
+    <span class="hljs-built_in">print</span>(utt,da)
+</code></pre>
+    </li>
+  </ul>
+  <p>以下、テストプログラム（da_extractor.py）の処理解説。</p>
 </div>
