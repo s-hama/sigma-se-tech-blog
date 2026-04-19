@@ -200,4 +200,16 @@ mecab.parse(<span class="hljs-string">&#x27;&#x27;</span>)
     </li>
   </ul>
   <p>以下、テストプログラム（da_extractor.py）の処理解説。</p>
+  <ul>
+    <li>
+      <p>SVMモデルの読み込み<br>
+        まず<code>svc.model</code>を開き、上記で出力した<code>vectorizer</code>、<code>label_encoder</code>、<strong>svc</strong>を<strong>dill</strong>を用いて読み込む。
+      </p>
+      <pre><code class="language-python"><span class="hljs-comment"># SVMモデルの読み込み</span>
+<span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;svc.model&quot;</span>,<span class="hljs-string">&quot;rb&quot;</span>) <span class="hljs-keyword">as</span> f:
+    vectorizer = dill.load(f)
+    label_encoder = dill.load(f)
+    svc = dill.load(f)
+</code></pre>
+    </li>
 </div>
