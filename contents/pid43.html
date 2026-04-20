@@ -212,4 +212,45 @@ mecab.parse(<span class="hljs-string">&#x27;&#x27;</span>)
     svc = dill.load(f)
 </code></pre>
     </li>
+    <li>
+      <p>発話から発話行為タイプを推定 <br>
+        発話行為タイプを推定する<code>extract_da</code>メソッド。<br>
+        下記の要領で推定結果<code>da</code>を返す。<br></p>
+      <ul>
+        <li>
+          <p>
+            （＊9）mecabで最小単位の単語（形態素）に分割し（splitlines）、最後（EOS）であればループを終了、最後（EOS）でなければタブで分割（split）し、先頭単語（word）のみを単語配列（words）に追加する。
+          </p>
+        </li>
+        <li>
+          <p>（＊10）単語配列（words）を空白区切りに置換え <code>tokens_str</code>に格納する。</p>
+        </li>
+        <li>
+          <p>（＊11）上記で読込んだ<code>vectorizer</code>を <code>TfidfVectorizer</code>を用いて素性ベクトルに変換する。</p>
+        </li>
+        <li>
+          <p>（＊12）（＊11）の<code>X</code>と上記で読み込んだ<strong>svc</strong>の<code>predict</code>を用いて推定結果を取得する。</p>
+        </li>
+        <li>
+          <p>（＊13）上記で読込んだ<code>label_encoder</code>をもとに数値列からラベル名に戻して返す。</p>
+          <pre><code class="language-python"><span class="hljs-comment"># 発話から発話行為タイプを推定  </span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">extract_da</span>(<span class="hljs-params">utt</span>):
+    words = []
+    <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> mecab.parse(utt).splitlines():
+        <span class="hljs-keyword">if</span> line == <span class="hljs-string">&quot;EOS&quot;</span>:
+            <span class="hljs-keyword">break</span>
+        <span class="hljs-keyword">else</span>:
+            word, feature_str = line.split(<span class="hljs-string">&quot;\t&quot;</span>)
+            words.append(word)
+    tokens_str = <span class="hljs-string">&quot; &quot;</span>.join(words)
+    X = vectorizer.transform([tokens_str])
+    Y = svc.predict(X)
+    <span class="hljs-comment"># 数値を対応するラベルに戻す</span>
+    da = label_encoder.inverse_transform(Y)[<span class="hljs-number">0</span>]
+    <span class="hljs-keyword">return</span> da  
+</code></pre>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </div>
