@@ -252,5 +252,23 @@ mecab.parse(<span class="hljs-string">&#x27;&#x27;</span>)
         </li>
       </ul>
     </li>
+    <li>
+      <p>推定結果の取得<br>
+        テスト用の3つの発話内容で上記<code>extract_da</code>メソッドを呼び、発話行為タイプの推定結果を取得する。</p>
+      <pre><code class="language-python"><span class="hljs-keyword">for</span> utt <span class="hljs-keyword">in</span> [<span class="hljs-string">&quot;大阪の明日の天気&quot;</span>,<span class="hljs-string">&quot;もう一度はじめから&quot;</span>,<span class="hljs-string">&quot;東京じゃなくて&quot;</span>]:
+    da = extract_da(utt)
+    <span class="hljs-built_in">print</span>(utt,da)
+</code></pre>
+    </li>
+    <li>
+      <p>実行結果<br>
+        上記テストプログラム（da_extractor.py）の実行結果
+        それぞれの発話内容（左）に対して、正しい発話行為タイプの推定（右）ができている。</p>
+      <pre><code class="language-bash">$ python ~/gitlocalrep/dsbook/da_extractor.py
+大阪の明日の天気 request-weather
+もう一度はじめから initialize
+東京じゃなくて correct-info
+</code></pre>
+    </li>
   </ul>
 </div>
