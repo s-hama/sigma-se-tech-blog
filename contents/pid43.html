@@ -1,0 +1,274 @@
+<div class="post-body">
+  <h2 id="目的">目的</h2>
+  <p>この記事では、フレームベースのタスク指向型対話システムを作るために使用するSVM（sklearn）のモデル学習実装サンプルについて記載する。</p>
+  <h2 id="解説と実装サンプル">解説と実装サンプル</h2>
+  <h3 id="モデル学習の実装サンプル">モデル学習の実装サンプル</h3>
+  <p>
+    先行記事で作成した学習データ<code>da_samples.dat</code>（＊1）を<strong>MeCab</strong>（＊2）で最小単位の単語（形態素）に分割し、<strong>SVM</strong>（＊3）で対話行為タイプを推定（モデル学習）する実装サンプル。
+  </p>
+  <ul>
+    <li>
+      <p>（＊1）<a class="link-secondary"
+          href="https://sigma-se.com/detail/42/#:~:text=%E3%82%92%E8%A7%A3%E8%AA%AC%E3%81%99%E3%82%8B%E3%80%82-,%E5%AD%A6%E7%BF%92%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E4%BD%9C%E6%88%90,-%E3%81%93%E3%81%AE%E6%A1%88%E5%86%85%E5%AF%BE%E8%A9%B1">Python
+          - タスク指向型対話 : フレームベースの環境準備 &gt; SVM（sklearn）と学習データの作成 &gt; 学習データの作成</a></p>
+    </li>
+    <li>
+      <p>（＊2）<a class="link-secondary"
+          href="https://sigma-se.com/detail/39/#:~:text=%E5%AF%BE%E8%A9%B1%E3%81%AE%E6%96%87%E7%AB%A0%E3%82%92%E8%A7%A3%E6%9E%90%E3%81%99%E3%82%8B%E3%80%8CMeCab%E3%80%8D%E3%81%AE%E6%A6%82%E8%A6%81%E3%81%A8%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Python
+          - タスク指向型対話 : 状態遷移ベースの環境準備 &gt; MeCab, SCXML &gt; 対話の文章を解析する「MeCab」の概要とインストール</a></p>
+    </li>
+    <li>
+      <p>（＊3）<a class="link-secondary"
+          href="https://sigma-se.com/detail/42/#:~:text=%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%81%A8%E5%AF%BE%E8%A9%B1%E8%A1%8C%E7%82%BA%E3%82%92%E6%8E%A8%E5%AE%9A%E3%81%99%E3%82%8BSVM%EF%BC%88sklearn%EF%BC%89%E3%81%AE%E6%A6%82%E8%A6%81%E3%81%A8%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Python
+          - タスク指向型対話 : フレームベースの環境準備 &gt; SVM（sklearn）と学習データの作成 &gt; フレームと対話行為を推定するSVM（sklearn）の概要とインストール</a></p>
+    </li>
+    <li>
+      <p>train_da_model.py</p>
+      <pre><code class="language-python"><span class="hljs-keyword">import</span> MeCab
+<span class="hljs-keyword">from</span> sklearn.feature_extraction.text <span class="hljs-keyword">import</span> TfidfVectorizer
+<span class="hljs-keyword">from</span> sklearn.svm <span class="hljs-keyword">import</span> SVC
+<span class="hljs-keyword">from</span> sklearn.preprocessing <span class="hljs-keyword">import</span> LabelEncoder
+<span class="hljs-keyword">import</span> dill
+
+<span class="hljs-comment"># MeCabの初期化</span>
+mecab = MeCab.Tagger()
+mecab.parse(<span class="hljs-string">&#x27;&#x27;</span>)
+
+sents = []
+labels = []
+
+<span class="hljs-comment"># generate-samples.txt の出力である samples.dat の読み込み</span>
+<span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;da_samples.dat&quot;</span>,<span class="hljs-string">&quot;r&quot;</span>):
+    line = line.rstrip()
+    <span class="hljs-comment"># samples.dat は発話行為タイプ，発話文，タグとその文字位置が含まれている</span>
+    da, utt = line.split(<span class="hljs-string">&#x27;\t&#x27;</span>)
+    words = []
+    <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> mecab.parse(utt).splitlines():
+        <span class="hljs-keyword">if</span> line == <span class="hljs-string">&quot;EOS&quot;</span>:
+            <span class="hljs-keyword">break</span>
+        <span class="hljs-keyword">else</span>:
+            <span class="hljs-comment"># MeCabの出力から単語を抽出</span>
+            word, feature_str = line.split(<span class="hljs-string">&quot;\t&quot;</span>)
+            words.append(word)
+    <span class="hljs-comment"># 空白区切りの単語列をsentsに追加</span>
+    sents.append(<span class="hljs-string">&quot; &quot;</span>.join(words))
+    <span class="hljs-comment"># 発話行為タイプをlabelsに追加</span>
+    labels.append(da)
+
+<span class="hljs-comment"># TfidfVectorizerを用いて，各文をベクトルに変換</span>
+vectorizer = TfidfVectorizer(tokenizer=<span class="hljs-keyword">lambda</span> x:x.split(), ngram_range=(<span class="hljs-number">1</span>,<span class="hljs-number">3</span>))
+X = vectorizer.fit_transform(sents)
+
+<span class="hljs-comment"># LabelEncoderを用いて，ラベルを数値に変換</span>
+label_encoder = LabelEncoder()
+Y = label_encoder.fit_transform(labels)
+
+<span class="hljs-comment"># SVMでベクトルからラベルを取得するモデルを学習</span>
+svc = SVC(gamma=<span class="hljs-string">&quot;scale&quot;</span>)
+svc.fit(X,Y)
+
+<span class="hljs-comment"># 学習されたモデル等一式を svc.modelに保存</span>
+<span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;svc.model&quot;</span>,<span class="hljs-string">&quot;wb&quot;</span>) <span class="hljs-keyword">as</span> f:
+    dill.dump(vectorizer, f)
+    dill.dump(label_encoder, f)
+    dill.dump(svc, f)
+</code></pre>
+      <p>以下、処理解説。<br>
+        ※ 機械学習では、推定対象となるものを<strong>ラベル</strong>や<strong>クラス</strong>と呼ぶ。<br>
+        今回のデータでは、発話行為タイプの<strong>request-weather</strong>がラベルとなるため、コメントや変数名の表現もラベルとなっている。</p>
+      <ul>
+        <li>
+          <p>sentsとlabelsの作成<br>
+            学習データ<code>da_samples.dat</code>を読み込み、それぞれの行に対して下記要領で発話文字列を単語分割した<code>sents</code>と発話行為タイプ<code>labels</code>をそれぞれ作成する。
+          </p>
+          <ul>
+            <li>（＊4）行の末尾の空白を削除し（rstrip）、タブで分割（split）する。</li>
+            <li>（＊5）1つ目分割結果（発話行為タイプ）を<code>da</code>に、2つ目分割結果（発話文字列）を<code>utt</code>に格納する。</li>
+            <li>
+              （＊6）mecabで最小単位の単語（形態素）に分割し（splitlines）、最後（EOS）であればループを終了、最後（EOS）でなければタブで分割（split）し、先頭単語（word）のみを単語配列（words）に追加する。
+            </li>
+            <li>（＊7）単語配列（words）を空白区切りに置換え<code>sents</code>に追加する。</li>
+            <li>（＊8）発話行為タイプ（da）を<code>labels</code>に追加する。</li>
+          </ul>
+          <pre><code class="language-python"><span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;da_samples.dat&quot;</span>,<span class="hljs-string">&quot;r&quot;</span>):
+    line = line.rstrip()
+    <span class="hljs-comment"># samples.dat は発話行為タイプ，発話文，タグとその文字位置が含まれている</span>
+    da, utt = line.split(<span class="hljs-string">&#x27;\t&#x27;</span>)
+    words = []
+    <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> mecab.parse(utt).splitlines():
+        <span class="hljs-keyword">if</span> line == <span class="hljs-string">&quot;EOS&quot;</span>:
+            <span class="hljs-keyword">break</span>
+        <span class="hljs-keyword">else</span>:
+            <span class="hljs-comment"># MeCabの出力から単語を抽出</span>
+            word, feature_str = line.split(<span class="hljs-string">&quot;\t&quot;</span>)
+            words.append(word)
+    <span class="hljs-comment"># 空白区切りの単語列をsentsに追加</span>
+    sents.append(<span class="hljs-string">&quot; &quot;</span>.join(words))
+    <span class="hljs-comment"># 発話行為タイプをlabelsに追加</span>
+    labels.append(da)
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>発話情報の変換<br>
+        上記で取得した発話内容<code>sents</code>と発話行為タイプ<code>labels</code>の関連付けを学習させるために発話情報を数値列に変換する必要がある。<br>
+        その作成には<code>TfidfVectorizer</code>を用いて変換する。</p>
+      <p>これを<strong>素性ベクトル</strong>と呼び、後続処理で<strong>ラベル</strong>との関連付け学習を行うために作成している。<br>
+        fit_transformで発話内容<code>sents</code>を素性ベクトルに変換したものが<code>X</code>で、発話情報にある単語の登場頻度と学習データから推測できる単語の重要度をもとに素数ベクトルを自動生成している。
+      </p>
+      <pre><code class="language-python"><span class="hljs-comment"># TfidfVectorizerを用いて，各文をベクトルに変換</span>
+vectorizer = TfidfVectorizer(tokenizer=<span class="hljs-keyword">lambda</span> x:x.split(), ngram_range=(<span class="hljs-number">1</span>,<span class="hljs-number">3</span>))
+X = vectorizer.fit_transform(sents)
+</code></pre>
+    </li>
+    <li>
+      <p>変換後の数値列を<code>Y</code>に保持<br>
+        上記と同様にfit_transformで発話行為タイプ<strong>labels</strong>（ラベル）を数値列に変換したものを<code>Y</code>に保持する。</p>
+      <pre><code class="language-python"><span class="hljs-comment"># LabelEncoderを用いて，ラベルを数値に変換</span>
+label_encoder = LabelEncoder()
+Y = label_encoder.fit_transform(labels)
+</code></pre>
+    </li>
+    <li>
+      <p>ラベルを取得するモデルを学習させる<br>
+        コメントの通り、発話内容<strong>sents</strong>を素性ベクトル化した<code>X</code>から、発話行為タイプ<strong>labels</strong>（ラベル）を数値列化した<strong>Y</strong>を取得するモデルを<strong>SVM</strong>を用いて学習させている。<br>
+        ※ <strong>モデル</strong>とは素性ベクトルの各要素とラベルとの関連を定義した大量の通知データのこと指す。</p>
+      <pre><code class="language-python"><span class="hljs-comment"># SVMでベクトルからラベルを取得するモデルを学習</span>
+svc = SVC(gamma=<span class="hljs-string">&quot;scale&quot;</span>)
+svc.fit(X,Y)
+</code></pre>
+    </li>
+    <li>
+      <p>svc.modelに保存<br>
+        最後に素性ベクトル作成時に用いた<code>vectorizer</code>とラベルを数値列化する際に用いた<code>label_encoder</code>、そしてモデル学習時に用いた
+        <strong>svc</strong>達を<strong>dill</strong>を用いて、ファイルに出力する。</p>
+      <pre><code class="language-python"><span class="hljs-comment"># 学習されたモデル等一式を svc.modelに保存</span>
+<span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;svc.model&quot;</span>,<span class="hljs-string">&quot;wb&quot;</span>) <span class="hljs-keyword">as</span> f:
+    dill.dump(vectorizer, f)
+    dill.dump(label_encoder, f)
+    dill.dump(svc, f)
+</code></pre>
+    </li>
+    <li>
+      <p>実行確認<br>
+        上記実装サンプル（train_da_model.py）の実行確認<br>
+        ※ 実行後<code>svc.model</code>が生成されていれば成功。</p>
+      <pre><code class="language-bash">$ python ~/gitlocalrep/dsbook/train_da_model.py
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="学習結果の確認">学習結果の確認</h3>
+  <p>前項で作成した<code>svc.model</code>が正しく推定できるか以下のテストプログラムを実行して確認する。</p>
+  <ul>
+    <li><code>da_extractor.py</code>（テストプログラム）
+      <pre><code class="language-python"><span class="hljs-keyword">import</span> MeCab
+<span class="hljs-keyword">from</span> sklearn.feature_extraction.text <span class="hljs-keyword">import</span> TfidfVectorizer
+<span class="hljs-keyword">from</span> sklearn.svm <span class="hljs-keyword">import</span> SVC
+<span class="hljs-keyword">from</span> sklearn.preprocessing <span class="hljs-keyword">import</span> LabelEncoder
+<span class="hljs-keyword">import</span> dill
+
+mecab = MeCab.Tagger()
+mecab.parse(<span class="hljs-string">&#x27;&#x27;</span>)
+
+<span class="hljs-comment"># SVMモデルの読み込み</span>
+<span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;svc.model&quot;</span>,<span class="hljs-string">&quot;rb&quot;</span>) <span class="hljs-keyword">as</span> f:
+    vectorizer = dill.load(f)
+    label_encoder = dill.load(f)
+    svc = dill.load(f)
+
+<span class="hljs-comment"># 発話から発話行為タイプを推定  </span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">extract_da</span>(<span class="hljs-params">utt</span>):
+    words = []
+    <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> mecab.parse(utt).splitlines():
+        <span class="hljs-keyword">if</span> line == <span class="hljs-string">&quot;EOS&quot;</span>:
+            <span class="hljs-keyword">break</span>
+        <span class="hljs-keyword">else</span>:
+            word, feature_str = line.split(<span class="hljs-string">&quot;\t&quot;</span>)
+            words.append(word)
+    tokens_str = <span class="hljs-string">&quot; &quot;</span>.join(words)
+    X = vectorizer.transform([tokens_str])
+    Y = svc.predict(X)
+    <span class="hljs-comment"># 数値を対応するラベルに戻す</span>
+    da = label_encoder.inverse_transform(Y)[<span class="hljs-number">0</span>]
+    <span class="hljs-keyword">return</span> da
+
+<span class="hljs-keyword">for</span> utt <span class="hljs-keyword">in</span> [<span class="hljs-string">&quot;大阪の明日の天気&quot;</span>,<span class="hljs-string">&quot;もう一度はじめから&quot;</span>,<span class="hljs-string">&quot;東京じゃなくて&quot;</span>]:
+    da = extract_da(utt)
+    <span class="hljs-built_in">print</span>(utt,da)
+</code></pre>
+    </li>
+  </ul>
+  <p>以下、テストプログラム（da_extractor.py）の処理解説。</p>
+  <ul>
+    <li>
+      <p>SVMモデルの読み込み<br>
+        まず<code>svc.model</code>を開き、上記で出力した<code>vectorizer</code>、<code>label_encoder</code>、<strong>svc</strong>を<strong>dill</strong>を用いて読み込む。
+      </p>
+      <pre><code class="language-python"><span class="hljs-comment"># SVMモデルの読み込み</span>
+<span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;svc.model&quot;</span>,<span class="hljs-string">&quot;rb&quot;</span>) <span class="hljs-keyword">as</span> f:
+    vectorizer = dill.load(f)
+    label_encoder = dill.load(f)
+    svc = dill.load(f)
+</code></pre>
+    </li>
+    <li>
+      <p>発話から発話行為タイプを推定 <br>
+        発話行為タイプを推定する<code>extract_da</code>メソッド。<br>
+        下記の要領で推定結果<code>da</code>を返す。<br></p>
+      <ul>
+        <li>
+          <p>
+            （＊9）mecabで最小単位の単語（形態素）に分割し（splitlines）、最後（EOS）であればループを終了、最後（EOS）でなければタブで分割（split）し、先頭単語（word）のみを単語配列（words）に追加する。
+          </p>
+        </li>
+        <li>
+          <p>（＊10）単語配列（words）を空白区切りに置換え <code>tokens_str</code>に格納する。</p>
+        </li>
+        <li>
+          <p>（＊11）上記で読込んだ<code>vectorizer</code>を <code>TfidfVectorizer</code>を用いて素性ベクトルに変換する。</p>
+        </li>
+        <li>
+          <p>（＊12）（＊11）の<code>X</code>と上記で読み込んだ<strong>svc</strong>の<code>predict</code>を用いて推定結果を取得する。</p>
+        </li>
+        <li>
+          <p>（＊13）上記で読込んだ<code>label_encoder</code>をもとに数値列からラベル名に戻して返す。</p>
+          <pre><code class="language-python"><span class="hljs-comment"># 発話から発話行為タイプを推定  </span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">extract_da</span>(<span class="hljs-params">utt</span>):
+    words = []
+    <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> mecab.parse(utt).splitlines():
+        <span class="hljs-keyword">if</span> line == <span class="hljs-string">&quot;EOS&quot;</span>:
+            <span class="hljs-keyword">break</span>
+        <span class="hljs-keyword">else</span>:
+            word, feature_str = line.split(<span class="hljs-string">&quot;\t&quot;</span>)
+            words.append(word)
+    tokens_str = <span class="hljs-string">&quot; &quot;</span>.join(words)
+    X = vectorizer.transform([tokens_str])
+    Y = svc.predict(X)
+    <span class="hljs-comment"># 数値を対応するラベルに戻す</span>
+    da = label_encoder.inverse_transform(Y)[<span class="hljs-number">0</span>]
+    <span class="hljs-keyword">return</span> da  
+</code></pre>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>推定結果の取得<br>
+        テスト用の3つの発話内容で上記<code>extract_da</code>メソッドを呼び、発話行為タイプの推定結果を取得する。</p>
+      <pre><code class="language-python"><span class="hljs-keyword">for</span> utt <span class="hljs-keyword">in</span> [<span class="hljs-string">&quot;大阪の明日の天気&quot;</span>,<span class="hljs-string">&quot;もう一度はじめから&quot;</span>,<span class="hljs-string">&quot;東京じゃなくて&quot;</span>]:
+    da = extract_da(utt)
+    <span class="hljs-built_in">print</span>(utt,da)
+</code></pre>
+    </li>
+    <li>
+      <p>実行結果<br>
+        上記テストプログラム（da_extractor.py）の実行結果
+        それぞれの発話内容（左）に対して、正しい発話行為タイプの推定（右）ができている。</p>
+      <pre><code class="language-bash">$ python ~/gitlocalrep/dsbook/da_extractor.py
+大阪の明日の天気 request-weather
+もう一度はじめから initialize
+東京じゃなくて correct-info
+</code></pre>
+    </li>
+  </ul>
+</div>
