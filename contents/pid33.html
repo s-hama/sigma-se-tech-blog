@@ -1,0 +1,296 @@
+<div class="post-body">
+  <h2 id="目的">目的</h2>
+  <p>この記事では、算術演算子について基本的な使い方を記載する。</p>
+  <h2 id="各算術演算子の使い方と実装サンプル">各算術演算子の使い方と実装サンプル</h2>
+  <h3 id="算術演算子の種類">算術演算子の種類</h3>
+  <p>
+    <strong>算術演算子</strong>は、一般的な<strong>四則演算</strong>とプログラム特有の表現である<strong>単項プラス演算</strong>と<strong>単項マイナス演算</strong>を合わせた演算子を指す。
+  </p>
+  <ul>
+    <li>算術演算子一覧<table class="table" style="width: 100%;">
+        <thead>
+          <tr>
+            <th scope="col">演算子</th>
+            <th scope="col">使用例</th>
+            <th scope="col">説明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>+</td>
+            <td>+a</td>
+            <td>正の整数：実質 a と同義。（暗黙的変換で用いる）</td>
+          </tr>
+          <tr>
+            <td>-</td>
+            <td>-a</td>
+            <td>符号反転：a の符号を反転する。</td>
+          </tr>
+          <tr>
+            <td>+</td>
+            <td>a + b</td>
+            <td>加算：a に b を足す。</td>
+          </tr>
+          <tr>
+            <td>-</td>
+            <td>a - b</td>
+            <td>減算：a から b を引く。</td>
+          </tr>
+          <tr>
+            <td>*</td>
+            <td>a * b</td>
+            <td>乗算：a に b を掛ける。</td>
+          </tr>
+          <tr>
+            <td>/</td>
+            <td>a / b</td>
+            <td>除算：a を b で割る。</td>
+          </tr>
+          <tr>
+            <td>//</td>
+            <td>a // b</td>
+            <td>整数除算：a を b で割った結果から小数以下を切り捨てる。</td>
+          </tr>
+          <tr>
+            <td>%</td>
+            <td>a % b</td>
+            <td>剰余：a を b で割った余り。</td>
+          </tr>
+          <tr>
+            <td>**</td>
+            <td>a ** b</td>
+            <td>べき乗：a の b 乗。</td>
+          </tr>
+        </tbody>
+      </table>
+    </li>
+  </ul>
+  <p>以降、簡単な実装サンプルを対話モード（インタプリタ）で解説する。</p>
+  <p>※ 演算結果の <strong>最大値</strong>、<strong>最小値</strong> についてはPCのスペックに依存する。詳しくは下記を参考。<br></p>
+  <ul>
+    <li><a class="link-secondary"
+        href="https://sigma-se.com/detail/30/#:~:text=%E5%88%A4%E5%AE%9A%E3%81%95%E3%82%8C%E3%82%8B%E3%80%82-,int%E5%9E%8B%20%3A%20%E6%95%B0%E5%80%A4%EF%BC%88%E6%95%B4%E6%95%B0%EF%BC%89,-%E6%95%B4%E6%95%B0%E5%9E%8B%E3%81%A7">Python
+        - 組込みデータ型まとめ : bool , int, float, complex &gt; int型 : 数値（整数）</a></li>
+    <li><a class="link-secondary"
+        href="https://sigma-se.com/detail/30/#:~:text=maxsize)%0A%20%20%20%209223372036854775807%0A%20%20%20%20%3E%3E%3E-,float%E5%9E%8B%20%3A%20%E6%B5%AE%E5%8B%95%E5%B0%8F%E6%95%B0%E7%82%B9%E6%95%B0%E5%9E%8B,-float%E5%9E%8B%E3%81%AF">Python
+        - 組込みデータ型まとめ : bool , int, float, complex &gt; float型 : 浮動小数点数型</a></li>
+    <li><a class="link-secondary"
+        href="https://sigma-se.com/detail/30/#:~:text=rounds%3D1)%0A%20%20%20%20%3E%3E%3E-,complex%E5%9E%8B%20%3A%20%E8%A4%87%E7%B4%A0%E6%95%B0%E5%9E%8B,-complex%E5%9E%8B%E3%81%AF">Python
+        - 組込みデータ型まとめ : bool , int, float, complex &gt; complex型 : 複素数型</a></li>
+  </ul>
+  <h3 id="単項プラスマイナス演算子-">単項プラス・マイナス演算子（+／-）</h3>
+  <ul>
+    <li>
+      <p>単項プラス演算子（+）<br>
+        単項プラス演算子は、少し特殊で対象値に付加しても符号（もちろん値）の変化はない。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 5 に単項プラス演算子を付加して出力</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">5</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(+int_a)
+    <span class="hljs-number">5</span>
+    &gt;&gt;&gt;
+</code></pre>
+      <p>上記の通り、int型に単項プラス演算子を付加しても結果は同じだが、boolean型からint型の<strong>暗黙的な変換</strong>を利用してコーディングするケースがある。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># boolean を定義し、単項プラス演算子でintに変換</span>
+    &gt;&gt;&gt; bool_a = <span class="hljs-literal">False</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bool_a)
+    <span class="hljs-literal">False</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(+bool_a)
+    <span class="hljs-number">0</span>
+    &gt;&gt;&gt; bool_b = <span class="hljs-literal">True</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(bool_b)
+    <span class="hljs-literal">True</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(+bool_b)
+    <span class="hljs-number">1</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>単項マイナス演算子（-）<br>
+        単項マイナス演算子は、対象値の符号を反転する。<br>
+        ※ <strong>-1</strong> を掛けた結果が欲しいような場合に使用する。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># int型の 5 に単項マイナス演算子を付加して出力</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">5</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(-int_a)
+    -<span class="hljs-number">5</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># 単項マイナス演算子を 2 回付加して出力</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(-(-int_a))
+    <span class="hljs-number">5</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># complex型の 1 - 2j に単項マイナス演算子を付加して出力</span>
+    &gt;&gt;&gt; complex_a = - (<span class="hljs-number">1</span> - <span class="hljs-number">2j</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_a)
+    (-<span class="hljs-number">1</span>+<span class="hljs-number">2j</span>)
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="加算減算-">加算（+）・減算（-）</h3>
+  <ul>
+    <li>
+      <p>加算（+）<br>
+        ※ 四則演算の<strong>加算</strong>と同じ結果。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># int型の 1 に 2 を加算</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">1</span> + <span class="hljs-number">2</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a)
+    <span class="hljs-number">3</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># float型の 1.5 に 2.5 を加算</span>
+    &gt;&gt;&gt; float_a = <span class="hljs-number">1.5</span> + <span class="hljs-number">2.5</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
+    <span class="hljs-number">4.0</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># complex型の 5+5j に 5+5j を加算</span>
+    &gt;&gt;&gt; complex_a = <span class="hljs-number">5</span> + <span class="hljs-number">5j</span> + <span class="hljs-number">5</span> + <span class="hljs-number">5j</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_a)
+    (<span class="hljs-number">10</span>+<span class="hljs-number">10j</span>)
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>減算（-）<br>
+        ※ 四則演算の<strong>減算</strong>と同じ結果。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># int型の 3 から 2 を減算</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">3</span> - <span class="hljs-number">2</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a)
+    <span class="hljs-number">1</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># float型の 1.5 から 2.5 を減算</span>
+    &gt;&gt;&gt; float_a = <span class="hljs-number">1.5</span> - <span class="hljs-number">2.5</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
+    -<span class="hljs-number">1.0</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># complex型の 5 + 5j から 7 + 3j を減算</span>
+    &gt;&gt;&gt; complex_a = <span class="hljs-number">5</span> + <span class="hljs-number">5j</span> - (<span class="hljs-number">7</span> + <span class="hljs-number">3j</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_a)
+    (-<span class="hljs-number">2</span>+<span class="hljs-number">2j</span>)
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="乗算除算剰余">乗算（*）・除算（/・//）・剰余（%）</h3>
+  <ul>
+    <li>
+      <p>乗算（*）<br>
+        ※ 四則演算の<strong>乗算</strong>と同じ結果。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># int型の 2に 2 を乗算</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">2</span> * <span class="hljs-number">2</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a)
+    <span class="hljs-number">4</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># float型の -2.0に 2.5 を乗算</span>
+    &gt;&gt;&gt; float_a = -<span class="hljs-number">2.0</span> * <span class="hljs-number">2.5</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
+    -<span class="hljs-number">5.0</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># complex型の 2 + 2j に -2.0 を乗算</span>
+    &gt;&gt;&gt; complex_a = -<span class="hljs-number">2.0</span> * (<span class="hljs-number">2</span> + <span class="hljs-number">2j</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_a)
+    (-<span class="hljs-number">4</span>-<span class="hljs-number">4j</span>)
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>除算（/）<br>
+        ※ 四則演算の<strong>除算</strong>と同じ結果。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># int型の 6 を 2 で除算</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">6</span> / <span class="hljs-number">2</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a)
+    <span class="hljs-number">3.0</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># float型の -6.5 を 0.5 で除算</span>
+    &gt;&gt;&gt; float_a = -<span class="hljs-number">6.5</span> / <span class="hljs-number">0.5</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
+    -<span class="hljs-number">13.0</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># complex型の 2 + 2j を 2 で除算</span>
+    &gt;&gt;&gt; complex_a = (<span class="hljs-number">2</span> + <span class="hljs-number">2j</span>) / <span class="hljs-number">2</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_a)
+    (<span class="hljs-number">1</span>+<span class="hljs-number">1j</span>)
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>除算（//） ※商のみ<br>
+        除算（//）は、演算結果の<strong>商（整数部のみ）</strong>を返す。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># int型の 6 を 2 で除算 (//)</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">5</span> // <span class="hljs-number">2</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a)
+    <span class="hljs-number">2.0</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># float型の -6.5 を 0.5 で除算 (//)</span>
+    &gt;&gt;&gt; float_a = -<span class="hljs-number">5.5</span> // <span class="hljs-number">0.2</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
+    -<span class="hljs-number">28.0</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># complex型の除算 (//)はできない</span>
+    &gt;&gt;&gt; complex_a = <span class="hljs-number">3j</span> // <span class="hljs-number">2</span>
+    Traceback (most recent call last):
+    File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
+    TypeError: <span class="hljs-string">&quot;can&#x27;t take floor of complex number.&quot;</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+    <li>
+      <p>剰余（%）<br>
+        除算の演算結果の<strong>余り</strong>を返す。</p>
+      <pre><code class="language-python">$ python
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># int型の 5 に 2 の剰余</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">5</span> % <span class="hljs-number">2</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a)
+    <span class="hljs-number">1</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># float型の 5.5 に 2.5 の剰余</span>
+    &gt;&gt;&gt; float_a = <span class="hljs-number">5.5</span> % <span class="hljs-number">2.5</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
+    <span class="hljs-number">0.5</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># complex型に剰余はできない</span>
+    &gt;&gt;&gt; complex_a = <span class="hljs-number">5j</span> % <span class="hljs-number">2</span>
+    Traceback (most recent call last):
+    File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
+    TypeError: <span class="hljs-string">&quot;can&#x27;t mod complex numbers.&quot;</span>
+    &gt;&gt;&gt;
+</code></pre>
+    </li>
+  </ul>
+  <h3 id="べき乗">べき乗（**）</h3>
+  <p><strong>底</strong>と<strong>指数</strong>の演算結果（底の<strong>べき乗</strong>）を返す。</p>
+  <pre><code class="language-python">$ python
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># int型の 2 の 3 乗</span>
+    &gt;&gt;&gt; int_a = <span class="hljs-number">2</span> ** <span class="hljs-number">3</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a)
+    <span class="hljs-number">8</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># int型の 10 の -10 乗</span>
+    &gt;&gt;&gt; int_b = <span class="hljs-number">10</span> ** -<span class="hljs-number">10</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_b)
+    <span class="hljs-number">1e-10</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># float型の 2.0 の 2.5 乗</span>
+    &gt;&gt;&gt; float_a = <span class="hljs-number">2.0</span> ** <span class="hljs-number">2.5</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
+    <span class="hljs-number">5.656854249492381</span>
+    &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-comment"># complex型の 2 + 2j の 3 を乗算</span>
+    &gt;&gt;&gt; complex_a = (<span class="hljs-number">2</span> + <span class="hljs-number">2j</span>) ** <span class="hljs-number">3</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_a)
+    (-<span class="hljs-number">16</span>+<span class="hljs-number">16j</span>)
+    &gt;&gt;&gt;
+</code></pre>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>金城 俊哉（\(2018\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム</li>
+  </ul>
+</div>
