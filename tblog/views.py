@@ -13,6 +13,9 @@ class BaseListView(generic.ListView):
 
 class PostIndexView(BaseListView):
     def get_queryset(self):
+        if self.is_top_page():
+            return Post.objects.none()
+
         queryset = self.base_queryset()
         keyword = self.request.GET.get("quick")
         if keyword:
@@ -25,6 +28,51 @@ class PostIndexView(BaseListView):
         logging.getLogger('command').debug(f'QuerySet contents: {queryset_list}')
 
         return queryset
+
+    def is_top_page(self):
+        return not self.request.GET
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["is_top_page"] = self.is_top_page()
+        if not context["is_top_page"]:
+            return context
+
+        public_posts = Post.objects.filter(is_publick=True).exclude(category__name="PaidContent")
+        context["series_guides"] = [
+            {
+                "label": "暗号技術",
+                "summary": "古典暗号から多表式暗号まで、暗号の仕組みを図解と具体例で順番に整理しています。",
+                "posts": public_posts.filter(title__icontains="暗号技術").order_by("pk")[:6],
+            },
+            {
+                "label": "Python / AI 基礎",
+                "summary": "AIの基本的な考え方や、Pythonで扱うための前提知識を整理します。",
+                "posts": public_posts.filter(Q(title__icontains="Python - AI")).order_by("pk")[:5],
+            },
+            {
+                "label": "Python / 機械学習",
+                "summary": "教師あり学習、分類、回帰など、機械学習の基本的な考え方をPythonの文脈で整理します。",
+                "posts": public_posts.filter(
+                    Q(title__icontains="Python - 機械学習")
+                    | Q(title__icontains="Python - Machine Learning")
+                ).order_by("pk")[:5],
+            },
+            {
+                "label": "Python / ニューラルネットワーク",
+                "summary": "ニューラルネットワークや深層学習の仕組みを、基礎から順番に整理します。",
+                "posts": public_posts.filter(
+                    Q(title__icontains="Python - ニューラルネットワーク")
+                    | Q(title__icontains="Python - Neural Networks")
+                ).order_by("pk")[:5],
+            },
+            {
+                "label": "応用情報技術者試験",
+                "summary": "試験対策で押さえたい用語や考え方を、あとから見返しやすい形でまとめます。",
+                "posts": public_posts.filter(title__icontains="応用情報技術").order_by("pk")[:5],
+            },
+        ]
+        return context
 
 class CategoryView(BaseListView):
     def get_queryset(self):
