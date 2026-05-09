@@ -154,6 +154,10 @@ a.list-group-last-item {
     background-color: var(--bs-white);
 }
 
+.category-child-link {
+    padding-left: 1.75rem;
+}
+
 .card-header h4 {
     margin-bottom: 0;
 }
