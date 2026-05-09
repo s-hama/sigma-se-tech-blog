@@ -11,13 +11,13 @@ urlpatterns = [
     re_path(r'^detail/(?P<pk>[0-9]+)/$',
         views.PostDetailView.as_view(), name='detail'),
  
-    re_path(r'^category/(?P<big>\w+)/(?P<small>\w+)/$',
+    re_path(r'^category/(?P<big>[^/]+)/(?P<small>[^/]+)/$',
         views.CategoryView.as_view(), name='category'),
  
-    re_path(r'^category/(?P<big>\w+)/$',
+    re_path(r'^category/(?P<big>[^/]+)/$',
         views.CategoryView.as_view(), name='category'),
  
-    re_path(r'^tag/(?P<tag>\w+)/$', 
+    re_path(r'^tag/(?P<tag>[^/]+)/$',
         views.TagView.as_view(), name='tag'),
 
     re_path(r'^profile/$',
