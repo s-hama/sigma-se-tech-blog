@@ -29,5 +29,5 @@ urlpatterns = [
     re_path(r'^ppolicy/$',
         views.PpolicyView.as_view(), name='ppolicy'),
 
-    # re_path(r'^ads.txt', lambda x: HttpResponse('google.com, pub-4029756773390765, DIRECT, f08c47fec0942fa0', content_type='text/plain'), name='adsfile'),
+    re_path(r'^ads.txt', lambda x: HttpResponse('google.com, pub-9033413781185393, DIRECT, f08c47fec0942fa0', content_type='text/plain'), name='adsfile'),
 ]
