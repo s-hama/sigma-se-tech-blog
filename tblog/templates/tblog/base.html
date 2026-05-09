@@ -107,44 +107,44 @@
     <nav class="navbar navbar-expand-sm navbar-dark menu-header fixed-top" style="border-radius:.1rem">
         <button class="d-sm-none btn btn-outline-light" style="margin-left: 0.7rem;" type="button"
             data-bs-toggle="collapse" data-bs-target="#exCollapsingNavbar2" aria-controls="exCollapsingNavbar2"
-            aria-expanded="false" aria-label="Menu navigation">Menu</button>
+            aria-expanded="false" aria-label="メニューを開く">メニュー</button>
 
         <div class="collapse navbar-collapse d-sm-block" id="exCollapsingNavbar2">
             <div class="container">
                 <ul class="nav navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'tblog:index' %}"
-                            style="padding-left: unset;">Top<span class="visually-hidden">(current)</span></a>
+                            style="padding-left: unset;">トップ<span class="visually-hidden">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == '/profile/' %}active{% endif %}"
-                            href="{% url 'tblog:profile' %}">Profile</a>
+                            href="{% url 'tblog:profile' %}">プロフィール</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == '/contact/' %}active{% endif %}"
-                            href="{% url 'tblog:contact' %}">Contact</a>
+                            href="{% url 'tblog:contact' %}">お問い合わせ</a>
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == '/ppolicy/' %}active{% endif %}"
-                            href="{% url 'tblog:ppolicy' %}">PrivacyPolicy</a>
+                            href="{% url 'tblog:ppolicy' %}">プライバシーポリシー</a>
                     </li>
                     <li class="nav-item" style="margin-right: 1rem;">
-                        <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+                        <a class="nav-link" href="{% url 'admin:index' %}">管理</a>
                     </li>
                     {% endif %}
                     {% if not user.is_authenticated %}
                     <li class="nav-item" style="margin-right: 1rem;">
                         <a class="nav-link {% if request.path == '/ppolicy/' %}active{% endif %}"
-                            href="{% url 'tblog:ppolicy' %}">PrivacyPolicy</a>
+                            href="{% url 'tblog:ppolicy' %}">プライバシーポリシー</a>
                     </li>
                     {% endif %}
                     <li>
                         <form action="{% url 'tblog:index' %}" method="GET" role="search" class="form-inline">
                             <input class="form-control" type="text" name="quick"
-                                style="width:130px; display:inline-block;" placeholder="Keyword" aria-label="Keyword">
+                                style="width:130px; display:inline-block;" placeholder="キーワード" aria-label="キーワード">
                             <button class="btn btn-outline-light" style="vertical-align:top;"
-                                type="submit">Search</button>
+                                type="submit">検索</button>
                         </form>
                     </li>
                 </ul>
