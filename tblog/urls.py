@@ -17,7 +17,7 @@ urlpatterns = [
     re_path(r'^category/(?P<big>[^/]+)/$',
         views.CategoryView.as_view(), name='category'),
  
-    re_path(r'^tag/(?P<tag>[^/]+)/$',
+    re_path(r'^tag/(?P<tag>.+)/$',
         views.TagView.as_view(), name='tag'),
 
     re_path(r'^profile/$',
