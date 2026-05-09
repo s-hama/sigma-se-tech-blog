@@ -41,35 +41,73 @@ class PostIndexView(BaseListView):
         public_posts = Post.objects.filter(is_publick=True).exclude(category__name="PaidContent")
         context["series_guides"] = [
             {
-                "label": "暗号技術",
-                "summary": "古典暗号から多表式暗号まで、暗号の仕組みを図解と具体例で順番に整理しています。",
-                "posts": public_posts.filter(title__icontains="暗号技術").order_by("pk")[:6],
+                "label": "暗号技術の歴史と仕組み",
+                "summary": "古典暗号から多表式暗号まで、暗号の仕組みを図解と具体例で順番に解説",
+                "posts": public_posts.filter(title__icontains="情報セキュリティ - 暗号技術").order_by("pk")[:10],
             },
             {
-                "label": "Python / AI 基礎",
-                "summary": "AIの基本的な考え方や、Pythonで扱うための前提知識を整理します。",
-                "posts": public_posts.filter(Q(title__icontains="Python - AI")).order_by("pk")[:5],
-            },
-            {
-                "label": "Python / 機械学習",
-                "summary": "教師あり学習、分類、回帰など、機械学習の基本的な考え方をPythonの文脈で整理します。",
+                "label": "Angular - システム開発の基礎",
+                "summary": "Angularの導入から基本構成まで、Webシステム開発の基礎を解説",
                 "posts": public_posts.filter(
-                    Q(title__icontains="Python - 機械学習")
-                    | Q(title__icontains="Python - Machine Learning")
+                    Q(title__icontains="Webシステム開発 - Angular入門")
+                ).order_by("pk")[:10],
+            },
+            {
+                "label": "Python - 基礎",
+                "summary": "Pythonの開発環境、基本文法、標準機能、数値計算や可視化の基礎を整理",
+                "posts": public_posts.filter(
+                    Q(title__icontains="Python - 開発向けVim設定")
+                    | Q(title__icontains="Python - 対話モード")
+                    | Q(title__icontains="Python - 標準デバッガー（Pdb）")
+                    | Q(title__icontains="Python - NumPy")
+                    | Q(title__icontains="Python - Matplotlib")
+                    | Q(title__icontains="Python - 組込みデータ型")
+                    | Q(title__icontains="Python - 算術演算子まとめ")
+                    | Q(title__icontains="Python - 複合代入演算子まとめ")
+                    | Q(title__icontains="Python - 論理演算子まとめ")
+                    | Q(title__icontains="Python - ビット演算子まとめ")
+                    | Q(title__icontains="Python - 高階関数と畳込み")
+                    | Q(title__icontains="Python - 例外")
+                ).order_by("pk")[:30],
+            },
+            {
+                "label": "Python - タスク指向型対話",
+                "summary": "タスク指向型対話システムの考え方や構成要素をPythonを用いて解説",
+                "posts": public_posts.filter(
+                    Q(title__icontains="Python - タスク指向型対話")
                 ).order_by("pk")[:5],
             },
             {
-                "label": "Python / ニューラルネットワーク",
-                "summary": "ニューラルネットワークや深層学習の仕組みを、基礎から順番に整理します。",
+                "label": "Python - ニューラルネットワーク",
+                "summary": "ニューラルネットワークや深層学習の仕組みをPythonを用いて基礎から順番に解説",
                 "posts": public_posts.filter(
                     Q(title__icontains="Python - ニューラルネットワーク")
-                    | Q(title__icontains="Python - Neural Networks")
+                ).order_by("pk")[:15],
+            },
+            {
+                "label": "Django - 基本操作",
+                "summary": "Django開発で使う基本操作やデバッグ支援ツールを整理",
+                "posts": public_posts.filter(
+                    Q(title__icontains="Django - Django Debug Toolbar")
                 ).order_by("pk")[:5],
             },
             {
-                "label": "応用情報技術者試験",
-                "summary": "試験対策で押さえたい用語や考え方を、あとから見返しやすい形でまとめます。",
-                "posts": public_posts.filter(title__icontains="応用情報技術").order_by("pk")[:5],
+                "label": "Django - VPSで作るDjangoサイト",
+                "summary": "VPS上でDjangoサイトを構築し、公開するまでの手順を解説",
+                "posts": public_posts.filter(title__icontains="VPSで作るDjangoサイト構築手順 - ").order_by("pk")[:5],
+            },
+            {
+                "label": "応用情報技術",
+                "summary": "試験対策で押さえたい用語や考え方を、あとから見返しやすい形で整理",
+                "posts": public_posts.filter(title__icontains="応用情報技術 - ").order_by("pk")[:25],
+            },
+            {
+                "label": "Git - 基本操作",
+                "summary": "Gitの開発準備や状態管理の考え方、基本操作を整理",
+                "posts": public_posts.filter(
+                    Q(title__icontains="Git - 開発準備")
+                    | Q(title__icontains="Git - 状態管理の概念と基本操作")
+                ).order_by("pk")[:5],
             },
         ]
         return context

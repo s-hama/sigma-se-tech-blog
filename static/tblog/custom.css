@@ -198,6 +198,11 @@ a.list-group-last-item {
     margin-left: -0.25rem;
 }
 
+.blog-notice {
+    font-size: .85rem;
+    line-height: 1.6;
+}
+
 .blog-container {
     padding-top: 2rem;
 }
@@ -243,11 +248,12 @@ a.list-group-last-item {
     font-size: .92rem;
     line-height: 1.65;
     margin-bottom: .4rem;
+    padding-left: 1rem;
 }
 
 .recommended-series-group ul {
     margin-bottom: 0;
-    padding-left: 1.25rem;
+    padding-left: 2.25rem;
 }
 
 .recommended-series-group li {
