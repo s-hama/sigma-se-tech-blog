@@ -2,6 +2,39 @@
 {% load static %}
 {% block nav_home %}active{% endblock %}
 {% block content %}
+{% if is_top_page %}
+<section class="recommended-series">
+  <div class="recommended-series-group">
+    <h4>記事一覧</h4>
+    <p>公開記事を新着順にまとめた一覧</p>
+    <ul>
+      <li>
+        <a class="link-secondary" href="?page=1">
+          すべての記事を見る
+        </a>
+      </li>
+    </ul>
+  </div>
+  {% for guide in series_guides %}
+    {% if guide.posts %}
+    <div class="recommended-series-group">
+      <h4>{{ guide.label }}</h4>
+      <p>{{ guide.summary }}</p>
+      <ul>
+        {% for series_post in guide.posts %}
+        <li>
+          <a class="link-secondary" href="{% url 'tblog:detail' series_post.pk %}">
+            {{ series_post.title }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  {% endfor %}
+</section>
+{% else %}
+
 {% for post in post_list %}
 <div class="border-primary mb-3">
   <a class="btn btn-outline-primary btn-list-link col-12 col-sm-12 {% if post.category.name == 'PaidContent' %}disabled{% endif %}" href="{% url 'tblog:detail' post.pk %}">
@@ -20,4 +53,5 @@
     {% include "tblog/page.html" %}
   </div>
 </div>
+{% endif %}
 {% endblock %}

@@ -55,15 +55,15 @@
     <!-- Code Google run prettify -->
     <!-- <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script> -->
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-125872348-3"></script> -->
-    <!-- <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-D82T5FPX9X"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-            gtag('config', 'UA-125872348-3');
-        </script> -->
+    gtag('config', 'G-D82T5FPX9X');
+    </script>
 
     <!-- MathJax -->
     <!-- <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script> -->
@@ -72,7 +72,9 @@
     <link rel="stylesheet" href="{% static 'tblog/custom.css' %}">
 
     <!-- Google AdSense MAIN -->
-    <!-- <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9033413781185393"
+     crossorigin="anonymous"></script>
+
     <!-- <script>
            (adsbygoogle = window.adsbygoogle || []).push({
            google_ad_client: "ca-pub-4029756773390765",
@@ -105,44 +107,44 @@
     <nav class="navbar navbar-expand-sm navbar-dark menu-header fixed-top" style="border-radius:.1rem">
         <button class="d-sm-none btn btn-outline-light" style="margin-left: 0.7rem;" type="button"
             data-bs-toggle="collapse" data-bs-target="#exCollapsingNavbar2" aria-controls="exCollapsingNavbar2"
-            aria-expanded="false" aria-label="Menu navigation">Menu</button>
+            aria-expanded="false" aria-label="メニューを開く">メニュー</button>
 
         <div class="collapse navbar-collapse d-sm-block" id="exCollapsingNavbar2">
             <div class="container">
                 <ul class="nav navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'tblog:index' %}"
-                            style="padding-left: unset;">Top<span class="visually-hidden">(current)</span></a>
+                            style="padding-left: unset;">トップ<span class="visually-hidden">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == '/profile/' %}active{% endif %}"
-                            href="{% url 'tblog:profile' %}">Profile</a>
+                            href="{% url 'tblog:profile' %}">プロフィール</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == '/contact/' %}active{% endif %}"
-                            href="{% url 'tblog:contact' %}">Contact</a>
+                            href="{% url 'tblog:contact' %}">お問い合わせ</a>
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == '/ppolicy/' %}active{% endif %}"
-                            href="{% url 'tblog:ppolicy' %}">PrivacyPolicy</a>
+                            href="{% url 'tblog:ppolicy' %}">プライバシーポリシー</a>
                     </li>
                     <li class="nav-item" style="margin-right: 1rem;">
-                        <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+                        <a class="nav-link" href="{% url 'admin:index' %}">管理</a>
                     </li>
                     {% endif %}
                     {% if not user.is_authenticated %}
                     <li class="nav-item" style="margin-right: 1rem;">
                         <a class="nav-link {% if request.path == '/ppolicy/' %}active{% endif %}"
-                            href="{% url 'tblog:ppolicy' %}">PrivacyPolicy</a>
+                            href="{% url 'tblog:ppolicy' %}">プライバシーポリシー</a>
                     </li>
                     {% endif %}
                     <li>
                         <form action="{% url 'tblog:index' %}" method="GET" role="search" class="form-inline">
                             <input class="form-control" type="text" name="quick"
-                                style="width:130px; display:inline-block;" placeholder="Keyword" aria-label="Keyword">
+                                style="width:130px; display:inline-block;" placeholder="キーワード" aria-label="キーワード">
                             <button class="btn btn-outline-light" style="vertical-align:top;"
-                                type="submit">Search</button>
+                                type="submit">検索</button>
                         </form>
                     </li>
                 </ul>
@@ -153,6 +155,10 @@
         <h1 class="d-sm-none blog-title">SIGMA-SE Tech Blog</h1>
         <div class="container">
             <h1 class="d-none d-sm-block container blog-title">SIGMA-SE Tech Blog</h1>
+            <br>
+            <div class="blog-notice text-white">当サイトは、過去に運営していた別ドメイン（unisia-se.com）から sigma-se.com へ移行した技術ブログです。</div>
+            <div class="blog-notice text-white">旧サイトの記事をもとに、内容の精査・加筆・最新化を行い再構成しています。</div>
+            <div class="blog-notice text-white">正確で実用的な情報提供を目的としています。</div>
         </div>
         <!-- <img border="0" width="1" height="1" src="https://www16.a8.net/0.gif?a8mat=3NN1YJ+3JES8I+50+2HN8K1" alt=""> -->
     </div>

@@ -25,9 +25,25 @@ body {
     border-color: var(--bs-gray-dark);
 }
 
+.menu-header .nav-link {
+    font-size: .9rem;
+}
+
+.menu-header .form-inline {
+    align-items: center;
+    display: flex;
+    gap: .35rem;
+}
+
 .btn-list-link {
+    background-color: var(--bs-white);
     text-align: left;
     padding: 0.5rem 1rem;
+    transition: none;
+}
+
+.btn-list-link .badge {
+    transition: none;
 }
 
 .btn-list-link:hover {
@@ -144,6 +160,10 @@ a.list-group-last-item {
     background-color: var(--bs-white);
 }
 
+.category-child-link {
+    padding-left: 1.75rem;
+}
+
 .card-header h4 {
     margin-bottom: 0;
 }
@@ -198,8 +218,79 @@ a.list-group-last-item {
     margin-left: -0.25rem;
 }
 
+.blog-notice {
+    font-size: .85rem;
+    line-height: 1.6;
+}
+
 .blog-container {
     padding-top: 2rem;
+}
+
+.recommended-series {
+    border-bottom: 1px solid var(--bs-light-border-subtle);
+    margin-bottom: 1.5rem;
+    padding-bottom: .5rem;
+}
+
+.recommended-series h2,
+.latest-posts-title {
+    border-bottom: 1px solid var(--bs-gray-700);
+    color: var(--bs-gray-700);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    padding-bottom: .35rem;
+}
+
+.recommended-series > p {
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+.recommended-series > h2:not(:first-child) {
+    margin-top: 1.5rem;
+}
+
+.recommended-series-group {
+    margin-bottom: 1rem;
+}
+
+.recommended-series-group h3 {
+    color: var(--bs-gray-700);
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.45;
+    margin-bottom: .35rem;
+}
+
+.recommended-series-group p {
+    font-size: .92rem;
+    line-height: 1.65;
+    margin-bottom: .4rem;
+    padding-left: 1rem;
+}
+
+.recommended-series-group ul {
+    margin-bottom: 0;
+    padding-left: 2.25rem;
+}
+
+.recommended-series-group li {
+    margin-bottom: .25rem;
+}
+
+.recommended-series-group li:last-child {
+    margin-bottom: 0;
+}
+
+.latest-posts-title {
+    margin-bottom: 1rem;
+}
+
+.all-posts-link {
+    margin-bottom: 0;
+    text-align: center;
 }
 
 .category-parent {
@@ -388,3 +479,17 @@ a.list-group-last-item {
 	background: var(--bs-dark-text-emphasis);
 }
 
+@media (max-width: 575.98px) {
+    .menu-header .navbar-nav {
+        padding: .5rem 0 .65rem;
+    }
+
+    .menu-header .nav-link {
+        padding-bottom: .2rem;
+        padding-top: .2rem;
+    }
+
+    .menu-header .form-inline {
+        margin-top: .35rem;
+    }
+}
