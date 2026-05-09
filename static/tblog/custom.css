@@ -25,6 +25,16 @@ body {
     border-color: var(--bs-gray-dark);
 }
 
+.menu-header .nav-link {
+    font-size: .9rem;
+}
+
+.menu-header .form-inline {
+    align-items: center;
+    display: flex;
+    gap: .35rem;
+}
+
 .btn-list-link {
     text-align: left;
     padding: 0.5rem 1rem;
@@ -457,4 +467,19 @@ a.list-group-last-item {
 	color: var(--bs-white);
 	tab-size: 4;
 	background: var(--bs-dark-text-emphasis);
+}
+
+@media (max-width: 575.98px) {
+    .menu-header .navbar-nav {
+        padding: .5rem 0 .65rem;
+    }
+
+    .menu-header .nav-link {
+        padding-bottom: .2rem;
+        padding-top: .2rem;
+    }
+
+    .menu-header .form-inline {
+        margin-top: .35rem;
+    }
 }
