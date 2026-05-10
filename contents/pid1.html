@@ -1,13 +1,104 @@
 <div class="post-body">
-  <h2 id="目的">目的</h2>
-  <p>この記事では、以下のVPS環境でDjangoサイトを構築するために必要な「ドメインとSSHの初期設定手順」について説明する。</p>
+  <h2 id="概要">概要</h2>
+  <p>VPS上でDjangoサイトを公開する前段階として、VPS契約、OSインストール、独自ドメイン、DNS設定、SSH初期設定を整理する。</p>
+  <p>この段階では、アプリケーションの実装よりも「安全にサーバーへ接続できること」と「ドメイン名でサーバーへ到達できること」が重要になる。後続のApache、Django、PostgreSQL設定の土台になるため、SSHとDNSの確認を丁寧に行う。</p>
+  <h2 id="前提環境">前提環境</h2>
+  <table class="table" style="width: 80%;">
+    <thead>
+      <tr>
+        <th scope="col">項目</th>
+        <th scope="col">内容</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>OS</td>
+        <td>CentOS 7.4</td>
+      </tr>
+      <tr>
+        <td>言語</td>
+        <td>Python</td>
+      </tr>
+      <tr>
+        <td>Webサーバー</td>
+        <td>Apache</td>
+      </tr>
+      <tr>
+        <td>フレームワーク</td>
+        <td>Django</td>
+      </tr>
+      <tr>
+        <td>データベース</td>
+        <td>PostgreSQL</td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="この記事で理解できること">この記事で理解できること</h2>
   <ul>
-    <li>OS：CentOS</li>
-    <li>言語：Python</li>
-    <li>WEBサーバー：Apache</li>
-    <li>FW：Django</li>
-    <li>DB：PostgresSQL</li>
+    <li>VPS契約時に確認する観点。</li>
+    <li>CentOS環境の初期確認方法。</li>
+    <li>独自ドメインとDNS設定の基本。</li>
+    <li>Aレコードとネームサーバー設定の役割。</li>
+    <li>rootログイン禁止と公開鍵認証の考え方。</li>
   </ul>
+  <h2 id="作業前に確認すること">作業前に確認すること</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">項目</th>
+        <th scope="col">確認内容</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>VPS情報</td>
+        <td>IPアドレス、ログインユーザー、初期パスワードを確認しておく。</td>
+      </tr>
+      <tr>
+        <td>ドメイン</td>
+        <td>example.com のような独自ドメインを取得しておく。</td>
+      </tr>
+      <tr>
+        <td>DNS</td>
+        <td>AレコードがVPSのIPアドレスを指すように設定する。</td>
+      </tr>
+      <tr>
+        <td>SSH</td>
+        <td>rootログイン禁止と公開鍵認証を設定できる状態にする。</td>
+      </tr>
+      <tr>
+        <td>反映時間</td>
+        <td>DNS変更はすぐ反映されないことがあるため、確認時間を見込む。</td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="作業時の注意点">作業時の注意点</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">作業時の注意点</th>
+        <th scope="col">確認ポイント</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>ドメイン契約とDNS設定</td>
+        <td>契約しただけでは接続できず、DNSレコードの設定が必要になる。</td>
+      </tr>
+      <tr>
+        <td>Aレコードとネームサーバー</td>
+        <td>どこで名前解決を管理するかと、どのIPへ向けるかを分けて考える。</td>
+      </tr>
+      <tr>
+        <td>rootログイン禁止</td>
+        <td>一般ユーザーでログインできることを確認してから無効化する。</td>
+      </tr>
+      <tr>
+        <td>パスワード認証の無効化</td>
+        <td>公開鍵で接続できることを確認してから切り替える。</td>
+      </tr>
+    </tbody>
+  </table>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="vps契約">VPS契約</h3>
   <ul>
@@ -18,7 +109,7 @@
   <ul>
     <li>開発環境(Apache, Django, PostgreSQL)がインストール可能で管理しやすいOSに絞る。</li>
     <li>ここでは、英語圏のコミュニティが大きく、日本語情報が豊富で個人的に使い慣れているCentOSを選んだ。</li>
-    <li>CentOS7_x64_x84(標準)をインストール
+    <li>CentOS7_x86_64(標準)をインストール
       インストールは、SAKURA VPS管理者用のコントロールパネルからGUI操作でインストールする。
       <pre><code class="language-bash">$ <span class="hljs-built_in">cat</span> /etc/redhat-release
 CentOS Linux release 7.4.1708 (Core)
@@ -78,4 +169,19 @@ $ passwd *******
     </li>
   </ul>
   <p>上記の設定により、新規登録した<code>vpsuser</code>と<strong>秘密鍵</strong>を使用しないとログインできなくなる。</p>
+  <h2 id="実務とのつながり">実務とのつながり</h2>
+  <ul>
+    <li>DNS設定<br>
+      Webサイト公開時の名前解決トラブルを切り分ける基礎になる。</li>
+    <li>SSH設定<br>
+      本番サーバーの初期セキュリティ対策として必須になる。</li>
+    <li>作業記録<br>
+      どのサービスでドメインとDNSを管理しているかを残しておくと、移行や障害対応が楽になる。</li>
+  </ul>
+  <h2 id="要約">要約</h2>
+  <ul>
+    <li>VPS構築の最初の段階では、OS、ドメイン、DNS、SSHを整える。</li>
+    <li>DNSはドメイン名をVPSのIPアドレスへ向ける仕組みとなる。</li>
+    <li>SSHはrootログインを避け、公開鍵認証を使うことで安全性を高める。</li>
+  </ul>
 </div>
