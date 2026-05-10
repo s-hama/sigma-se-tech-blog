@@ -1,8 +1,37 @@
 ## タイトル
-Git - 状態管理の概念と基本操作 : status, add, commit, diff, reset, push, pull, checkout
+Git - 状態管理と基本操作：status・add・commit・diff・reset・push・pull・checkout
 
-## 目的
-この記事では、Gitにおける状態管理の概念と基本操作について説明する。
+## 概要
+
+Gitの状態管理の考え方と、よく使う基本コマンドを整理する。
+
+Gitでは、ワーキングツリー、インデックス、ローカルリポジトリ、リモートリポジトリのどこに変更があるかを理解することが重要になる。コマンドを丸暗記するより、変更がどこからどこへ移動するかを追うと操作ミスを減らせる。
+
+## この記事で理解できること
+- ワーキングツリー、インデックス、ローカルリポジトリ、リモートリポジトリの違い。
+- status、add、commit、diffの基本的な流れ。
+- resetで何が戻るかの考え方。
+- pushとpullでリモートと同期する流れ。
+- checkoutでブランチや特定コミットへ移動する操作。
+
+## 作業前に確認すること
+
+| 項目 | 確認内容 |
+| --- | --- |
+| 作業場所 | Git管理下のディレクトリでコマンドを実行する。 |
+| 状態確認 | 変更前後でgit statusを確認する習慣を付ける。 |
+| ステージング | commit対象に含める変更だけをgit addする。 |
+| 履歴操作 | resetは影響範囲を理解してから使う。 |
+| リモート操作 | push/pull前に作業ブランチを確認する。 |
+
+## 作業時の注意点
+
+| 作業時の注意点 | 確認ポイント |
+| --- | --- |
+| addとcommit | addはコミット候補へ載せる操作、commitは履歴として保存する操作。 |
+| diffの対象 | ワーキングツリー、インデックス、HEADのどこと比較するかで結果が変わる。 |
+| reset --hard | 作業中の変更も消えるため、慎重に使う。 |
+| pushとpull | pushは送る、pullは取り込む操作として方向を意識する。 |
 
 ## 項目説明
 ### 状態管理の概念
@@ -74,21 +103,21 @@ Git - 状態管理の概念と基本操作 : status, add, commit, diff, reset, p
 
 - `git add`のその他使用例
   ```bash
-  $ git add [FILE]    # ファイルパス指定
-  $ git add [FILE1]  [FILE2]  [FILE3] ....    # ファイル複数指定
-  $ git add [DIR]  # ディレクトリ指定
-   git add [DIR1]  [DIR2]  [DIR3] ....    # ディレクトリ複数指定
-   git add .    # カレントディレクト以下すべてを追加する
-   git add -A    # Git管理内のすべての変更する (--allと同じ)
-   git add --all    # Git管理内のすべての変更する (--Aと同じ)
-   git add -u    # Git管理内で変更があったファイルをすべて追加する (--updateと同じ)
-   git add --update    # Git管理内で変更があったファイルをすべて追加する (--uと同じ)
-   git add -f    # .gitignoreにある管理対象外に設定したファイルも強制的に追加する(.-forceと同じ)
-   git add --force    # .gitignoreにある管理対象外に設定したファイルも強制的に追加る (-と同)
-   git add -p    # Git管理内のすべてのファイルを対象に対話形式 (Y or N)で追加す(--patchとじ)
-   git add --patch    # Git管理内のすべてのファイルを対象に対話形式 (Y or N)で追加る (-同じ)
-   git add -n    # addコマンド実行後のどういった結果になるか確認できる (--dry-rn同じ)
-  $ git add --dry-run    # addコマンド実行後のどういった結果になるか確認できる (-nとじ)
+  $ git add [FILE]    # ファイルを指定して追加する
+  $ git add [FILE1] [FILE2] [FILE3]    # 複数ファイルを指定して追加する
+  $ git add [DIR]    # ディレクトリを指定して追加する
+  $ git add [DIR1] [DIR2] [DIR3]    # 複数ディレクトリを指定して追加する
+  $ git add .    # カレントディレクトリ以下の変更を追加する
+  $ git add -A    # Git管理下の変更をすべて追加する（--all と同じ）
+  $ git add --all    # Git管理下の変更をすべて追加する（-A と同じ）
+  $ git add -u    # 追跡済みファイルの変更と削除を追加する（--update と同じ）
+  $ git add --update    # 追跡済みファイルの変更と削除を追加する（-u と同じ）
+  $ git add -f [FILE]    # .gitignore対象のファイルを強制的に追加する（--force と同じ）
+  $ git add --force [FILE]    # .gitignore対象のファイルを強制的に追加する（-f と同じ）
+  $ git add -p    # 差分を対話形式で確認しながら追加する（--patch と同じ）
+  $ git add --patch    # 差分を対話形式で確認しながら追加する（-p と同じ）
+  $ git add -n    # 実際には追加せず、追加対象を確認する（--dry-run と同じ）
+  $ git add --dry-run    # 実際には追加せず、追加対象を確認する（-n と同じ）
   ```
 
 ### [git commit] : ローカルリポジトリへ反映
@@ -155,7 +184,7 @@ Git - 状態管理の概念と基本操作 : status, add, commit, diff, reset, p
   $ git diff --cached    # HEADとインデックスの差分確認
   $ git diff --name-only    # 差分が発生しているファイル名の一覧を表示する
   $ git diff HEAD^ HEAD    # 直前のコミット内容を確認
-  $ git diff show    # HEADのコミット内容を確認
+  $ git show HEAD    # HEADのコミット内容を確認
   ```
 
 ### [git reset] : コミットの取り消し
@@ -188,7 +217,7 @@ Git - 状態管理の概念と基本操作 : status, add, commit, diff, reset, p
   ```
 
 - **リモートリポジトリ**から特定のブランチを削除<br>
-ローカルの`develop`ブランチをリモートリポジトリの`origin`に反映する。<br>
+不要になったリモートブランチを`origin`から削除する。<br>
   ```bash
   git push origin --delete branch_name
   ```
@@ -202,7 +231,7 @@ Git - 状態管理の概念と基本操作 : status, add, commit, diff, reset, p
 
 ### [git checkout] : チェックアウト
 - ブランチの切り替え<br>
-developブランチに切り替る。<br>
+developブランチに切り替える。<br>
   ```bash
   git checkout develop
   ```
@@ -218,3 +247,16 @@ developブランチに切り替る。<br>
   ```bash
   git checkout a1b2c3d
   ```
+
+## 実務とのつながり
+- 状態管理<br>
+    レビュー前に変更範囲を確認する基本になる。
+- 差分確認<br>
+    意図しない変更をコミットに混ぜないために重要になる。
+- ブランチ操作<br>
+    複数の修正を並行して進めるときの土台になる。
+
+## 要約
+- Gitの基本は、変更がワーキングツリー、インデックス、リポジトリのどこにあるかを理解すること。
+- status、diffで確認し、add、commitで履歴に残す流れを押さえる。
+- resetやpush/pullは影響範囲が大きいため、操作前にブランチと状態を確認する。
