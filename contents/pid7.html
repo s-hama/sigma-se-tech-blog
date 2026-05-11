@@ -1,6 +1,73 @@
 <div class="post-body">
-  <h2 id="目的">目的</h2>
-  <p>この記事では、Python開発向けのVim設定とコードチェックの手順について説明する。</p>
+  <h2 id="概要">概要</h2>
+  <p>Python開発で使うVimの基本設定と、flake8などのコードチェックツールの使い方を整理する。</p>
+  <p>Pythonではインデントが構文に影響するため、エディタ設定は見た目だけでなく実行結果にも関係する。Vimのファイルタイプ別設定とコードチェックを組み合わせることで、保存前後のミスを見つけやすくなる。</p>
+  <h2 id="この記事で理解できること">この記事で理解できること</h2>
+  <ul>
+    <li>.vimrcで共通設定を行う方法。</li>
+    <li>Python専用のftplugin設定を分ける方法。</li>
+    <li>PEP8に合わせたインデントと行幅の考え方。</li>
+    <li>flake8、pyflakes、pycodestyle、mccabeの役割。</li>
+    <li>コードチェック結果の読み方。</li>
+  </ul>
+  <h2 id="作業前に確認すること">作業前に確認すること</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">項目</th>
+        <th scope="col">確認内容</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Vim設定ファイル</td>
+        <td>.vimrcとftpluginの役割を分ける。</td>
+      </tr>
+      <tr>
+        <td>インデント</td>
+        <td>タブではなくスペース4つを基本にする。</td>
+      </tr>
+      <tr>
+        <td>行末スペース</td>
+        <td>保存時に余計な空白を除去する。</td>
+      </tr>
+      <tr>
+        <td>flake8</td>
+        <td>複数のチェックをまとめて実行する。</td>
+      </tr>
+      <tr>
+        <td>複雑度</td>
+        <td>必要に応じてmccabeで関数の複雑さを見る。</td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="作業時の注意点">作業時の注意点</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">作業時の注意点</th>
+        <th scope="col">確認ポイント</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>filetype設定</td>
+        <td>Python用設定が読み込まれない場合はディレクトリやファイル名を確認する。</td>
+      </tr>
+      <tr>
+        <td>タブとスペース</td>
+        <td>混在するとインデントエラーや読みにくさにつながる。</td>
+      </tr>
+      <tr>
+        <td>flake8の警告</td>
+        <td>行番号、列番号、エラーコードの順に読む。</td>
+      </tr>
+      <tr>
+        <td>プラグイン追加</td>
+        <td>最初から入れすぎず、必要なチェックから増やす。</td>
+      </tr>
+    </tbody>
+  </table>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="vimの共通設定">Vimの共通設定</h3>
   <ul>
@@ -14,7 +81,7 @@
     <li>
       <p>Pythonを使う上で最低限必要な<strong>自動インデント</strong>と<strong>シンタックスハイライト</strong>のみ設定<br></p>
       <pre><code class="language-bash">$ vim ~/.vimrc
- filetype plugin indenton    <span class="hljs-comment"># 自動インデントの設定</span>
+ filetype plugin indent on    <span class="hljs-comment"># 自動インデントの設定</span>
  syntax on    <span class="hljs-comment"># シンタックスハイライトの設定</span>
 </code></pre>
     </li>
@@ -106,4 +173,19 @@ $ pip show flake8
   </ul>
   <br>
   その他、<strong>flake8</strong>には、<strong>flake8-docstrings</strong>や<strong>flake8-import-order</strong>など色々なプラグインが用意されており、必要に応じてカスタマイズすることができる。
+  <h2 id="実務とのつながり">実務とのつながり</h2>
+  <ul>
+    <li>エディタ設定<br>
+      チーム内で同じコーディング規約を保つ助けになる。</li>
+    <li>静的チェック<br>
+      実行前に単純なミスを検出できる。</li>
+    <li>複雑度チェック<br>
+      関数を分割する判断材料になる。</li>
+  </ul>
+  <h2 id="要約">要約</h2>
+  <ul>
+    <li>Python開発では、Vimのインデント設定がコード品質に直結する。</li>
+    <li>flake8を使うと、PEP8、未定義名、複雑度などをまとめて確認できる。</li>
+    <li>まずは最小限の設定から始め、必要に応じてチェックを増やすと扱いやすい。</li>
+  </ul>
 </div>
