@@ -1,6 +1,43 @@
 <div class="post-body">
-  <h2 id="目的">目的</h2>
-  <p>この記事では、ndarrayの使用方法について説明する。</p>
+  <h2 id="概要">概要</h2>
+  <p>NumPyのndarrayを使い、Pythonで配列を効率よく扱うための基本操作を整理する。</p>
+  <p>Python標準のリストでも複数の値は扱えるが、数値計算や機械学習では、配列同士の演算、条件抽出、行列計算をまとめて実行できるndarrayの理解が重要になる。</p>
+  <p>ここでは、配列の作成、次元や形状の確認、要素アクセス、ブロードキャスト、条件指定による抽出を、対話モードの実行例で確認する。</p>
+  <h2 id="この記事で理解できること">この記事で理解できること</h2>
+<ul>
+  <li>ndarrayとPythonリストの違い。</li>
+  <li>配列の次元、形状、データ型を確認する方法。</li>
+  <li>配列同士の演算やブロードキャストの基本。</li>
+  <li>インデックス指定、スライス、条件抽出の使い方。</li>
+</ul>
+  <h2 id="作業前に確認すること">作業前に確認すること</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">確認項目</th>
+        <th scope="col">内容</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Python環境</td><td>pythonコマンドとpipが使える状態にしておく。</td></tr>
+      <tr><td>NumPy</td><td>pip install numpyでインストールできる環境を用意する。</td></tr>
+      <tr><td>前提知識</td><td>Pythonのリスト、インデックス、四則演算を軽く理解しておく。</td></tr>
+    </tbody>
+  </table>
+  <h2 id="注意したい点">注意したい点</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">注意したい点</th>
+        <th scope="col">確認する観点</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>リストとndarrayの違い</td><td>リストは要素の集合、ndarrayは数値計算向けの多次元配列として考える。</td></tr>
+      <tr><td>shapeの読み方</td><td>(行, 列)の順で読む。1次元配列では列ベクトルと混同しやすい。</td></tr>
+      <tr><td>条件抽出</td><td>比較結果はTrue/Falseの配列になり、それを使って対象要素を取り出す。</td></tr>
+    </tbody>
+  </table>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="numpyの環境準備">NumPyの環境準備</h3>
   <p><strong>NumPy</strong>は、高速な数値演算をはじめ、学術計算も広く対応しているPythonの外部ライブラリ。
@@ -221,7 +258,20 @@
       </ul>
     </li>
   </ul>
-  <h3 id="参考文献">参考文献</h3>
+  <h2 id="実務とのつながり">実務とのつながり</h2>
+<ul>
+  <li>数値計算の土台<br>
+    機械学習、画像処理、統計処理では、データをndarrayとして扱う場面が多い。</li>
+  <li>データ前処理<br>
+    条件抽出や配列演算を理解していると、特徴量の加工や欠損値処理を読み解きやすくなる。</li>
+</ul>
+  <h2 id="要約">要約</h2>
+<ul>
+  <li>NumPyのndarrayは、数値計算に適した多次元配列。</li>
+  <li>shape、ndim、dtypeを確認すると、配列の構造を把握しやすい。</li>
+  <li>配列演算や条件抽出は、機械学習前処理の基本になる。</li>
+</ul>
+  <h2 id="参考文献">参考文献</h2>
   <ul>
     <li>斎藤 康毅（\(2018\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
   </ul>
