@@ -1,16 +1,52 @@
 <div class="post-body">
-  <h2 id="目的">目的</h2>
-  <p>この記事では、交差エントロピー誤差のミニバッチ学習について簡単な実装サンプルを記載する。</p>
+  <h2 id="概要">概要</h2>
+  <p>交差エントロピー誤差をミニバッチ単位で計算する方法を整理する。</p>
+  <p>学習では、すべてのデータを毎回使うのではなく、一部のデータをまとめて取り出して損失を計算することが多い。</p>
+  <p>ここでは、MNISTからミニバッチを取り出し、複数件の予測と正解ラベルに対して平均損失を求める流れを確認する。</p>
+  <h2 id="この記事で理解できること">この記事で理解できること</h2>
+<ul>
+  <li>ミニバッチ学習の考え方。</li>
+  <li>ランダムにデータを抽出する方法。</li>
+  <li>バッチ版の交差エントロピー誤差の実装。</li>
+  <li>ラベル形式の違いに対応する方法。</li>
+</ul>
+  <h2 id="作業前に確認すること">作業前に確認すること</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">確認項目</th>
+        <th scope="col">内容</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>MNIST</td><td>訓練データと正解ラベルを読み込める状態にしておく。</td></tr>
+      <tr><td>NumPy</td><td>random.choice、配列インデックス、ブロードキャストを確認しておく。</td></tr>
+      <tr><td>損失関数</td><td>交差エントロピー誤差の基本式を理解しておく。</td></tr>
+    </tbody>
+  </table>
+  <h2 id="混乱しやすい点">混乱しやすい点</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">混乱しやすい点</th>
+        <th scope="col">確認する観点</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>全件学習との違い</td><td>ミニバッチは全データの一部を使って近似的に損失を計算する。</td></tr>
+      <tr><td>ラベル形式</td><td>one-hot表現かクラス番号かで実装が変わる。</td></tr>
+      <tr><td>平均を取る位置</td><td>バッチ全体の損失は、件数で割って平均として扱う。</td></tr>
+    </tbody>
+  </table>
   <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
   <h3 id="ミニバッチ学習とは">ミニバッチ学習とは</h3>
   <p>機械学習では、<a class="link-secondary"
-      href="https://sigma-se.com/detail/19/#:~:text=%E3%83%87%E3%83%BC%E3%82%BF%E3%82%BB%E3%83%83%E3%83%88%EF%BC%8810%2C000%E5%80%8B%EF%BC%89-,MNIST%E3%81%AE%E3%83%87%E3%83%BC%E3%82%BF%E4%BB%95%E6%A7%98,-%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92%E3%81%A7%E3%81%AF">Python
-      - AI : MNISTのダウンロード方法（手書き数字画像セットを取込む）&gt; MNISTのデータ仕様</a> のような訓練データすべて(学習用データセット 60,000枚)を対象に損失関数を求める必要がある。</p>
+      href="https://sigma-se.com/detail/19/#:~:text=%E3%83%87%E3%83%BC%E3%82%BF%E3%82%BB%E3%83%83%E3%83%88%EF%BC%8810%2C000%E5%80%8B%EF%BC%89-,MNIST%E3%81%AE%E3%83%87%E3%83%BC%E3%82%BF%E4%BB%95%E6%A7%98,-%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92%E3%81%A7%E3%81%AF">Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）&gt; MNISTのデータ仕様</a> のような訓練データすべて(学習用データセット 60,000枚)を対象に損失関数を求める必要がある。</p>
   <p>60,000枚程度であれば問題ないが、ビッグデータでは<strong>数千万のデータ</strong>となり、すべて求めると処理時間もサーバー負荷も膨大となり現実的でない。</p>
   <p>また、高負荷の割には、100件程度のランダム抽出結果と大きく変わらず、機械学習では数千万データの近似値として十分有効である。
     この学習方法を機械学習分野では、<strong>ミニバッチ学習</strong>と呼び、テレビの視聴率計測など一般的に広く使用されている。</p>
   <h3 id="交差エントロピー誤差のミニバッチ学習定義">交差エントロピー誤差のミニバッチ学習（定義）</h3>
-  <p>下記\(（A）\)は、<a class="link-secondary" href="https://sigma-se.com/detail/22/#:~:text=array(t))%0A0.0-,%E4%BA%A4%E5%B7%AE%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AD%E3%83%94%E3%83%BC%E8%AA%A4%E5%B7%AE%E3%81%AE%E5%AE%9A%E7%BE%A9,-%E4%BA%A4%E5%B7%AE%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AD%E3%83%94%E3%83%BC%E8%AA%A4%E5%B7%AE">Python - AI : 損失関数（2乗和誤差、交差エントロピー誤差）と実装サンプル）&gt; 交差エントロピー誤差の定義</a> で解説した交差エントロピー誤差の定義。</p>
+  <p>下記\(（A）\)は、<a class="link-secondary" href="https://sigma-se.com/detail/22/#:~:text=array(t))%0A0.0-,%E4%BA%A4%E5%B7%AE%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AD%E3%83%94%E3%83%BC%E8%AA%A4%E5%B7%AE%E3%81%AE%E5%AE%9A%E7%BE%A9,-%E4%BA%A4%E5%B7%AE%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AD%E3%83%94%E3%83%BC%E8%AA%A4%E5%B7%AE">Python - ニューラルネットワーク： 損失関数（2乗和誤差、交差エントロピー誤差）と実装サンプル）&gt; 交差エントロピー誤差の定義</a> で解説した交差エントロピー誤差の定義。</p>
   <div
     style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
     \[
@@ -45,11 +81,9 @@
   <h3 id="交差エントロピー誤差のミニバッチ学習mnistの準備">交差エントロピー誤差のミニバッチ学習（MNISTの準備）</h3>
   <p>次にMNISTを使った<strong>ミニバッチ学習の準備</strong>と<strong>データの内容</strong>について解説する。</p>
   <p>※ MNISTのデータについては、<a class="link-secondary"
-      href="https://sigma-se.com/detail/19/#:~:text=%E3%83%87%E3%83%BC%E3%82%BF%E3%82%BB%E3%83%83%E3%83%88%EF%BC%8810%2C000%E5%80%8B%EF%BC%89-,MNIST%E3%81%AE%E3%83%87%E3%83%BC%E3%82%BF%E4%BB%95%E6%A7%98,-%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92%E3%81%A7%E3%81%AF">Python
-      - AI : MNISTのダウンロード方法（手書き数字画像セットを取込む）&gt; MNISTのデータ仕様</a> を参考のこと。<br>
+      href="https://sigma-se.com/detail/19/#:~:text=%E3%83%87%E3%83%BC%E3%82%BF%E3%82%BB%E3%83%83%E3%83%88%EF%BC%8810%2C000%E5%80%8B%EF%BC%89-,MNIST%E3%81%AE%E3%83%87%E3%83%BC%E3%82%BF%E4%BB%95%E6%A7%98,-%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92%E3%81%A7%E3%81%AF">Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）&gt; MNISTのデータ仕様</a> を参考のこと。<br>
     ※ リポジトリクローンについては、<a class="link-secondary"
-      href="https://sigma-se.com/detail/19/#:~:text=%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E3%83%A9%E3%83%99%E3%83%AB-,MNIST%E3%81%AE%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89,-%E4%B8%8B%E8%A8%98%E3%80%81mnist">Python
-      - AI : MNISTのダウンロード方法（手書き数字画像セットを取込む）&gt; MNISTのダウンロード</a> を参考のこと。</p>
+      href="https://sigma-se.com/detail/19/#:~:text=%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E3%83%A9%E3%83%99%E3%83%AB-,MNIST%E3%81%AE%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89,-%E4%B8%8B%E8%A8%98%E3%80%81mnist">Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）&gt; MNISTのダウンロード</a> を参考のこと。</p>
   <p>MNISTの<strong>学習用データセット</strong>と<strong>検証用データセット</strong>をダウンロードする。</p>
   <pre><code class="language-bash">$ <span class="hljs-built_in">cd</span> gitlocalrep    <span class="hljs-comment"># ローカルのGitリポジトリに移動</span>
 $ <span class="hljs-built_in">cd</span> deep-learning-from-scratch/ch03    <span class="hljs-comment"># Git (deep-learning-from-scratch) のカレントディレクトリに移動</span>
@@ -95,8 +129,7 @@ $ python
   <p>最後に上記で準備したMNISTのデータセットを使い、<strong>ミニバッチ学習のPython実装サンプル</strong>について解説する。</p>
   <p>MNISTの学習用画像データセット（60,000枚）の中から<strong>100枚</strong>抜出して、<strong>交差エントロピー誤差の損失関数</strong>を求めるサンプル。</p>
   <p>まず、前準備として、<a class="link-secondary"
-      href="https://sigma-se.com/detail/21/#:~:text=%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB-,%E6%8E%A8%E8%AB%96%E3%83%90%E3%83%83%E3%83%81%E5%87%A6%E7%90%86%E3%81%AE%E5%AE%9F%E8%A1%8C%E6%BA%96%E5%82%99,-%E5%89%8D%E3%81%AE%E8%A8%98%E4%BA%8B">Python
-      - AI : MNISTを使った推論バッチ処理の実装サンプル &gt; 推論バッチ処理の実行準備</a>
+      href="https://sigma-se.com/detail/21/#:~:text=%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB-,%E6%8E%A8%E8%AB%96%E3%83%90%E3%83%83%E3%83%81%E5%87%A6%E7%90%86%E3%81%AE%E5%AE%9F%E8%A1%8C%E6%BA%96%E5%82%99,-%E5%89%8D%E3%81%AE%E8%A8%98%E4%BA%8B">Python - ニューラルネットワーク： MNISTを使った推論バッチ処理の実装サンプル &gt; 推論バッチ処理の実行準備</a>
     で解説した<code>ch03/neuralnet_mnist_batch.py</code>の<code>init_network()</code>と<code>predict(network, x)</code>を定義する。
   </p>
   <pre><code class="language-bash">$ <span class="hljs-built_in">cd</span> gitlocalrep    <span class="hljs-comment"># ローカルのGitリポジトリに移動</span>
@@ -196,7 +229,20 @@ $ python
   </ul>
   <pre><code class="language-bash">...     <span class="hljs-built_in">return</span> -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size
 </code></pre>
-  <h3 id="参考文献">参考文献</h3>
+  <h2 id="実務とのつながり">実務とのつながり</h2>
+<ul>
+  <li>大規模データへの対応<br>
+    全データを一度に処理できない場合でも、ミニバッチなら現実的なメモリ量で学習できる。</li>
+  <li>学習の安定性<br>
+    バッチサイズは学習速度やばらつきに影響するため、調整対象になる。</li>
+</ul>
+  <h2 id="要約">要約</h2>
+<ul>
+  <li>ミニバッチ学習は、データの一部をまとめて使う学習方法。</li>
+  <li>交差エントロピー誤差は、バッチ内の損失を平均して扱う。</li>
+  <li>ラベル形式と配列shapeを確認することが実装の要点。</li>
+</ul>
+  <h2 id="参考文献">参考文献</h2>
   <ul>
     <li>斎藤 康毅（\(2018\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
   </ul>
