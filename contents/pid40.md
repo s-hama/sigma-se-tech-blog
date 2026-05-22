@@ -1,10 +1,32 @@
 ## タイトル
-Python - タスク指向型対話 : 2/5 状態遷移ベースの環境準備 > OpenWeatherMap, Telegram
+Python - タスク指向型対話：2/5 OpenWeatherMap・Telegramの環境準備
 
-## 目的
-この記事では、状態遷移ベースのタスク指向型対話システムを作るために使用するOpenWeatherMapとTelegramの利用登録、python-telegram-botの使用方法（インストールと対話の実装サンプル）について記載する。
+## 概要
+状態遷移ベースの天気案内Botで使用するOpenWeatherMap、Telegram、python-telegram-botの準備手順を整理する。
+天気案内Botでは、天気情報を外部APIから取得し、ユーザーとのやり取りをメッセンジャー上で行う必要がある。OpenWeatherMapは天気情報の取得、Telegramはユーザーとの対話画面、python-telegram-botはBot実装の接続部分を担当する。
+ここでは、API利用登録、Bot作成、ライブラリのインストール、オウム返しBotによる疎通確認までを扱う。
 
-## 概要の説明と実装サンプル
+## この記事で理解できること
+- OpenWeatherMapで天気情報を取得する準備。
+- Telegram Botを作成してトークンを取得する流れ。
+- python-telegram-botを使った基本的な対話処理。
+- 外部APIとメッセンジャーを組み合わせる構成。
+
+## 作業前に確認すること
+| 確認項目 | 内容 |
+| --- | --- |
+| OpenWeatherMap | APIキーを取得し、天気情報を取得できる状態にする。 |
+| Telegram | BotFatherでBotを作成し、Botトークンを控える。 |
+| Python環境 | python-telegram-botをインストールし、サンプルを実行できる状態にする。 |
+
+## 作業時の注意点
+| 作業時の注意点 | 確認する観点 |
+| --- | --- |
+| APIキーとBotトークン | コードに直書きすると漏えいリスクがあるため、環境変数や設定ファイルで管理する。 |
+| 疎通確認の順番 | 天気APIとTelegram Botを別々に確認してから結合すると原因を切り分けやすい。 |
+| ライブラリのバージョン | python-telegram-botはバージョンで書き方が変わるため、記事のコードと環境を合わせる。 |
+
+## 解説と実装サンプル
 
 ### 天気情報を取得する「OpenWeatherMap」WebAPIの概要と利用登録
 
@@ -237,8 +259,19 @@ Python - タスク指向型対話 : 2/5 状態遷移ベースの環境準備 > O
     ※ 対話(オウム返し)を終了する場合は「Ctrl + C」で終了。<br>
     ![pid40_2](/static/tblog/img/pid40_2.png)
 
-### 参考文献
+## 実務とのつながり
+- 外部サービス連携<br>
+    実務のBot開発では、APIキー、Webhook、Botトークンなどの外部連携情報を安全に管理する必要がある。
+- 小さな疎通確認<br>
+    オウム返しBotのような最小構成で確認すると、後続の状態遷移処理を追加しやすい。
+
+## 要約
+- OpenWeatherMapは天気情報取得、Telegramは対話インターフェースとして使う。
+- python-telegram-botを使うと、PythonからTelegram Botを実装できる。
+- 本格実装の前に、APIとBotの疎通確認を分けて行うと安全。
+
+## 参考文献
 - 東中 竜一郎、稲葉 通将、水上 雅博（\\(2020\\)）『Pythonでつくる対話システム』株式会社オーム社
 
-### GitHubサポートページ
+## GitHubサポートページ
 - https://github.com/dsbook/dsbook
