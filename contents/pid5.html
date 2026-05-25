@@ -1,6 +1,73 @@
 <div class="post-body">
-  <h2 id="目的">目的</h2>
-  <p>この記事では、GitHubへの新規登録からローカルブランチを作成するまでの開発準備について説明する。</p>
+  <h2 id="概要">概要</h2>
+  <p>GitHubアカウントの準備、SSH鍵の作成と登録、リモートリポジトリの作成、clone、ブランチ作成までを整理する。</p>
+  <p>Gitを使った開発では、ローカルリポジトリとリモートリポジトリの関係を理解しておくと、clone、branch、pushの意味が分かりやすくなる。この記事は、開発を始める前の初期設定に焦点を当てる。</p>
+  <h2 id="この記事で理解できること">この記事で理解できること</h2>
+  <ul>
+    <li>GitリポジトリとGitHubリポジトリの違い。</li>
+    <li>ローカルリポジトリとリモートリポジトリの関係。</li>
+    <li>SSH鍵を使ってGitHubへ接続する流れ。</li>
+    <li>リモートリポジトリをcloneする手順。</li>
+    <li>ブランチを作成して切り替える基本操作。</li>
+  </ul>
+  <h2 id="作業前に確認すること">作業前に確認すること</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">項目</th>
+        <th scope="col">確認内容</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>GitHubアカウント</td>
+        <td>メール認証と基本設定を済ませる。</td>
+      </tr>
+      <tr>
+        <td>SSH鍵</td>
+        <td>公開鍵と秘密鍵の役割を分けて理解する。</td>
+      </tr>
+      <tr>
+        <td>リポジトリ</td>
+        <td>ローカルとリモートのどちらに何があるかを整理する。</td>
+      </tr>
+      <tr>
+        <td>ブランチ名</td>
+        <td>作業内容が分かる名前を付ける。</td>
+      </tr>
+      <tr>
+        <td>接続確認</td>
+        <td>GitHubへのSSH認証が通ることを確認する。</td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="作業時の注意点">作業時の注意点</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">作業時の注意点</th>
+        <th scope="col">確認ポイント</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>公開鍵と秘密鍵</td>
+        <td>GitHubに登録するのは公開鍵であり、秘密鍵は外へ出さない。</td>
+      </tr>
+      <tr>
+        <td>masterとmain</td>
+        <td>現在はmainが標準のことが多く、古い資料ではmaster表記が残る。</td>
+      </tr>
+      <tr>
+        <td>clone後の作業場所</td>
+        <td>cloneで作成されたディレクトリ内でgitコマンドを実行する。</td>
+      </tr>
+      <tr>
+        <td>ブランチ作成と切り替え</td>
+        <td>git branchは作成、git checkoutは切り替えという役割を分ける。</td>
+      </tr>
+    </tbody>
+  </table>
   <h2 id="事前説明">事前説明</h2>
   <h3 id="Git、GitHubのリポジトリ構成イメージ">Git、GitHubのリポジトリ構成イメージ</h3>
   <ul>
@@ -29,7 +96,7 @@
         <strong>Gitブランチ</strong>とは、複数の開発者が同時に修正しても互いに影響を受けないよう<strong>機能単位または、開発者もしくはグループ単位に割り当てる開発領域</strong>のこと。<br>
         ブランチ上で行った変更履歴もそれぞれ記録され変更後、<strong>ブランチ同士のマージ</strong>を行いソース管理していく。<br>
         初期状態では、Gitリポジトリの作成と同時に作られるmaster(※)ブランチのみ存在し、このmaster(※)ブランチがすべての起点となる。<br>
-        ※ 2020年10月1日以降、デフォルトブランチ名が<strong>mastar</strong>から<strong>main</strong>に変更されている。
+        ※ 2020年10月1日以降、デフォルトブランチ名が<strong>master</strong>から<strong>main</strong>に変更されている。
       </p>
     </li>
     <li>
@@ -46,7 +113,7 @@
   <h3 id="githubのアカウント準備">GitHubのアカウント準備</h3>
   <ul>
     <li>
-      <p>Githubのアカウント登録
+      <p>GitHubのアカウント登録
         <a class="link-secondary" href="https://github.com">https://github.com</a> からアカウント登録(Sign up)する。
       </p>
     </li>
@@ -100,7 +167,7 @@ id_rsa  id_rsa.pub
       <pre><code class="language-bash">$ <span class="hljs-built_in">eval</span> `ssh-agent`    <span class="hljs-comment"># ssh-agent起動（evalなしだと環境変数の設定が必要）</span>
 $ ssh-add ~/.ssh/id_rsa
 $ ssh-add -l    <span class="hljs-comment"># 登録確認</span>
-2048 ********** /root/.ssh/id_rsa (RSA)    <span class="hljs-comment"># このように表示されば正常に登録されている</span>
+2048 ********** /root/.ssh/id_rsa (RSA)    <span class="hljs-comment"># このように表示されれば正常に登録されている</span>
 </code></pre>
     </li>
     <li>
@@ -169,7 +236,7 @@ exrep
     <li>
       <p>現在のブランチ確認<br>
         アスタリスク(*)があるブランチが現在の作業ブランチとなる。<br>
-        ※ 今回は、cloneしただけなのでmastarブランチのみ。</p>
+        ※ 今回は、cloneしただけなのでmasterブランチのみ。</p>
       <pre><code class="language-bash">$ <span class="hljs-built_in">cd</span> ~/gitlocalrep/exrep    <span class="hljs-comment"># cloneしたディレクトリに移動</span>
 $ git branch    <span class="hljs-comment"># ブランチの確認</span>
  * master
@@ -210,4 +277,19 @@ $ git branch
     以降は、ローカルリポジトリ(ブランチ)からリモートリポジトリに対して、pull、commit, push等の操作を行いバージョン管理する流れとなる。<br>
     参考 : <a class="link-secondary" href="https://sigma-se.com/detail/6/">Git - 状態管理の概念と基本操作 : status, add, commit, diff, reset, push, pull,
       checkout</a></p>
+  <h2 id="実務とのつながり">実務とのつながり</h2>
+  <ul>
+    <li>SSH接続<br>
+      毎回パスワードを入力せず、安全にリモート操作するために使う。</li>
+    <li>ブランチ運用<br>
+      機能追加や修正作業を本流から分離して進められる。</li>
+    <li>リモート連携<br>
+      チーム開発やバックアップの基本になる。</li>
+  </ul>
+  <h2 id="要約">要約</h2>
+  <ul>
+    <li>GitHubを使う開発準備では、アカウント、SSH鍵、リポジトリ作成、cloneを順番に行う。</li>
+    <li>ローカルリポジトリとリモートリポジトリの関係を理解すると、pushやpullの意味が分かりやすい。</li>
+    <li>作業はブランチを分けて進めると、変更範囲を管理しやすくなる。</li>
+  </ul>
 </div>

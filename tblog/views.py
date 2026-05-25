@@ -41,15 +41,15 @@ class PostIndexView(BaseListView):
         public_posts = Post.objects.filter(is_publick=True).exclude(category__name="PaidContent")
         context["series_guides"] = [
             {
-                "label": "暗号技術の歴史と仕組み",
-                "summary": "古典暗号から多表式暗号まで、暗号の仕組みを図解と具体例で順番に解説",
+                "label": "暗号技術の仕組み",
+                "summary": "古典暗号から耐量子暗号まで、暗号の考え方を図解と具体例で解説",
                 "posts": public_posts.filter(title__icontains="情報セキュリティ - 暗号技術").order_by("pk")[:10],
             },
             {
                 "label": "Angular - システム開発の基礎",
                 "summary": "Angularの導入から基本構成まで、Webシステム開発の基礎を解説",
                 "posts": public_posts.filter(
-                    Q(title__icontains="Webシステム開発 - Angular入門")
+                    Q(title__icontains="Webシステム開発 - Angular基礎")
                 ).order_by("pk")[:10],
             },
             {
@@ -62,10 +62,10 @@ class PostIndexView(BaseListView):
                     | Q(title__icontains="Python - NumPy")
                     | Q(title__icontains="Python - Matplotlib")
                     | Q(title__icontains="Python - 組込みデータ型")
-                    | Q(title__icontains="Python - 算術演算子まとめ")
-                    | Q(title__icontains="Python - 複合代入演算子まとめ")
-                    | Q(title__icontains="Python - 論理演算子まとめ")
-                    | Q(title__icontains="Python - ビット演算子まとめ")
+                    | Q(title__icontains="Python - 算術演算子")
+                    | Q(title__icontains="Python - 複合代入演算子")
+                    | Q(title__icontains="Python - 論理演算子")
+                    | Q(title__icontains="Python - ビット演算子")
                     | Q(title__icontains="Python - 高階関数と畳込み")
                     | Q(title__icontains="Python - 例外")
                 ).order_by("pk")[:30],
@@ -97,17 +97,22 @@ class PostIndexView(BaseListView):
                 "posts": public_posts.filter(title__icontains="VPSで作るDjangoサイト構築手順 - ").order_by("pk")[:5],
             },
             {
-                "label": "応用情報技術",
+                "label": "応用情報技術 - 基礎",
                 "summary": "試験対策で押さえたい用語や考え方を、あとから見返しやすい形で整理",
-                "posts": public_posts.filter(title__icontains="応用情報技術 - ").order_by("pk")[:25],
+                "posts": public_posts.filter(title__icontains="応用情報技術 - 基礎").order_by("pk")[:25],
             },
             {
                 "label": "Git - 基本操作",
                 "summary": "Gitの開発準備や状態管理の考え方、基本操作を整理",
                 "posts": public_posts.filter(
-                    Q(title__icontains="Git - 開発準備")
-                    | Q(title__icontains="Git - 状態管理の概念と基本操作")
+                    Q(title__icontains="Git - GitHub登録・SSH鍵設定・ブランチ作成までの開発準備")
+                    | Q(title__icontains="Git - 状態管理と基本操作")
                 ).order_by("pk")[:5],
+            },
+            {
+                "label": "MathJax",
+                "summary": "MathJaxを使った数式表示の基本と、MathML・LaTeXによる記述方法を整理",
+                "posts": public_posts.filter(title__icontains="MathJax - MathML、LaTeX ").order_by("pk")[:5],
             },
         ]
         return context

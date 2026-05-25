@@ -1,6 +1,43 @@
 <div class="post-body">
-  <h2 id="目的">目的</h2>
-  <p>この記事では、ニューラルネットワークの学習に関する基本的な概念を処理の流れに沿ってまとめる。</p>
+  <h2 id="概要">概要</h2>
+  <p>ニューラルネットワークの学習アルゴリズムを、ミニバッチ、推論、損失関数、勾配、パラメータ更新の流れとして整理する。</p>
+  <p>これまで扱った個別の処理は、学習ループの中で順番につながっている。</p>
+  <p>ここでは、入力データから損失を計算し、勾配を求めて重みを更新するまでの全体像をまとめる。</p>
+  <h2 id="この記事で理解できること">この記事で理解できること</h2>
+<ul>
+  <li>ニューラルネットワーク学習の全体的な処理順序。</li>
+  <li>ミニバッチ、損失関数、勾配、更新式の関係。</li>
+  <li>推論処理と学習処理の違い。</li>
+  <li>これまでの各記事が学習アルゴリズムのどこに対応するか。</li>
+</ul>
+  <h2 id="作業前に確認すること">作業前に確認すること</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">確認項目</th>
+        <th scope="col">内容</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>前提記事</td><td>損失関数、数値微分、勾配降下法、重み更新の記事を確認しておく。</td></tr>
+      <tr><td>用語</td><td>重み、バイアス、ミニバッチ、学習率の意味を整理しておく。</td></tr>
+      <tr><td>実装視点</td><td>処理の順番を追いながら、どこで値が変わるかを意識する。</td></tr>
+    </tbody>
+  </table>
+  <h2 id="混乱しやすい点">混乱しやすい点</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">混乱しやすい点</th>
+        <th scope="col">確認する観点</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>推論と学習の混同</td><td>推論は予測を出す処理、学習は重みを更新する処理。</td></tr>
+      <tr><td>損失を直接下げるわけではない</td><td>勾配を使ってパラメータを動かし、その結果として損失を下げる。</td></tr>
+      <tr><td>一回で最適化されない</td><td>ミニバッチを変えながら何度も更新を繰り返す。</td></tr>
+    </tbody>
+  </table>
   <h2 id="学習アルゴリズムの流れまとめ">学習アルゴリズムの流れ（まとめ）</h2>
   <p>ニューラルネットワークの学習とは、<strong>訓練データを基に意図した結果となる最適な重みパラメータを判別する</strong>処理を指す。</p>
   <p>その処理を大きく分類すると、以下の手順（＊1）～（＊4）の4つに分かれ、これを繰り返すことで限りなく<strong>最適な重みパラメータ</strong>に近づけていく。</p>
@@ -13,7 +50,7 @@
         訓練データの中からランダムに<strong>100件程度</strong>（ある程度信頼性がある件数）抽出した<strong>データ群</strong>を<strong>ミニバッチ</strong>といい、以降の（＊2）～（＊4）では、この<strong>ミニバッチ</strong>単位に<strong>損失関数の結果</strong>と<strong>勾配</strong>を求めるアルゴリズムになっている。
       </p>
       <p>※ 参考<br>
-        <a href="https://sigma-se.com/detail/23/#:~:text=%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB-,%E3%83%9F%E3%83%8B%E3%83%90%E3%83%83%E3%83%81%E5%AD%A6%E7%BF%92%E3%81%A8%E3%81%AF,-%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92%E3%81%A7%E3%81%AF" class="link-secondary">Python - AI : 交差エントロピー誤差のミニバッチ学習と実装サンプル &gt; ミニバッチ学習とは</a>
+        <a href="https://sigma-se.com/detail/23/#:~:text=%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB-,%E3%83%9F%E3%83%8B%E3%83%90%E3%83%83%E3%83%81%E5%AD%A6%E7%BF%92%E3%81%A8%E3%81%AF,-%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92%E3%81%A7%E3%81%AF" class="link-secondary">Python - ニューラルネットワーク： 交差エントロピー誤差のミニバッチ学習と実装サンプル &gt; ミニバッチ学習とは</a>
       </p>
     </li>
     <li>
@@ -24,9 +61,9 @@
       </p>
       <p>※ 参考<br></p>
       <ul>
-        <li><a href="https://sigma-se.com/detail/22/#:~:text=%E3%81%A3%E3%81%A6%E8%A7%A3%E8%AA%AC%E3%81%99%E3%82%8B%E3%80%82-,2%E4%B9%97%E5%92%8C%E8%AA%A4%E5%B7%AE%E3%81%AE%E5%AE%9A%E7%BE%A9,-2%E4%B9%97%E5%92%8C" class="link-secondary">Python - AI : 損失関数（2乗和誤差、交差エントロピー誤差）と実装サンプル &gt; 2乗和誤差の定義</a></li>
-        <li><a href="https://sigma-se.com/detail/22/#:~:text=%EF%BC%89-,2%E4%B9%97%E5%92%8C%E8%AA%A4%E5%B7%AE%E3%81%AE%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB,-Python%20%2D%20AI%20%3A%20MNIST" class="link-secondary">Python - AI : 損失関数（2乗和誤差、交差エントロピー誤差）と実装サンプル &gt; 2乗和誤差の実装サンプル</a></li>
-        <li><a href="https://sigma-se.com/detail/23/#:~:text=%E4%BA%A4%E5%B7%AE%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AD%E3%83%94%E3%83%BC%E8%AA%A4%E5%B7%AE%E3%81%AE%E3%83%9F%E3%83%8B%E3%83%90%E3%83%83%E3%83%81%E5%AD%A6%E7%BF%92%EF%BC%88Python%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB%EF%BC%89" class="link-secondary">Python - AI : 交差エントロピー誤差のミニバッチ学習と実装サンプル &gt; 交差エントロピー誤差のミニバッチ学習（Python実装サンプル）</a></li>
+        <li><a href="https://sigma-se.com/detail/22/#:~:text=%E3%81%A3%E3%81%A6%E8%A7%A3%E8%AA%AC%E3%81%99%E3%82%8B%E3%80%82-,2%E4%B9%97%E5%92%8C%E8%AA%A4%E5%B7%AE%E3%81%AE%E5%AE%9A%E7%BE%A9,-2%E4%B9%97%E5%92%8C" class="link-secondary">Python - ニューラルネットワーク： 損失関数（2乗和誤差、交差エントロピー誤差）と実装サンプル &gt; 2乗和誤差の定義</a></li>
+        <li><a href="https://sigma-se.com/detail/22/#:~:text=%EF%BC%89-,2%E4%B9%97%E5%92%8C%E8%AA%A4%E5%B7%AE%E3%81%AE%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB,-Python%20%2D%20AI%20%3A%20MNIST" class="link-secondary">Python - ニューラルネットワーク： 損失関数（2乗和誤差、交差エントロピー誤差）と実装サンプル &gt; 2乗和誤差の実装サンプル</a></li>
+        <li><a href="https://sigma-se.com/detail/23/#:~:text=%E4%BA%A4%E5%B7%AE%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AD%E3%83%94%E3%83%BC%E8%AA%A4%E5%B7%AE%E3%81%AE%E3%83%9F%E3%83%8B%E3%83%90%E3%83%83%E3%83%81%E5%AD%A6%E7%BF%92%EF%BC%88Python%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB%EF%BC%89" class="link-secondary">Python - ニューラルネットワーク： 交差エントロピー誤差のミニバッチ学習と実装サンプル &gt; 交差エントロピー誤差のミニバッチ学習（Python実装サンプル）</a></li>
       </ul>
     </li>
     <li>
@@ -39,13 +76,13 @@
       <p>そこで基準になるのが<strong>重みパラメータの微分結果</strong>（勾配値）。</p>
       <p>※ 参考<br></p>
       <ul>
-        <li><a href="https://sigma-se.com/detail/24/#:~:text=%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB-,%E6%90%8D%E5%A4%B1%E9%96%A2%E6%95%B0%E3%81%A8%E5%BE%AE%E5%88%86%E3%81%AE%E9%96%A2%E4%BF%82,-%E5%89%8D%E3%81%AE%E8%A8%98%E4%BA%8B" class="link-secondary">Python - AI : 損失関数と数値微分（勾配）の実装サンプル &gt; 損失関数と微分の関係</a></li>
-        <li><a href="https://sigma-se.com/detail/24/#:~:text=%E3%82%8C%E3%81%A6%E3%81%84%E3%82%8B%E3%80%82-,%E5%BE%AE%E5%88%86%E3%81%AE%E3%81%8A%E3%81%95%E3%82%89%E3%81%84,-%E5%BE%AE%E5%88%86%E3%81%A8%E3%81%AF" class="link-secondary">Python - AI : 損失関数と数値微分（勾配）の実装サンプル &gt; 微分のおさらい</a></li>
-        <li><a href="https://sigma-se.com/detail/24/#:~:text=%E6%B1%82%E3%82%81%E3%81%A6%E3%81%84%E3%82%8B%E3%80%82-,%E6%95%B0%E5%80%A4%E5%BE%AE%E5%88%86%E3%81%AE%E9%96%A2%E6%95%B0%E5%AE%9A%E7%BE%A9%EF%BC%88Python%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB%EF%BC%89,-%E4%B8%8A%E8%A8%98%E3%81%A7%E8%A7%A6%E3%82%8C" class="link-secondary">Python - AI : 損失関数と数値微分（勾配）の実装サンプル &gt; 数値微分の関数定義（Python実装サンプル）</a></li>
-        <li><a href="https://sigma-se.com/detail/24/#:~:text=%E6%95%B0%E5%80%A4%E5%BE%AE%E5%88%86%E3%81%AE%E4%BE%8B%EF%BC%88Python%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB%EF%BC%89" class="link-secondary">Python - AI : 損失関数と数値微分（勾配）の実装サンプル &gt; 数値微分の例（Python実装サンプル）</a></li>
-        <li><a href="https://sigma-se.com/detail/25/#:~:text=%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB-,%E5%81%8F%E5%BE%AE%E5%88%86%E3%81%AE%E3%81%8A%E3%81%95%E3%82%89%E3%81%84,-%E5%A4%A7%E3%81%BE%E3%81%8B%E3%81%AB%E8%A8%80%E3%81%86" class="link-secondary">Python - AI : 偏微分と勾配の実装サンプル &gt; 偏微分のおさらい</a></li>
-        <li><a href="https://sigma-se.com/detail/25/#:~:text=%E3%81%AE%E3%81%8A%E3%81%95%E3%82%89%E3%81%84-,%E5%81%8F%E5%BE%AE%E5%88%86%E3%81%AEPython%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB,-%E4%BB%A5%E4%B8%8B%E3%80%81" class="link-secondary">Python - AI : 偏微分と勾配の実装サンプル &gt; 偏微分のPython実装サンプル</a></li>
-        <li><a href="https://sigma-se.com/detail/25/#:~:text=%E3%81%AB%E9%81%8E%E3%81%8E%E3%81%AA%E3%81%84%E3%80%82-,%E5%8B%BE%E9%85%8D%E3%81%AEPython%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB,-%E4%B8%8A%E8%A8%98%E3%81%A7%E3%80%81" class="link-secondary">Python - AI : 偏微分と勾配の実装サンプル &gt; 勾配のPython実装サンプル</a></li>
+        <li><a href="https://sigma-se.com/detail/24/#:~:text=%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB-,%E6%90%8D%E5%A4%B1%E9%96%A2%E6%95%B0%E3%81%A8%E5%BE%AE%E5%88%86%E3%81%AE%E9%96%A2%E4%BF%82,-%E5%89%8D%E3%81%AE%E8%A8%98%E4%BA%8B" class="link-secondary">Python - ニューラルネットワーク： 損失関数と数値微分（勾配）の実装サンプル &gt; 損失関数と微分の関係</a></li>
+        <li><a href="https://sigma-se.com/detail/24/#:~:text=%E3%82%8C%E3%81%A6%E3%81%84%E3%82%8B%E3%80%82-,%E5%BE%AE%E5%88%86%E3%81%AE%E3%81%8A%E3%81%95%E3%82%89%E3%81%84,-%E5%BE%AE%E5%88%86%E3%81%A8%E3%81%AF" class="link-secondary">Python - ニューラルネットワーク： 損失関数と数値微分（勾配）の実装サンプル &gt; 微分のおさらい</a></li>
+        <li><a href="https://sigma-se.com/detail/24/#:~:text=%E6%B1%82%E3%82%81%E3%81%A6%E3%81%84%E3%82%8B%E3%80%82-,%E6%95%B0%E5%80%A4%E5%BE%AE%E5%88%86%E3%81%AE%E9%96%A2%E6%95%B0%E5%AE%9A%E7%BE%A9%EF%BC%88Python%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB%EF%BC%89,-%E4%B8%8A%E8%A8%98%E3%81%A7%E8%A7%A6%E3%82%8C" class="link-secondary">Python - ニューラルネットワーク： 損失関数と数値微分（勾配）の実装サンプル &gt; 数値微分の関数定義（Python実装サンプル）</a></li>
+        <li><a href="https://sigma-se.com/detail/24/#:~:text=%E6%95%B0%E5%80%A4%E5%BE%AE%E5%88%86%E3%81%AE%E4%BE%8B%EF%BC%88Python%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB%EF%BC%89" class="link-secondary">Python - ニューラルネットワーク： 損失関数と数値微分（勾配）の実装サンプル &gt; 数値微分の例（Python実装サンプル）</a></li>
+        <li><a href="https://sigma-se.com/detail/25/#:~:text=%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB-,%E5%81%8F%E5%BE%AE%E5%88%86%E3%81%AE%E3%81%8A%E3%81%95%E3%82%89%E3%81%84,-%E5%A4%A7%E3%81%BE%E3%81%8B%E3%81%AB%E8%A8%80%E3%81%86" class="link-secondary">Python - ニューラルネットワーク： 偏微分と勾配の実装サンプル &gt; 偏微分のおさらい</a></li>
+        <li><a href="https://sigma-se.com/detail/25/#:~:text=%E3%81%AE%E3%81%8A%E3%81%95%E3%82%89%E3%81%84-,%E5%81%8F%E5%BE%AE%E5%88%86%E3%81%AEPython%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB,-%E4%BB%A5%E4%B8%8B%E3%80%81" class="link-secondary">Python - ニューラルネットワーク： 偏微分と勾配の実装サンプル &gt; 偏微分のPython実装サンプル</a></li>
+        <li><a href="https://sigma-se.com/detail/25/#:~:text=%E3%81%AB%E9%81%8E%E3%81%8E%E3%81%AA%E3%81%84%E3%80%82-,%E5%8B%BE%E9%85%8D%E3%81%AEPython%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB,-%E4%B8%8A%E8%A8%98%E3%81%A7%E3%80%81" class="link-secondary">Python - ニューラルネットワーク： 偏微分と勾配の実装サンプル &gt; 勾配のPython実装サンプル</a></li>
       </ul>
     </li>
     <li>
@@ -53,7 +90,7 @@
         重みパラメータを<strong>勾配方向</strong>（より損失が少ない重みパラメータへ）へ微小量だけ更新する。</p>
       <p>※ 参考<br></p>
       <ul>
-        <li><a href="https://sigma-se.com/detail/27/#:~:text=%E9%96%A2%E6%95%B0%EF%BC%89%E3%82%92%E8%BF%94%E3%81%99%E3%80%82-,%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB%E3%81%AE%E5%AE%9F%E8%A1%8C%E7%A2%BA%E8%AA%8D,-%E4%BB%A5%E9%99%8D%E3%80%81%E4%B8%8A%E8%A8%98simpleNet" class="link-secondary">Python - AI : 重みに対する損失関数の勾配法と実装サンプル &gt; 実装サンプルの実行確認</a></li>
+        <li><a href="https://sigma-se.com/detail/27/#:~:text=%E9%96%A2%E6%95%B0%EF%BC%89%E3%82%92%E8%BF%94%E3%81%99%E3%80%82-,%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB%E3%81%AE%E5%AE%9F%E8%A1%8C%E7%A2%BA%E8%AA%8D,-%E4%BB%A5%E9%99%8D%E3%80%81%E4%B8%8A%E8%A8%98simpleNet" class="link-secondary">Python - ニューラルネットワーク： 重みに対する損失関数の勾配法と実装サンプル &gt; 実装サンプルの実行確認</a></li>
       </ul>
     </li>
   </ul>
@@ -63,16 +100,26 @@
   <p>※ 参考<br></p>
   <ul>
     <li><a
-        href="https://sigma-se.com/detail/26/#:~:text=%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB-,%E5%8B%BE%E9%85%8D%E6%B3%95%E3%81%A8%E3%81%AF,-%E4%B8%8B%E8%A8%98%E3%81%AE%E8%A8%98%E4%BA%8B" class="link-secondary">Python
-        - AI : 勾配降下法の実装サンプル &gt; 勾配法とは</a></li>
+        href="https://sigma-se.com/detail/26/#:~:text=%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB-,%E5%8B%BE%E9%85%8D%E6%B3%95%E3%81%A8%E3%81%AF,-%E4%B8%8B%E8%A8%98%E3%81%AE%E8%A8%98%E4%BA%8B" class="link-secondary">Python - ニューラルネットワーク： 勾配降下法の実装サンプル &gt; 勾配法とは</a></li>
     <li><a
-        href="https://sigma-se.com/detail/26/#:~:text=%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB-,%E5%8B%BE%E9%85%8D%E9%99%8D%E4%B8%8B%E6%B3%95%E3%81%AEPython%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB,-Python%20%2D%20AI%20%3A%20%E5%81%8F%E5%BE%AE%E5%88%86" class="link-secondary">Python
-        - AI : 勾配降下法の実装サンプル &gt; 勾配降下法のPython実装サンプル</a></li>
+        href="https://sigma-se.com/detail/26/#:~:text=%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB-,%E5%8B%BE%E9%85%8D%E9%99%8D%E4%B8%8B%E6%B3%95%E3%81%AEPython%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB,-Python%20%2D%20AI%20%3A%20%E5%81%8F%E5%BE%AE%E5%88%86" class="link-secondary">Python - ニューラルネットワーク： 勾配降下法の実装サンプル &gt; 勾配降下法のPython実装サンプル</a></li>
     <li><a
-        href="https://sigma-se.com/detail/26/#:~:text=%E3%82%92%E7%B9%B0%E3%82%8A%E8%BF%94%E3%81%99%E5%9B%9E%E6%95%B0-,%E5%8B%BE%E9%85%8D%E9%99%8D%E4%B8%8B%E6%B3%95%E3%81%AE%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB%E5%AE%9F%E8%A1%8C%E4%BE%8B,-%E6%9C%80%E5%BE%8C%E3%81%AB%E5%AE%9F%E8%A1%8C" class="link-secondary">Python
-        - AI : 勾配降下法の実装サンプル &gt; 勾配降下法の実装サンプル実行例</a></li>
+        href="https://sigma-se.com/detail/26/#:~:text=%E3%82%92%E7%B9%B0%E3%82%8A%E8%BF%94%E3%81%99%E5%9B%9E%E6%95%B0-,%E5%8B%BE%E9%85%8D%E9%99%8D%E4%B8%8B%E6%B3%95%E3%81%AE%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB%E5%AE%9F%E8%A1%8C%E4%BE%8B,-%E6%9C%80%E5%BE%8C%E3%81%AB%E5%AE%9F%E8%A1%8C" class="link-secondary">Python - ニューラルネットワーク： 勾配降下法の実装サンプル &gt; 勾配降下法の実装サンプル実行例</a></li>
   </ul>
-  <h3 id="参考文献">参考文献</h3>
+  <h2 id="実務とのつながり">実務とのつながり</h2>
+<ul>
+  <li>学習ログの読み方<br>
+    損失や精度の推移を見ると、学習が進んでいるか、発散しているかを判断しやすい。</li>
+  <li>フレームワーク理解<br>
+    PyTorchやTensorFlowを使う場合でも、裏側では同じ流れでパラメータ更新が行われる。</li>
+</ul>
+  <h2 id="要約">要約</h2>
+<ul>
+  <li>学習は、ミニバッチ抽出、推論、損失計算、勾配計算、重み更新を繰り返す処理。</li>
+  <li>損失関数はモデルの悪さを測り、勾配は改善方向を探す手がかりになる。</li>
+  <li>一連の流れを理解すると、深層学習フレームワークの動作も追いやすくなる。</li>
+</ul>
+  <h2 id="参考文献">参考文献</h2>
   <ul>
     <li>斎藤 康毅（\(2018\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
   </ul>

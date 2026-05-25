@@ -1,14 +1,108 @@
 <div class="post-body">
-  <h2 id="目的">目的</h2>
-  <p>この記事では、以下のVPS環境でDjangoサイトを構築するために必要な「データベース設定と起動確認手順」について説明する。</p>
+  <h2 id="概要">概要</h2>
+  <p>PostgreSQLの初期設定、Djangoのデータベース接続、settings.pyの本番向け設定、起動確認までを整理する。</p>
+  <p>Djangoサイトを公開する最後の段階では、データベース、マイグレーション、セキュリティ設定、静的ファイル、Apache連携をまとめて確認する必要がある。runserverと本番起動の違いも押さえておく。</p>
+  <h2 id="前提環境">前提環境</h2>
+  <table class="table" style="width: 80%;">
+    <thead>
+      <tr>
+        <th scope="col">項目</th>
+        <th scope="col">内容</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>OS</td>
+        <td>CentOS 7.4</td>
+      </tr>
+      <tr>
+        <td>言語</td>
+        <td>Python</td>
+      </tr>
+      <tr>
+        <td>Webサーバー</td>
+        <td>Apache</td>
+      </tr>
+      <tr>
+        <td>フレームワーク</td>
+        <td>Django</td>
+      </tr>
+      <tr>
+        <td>データベース</td>
+        <td>PostgreSQL</td>
+      </tr>
+      <tr>
+        <td>ドメイン</td>
+        <td>example.com</td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="この記事で理解できること">この記事で理解できること</h2>
   <ul>
-    <li>OS：CentOS 7,4</li>
-    <li>言語：Python</li>
-    <li>WEBサーバー：Apache</li>
-    <li>FW：Django</li>
-    <li>DB：PostgresSQL</li>
-    <li>ドメイン：example.com</li>
+    <li>PostgreSQLの初期化、ユーザー、データベース作成。</li>
+    <li>Djangoのmakemigrationsとmigrateの役割。</li>
+    <li>settings.pyで確認する本番向け設定。</li>
+    <li>DATABASES、STATIC、MEDIA、LOGGINGの基本。</li>
+    <li>runserverとApache経由の起動確認の違い。</li>
   </ul>
+  <h2 id="作業前に確認すること">作業前に確認すること</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">項目</th>
+        <th scope="col">確認内容</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>PostgreSQL</td>
+        <td>データベース名、ユーザー名、接続元IP、権限を整理する。</td>
+      </tr>
+      <tr>
+        <td>Djangoモデル</td>
+        <td>マイグレーション対象のモデル定義があることを確認する。</td>
+      </tr>
+      <tr>
+        <td>settings.py</td>
+        <td>DEBUG、ALLOWED_HOSTS、DATABASES、SSL/TLS設定を確認する。</td>
+      </tr>
+      <tr>
+        <td>ファイアウォール</td>
+        <td>必要なポートだけを開放する。</td>
+      </tr>
+      <tr>
+        <td>起動確認</td>
+        <td>開発用runserverとApache経由の本番確認を分けて行う。</td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="作業時の注意点">作業時の注意点</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">作業時の注意点</th>
+        <th scope="col">確認ポイント</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>データベースユーザー</td>
+        <td>作成したユーザー名とDjangoのDATABASES設定を一致させる。</td>
+      </tr>
+      <tr>
+        <td>DEBUG設定</td>
+        <td>本番ではFalseにし、ALLOWED_HOSTSを正しく設定する。</td>
+      </tr>
+      <tr>
+        <td>マイグレーション</td>
+        <td>モデル変更後はmakemigrationsとmigrateを忘れない。</td>
+      </tr>
+      <tr>
+        <td>runserverとApache</td>
+        <td>両方を混同すると、どちらで動いているか分かりにくくなる。</td>
+      </tr>
+    </tbody>
+  </table>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="データベースの環境構築">データベースの環境構築</h3>
   <ul>
@@ -21,18 +115,18 @@
       <p>データベースとユーザーの作成<br>
         データベース<strong>MACUOSDB</strong>とアクセスユーザー<strong>padmin</strong>を作成。</p>
       <pre><code class="language-bash">$ postgresql-setup initdb    <span class="hljs-comment"># データベースの初期化</span>
-$ service postgresql start    <span class="hljs-comment"># PostgreSqlを起動</span>
+$ service postgresql start    <span class="hljs-comment"># PostgreSQLを起動</span>
 $ sudo -u postgres psql    <span class="hljs-comment"># postgresでログイン</span>
 postgres=# CREATE DATABASE MACUOSDB;    <span class="hljs-comment"># データベースの作成</span>
 postgres=# CREATE USER padmin WITH PASSWORD &#x27;*****&#x27;;    <span class="hljs-comment"># ユーザー、パスワードの作成</span>
 postgres=# ALTER ROLE padmin SET client_encoding TO &#x27;utf8&#x27;;    <span class="hljs-comment"># padminの文字コードを設定</span>
 postgres=# ALTER ROLE padmin SET default_transaction_isolation TO &#x27;read committed&#x27;;    <span class="hljs-comment"># 実行された結果だけを見に行く</span>
 postgres=# ALTER ROLE padmin SET timezone TO &#x27;UTC+9&#x27;;    <span class="hljs-comment"># タイムゾーンを設定</span>
-postgres=# GRANT ALL PRIVILEGES  ON DATABASE MACUOSDB TO admin;    <span class="hljs-comment"># padminに権限を付与</span>
+postgres=# GRANT ALL PRIVILEGES  ON DATABASE MACUOSDB TO padmin;    <span class="hljs-comment"># padminに権限を付与</span>
 </code></pre>
     </li>
     <li>
-      <p>PostgreSqlを起動確認<br>
+      <p>PostgreSQLを起動確認<br>
         active (running) と表示されていれば成功。</p>
       <pre><code class="language-bash">$ service postgresql status
 </code></pre>
@@ -66,7 +160,7 @@ $ firewall-cmd --reload
 </code></pre>
     </li>
   </ul>
-  <h3 id="postgresql周りの設定">PostgreSql周りの設定</h3>
+  <h3 id="postgresql周りの設定">PostgreSQL周りの設定</h3>
   <ul>
     <li>
       <p><strong>postgresql.conf</strong>の<code>listen_addresses</code>を公開</p>
@@ -200,7 +294,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, <span class="hljs-string">&#x27;media&#x27;<
       <ul>
         <li><strong>manage.py</strong>の<code>runserver</code>コマンドでDjangoを起動<br>
           ※ <code>runserver</code>コマンド実行後、http://example.com:8080にアクセスし、ロケットが離陸している画像が表示されれば正常にDjangoが起動している。<br>
-          ※ runserver は、開発モードでの起動であることに注意。
+          ※ runserverは、開発モードでの起動であることに注意。
           <pre><code class="language-bash">$ /var/www/vops/ops/manage.py runserver example.com:8080
 </code></pre>
         </li>
@@ -208,11 +302,26 @@ MEDIA_ROOT = os.path.join(BASE_DIR, <span class="hljs-string">&#x27;media&#x27;<
     </li>
     <li>
       <p>本番環境の起動確認<br>
-        <strong>Apache</strong>、<strong>PostgresSQL</strong>を再起動後、https://example.comにアクセスし、自身で作成したアプリが起動すれば成功。<br>
+        <strong>Apache</strong>、<strong>PostgreSQL</strong>を再起動後、https://example.comにアクセスし、自身で作成したアプリが起動すれば成功。<br>
         モデルを修正した場合は、<strong>manage.py</strong>の<code>makemigrations</code>、<code>migrate</code>を忘れないこと。<br><br>
         また、Django を単独で起動する<strong>manage.py</strong>の<code>runserver</code>や<code>runsslserver</code>は、あくまで開発モードなのでApacheと混同して両方起動しないように注意。<br><br>
-        ※ Apacheもrunserverも単独で動くので双方起動した場合、別プロセスで動きつつApache、Djangoそれぞれでリスエストを解析するので設定次第でどちらかが先に動き挙動がおかしくなる。<br>
+        ※ Apacheもrunserverも単独で動くので双方起動した場合、別プロセスで動きつつApache、Djangoそれぞれでリクエストを解析するので設定次第でどちらかが先に動き挙動がおかしくなる。<br>
       </p>
     </li>
+  </ul>
+  <h2 id="実務とのつながり">実務とのつながり</h2>
+  <ul>
+    <li>DB接続設定<br>
+      アプリケーションとデータベースの責務分離を理解する基礎になる。</li>
+    <li>本番設定<br>
+      DEBUG、Cookie、HTTPS設定はセキュリティに直結する。</li>
+    <li>ログ設定<br>
+      障害調査の入口になるため、出力先と内容を決めておくことが重要になる。</li>
+  </ul>
+  <h2 id="要約">要約</h2>
+  <ul>
+    <li>Djangoサイト公開の仕上げでは、PostgreSQL、マイグレーション、settings.pyをまとめて確認する。</li>
+    <li>本番環境ではDEBUGを無効化し、ALLOWED_HOSTSやSSL/TLS関連設定を整える。</li>
+    <li>起動確認はrunserverではなく、最終的にApache経由で確認する。</li>
   </ul>
 </div>
