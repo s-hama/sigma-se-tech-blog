@@ -1,11 +1,48 @@
 <div class="post-body">
-  <h2 id="目的">目的</h2>
-  <p>この記事では、Pythonで使用する高階関数（map, filter, reduce）の基本的な使い方について記載する。</p>
+  <h2 id="概要">概要</h2>
+  <p>Pythonの高階関数として、map、filter、reduceの基本的な使い方を整理する。</p>
+  <p>高階関数は、関数を引数として受け取ったり、関数を戻り値として返したりする関数を指す。map、filter、reduceを理解すると、繰り返し処理を「変換」「抽出」「集約」という観点で整理できる。</p>
+  <p>ここでは、通常の関数、lambda式、畳込み処理を実行例で確認する。</p>
+  <h2 id="この記事で理解できること">この記事で理解できること</h2>
+<ul>
+  <li>高階関数の基本的な意味。</li>
+  <li>mapで要素を変換する方法。</li>
+  <li>filterで条件に合う要素を抽出する方法。</li>
+  <li>reduceで値を畳み込んで1つに集約する方法。</li>
+</ul>
+  <h2 id="作業前に確認すること">作業前に確認すること</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">確認項目</th>
+        <th scope="col">内容</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Python環境</td><td>対話モードでmap、filter、reduceを確認できる状態にしておく。</td></tr>
+      <tr><td>前提知識</td><td>関数定義、lambda式、for文の基本を理解しておく。</td></tr>
+      <tr><td>import</td><td>reduceはfunctoolsからimportして使う。</td></tr>
+    </tbody>
+  </table>
+  <h2 id="混乱しやすい点">混乱しやすい点</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">混乱しやすい点</th>
+        <th scope="col">確認する観点</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>戻り値がイテレータ</td><td>mapやfilterの結果は、そのままではlistではないため、必要に応じてlistに変換する。</td></tr>
+      <tr><td>読みやすさ</td><td>複雑な処理は高階関数よりfor文の方が読みやすい場合がある。</td></tr>
+      <tr><td>reduceの使いどころ</td><td>集約処理には便利だが、sumなど専用関数がある場合はそちらの方が明確なこともある。</td></tr>
+    </tbody>
+  </table>
   <h2 id="高階関数の説明と実装サンプル">高階関数の説明と実装サンプル</h2>
   <h3 id="高階関数とは">高階関数とは</h3>
   <p>Pythonでは、関数もオブジェクトと同じように捉えるため、関数を引数や戻り値に指定したり、関数に対して別の関数やオブジェクトを代入することができる。</p>
   <p>この性質を利用して、関数を引数に持ったり、関数を戻り値で返す関数を<strong>高階関数</strong>（higher-order function）という。</p>
-  <p>以下、<strong>関数を引数に持つ場合</strong>、<strong>戻り値に持つ場合</strong>、<strong>引数と戻り値の両方に持つ場合</strong>それぞれの簡単な実装サンプルを記載する。</p>
+  <p>以下では、<strong>関数を引数に持つ場合</strong>、<strong>戻り値に持つ場合</strong>、<strong>引数と戻り値の両方に持つ場合</strong>それぞれの実装サンプルを確認する。</p>
   <ul>
     <li>
       <p>関数を引数に持つ高階関数</p>
@@ -67,7 +104,7 @@
 </code></pre>
     </li>
   </ul>
-  <p>以降、高階関数 <code>map</code>, <code>filter</code>, <code>reduce</code> を簡単な実装サンプルで解説する。</p>
+  <p>以降、高階関数 <code>map</code>, <code>filter</code>, <code>reduce</code> を実装サンプルで解説する。</p>
   <h3 id="map要素別の演算">map（要素別の演算）</h3>
   <p><code>map(function, iterable)</code> は、第 \(2\) 引数（iterable）に指定したイテレータ（各要素の反復処理ができるインターフェース）の各要素に対して、第
     \(1\)引数（function）を実行した結果をイテレータで返す。</p>
@@ -202,7 +239,20 @@
 </code></pre>
     </li>
   </ul>
-  <h3 id="参考文献">参考文献</h3>
+  <h2 id="実務とのつながり">実務とのつながり</h2>
+<ul>
+  <li>データ変換<br>
+    リスト内の値を一括変換したり、条件で絞り込んだりする処理で役立つ。</li>
+  <li>関数型の考え方<br>
+    処理を小さな関数として分けると、テストしやすく再利用しやすいコードになる。</li>
+</ul>
+  <h2 id="要約">要約</h2>
+<ul>
+  <li>高階関数は、関数を値として扱う関数。</li>
+  <li>mapは変換、filterは抽出、reduceは集約として考えると分かりやすい。</li>
+  <li>読みやすさを優先し、for文や内包表記と使い分ける。</li>
+</ul>
+  <h2 id="参考文献">参考文献</h2>
   <ul>
     <li>金城 俊哉（\(2018\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム</li>
   </ul>

@@ -1,14 +1,48 @@
 ## タイトル
-VPSで作るDjangoサイト構築手順 - Apache編 : 3/4 Django環境とサーバー設定のセットアップ
+VPSで作るDjangoサイト構築手順 - Apache編：3/4 Python・Django・mod_wsgi設定
 
-## 目的
-この記事では、以下のVPS環境でDjangoサイトを構築するために必要な「Django環境とサーバー設定のセットアップ手順」について説明する。
-- OS：CentOS 7,4
-- 言語：Python
-- WEBサーバー：Apache
-- FW：Django
-- DB：PostgresSQL
-- ドメイン：example.com
+## 概要
+
+VPS上にPython、Django、mod_wsgiを導入し、ApacheからDjangoアプリケーションを起動するための設定を整理する。
+
+Djangoを本番環境で動かす場合、開発用のrunserverではなく、ApacheなどのWebサーバーからWSGI経由でアプリケーションを呼び出す構成を理解することが重要になる。
+
+## 前提環境
+
+| 項目 | 内容 |
+| --- | --- |
+| OS | CentOS 7.4 |
+| 言語 | Python |
+| Webサーバー | Apache |
+| フレームワーク | Django |
+| データベース | PostgreSQL |
+| ドメイン | example.com |
+
+## この記事で理解できること
+- EPEL/IUSリポジトリの導入意図。
+- Pythonとvenvによる仮想環境の作成。
+- Djangoプロジェクトとアプリケーションの作成。
+- mod_wsgiを使ってApacheとDjangoを接続する流れ。
+- VirtualHostとWSGI設定の役割。
+
+## 作業前に確認すること
+
+| 項目 | 確認内容 |
+| --- | --- |
+| Python環境 | 利用するPythonバージョンと仮想環境の場所を決める。 |
+| Django構成 | プロジェクト名、アプリケーション名、配置ディレクトリを整理する。 |
+| Apache設定 | conf.modules.d と conf.d の読み込み関係を確認する。 |
+| mod_wsgi | Pythonバージョンに合ったモジュールパスを確認する。 |
+| HTTPS設定 | 前段のSSL/TLS設定とVirtualHostの関係を確認する。 |
+
+## 作業時の注意点
+
+| 作業時の注意点 | 確認ポイント |
+| --- | --- |
+| venvとシステムPython | どちらにDjangoやmod_wsgiを入れたかを混同しない。 |
+| WSGIファイルパス | wsgi.pyとmod_wsgiモジュールのパスを取り違えやすい。 |
+| 静的ファイル | DjangoアプリのstaticとApacheのAlias設定を対応させる。 |
+| VirtualHost | 80番はHTTPSリダイレクト、443番はDjango起動という役割を分ける。 |
 
 ## 実施内容
 ### CentOSにパッケージリポジトリを導入
@@ -150,3 +184,16 @@ Apacheの設定ファイル**httpd.conf**の設定内容を確認する。<br>
   ※8 静的ファイルへの（アイコンや画像など）エイリアスを設定 及び、静的フォルダまでのパスを設定。<br>
   ※9 wsgi.pyまでのパスを設定。(起動直後にwsgi.pyを実行するよに設定)<br>
   ※10 httpデフォルトの80ポートのVirtualHost。httpsにリダイレクトするように設定。<br>
+
+## 実務とのつながり
+- WSGI構成<br>
+    Djangoを本番Webサーバーで動かす基本構成の理解につながる。
+- 仮想環境<br>
+    プロジェクトごとに依存関係を分離する実務上の基本になる。
+- Apache設定分割<br>
+    設定ファイルを役割ごとに分けると、保守や障害調査がしやすくなる。
+
+## 要約
+- Django本番構成では、Apacheからmod_wsgiを介してアプリケーションを起動する。
+- Pythonの仮想環境、Djangoプロジェクト、WSGI設定のパスをそろえることが重要となる。
+- VirtualHostではHTTPからHTTPSへのリダイレクトとDjango起動設定を分けて考える。

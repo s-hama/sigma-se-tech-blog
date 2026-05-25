@@ -1,14 +1,48 @@
 ## タイトル
-VPSで作るDjangoサイト構築手順 - Apache編 : 2/4 Apache&SSL/TLSの初期設定
+VPSで作るDjangoサイト構築手順 - Apache編：2/4 Apache・SSL/TLS初期設定
 
-## 目的
-この記事では、以下のVPS環境でDjangoサイトを構築するために必要な「ApacheとSSL/TLSの初期設定手順」について説明する。
-- OS：CentOS 7,4
-- 言語：Python
-- WEBサーバー：Apache
-- FW：Django
-- DB：PostgresSQL
-- ドメイン：example.com
+## 概要
+
+VPS上でApacheを起動し、HTTP/HTTPS通信を許可し、Let's EncryptでSSL/TLS証明書を取得する流れを整理する。
+
+Webサイトを公開するには、Webサーバーの起動だけでなく、firewalld、DocumentRoot、HTTPS、証明書更新までつなげて確認する必要がある。特にSSL/TLSは、一度取得して終わりではなく、期限管理まで含めて運用する。
+
+## 前提環境
+
+| 項目 | 内容 |
+| --- | --- |
+| OS | CentOS 7.4 |
+| 言語 | Python |
+| Webサーバー | Apache |
+| フレームワーク | Django |
+| データベース | PostgreSQL |
+| ドメイン | example.com |
+
+## この記事で理解できること
+- Apacheのインストールと起動確認。
+- HTTP/HTTPSをfirewalldで許可する手順。
+- DocumentRootの権限設定。
+- mod_sslとCertbotによるSSL/TLS証明書取得。
+- Let's Encrypt証明書の更新確認。
+
+## 作業前に確認すること
+
+| 項目 | 確認内容 |
+| --- | --- |
+| Apache | httpdをインストールし、サービスとして起動できる状態にする。 |
+| firewalld | httpとhttpsの通信を恒久的に許可する。 |
+| DocumentRoot | 配置先ディレクトリの所有者と権限を確認する。 |
+| ドメイン | 証明書取得前にDNSがVPSへ向いている必要がある。 |
+| 証明書更新 | Let's Encryptの期限と更新手順を確認する。 |
+
+## 作業時の注意点
+
+| 作業時の注意点 | 確認ポイント |
+| --- | --- |
+| HTTPとHTTPS | 80番ポートと443番ポートは別々に許可が必要になる。 |
+| --permanent | 付けない設定は再起動後に消えることがある。 |
+| 証明書取得失敗 | DNS未反映やApache起動中のポート競合を確認する。 |
+| 自動更新 | 証明書の取得だけでなく、更新確認まで運用に含める。 |
 
 ## 実施内容
 ### Apache(httpd)インストール
@@ -164,3 +198,16 @@ httpsで自身のドメイン(https://example.com)にアクセスできれば成
 
 - 有効期限の確認<br>
 ブラウザの証明書情報の有効期限が**3か月**伸びていれば再発行成功。
+
+## 実務とのつながり
+- HTTPS化<br>
+    ログイン情報や管理画面を扱うサイトでは基本的な保護になる。
+- firewalld<br>
+    公開するポートを必要最小限にする考え方につながる。
+- 証明書更新<br>
+    期限切れによるサイト停止を防ぐため、監視や定期確認が重要になる。
+
+## 要約
+- Apacheを公開するには、httpd、firewalld、DocumentRootをまとめて確認する。
+- HTTPS化では、mod_sslとSSL/TLS証明書の設定が必要になる。
+- Let's Encryptは更新が必要なため、取得後の期限確認も運用に含める。

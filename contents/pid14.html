@@ -1,6 +1,43 @@
 <div div class="post-body">
-  <h2 id="目的">目的</h2>
-  <p>この記事では、MathJaxの導入説明とMathML、LaTeXの数式表示サンプルを記載する。</p>
+  <h2 id="概要">概要</h2>
+  <p>MathJaxを使い、Webページ上でMathMLやLaTeX形式の数式を表示する方法を整理する。</p>
+  <p>技術記事では、数式を画像ではなくテキストとして扱えると、拡大表示、検索、修正がしやすくなる。</p>
+  <p>ここでは、MathJaxの読み込み、MathMLの基本要素、LaTeXによる数式表現をサンプルで確認する。</p>
+  <h2 id="この記事で理解できること">この記事で理解できること</h2>
+<ul>
+  <li>MathJaxをWebページへ読み込む基本。</li>
+  <li>MathMLで数式を構造的に表す考え方。</li>
+  <li>LaTeX記法で分数、添字、平方根などを表示する方法。</li>
+  <li>ブログ記事で数式を書くときの注意点。</li>
+</ul>
+  <h2 id="作業前に確認すること">作業前に確認すること</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">確認項目</th>
+        <th scope="col">内容</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>HTMLの基礎</td><td>scriptタグやHTML要素の読み方を確認しておく。</td></tr>
+      <tr><td>数式表記</td><td>分数、指数、添字などの基本的な数式表現を理解しておく。</td></tr>
+      <tr><td>表示確認</td><td>ブラウザでHTMLを表示し、MathJaxが読み込まれているか確認できるようにする。</td></tr>
+    </tbody>
+  </table>
+  <h2 id="注意したい点">注意したい点</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">注意したい点</th>
+        <th scope="col">確認する観点</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>MathMLとLaTeXの違い</td><td>MathMLはHTMLに近い構造、LaTeXは短い記法で数式を書く方法として捉える。</td></tr>
+      <tr><td>エスケープ漏れ</td><td>HTML内では記号の扱いに注意し、ブログの変換処理で壊れない形にする。</td></tr>
+      <tr><td>読み込み順序</td><td>MathJaxのscriptが読み込まれないと、数式がそのまま文字として表示される。</td></tr>
+    </tbody>
+  </table>
   <p>
     MathJaxは、<strong>MathML</strong>、<strong>LaTeX</strong>、<strong>AsciiMath</strong>で記述された数式をウェブブラウザ上で表示するためのJavaScriptライブラリ。<br>
     また、ブラウザ依存せず、如何なる環境下でも動作を保証するクロスブラウザ仕様となる。<br></p>
@@ -21,7 +58,7 @@
     </li>
   </ul>
   <h3 id="mathmlの要素">MathMLの要素</h3>
-  <p>基本<code>&lt;math&gt;</code>内に、下記で記載するMathMLの<strong>mnタグ</strong>や<strong>moタグ</strong>など記述する形になる。<br></p>
+  <p>基本的には<code>&lt;math&gt;</code>内に、<strong>mnタグ</strong>や<strong>moタグ</strong>などのMathML要素を記述する形になる。<br></p>
   <ul>
     <li>
       <p>MathMLの全要素<br>
@@ -76,7 +113,7 @@
     </li>
   </ul>
   <h3 id="mathmlの表示サンプル">MathMLの表示サンプル</h3>
-  <p>以下、表示サンプルを記載する。</p>
+  <p>以下の表示サンプルで確認する。</p>
   <ul>
     <li>
       <p>黄金比</p>
@@ -94,7 +131,7 @@
                 <mn>2</mn>
               </mfrac>
             </math>
-          </div><br>
+</div><br>
         </li>
         <li>マークアップ
           <pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">math</span>&gt;</span>
@@ -328,7 +365,7 @@
   </ul>
   <h3 id="latexの表示サンプル">LaTeXの表示サンプル</h3>
   <p>続いてLaTeX。<br>
-    以下、表示サンプルを記載する。</p>
+    以下の表示サンプルで確認する。</p>
   <ul>
     <li>
       <p>二次方程式の解</p>
@@ -430,4 +467,18 @@
       </ul>
     </li>
   </ul>
+<h2 id="実務とのつながり">実務とのつながり</h2>
+<ul>
+  <li>技術ブログでの数式表現<br>
+    機械学習、暗号技術、情報処理試験の記事では、数式を読みやすく表示できると理解しやすくなる。</li>
+  <li>保守しやすい記事作成<br>
+    画像化した数式より、テキストで書いた数式の方が後から修正しやすい。</li>
+</ul>
+  <h2 id="要約">要約</h2>
+<ul>
+  <li>MathJaxを使うと、Webページ上でMathMLやLaTeXの数式を表示できる。</li>
+  <li>MathMLは構造的、LaTeXは短く書きやすい表現として使い分ける。</li>
+  <li>数式をテキストとして管理すると、技術記事の保守性が上がる。</li>
+</ul>
+
 </div>

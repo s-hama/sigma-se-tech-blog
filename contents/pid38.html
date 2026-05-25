@@ -1,10 +1,47 @@
 <div class="post-body">
-  <h2 id="目的">目的</h2>
-  <p>この記事では、Pythonの例外処理と組込み例外クラスそれぞれの概要について記載する。</p>
+  <h2 id="概要">概要</h2>
+  <p>Pythonの例外処理と組込み例外クラスの基本を整理する。</p>
+  <p>例外処理は、想定外の入力、ファイル操作の失敗、型の不一致などが起きたときに、プログラムを安全に制御するための仕組みとなる。</p>
+  <p>ここでは、try、except、else、finallyの役割と、代表的な組込み例外クラスの位置づけを確認する。</p>
+  <h2 id="この記事で理解できること">この記事で理解できること</h2>
+<ul>
+  <li>例外処理が必要になる場面。</li>
+  <li>try、except、else、finallyの役割。</li>
+  <li>BaseExceptionとExceptionの違い。</li>
+  <li>代表的な組込み例外クラスの読み方。</li>
+</ul>
+  <h2 id="作業前に確認すること">作業前に確認すること</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">確認項目</th>
+        <th scope="col">内容</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Python環境</td><td>対話モードまたはスクリプトで例外を発生させて確認できる状態にしておく。</td></tr>
+      <tr><td>前提知識</td><td>関数、if文、ファイル操作の基本を確認しておく。</td></tr>
+      <tr><td>確認観点</td><td>どの例外を捕捉したいのかを具体的に考える。</td></tr>
+    </tbody>
+  </table>
+  <h2 id="混乱しやすい点">混乱しやすい点</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">混乱しやすい点</th>
+        <th scope="col">確認する観点</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>広すぎるexcept</td><td>`except Exception`だけに頼ると、原因を見失いやすい。必要な例外を絞る。</td></tr>
+      <tr><td>BaseExceptionの扱い</td><td>SystemExitやKeyboardInterruptも含むため、通常の業務コードで安易に捕捉しない。</td></tr>
+      <tr><td>握りつぶし</td><td>exceptで何もせず通過すると、障害原因が分からなくなる。ログや再送出を検討する。</td></tr>
+    </tbody>
+  </table>
   <h2 id="解説と実装サンプル">解説と実装サンプル</h2>
   <h3 id="例外処理と例外クラス">例外処理と例外クラス</h3>
   <p>
-    文字通り、<strong>例外</strong>（正常系でない想定外のエラー）が発生した場合に対処する処理を<strong>例外処理</strong>と呼び、Pythonでは、メイン処理を<strong>try句</strong>に、例外処理を<strong>except句</strong>に記載する。</p>
+    文字通り、<strong>例外</strong>（正常系でない想定外のエラー）が発生した場合に対処する処理を<strong>例外処理</strong>と呼び、Pythonでは、メイン処理を<strong>try句</strong>に、例外処理を<strong>except句</strong>に書く。</p>
   <p>また、<strong>except句</strong>に指定する<strong>例外クラス</strong>によって、どの例外をキャッチするか指定することができる。</p>
   <ul>
     <li>例外クラス BaseException を指定した場合の構文例
@@ -18,7 +55,7 @@
     </li>
   </ul>
   <p>
-    ただし、<code>BaseException</code>は、Pythonすべての組込み<strong>例外クラス</strong>の派生元（基底）となっており、すべての例外キャッチしてしまうため（ユーザーの妨げになる場合もあるため）、<code>Exception</code>クラス等のキャッチしたい目的に応じた<strong>例外クラス</strong>を指定する。
+    ただし、<code>BaseException</code>は、Pythonすべての組込み<strong>例外クラス</strong>の派生元（基底）となっており、すべての例外キャッチしてしまうため（ユーザーの妨げになる場合もあるため）、<code>Exception</code>クラス等のキャッチしたい用途に応じた<strong>例外クラス</strong>を指定する。
   </p>
   <h3 id="組込み例外クラス一覧">組込み例外クラス一覧</h3>
   <p>以下、Pythonの組込み <strong>例外クラス</strong>とそれぞれの概要。<br>
@@ -493,7 +530,20 @@ CLASSES
             SystemExit
             …（以降省略）
 </code></pre>
-  <h3 id="参考文献">参考文献</h3>
+  <h2 id="実務とのつながり">実務とのつながり</h2>
+<ul>
+  <li>堅牢な処理<br>
+    ファイル読み込み、外部API、ユーザー入力では例外処理が品質に直結する。</li>
+  <li>障害調査<br>
+    例外クラスとスタックトレースを読むことで、原因箇所を特定しやすくなる。</li>
+</ul>
+  <h2 id="要約">要約</h2>
+<ul>
+  <li>例外処理は、エラー発生時の流れを制御する仕組み。</li>
+  <li>exceptでは、捕捉したい例外クラスをできるだけ具体的に指定する。</li>
+  <li>finallyは後片付け、elseは例外が起きなかった場合の処理に使える。</li>
+</ul>
+  <h2 id="参考文献">参考文献</h2>
   <ul>
     <li>金城 俊哉（\(2018\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム</li>
   </ul>

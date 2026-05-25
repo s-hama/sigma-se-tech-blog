@@ -1,6 +1,73 @@
 <div class="post-body">
-  <h2 id="目的">目的</h2>
-  <p>この記事では、Django Debug Toolbarの導入手順と設定方法について説明する。</p>
+  <h2 id="概要">概要</h2>
+  <p>Django Debug Toolbarを導入し、settings.pyとurls.pyへ必要な設定を追加する手順を整理する。</p>
+  <p>Django Debug Toolbarは、リクエスト、レスポンス、SQL、テンプレートなどの情報をブラウザ上で確認できる開発支援ツールとなる。開発時の調査には便利だが、DEBUG=Trueを前提とするため、本番環境に出さないことが重要になる。</p>
+  <h2 id="この記事で理解できること">この記事で理解できること</h2>
+  <ul>
+    <li>django-debug-toolbarの役割。</li>
+    <li>仮想環境へパッケージをインストールする手順。</li>
+    <li>INSTALLED_APPSとMIDDLEWAREへの追加方法。</li>
+    <li>INTERNAL_IPSの意味。</li>
+    <li>urls.pyで__debug__用URLを追加する方法。</li>
+  </ul>
+  <h2 id="作業前に確認すること">作業前に確認すること</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">項目</th>
+        <th scope="col">確認内容</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Django環境</td>
+        <td>仮想環境上でDjangoが動く状態にしておく。</td>
+      </tr>
+      <tr>
+        <td>DEBUG設定</td>
+        <td>開発環境でDEBUG=Trueにする。</td>
+      </tr>
+      <tr>
+        <td>静的ファイル</td>
+        <td>ToolbarのCSS/JSが読み込めるようにする。</td>
+      </tr>
+      <tr>
+        <td>接続元IP</td>
+        <td>INTERNAL_IPSに表示対象のIPを設定する。</td>
+      </tr>
+      <tr>
+        <td>本番公開</td>
+        <td>本番ではDebug Toolbarを表示しない。</td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="作業時の注意点">作業時の注意点</h2>
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th scope="col">作業時の注意点</th>
+        <th scope="col">確認ポイント</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Toolbarが出ない</td>
+        <td>DEBUG、INTERNAL_IPS、URL設定、MIDDLEWAREの順に確認する。</td>
+      </tr>
+      <tr>
+        <td>CSSが効かない</td>
+        <td>staticファイルの配置先と読み込み先を確認する。</td>
+      </tr>
+      <tr>
+        <td>設定順序</td>
+        <td>INSTALLED_APPSやMIDDLEWAREの追加位置に注意する。</td>
+      </tr>
+      <tr>
+        <td>本番利用</td>
+        <td>デバッグ情報を公開しないよう、開発用途に限定する。</td>
+      </tr>
+    </tbody>
+  </table>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="django-debug-toolbarの導入">django-debug-toolbarの導入</h3>
   <p>
@@ -133,5 +200,20 @@ INTERNAL_IPS = [<span class="hljs-string">&#x27;127.0.0.1&#x27;</span>]   <span 
 $ cp -r /var/www/vops/lib/python3.6/site-packages/debug_toolbar/static/debug_toolbar [staticファイルのロード先フォルダ]
 </code></pre>
     </li>
+  </ul>
+  <h2 id="実務とのつながり">実務とのつながり</h2>
+  <ul>
+    <li>SQL確認<br>
+      画面表示時にどのSQLが発行されたかを確認できる。</li>
+    <li>性能調査<br>
+      処理時間やテンプレート読み込みを確認できる。</li>
+    <li>設定確認<br>
+      Djangoの設定値をブラウザから確認できる。</li>
+  </ul>
+  <h2 id="要約">要約</h2>
+  <ul>
+    <li>Django Debug Toolbarは、Django開発時の調査を助けるデバッグツールとなる。</li>
+    <li>導入には、パッケージインストール、settings.py、urls.pyの設定が必要になる。</li>
+    <li>便利な反面、内部情報を表示するため本番環境では無効化する。</li>
   </ul>
 </div>

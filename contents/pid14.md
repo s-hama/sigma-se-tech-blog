@@ -1,15 +1,30 @@
 ## タイトル
-MathJax - MathML、LaTeX : 導入と数式表示サンプル
+MathJax - MathML・LaTeX：導入と数式表示サンプル
 
-## 目的
-この記事では、MathJaxの導入説明とMathML、LaTeXの数式表示サンプルを記載する。
+## 概要
+MathJaxを使い、Webページ上でMathMLやLaTeX形式の数式を表示する方法を整理する。
+技術記事では、数式を画像ではなくテキストとして扱えると、拡大表示、検索、修正がしやすくなる。
+ここでは、MathJaxの読み込み、MathMLの基本要素、LaTeXによる数式表現をサンプルで確認する。
 
-MathJaxは、**MathML**、**LaTeX**、**AsciiMath**で記述された数式をウェブブラウザ上で表示するためのJavaScriptライブラリ。<br>
-また、ブラウザ依存せず、如何なる環境下でも動作を保証するクロスブラウザ仕様となる。<br>
+## この記事で理解できること
+- MathJaxをWebページへ読み込む基本。
+- MathMLで数式を構造的に表す考え方。
+- LaTeX記法で分数、添字、平方根などを表示する方法。
+- ブログ記事で数式を書くときの注意点。
 
-※ MathMLの対応ブラウザについては、2018年1月時点で**Firefox**、**Safari**、**iOS Safari**のみ。<br>
-より詳細な使用方法は、公式ドキュメントを参考。<br>
-MathML3ドキュメント：https://www.w3.org/TR/MathML3/
+## 作業前に確認すること
+| 確認項目 | 内容 |
+| --- | --- |
+| HTMLの基礎 | scriptタグやHTML要素の読み方を確認しておく。 |
+| 数式表記 | 分数、指数、添字などの基本的な数式表現を理解しておく。 |
+| 表示確認 | ブラウザでHTMLを表示し、MathJaxが読み込まれているか確認できるようにする。 |
+
+## 注意したい点
+| 注意したい点 | 確認する観点 |
+| --- | --- |
+| MathMLとLaTeXの違い | MathMLはHTMLに近い構造、LaTeXは短い記法で数式を書く方法として捉える。 |
+| エスケープ漏れ | HTML内では記号の扱いに注意し、ブログの変換処理で壊れない形にする。 |
+| 読み込み順序 | MathJaxのscriptが読み込まれないと、数式がそのまま文字として表示される。 |
 
 ## 実施内容
 ### MathJaxの導入
@@ -24,7 +39,7 @@ MathML3ドキュメント：https://www.w3.org/TR/MathML3/
   ※ https://docs.mathjax.org/en/latest/config-files.html<br>
 
 ### MathMLの要素
-基本`<math>`内に、下記で記載するMathMLの**mnタグ**や**moタグ**など記述する形になる。<br>
+基本的には`<math>`内に、**mnタグ**や**moタグ**などのMathML要素を記述する形になる。<br>
 
 - MathMLの全要素<br>
 ※ より詳細なルールや使用方法は下記を参考。<br>
@@ -74,7 +89,7 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
   - `<annotation-xml>`：XML アノテーション
 
 ### MathMLの表示サンプル
-以下、表示サンプルを記載する。
+以下の表示サンプルで確認する。
 - 黄金比
   - 表示
     <div style="margin-left: 1rem; font-size: 1.8em; margin-top: 0.25em;">
@@ -311,7 +326,7 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
 
 ### LaTeXの表示サンプル
   続いてLaTeX。<br>
-  以下、表示サンプルを記載する。
+  以下の表示サンプルで確認する。
 - 二次方程式の解
   - 表示 
     <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
@@ -398,4 +413,14 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
      \end{pmatrix}
     \]
     ```
-  
+
+## 実務とのつながり
+- 技術ブログでの数式表現<br>
+    機械学習、暗号技術、情報処理試験の記事では、数式を読みやすく表示できると理解しやすくなる。
+- 保守しやすい記事作成<br>
+    画像化した数式より、テキストで書いた数式の方が後から修正しやすい。
+
+## 要約
+- MathJaxを使うと、Webページ上でMathMLやLaTeXの数式を表示できる。
+- MathMLは構造的、LaTeXは短く書きやすい表現として使い分ける。
+- 数式をテキストとして管理すると、技術記事の保守性が上がる。

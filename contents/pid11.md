@@ -1,10 +1,39 @@
 ## タイトル
-Django - Django Debug Toolbar : 2/2 デバッグ情報とカスタマイズ
+Django - Django Debug Toolbar：2/2 デバッグ情報とカスタマイズ
 
-## 目的
-この記事では、Django Debug Toolbarのデバッグ情報とカスタマイズ方法について説明する。
+## 概要
 
-## 概要説明と実施内容
+Django Debug Toolbarで確認できる代表的な表示パネルと、DEBUG_TOOLBAR_PANELSによるカスタマイズ方法を整理する。
+
+Toolbarの各パネルは、バージョン、処理時間、SQL、テンプレート、キャッシュ、ログなど、画面表示時の内部情報を確認する入口になる。どのパネルで何を見られるかを知っておくと、原因調査の流れを作りやすい。
+
+## この記事で理解できること
+- Versions、Time、Settingsなどの基本パネルの役割。
+- Headers、Request、SQL、Templatesで確認できる情報。
+- Cache、Signals、Logging、Redirectsの使いどころ。
+- DEBUG_TOOLBAR_PANELSで表示パネルを変更する方法。
+- プロファイリング用パネルを追加する考え方。
+
+## 作業前に確認すること
+
+| 項目 | 確認内容 |
+| --- | --- |
+| 表示パネル | 調査したい対象に応じて見るパネルを選ぶ。 |
+| SQLパネル | N+1問題やクエリ回数の確認に使う。 |
+| Templatesパネル | どのテンプレートが使われたかを確認する。 |
+| Loggingパネル | 画面表示時に出力されたログを確認する。 |
+| カスタマイズ | 必要なパネルだけを表示して調査しやすくする。 |
+
+## 作業時の注意点
+
+| 作業時の注意点 | 確認ポイント |
+| --- | --- |
+| パネルの見方 | 全パネルを見るより、調査目的に合わせて見る場所を決める。 |
+| Timeの解釈 | サーバー処理とブラウザ側の表示時間を混同しない。 |
+| SQLの多さ | クエリ数だけでなく、同じSQLが繰り返されていないかを見る。 |
+| Redirects | 有効化するとリダイレクト動作が変わるため、調査時だけ使う。 |
+
+## 実施内容
 ### 表示パネルの概要説明
 以下、インストール後の初期状態から表示されている**デフォルトパネル**について説明する。
 1. Versions<br>
@@ -22,7 +51,7 @@ Webアプリで使用されている**モジュール（フレームワーク、
     リクエストを受信してからクライアントに返すまでの時間。<br>
     （「User CPU time」 + 「System CPU time」 の合計）
     - Resource usage > Elapsed time<br>
-    Total CPU time」にHTML、CSS、Javascriptに関するサーバー処理とクライアントでレタリングする時間を加えた時間。
+    「Total CPU time」は、HTML、CSS、JavaScriptに関するサーバー処理とクライアント側のレンダリング時間を含めた値。
     - Resource usage > Context switches<br>
     voluntary context switchesは、複数のプロセスを効率良く実行するため、自発的にコンテキストスイッチを実行した回数でinvoluntary context switchesは、実行優先度が高いプロセスを実行するために、強制的にコンテキストスイッチを実行した回数。
 
@@ -55,7 +84,7 @@ ViewやCookie、Sessionなどの**リクエスト情報**を確認できる。<b
 ![pid11_9](/static/tblog/img/pid11_9.png)
 
 10.  Signals<br>
-FrameWorkに備わっている各アクション単位での通知の受け渡し一覧。<br>
+フレームワークに備わっている各アクション単位での通知の受け渡し一覧。<br>
 ![pid11_10](/static/tblog/img/pid11_10.png)
 
 11.  Logging<br>
@@ -110,3 +139,16 @@ loggingモジュールで出力したログが確認できる。<br>
 - その他のパネルについて
 下記**サードパーティ製**のパネルを参照。<br>
 https://django-debug-toolbar.readthedocs.io/en/stable/panels.html#third-party-panels
+
+## 実務とのつながり
+- 性能改善<br>
+    SQL回数や処理時間を見てボトルネックを探せる。
+- テンプレート調査<br>
+    継承関係や読み込まれたテンプレートを確認できる。
+- デバッグ設計<br>
+    調査に必要なパネルだけを残すと、確認作業が効率化する。
+
+## 要約
+- Django Debug Toolbarの各パネルは、Django画面表示の内部状態を確認するための入口になる。
+- SQL、Templates、Timeなどは、性能調査や表示不具合の確認で特に役立つ。
+- DEBUG_TOOLBAR_PANELSを使うと、必要なパネルだけに絞って調査しやすくできる。

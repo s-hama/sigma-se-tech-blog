@@ -1,8 +1,30 @@
 ## タイトル
-Python - Matplotlib : matplotlib.pyplotの使用方法
+Python - Matplotlib：pyplotでグラフを描画する基本操作
 
-## 目的
-この記事では、pyplotの使用方法について説明する。
+## 概要
+Matplotlibのpyplotを使い、Pythonでグラフを描画する基本手順を整理する。
+数値だけを眺めても傾向はつかみにくいため、折れ線グラフや散布図として可視化することで、変化、分布、外れ値を確認しやすくなる。
+ここでは、インストール、基本的な描画、複数系列、ラベルや凡例の設定を実行例で確認する。
+
+## この記事で理解できること
+- pyplotを使ったグラフ描画の基本的な流れ。
+- x軸、y軸、タイトル、凡例を設定する方法。
+- 折れ線グラフや散布図でデータの傾向を見る考え方。
+- NumPy配列とMatplotlibを組み合わせる使い方。
+
+## 作業前に確認すること
+| 確認項目 | 内容 |
+| --- | --- |
+| Python環境 | pythonコマンドとpipが使える状態にしておく。 |
+| Matplotlib | pip install matplotlibでインストールできる環境を用意する。 |
+| NumPy | サンプルで配列を扱うため、NumPyの基本操作を確認しておく。 |
+
+## 注意したい点
+| 注意したい点 | 確認する観点 |
+| --- | --- |
+| showの呼び出し忘れ | スクリプト実行ではplt.show()がないとグラフが表示されないことがある。 |
+| 軸ラベル不足 | グラフだけでは意味が伝わりにくいため、軸名や凡例を付ける。 |
+| データ数の不一致 | xとyの要素数が違うと描画エラーになる。 |
 
 ## 実施内容
 ### Matplotlibの環境準備
@@ -33,7 +55,7 @@ Python - Matplotlib : matplotlib.pyplotの使用方法
    Installing collected packages: six, python-dateutil, cycler, pyparsing, kiwisolver, matplotlib
    Successfully installed cycler-0.10.0 kiwisolver-1.0.1 matplotlib-3.0.2 pyparsing-2.3.0 python-dateutil-2.7.5 six-1.11.0
   ```
-  ※ 以降でmatplotlib.pyplotの使用方法について基本的な部分しか触れないため、詳細な使用方法については、下記チュートリアルで確認すること。<br>
+  ※ 以降ではmatplotlib.pyplotの基本操作に絞る。詳細な使い方は、下記チュートリアルで確認できる。<br>
   Matplotlibチュートリアル：https://matplotlib.org/tutorials/index.html<br>
 
 ### Matplotlibの使用方法
@@ -111,5 +133,16 @@ Python - Matplotlib : matplotlib.pyplotの使用方法
 より詳細な使用方法は、下記ユーザーズガイドを参考。<br>
 Matplotlibユーザーズガイド：https://matplotlib.org/users/index.html
 
-### 参考文献
+## 実務とのつながり
+- 分析結果の確認<br>
+    モデルの学習曲線、損失値、精度推移などを可視化すると、処理の状態を判断しやすい。
+- 説明資料への活用<br>
+    数値の一覧よりグラフの方が、傾向や比較結果を共有しやすい。
+
+## 要約
+- MatplotlibはPythonでグラフを描く代表的なライブラリ。
+- pyplotでは、データを渡して描画し、ラベルや凡例を加えて見やすくする。
+- 可視化は、数値の傾向や異常を確認するための重要な工程。
+
+## 参考文献
 - 斎藤 康毅（\\(2018\\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
