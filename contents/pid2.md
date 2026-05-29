@@ -18,7 +18,7 @@ Webサイトを公開するには、Webサーバーの起動だけでなく、fi
 | データベース | PostgreSQL |
 | ドメイン | example.com |
 
-## この記事で理解できること
+## この記事で扱うこと
 - Apacheのインストールと起動確認。
 - HTTP/HTTPSをfirewalldで許可する手順。
 - DocumentRootの権限設定。
@@ -207,7 +207,7 @@ httpsで自身のドメイン(https://example.com)にアクセスできれば成
 - 証明書更新<br>
     期限切れによるサイト停止を防ぐため、監視や定期確認が重要になる。
 
-## 要約
+## まとめ
 - Apacheを公開するには、httpd、firewalld、DocumentRootをまとめて確認する。
 - HTTPS化では、mod_sslとSSL/TLS証明書の設定が必要になる。
 - Let's Encryptは更新が必要なため、取得後の期限確認も運用に含める。

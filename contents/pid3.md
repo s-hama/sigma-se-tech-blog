@@ -18,7 +18,7 @@ Djangoを本番環境で動かす場合、開発用のrunserverではなく、Ap
 | データベース | PostgreSQL |
 | ドメイン | example.com |
 
-## この記事で理解できること
+## この記事で扱うこと
 - EPEL/IUSリポジトリの導入意図。
 - Pythonとvenvによる仮想環境の作成。
 - Djangoプロジェクトとアプリケーションの作成。
@@ -193,7 +193,7 @@ Apacheの設定ファイル**httpd.conf**の設定内容を確認する。<br>
 - Apache設定分割<br>
     設定ファイルを役割ごとに分けると、保守や障害調査がしやすくなる。
 
-## 要約
+## まとめ
 - Django本番構成では、Apacheからmod_wsgiを介してアプリケーションを起動する。
 - Pythonの仮想環境、Djangoプロジェクト、WSGI設定のパスをそろえることが重要となる。
 - VirtualHostではHTTPからHTTPSへのリダイレクトとDjango起動設定を分けて考える。
