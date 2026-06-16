@@ -41,4 +41,46 @@
       </tr>
     </tbody>
   </table>
+
+  <h2 id="統計分析">統計分析</h2>
+  <ul>
+    <li>
+      <p>正規分布<br>
+        最も一般的な確率分布で身長、座高など身近な分布に多く見られる。<br>
+        その分布表現は、以下の<strong>確率密度関数</strong>として定義される。</p>
+      <p>平均値：\(μ\) 、標準偏差：\(σ\) と置くと</p>
+      <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+      \[
+      f(x) = \displaystyle \frac{1}{\sqrt{2\pi \sigma^2}} \exp \left(-\frac{(x - \mu)^2} {2\sigma^2} \right)
+      \]
+      </div>
+      <p>この標準偏差 \(σ\) の分布比率は以下の通り。</p>
+      <ul>
+        <li>\(\pm 1σ\) で \(68%\)</li>
+        <li>\(\pm 2σ\) で \(95%\)</li>
+        <li>\(\pm 3σ\) で \(99.7%\)</li>
+      </ul>
+      <p>以下、統計分析の種類。</p>
+    </li>
+    <li>
+      <p>回帰分析<br>
+        関数モデルを使用した分析で変数が \(1\) つなら<strong>単回帰分析</strong>、複数なら<strong>重回帰分析</strong>という。</p>
+    </li>
+    <li>
+      <p>主成分分析<br>
+        変数が多い場合、より<strong>少ない指標や合成変数に要約</strong>する分析手法。</p>
+    </li>
+    <li>
+      <p>因子分析<br>
+        観測結果に影響する<strong>潜在要因</strong>（因子）を分析する手法。</p>
+    </li>
+    <li>
+      <p>相関分析<br>
+        二つの変数（データ分布）がどの程度<strong>直線的（比例関係）</strong>にあるかを数値化して分析する手法。</p>
+      <p>この数値を<strong>相関係数</strong>という。<br>
+        → データ分布が右上がりの直線に近い程 \(1\) に近づく。<br>
+        → データ分布が右下がりの直線に近い程 \(-1\) に近づく。<br>
+        → データ分布が無相関である程 \(0\) に近づく。</p>
+    </li>
+  </ul>
 </div>
