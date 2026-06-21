@@ -165,4 +165,25 @@
       </ul>
     </li>
   </ul>
+  <h2 id="待ち時間の計算">待ち時間の計算</h2>
+  <ul>
+    <li>
+      <p>\(M/M/1\) モデルの平均待ち時間<br>
+        \(M/M/1\) モデルの場合に限定すると、<strong>平均待ち時間</strong>は、次の式で表現できる。</p>
+      <p>平均待ち時間：\(s1\)<br>
+        平均サービス時間：\(s2\)<br>
+        利用率：\(ρ\) と置くと</p>
+      <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+      \[
+      s1 = \frac{ρ}{1 - ρ} \times s2\hspace{5mm}･･･（＊）
+      \]
+      </div>
+      <p>※ 利用率\(ρ\)は、平均サービス時間／平均到着間隔で表現できる。</p>
+      <p>また、<strong>平均応答時間</strong>は、平均待ち時間（\(s1\) モデル）と平均サービス時間（\(s2\) モデル）を合わせた時間となり、上記（＊4）より、次の式で表現できる。<br>
+        → 平均応答時間 \(= s1+ s2\)<br>
+        \(\displaystyle = \frac{ρ}{1 - ρ} \times s2 + s2\)<br>
+        \(\displaystyle = ( \frac{ρ}{1 - ρ} + 1 ) s2\)<br>
+        \(\displaystyle = \frac{1}{1 - ρ} \times s2\)</p>
+    </li>
+  </ul>
 </div>
