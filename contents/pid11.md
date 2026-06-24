@@ -7,7 +7,7 @@ Django Debug Toolbarで確認できる代表的な表示パネルと、DEBUG_TOO
 
 Toolbarの各パネルは、バージョン、処理時間、SQL、テンプレート、キャッシュ、ログなど、画面表示時の内部情報を確認する入口になる。どのパネルで何を見られるかを知っておくと、原因調査の流れを作りやすい。
 
-## この記事で理解できること
+## この記事で扱うこと
 - Versions、Time、Settingsなどの基本パネルの役割。
 - Headers、Request、SQL、Templatesで確認できる情報。
 - Cache、Signals、Logging、Redirectsの使いどころ。
@@ -148,7 +148,7 @@ https://django-debug-toolbar.readthedocs.io/en/stable/panels.html#third-party-pa
 - デバッグ設計<br>
     調査に必要なパネルだけを残すと、確認作業が効率化する。
 
-## 要約
+## まとめ
 - Django Debug Toolbarの各パネルは、Django画面表示の内部状態を確認するための入口になる。
 - SQL、Templates、Timeなどは、性能調査や表示不具合の確認で特に役立つ。
 - DEBUG_TOOLBAR_PANELSを使うと、必要なパネルだけに絞って調査しやすくできる。
