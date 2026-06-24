@@ -3,7 +3,7 @@
   <p>状態遷移ベースの天気案内Botで使用するOpenWeatherMap、Telegram、python-telegram-botの準備手順を整理する。</p>
   <p>天気案内Botでは、天気情報を外部APIから取得し、ユーザーとのやり取りをメッセンジャー上で行う必要がある。OpenWeatherMapは天気情報の取得、Telegramはユーザーとの対話画面、python-telegram-botはBot実装の接続部分を担当する。</p>
   <p>ここでは、API利用登録、Bot作成、ライブラリのインストール、オウム返しBotによる疎通確認までを扱う。</p>
-  <h2 id="この記事で理解できること">この記事で理解できること</h2>
+  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
 <ul>
   <li>OpenWeatherMapで天気情報を取得する準備。</li>
   <li>Telegram Botを作成してトークンを取得する流れ。</li>
@@ -289,7 +289,7 @@ updater = Updater(TOKEN)
   <li>小さな疎通確認<br>
     オウム返しBotのような最小構成で確認すると、後続の状態遷移処理を追加しやすい。</li>
 </ul>
-  <h2 id="要約">要約</h2>
+  <h2 id="まとめ">まとめ</h2>
 <ul>
   <li>OpenWeatherMapは天気情報取得、Telegramは対話インターフェースとして使う。</li>
   <li>python-telegram-botを使うと、PythonからTelegram Botを実装できる。</li>

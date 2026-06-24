@@ -6,7 +6,7 @@ Python - タスク指向型対話：2/5 OpenWeatherMap・Telegramの環境準備
 天気案内Botでは、天気情報を外部APIから取得し、ユーザーとのやり取りをメッセンジャー上で行う必要がある。OpenWeatherMapは天気情報の取得、Telegramはユーザーとの対話画面、python-telegram-botはBot実装の接続部分を担当する。
 ここでは、API利用登録、Bot作成、ライブラリのインストール、オウム返しBotによる疎通確認までを扱う。
 
-## この記事で理解できること
+## この記事で扱うこと
 - OpenWeatherMapで天気情報を取得する準備。
 - Telegram Botを作成してトークンを取得する流れ。
 - python-telegram-botを使った基本的な対話処理。
@@ -265,7 +265,7 @@ Python - タスク指向型対話：2/5 OpenWeatherMap・Telegramの環境準備
 - 小さな疎通確認<br>
     オウム返しBotのような最小構成で確認すると、後続の状態遷移処理を追加しやすい。
 
-## 要約
+## まとめ
 - OpenWeatherMapは天気情報取得、Telegramは対話インターフェースとして使う。
 - python-telegram-botを使うと、PythonからTelegram Botを実装できる。
 - 本格実装の前に、APIとBotの疎通確認を分けて行うと安全。
