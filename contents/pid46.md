@@ -79,3 +79,50 @@
       → \\(a = 0,\ b = 10\\) \\(,\ c = 110,\ d = 111\\)
 
       このとき \\(2\\) 分岐構造により、**可逆**（復元可能）となるため、文字列 \\(a,\ b,\ c,\ d\\) とビット \\(0,\ 10,\ 110,\ 111\\) のマッピングが出来上がり、**圧縮 / 解凍**（復元）が可能となる。
+
+## オートマトン
+- オートマトン<br>
+    入力から出力に至る**過程**（状態遷移）をシステムモデル化したもの。  <br>
+    一般的に**状態遷移図**や**状態遷移表**で表現される。
+
+    オートマトンのうち、**状態**や**遷移**を有限個で表現できるものを**有限オートマトン**という。
+
+    - 例 : 入力記号が \\(\{0,\ 1\}\\) で状態集合が \\({a,\ b,\ c,\ d}\\) である下記有限オートマトンの状態遷移表を状態遷移図で表現する。
+        - 状態遷移表
+            <table class="table" style="width: 50%;">
+            <thead>
+                <tr>
+                <th scope="col"></th>
+                <th scope="col">\(0\)</th>
+                <th scope="col">\(1\)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>\(a\)</td><td>\(a\)</td><td>\(b\)</td></tr>
+                <tr><td>\(b\)</td><td>\(c\)</td><td>\(d\)</td></tr>
+                <tr><td>\(c\)</td><td>\(a\)</td><td>\(b\)</td></tr>
+                <tr><td>\(d\)</td><td>\(c\)</td><td>\(d\)</td></tr>
+            </tbody>
+            </table>
+
+        - 状態遷移表の見方
+            <table class="table" style="width: 100%;">
+            <thead>
+                <tr>
+                <th scope="col"></th>
+                <th scope="col">\(0\)</th>
+                <th scope="col">\(1\)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>\(a\)</td><td>\(a\)<br />\(a\) に \(0\) を入力 → \(a\) に遷移</td><td>\(b\)<br />\(a\) に \(1\) を入力 → \(b\) に遷移</td></tr>
+                <tr><td>\(b\)</td><td>\(c\)<br />\(b\) に \(0\) を入力 → \(c\) に遷移</td><td>\(d\)<br />\(b\) に \(1\) を入力 → \(d\) に遷移</td></tr>
+                <tr><td>\(c\)</td><td>\(a\)<br />\(c\) に \(0\) を入力 → \(a\) に遷移</td><td>\(b\)<br />\(c\) に \(1\) を入力 → \(b\) に遷移</td></tr>
+                <tr><td>\(d\)</td><td>\(c\)<br />\(d\) に \(0\) を入力 → \(c\) に遷移</td><td>\(d\)<br />\(d\) に \(1\) を入力 → \(d\) に遷移</td></tr>
+            </tbody>
+            </table>
+
+        - 状態遷移図で表現<br>
+            <div style="text-align: left;">
+            　<img src="/static/tblog/img/pid46_1.svg" alt="pid46_1" style="width: 100%; height: auto; margin-left: -2rem; margin-top: -1.25rem; max-width: 550px;" />
+            </div>
