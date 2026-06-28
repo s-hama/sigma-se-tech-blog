@@ -147,3 +147,16 @@
 
     - 例 : \\(Y = (A + B)\\)\\(\times (C - (D \div E))\\)の逆ポーランド表記法<br>
         → \\(YAB + CDE\\) \\(\div - \times =\\)
+
+## BNF記法
+- BNF記法（Backus-Naur Form）<br>
+    文法等を形式定義するために用いられる言語のことでプログラミング言語の定義にも利用される。<br>
+    繰返し表現に**再帰**を使う。
+
+    - 例 : 識別子（identifier）は、先頭が英字でそれ以降が任意個の英数字である。<br>
+        この時、次の定義下において、識別子（identifier）をBNFで定義する。<br>
+        \<digit\> \\(:: = 0\ |\ 1\ |\ 2\ |\ 3\ |\\) \\(\cdots |\ 9\ \\) <br>
+        \<letter\> \\(:: = A\ |\ B\ |\ C\ |\\) \\(\cdots |\ Z\ |\ a\ |\ b\ |\ c\ |\\) \\(\cdots |\ z\\)
+
+        識別子（identifier）の定義は、  
+        \<identifier\>\\(\ :: =\ \\)\<letter\>\\(\ |\ \\)\<identifier\>\<digit\>\\(\ |\ \\)\<identifier\>\<letter\>
