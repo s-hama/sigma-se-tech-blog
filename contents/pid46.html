@@ -234,4 +234,23 @@
       </ul>
     </li>
   </ul>
+  <h2 id="bnf記法">BNF記法</h2>
+  <ul>
+    <li>
+      <p>BNF記法（Backus-Naur Form）<br>
+        文法等を形式定義するために用いられる言語のことでプログラミング言語の定義にも利用される。<br>
+        繰返し表現に<strong>再帰</strong>を使う。</p>
+      <ul>
+        <li>
+          <p>例 : 識別子（identifier）は、先頭が英字でそれ以降が任意個の英数字である。<br>
+            この時、次の定義下において、識別子（identifier）をBNFで定義する。<br>
+            &lt;digit&gt; \(:: = 0\ |\ 1\ |\ 2\ |\ 3\ |\) \(\cdots |\ 9\ \) <br>
+            &lt;letter&gt; \(:: = A\ |\ B\ |\ C\ |\) \(\cdots |\ Z\ |\ a\ |\ b\ |\ c\ |\) \(\cdots |\ z\)</p>
+          <p>識別子（identifier）の定義は、<br>
+            &lt;identifier&gt;\(\ :: =\ \)&lt;letter&gt;\(\ |\ \)&lt;identifier&gt;&lt;digit&gt;\(\ |\
+            \)&lt;identifier&gt;&lt;letter&gt;</p>
+        </li>
+      </ul>
+    </li>
+  </ul>
 </div>
