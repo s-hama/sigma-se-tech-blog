@@ -37,9 +37,9 @@
     <!-- <script>hljs.initHighlightingOnLoad();</script> -->
 
     <!-- SNS Other -->
-    <meta property="og:url" content="https://sigma-se.com" />
+    <meta property="og:url" content="{% block og_url %}https://sigma-se.com{% endblock %}" />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="SIGMA-SE Tech Blog" />
+    <meta property="og:title" content="{% block og_title %}SIGMA-SE Tech Blog{% endblock %}" />
     <meta property="og:description" content="Engineer Tech Blog" />
     <!-- <meta property="og:image" content="{% static 'tblog/img/SIGMA-SE2.jpg' %}" /> -->
     <meta property="author" content="SIGMA-SE Tech Blog" />
