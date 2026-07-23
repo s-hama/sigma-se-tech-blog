@@ -1,4 +1,6 @@
 {% extends "tblog/base.html" %}
+{% block title %}{{ post.title }} | SIGMA-SE Tech Blog{% endblock %}
+{% block canonical %}<link rel="canonical" href="https://sigma-se.com{% url 'tblog:detail' post.pk %}">{% endblock %}
 {% block content %}
 <div class="card border-primary">
   <div class="card-header bg-primary text-white">
