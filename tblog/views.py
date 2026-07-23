@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.http import Http404
 from django.views import generic
 from .models import Post
 import logging
