@@ -101,8 +101,9 @@
   <ul>
     <li>
       <p>補数表現<br>
-        補数とは、決められた基数と桁数の範囲で、対象の数に加えると桁上がりする最小の数を指す。</p>
-      <p>\(n\) 桁の \(r\) 進数で数 \(x\) を考える場合、補数は次のように表せる。</p>
+        ここでは、固定した桁数における <strong>\(r\) の補数（基数の補数）</strong> を扱う。<br>
+        \(n\) 桁の \(r\) 進数で \(0 \leq x &lt; r^n\) のとき、\(x\) の \(r\) の補数は \((-x) \bmod r^n\) で表される。</p>
+      <p>\(0 &lt; x &lt; r^n\) の場合は、次の式で求められる。\(x = 0\) の場合は \(0\) とする。</p>
       <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
         \[
         {\small
@@ -112,7 +113,7 @@
       </div>
       <ul>
         <li>
-          <p>例 \(1\) : \(2\) 桁の \(10\) 進数 \((55)_{10}\) の補数。</p>
+          <p>例 \(1\) : \(2\) 桁の \(10\) 進数 \((55)_{10}\) の \(10\) の補数。</p>
           <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
             \[
             {\small
@@ -122,8 +123,8 @@
           </div>
         </li>
         <li>
-          <p>例 \(2\) : \(8\) 桁の \(2\) 進数 \((00001101)_{2}\) の補数。</p>
-          <p>\(2\) 進数では、全ビットを反転して \(1\) を加えると \(2\) の補数になる。</p>
+          <p>例 \(2\) : \(8\) 桁の \(2\) 進数 \((00001101)_{2}\) の \(2\) の補数。</p>
+          <p>\(2\) 進数では、全ビットを反転したものが \(1\) の補数で、さらに \(1\) を加えると \(2\) の補数になる。</p>
           <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
             \[
             {\small
@@ -210,7 +211,7 @@
     <li>
       <p>小数表現の正規化<br>
         正規化とは、仮数部と指数部の形を一定のルールにそろえることを指す。<br>
-        どの形を正規化とするかは、問題文の条件や浮動小数点形式によって異なる。</p>
+        代表的には、仮数部を \(1 \leq |m| &lt; r\) にそろえる形式と、\(1/r \leq |m| &lt; 1\) にそろえる形式がある。どの形を正規化とするかは、問題文の条件や浮動小数点形式によって異なる。</p>
       <ul>
         <li>
           <p>例 \(1\) : \((0.00052)_{10}\) を正規化する。</p>
@@ -271,7 +272,7 @@
           <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
             \[
             {\small
-            = (0.\dot{0110})_{2}
+            = (0.\overline{0110})_{2}
             }
             \]
           </div>
@@ -291,7 +292,7 @@
         ほぼ等しい値同士を引き算したとき、有効桁数が大きく減ってしまうことで生じる誤差。</p>
       <ul>
         <li>
-          <p>例 : 有効桁数が小数点以下 \(7\) 桁となる条件下で \(\sqrt{999} - \sqrt{997}\) を計算する。</p>
+          <p>例 : 各平方根を有効数字 \(7\) 桁に丸めて、\(\sqrt{999} - \sqrt{997}\) を計算する。</p>
           <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
             \[
             {\small
@@ -341,45 +342,47 @@
     </li>
     <li>
       <p>オーバーフロー<br>
-        演算結果が、あらかじめ用意された表現範囲の上限を超えてしまう状態。</p>
+        演算結果の絶対値が、データ形式で表現できる最大の大きさを超えてしまう状態。</p>
     </li>
     <li>
       <p>アンダーフロー<br>
-        演算結果が小さくなりすぎて、浮動小数点数で表現できる下限を下回ってしまう状態。</p>
+        演算結果の絶対値が非常に小さくなり、正規化数として表現できる最小値を下回る状態。<br>
+        IEEE 754 では、直ちに \(0\) になるとは限らず、サブノーマル数（非正規化数）として表現される場合がある。</p>
     </li>
   </ul>
   <h2 id="集合">集合</h2>
-  <p>集合演算は、論理演算と対応させると理解しやすい。<br>
-    この分野では、集合記号と論理演算の対応を整理しておきたい。</p>
+  <p>要素が集合に属するかどうかを命題として見ると、集合演算と論理演算の対応を整理しやすい。<br>
+    ここでは、集合記号と対応する論理条件を分けて示す。</p>
   <ul>
     <li>
       <p>和集合<br>
         少なくともどちらか一方に含まれる要素の集合。<br>
-        論理演算では OR に対応する。<br>
-        表現記号：\(OR\)、\(+\)、\(\cup\)、\(∨\)</p>
+        集合記号：\(A \cup B\)<br>
+        \(x \in A \cup B\) は、\(x \in A\) または \(x \in B\)（OR）に対応する。</p>
     </li>
     <li>
       <p>積集合<br>
         両方に共通して含まれる要素の集合。<br>
-        論理演算では AND に対応する。<br>
-        表現記号：\(AND\)、\(・\)、\(\cap\)、\(∧\)</p>
+        集合記号：\(A \cap B\)<br>
+        \(x \in A \cap B\) は、\(x \in A\) かつ \(x \in B\)（AND）に対応する。</p>
     </li>
     <li>
       <p>補集合<br>
-        ある集合に含まれない要素の集合。<br>
-        論理演算では NOT に対応する。<br>
-        表現記号：\(NOT\)、\(\overline{A}\)</p>
+        全体集合 \(U\) のうち、集合 \(A\) に含まれない要素の集合。<br>
+        集合記号：\(A^c = U \setminus A\)<br>
+        \(x \in A^c\) は、\(x \in A\) ではないこと（NOT）に対応する。</p>
     </li>
     <li>
       <p>差集合<br>
-        ある集合から、別の集合に含まれる要素を取り除いた集合。<br>
-        表現記号：\(-\)</p>
+        集合 \(A\) から、集合 \(B\) に含まれる要素を取り除いた集合。<br>
+        集合記号：\(A \setminus B\)<br>
+        \(x \in A \setminus B\) は、\(x \in A\) かつ \(x \notin B\) に対応する。</p>
     </li>
     <li>
       <p>対称差集合<br>
         どちらか一方にだけ含まれる要素の集合。<br>
-        論理演算では XOR に対応する。<br>
-        表現記号：\(XOR\)、\(⊕\)、\(△\)</p>
+        集合記号：\(A \triangle B\)<br>
+        \(x \in A \triangle B\) は、\(x\) がどちらか一方だけに属すること（XOR）に対応する。</p>
     </li>
   </ul>
 
@@ -398,7 +401,7 @@
       </tr>
       <tr>
         <td>補数と単なる符号付きの数</td>
-        <td>補数は、決められた桁数の中で負の数を表すための表現。</td>
+        <td>\(r\) の補数は、決められた基数と桁数の中で負の数を表すための表現。</td>
       </tr>
       <tr>
         <td>丸め誤差と桁落ち</td>
@@ -406,7 +409,7 @@
       </tr>
       <tr>
         <td>情報落ちとアンダーフロー</td>
-        <td>情報落ちは小さい値が演算に反映されないこと、アンダーフローは表現できる範囲を下回ること。</td>
+        <td>情報落ちは小さい値が演算に反映されないこと、アンダーフローは絶対値が正規化数の最小値を下回ること。</td>
       </tr>
       <tr>
         <td>差集合と対称差集合</td>
@@ -422,7 +425,7 @@
     </li>
     <li>
       <p>補数表現<br>
-        整数型の負数表現や、オーバーフローの挙動を理解する手がかりになる。</p>
+        固定ビット幅の \(2\) の補数表現や、オーバーフローの挙動を理解する手がかりになる。</p>
     </li>
     <li>
       <p>小数表現と誤差<br>
@@ -442,6 +445,10 @@
   </ul>
   <h3 id="参考文献">参考文献</h3>
   <ul>
+    <li><a href="https://standards.ieee.org/ieee/754/6210/" class="link-secondary">IEEE Standards Association - IEEE 754-2019: IEEE Standard for Floating-Point Arithmetic</a></li>
+    <li><a href="https://docs.oracle.com/en/java/javase/26/docs/specs/jls/jls-4.html" class="link-secondary">Oracle - Java Language Specification, Chapter 4: Types, Values, and Variables</a></li>
+    <li><a href="https://docs.python.org/ja/3/tutorial/floatingpoint.html" class="link-secondary">Python 3 ドキュメント - 浮動小数点演算、その問題と制限</a></li>
+    <li><a href="https://dlmf.nist.gov/front/introduction" class="link-secondary">NIST Digital Library of Mathematical Functions - Common Notations and Definitions</a></li>
     <li>瀬戸 美月（\(2020\)）『徹底攻略 応用情報技術者教科書』株式会社インプレス</li>
   </ul>
 </div>
