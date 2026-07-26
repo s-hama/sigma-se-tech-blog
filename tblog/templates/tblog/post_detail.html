@@ -14,6 +14,97 @@
     {% else %}
       {{ post.text | urlize | linebreaks }}
     {% endif %}
+
+    {% url 'tblog:detail' post.pk as article_path %}
+    {% with article_url="https://sigma-se.com"|add:article_path %}
+      <section class="mt-4 pt-3 border-top" aria-labelledby="share-title">
+        <h6 id="share-title">この記事を共有</h6>
+        <div class="d-flex flex-wrap gap-2">
+          <a class="btn btn-outline-primary btn-sm"
+            href="https://x.com/intent/tweet?text={{ post.title|urlencode }}&amp;url={{ article_url|urlencode }}"
+            target="_blank" rel="noopener noreferrer nofollow"
+            aria-label="この記事をXで共有（新しいタブで開きます）">Xで共有</a>
+          <a class="btn btn-outline-primary btn-sm"
+            href="https://www.facebook.com/sharer/sharer.php?u={{ article_url|urlencode }}"
+            target="_blank" rel="noopener noreferrer nofollow"
+            aria-label="この記事をFacebookで共有（新しいタブで開きます）">Facebookで共有</a>
+          <a class="btn btn-outline-primary btn-sm"
+            href="https://social-plugins.line.me/lineit/share?url={{ article_url|urlencode }}&amp;text={{ post.title|urlencode }}"
+            target="_blank" rel="noopener noreferrer nofollow"
+            aria-label="この記事をLINEで共有（新しいタブで開きます）">LINEで共有</a>
+          <button id="copy-article-url" class="btn btn-outline-primary btn-sm" type="button"
+            data-url="{{ article_url }}" data-title="{{ post.title }}">URLをコピー</button>
+          <button id="share-article" class="btn btn-outline-primary btn-sm" type="button" hidden>
+            その他で共有
+          </button>
+        </div>
+        <p id="share-status" class="small mt-2 mb-0" role="status" aria-live="polite"></p>
+      </section>
+
+      <script>
+        (() => {
+          const copyButton = document.getElementById('copy-article-url');
+          const shareButton = document.getElementById('share-article');
+          const status = document.getElementById('share-status');
+          const articleUrl = copyButton.dataset.url;
+          let statusTimer;
+
+          const showStatus = (message) => {
+            window.clearTimeout(statusTimer);
+            status.textContent = message;
+            statusTimer = window.setTimeout(() => {
+              status.textContent = '';
+            }, 4000);
+          };
+
+          const copyArticleUrl = async () => {
+            if (navigator.clipboard && window.isSecureContext) {
+              await navigator.clipboard.writeText(articleUrl);
+              return;
+            }
+
+            const textArea = document.createElement('textarea');
+            textArea.value = articleUrl;
+            textArea.setAttribute('readonly', '');
+            textArea.style.position = 'fixed';
+            textArea.style.opacity = '0';
+            document.body.appendChild(textArea);
+            textArea.select();
+            const copied = document.execCommand('copy');
+            textArea.remove();
+
+            if (!copied) {
+              throw new Error('Copy failed');
+            }
+          };
+
+          copyButton.addEventListener('click', async () => {
+            try {
+              await copyArticleUrl();
+              showStatus('記事のURLをコピーしました。');
+            } catch (error) {
+              showStatus('URLをコピーできませんでした。');
+            }
+          });
+
+          if (navigator.share) {
+            shareButton.hidden = false;
+            shareButton.addEventListener('click', async () => {
+              try {
+                await navigator.share({
+                  title: copyButton.dataset.title,
+                  url: articleUrl,
+                });
+              } catch (error) {
+                if (error.name !== 'AbortError') {
+                  showStatus('共有メニューを開けませんでした。');
+                }
+              }
+            });
+          }
+        })();
+      </script>
+    {% endwith %}
     <hr>
     {% include "tblog/latest_post.html" %}
   </div>
