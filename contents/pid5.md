@@ -29,16 +29,15 @@ Gitを使った開発では、ローカルリポジトリとリモートリポ�
 | 作業時の注意点 | 確認ポイント |
 | --- | --- |
 | 公開鍵と秘密鍵 | GitHubに登録するのは公開鍵であり、秘密鍵は外へ出さない。 |
-| masterとmain | 現在はmainが標準のことが多く、古い資料ではmaster表記が残る。 |
+| masterとmain | GitHubで新しく作るリポジトリは通常mainが既定となる。既存リポジトリでは異なる場合があるため確認する。 |
 | clone後の作業場所 | cloneで作成されたディレクトリ内でgitコマンドを実行する。 |
-| ブランチ作成と切り替え | git branchは作成、git checkoutは切り替えという役割を分ける。 |
+| ブランチ作成と切り替え | 現在は`git switch -c`で作成と切り替えを同時に行える。古いGitでは`git checkout -b`を使う。 |
 
 ## 事前説明
 ### Git、GitHubのリポジトリ構成イメージ
 - Gitリポジトリ<br>
-Gitリポジトリは、Gitで管理される変更履歴を記録するローカルのデータベースで開発者のPCやローカル環境に保存される。<br>
-個人やチームでバージョン管理をローカル環境で行う場合に使用され、オフラインでも利用可能。<br>
-他の開発者との共有には、別途リモートリポジトリが必要となる。<br>
+Gitリポジトリは、Gitがコミットやブランチなどの履歴を管理するデータベースである。開発者のPCに置くローカルリポジトリだけでも、コミットや履歴参照などの操作はオフラインで利用できる。<br>
+他の開発者とネットワーク経由で共有する場合は、リモートリポジトリを用意する。<br>
 リモートリポジトリを利用する場合は、**GitHub**や**GitLab**、**Bitbucket**などのGitリポジトリをホスティングするWebサービスを利用する。
 
 - GitHubリポジトリ<br>
@@ -46,18 +45,18 @@ GitHubは、Gitの機能を拡張し、共有やコラボレーションを行�
 GitHubリポジトリは、GitリポジトリをGitHubプラットフォーム上でホストしたもので単に**リモートリポジトリ**と呼ばれることが多い。<br><br>
 オンラインでホストされ、他の開発者とリポジトリを共有でき、pullリクエストやIssue管理、アクションの自動化など、GitHub独自の機能が利用可能。<br>
 GitHubリポジトリをリモートリポジトリとして利用し、ローカルと同期しながらソース管理する。<br><br>
-一般的に開発者がローカル管理しているリポジトリを**ローカルリポジトリ**、GitHubやGitLab、BitbucketなどのVCS（Version Control System）を介してネットワーク上で管理しているリポジトリを**リモートリポジトリ**という。<br>
+一般的に開発者の端末で管理するリポジトリを**ローカルリポジトリ**、GitHubやGitLab、Bitbucketなどのホスティングサービス上で管理するリポジトリを**リモートリポジトリ**という。GitはVCS（Version Control System）であり、GitHubはGitリポジトリのホスティングサービスという違いがある。<br>
 
 ### Gitブランチと運用
 - Gitブランチ<br>
-**Gitブランチ**とは、複数の開発者が同時に修正しても互いに影響を受けないよう**機能単位または、開発者もしくはグループ単位に割り当てる開発領域**のこと。<br>
-ブランチ上で行った変更履歴もそれぞれ記録され、変更後に**ブランチ同士のマージ**を行いソース管理していく。<br>
-初期状態では、Gitリポジトリの作成と同時に作られるmainまたはmasterブランチが起点となる。<br>
+**Gitブランチ**とは、コミットを指す移動可能な名前である。ブランチを分けると、機能追加や不具合修正の履歴をmainの履歴から分離して進められる。<br>
+作業が完了したら、必要に応じて**ブランチ同士をマージ**する。<br>
+最初のコミットが作成されると、mainまたはmasterなどの既定ブランチが履歴の起点となる。コミットが一つもない空のリポジトリでは、ブランチはまだ実体化していない。<br>
 ※ 現在は、デフォルトブランチ名として**main**が使われることが多い。
 
 - 統合ブランチとトピックブランチ<br>
-通常運用の**main**ブランチは、リリース可能なリビジョンが常に切ってある**統合ブランチ**として使用される。<br>
-また、**統合ブランチ**を起点とし、不具合修正、仕様変更などの課題単位に作成するブランチを**トピックブランチ**という。<br>
+チームの運用ルールとして、**main**ブランチをリリース可能な状態に保つ統合ブランチとして扱うことが多い。これはGit自体が強制する規則ではない。<br>
+また、統合ブランチを起点とし、不具合修正や仕様変更などの課題単位に作成するブランチを**トピックブランチ**という。<br>
 変更後は、課題単位に作成された**トピックブランチ**を統合ブランチにマージする。<br>
 統合ブランチにマージ後、不要となったトピックブランチは削除する。<br><br>
 トピックブランチ名は、改修内容が分かりやすいようにプロジェクト内の課題管理方法に準じた名前にするのが一般的。<br>
@@ -66,153 +65,121 @@ GitHubリポジトリをリモートリポジトリとして利用し、ロー�
 ## 実施内容
 ### GitHubのアカウント準備
 - GitHubのアカウント登録
-https://github.com からアカウント登録(Sign up)する。
+[GitHub](https://github.com)からアカウント登録（Sign up）する。
 
 - メール認証<br>
 登録したメールアドレス宛にメール「**[GitHub] Please verify your email**」が届くので、本文内のURLにアクセスしメール認証を完了させる。
 
-- 有料プラン変更<br>
-(1) 右上のプロフィールアイコンから**Settings**リンクをクリック。<br>
-(2) 左側のサイドメニューから**Billing**リンクをクリック。<br>
-(3) **Billing overviewセクション**の**Plan**にある**Get private repositories**ボタンをクリック。<br>
-(4) **Upgrade summaryセクション**の**Pay monthly / Pay yearly**ラジオボタンを選択。<br>
-(5) **Billing informationセクション**の**Add a Payment Method**リンクから支払い方法を指定。<br>
-(6) 必須情報の入力後、**Upgrade plan**ボタンをクリックする。<br>
-(7) (6)の後、**Billing overviewセクション**の**Plan**に**Personal - Unlimited private repositories**と表示されていれば、有料版へプラン変更が正常に完了。<br>
+GitHub Freeでも非公開リポジトリを作成できるため、開発準備のためだけに有料プランへ変更する必要はない。<br>組織機能や高度な機能が必要になった時点でプランを比較する。
 
 ### SSHの公開鍵、秘密鍵の生成
 通信手段は、SSHを利用する。
-- id_rsa(秘密鍵)、id_rsa.pub(公開鍵)の生成<br>
-homeディレクトリに`.ssh`フォルダを作成後、そのフォルダに移動し、`ssh-keygen`を実行。
+- Ed25519形式の秘密鍵と公開鍵を生成<br>
+既存の鍵を誤って上書きしないよう`~/.ssh`の内容を確認してから、`ssh-keygen`を実行する。<br>GitHubはEd25519を推奨しており、Ed25519を利用できない古い環境では4096ビットのRSA鍵を選択する。
   ```bash
-  $ mkdir ~/.ssh
-  $ cd ~/.ssh
-  $ ssh-keygen -t rsa -C "GitHubに登録したメールアドレス"
-  Generating public/private rsa key pair.
-  Enter file in which to save the key (/root/.ssh/id_rsa):    # Enter押下
-  Enter passphrase (empty for no passphrase):    # 新規のパスワードを入力
-  Enter same passphrase again:    # 確認用のパスワードを入力
-  Your identification has been saved in /root/.ssh/id_rsa.
-  Your public key has been saved in /root/.ssh/id_rsa.pub.
-  The key fingerprint is:
-  …
+  $ install -d -m 700 ~/.ssh
+  $ ls -la ~/.ssh
+  $ ssh-keygen -t ed25519 -C "GitHubに登録したメールアドレス"
+  Enter file in which to save the key (/home/user/.ssh/id_ed25519):    # Enter押下
+  Enter passphrase (empty for no passphrase):    # 十分に強いパスフレーズを入力
+  Enter same passphrase again:
   ```
 
 - 秘密鍵、公開鍵の生成確認<br>
   ```bash
   $ ls ~/.ssh
-  id_rsa  id_rsa.pub
+  id_ed25519  id_ed25519.pub
   ```
 
-- 秘密鍵、パスフレーズの登録<br>
-`ssh-add`で、SSH接続時に**パスワード入力を省略する**設定を行う。
+- 秘密鍵をssh-agentへ登録<br>
+`ssh-add`で秘密鍵をssh-agentへ登録すると、エージェントが起動している間はパスフレーズを毎回入力せずに済む。<br>パスフレーズそのものを削除する操作ではない。<br>
 `ssh-add`は、OSによって実行方法が若干違うので注意。
   ```bash
-  $ eval `ssh-agent`    # ssh-agent起動（evalなしだと環境変数の設定が必要）
-  $ ssh-add ~/.ssh/id_rsa
+  $ eval "$(ssh-agent -s)"
+  $ ssh-add ~/.ssh/id_ed25519
   $ ssh-add -l    # 登録確認
-  2048 ********** /root/.ssh/id_rsa (RSA)    # このように表示されれば正常に登録されている
   ```
 
-- GitHubに公開鍵を登録<br>
-(1) 右上のプロフィールアイコンから**Settings**リンクをクリックする。<br>
-(2) 左側のサイドメニューから**SSH and GPG Keys**リンクをクリックする。<br>
-(3) **SSH Keysセクション**の右側にある**add SSH Key**ボタンをクリックする。<br>
-(4) **Title**テキストボックスに任意の端末認識ができるような分かりやすいタイトルを記入する。<br>
-(5) 上記 秘密鍵、パスフレーズの登録で生成された id_rsa.pub(公開鍵) ファイル内すべてを**Key**にコピー＆ペーストする。<br>
-(6) **Add key**をクリックして保存する。<br>
-(7) GitHubのログインパスワードの入力を求められるので入力する。<br>
-(8) (3) で表示した画面に切り替わり**SSH keysセクション**に上記 (4)で設定した**Title**が表示されていれば成功。<br>
+- GitHubに公開鍵を登録
+
+  1. 右上のプロフィールアイコンから**Settings**リンクをクリックする。
+  2. **SSH and GPG keys**をクリックする。
+  3. **New SSH key**をクリックする。
+  4. **Title**テキストボックスに任意の端末認識ができるような分かりやすいタイトルを記入する。
+  5. 生成した`id_ed25519.pub`（公開鍵）の内容を**Key**にコピー＆ペーストする。秘密鍵`id_ed25519`は登録しない。
+  6. **Add key**をクリックして保存する。
+  7. GitHubのログインパスワードの入力を求められるので入力する。
+  8. 手順3で表示した画面に切り替わり、**SSH keysセクション**に手順4で設定した**Title**が表示されていれば成功。
 
 - 接続確認<br>
-最後の2行は、GitHubはシェルアクセスを提供しない(許可しない)旨のメッセージなので問題なし、正常に接続できている。
-  ```
-  $ ssh -l git -i ~/.ssh/id_rsa github.com
-  The authenticity of host 'github.com (192.30.255.113)' can't be established.
-  RSA key fingerprint is **********.
-  RSA key fingerprint is **********.
-  Are you sure you want to continue connecting (yes/no)? yes    # 接続を継続するかの確認（yesを入力）
-  Warning: Permanently added 'github.com,192.30.255.113' (RSA) to the list of known hosts.
-  Enter passphrase for key '/root/.ssh/id_rsa':    # 上記、[ ssh-keygen ]で登録したパスワードを入力
-  PTY allocation request failed on channel 0
-  Hi ! You've successfully authenticated, but GitHub does not provide shell access.
-  Connection to github.com closed.
+初回接続時は、表示されたホスト鍵フィンガープリントをGitHub公式ドキュメントの値と照合してから続行する。<br>認証成功時は、GitHubがシェルアクセスを提供しない旨のメッセージが表示され、コマンドの終了コードは`1`となるが問題はない。
+  ```bash
+  $ ssh -T git@github.com
+  Hi USERNAME! You've successfully authenticated, but GitHub does not provide shell access.
   ```
 
 ### GitHubのリポジトリ作成
-- id_rsa(秘密鍵)、id_rsa.pub(公開鍵)の生成<br>
-`home`ディレクトリに`.ssh`フォルダを作成後、そのフォルダに移動し、`ssh-keygen`を実行する。<br>
-(1) GitHubトップの右上「＋」をクリックし、**New Repository**リンクから**Create a new repository**画面に遷移する。<br>
-(2) 画面上部にある**Repository name**に任意のリポジトリ名を入力する。<br>
-(3) リポジトリの公開 / 非公開を設定する**Public / Private**ラジオボタンを選択する。<br>
-(4) (2)、(3) の入力に間違いがないことを確認し**Create repository**ボタンをクリックする。<br>
-(5) **Quick setup**画面の表示後、そのすぐ下にある**SSH**ボタンをクリックする。<br>
+1. GitHubトップの右上「＋」をクリックし、**New Repository**リンクから**Create a new repository**画面に遷移する。
+2. 画面上部にある**Repository name**に任意のリポジトリ名を入力する。
+3. リポジトリの公開 / 非公開を設定する**Public / Private**ラジオボタンを選択する。
+4. この後の例と同じく`main`ブランチをすぐ利用できるよう、**Add a README file**を選択する。空のリポジトリにはまだブランチが存在しない点に注意する。
+5. 入力内容を確認し、**Create repository**ボタンをクリックする。
+6. リポジトリ画面の**Code**から**SSH**を選択する。
 
 ### [git clone] : リモートリポジトリの複製
 上記で作成したリモートリポジトリをclone(複製)する。
 - Gitの作業フォルダ作成
   ```bash
   $ mkdir ~/gitlocalrep
-  $ cd gitlocalrep
+  $ cd ~/gitlocalrep
   ```
 
 - リモートリポジトリをclone 
   ```bash
-  $ git clone git@github.com:sigma-se/exrep.git    # 下記※のパスを入力
+  $ git clone git@github.com:YOUR_USERNAME/exrep.git
   Cloning into 'exrep'...
-  Enter passphrase for key '/root/.ssh/id_rsa':    # パスフレーズを入力
-  warning: You appear to have cloned an empty repository.   # 空のディレクトリである警告
   $ ls    # 確認
   exrep
   ```
-  ※ リモートリポジトリの**Quick setup**画面の**SSH**ボタン右側にあるURL「git@github.com:\<username\>/\<repositoryname\>.git」。<br>
+  ※ `YOUR_USERNAME`は実際のユーザー名へ置き換える。ここではリポジトリ名を`exrep`としているが、作成した名前が異なる場合は`exrep`も置き換え、リモートリポジトリの**Code**画面に表示されるSSH URLを使用する。<br>山括弧（`< >`）をコマンドへそのまま入力すると、シェルではリダイレクトとして解釈される。<br>
   上記の通り`clone`によってGitリポジトリが`clone`され**exrep**ディレクトリが作成される。
 
-### [git branch]：ブランチの作成
+### ブランチの確認・作成・切り替え
 - 現在のブランチ確認<br>
-アスタリスク(*)があるブランチが現在の作業ブランチとなる。<br>
-※ 今回は、cloneしただけなのでmasterブランチのみ。
+アスタリスク（`*`）があるブランチが現在の作業ブランチとなる。<br>ここではGitHubの標準設定とREADME付きで作成したため、`main`が存在する。GitHub側で既定ブランチ名を変更している場合は、その名前に読み替える。
   ```bash
   $ cd ~/gitlocalrep/exrep    # cloneしたディレクトリに移動
   $ git branch    # ブランチの確認
-   * master
+  * main
   ```
 
-- topicbranchブランチの作成<br>
-`git branch`と一緒に名前を指定することで、新規にブランチが作成される。<br>
+- topicbranchブランチの作成と切り替え<br>
+`git switch -c`を使うと、新しいブランチの作成と切り替えを同時に実行できる。
   ```bash
-  $ git branch topicbranch  #「topicbranch」ブランチを作成
+  $ git switch -c topicbranch
+  Switched to a new branch 'topicbranch'
   $ git branch    # ブランチの確認
-  * master
-    topicbranch
-  ```
-
-- topicbranchブランチに切り替え<br>
-  ```bash
-  $ git checkout topicbranch
-  Switched to branch 'topicbranch'
-  $ git branch
-    master
+    main
   * topicbranch
   ```
 
-- （補足）ブランチ作成と切り替えを同時に実行<br>
-上記の`git branch topicbranch`と`git checkout topicbranch`は、`git checkout -b`で一度で実行することができる。
+- （補足）古いGitでの操作<br>
+`git switch`を利用できない古いGitでは、`git checkout -b`で同じ操作を行う。
   ```bash
   $ git checkout -b topicbranch
   Switched to branch 'topicbranch'
   $ git branch
-    master
+    main
   * topicbranch
   ```
 
 以上で開発準備完了。<br><br>
-以降は、ローカルリポジトリ(ブランチ)からリモートリポジトリに対して、pull、commit, push等の操作を行いバージョン管理する流れとなる。<br><br>
+以降は、必要に応じてリモートの変更をpullし、ローカルでadd、commitした変更をpushする流れとなる。<br><br>
 参考 : [Git - 状態管理の概念と基本操作 : status, add, commit, diff, reset, push, pull, checkout](https://sigma-se.com/detail/6/)
 
 ## 実務とのつながり
 - SSH接続<br>
-    毎回パスワードを入力せず、安全にリモート操作するために使う。
+    公開鍵認証によって、安全にリモート操作するために使う。パスフレーズ付きの秘密鍵はssh-agentで扱える。
 - ブランチ運用<br>
     機能追加や修正作業を本流から分離して進められる。
 - リモート連携<br>
@@ -222,3 +189,11 @@ homeディレクトリに`.ssh`フォルダを作成後、そのフォルダに�
 - GitHubを使う開発準備では、アカウント、SSH鍵、リポジトリ作成、cloneを順番に行う。
 - ローカルリポジトリとリモートリポジトリの関係を理解すると、pushやpullの意味が分かりやすい。
 - 作業はブランチを分けて進めると、変更範囲を管理しやすくなる。
+
+### 参考文献
+- [GitHub Docs, About repositories](https://docs.github.com/en/repositories/creating-and-managing-repositories/about-repositories)
+- [GitHub Docs, Generating a new SSH key and adding it to the ssh-agent](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+- [GitHub Docs, Adding a new SSH key to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+- [GitHub Docs, Testing your SSH connection](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/testing-your-ssh-connection)
+- [GitHub Docs, Creating a new repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository)
+- [Git Documentation, git-switch](https://git-scm.com/docs/git-switch)
