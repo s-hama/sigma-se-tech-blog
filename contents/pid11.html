@@ -1,14 +1,15 @@
 <div class="post-body">
   <h2 id="概要">概要</h2>
-  <p>Django Debug Toolbarで確認できる代表的な表示パネルと、DEBUG_TOOLBAR_PANELSによるカスタマイズ方法を整理する。</p>
-  <p>Toolbarの各パネルは、バージョン、処理時間、SQL、テンプレート、キャッシュ、ログなど、画面表示時の内部情報を確認する入口になる。どのパネルで何を見られるかを知っておくと、原因調査の流れを作りやすい。</p>
+  <p>Django Debug Toolbarで確認できる代表的な表示パネルと、<code>DEBUG_TOOLBAR_PANELS</code>によるカスタマイズ方法を整理する。</p>
+  <p>Toolbarの各パネルは、バージョン、処理時間、SQL、テンプレート、キャッシュ、ログなど、画面表示時の内部情報を確認する入口になる。<br>どのパネルで何を見られるかを知っておくと、原因調査の流れを作りやすい。</p>
+  <p>掲載画像はDjango 2.0.2を利用していた当時の画面であり、現行版とはパネル名や構成が異なる。<br>画像は画面の見方をつかむための旧版例として使用し、現行版との差分もあわせて説明する。</p>
   <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
   <ul>
-    <li>Versions、Time、Settingsなどの基本パネルの役割。</li>
+    <li>Versions、Timer、Settingsなどの基本パネルの役割。</li>
     <li>Headers、Request、SQL、Templatesで確認できる情報。</li>
-    <li>Cache、Signals、Logging、Redirectsの使いどころ。</li>
-    <li>DEBUG_TOOLBAR_PANELSで表示パネルを変更する方法。</li>
-    <li>プロファイリング用パネルを追加する考え方。</li>
+    <li>Cache、Signals、旧版のLogging、Redirectsの使いどころ。</li>
+    <li><code>DEBUG_TOOLBAR_PANELS</code>で表示パネルを変更する方法。</li>
+    <li>プロファイリング用パネルを有効にする考え方。</li>
   </ul>
   <h2 id="作業前に確認すること">作業前に確認すること</h2>
   <table class="table" style="width: 100%;">
@@ -32,12 +33,16 @@
         <td>どのテンプレートが使われたかを確認する。</td>
       </tr>
       <tr>
-        <td>Loggingパネル</td>
-        <td>画面表示時に出力されたログを確認する。</td>
+        <td>旧版のLoggingパネル</td>
+        <td>掲載画像の旧版で、画面表示時に出力されたログを確認する。</td>
       </tr>
       <tr>
         <td>カスタマイズ</td>
         <td>必要なパネルだけを表示して調査しやすくする。</td>
+      </tr>
+      <tr>
+        <td>バージョン差</td>
+        <td>掲載画像と現行版のパネル構成を同一視しない。</td>
       </tr>
     </tbody>
   </table>
@@ -46,7 +51,7 @@
     <thead>
       <tr>
         <th scope="col">作業時の注意点</th>
-        <th scope="col">整理するポイント</th>
+        <th scope="col">確認ポイント</th>
       </tr>
     </thead>
     <tbody>
@@ -55,7 +60,7 @@
         <td>全パネルを見るより、調査目的に合わせて見る場所を決める。</td>
       </tr>
       <tr>
-        <td>Timeの解釈</td>
+        <td>Timerの解釈</td>
         <td>サーバー処理とブラウザ側の表示時間を混同しない。</td>
       </tr>
       <tr>
@@ -66,106 +71,117 @@
         <td>Redirects</td>
         <td>有効化するとリダイレクト動作が変わるため、調査時だけ使う。</td>
       </tr>
+      <tr>
+        <td>公開環境での利用</td>
+        <td>設定値やSQLなどの内部情報を表示するため、外部公開された本番環境では有効にしない。</td>
+      </tr>
     </tbody>
   </table>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="表示パネルの概要説明">表示パネルの概要説明</h3>
-  <p>以下、インストール後の初期状態から表示されている<strong>デフォルトパネル</strong>について説明する。</p>
+  <p>以下は、掲載画像を取得した旧バージョンで表示されていたパネルについての説明である。<br>現行版の構成は後述の「現行版での主な違い」で補足する。</p>
   <ol>
     <li>
       <p>Versions<br>
-        Webアプリで使用されている<strong>モジュール（フレームワーク、言語、プラグイン等）のバージョン情報</strong>が表示される。<br>
-        <img src="/static/tblog/img/pid11_1.png" alt="pid11_1">
+        Python、Django、インストール済みアプリなど、調査対象の<strong>バージョン情報</strong>を確認する。依存ライブラリ固有の不具合を調べるときは、まずここで実行環境を特定する。<br>
+        <img src="/static/tblog/img/pid11_1.png" alt="Versionsパネルに表示されたDjangoなどのバージョン情報">
       </p>
     </li>
     <li>
-      <p>Time（時刻）<br>
-        現在の画面が表示されるまでの<strong>各処理に要した時間</strong>が確認できる。<br>
-        <img src="/static/tblog/img/pid11_2.png" alt="pid11_2"><br>
+      <p>Timer（掲載画像では「時刻」）<br>
+        リクエスト処理の<strong>CPU時間と経過時間</strong>を確認する。<br>掲載画像ではブラウザ側のタイミングも別欄に表示されている。<br>
+        <img src="/static/tblog/img/pid11_2.png" alt="Timerパネルに表示されたCPU時間と経過時間"><br>
       </p>
       <ul>
         <li>Resource usage &gt; User CPU time<br>
-          クライアントからリクエストを受信してからページ構成を準備するまでの時間。</li>
+          Pythonプロセスがユーザーモードで実際にCPUを使用した時間。</li>
         <li>Resource usage &gt; System CPU time<br>
-          「User CPU time」の後にサーバーがレスポンス情報を作成し、クライアントに返すまでの時間。</li>
+          OSカーネルがシステムコールなどの処理にCPUを使用した時間。</li>
         <li>Resource usage &gt; Total CPU time<br>
-          リクエストを受信してからクライアントに返すまでの時間。<br>
-          （「User CPU time」 + 「System CPU time」 の合計）</li>
+          User CPU timeとSystem CPU timeの合計。</li>
         <li>Resource usage &gt; Elapsed time<br>
-          「Total CPU time」は、HTML、CSS、JavaScriptに関するサーバー処理とクライアント側のレンダリング時間を含めた値。</li>
+          処理開始から終了までに経過した実時間。I/O待ちなども含むため、通常はTotal CPU timeと一致しない。ブラウザの描画時間そのものを表す値ではない。</li>
         <li>Resource usage &gt; Context switches<br>
-          voluntary context switchesは、複数のプロセスを効率良く実行するため、自発的にコンテキストスイッチを実行した回数でinvoluntary context
-          switchesは、実行優先度が高いプロセスを実行するために、強制的にコンテキストスイッチを実行した回数。</li>
+          voluntaryはI/O待ちなどで処理が自発的にCPUを譲った回数、involuntaryはOSのスケジューラによって実行が切り替えられた回数。</li>
       </ul>
     </li>
     <li>
       <p>Settings<br>
-        <strong>settings.py</strong>を一覧で確認できる。<br>
-        <img src="/static/tblog/img/pid11_3.png" alt="pid11_3">
+        <strong>settings.py</strong>の設定値を一覧で確認できる。
+        <img src="/static/tblog/img/pid11_3.png" alt="Settingsパネルに表示されたDjango設定値の一覧">
       </p>
     </li>
     <li>
       <p>Headers<br>
-        <strong>HTTP</strong>の<strong>リクエストヘッダー情報</strong>、<strong>レスポンスヘッダー情報</strong>を確認できる。<br>
-        <img src="/static/tblog/img/pid11_4.png" alt="pid11_4">
+        <strong>HTTP</strong>の<strong>リクエストヘッダー情報</strong>、<strong>レスポンスヘッダー情報</strong>、WSGI環境情報を確認できる。
+        <img src="/static/tblog/img/pid11_4.png" alt="旧版のHeadersパネルに表示されたリクエスト・レスポンスヘッダーとWSGI環境情報">
       </p>
     </li>
     <li>
       <p>Request<br>
-        ViewやCookie、Sessionなどの<strong>リクエスト情報</strong>を確認できる。<br>
-        <img src="/static/tblog/img/pid11_5.png" alt="pid11_5">
+        ViewやCookie、Sessionなどの<strong>リクエスト情報</strong>を確認できる。
+        <img src="/static/tblog/img/pid11_5.png" alt="旧版のRequestパネルに表示されたView、Cookie、Session情報">
       </p>
     </li>
     <li>
       <p>SQL<br>
-        画面が表示されるまでに<strong>実行されたSQL文</strong>をはじめ、それぞれに要した<strong>実行時間</strong>や<strong>Stacktrace</strong>を確認できる。<br>
-        <img src="/static/tblog/img/pid11_6.png" alt="pid11_6">
+        画面が表示されるまでに<strong>実行されたSQL文</strong>、各クエリの<strong>実行時間</strong>、類似・重複クエリ、スタックトレースなどを確認できる。
+        <img src="/static/tblog/img/pid11_6.png" alt="旧版のSQLパネルに表示されたSQL文、実行時間、類似・重複クエリ">
       </p>
     </li>
     <li>
       <p>Static Files<br>
         画面を表示する際に読み込んだ<strong>Staticファイル</strong>を確認できる。<br>
-        <img src="/static/tblog/img/pid11_7.png" alt="pid11_7">
+        <img src="/static/tblog/img/pid11_7.png" alt="Static Filesパネルに表示された使用済み静的ファイル">
       </p>
     </li>
     <li>
       <p>Templates<br>
-        画面を表示する際に使用された継承も含む<strong>Templateファイル</strong>を確認できる。<br>
-        <img src="/static/tblog/img/pid11_8.png" alt="pid11_8">
+        画面を表示する際に使用された<strong>テンプレート、継承関係、コンテキスト</strong>を確認できる。<br>想定外のテンプレートが選ばれた場合や、変数が渡っていない場合の切り分けに使う。<br>
+        <img src="/static/tblog/img/pid11_8.png" alt="Templatesパネルに表示されたテンプレートとコンテキスト">
       </p>
     </li>
     <li>
       <p>Cache<br>
-        画面を表示する際に利用された<strong>キャッシュバックエンド情報</strong>を確認できる。<br>
-        <img src="/static/tblog/img/pid11_9.png" alt="pid11_9">
+        リクエスト中に行われた<strong>キャッシュ操作</strong>や処理時間を確認する。<br>キャッシュが期待どおり使われているか、同じキーへ不要なアクセスがないかを調べる入口になる。<br>
+        <img src="/static/tblog/img/pid11_9.png" alt="Cacheパネルに表示されたキャッシュ操作の情報">
       </p>
     </li>
     <li>
       <p>Signals<br>
-        フレームワークに備わっている各アクション単位での通知の受け渡し一覧。<br>
-        <img src="/static/tblog/img/pid11_10.png" alt="pid11_10">
+        Djangoの<strong>シグナルと登録済みレシーバー</strong>を一覧で確認する。<br>意図したレシーバーが登録されているかを調べる際に役立つ。<br>
+        <img src="/static/tblog/img/pid11_10.png" alt="Signalsパネルに表示されたシグナルとレシーバーの一覧">
       </p>
     </li>
     <li>
       <p>Logging<br>
-        loggingモジュールで出力したログが確認できる。<br>
-        <img src="/static/tblog/img/pid11_11.png" alt="pid11_11">
+        当時の組み込みLoggingパネルでは、Pythonのloggingモジュールで出力したログを確認できた。<br>現行版の組み込みパネル一覧には含まれていないため、現在の環境では通常のログ出力や対応する外部ツールを利用する。<br>
+        <img src="/static/tblog/img/pid11_11.png" alt="旧版のLoggingパネルに表示されたリクエスト処理中のログ">
       </p>
     </li>
     <li>
       <p>Intercept redirects<br>
-        デフォルト無効であるチェックボックスを有効にすると<strong>リダイレクトが中断</strong>されるようになる。<br>
-        ※ リダイレクト処理をデバッグするときに使用する。</p>
+        有効にするとリダイレクト前に中間ページを表示し、その時点のデバッグ情報を確認できる。<br>ただし、現行版では非推奨で、リダイレクトされたリクエストの情報はHistoryパネルから確認する方法が推奨されている。</p>
     </li>
   </ol>
+  <h3 id="現行版での主な違い">現行版での主な違い</h3>
+  <p>掲載画像の旧版と比べ、現行版の組み込みパネルにはHistory、Alerts、Communityなどが追加されている。<br>一方、旧版のLoggingパネルは現行版の組み込み一覧には含まれない。</p>
+  <ul>
+    <li>History<br>
+      過去のリクエストを選び、その時点のToolbar情報を確認する。<br>リダイレクト前後の調査にも利用できる。</li>
+    <li>Alerts<br>
+      ファイル入力を含むフォームで<code>enctype="multipart/form-data"</code>が不足している場合など、既知の問題を通知する。</li>
+    <li>Redirects<br>
+      現行版にも含まれるが既定では無効で、バージョン6.0から非推奨となっている。</li>
+    <li>Profiling<br>
+      リクエスト処理中の関数呼び出しを確認するパネル。<br>現行版では構成に含まれるが既定では無効である。</li>
+  </ul>
   <h3 id="表示パネルのカスタマイズ">表示パネルのカスタマイズ</h3>
-  <p>上記デフォルトパネルは、<strong>settings.py</strong>の<code>DEBUG_TOOLBAR_PANELS</code>に設定されている。</p>
+  <p>表示するパネルは、<strong>settings.py</strong>の<code>DEBUG_TOOLBAR_PANELS</code>で変更できる。<br>現行版の既定値は次の構成で、<strong>並び替え</strong>、<strong>削除</strong>、<strong>追加</strong>が可能である。<br>ただし、既定値をそのままコピーすると将来の改善を取り込めなくなるため、変更が必要な場合だけ設定する。</p>
   <ul>
     <li>
-      <p>settings.pyの<code>DEBUG_TOOLBAR_PANELS</code>（デフォルト）
-        下記<code>DEBUG_TOOLBAR_PANELS</code>を変更することで<strong>パネルの並び替え</strong>や<strong>削除</strong>、<strong>追加</strong>ができるようになる。
-      </p>
-      <pre><code class="language-ini"><span class="hljs-attr">DEBUG_TOOLBAR_PANELS</span> = [
+      <pre><code class="language-python"><span class="hljs-variable">DEBUG_TOOLBAR_PANELS</span> = [
+    <span class="hljs-string">&#x27;debug_toolbar.panels.history.HistoryPanel&#x27;</span>,
     <span class="hljs-string">&#x27;debug_toolbar.panels.versions.VersionsPanel&#x27;</span>,
     <span class="hljs-string">&#x27;debug_toolbar.panels.timer.TimerPanel&#x27;</span>,
     <span class="hljs-string">&#x27;debug_toolbar.panels.settings.SettingsPanel&#x27;</span>,
@@ -174,40 +190,24 @@
     <span class="hljs-string">&#x27;debug_toolbar.panels.sql.SQLPanel&#x27;</span>,
     <span class="hljs-string">&#x27;debug_toolbar.panels.staticfiles.StaticFilesPanel&#x27;</span>,
     <span class="hljs-string">&#x27;debug_toolbar.panels.templates.TemplatesPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.alerts.AlertsPanel&#x27;</span>,
     <span class="hljs-string">&#x27;debug_toolbar.panels.cache.CachePanel&#x27;</span>,
     <span class="hljs-string">&#x27;debug_toolbar.panels.signals.SignalsPanel&#x27;</span>,
-    <span class="hljs-string">&#x27;debug_toolbar.panels.logging.LoggingPanel&#x27;</span>,
-    <span class="hljs-string">&#x27;debug_toolbar.panels.redirects.RedirectsPanel&#x27;</span>
+    <span class="hljs-string">&#x27;debug_toolbar.panels.community.CommunityPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.redirects.RedirectsPanel&#x27;</span>,
+    <span class="hljs-string">&#x27;debug_toolbar.panels.profiling.ProfilingPanel&#x27;</span>,
 ]
 </code></pre>
     </li>
     <li>
-      <p><strong>プロファイリング情報</strong>の追加例</p>
-      <pre><code class="language-ini"><span class="hljs-attr">DEBUG_TOOLBAR_PANELS</span> = [
-    <span class="hljs-string">&#x27;debug_toolbar.panels.versions.VersionsPanel&#x27;</span>,
-    <span class="hljs-string">&#x27;debug_toolbar.panels.timer.TimerPanel&#x27;</span>,
-    <span class="hljs-string">&#x27;debug_toolbar.panels.settings.SettingsPanel&#x27;</span>,
-    <span class="hljs-string">&#x27;debug_toolbar.panels.headers.HeadersPanel&#x27;</span>,
-    <span class="hljs-string">&#x27;debug_toolbar.panels.request.RequestPanel&#x27;</span>,
-    <span class="hljs-string">&#x27;debug_toolbar.panels.sql.SQLPanel&#x27;</span>,
-    <span class="hljs-string">&#x27;debug_toolbar.panels.staticfiles.StaticFilesPanel&#x27;</span>,
-    <span class="hljs-string">&#x27;debug_toolbar.panels.templates.TemplatesPanel&#x27;</span>,
-    <span class="hljs-string">&#x27;debug_toolbar.panels.cache.CachePanel&#x27;</span>,
-    <span class="hljs-string">&#x27;debug_toolbar.panels.signals.SignalsPanel&#x27;</span>,
-    <span class="hljs-string">&#x27;debug_toolbar.panels.logging.LoggingPanel&#x27;</span>,
-    <span class="hljs-string">&#x27;debug_toolbar.panels.profiling.ProfilingPanel&#x27;</span>    <span class="hljs-comment"># 追記</span>
-]
-</code></pre>
-      <p>末尾に追加した<strong>プロファイリング情報</strong>が確認できるようになる。<br>
-        <img src="/static/tblog/img/pid11_12.png" alt="pid11_12">
+      <p><strong>プロファイリング情報</strong>の確認例<br>
+        Profilingパネルを有効にすると、関数ごとの呼び出し回数や処理時間を確認できる。<br>Python 3.12以降では、公式ドキュメントに記載された実行条件もあわせて確認する。<br>
+        <img src="/static/tblog/img/pid11_12.png" alt="旧版のProfilingパネルに表示された関数ごとの処理時間">
       </p>
     </li>
     <li>
-      <p>その他のパネルについて
-        下記<strong>サードパーティ製</strong>のパネルを参照。<br>
-        <a class="link-secondary"
-          href="https://django-debug-toolbar.readthedocs.io/en/stable/panels.html#third-party-panels">https://django-debug-toolbar.readthedocs.io/en/stable/panels.html#third-party-panels</a>
-      </p>
+      <p>その他のパネルについて<br>
+        公式ドキュメントには<strong>サードパーティ製</strong>のパネルも掲載されているが、Django Debug Toolbar本体による正式サポートの対象外である。<br>導入前に、対応バージョンや更新状況を確認する。</p>
     </li>
   </ul>
   <h2 id="実務とのつながり">実務とのつながり</h2>
@@ -222,7 +222,13 @@
   <h2 id="まとめ">まとめ</h2>
   <ul>
     <li>Django Debug Toolbarの各パネルは、Django画面表示の内部状態を確認するための入口になる。</li>
-    <li>SQL、Templates、Timeなどは、性能調査や表示不具合の確認で特に役立つ。</li>
-    <li>DEBUG_TOOLBAR_PANELSを使うと、必要なパネルだけに絞って調査しやすくできる。</li>
+    <li>SQL、Templates、Timerなどは、性能調査や表示不具合の確認で特に役立つ。</li>
+    <li><code>DEBUG_TOOLBAR_PANELS</code>を使うと、必要なパネルだけに絞って調査しやすくできる。</li>
+    <li>パネル構成はバージョンによって変わるため、旧版の画面例と利用中の公式ドキュメントを照合する。</li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li><a href="https://django-debug-toolbar.readthedocs.io/en/stable/panels.html" class="link-secondary">Django Debug Toolbar, Panels</a></li>
+    <li><a href="https://django-debug-toolbar.readthedocs.io/en/stable/configuration.html" class="link-secondary">Django Debug Toolbar, Configuration</a></li>
   </ul>
 </div>
