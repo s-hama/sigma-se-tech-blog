@@ -5,10 +5,10 @@ Python - 標準デバッガー（Pdb）：基本操作とステップ実行
 
 Python標準デバッガーであるPdbの使い方を、ブレークポイント、ステップ実行、変数確認を中心に整理する。
 
-Pdbを使うと、print文だけでは追いにくい処理の流れを、停止位置ごとに確認できる。関数の中へ入るのか、次の行へ進むのか、変数の値をどう見るのかを押さえると、原因調査がしやすくなる。
+Pdbを使うと、print文だけでは追いにくい処理の流れを、停止位置ごとに確認できる。<br>関数の中へ入るのか、次の行へ進むのか、変数の値をどう見るのかを押さえると、原因調査がしやすくなる。
 
 ## この記事で扱うこと
-- pdb.set_trace()で処理を止める方法。
+- `breakpoint()`または`pdb.set_trace()`で処理を止める方法。
 - ステップ実行で処理の流れを追う方法。
 - pコマンドで変数の値を確認する方法。
 - step、next、return、continueの違い。
@@ -19,7 +19,7 @@ Pdbを使うと、print文だけでは追いにくい処理の流れを、停止
 | 項目 | 確認内容 |
 | --- | --- |
 | サンプルコード | 小さな関数で停止位置と変数の変化を確認する。 |
-| ブレークポイント | pdb.set_trace()を置いた直後から確認を始める。 |
+| ブレークポイント | Python 3.7以降では組込みのbreakpoint()を利用できる。 |
 | ステップ実行 | 関数内へ入るか、次行へ進むかを使い分ける。 |
 | 変数確認 | p 変数名で現在値を表示する。 |
 | 終了操作 | qでデバッガーを抜ける。 |
@@ -31,87 +31,68 @@ Pdbを使うと、print文だけでは追いにくい処理の流れを、停止
 | stepとnext | stepは関数の中へ入り、nextは関数呼び出しを一行として進める。 |
 | 停止位置 | set_trace()を書いた行そのものではなく、その次の実行行で止まる。 |
 | 変数のスコープ | 現在停止している位置から見える変数だけを確認できる。 |
-| 消し忘れ | pdb.set_trace()を本番コードへ残さない。 |
+| 消し忘れ | breakpoint()やpdb.set_trace()を本番コードへ残さない。 |
 
 ## 実施内容
 ### Pdbの使用例
 - 説明用のサンプルプログラムを作成<br>
 説明用に下記`debug_example.py`を作成する。<br>
   ```python
-  1 def add(a, b, c):
-  2     return a + b + c
-  3 
-  4 step = 0
-  5
-  6 step = add(1, 2, 3)
-  7 step = add(4, 5, 6)
-  ```
+  def add(a, b, c):
+      return a + b + c
 
-- 4行目に`import pdb; pdb.set_trace()`を挿入<br>
-この状態で4行目の直後となる6行目の`step = 0`がブレイクポイントとなる。
-  ```python
-  1 def add(a, b, c):
-  2     return a + b + c
-  3
-  4 import pdb; pdb.set_trace()
-  5
-  6 step = 0
-  7
-  8 step = add(1, 2, 3)
-  9 step = add(4, 5, 6)
+
+  breakpoint()
+  step = 0
+  step = add(1, 2, 3)
+  step = add(4, 5, 6)
+  print(step)
   ```
+  `breakpoint()`はPython 3.7以降で利用でき、既定では`pdb.set_trace()`を呼び出す。<br>Python 3.6以前では、`import pdb; pdb.set_trace()`を同じ位置へ記述する。
 
 - `debug_example.py`を実行<br>
-6行目の`step = 0`で止まり、入力待ちを表す`(Pdb)`が表示される。
+`breakpoint()`が実行されると、その次に実行する`step = 0`の行で止まり、入力待ちを表す`(Pdb)`が表示される。
   ```bash
-  $ python /var/www/vops/ops/macuos/debug_example.py
-   > /var/www/vops/ops/macuos/debug_example.py(6)()
+  $ python debug_example.py
+   > /path/to/debug_example.py(6)<module>()
    -> step = 0
    (Pdb)
   ```
 
-- ステップ実行でそれぞれ変数の値を確認<br>
-以下、6行目～9行目までステップ実行し、最後に変数`step`の値を確認する。<br>
-ステップ実行は、`s`、変数の確認は、**p <変数名>**を入力する。<br>
-ステップ実行毎に`>`でどの行であるか、`->`で実行コードが確認できる。
+- `next`と`step`を使い分けて値を確認<br>
+`n`は現在の関数内の次の行まで進み、`s`は呼び出した関数の内部へ入る。<br>`a`で現在の関数の引数を、`p <式>`で式の評価結果を確認できる。<br>以下は操作の流れを抜粋した例となる。
   ```bash
-  $ python /var/www/vops/ops/macuos/debug_example.py
-   > /var/www/vops/ops/macuos/debug_example.py(6)()
-   -> step = 0
-   (Pdb) s    # ステップ実行のsを入力
-   > /var/www/vops/ops/macuos/debug_example.py(8)()
-   -> step = add(1, 2, 3)
-   (Pdb) s    # ステップ実行のsを入力
+  (Pdb) n       # step = 0を実行し、次の行へ進む
+  (Pdb) s       # add(1, 2, 3)の内部へ入る
    --Call--
-   > /var/www/vops/ops/macuos/debug_example.py(1)add()
+   > /path/to/debug_example.py(1)add()
    -> def add(a, b, c):
-   (Pdb) s    # ステップ実行のsを入力
-   > /var/www/vops/ops/macuos/debug_example.py(2)add()
-   -> return a + b + c
-   (Pdb) s    # ステップ実行のsを入力
+  (Pdb) a       # 現在の関数の引数を表示
+  a = 1
+  b = 2
+  c = 3
+  (Pdb) r       # 現在のadd関数がreturnするまで実行
    --Return--
-   > /var/www/vops/ops/macuos/debug_example.py(2)add()->6
+   > /path/to/debug_example.py(2)add()->6
    -> return a + b + c
-   (Pdb) s    # ステップ実行のsを入力
-   > /var/www/vops/ops/macuos/debug_example.py(9)()
-   -> step = add(4, 5, 6)
-   (Pdb) s    # ステップ実行のsを入力
-   (Pdb) p step    # 変数「step」の確認
-   15
+  (Pdb) n       # 呼び出し元へ戻り、次の行まで進む
+  (Pdb) p step
+  6
+  (Pdb) n       # 2回目のaddは内部へ入らず実行
+  (Pdb) p step
+  15
   ```
 
 ### Pdbの基本操作方法
 以下、よく使用するPdbコマンド。
 - [`s`] or [`step`]<br>
-ステップイン : **行単位**でステップ実行する。
+現在行を実行し、呼び出した関数の内部を含む、次に停止可能な位置で止まる。
 
 - [`n`] or [`next`]<br>
-ステップオーバー : **行単位**で実行する。
-※ 関数の中は停止しない。
+現在行を実行し、現在の関数内の次の行、または現在の関数が戻る位置で止まる。<br>呼び出した関数の内部では停止しない。
 
 - [`r`] or [`return`]<br>
-ステップアウト : 関数単位で実行する。
-※ 実行中の関数が返るまで実行する。
+現在の関数が戻るまで実行する。
 
 - [`c`] or [`continue`]<br>
 次回の**ブレークポイントまで停止せず**実行する。
@@ -119,14 +100,14 @@ Pdbを使うと、print文だけでは追いにくい処理の流れを、停止
 - [`l`] or [`list`]<br>
 現在停止行の**前後のソース**を表示する。
 
-- [`a`] or [`largs`]<br>
+- [`a`] or [`args`]<br>
 現在停止している**関数の引数**を表示する。
 
-- [**p <変数名>**]<br>
-**変数の値**を表示する。
+- [**p <式>**]<br>
+現在のコンテキストで式を評価し、結果を表示する。
 
 - [`q`] or [`quit`]<br>
-**Pdbデバッガー**を終了する。
+デバッグ中のプログラムを終了する。
 
 ## 実務とのつながり
 - 不具合調査<br>
@@ -139,4 +120,9 @@ Pdbを使うと、print文だけでは追いにくい処理の流れを、停止
 ## まとめ
 - PdbはPython標準のデバッガーで、処理を止めながら変数や流れを確認できる。
 - step、next、return、continueの違いを押さえると、調査しやすくなる。
-- pdb.set_trace()は便利だが、確認後はコードから外す。
+- breakpoint()やpdb.set_trace()は便利だが、確認後はコードから外す。
+
+### 参考文献
+- [Python公式ドキュメント - pdb：Pythonデバッガー](https://docs.python.org/ja/3/library/pdb.html)
+- [Python公式ドキュメント - breakpoint()](https://docs.python.org/ja/3/library/functions.html#breakpoint)
+- [Python公式ドキュメント - PYTHONBREAKPOINT](https://docs.python.org/ja/3/using/cmdline.html#envvar-PYTHONBREAKPOINT)
