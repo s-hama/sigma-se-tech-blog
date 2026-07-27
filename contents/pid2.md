@@ -7,11 +7,14 @@ VPS上でApacheを起動し、HTTP/HTTPS通信を許可し、Let's EncryptでSSL
 
 Webサイトを公開するには、Webサーバーの起動だけでなく、firewalld、DocumentRoot、HTTPS、証明書更新までつなげて確認する必要がある。特にSSL/TLSは、一度取得して終わりではなく、期限管理まで含めて運用する。
 
+※ 注意：この記事は、2018年当時のCentOS 7.4環境をもとにした構築記録である。<br>
+CentOS 7は2024年6月30日にサポートを終了しているため、新規構築ではサポート中のOSと、そのOS向けにCertbot公式サイトが案内する手順を利用する。
+
 ## 前提環境
 
 | 項目 | 内容 |
 | --- | --- |
-| OS | CentOS 7.4 |
+| OS | CentOS 7.4（サポート終了済み） |
 | 言語 | Python |
 | Webサーバー | Apache |
 | フレームワーク | Django |
@@ -46,66 +49,52 @@ Webサイトを公開するには、Webサーバーの起動だけでなく、fi
 
 ## 実施内容
 ### Apache(httpd)インストール
-- インストール実行後、`Complete!`で正常終了。
+- インストール後、Apacheを起動し、OS起動時にも自動起動するよう設定
   ```bash
   $ yum install httpd
+  $ systemctl start httpd
+  $ systemctl enable httpd
   ```
 
 ### ファイアウォールの設定
-- CentOS7は、デフォルトでファイアウォールが有効なため、http、httpsも遮断されている状態なのでこの通信を許容するように設定変更する。<br>
-後にSSL/TSL化するため、ここでhttpsも一緒に許容しておく。
+- `firewalld`でHTTPとHTTPSのサービスを恒久的に許可し、設定を再読込み<br>
+後にSSL/TLS化するため、ここでHTTPSも一緒に許可しておく。
   ```bash
-  $ systemctl start httpd    # Apacheの起動
-  $ firewall-cmd --add-service=http --zone=public --permanent    # http通信の許容
-  $ firewall-cmd --add-service=https --zone=public --permanent    # https通信の許容
-  $ systemctl restart firewalld    # ファイアウォールの再起動
+  $ firewall-cmd --zone=public --add-service=http --permanent
+  $ firewall-cmd --zone=public --add-service=https --permanent
+  $ firewall-cmd --reload
+  $ firewall-cmd --zone=public --list-services
   ```
 
 - httpでの接続確認<br>
 httpで自身のドメイン(http://example.com)にアクセスし、`Testing 123`と表示されれば設定成功。
 
-### httpd自動起動の設定
-- サーバー起動時にhttpdも自動で起動するように設定する。
+### httpd自動起動の確認
+- インストール時に有効化した自<br>
+`enabled`と表示されれば、OS起動時にhttpdも起動する。
   ```bash
-  $ systemctl enable httpd
-  ```
-- 自動起動の設定確認<br>
-`httpd.service enabled`と表示されれば設定成功。
-  ```bash
-  $ systemctl list-unit-files -t service
+  $ systemctl is-enabled httpd
   ```
 
 ### DocumentRootの権限変更
-- vpsuser(所有者グループ)やapache(所有者)でもDocumentRoot配下(/var/www/html) が編集できるように権限変更する。
+- 配置作業を行う`vpsuser`を所有者、Apacheをグループに設定
+<br>静的ファイルを配信するだけならApacheに書込み権限は不要なので、DocumentRoot全体を`775`にはしない。
   ```bash
   $ cd /var/www
-  $ chown apache:vpsuser html 
-  $ chmod 775 html
+  $ chown vpsuser:apache html
+  $ chmod 755 html
   ```
 
-- 仮のindexで表示確認<br>
-/var/www/htmlの直下にindex.htmlを新規作成後、httpで自身のドメイン(http://example.com)にアクセスし表示されれば設定成功。
+- 仮の`index.html`を`/var/www/html`直下へ配置した後、HTTPレスポンスを確認<br>
   ```bash
-  $ systemctl list-unit-files -t service
+  $ curl -I http://example.com/
   ```
 
-### httpsの解放設定
-- httpsのサービス解放<br>
-「--permanent」でOSを再起動しても設定が変わらないように設定を恒久化する。
-「--zone=public」で明示的にzoneをpublicに割当てる。<br>
+### HTTPS用ポートの確認
+- `services`に`http`と`https`が表示されることを確認<br>
+すでに「ファイアウォールの設定」で追加しているため、ここで同じ設定を重複して実行する必要はない。
   ```bash
-  $ firewall-cmd --permanent --zone=public --add-service=https
-  ```
-
-- 設定を反映させるためfirewalldを再起動する
-  ```bash
-  $ systemctl restart firewalld
-  ```
-
-- httpsの解放確認<br>
-servicesにhttpsと表示されれば解放成功。
-  ```bash
-  $ firewall-cmd --list-all
+  $ firewall-cmd --zone=public --list-all
    public (active)
     target: default
     icmp-block-inversion: no
@@ -132,34 +121,11 @@ servicesにhttpsと表示されれば解放成功。
   ```
 
 - 起動確認
-`active(running)`であることを確認する。<br>
+`active (running)`であることを確認する。長いプロセス一覧を転載するより、サービス状態と設定構文を確認する方が切り分けやすい。
   ```bash
+  $ apachectl configtest
   $ systemctl restart httpd
   $ systemctl status httpd
-  * httpd.service - The Apache HTTP Server
-     Loaded: loaded (/usr/lib/systemd/system/httpd.service; enabled; vendor preset: disabled)
-     Active: active (running) since Fri 2018-09-14 21:54:42 JST; 1h 40min ago
-       Docs: man:httpd(8)
-             man:apachectl(8)
-    Process: 3887 ExecStop=/bin/kill -WINCH ${MAINPID} (code=exited, status=0/SUCCESS)
-    Process: 24271 ExecReload=/usr/sbin/httpd $OPTIONS -k graceful (code=exited, status=0/SUCCESS)
-   Main PID: 3895 (httpd)
-     Status: "Total requests: 49; Current requests/sec: 0; Current traffic:   0 B/sec"
-     CGroup: /system.slice/httpd.service
-             |-3895 /usr/sbin/httpd -DFOREGROUND
-             |-3896 /usr/sbin/httpd -DFOREGROUND
-             |-3897 /usr/sbin/httpd -DFOREGROUND
-             |-3898 /usr/sbin/httpd -DFOREGROUND
-             |-3899 /usr/sbin/httpd -DFOREGROUND
-             |-3900 /usr/sbin/httpd -DFOREGROUND
-             |-3902 /usr/sbin/httpd -DFOREGROUND
-             |-3903 /usr/sbin/httpd -DFOREGROUND
-             |-3979 /usr/sbin/httpd -DFOREGROUND
-             |-3982 /usr/sbin/httpd -DFOREGROUND
-             |-3995 /usr/sbin/httpd -DFOREGROUND
-             |-3996 /usr/sbin/httpd -DFOREGROUND
-             |-4089 /usr/sbin/httpd -DFOREGROUND
-             `-4536 /usr/sbin/httpd -DFOREGROUND
   ```
 
 - EPELリポジトリのインストール<br>
@@ -171,33 +137,34 @@ servicesにhttpsと表示されれば解放成功。
 - Certbotのインストール<br>
 **Certbot**は、**Let's Encrypt**で使用するクライアントソフトウェアで、SSL/TLSサーバー証明書の取得、及び更新作業を自動化してくれる。
   ```bash
-  $ yum install epel-release
+  $ yum install certbot python2-certbot-apache
   ```
+  ※ 上記はCentOS 7当時のパッケージ名である。現在はCertbot公式のインストール手順で、利用中のOSとWebサーバーを選択して確認する。
 
 - CertbotでSSL証明書を取得する
   ```bash
-  $ sudo certbot --authenticator standalone --installer apache -d example.com --pre-hook "apachectl stop" --post-hook "apachectl start"
+  $ sudo certbot --apache -d example.com
   ```
 
 - SSL/TLSの動作確認<br>
-httpsで自身のドメイン(https://example.com)にアクセスできれば成功。<br>
-※ httpでアクセスしてもhttpsにリダイレクトされる。
+HTTPSで自身のドメイン（https://example.com）にアクセスできれば成功。<br>
+※ HTTPからHTTPSへのリダイレクトは、Certbot実行時にリダイレクトを選択した場合、またはApache側で別途設定した場合に有効になる。
 
 ### Let's Encryptの定期更新
-3か月単位で定期的な証明書の再発行が必要。
-期限が近づくと**Let's Encrypt certificate expiration notice for domain "example.com"**というメールが送られてくるため、期限以内に**certbot**から証明書を再発行する必要がある。
+Let's Encryptの`classic`プロファイルで発行される既定の証明書有効期間は現在90日であり、期限前に自動更新できる状態を維持する必要がある。<br>
+短期証明書のプロファイルや段階的な有効期間短縮も案内されているため、「3か月ごと」の固定スケジュールではなくCertbotの更新判定に任せる。<br>
+Let's Encryptによる期限通知メールは2025年6月4日に終了したため、メールを更新確認の代わりにはできない。
 
-- Apacheを停止して現在の証明書を強制的に再発行する。
+- インストール方法に応じてsystemd timerまたはcronの自動更新設定を確認し、`--dry-run`で更新をテストする。通常の更新では、期限が近い証明書だけを対象とする`certbot renew`を使い、`--force-renewal`は常用しない。
   ```bash
-  $ sudo systemctl stop httpd    # Apache停止
-  $ sudo certbot renew --force-renewal --dry-run    # 仮実施
-  $ openssl x509 -in /etc/letsencrypt/live/example.com/fullchain.pem -noout -dates    # 有効期限の確認
-  $ sudo certbot renew --force-renewal    # 本番実施：証明書再発行
-  $ sudo systemctl start httpd    # Apache起動
+  $ systemctl list-timers --all | grep certbot
+  $ sudo certbot renew --dry-run
+  $ sudo certbot renew
+  $ openssl x509 -in /etc/letsencrypt/live/example.com/fullchain.pem -noout -dates
   ```
 
 - 有効期限の確認<br>
-ブラウザの証明書情報の有効期限が**3か月**伸びていれば再発行成功。
+`certbot renew --dry-run`が成功することに加え、外部監視や定期的な証明書確認を用意して更新失敗を検知する。
 
 ## 実務とのつながり
 - HTTPS化<br>
@@ -211,3 +178,12 @@ httpsで自身のドメイン(https://example.com)にアクセスできれば成
 - Apacheを公開するには、httpd、firewalld、DocumentRootをまとめて確認する。
 - HTTPS化では、mod_sslとSSL/TLS証明書の設定が必要になる。
 - Let's Encryptは更新が必要なため、取得後の期限確認も運用に含める。
+
+### 参考文献
+- [The CentOS Project, CentOS Linux（CentOS Linux 7のEOL）](https://www.centos.org/centos-linux/)
+- [Red Hat Enterprise Linux 7 Security Guide, Controlling Traffic](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/security_guide/sec-controlling_traffic)
+- [Apache HTTP Server 2.4, SSL/TLS Encryption](https://httpd.apache.org/docs/2.4/ssl/)
+- [Certbot Documentation, Renewing certificates](https://eff-certbot.readthedocs.io/en/stable/using.html#renewing-certificates)
+- [Let's Encrypt, FAQ：証明書の有効期間](https://letsencrypt.org/docs/faq/#what-is-the-lifetime-for-lets-encrypt-certificates-for-how-long-are-they-valid)
+- [Let's Encrypt, Decreasing Certificate Lifetimes to 45 Days](https://letsencrypt.org/2025/12/02/from-90-to-45.html)
+- [Let's Encrypt, Ending Support for Expiration Notification Emails](https://letsencrypt.org/2025/01/22/ending-expiration-emails.html)
