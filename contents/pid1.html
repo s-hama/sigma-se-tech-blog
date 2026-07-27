@@ -2,6 +2,7 @@
   <h2 id="概要">概要</h2>
   <p>VPS上でDjangoサイトを公開する前段階として、VPS契約、OSインストール、独自ドメイン、DNS設定、SSH初期設定を整理する。</p>
   <p>この段階では、アプリケーションの実装よりも「安全にサーバーへ接続できること」と「ドメイン名でサーバーへ到達できること」が重要になる。後続のApache、Django、PostgreSQL設定の土台になるため、SSHとDNSの確認を丁寧に行う。</p>
+  <p>※ 注意：この記事は、2018年当時のCentOS 7.4環境をもとにした構築記録である。<br>CentOS 7は2024年6月30日にサポートを終了しており、セキュリティ更新も提供されない。<br>新規構築ではサポート中のOSを選び、以下のコマンドは旧環境の構成を理解するための参考として利用する。</p>
   <h2 id="前提環境">前提環境</h2>
   <table class="table" style="width: 80%;">
     <thead>
@@ -13,7 +14,7 @@
     <tbody>
       <tr>
         <td>OS</td>
-        <td>CentOS 7.4</td>
+        <td>CentOS 7.4（サポート終了済み）</td>
       </tr>
       <tr>
         <td>言語</td>
@@ -77,7 +78,7 @@
     <thead>
       <tr>
         <th scope="col">作業時の注意点</th>
-        <th scope="col">整理するポイント</th>
+        <th scope="col">確認ポイント</th>
       </tr>
     </thead>
     <tbody>
@@ -107,10 +108,14 @@
   </ul>
   <h3 id="osインストール">OSインストール</h3>
   <ul>
-    <li>開発環境(Apache, Django, PostgreSQL)がインストール可能で管理しやすいOSに絞る。</li>
-    <li>ここでは、英語圏のコミュニティが大きく、日本語情報が豊富で個人的に使い慣れているCentOSを選んだ。</li>
-    <li>CentOS7_x86_64(標準)をインストール
-      インストールは、SAKURA VPS管理者用のコントロールパネルからGUI操作でインストールする。
+    <li>
+      <p>OSの選択<br>
+        開発環境(Apache, Django, PostgreSQL)がインストール可能で管理しやすいOSに絞る。<br>
+        ここでは、構築当時に英語圏のコミュニティが大きく、日本語情報が豊富で個人的に使い慣れているCentOSを選んだ。</p>
+    </li>
+    <li>
+      <p>CentOS7_x86_64(標準)をインストール<br>
+        インストールは、SAKURA VPS管理者用のコントロールパネルからGUI操作でインストールする。</p>
       <pre><code class="language-bash">$ <span class="hljs-built_in">cat</span> /etc/redhat-release
 CentOS Linux release 7.4.1708 (Core)
 </code></pre>
@@ -149,26 +154,34 @@ TTL: 3600
   <h3 id="sshの初期設定">SSHの初期設定</h3>
   <ul>
     <li>
-      <p>rootでログインできないようにする。<br>
-        ログイン用の一般ユーザーを作成する。</p>
+      <p>rootログインの無効化<br>
+        ログイン用の一般ユーザーを作成し、管理作業に必要な場合は<code>wheel</code>グループへ追加する。</p>
       <pre><code class="language-bash">$ adduser vpsuser
-$ passwd *******
+$ passwd vpsuser
+$ usermod -aG wheel vpsuser
 </code></pre>
-      <p>SSHの設定変更<br>
-        rootで直接アクセス出来ないようにする。</p>
-      <pre><code class="language-bash">$ vim /etc/ssh/sshd_config
+      <p>手元のPCで鍵を作成し、公開鍵だけをVPSへ登録する。秘密鍵は手元のPCから外へ出さない。</p>
+      <pre><code class="language-bash">$ ssh-keygen -t ed25519 -C "vpsuser@example.com"
+$ ssh-copy-id vpsuser@example.com
+$ ssh vpsuser@example.com
 </code></pre>
-      <p>→ <code>PermitRootLogin no</code>がコメントアウトされていたら解除する。</p>
+      <p><code>ssh-copy-id</code>を利用できない場合は、公開鍵の内容をVPS側の<code>~/.ssh/authorized_keys</code>へ登録し、<code>.ssh</code>を<code>700</code>、<code>authorized_keys</code>を<code>600</code>に設定する。</p>
     </li>
     <li>
-      <p>公開鍵認証の設定<br>
-        公開鍵認証でのみログインするようにする。</p>
+      <p>SSHの設定変更<br>
+        <strong>別のターミナルから一般ユーザーの公開鍵認証に成功することを確認してから</strong>、rootログインとパスワード認証を無効化する。</p>
       <pre><code class="language-bash">$ vim /etc/ssh/sshd_config
+PermitRootLogin no
+PubkeyAuthentication yes
+PasswordAuthentication no
 </code></pre>
-      <p>→ <code>PasswordAuthentication no</code>がコメントアウトされていたら解除する。</p>
+      <p>設定の構文を確認してから再読込みし、確認中のSSHセッションは新しい接続に成功するまで閉じない。</p>
+      <pre><code class="language-bash">$ sshd -t
+$ systemctl reload sshd
+</code></pre>
     </li>
   </ul>
-  <p>上記の設定により、新規登録した<code>vpsuser</code>と<strong>秘密鍵</strong>を使用しないとログインできなくなる。</p>
+  <p>上記の設定により、登録済み公開鍵に対応する秘密鍵を持つ<code>vpsuser</code>だけがSSH認証できる。鍵の登録前に<code>PasswordAuthentication no</code>へ変更するとサーバーへ入れなくなるため、順序が重要となる。</p>
   <h2 id="実務とのつながり">実務とのつながり</h2>
   <ul>
     <li>DNS設定<br>
@@ -183,5 +196,11 @@ $ passwd *******
     <li>VPS構築の最初の段階では、OS、ドメイン、DNS、SSHを整える。</li>
     <li>DNSはドメイン名をVPSのIPアドレスへ向ける仕組みとなる。</li>
     <li>SSHはrootログインを避け、公開鍵認証を使うことで安全性を高める。</li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li><a href="https://www.centos.org/centos-linux/" class="link-secondary">The CentOS Project, CentOS Linux（CentOS Linux 7のEOL）</a></li>
+    <li><a href="https://www.rfc-editor.org/rfc/rfc1034.html" class="link-secondary">RFC Editor, RFC 1034：Domain names - concepts and facilities</a></li>
+    <li><a href="https://man.openbsd.org/sshd_config" class="link-secondary">OpenBSD Manual Pages, sshd_config(5)</a></li>
   </ul>
 </div>
