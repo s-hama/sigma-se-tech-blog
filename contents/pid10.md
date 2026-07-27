@@ -5,7 +5,7 @@ Django - Django Debug Toolbar：1/2 導入手順と設定方法
 
 Django Debug Toolbarを導入し、settings.pyとurls.pyへ必要な設定を追加する手順を整理する。
 
-Django Debug Toolbarは、リクエスト、レスポンス、SQL、テンプレートなどの情報をブラウザ上で確認できる開発支援ツールとなる。開発時の調査には便利だが、DEBUG=Trueを前提とするため、本番環境に出さないことが重要になる。
+Django Debug Toolbarは、リクエスト、レスポンス、SQL、テンプレートなどの情報をブラウザ上で確認できる開発支援ツールとなる。<br>開発時の調査には便利だが、本番環境や公開サーバーでの利用を想定して強化されたツールではないため、開発環境だけで有効にすることが重要になる。
 
 ## この記事で扱うこと
 - django-debug-toolbarの役割。
@@ -29,122 +29,95 @@ Django Debug Toolbarは、リクエスト、レスポンス、SQL、テンプレ
 | 作業時の注意点 | 確認ポイント |
 | --- | --- |
 | Toolbarが出ない | DEBUG、INTERNAL_IPS、URL設定、MIDDLEWAREの順に確認する。 |
-| CSSが効かない | staticファイルの配置先と読み込み先を確認する。 |
-| 設定順序 | INSTALLED_APPSやMIDDLEWAREの追加位置に注意する。 |
+| CSSやJavaScriptが読み込めない | staticfilesの設定とブラウザーの開発者ツールを確認する。 |
+| 設定順序 | DebugToolbarMiddlewareは早い位置に置き、レスポンスを圧縮するミドルウェアより後に置く。 |
 | 本番利用 | デバッグ情報を公開しないよう、開発用途に限定する。 |
 
 ## 実施内容
 ### django-debug-toolbarの導入
-`django-debug-toolbar`は、開発時に必要になってくる`セッション情報 `や`リクエスト/レスポンス情報`、そして`実行したSQL`などリアルタイムで様々な情報を確認できるプラグイン。<br>
+`django-debug-toolbar`は、セッション、リクエスト/レスポンス、実行したSQLなどをリクエスト単位で確認できる開発支援パッケージとなる。<br>
 - django-debug-toolbarのインストール<br>
-ここでは、仮想環境上で`Django`が動いているため、仮想環境に`django-debug-toolbar`をインストールする。<br>
-※ 詳細は、[Djangoインストール](https://sigma-se.com/detail/3/#:~:text=V%0APython%203.6.4-,Django%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB,-venv%E3%81%A7%E4%BB%AE%E6%83%B3)を参照。
+仮想環境を有効にしてから、公式手順どおり`python -m pip`でインストールする。<br>利用中のPython・Djangoに対応するバージョンは、インストール前に公式ドキュメントで確認する。<br>
+※ 仮想環境とDjangoの準備は、[Djangoインストール](https://sigma-se.com/detail/3/)を参照。
   ```bash
   $ source /var/www/vops/bin/activate
-  (vops) $ pip install django-debug-toolbar
-  Collecting django-debug-toolbar
-  　  Downloading https://files.pythonhosted.org/packages/97/c6/523fc2ca98119d21c709bbc47217b1d5fd17c6f9449ef32490889363d97d/django_debug_toolbar-1.10.1-py2.py3-none-any.whl (207kB)
-      100% |################################| 215kB 10.0MB/s
-  Collecting sqlparse>=0.2.0 (from django-debug-toolbar)
-    Downloading https://files.pythonhosted.org/packages/65/85/20bdd72f4537cf2c4d5d005368d502b2f464ede22982e724a82c86268eda/sqlparse-0.2.4-py2.py3-none-any.whl
-   Requirement already satisfied: Django>=1.11 in /var/www/vops/lib/python3.6/site-packages (from django-debug-toolbar) (2.0.2)
-   Requirement already satisfied: pytz in /var/www/vops/lib/python3.6/site-packages (from Django>=1.11->django-debug-toolbar) (2018.3)
-   Installing collected packages: sqlparse, django-debug-toolbar
-   Successfully installed django-debug-toolbar-1.10.1 sqlparse-0.2.4
-   You are using pip version 10.0.1, however version 18.1 is available.
-   You should consider upgrading via the 'pip install --upgrade pip' command.
+  (vops) $ python -m pip install django-debug-toolbar
   ```
-  上記でインストールが完了。<br>
+
+- Django側の前提設定<br>
+通常の`startproject`で作成したプロジェクトでは設定済みだが、`INSTALLED_APPS`に`django.contrib.staticfiles`があり、`TEMPLATES`のDjangoTemplatesバックエンドで`APP_DIRS=True`になっていることを確認する。
 
 ### django-debug-toolbarの設定追加
 - settings.pyの設定<br>
 settings.pyの最低限必要な設定を変更する。<br>
   - DEBUGモードの変更<br>
-  `DEBUG`を`True`に変更する。
-    ```bash
-    $ vim /var/www/vops/ops/ops/settings.py
-     … (省略)…
-     DEBUG = True    # DEBUGモードをTrueに変更
-     … (省略)…
+  開発環境で`DEBUG=True`となるように設定する。<br>本番環境と設定を共有している場合は、環境変数や設定ファイルを分け、本番で誤って有効にならないようにする。
+    ```python
+    DEBUG = True
     ```
 
   - INSTALLED_APPSへ追加<br>
-  `INSTALLED_APPS`に`'debug_toolbar'`を追記する。
-  `'debug_toolbar'`が`'django.contrib.staticfiles'`よりも**後ろ**になるよう注意。
-    ```bash
-    $ vim /var/www/vops/ops/ops/settings.py
-     … (省略)…
-     INSTALLED_APPS = [
-         'macuos',
-         'django.contrib.admin',
-         'django.contrib.auth',
-         'django.contrib.contenttypes',
-         'django.contrib.sessions',
-         'django.contrib.messages',
-         'django.contrib.staticfiles',
-         'debug_toolbar'    # ← 追記：'django.contrib.staticfiles' よりも後ろに設定
-     ]
-     … (省略)…
+  `INSTALLED_APPS`に`"debug_toolbar"`を追記する。
+    ```python
+    INSTALLED_APPS = [
+        # ...
+        "django.contrib.staticfiles",
+        "debug_toolbar",
+    ]
     ```
 
   - MIDDLEWAREへ追加<br>
-  `MIDDLEWARE`に`'debug_toolbar.middleware.DebugToolbarMiddleware'`を追記する。
-    ```bash
-    $ vim /var/www/vops/ops/ops/settings.py
-     … (省略)…
-     MIDDLEWARE = [
-         'django.middleware.security.SecurityMiddleware',
-         'django.contrib.sessions.middleware.SessionMiddleware',
-         'django.middleware.common.CommonMiddleware',
-         'django.middleware.csrf.CsrfViewMiddleware',
-         'django.contrib.auth.middleware.AuthenticationMiddleware',
-         'django.contrib.messages.middleware.MessageMiddleware',
-         'django.middleware.clickjacking.XFrameOptionsMiddleware',
-         'debug_toolbar.middleware.DebugToolbarMiddleware'   # ← 追記
-     ]
-     … (省略)…
+  `MIDDLEWARE`に`"debug_toolbar.middleware.DebugToolbarMiddleware"`を追記する。公式手順ではできるだけ早い位置が推奨されるが、`GZipMiddleware`などレスポンスをエンコードするミドルウェアを使用している場合は、その**後ろ**に置く。
+    ```python
+    MIDDLEWARE = [
+        # "django.middleware.gzip.GZipMiddleware",  # 使用する場合はこの後ろ
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+        # ...
+    ]
     ```
 
   - INTERNAL_IPSの追加<br>
   `INTERNAL_IPS`を追記する。<br>
-    ```bash
-    $ vim /var/www/vops/ops/ops/settings.py
-     … (省略)…
-    INTERNAL_IPS = ['127.0.0.1']   # 追加
-     … (省略)…
+    ```python
+    INTERNAL_IPS = ["127.0.0.1"]
     ```
-    ※ INTERNAL_IPSは、このIPアドレスで接続されたときのみ、django-debug-toolbar が表示される設定項目であるため、ローカル開発時は、localhost の '127.0.0.1' を設定する。<br>
-    ローカルではない別サーバーでDjangoを動かしている場合は、開発マシンのグローバルIPアドレスを入力すること。
+    既定の表示判定では、Djangoが認識する接続元IPが`INTERNAL_IPS`に含まれる場合だけToolbarが表示される。<br>Docker、リバースプロキシ、別の開発サーバーを利用する場合は見えるIPが変わるため、公式ドキュメントの`SHOW_TOOLBAR_CALLBACK`も含めて環境に合わせて設定する。<br>単に常に`True`を返す設定を公開環境へ置かないよう注意する。
 
 - urls.pyの設定
-`urlpatterns`に`Debug Toolbar`を追加する。<br>
-  - `urlpatterns`に`Debug Toolbar`を追加<br>
-    ```bash
-    $ vim /var/www/vops/ops/ops/urls.py
-     … (省略)…
-     if settings.DEBUG:    # この if 文 (5STEP) を追加する。
-         import debug_toolbar
-         urlpatterns = [
-             url(r'^__debug__/', include(debug_toolbar.urls))
-         ] + urlpatterns
-     … (省略)…
+現在の公式手順では、`debug_toolbar_urls()`を利用してToolbar用URLを追加できる。<br>既定では`__debug__/`がプレフィックスとなる。
+    ```python
+    from debug_toolbar.toolbar import debug_toolbar_urls
+
+    urlpatterns = [
+        # アプリケーションのURL
+    ] + debug_toolbar_urls()
+    ```
+
+  使用しているバージョンやプロジェクト方針によってURLを明示する場合は、古い`url()`ではなく`path()`を使用する。
+    ```python
+    from django.conf import settings
+    from django.urls import include, path
+
+    if settings.DEBUG:
+        urlpatterns += [
+            path("__debug__/", include("debug_toolbar.urls")),
+        ]
     ```
   以上で設定は完了。
 
 ### Debug Toolbarの表示確認
 管理者画面や作成したWebアプリの画面に接続すると右側に`Debug Toolbar`が表示される。
-![pid10_1](/static/tblog/img/pid10_1.png)
+![Django管理画面の右側にDjango Debug Toolbarが表示された例](/static/tblog/img/pid10_1.png)
 
-- CSSが効いてない場合の対処
-staticファイルのロード先を別フォルダに設定している場合は、CSSが効いてない状態で表示されている可能性がある。<br>
-その場合は、下記コマンドでインストール先を特定し、その直下にある`debug_toolbar/static/debug_toolbar`ディレクトリをstaticファイルのロード先ディレクトリ直下にコピーすること。
-  ```bash
-  $ pip show django-debug-toolbar
-   … (省略)…
-   Location: /var/www/vops/lib/python3.6/site-packages    # django-debug-toolbar のインストール先を確認
-   … (省略)…
-  $ cp -r /var/www/vops/lib/python3.6/site-packages/debug_toolbar/static/debug_toolbar [staticファイルのロード先フォルダ]
-  ```
+画像はDjango 2.0.2と当時のDjango Debug Toolbarによる表示例であり、現在のバージョンではパネル名や外観が異なる場合がある。<br>「画面右側に調査用パネルが挿入される」という位置関係の参考として利用できる。
+
+- Toolbarが表示されない場合の確認順序
+  1. `DEBUG=True`であり、接続元IPが`INTERNAL_IPS`に含まれているか。
+  2. レスポンスのContent-Typeが`text/html`または`application/xhtml+xml`で、HTMLに閉じ`</body>`タグがあるか。
+  3. `DebugToolbarMiddleware`、URL、`django.contrib.staticfiles`の設定に漏れがないか。
+  4. ブラウザーの開発者ツールに、JavaScriptのMIMEタイプやCORS、404エラーが出ていないか。
+
+パッケージ内のstaticディレクトリを手動コピーすると、更新時に古いファイルが残る原因になる。CSSやJavaScriptが読み込めない場合はコピーで回避せず、Djangoのstaticfiles設定や配信サーバーのMIMEタイプ・CORS設定を確認する。
 
 ## 実務とのつながり
 - SQL確認<br>
@@ -158,3 +131,9 @@ staticファイルのロード先を別フォルダに設定している場合�
 - Django Debug Toolbarは、Django開発時の調査を助けるデバッグツールとなる。
 - 導入には、パッケージインストール、settings.py、urls.pyの設定が必要になる。
 - 便利な反面、内部情報を表示するため本番環境では無効化する。
+
+### 参考文献
+- [Django Debug Toolbar公式ドキュメント - Installation](https://django-debug-toolbar.readthedocs.io/en/stable/installation.html)
+- [Django Debug Toolbar公式ドキュメント - Configuration](https://django-debug-toolbar.readthedocs.io/en/stable/configuration.html)
+- [Django Debug Toolbar公式ドキュメント - Tips：The toolbar isn't displayed!](https://django-debug-toolbar.readthedocs.io/en/stable/tips.html#the-toolbar-isnt-displayed)
+- [Django公式ドキュメント - How to manage static files（Django 6.0）](https://docs.djangoproject.com/en/6.0/howto/static-files/)
