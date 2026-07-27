@@ -4,7 +4,7 @@
   <p>Djangoを本番環境で動かす場合、開発用のrunserverではなく、ApacheなどのWebサーバーからWSGI経由でアプリケーションを呼び出す構成を理解することが重要になる。</p>
   <p>注意：この記事は、2018年当時のCentOS 7.4、Python 3.6環境の構築記録をもとに、手順同士の互換性を確認しやすい後年の旧バージョン（Django 2.2、mod_wsgi 4.9.4）へ置き換えて再構成した例である。<br>2018年当時のパッケージ構成を厳密に再現するものではない。<br>CentOS 7、Python 3.6、ここで扱うDjangoとmod_wsgiはいずれもサポート終了済みで、IUSリポジトリも現在の新規構築には使用できない。<br>新規構築ではサポート中の環境を選び、ここではApacheとmod_wsgiを接続する考え方を中心に参照する。</p>
   <h2 id="前提環境">前提環境</h2>
-  <table class="table" style="width: 80%;">
+  <table class="table" style="width: 100%;">
     <thead>
       <tr>
         <th scope="col">項目</th>

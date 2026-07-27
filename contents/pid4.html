@@ -4,7 +4,7 @@
   <p>Djangoサイトを公開する最後の段階では、データベース、マイグレーション、セキュリティ設定、静的ファイル、Apache連携をまとめて確認する必要がある。runserverと本番起動の違いも押さえておく。</p>
   <p>注意：この記事は、2018年当時のCentOS 7.4環境の構築記録をもとに、前記事で採用した後年の旧バージョン（Django 2.2、psycopg2 2.8系）と整合するよう再構成した例であり、2018年当時のパッケージ構成を厳密に再現するものではない。<br>CentOS 7標準のPostgreSQL 9.2はDjango 2.2の要件（PostgreSQL 9.4以上）を満たさないため、PGDG版PostgreSQL 9.6を使用する。<br>これらはすべてサポート終了済みなので、新規の本番環境へ採用しない。<br>以下では、データベースをDjangoと同じVPSで動かす構成を前提とする。</p>
   <h2 id="前提環境">前提環境</h2>
-  <table class="table" style="width: 80%;">
+  <table class="table" style="width: 100%;">
     <thead>
       <tr>
         <th scope="col">項目</th>
