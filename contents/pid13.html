@@ -1,8 +1,7 @@
 <div class="post-body">
   <h2 id="概要">概要</h2>
   <p>Matplotlibのpyplotを使い、Pythonでグラフを描画する基本手順を整理する。</p>
-  <p>数値だけを眺めても傾向はつかみにくいため、折れ線グラフや散布図として可視化することで、変化、分布、外れ値を確認しやすくなる。</p>
-  <p>ここでは、インストール、基本的な描画、複数系列、ラベルや凡例の設定を実行例で確認する。</p>
+  <p>数値だけを眺めても傾向はつかみにくいため、折れ線グラフや散布図として可視化することで、変化、分布、外れ値を確認しやすくなる。<br>ここでは、インストール、基本的な描画、複数系列、ラベルや凡例の設定を実行例で確認する。</p>
   <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
 <ul>
   <li>pyplotを使ったグラフ描画の基本的な流れ。</li>
@@ -40,46 +39,24 @@
   </table>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="matplotlibの環境準備">Matplotlibの環境準備</h3>
-  <p><strong>Matplotlib</strong>は、グラフ描画のライブラリでNumPyやScipyと組み合わせて使用するケースが多い。</p>
+  <p><strong>Matplotlib</strong>は、折れ線グラフ、散布図、ヒストグラム、画像などを描画できるPythonライブラリで、NumPyと組み合わせて使用する場面も多い。</p>
   <ul>
-    <li>NumPyインストール<br>
-      インストールは、pipで<code>install matplotlib</code>を実行する。
-      <pre><code class="language-bash">$ pip install matplotlib
- Collecting matplotlib
-   Downloading https://files.pythonhosted.org/packages/71/07/16d781df15be30df4acfd536c479268f1208b2dfbc91e9ca5d92c9caf673/matplotlib-3.0.2-cp36-cp36m-manylinux1_x86_64.whl (12.9MB)
-     100% |<span class="hljs-comment">################################| 12.9MB 1.7MB/s</span>
- Collecting python-dateutil&gt;=2.1 (from matplotlib)
-   Downloading https://files.pythonhosted.org/packages/74/68/d87d9b36af36f44254a8d512cbfc48369103a3b9e474be9bdfe536abfc45/python_dateutil-2.7.5-py2.py3-none-any.whl (225kB)
-     100% |<span class="hljs-comment">################################| 235kB 10.3MB/s</span>
- Collecting cycler&gt;=0.10 (from matplotlib)
-   Downloading https://files.pythonhosted.org/packages/f7/d2/e07d3ebb2bd7af696440ce7e754c59dd546ffe1bbe732c8ab68b9c834e61/cycler-0.10.0-py2.py3-none-any.whl
- Collecting pyparsing!=2.0.4,!=2.1.2,!=2.1.6,&gt;=2.0.1 (from matplotlib)
-   Downloading https://files.pythonhosted.org/packages/71/e8/6777f6624681c8b9701a8a0a5654f3eb56919a01a78e12bf3c73f5a3c714/pyparsing-2.3.0-py2.py3-none-any.whl (59kB)
-     100% |<span class="hljs-comment">################################| 61kB 13.5MB/s</span>
- Collecting kiwisolver&gt;=1.0.1 (from matplotlib)
-   Downloading https://files.pythonhosted.org/packages/69/a7/88719d132b18300b4369fbffa741841cfd36d1e637e1990f27929945b538/kiwisolver-1.0.1-cp36-cp36m-manylinux1_x86_64.whl (949kB)
-     100% |<span class="hljs-comment">################################| 952kB 8.0MB/s</span>
- Requirement already satisfied: numpy&gt;=1.10.0 <span class="hljs-keyword">in</span> /var/www/vops/lib/python3.6/site-packages (from matplotlib) (1.15.4)
- Collecting six&gt;=1.5 (from python-dateutil&gt;=2.1-&gt;matplotlib)
-   Downloading https://files.pythonhosted.org/packages/67/4b/141a581104b1f6397bfa78ac9d43d8ad29a7ca43ea90a2d863fe3056e86a/six-1.11.0-py2.py3-none-any.whl
- Requirement already satisfied: setuptools <span class="hljs-keyword">in</span> /var/www/vops/lib/python3.6/site-packages (from kiwisolver&gt;=1.0.1-&gt;matplotlib) (40.5.0)
- Installing collected packages: six, python-dateutil, cycler, pyparsing, kiwisolver, matplotlib
- Successfully installed cycler-0.10.0 kiwisolver-1.0.1 matplotlib-3.0.2 pyparsing-2.3.0 python-dateutil-2.7.5 six-1.11.0
+    <li>Matplotlibのインストール<br>
+      使用するPython環境を明確にするため、次のようにPython経由でpipを実行する。
+      <pre><code class="language-bash">$ python -m pip install matplotlib
 </code></pre>
-      ※ 以降ではmatplotlib.pyplotの基本操作に絞る。詳細な使い方は、下記チュートリアルで確認できる。<br>
-      Matplotlibチュートリアル：<a class="link-secondary"
-        href="https://matplotlib.org/tutorials/index.html">https://matplotlib.org/tutorials/index.html</a><br>
+      インストール後は<code>python -c "import matplotlib; print(matplotlib.__version__)"</code>で、読み込まれたバージョンを確認できる。以降では<code>matplotlib.pyplot</code>の基本操作に絞る。
     </li>
   </ul>
   <h3 id="matplotlibの使用方法">Matplotlibの使用方法</h3>
   <ul>
     <li>
-      <p>区間、描画精度、グラフタイトル、軸ラベルの設定と表示<br>
-        二次関数<strong>y = x^2</strong>を例に区間、描画精度、グラフタイトル、軸ラベルの設定を行いグラフ表示する。</p>
+      <p>区間、刻み幅、グラフタイトル、軸ラベルの設定と表示<br>
+        二次関数<strong>y = x^2</strong>を例に区間、刻み幅、グラフタイトル、軸ラベルを設定してグラフを描画する。<br><code>np.arange(0, 20, 0.01)</code>は、0以上20未満の値を0.01刻みで生成する。</p>
       <pre><code class="language-bash">$ python
  &gt;&gt;&gt; import numpy as np
  &gt;&gt;&gt; import matplotlib.pyplot as plt
- &gt;&gt;&gt; x = np.arange(0, 20, 0.01)    <span class="hljs-comment"># 区間を0～20 まで、描画制度を 0.01 刻みに設定</span>
+ &gt;&gt;&gt; x = np.arange(0, 20, 0.01)    <span class="hljs-comment"># 0以上20未満の範囲を0.01刻みに設定</span>
  &gt;&gt;&gt; y = x**2
  &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;y = x^2\n# arange:0, 20, 0.01, xlabel:x, ylabel:y&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
    Text(0.5, 1.0, <span class="hljs-string">&#x27;y = x^2\n# arange:0, 20, 0.01, xlabel:x, ylabel:y&#x27;</span>)
@@ -89,11 +66,12 @@
    Text(0, 0.5, <span class="hljs-string">&#x27;y&#x27;</span>)
  &gt;&gt;&gt; plt.plot(x,y)    <span class="hljs-comment"># グラフの描画</span>
    [&lt;matplotlib.lines.Line2D object at 0x7fa0a479eb70&gt;]
- &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;/var/www/projs/sweb/static/tblog/img/pid13_1.png&#x27;</span>)    <span class="hljs-comment"># 各自の環境に合わせ、任意のパス、ファイル名を指定</span>
+ &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;pid13_1.png&#x27;</span>)    <span class="hljs-comment"># 任意の保存先を指定</span>
+ &gt;&gt;&gt; plt.close()    <span class="hljs-comment"># 図を閉じ、次の描画へ状態を持ち越さない</span>
 </code></pre>
       <ul>
         <li>上記で出力したグラフ「pid13_1.png」
-          <img src="/static/tblog/img/pid13_1.png" alt="pid13_1">
+          <img src="/static/tblog/img/pid13_1.png" alt="0以上20未満の二次関数y=x^2を描画した折れ線グラフ">
         </li>
       </ul>
     </li>
@@ -103,7 +81,7 @@
       <pre><code class="language-bash">$ python
  &gt;&gt;&gt; import numpy as np
  &gt;&gt;&gt; import matplotlib.pyplot as plt
- &gt;&gt;&gt; x = np.arange(0, 6, 0.01)    <span class="hljs-comment"># 区間を0～6 まで、描画制度を 0.01 刻みに設定</span>
+ &gt;&gt;&gt; x = np.arange(0, 6, 0.01)    <span class="hljs-comment"># 0以上6未満の範囲を0.01刻みに設定</span>
  &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;y = sin(x), y = cos(x)\n# arange:0, 6, 0.01, xlabel:x, ylabel:y, legend:sin&amp;cos&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
  Text(0.5, 1.0, <span class="hljs-string">&#x27;y = sin(x), y = cos(x)\n# arange:0, 6, 0.01, xlabel:x, ylabel:y, legend:sin&amp;cos&#x27;</span>)
  &gt;&gt;&gt; plt.xlabel(<span class="hljs-string">&quot;x&quot;</span>)    <span class="hljs-comment"># x軸のラベルを設定</span>
@@ -118,49 +96,52 @@
    [&lt;matplotlib.lines.Line2D object at 0x7fde03625048&gt;]
  &gt;&gt;&gt; plt.legend()    <span class="hljs-comment"># 凡例の描画</span>
    &lt;matplotlib.legend.Legend object at 0x7fde03625358&gt;
- &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;/var/www/projs/sweb/static/tblog/img/pid13_2.png&#x27;</span>)    <span class="hljs-comment"># 各自の環境に合わせ、任意のパス、ファイル名を指定</span>
+ &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;pid13_2.png&#x27;</span>)    <span class="hljs-comment"># 任意の保存先を指定</span>
+ &gt;&gt;&gt; plt.close()
 </code></pre>
       <ul>
         <li>上記で出力したグラフ「pid13_2.png」
-          <img src="/static/tblog/img/pid13_2.png" alt="pid13_2">
+          <img src="/static/tblog/img/pid13_2.png" alt="0以上6未満のsin関数とcos関数を重ねて描画したグラフ">
         </li>
       </ul>
     </li>
     <li>
       <p><strong>imread</strong>を使った画像表示<br>
-        <code>matplotlib.imagen</code>の<code>imread</code>によって読み込んだ画像を<code>pyplot.imshow</code>で表示する。<br>
-        ※ あらかじめ任意の画像を準備して<code>imread</code>で読み込み<code>imshow</code>で表示する。
+        <code>matplotlib.image</code>の<code>imread</code>によって画像をNumPy配列として読み込み、<code>pyplot.imshow</code>で座標軸上に表示する。<br>
+        ここでは、透過背景のPythonロゴ画像「pid13_3.png」を読み込み、描画結果を「pid13_4.png」として保存する。<br>読み込んだ配列の<code>shape</code>を確認すると、画像の高さ、幅、色チャンネル数も確認できる。
       </p>
       <ul>
         <li>
-          <p>任意の画像「pid13_3.png」を準備<br>
-            <img src="/static/tblog/img/pid13_3.png" alt="pid13_3">
+          <p>読み込み元の画像「pid13_3.png」<br>
+            <img src="/static/tblog/img/pid13_3.png" alt="imreadで読み込む透過背景のPythonロゴ画像">
           </p>
         </li>
         <li>
-          <p>「pid13_3.png」を<code>imread</code>で読み込み<code>imshow</code>で表示し、ファイル名を「pid13_4.png」として出力</p>
+          <p>「pid13_3.png」を<code>imread</code>で読み込み、<code>imshow</code>で表示して「pid13_4.png」として保存</p>
           <pre><code class="language-bash">$ python
  &gt;&gt;&gt; import matplotlib.pyplot as plt
  &gt;&gt;&gt; from matplotlib.image import imread
- &gt;&gt;&gt; img = imread(<span class="hljs-string">&#x27;/var/www/projs/sweb/static/tblog/img/pid13_3.png&#x27;</span>)    <span class="hljs-comment"># 任意の画像をimgに読み込み</span>
+ &gt;&gt;&gt; img = imread(<span class="hljs-string">&#x27;pid13_3.png&#x27;</span>)    <span class="hljs-comment"># Pythonロゴ画像を読み込み</span>
+ &gt;&gt;&gt; img.shape
+ (500, 500, 4)
  &gt;&gt;&gt; plt.imshow(img)    <span class="hljs-comment"># 画像表示</span>
  &lt;matplotlib.image.AxesImage object at 0x7f4b80106f60&gt;
- &gt;&gt;&gt; plt.title(<span class="hljs-string">&#x27;b_id36_3.png Read with image.imread \n and output as b_id36_4.png in pyplot.imshow&#x27;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
- &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;/var/www/projs/sweb/static/tblog/img/pid13_4.png&#x27;</span>)
+ &gt;&gt;&gt; plt.title(<span class="hljs-string">&#x27;b_id36_3.png Read with image.imread \n and output as b_id36_4.png in pyplot.imshow&#x27;</span>)
+ &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;pid13_4.png&#x27;</span>)
+ &gt;&gt;&gt; plt.close()
 </code></pre>
         </li>
         <li>
-          <p>上記で出力したグラフ「pid13_4.png」
-            <img src="/static/tblog/img/pid13_4.png" alt="pid13_4">
+          <p>上記で出力した画像「pid13_4.png」<br>
+            <img src="/static/tblog/img/pid13_4.png" alt="Pythonロゴ画像をimshowで描画した結果">
           </p>
         </li>
       </ul>
+      <p>掲載画像のタイトルにある<code>b_id36_3.png</code>と<code>b_id36_4.png</code>は、旧サイトで使用していたファイル名である。<br><code>shape</code>の値や保存画像の余白は、元画像やMatplotlibのバージョン・設定によって異なる。</p>
     </li>
     <li>
       <p>その他のグラフ<br>
-        上記以外にも<code>numpy.random</code>を使った分散図やヒストグラムなど様々なグラフに対応している。<br>
-        より詳細な使用方法は、下記ユーザーズガイドを参考。<br>
-        Matplotlibユーザーズガイド：<a class="link-secondary" href="https://matplotlib.org/users/index.html">https://matplotlib.org/users/index.html</a>
+        上記以外にも<code>plt.scatter()</code>による散布図、<code>plt.hist()</code>によるヒストグラムなど、さまざまなグラフに対応している。目的に合うグラフを選び、軸名、単位、凡例を付けると、画像だけを見ても意味を判断しやすくなる。
       </p>
     </li>
   </ul>
@@ -180,5 +161,8 @@
   <h2 id="参考文献">参考文献</h2>
   <ul>
     <li>斎藤 康毅（\(2018\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
+    <li><a href="https://matplotlib.org/stable/users/getting_started/" class="link-secondary">Matplotlib, Getting started</a></li>
+    <li><a href="https://matplotlib.org/stable/tutorials/pyplot.html" class="link-secondary">Matplotlib, Pyplot tutorial</a></li>
+    <li><a href="https://matplotlib.org/stable/tutorials/images.html" class="link-secondary">Matplotlib, Image tutorial</a></li>
   </ul>
 </div>
