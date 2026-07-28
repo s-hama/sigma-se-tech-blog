@@ -10,37 +10,6 @@
     <li>PYTHONSTARTUPで起動時スクリプトを読み込む方法。</li>
     <li>IPythonやimport thisなどの補足的な使い方。</li>
   </ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">項目</th>
-        <th scope="col">確認内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Pythonコマンド</td>
-        <td>利用しているPythonのバージョンを確認する。</td>
-      </tr>
-      <tr>
-        <td>対話モード</td>
-        <td>&gt;&gt;&gt; の後にコードを入力して即時実行する。</td>
-      </tr>
-      <tr>
-        <td>PYTHONSTARTUP</td>
-        <td>起動時に読み込むスクリプトのパスを環境変数に設定する。</td>
-      </tr>
-      <tr>
-        <td>共通import</td>
-        <td>毎回使う標準ライブラリを起動時に読み込める。</td>
-      </tr>
-      <tr>
-        <td>-iオプション</td>
-        <td>ファイル実行後に対話モードへ入れる。</td>
-      </tr>
-    </tbody>
-  </table>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <table class="table" style="width: 100%;">
     <thead>
@@ -192,15 +161,6 @@ $ <span class="hljs-built_in">export</span> PYTHONSTARTUP=<span class="hljs-stri
       <p>Pythonの設計原則（The Zen of Python）<br>
         対話モードで<code>import this</code>を実行すると、Tim Petersがまとめた「The Zen of Python」を確認できる。<br>全文を覚えるものではなく、可読性、明示性、単純さ、名前空間など、Pythonコードを設計・レビューするときの判断軸として読むと役立つ。<br>背景と原文はPEP 20で確認できる。</p>
     </li>
-  </ul>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-  <ul>
-    <li>動作確認<br>
-      短い式や標準ライブラリの挙動をすぐ確認できる。</li>
-    <li>環境調査<br>
-      sys.pathやモジュール読み込み先の確認に使える。</li>
-    <li>開発効率<br>
-      よく使う準備処理をPYTHONSTARTUPへまとめられる。</li>
   </ul>
   <h2 id="まとめ">まとめ</h2>
   <ul>

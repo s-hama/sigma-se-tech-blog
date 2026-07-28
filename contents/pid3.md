@@ -27,16 +27,6 @@ Djangoを本番環境で動かす場合、開発用のrunserverではなく、Ap
 - mod_wsgiを使ってApacheとDjangoを接続する流れ。
 - VirtualHostとWSGI設定の役割。
 
-## 作業前に確認すること
-
-| 項目 | 確認内容 |
-| --- | --- |
-| Python環境 | 利用するPythonバージョンと仮想環境の場所を決める。 |
-| Django構成 | プロジェクト名、アプリケーション名、配置ディレクトリを整理する。 |
-| Apache設定 | conf.modules.d と conf.d の読み込み関係を確認する。 |
-| mod_wsgi | Pythonバージョンに合ったモジュールパスを確認する。 |
-| HTTPS設定 | 前段のSSL/TLS設定とVirtualHostの関係を確認する。 |
-
 ## 作業時の注意点
 
 | 作業時の注意点 | 確認ポイント |
@@ -178,14 +168,6 @@ Apacheの設定ファイル**httpd.conf**の設定内容を確認する。<br>
   証明書設定はCentOS 7.4標準のApache 2.4.6を前提に、`cert.pem`と`chain.pem`を別々に指定している。Apache 2.4.8以降では`SSLCertificateFile`に`fullchain.pem`を指定し、`SSLCertificateChainFile`は省略できる。`httpd -v`でバージョンを確認し、Certbotが生成した設定を優先する。秘密鍵の読取り権限は必要最小限にする。<br><br>
   `WSGIDaemonProcess`の`python-home`は仮想環境のルート、`python-path`はDjangoプロジェクトをimportできるディレクトリを指定する。`WSGIProcessGroup`には同じプロセスグループ名を設定し、`WSGIScriptAlias`には`wsgi.py`へのパスを指定する。<br><br>
   `Alias /static/`は`collectstatic`で`STATIC_ROOT`へ集約した静的ファイルを配信する設定で、URLとファイルパスの末尾の`/`を対応させる。<br>
-
-## 実務とのつながり
-- WSGI構成<br>
-    Djangoを本番Webサーバーで動かす基本構成の理解につながる。
-- 仮想環境<br>
-    プロジェクトごとに依存関係を分離する実務上の基本になる。
-- Apache設定分割<br>
-    設定ファイルを役割ごとに分けると、保守や障害調査がしやすくなる。
 
 ## まとめ
 - Django本番構成では、Apacheからmod_wsgiを介してアプリケーションを起動する。

@@ -14,16 +14,6 @@ Django Debug Toolbarは、リクエスト、レスポンス、SQL、テンプレ
 - INTERNAL_IPSの意味。
 - urls.pyで__debug__用URLを追加する方法。
 
-## 作業前に確認すること
-
-| 項目 | 確認内容 |
-| --- | --- |
-| Django環境 | 仮想環境上でDjangoが動く状態にしておく。 |
-| DEBUG設定 | 開発環境でDEBUG=Trueにする。 |
-| 静的ファイル | ToolbarのCSS/JSが読み込めるようにする。 |
-| 接続元IP | INTERNAL_IPSに表示対象のIPを設定する。 |
-| 本番公開 | 本番ではDebug Toolbarを表示しない。 |
-
 ## 作業時の注意点
 
 | 作業時の注意点 | 確認ポイント |
@@ -118,14 +108,6 @@ settings.pyの最低限必要な設定を変更する。<br>
   4. ブラウザーの開発者ツールに、JavaScriptのMIMEタイプやCORS、404エラーが出ていないか。
 
 パッケージ内のstaticディレクトリを手動コピーすると、更新時に古いファイルが残る原因になる。CSSやJavaScriptが読み込めない場合はコピーで回避せず、Djangoのstaticfiles設定や配信サーバーのMIMEタイプ・CORS設定を確認する。
-
-## 実務とのつながり
-- SQL確認<br>
-    画面表示時にどのSQLが発行されたかを確認できる。
-- 性能調査<br>
-    処理時間やテンプレート読み込みを確認できる。
-- 設定確認<br>
-    Djangoの設定値をブラウザから確認できる。
 
 ## まとめ
 - Django Debug Toolbarは、Django開発時の調査を助けるデバッグツールとなる。

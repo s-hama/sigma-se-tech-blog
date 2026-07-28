@@ -42,37 +42,6 @@
     <li>Aレコードとネームサーバー設定の役割。</li>
     <li>rootログイン禁止と公開鍵認証の考え方。</li>
   </ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">項目</th>
-        <th scope="col">確認内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>VPS情報</td>
-        <td>IPアドレス、ログインユーザー、初期パスワードを確認しておく。</td>
-      </tr>
-      <tr>
-        <td>ドメイン</td>
-        <td>example.com のような独自ドメインを取得しておく。</td>
-      </tr>
-      <tr>
-        <td>DNS</td>
-        <td>AレコードがVPSのIPアドレスを指すように設定する。</td>
-      </tr>
-      <tr>
-        <td>SSH</td>
-        <td>rootログイン禁止と公開鍵認証を設定できる状態にする。</td>
-      </tr>
-      <tr>
-        <td>反映時間</td>
-        <td>DNS変更はすぐ反映されないことがあるため、確認時間を見込む。</td>
-      </tr>
-    </tbody>
-  </table>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <table class="table" style="width: 100%;">
     <thead>
@@ -182,15 +151,6 @@ $ systemctl reload sshd
     </li>
   </ul>
   <p>上記の設定により、登録済み公開鍵に対応する秘密鍵を持つ<code>vpsuser</code>だけがSSH認証できる。鍵の登録前に<code>PasswordAuthentication no</code>へ変更するとサーバーへ入れなくなるため、順序が重要となる。</p>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-  <ul>
-    <li>DNS設定<br>
-      Webサイト公開時の名前解決トラブルを切り分ける基礎になる。</li>
-    <li>SSH設定<br>
-      本番サーバーの初期セキュリティ対策として必須になる。</li>
-    <li>作業記録<br>
-      どのサービスでドメインとDNSを管理しているかを残しておくと、移行や障害対応が楽になる。</li>
-  </ul>
   <h2 id="まとめ">まとめ</h2>
   <ul>
     <li>VPS構築の最初の段階では、OS、ドメイン、DNS、SSHを整える。</li>

@@ -30,16 +30,6 @@ CentOS 7標準のPostgreSQL 9.2はDjango 2.2の要件（PostgreSQL 9.4以上）�
 - DATABASES、STATIC、MEDIA、LOGGINGの基本。
 - runserverとApache経由の起動確認の違い。
 
-## 作業前に確認すること
-
-| 項目 | 確認内容 |
-| --- | --- |
-| PostgreSQL | データベース名、ユーザー名、接続元IP、権限を整理する。 |
-| Djangoモデル | マイグレーション対象のモデル定義があることを確認する。 |
-| settings.py | DEBUG、ALLOWED_HOSTS、DATABASES、SSL/TLS設定を確認する。 |
-| ファイアウォール | 必要なポートだけを開放する。 |
-| 起動確認 | 開発用runserverとApache経由の本番確認を分けて行う。 |
-
 ## 作業時の注意点
 
 | 作業時の注意点 | 確認ポイント |
@@ -247,14 +237,6 @@ DjangoのデプロイチェックとApacheの構文確認を行い、**Apache**�
   $ curl -I https://example.com/
   ```
 モデルを修正した場合は、**manage.py**の`makemigrations`、`migrate`を実行する。<br>`runserver`とApacheは通常は別ポートで動くため競合するわけではないが、確認先を取り違えないよう、単体診断後は`runserver`を停止してApache経由の結果を確認する。
-
-## 実務とのつながり
-- DB接続設定<br>
-    アプリケーションとデータベースの責務分離を理解する基礎になる。
-- 本番設定<br>
-    DEBUG、Cookie、HTTPS設定はセキュリティに直結する。
-- ログ設定<br>
-    障害調査の入口になるため、出力先と内容を決めておくことが重要になる。
 
 ## まとめ
 - Djangoサイト公開の仕上げでは、PostgreSQL、マイグレーション、settings.pyをまとめて確認する。

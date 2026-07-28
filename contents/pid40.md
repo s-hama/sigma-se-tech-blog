@@ -12,13 +12,6 @@ Python - タスク指向型対話：2/5 OpenWeatherMap・Telegramの環境準備
 - python-telegram-botを使った基本的な対話処理。
 - 外部APIとメッセンジャーを組み合わせる構成。
 
-## 作業前に確認すること
-| 確認項目 | 内容 |
-| --- | --- |
-| OpenWeatherMap | APIキーを取得し、天気情報を取得できる状態にする。 |
-| Telegram | BotFatherでBotを作成し、Botトークンを控える。 |
-| Python環境 | python-telegram-botをインストールし、サンプルを実行できる状態にする。 |
-
 ## 作業時の注意点
 | 作業時の注意点 | 確認する観点 |
 | --- | --- |
@@ -258,12 +251,6 @@ Python - タスク指向型対話：2/5 OpenWeatherMap・Telegramの環境準備
     ↓ ユーザーの入力をすべてオウム返しする。<br>
     ※ 対話(オウム返し)を終了する場合は「Ctrl + C」で終了。<br>
     ![pid40_2](/static/tblog/img/pid40_2.png)
-
-## 実務とのつながり
-- 外部サービス連携<br>
-    実務のBot開発では、APIキー、Webhook、Botトークンなどの外部連携情報を安全に管理する必要がある。
-- 小さな疎通確認<br>
-    オウム返しBotのような最小構成で確認すると、後続の状態遷移処理を追加しやすい。
 
 ## まとめ
 - OpenWeatherMapは天気情報取得、Telegramは対話インターフェースとして使う。

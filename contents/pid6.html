@@ -10,37 +10,6 @@
     <li>pushとpullでリモートと同期する流れ。</li>
     <li>checkoutでブランチや特定コミットへ移動する操作。</li>
   </ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">項目</th>
-        <th scope="col">確認内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>作業場所</td>
-        <td>Git管理下のディレクトリでコマンドを実行する。</td>
-      </tr>
-      <tr>
-        <td>状態確認</td>
-        <td>変更前後でgit statusを確認する習慣を付ける。</td>
-      </tr>
-      <tr>
-        <td>ステージング</td>
-        <td>commit対象に含める変更だけをgit addする。</td>
-      </tr>
-      <tr>
-        <td>履歴操作</td>
-        <td>resetは影響範囲を理解してから使う。</td>
-      </tr>
-      <tr>
-        <td>リモート操作</td>
-        <td>push/pull前に作業ブランチを確認する。</td>
-      </tr>
-    </tbody>
-  </table>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <table class="table" style="width: 100%;">
     <thead>
@@ -313,15 +282,6 @@ git restore --staged example-src.txt
 </code></pre>
       <p><code>git restore example-src.txt</code>は、ワーキングツリーにある未ステージの変更を破棄する。復元前に<code>git diff -- example-src.txt</code>で内容を確認し、必要な変更はコミットまたは退避しておく。</p>
     </li>
-  </ul>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-  <ul>
-    <li>状態管理<br>
-      レビュー前に変更範囲を確認する基本になる。</li>
-    <li>差分確認<br>
-      意図しない変更をコミットに混ぜないために重要になる。</li>
-    <li>ブランチ操作<br>
-      複数の修正を並行して進めるときの土台になる。</li>
   </ul>
   <h2 id="まとめ">まとめ</h2>
   <ul>

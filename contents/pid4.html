@@ -46,37 +46,6 @@
     <li>DATABASES、STATIC、MEDIA、LOGGINGの基本。</li>
     <li>runserverとApache経由の起動確認の違い。</li>
   </ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">項目</th>
-        <th scope="col">確認内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>PostgreSQL</td>
-        <td>データベース名、ユーザー名、接続元IP、権限を整理する。</td>
-      </tr>
-      <tr>
-        <td>Djangoモデル</td>
-        <td>マイグレーション対象のモデル定義があることを確認する。</td>
-      </tr>
-      <tr>
-        <td>settings.py</td>
-        <td>DEBUG、ALLOWED_HOSTS、DATABASES、SSL/TLS設定を確認する。</td>
-      </tr>
-      <tr>
-        <td>ファイアウォール</td>
-        <td>必要なポートだけを開放する。</td>
-      </tr>
-      <tr>
-        <td>起動確認</td>
-        <td>開発用runserverとApache経由の本番確認を分けて行う。</td>
-      </tr>
-    </tbody>
-  </table>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <table class="table" style="width: 100%;">
     <thead>
@@ -308,15 +277,6 @@ $ curl -I https://example.com/
 </code></pre>
       <p>モデルを修正した場合は、<strong>manage.py</strong>の<code>makemigrations</code>、<code>migrate</code>を実行する。<br><code>runserver</code>とApacheは通常は別ポートで動くため競合するわけではないが、確認先を取り違えないよう、単体診断後は<code>runserver</code>を停止してApache経由の結果を確認する。</p>
     </li>
-  </ul>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-  <ul>
-    <li>DB接続設定<br>
-      アプリケーションとデータベースの責務分離を理解する基礎になる。</li>
-    <li>本番設定<br>
-      DEBUG、Cookie、HTTPS設定はセキュリティに直結する。</li>
-    <li>ログ設定<br>
-      障害調査の入口になるため、出力先と内容を決めておくことが重要になる。</li>
   </ul>
   <h2 id="まとめ">まとめ</h2>
   <ul>

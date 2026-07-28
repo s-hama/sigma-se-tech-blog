@@ -46,37 +46,6 @@
     <li>mod_wsgiを使ってApacheとDjangoを接続する流れ。</li>
     <li>VirtualHostとWSGI設定の役割。</li>
   </ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">項目</th>
-        <th scope="col">確認内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Python環境</td>
-        <td>利用するPythonバージョンと仮想環境の場所を決める。</td>
-      </tr>
-      <tr>
-        <td>Django構成</td>
-        <td>プロジェクト名、アプリケーション名、配置ディレクトリを整理する。</td>
-      </tr>
-      <tr>
-        <td>Apache設定</td>
-        <td>conf.modules.d と conf.d の読み込み関係を確認する。</td>
-      </tr>
-      <tr>
-        <td>mod_wsgi</td>
-        <td>Pythonバージョンに合ったモジュールパスを確認する。</td>
-      </tr>
-      <tr>
-        <td>HTTPS設定</td>
-        <td>前段のSSL/TLS設定とVirtualHostの関係を確認する。</td>
-      </tr>
-    </tbody>
-  </table>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <table class="table" style="width: 100%;">
     <thead>
@@ -253,15 +222,6 @@ WSGIPythonHome <span class="hljs-string">&quot;/var/www/vops&quot;</span>
           <code>Alias /static/</code>は<code>collectstatic</code>で<code>STATIC_ROOT</code>へ集約した静的ファイルを配信する設定で、URLとファイルパスの末尾の<code>/</code>を対応させる。<br></li>
       </ul>
     </li>
-  </ul>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-  <ul>
-    <li>WSGI構成<br>
-      Djangoを本番Webサーバーで動かす基本構成の理解につながる。</li>
-    <li>仮想環境<br>
-      プロジェクトごとに依存関係を分離する実務上の基本になる。</li>
-    <li>Apache設定分割<br>
-      設定ファイルを役割ごとに分けると、保守や障害調査がしやすくなる。</li>
   </ul>
   <h2 id="まとめ">まとめ</h2>
   <ul>

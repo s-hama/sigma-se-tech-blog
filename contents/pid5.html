@@ -10,37 +10,6 @@
     <li>リモートリポジトリをcloneする手順。</li>
     <li>ブランチを作成して切り替える基本操作。</li>
   </ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">項目</th>
-        <th scope="col">確認内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>GitHubアカウント</td>
-        <td>メール認証と基本設定を済ませる。</td>
-      </tr>
-      <tr>
-        <td>SSH鍵</td>
-        <td>公開鍵と秘密鍵の役割を分けて理解する。</td>
-      </tr>
-      <tr>
-        <td>リポジトリ</td>
-        <td>ローカルとリモートのどちらに何があるかを整理する。</td>
-      </tr>
-      <tr>
-        <td>ブランチ名</td>
-        <td>作業内容が分かる名前を付ける。</td>
-      </tr>
-      <tr>
-        <td>接続確認</td>
-        <td>GitHubへのSSH認証が通ることを確認する。</td>
-      </tr>
-    </tbody>
-  </table>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <table class="table" style="width: 100%;">
     <thead>
@@ -236,15 +205,6 @@ $ git branch
     以降は、必要に応じてリモートの変更をpullし、ローカルでadd、commitした変更をpushする流れとなる。<br>
     参考 : <a class="link-secondary" href="https://sigma-se.com/detail/6/">Git - 状態管理の概念と基本操作 : status, add, commit, diff, reset, push, pull,
       checkout</a></p>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-  <ul>
-    <li>SSH接続<br>
-      公開鍵認証によって、安全にリモート操作するために使う。パスフレーズ付きの秘密鍵はssh-agentで扱える。</li>
-    <li>ブランチ運用<br>
-      機能追加や修正作業を本流から分離して進められる。</li>
-    <li>リモート連携<br>
-      チーム開発やバックアップの基本になる。</li>
-  </ul>
   <h2 id="まとめ">まとめ</h2>
   <ul>
     <li>GitHubを使う開発準備では、アカウント、SSH鍵、リポジトリ作成、cloneを順番に行う。</li>

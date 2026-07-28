@@ -10,37 +10,6 @@
     <li>flake8、pyflakes、pycodestyle、mccabeの役割。</li>
     <li>コードチェック結果の読み方。</li>
   </ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">項目</th>
-        <th scope="col">確認内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Vim設定ファイル</td>
-        <td>.vimrcとftpluginの役割を分ける。</td>
-      </tr>
-      <tr>
-        <td>インデント</td>
-        <td>タブではなくスペース4つを基本にする。</td>
-      </tr>
-      <tr>
-        <td>行末スペース</td>
-        <td>保存時に余計な空白を除去する。</td>
-      </tr>
-      <tr>
-        <td>flake8</td>
-        <td>複数のチェックをまとめて実行する。</td>
-      </tr>
-      <tr>
-        <td>複雑度</td>
-        <td>必要に応じてmccabeで関数の複雑さを見る。</td>
-      </tr>
-    </tbody>
-  </table>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <table class="table" style="width: 100%;">
     <thead>
@@ -158,15 +127,6 @@ $ flake8 --version
   </ul>
   <br>
   その他、<strong>flake8</strong>には、<strong>flake8-docstrings</strong>や<strong>flake8-import-order</strong>など色々なプラグインが用意されており、必要に応じてカスタマイズすることができる。
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-  <ul>
-    <li>エディタ設定<br>
-      チーム内で同じコーディング規約を保つ助けになる。</li>
-    <li>静的チェック<br>
-      実行前に単純なミスを検出できる。</li>
-    <li>複雑度チェック<br>
-      関数を分割する判断材料になる。</li>
-  </ul>
   <h2 id="まとめ">まとめ</h2>
   <ul>
     <li>Python開発では、Vimのインデント設定がコード品質に直結する。</li>

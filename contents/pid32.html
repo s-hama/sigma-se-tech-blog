@@ -10,21 +10,6 @@
   <li>バイナリデータを扱うときの考え方。</li>
   <li>file objectを使った読み書きの基本。</li>
 </ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">確認項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>Python環境</td><td>対話モードとファイルを作成できる作業ディレクトリを用意する。</td></tr>
-      <tr><td>前提知識</td><td>list、dict、文字列の基本操作を確認しておく。</td></tr>
-      <tr><td>確認観点</td><td>テキストデータとバイナリデータの違いを意識する。</td></tr>
-    </tbody>
-  </table>
-
   <h2 id="各データ型の操作方法">各データ型の操作方法</h2>
   <h3 id="set型--集合">set型 : 集合</h3>
   <p>set型は、<strong>重複した要素</strong>がなく、要素に<strong>順番を</strong>持たない配列のような集合。</p>
@@ -888,13 +873,6 @@ line6 work file sample
       <tr><td>ファイルのclose漏れ</td><td>with文を使うと、処理後に自動でクローズできる。</td></tr>
     </tbody>
   </table>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-<ul>
-  <li>重複排除<br>
-    ID一覧やタグ一覧から重複を消す処理でsetが使える。</li>
-  <li>ファイル・通信処理<br>
-    画像、圧縮ファイル、通信データなどではbytesの理解が必要になる。</li>
-</ul>
   <h2 id="まとめ">まとめ</h2>
 <ul>
   <li>setは重複しない要素の集合を扱う型。</li>

@@ -10,20 +10,6 @@
   <li>python-telegram-botを使った基本的な対話処理。</li>
   <li>外部APIとメッセンジャーを組み合わせる構成。</li>
 </ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">確認項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>OpenWeatherMap</td><td>APIキーを取得し、天気情報を取得できる状態にする。</td></tr>
-      <tr><td>Telegram</td><td>BotFatherでBotを作成し、Botトークンを控える。</td></tr>
-      <tr><td>Python環境</td><td>python-telegram-botをインストールし、サンプルを実行できる状態にする。</td></tr>
-    </tbody>
-  </table>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <table class="table" style="width: 100%;">
     <thead>
@@ -282,13 +268,6 @@ updater = Updater(TOKEN)
       </p>
     </li>
   </ul>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-<ul>
-  <li>外部サービス連携<br>
-    実務のBot開発では、APIキー、Webhook、Botトークンなどの外部連携情報を安全に管理する必要がある。</li>
-  <li>小さな疎通確認<br>
-    オウム返しBotのような最小構成で確認すると、後続の状態遷移処理を追加しやすい。</li>
-</ul>
   <h2 id="まとめ">まとめ</h2>
 <ul>
   <li>OpenWeatherMapは天気情報取得、Telegramは対話インターフェースとして使う。</li>

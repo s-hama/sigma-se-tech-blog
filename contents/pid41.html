@@ -10,20 +10,6 @@
   <li>SCXMLで定義した状態とPython処理の関係。</li>
   <li>Telegram上でBotを実行確認する方法。</li>
 </ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">確認項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>前提記事</td><td>pid39とpid40の環境準備を済ませておく。</td></tr>
-      <tr><td>API情報</td><td>OpenWeatherMapのAPIキーとTelegram Botトークンを用意する。</td></tr>
-      <tr><td>実行環境</td><td>Botを起動し続けられるPython実行環境を用意する。</td></tr>
-    </tbody>
-  </table>
   <h2 id="注意したい点">注意したい点</h2>
   <table class="table" style="width: 100%;">
     <thead>
@@ -616,13 +602,6 @@ IndexError: list index out of range
         </li>
     </ul>
     <p>今日（東京）、明日（福岡）ともに実装に沿った期待通りの結果が得られた。</p>
-    <h2 id="実務とのつながり">実務とのつながり</h2>
-<ul>
-  <li>業務フローBot<br>
-    問い合わせ、予約、申請など、決まった手順がある処理では状態遷移ベースが実装しやすい。</li>
-  <li>保守性<br>
-    状態と遷移を整理しておくと、対話の分岐追加や不具合調査がしやすくなる。</li>
-</ul>
   <h2 id="まとめ">まとめ</h2>
 <ul>
   <li>状態遷移ベースでは、現在の状態と入力に応じて次の処理を決める。</li>

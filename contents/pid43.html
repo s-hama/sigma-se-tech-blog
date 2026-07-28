@@ -10,20 +10,6 @@
   <li>LabelEncoderでラベルを数値化する理由。</li>
   <li>SVMモデルを保存し、別プログラムで読み込んで推定する流れ。</li>
 </ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">確認項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>学習データ</td><td>pid42で作成したda_samples.datを用意する。</td></tr>
-      <tr><td>ライブラリ</td><td>MeCab、scikit-learn、dillを使える状態にする。</td></tr>
-      <tr><td>確認観点</td><td>学習、保存、読み込み、推定を分けて確認する。</td></tr>
-    </tbody>
-  </table>
   <h2 id="注意したい点">注意したい点</h2>
   <table class="table" style="width: 100%;">
     <thead>
@@ -271,13 +257,6 @@ def extract_da(utt):
 もう一度はじめから initialize
 東京じゃなくて correct-info
 </code></pre>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-<ul>
-  <li>意図分類の基本<br>
-    問い合わせ分類、チャットBot、FAQルーティングなどでは、発話から意図を推定する処理が重要になる。</li>
-  <li>推論環境への展開<br>
-    学習時に使った前処理器とモデルを一緒に保存しておくと、別プログラムで再利用しやすい。</li>
-</ul>
   <h2 id="まとめ">まとめ</h2>
 <ul>
   <li>MeCabで発話を単語分割し、TF-IDFで数値ベクトルに変換する。</li>

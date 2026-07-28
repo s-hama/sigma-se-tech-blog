@@ -10,20 +10,6 @@
   <li>MeCabを使って日本語発話を形態素解析する理由。</li>
   <li>SCXMLで状態遷移を表現する考え方。</li>
 </ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">確認項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>Python環境</td><td>後続記事の実装に合わせて、Linux上でPythonを実行できる状態にしておく。</td></tr>
-      <tr><td>MeCab</td><td>日本語文を単語単位に分割するために使用する。</td></tr>
-      <tr><td>SCXML</td><td>対話状態と遷移条件をXMLとして表すために使用する。</td></tr>
-    </tbody>
-  </table>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <table class="table" style="width: 100%;">
     <thead>
@@ -230,13 +216,6 @@ $ pip3.6 install PySide2 <span class="hljs-comment"># PySide2をインストー�
   <p>上記の要領で<code>ask_place</code>（地名指定）→ <code>ask_date</code>（日時指定）→ <code>ask_type</code>（種別：天気 or
     気温）と状態遷移が進むと、最後に<code>final</code>要素の天気情報の取得結果を返す状態に遷移し、天気情報を返して処理を終了する。</p>
   <p>以上で<code>MeCab</code>と<code>SCXML</code>の環境準備が完了。</p>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-<ul>
-  <li>問い合わせBotの基礎<br>
-    予約、FAQ、天気案内など、決まった流れで処理できる対話では状態遷移ベースが使いやすい。</li>
-  <li>設計と実装の分離<br>
-    状態をSCXMLで表すと、対話の流れをコードから切り離して確認しやすくなる。</li>
-</ul>
   <h2 id="まとめ">まとめ</h2>
 <ul>
   <li>状態遷移ベースは、現在の状態と入力に応じて次の処理を決める方式。</li>

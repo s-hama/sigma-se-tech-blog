@@ -10,20 +10,6 @@
   <li>SVMを使って発話を分類する理由。</li>
   <li>学習データを作成する流れ。</li>
 </ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">確認項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>前提記事</td><td>状態遷移ベースの構成とTelegram連携を確認しておく。</td></tr>
-      <tr><td>Python環境</td><td>scikit-learnとdillをインストールできる状態にする。</td></tr>
-      <tr><td>学習データ設計</td><td>発話行為タイプとコンセプトの候補を先に決めておく。</td></tr>
-    </tbody>
-  </table>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <table class="table" style="width: 100%;">
     <thead>
@@ -399,13 +385,6 @@ correct-info 広島じゃない
     </li>
   </ul>
   <p>以上で学習データの準備が完了。</p>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-<ul>
-  <li>自然な入力への対応<br>
-    ユーザーが一文で複数情報を伝える場合、フレームベースの方が扱いやすい。</li>
-  <li>機械学習との接続<br>
-    発話分類をSVMで扱うことで、ルールだけでは拾いにくい表現にも対応しやすくなる。</li>
-</ul>
   <h2 id="まとめ">まとめ</h2>
 <ul>
   <li>フレームベースでは、発話から対話行為タイプやスロット情報を推定する。</li>

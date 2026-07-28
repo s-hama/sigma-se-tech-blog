@@ -46,37 +46,6 @@
     <li>mod_sslとCertbotによるSSL/TLS証明書取得。</li>
     <li>Let&#x27;s Encrypt証明書の更新確認。</li>
   </ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">項目</th>
-        <th scope="col">確認内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Apache</td>
-        <td>httpdをインストールし、サービスとして起動できる状態にする。</td>
-      </tr>
-      <tr>
-        <td>firewalld</td>
-        <td>httpとhttpsの通信を恒久的に許可する。</td>
-      </tr>
-      <tr>
-        <td>DocumentRoot</td>
-        <td>配置先ディレクトリの所有者と権限を確認する。</td>
-      </tr>
-      <tr>
-        <td>ドメイン</td>
-        <td>証明書取得前にDNSがVPSへ向いている必要がある。</td>
-      </tr>
-      <tr>
-        <td>証明書更新</td>
-        <td>Let&#x27;s Encryptの期限と更新手順を確認する。</td>
-      </tr>
-    </tbody>
-  </table>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <table class="table" style="width: 100%;">
     <thead>
@@ -234,15 +203,6 @@ $ openssl x509 -in /etc/letsencrypt/live/example.com/fullchain.pem -noout -dates
       <p>有効期限の確認<br>
         <code>certbot renew --dry-run</code>が成功することに加え、外部監視や定期的な証明書確認を用意して更新失敗を検知する。</p>
     </li>
-  </ul>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-  <ul>
-    <li>HTTPS化<br>
-      ログイン情報や管理画面を扱うサイトでは基本的な保護になる。</li>
-    <li>firewalld<br>
-      公開するポートを必要最小限にする考え方につながる。</li>
-    <li>証明書更新<br>
-      期限切れによるサイト停止を防ぐため、監視や定期確認が重要になる。</li>
   </ul>
   <h2 id="まとめ">まとめ</h2>
   <ul>
