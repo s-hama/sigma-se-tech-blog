@@ -207,25 +207,10 @@
     </li>
   </ul>
 
-  <h2 id="違いを整理する">違いを整理する</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">比較する項目</th>
-        <th scope="col">整理するポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>immutableは変数が変わらないという意味ではない</td><td>変数には別のオブジェクトを再代入できる。変えられないのはオブジェクト自体。</td></tr>
-      <tr><td>iterableとsequenceの混同</td><td>sequenceは順序とインデックスを持つ。iterableはforで取り出せる性質。</td></tr>
-      <tr><td>mappingの理解</td><td>インデックス番号ではなく、キーを使って値にアクセスする。</td></tr>
-    </tbody>
-  </table>
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>immutableは変更不可、mutableは変更可能なオブジェクトを指す。</li>
-  <li>iterable、sequence、mappingは、値の取り出し方やアクセス方法を表す。</li>
-  <li>型の特性を知ると、Pythonのエラーや挙動を追いやすくなる。</li>
-</ul>
-
+  <ul>
+    <li>immutableは変数を再代入できないという意味ではなく、オブジェクト自体を変更できない性質を表す。mutableなオブジェクトは内容を変更できる。</li>
+    <li>sequenceは順序とインデックスを持ち、iterableはfor文などで要素を順に取り出せる性質を表す。</li>
+    <li>mappingはインデックス番号ではなくキーを使って値へアクセスする。型の特性を知ると、Pythonの挙動やエラーを追いやすくなる。</li>
+  </ul>
 </div>

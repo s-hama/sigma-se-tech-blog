@@ -171,26 +171,12 @@ accuracy_cnt = <span class="hljs-number">0</span>
     </li>
   </ul>
 
-  <h2 id="違いを整理する">違いを整理する</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">比較する項目</th>
-        <th scope="col">整理するポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>batch_sizeの意味</td><td>一度に処理する件数であり、データ全体の件数ではない。</td></tr>
-      <tr><td>axisの指定</td><td>argmaxでどの方向に最大値を取るかを間違えると、予測結果が崩れる。</td></tr>
-      <tr><td>メモリ使用量</td><td>大きすぎるバッチはメモリを圧迫することがある。</td></tr>
-    </tbody>
-  </table>
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>バッチ処理は、複数の入力をまとめて推論する方法。</li>
-  <li>入力のshapeが変わるため、行列計算の次元に注意する。</li>
-  <li>argmaxのaxis指定は、予測クラスを取り出すうえで重要。</li>
-</ul>
+  <ul>
+    <li>バッチ処理は複数の入力をまとめて推論する方法で、batch_sizeは一度に処理する件数を表し、データ全体の件数ではない。</li>
+    <li>入力のshapeが変わるため行列計算の次元を確認し、argmaxでは予測クラスを取り出すaxisを正しく指定する。</li>
+    <li>バッチを大きくすると効率化できる一方、メモリ使用量も増えるため、実行環境に合わせて調整する。</li>
+  </ul>
   <h2 id="参考文献">参考文献</h2>
   <ul>
     <li>斎藤 康毅（\(2018\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>

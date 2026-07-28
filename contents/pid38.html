@@ -503,26 +503,13 @@ CLASSES
             …（以降省略）
 </code></pre>
 
-  <h2 id="違いを整理する">違いを整理する</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">比較する項目</th>
-        <th scope="col">整理するポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>広すぎるexcept</td><td>`except Exception`だけに頼ると、原因を見失いやすい。必要な例外を絞る。</td></tr>
-      <tr><td>BaseExceptionの扱い</td><td>SystemExitやKeyboardInterruptも含むため、通常の業務コードで安易に捕捉しない。</td></tr>
-      <tr><td>握りつぶし</td><td>exceptで何もせず通過すると、障害原因が分からなくなる。ログや再送出を検討する。</td></tr>
-    </tbody>
-  </table>
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>例外処理は、エラー発生時の流れを制御する仕組み。</li>
-  <li>exceptでは、捕捉したい例外クラスをできるだけ具体的に指定する。</li>
-  <li>finallyは後片付け、elseは例外が起きなかった場合の処理に使える。</li>
-</ul>
+  <ul>
+    <li>例外処理はエラー発生時の流れを制御する仕組みで、exceptでは捕捉する例外クラスをできるだけ具体的に指定する。</li>
+    <li>BaseExceptionにはSystemExitやKeyboardInterruptも含まれるため、通常の処理で安易に捕捉しない。</li>
+    <li>例外を何もせず握りつぶすと原因を追えなくなるため、ログ記録や再送出を検討する。</li>
+    <li>finallyは後片付け、elseは例外が発生しなかった場合の処理に使う。</li>
+  </ul>
   <h2 id="参考文献">参考文献</h2>
   <ul>
     <li>金城 俊哉（\(2018\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム</li>

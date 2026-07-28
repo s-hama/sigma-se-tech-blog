@@ -202,26 +202,12 @@ $ python
   <pre><code class="language-bash">...     <span class="hljs-built_in">return</span> -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size
 </code></pre>
 
-  <h2 id="違いを整理する">違いを整理する</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">比較する項目</th>
-        <th scope="col">整理するポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>全件学習との違い</td><td>ミニバッチは全データの一部を使って近似的に損失を計算する。</td></tr>
-      <tr><td>ラベル形式</td><td>one-hot表現かクラス番号かで実装が変わる。</td></tr>
-      <tr><td>平均を取る位置</td><td>バッチ全体の損失は、件数で割って平均として扱う。</td></tr>
-    </tbody>
-  </table>
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>ミニバッチ学習は、データの一部をまとめて使う学習方法。</li>
-  <li>交差エントロピー誤差は、バッチ内の損失を平均して扱う。</li>
-  <li>ラベル形式と配列shapeを確認することが実装の要点。</li>
-</ul>
+  <ul>
+    <li>ミニバッチ学習は、全データではなく一部をまとめて使い、損失を近似的に計算する方法。</li>
+    <li>バッチ全体の交差エントロピー誤差は、データ件数で割った平均として扱う。</li>
+    <li>正解ラベルがone-hot表現かクラス番号かによって実装が変わるため、ラベル形式と配列のshapeを確認する。</li>
+  </ul>
   <h2 id="参考文献">参考文献</h2>
   <ul>
     <li>斎藤 康毅（\(2018\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>

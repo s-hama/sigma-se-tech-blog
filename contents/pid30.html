@@ -391,25 +391,11 @@
     </li>
   </ul>
 
-  <h2 id="違いを整理する">違いを整理する</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">比較する項目</th>
-        <th scope="col">整理するポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>boolはintの派生型</td><td>Trueは1、Falseは0のように扱えるが、意味としては真偽値として読む。</td></tr>
-      <tr><td>floatの誤差</td><td>10進数で自然に見える値でも、2進数では正確に表せないことがある。</td></tr>
-      <tr><td>complexの表記</td><td>Pythonでは虚数単位にjを使う。</td></tr>
-    </tbody>
-  </table>
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>bool、int、float、complexはPythonの基本的な数値系データ型。</li>
-  <li>演算によって結果の型が変わることがある。</li>
-  <li>floatの丸め誤差やcomplexの表記は、実装時に注意が必要。</li>
-</ul>
-
+  <ul>
+    <li>bool、int、float、complexはPythonの基本的な数値型で、演算によって結果の型が変わることがある。</li>
+    <li>boolはintの派生型なのでTrueを1、Falseを0として扱えるが、意味としては真偽値として読む。</li>
+    <li>floatは2進数で正確に表せない値があるため、丸め誤差が発生する場合がある。</li>
+    <li>complexでは虚数単位をjで表す。</li>
+  </ul>
 </div>

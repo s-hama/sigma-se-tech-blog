@@ -889,25 +889,10 @@ defg
     </li>
   </ul>
 
-  <h2 id="違いを整理する">違いを整理する</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">比較する項目</th>
-        <th scope="col">整理するポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>listとtupleの違い</td><td>listは変更可能、tupleは変更不可として使い分ける。</td></tr>
-      <tr><td>dictの順序とキー</td><td>値ではなくキーを使ってアクセスする。キーの重複はできない。</td></tr>
-      <tr><td>strの変更</td><td>文字列はimmutableなので、変更に見える操作は新しい文字列を作る。</td></tr>
-    </tbody>
-  </table>
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>str、list、tuple、rangeは順序を持つデータとして扱える。</li>
-  <li>dictはキーと値を対応付けるmapping型。</li>
-  <li>変更可否やアクセス方法の違いを意識すると、型を選びやすくなる。</li>
-</ul>
-
+  <ul>
+    <li>str、list、tuple、rangeは順序を持つデータとして扱え、listは変更可能、tupleは変更不可として使い分ける。</li>
+    <li>strはimmutableなので、変更に見える操作でも新しい文字列が作られる。</li>
+    <li>dictはキーと値を対応付けるmapping型で、キーによって値へアクセスし、同じキーは重複して保持できない。</li>
+  </ul>
 </div>

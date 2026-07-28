@@ -207,17 +207,17 @@ KeyError: <span class="hljs-number">100</span>
 </code></pre>
         </li>
         <li>
-          <p>対象差集合（^ 演算子 or symmetric_difference）<br>
+          <p>対称差集合（^ 演算子 or symmetric_difference）<br>
             積集合の逆（どちらか一方にあるものを取得する）で排他的論理和（XOR）と同義。</p>
           <pre><code class="language-python">$ python
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ^ 演算子を用いた対象差集合</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ^ 演算子を用いた対称差集合</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_b = {<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>}
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_c = set_a ^ set_b
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_c)
 {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>}
 &gt;&gt;&gt;
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># symmetric_differenceを用いた対象差集合</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># symmetric_differenceを用いた対称差集合</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_d = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_e = {<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>}
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_f = set_d.symmetric_difference(set_e)
@@ -859,25 +859,10 @@ line6 work file sample
     </li>
   </ul>
 
-  <h2 id="違いを整理する">違いを整理する</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">比較する項目</th>
-        <th scope="col">整理するポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>setは順序を前提にしない</td><td>重複排除や集合演算に使う。インデックスで取り出す用途には向かない。</td></tr>
-      <tr><td>bytesとbytearray</td><td>bytesは変更不可、bytearrayは変更可能。</td></tr>
-      <tr><td>ファイルのclose漏れ</td><td>with文を使うと、処理後に自動でクローズできる。</td></tr>
-    </tbody>
-  </table>
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>setは重複しない要素の集合を扱う型。</li>
-  <li>bytesは変更不可、bytearrayは変更可能なバイト列。</li>
-  <li>file objectはファイル読み書きの入口になる。</li>
-</ul>
-
+  <ul>
+    <li>setは重複しない要素を扱う集合型で、順序やインデックスによるアクセスを前提にせず、重複排除や集合演算に使う。</li>
+    <li>bytesは変更不可、bytearrayは変更可能なバイト列として使い分ける。</li>
+    <li>file objectはファイルを読み書きする入口となり、with文を使うと処理後に自動でクローズできる。</li>
+  </ul>
 </div>
