@@ -4,40 +4,20 @@
   <p>Djangoを本番環境で動かす場合、開発用のrunserverではなく、ApacheなどのWebサーバーからWSGI経由でアプリケーションを呼び出す構成を理解することが重要になる。</p>
   <p>注意：この記事は、2018年当時のCentOS 7.4、Python 3.6環境の構築記録をもとに、手順同士の互換性を確認しやすい後年の旧バージョン（Django 2.2、mod_wsgi 4.9.4）へ置き換えて再構成した例である。<br>2018年当時のパッケージ構成を厳密に再現するものではない。<br>CentOS 7、Python 3.6、ここで扱うDjangoとmod_wsgiはいずれもサポート終了済みで、IUSリポジトリも現在の新規構築には使用できない。<br>新規構築ではサポート中の環境を選び、ここではApacheとmod_wsgiを接続する考え方を中心に参照する。</p>
   <h2 id="前提環境">前提環境</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>OS</td>
-        <td>CentOS 7.4（サポート終了済み）</td>
-      </tr>
-      <tr>
-        <td>言語</td>
-        <td>Python</td>
-      </tr>
-      <tr>
-        <td>Webサーバー</td>
-        <td>Apache</td>
-      </tr>
-      <tr>
-        <td>フレームワーク</td>
-        <td>Django</td>
-      </tr>
-      <tr>
-        <td>データベース</td>
-        <td>PostgreSQL</td>
-      </tr>
-      <tr>
-        <td>ドメイン</td>
-        <td>example.com</td>
-      </tr>
-    </tbody>
-  </table>
+  <ul>
+    <li>OS<br>
+      CentOS 7.4（サポート終了済み）</li>
+    <li>言語<br>
+      Python</li>
+    <li>Webサーバー<br>
+      Apache</li>
+    <li>フレームワーク<br>
+      Django</li>
+    <li>データベース<br>
+      PostgreSQL</li>
+    <li>ドメイン<br>
+      example.com</li>
+  </ul>
   <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
   <ul>
     <li>EPEL/IUSリポジトリを利用していた当時の背景。</li>
@@ -47,32 +27,16 @@
     <li>VirtualHostとWSGI設定の役割。</li>
   </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">作業時の注意点</th>
-        <th scope="col">確認ポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>venvとシステムPython</td>
-        <td>どちらにDjangoやmod_wsgiを入れたかを混同しない。</td>
-      </tr>
-      <tr>
-        <td>WSGIファイルパス</td>
-        <td>wsgi.pyとmod_wsgiモジュールのパスを取り違えやすい。</td>
-      </tr>
-      <tr>
-        <td>静的ファイル</td>
-        <td>DjangoアプリのstaticとApacheのAlias設定を対応させる。</td>
-      </tr>
-      <tr>
-        <td>VirtualHost</td>
-        <td>80番はHTTPSリダイレクト、443番はDjango起動という役割を分ける。</td>
-      </tr>
-    </tbody>
-  </table>
+  <ul>
+    <li>venvとシステムPython<br>
+      どちらにDjangoやmod_wsgiを入れたかを混同しない。</li>
+    <li>WSGIファイルパス<br>
+      wsgi.pyとmod_wsgiモジュールのパスを取り違えやすい。</li>
+    <li>静的ファイル<br>
+      DjangoアプリのstaticとApacheのAlias設定を対応させる。</li>
+    <li>VirtualHost<br>
+      80番はHTTPSリダイレクト、443番はDjango起動という役割を分ける。</li>
+  </ul>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="centosにパッケージリポジトリを導入">CentOSにパッケージリポジトリを導入</h3>
   <ul>

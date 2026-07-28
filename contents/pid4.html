@@ -4,40 +4,20 @@
   <p>Djangoサイトを公開する最後の段階では、データベース、マイグレーション、セキュリティ設定、静的ファイル、Apache連携をまとめて確認する必要がある。runserverと本番起動の違いも押さえておく。</p>
   <p>注意：この記事は、2018年当時のCentOS 7.4環境の構築記録をもとに、前記事で採用した後年の旧バージョン（Django 2.2、psycopg2 2.8系）と整合するよう再構成した例であり、2018年当時のパッケージ構成を厳密に再現するものではない。<br>CentOS 7標準のPostgreSQL 9.2はDjango 2.2の要件（PostgreSQL 9.4以上）を満たさないため、PGDG版PostgreSQL 9.6を使用する。<br>これらはすべてサポート終了済みなので、新規の本番環境へ採用しない。<br>以下では、データベースをDjangoと同じVPSで動かす構成を前提とする。</p>
   <h2 id="前提環境">前提環境</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>OS</td>
-        <td>CentOS 7.4（サポート終了済み）</td>
-      </tr>
-      <tr>
-        <td>言語</td>
-        <td>Python</td>
-      </tr>
-      <tr>
-        <td>Webサーバー</td>
-        <td>Apache</td>
-      </tr>
-      <tr>
-        <td>フレームワーク</td>
-        <td>Django</td>
-      </tr>
-      <tr>
-        <td>データベース</td>
-        <td>PostgreSQL 9.6（サポート終了済み）</td>
-      </tr>
-      <tr>
-        <td>ドメイン</td>
-        <td>example.com</td>
-      </tr>
-    </tbody>
-  </table>
+  <ul>
+    <li>OS<br>
+      CentOS 7.4（サポート終了済み）</li>
+    <li>言語<br>
+      Python</li>
+    <li>Webサーバー<br>
+      Apache</li>
+    <li>フレームワーク<br>
+      Django</li>
+    <li>データベース<br>
+      PostgreSQL 9.6（サポート終了済み）</li>
+    <li>ドメイン<br>
+      example.com</li>
+  </ul>
   <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
   <ul>
     <li>PostgreSQLの初期化、ユーザー、データベース作成。</li>
@@ -47,32 +27,16 @@
     <li>runserverとApache経由の起動確認の違い。</li>
   </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">作業時の注意点</th>
-        <th scope="col">確認ポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>データベースユーザー</td>
-        <td>作成したユーザー名とDjangoのDATABASES設定を一致させる。</td>
-      </tr>
-      <tr>
-        <td>DEBUG設定</td>
-        <td>本番ではFalseにし、ALLOWED_HOSTSを正しく設定する。</td>
-      </tr>
-      <tr>
-        <td>マイグレーション</td>
-        <td>モデル変更後はmakemigrationsとmigrateを忘れない。</td>
-      </tr>
-      <tr>
-        <td>runserverとApache</td>
-        <td>両方を混同すると、どちらで動いているか分かりにくくなる。</td>
-      </tr>
-    </tbody>
-  </table>
+  <ul>
+    <li>データベースユーザー<br>
+      作成したユーザー名とDjangoのDATABASES設定を一致させる。</li>
+    <li>DEBUG設定<br>
+      本番ではFalseにし、ALLOWED_HOSTSを正しく設定する。</li>
+    <li>マイグレーション<br>
+      モデル変更後はmakemigrationsとmigrateを忘れない。</li>
+    <li>runserverとApache<br>
+      両方を混同すると、どちらで動いているか分かりにくくなる。</li>
+  </ul>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="データベースの環境構築">データベースの環境構築</h3>
   <ul>

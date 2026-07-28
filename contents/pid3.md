@@ -11,14 +11,18 @@ Djangoを本番環境で動かす場合、開発用のrunserverではなく、Ap
 
 ## 前提環境
 
-| 項目 | 内容 |
-| --- | --- |
-| OS | CentOS 7.4（サポート終了済み） |
-| 言語 | Python |
-| Webサーバー | Apache |
-| フレームワーク | Django |
-| データベース | PostgreSQL |
-| ドメイン | example.com |
+- OS<br>
+CentOS 7.4（サポート終了済み）
+- 言語<br>
+Python
+- Webサーバー<br>
+Apache
+- フレームワーク<br>
+Django
+- データベース<br>
+PostgreSQL
+- ドメイン<br>
+example.com
 
 ## この記事で扱うこと
 - EPEL/IUSリポジトリを利用していた当時の背景。
@@ -29,12 +33,14 @@ Djangoを本番環境で動かす場合、開発用のrunserverではなく、Ap
 
 ## 作業時の注意点
 
-| 作業時の注意点 | 確認ポイント |
-| --- | --- |
-| venvとシステムPython | どちらにDjangoやmod_wsgiを入れたかを混同しない。 |
-| WSGIファイルパス | wsgi.pyとmod_wsgiモジュールのパスを取り違えやすい。 |
-| 静的ファイル | DjangoアプリのstaticとApacheのAlias設定を対応させる。 |
-| VirtualHost | 80番はHTTPSリダイレクト、443番はDjango起動という役割を分ける。 |
+- venvとシステムPython<br>
+どちらにDjangoやmod_wsgiを入れたかを混同しない。
+- WSGIファイルパス<br>
+wsgi.pyとmod_wsgiモジュールのパスを取り違えやすい。
+- 静的ファイル<br>
+DjangoアプリのstaticとApacheのAlias設定を対応させる。
+- VirtualHost<br>
+80番はHTTPSリダイレクト、443番はDjango起動という役割を分ける。
 
 ## 実施内容
 ### CentOSにパッケージリポジトリを導入

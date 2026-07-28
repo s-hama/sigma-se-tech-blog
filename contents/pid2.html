@@ -4,40 +4,20 @@
   <p>Webサイトを公開するには、Webサーバーの起動だけでなく、firewalld、DocumentRoot、HTTPS、証明書更新までつなげて確認する必要がある。特にSSL/TLSは、一度取得して終わりではなく、期限管理まで含めて運用する。</p>
   <p>※ 注意：この記事は、2018年当時のCentOS 7.4環境をもとにした構築記録である。<br>CentOS 7は2024年6月30日にサポートを終了しているため、新規構築ではサポート中のOSと、そのOS向けにCertbot公式サイトが案内する手順を利用する。</p>
   <h2 id="前提環境">前提環境</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>OS</td>
-        <td>CentOS 7.4（サポート終了済み）</td>
-      </tr>
-      <tr>
-        <td>言語</td>
-        <td>Python</td>
-      </tr>
-      <tr>
-        <td>Webサーバー</td>
-        <td>Apache</td>
-      </tr>
-      <tr>
-        <td>フレームワーク</td>
-        <td>Django</td>
-      </tr>
-      <tr>
-        <td>データベース</td>
-        <td>PostgreSQL</td>
-      </tr>
-      <tr>
-        <td>ドメイン</td>
-        <td>example.com</td>
-      </tr>
-    </tbody>
-  </table>
+  <ul>
+    <li>OS<br>
+      CentOS 7.4（サポート終了済み）</li>
+    <li>言語<br>
+      Python</li>
+    <li>Webサーバー<br>
+      Apache</li>
+    <li>フレームワーク<br>
+      Django</li>
+    <li>データベース<br>
+      PostgreSQL</li>
+    <li>ドメイン<br>
+      example.com</li>
+  </ul>
   <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
   <ul>
     <li>Apacheのインストールと起動確認。</li>
@@ -47,32 +27,16 @@
     <li>Let&#x27;s Encrypt証明書の更新確認。</li>
   </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">作業時の注意点</th>
-        <th scope="col">確認ポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>HTTPとHTTPS</td>
-        <td>80番ポートと443番ポートは別々に許可が必要になる。</td>
-      </tr>
-      <tr>
-        <td>--permanent</td>
-        <td>付けない設定は再起動後に消えることがある。</td>
-      </tr>
-      <tr>
-        <td>証明書取得失敗</td>
-        <td>DNS未反映やApache起動中のポート競合を確認する。</td>
-      </tr>
-      <tr>
-        <td>自動更新</td>
-        <td>証明書の取得だけでなく、更新確認まで運用に含める。</td>
-      </tr>
-    </tbody>
-  </table>
+  <ul>
+    <li>HTTPとHTTPS<br>
+      80番ポートと443番ポートは別々に許可が必要になる。</li>
+    <li>--permanent<br>
+      付けない設定は再起動後に消えることがある。</li>
+    <li>証明書取得失敗<br>
+      DNS未反映やApache起動中のポート競合を確認する。</li>
+    <li>自動更新<br>
+      証明書の取得だけでなく、更新確認まで運用に含める。</li>
+  </ul>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="apachehttpdインストール">Apache(httpd)インストール</h3>
   <ul>

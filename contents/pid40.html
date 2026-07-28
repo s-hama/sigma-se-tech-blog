@@ -11,19 +11,14 @@
   <li>外部APIとメッセンジャーを組み合わせる構成。</li>
 </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">作業時の注意点</th>
-        <th scope="col">確認する観点</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>APIキーとBotトークン</td><td>コードに直書きすると漏えいリスクがあるため、環境変数や設定ファイルで管理する。</td></tr>
-      <tr><td>疎通確認の順番</td><td>天気APIとTelegram Botを別々に確認してから結合すると原因を切り分けやすい。</td></tr>
-      <tr><td>ライブラリのバージョン</td><td>python-telegram-botはバージョンで書き方が変わるため、記事のコードと環境を合わせる。</td></tr>
-    </tbody>
-  </table>
+  <ul>
+    <li>APIキーとBotトークン<br>
+      コードに直書きすると漏えいリスクがあるため、環境変数や設定ファイルで管理する。</li>
+    <li>疎通確認の順番<br>
+      天気APIとTelegram Botを別々に確認してから結合すると原因を切り分けやすい。</li>
+    <li>ライブラリのバージョン<br>
+      python-telegram-botはバージョンで書き方が変わるため、記事のコードと環境を合わせる。</li>
+  </ul>
   <h2 id="解説と実装サンプル">解説と実装サンプル</h2>
   <h3 id="天気情報を取得するopenweathermapwebapiの概要と利用登録">天気情報を取得する「OpenWeatherMap」WebAPIの概要と利用登録</h3>
   <p>天気情報は、無償で天気情報を取得できる<code>OpenWeatherMap</code>のWebAPIを用いて取得する。<br>

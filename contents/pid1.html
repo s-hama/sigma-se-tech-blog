@@ -4,36 +4,18 @@
   <p>この段階では、アプリケーションの実装よりも「安全にサーバーへ接続できること」と「ドメイン名でサーバーへ到達できること」が重要になる。後続のApache、Django、PostgreSQL設定の土台になるため、SSHとDNSの確認を丁寧に行う。</p>
   <p>※ 注意：この記事は、2018年当時のCentOS 7.4環境をもとにした構築記録である。<br>CentOS 7は2024年6月30日にサポートを終了しており、セキュリティ更新も提供されない。<br>新規構築ではサポート中のOSを選び、以下のコマンドは旧環境の構成を理解するための参考として利用する。</p>
   <h2 id="前提環境">前提環境</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>OS</td>
-        <td>CentOS 7.4（サポート終了済み）</td>
-      </tr>
-      <tr>
-        <td>言語</td>
-        <td>Python</td>
-      </tr>
-      <tr>
-        <td>Webサーバー</td>
-        <td>Apache</td>
-      </tr>
-      <tr>
-        <td>フレームワーク</td>
-        <td>Django</td>
-      </tr>
-      <tr>
-        <td>データベース</td>
-        <td>PostgreSQL</td>
-      </tr>
-    </tbody>
-  </table>
+  <ul>
+    <li>OS<br>
+      CentOS 7.4（サポート終了済み）</li>
+    <li>言語<br>
+      Python</li>
+    <li>Webサーバー<br>
+      Apache</li>
+    <li>フレームワーク<br>
+      Django</li>
+    <li>データベース<br>
+      PostgreSQL</li>
+  </ul>
   <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
   <ul>
     <li>VPS契約時に確認する観点。</li>
@@ -43,32 +25,16 @@
     <li>rootログイン禁止と公開鍵認証の考え方。</li>
   </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">作業時の注意点</th>
-        <th scope="col">確認ポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>ドメイン契約とDNS設定</td>
-        <td>契約しただけでは接続できず、DNSレコードの設定が必要になる。</td>
-      </tr>
-      <tr>
-        <td>Aレコードとネームサーバー</td>
-        <td>どこで名前解決を管理するかと、どのIPへ向けるかを分けて考える。</td>
-      </tr>
-      <tr>
-        <td>rootログイン禁止</td>
-        <td>一般ユーザーでログインできることを確認してから無効化する。</td>
-      </tr>
-      <tr>
-        <td>パスワード認証の無効化</td>
-        <td>公開鍵で接続できることを確認してから切り替える。</td>
-      </tr>
-    </tbody>
-  </table>
+  <ul>
+    <li>ドメイン契約とDNS設定<br>
+      契約しただけでは接続できず、DNSレコードの設定が必要になる。</li>
+    <li>Aレコードとネームサーバー<br>
+      どこで名前解決を管理するかと、どのIPへ向けるかを分けて考える。</li>
+    <li>rootログイン禁止<br>
+      一般ユーザーでログインできることを確認してから無効化する。</li>
+    <li>パスワード認証の無効化<br>
+      公開鍵で接続できることを確認してから切り替える。</li>
+  </ul>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="vps契約">VPS契約</h3>
   <ul>

@@ -16,12 +16,14 @@ Django Debug Toolbarは、リクエスト、レスポンス、SQL、テンプレ
 
 ## 作業時の注意点
 
-| 作業時の注意点 | 確認ポイント |
-| --- | --- |
-| Toolbarが出ない | DEBUG、INTERNAL_IPS、URL設定、MIDDLEWAREの順に確認する。 |
-| CSSやJavaScriptが読み込めない | staticfilesの設定とブラウザーの開発者ツールを確認する。 |
-| 設定順序 | DebugToolbarMiddlewareは早い位置に置き、レスポンスを圧縮するミドルウェアより後に置く。 |
-| 本番利用 | デバッグ情報を公開しないよう、開発用途に限定する。 |
+- Toolbarが出ない<br>
+DEBUG、INTERNAL_IPS、URL設定、MIDDLEWAREの順に確認する。
+- CSSやJavaScriptが読み込めない<br>
+staticfilesの設定とブラウザーの開発者ツールを確認する。
+- 設定順序<br>
+DebugToolbarMiddlewareは早い位置に置き、レスポンスを圧縮するミドルウェアより後に置く。
+- 本番利用<br>
+デバッグ情報を公開しないよう、開発用途に限定する。
 
 ## 実施内容
 ### django-debug-toolbarの導入

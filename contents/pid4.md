@@ -14,14 +14,18 @@ CentOS 7標準のPostgreSQL 9.2はDjango 2.2の要件（PostgreSQL 9.4以上）�
 
 ## 前提環境
 
-| 項目 | 内容 |
-| --- | --- |
-| OS | CentOS 7.4（サポート終了済み） |
-| 言語 | Python |
-| Webサーバー | Apache |
-| フレームワーク | Django |
-| データベース | PostgreSQL 9.6（サポート終了済み） |
-| ドメイン | example.com |
+- OS<br>
+CentOS 7.4（サポート終了済み）
+- 言語<br>
+Python
+- Webサーバー<br>
+Apache
+- フレームワーク<br>
+Django
+- データベース<br>
+PostgreSQL 9.6（サポート終了済み）
+- ドメイン<br>
+example.com
 
 ## この記事で扱うこと
 - PostgreSQLの初期化、ユーザー、データベース作成。
@@ -32,12 +36,14 @@ CentOS 7標準のPostgreSQL 9.2はDjango 2.2の要件（PostgreSQL 9.4以上）�
 
 ## 作業時の注意点
 
-| 作業時の注意点 | 確認ポイント |
-| --- | --- |
-| データベースユーザー | 作成したユーザー名とDjangoのDATABASES設定を一致させる。 |
-| DEBUG設定 | 本番ではFalseにし、ALLOWED_HOSTSを正しく設定する。 |
-| マイグレーション | モデル変更後はmakemigrationsとmigrateを忘れない。 |
-| runserverとApache | 両方を混同すると、どちらで動いているか分かりにくくなる。 |
+- データベースユーザー<br>
+作成したユーザー名とDjangoのDATABASES設定を一致させる。
+- DEBUG設定<br>
+本番ではFalseにし、ALLOWED_HOSTSを正しく設定する。
+- マイグレーション<br>
+モデル変更後はmakemigrationsとmigrateを忘れない。
+- runserverとApache<br>
+両方を混同すると、どちらで動いているか分かりにくくなる。
 
 ## 実施内容
 ### データベースの環境構築

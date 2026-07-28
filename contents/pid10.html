@@ -11,32 +11,16 @@
     <li>urls.pyで__debug__用URLを追加する方法。</li>
   </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">作業時の注意点</th>
-        <th scope="col">確認ポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Toolbarが出ない</td>
-        <td>DEBUG、INTERNAL_IPS、URL設定、MIDDLEWAREの順に確認する。</td>
-      </tr>
-      <tr>
-        <td>CSSやJavaScriptが読み込めない</td>
-        <td>staticfilesの設定とブラウザーの開発者ツールを確認する。</td>
-      </tr>
-      <tr>
-        <td>設定順序</td>
-        <td>DebugToolbarMiddlewareは早い位置に置き、レスポンスを圧縮するミドルウェアより後に置く。</td>
-      </tr>
-      <tr>
-        <td>本番利用</td>
-        <td>デバッグ情報を公開しないよう、開発用途に限定する。</td>
-      </tr>
-    </tbody>
-  </table>
+  <ul>
+    <li>Toolbarが出ない<br>
+      DEBUG、INTERNAL_IPS、URL設定、MIDDLEWAREの順に確認する。</li>
+    <li>CSSやJavaScriptが読み込めない<br>
+      staticfilesの設定とブラウザーの開発者ツールを確認する。</li>
+    <li>設定順序<br>
+      DebugToolbarMiddlewareは早い位置に置き、レスポンスを圧縮するミドルウェアより後に置く。</li>
+    <li>本番利用<br>
+      デバッグ情報を公開しないよう、開発用途に限定する。</li>
+  </ul>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="django-debug-toolbarの導入">django-debug-toolbarの導入</h3>
   <p><code>django-debug-toolbar</code>は、セッション、リクエスト/レスポンス、実行したSQLなどをリクエスト単位で確認できる開発支援パッケージとなる。</p>

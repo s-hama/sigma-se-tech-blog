@@ -11,32 +11,16 @@
     <li>checkoutでブランチや特定コミットへ移動する操作。</li>
   </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">作業時の注意点</th>
-        <th scope="col">確認ポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>addとcommit</td>
-        <td>addはコミット候補へ載せる操作、commitは履歴として保存する操作。</td>
-      </tr>
-      <tr>
-        <td>diffの対象</td>
-        <td>ワーキングツリー、インデックス、HEADのどこと比較するかで結果が変わる。</td>
-      </tr>
-      <tr>
-        <td>reset --hard</td>
-        <td>追跡済みファイルの未コミット変更も失われるため、実行前にstatusとdiffを確認する。</td>
-      </tr>
-      <tr>
-        <td>pushとpull</td>
-        <td>pushは送る、pullは取り込む操作として方向を意識する。</td>
-      </tr>
-    </tbody>
-  </table>
+  <ul>
+    <li>addとcommit<br>
+      addはコミット候補へ載せる操作、commitは履歴として保存する操作。</li>
+    <li>diffの対象<br>
+      ワーキングツリー、インデックス、HEADのどこと比較するかで結果が変わる。</li>
+    <li>reset --hard<br>
+      追跡済みファイルの未コミット変更も失われるため、実行前にstatusとdiffを確認する。</li>
+    <li>pushとpull<br>
+      pushは送る、pullは取り込む操作として方向を意識する。</li>
+  </ul>
   <p>以下のコマンド例にある<code>[FILE]</code>、<code>[FILE1]</code>、<code>[DIR]</code>などは、実際のファイルパスやディレクトリパスへ置き換えるための表記である。角括弧を含めて入力すると、シェルではglobパターンとして解釈されるため、そのままコピーしない。</p>
   <h2 id="状態管理の概念">状態管理の概念</h2>
   <ul>
