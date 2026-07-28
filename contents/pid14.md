@@ -12,13 +12,6 @@ MathJaxを使い、Webページ上でMathMLやLaTeX形式の数式を表示す�
 - LaTeX記法で分数、添字、平方根などを表示する方法。
 - ブログ記事で数式を書くときの注意点。
 
-## 注意したい点
-| 注意したい点 | 確認する観点 |
-| --- | --- |
-| MathMLとLaTeXの違い | MathMLはHTMLに近い構造、LaTeXは短い記法で数式を書く方法として捉える。 |
-| エスケープ漏れ | HTML内では記号の扱いに注意し、ブログの変換処理で壊れない形にする。 |
-| 読み込み順序 | MathJaxのscriptが読み込まれないと、数式がそのまま文字として表示される。 |
-
 ## 実施内容
 ### MathJaxの導入
 MathJaxはCDNからJavaScriptを読み込むだけで導入できる。
@@ -383,8 +376,9 @@ MathJaxのTeX入力では、分数や行列をMathMLより短い記述で表せ�
 
 ## まとめ
 - MathJaxを使うと、Webページ上でMathMLやLaTeXの数式を表示できる。
-- MathMLは構造的、LaTeXは短く書きやすい表現として使い分ける。
-- 数式をテキストとして管理すると、技術記事の保守性が上がる。
+- MathMLはHTMLに近い構造で数式を表し、LaTeXは短い記法で数式を書けるため、用途に応じて使い分ける。
+- MathJaxのscriptが正しく読み込まれない場合、数式は変換されず文字列のまま表示される。
+- HTMLの記号やブログの変換処理によるエスケープ漏れに注意し、数式を壊れないテキストとして管理すると記事を保守しやすい。
 
 ### 参考文献
 - [MathJax Documentation, Getting Started with MathJax Components](https://docs.mathjax.org/en/stable/web/start.html)

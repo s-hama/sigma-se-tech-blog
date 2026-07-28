@@ -10,20 +10,6 @@
   <li>LaTeX記法で分数、添字、平方根などを表示する方法。</li>
   <li>ブログ記事で数式を書くときの注意点。</li>
 </ul>
-  <h2 id="注意したい点">注意したい点</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">注意したい点</th>
-        <th scope="col">確認する観点</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>MathMLとLaTeXの違い</td><td>MathMLはHTMLに近い構造、LaTeXは短い記法で数式を書く方法として捉える。</td></tr>
-      <tr><td>エスケープ漏れ</td><td>HTML内では記号の扱いに注意し、ブログの変換処理で壊れない形にする。</td></tr>
-      <tr><td>読み込み順序</td><td>MathJaxのscriptが読み込まれないと、数式がそのまま文字として表示される。</td></tr>
-    </tbody>
-  </table>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="mathjaxの導入">MathJaxの導入</h3>
   <p>MathJaxはCDNからJavaScriptを読み込むだけで導入できる。</p>
@@ -420,8 +406,9 @@
   <h2 id="まとめ">まとめ</h2>
   <ul>
     <li>MathJaxを使うと、Webページ上でMathMLやLaTeXの数式を表示できる。</li>
-    <li>MathMLは構造的、LaTeXは短く書きやすい表現として使い分ける。</li>
-    <li>数式をテキストとして管理すると、技術記事の保守性が上がる。</li>
+    <li>MathMLはHTMLに近い構造で数式を表し、LaTeXは短い記法で数式を書けるため、用途に応じて使い分ける。</li>
+    <li>MathJaxのscriptが正しく読み込まれない場合、数式は変換されず文字列のまま表示される。</li>
+    <li>HTMLの記号やブログの変換処理によるエスケープ漏れに注意し、数式を壊れないテキストとして管理すると記事を保守しやすい。</li>
   </ul>
   <h3 id="参考文献">参考文献</h3>
   <ul>

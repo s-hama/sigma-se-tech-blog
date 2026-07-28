@@ -9,20 +9,6 @@
   <li>配列同士の演算やブロードキャストの基本。</li>
   <li>インデックス指定、スライス、条件抽出の使い方。</li>
 </ul>
-  <h2 id="注意したい点">注意したい点</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">注意したい点</th>
-        <th scope="col">確認する観点</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>リストとndarrayの違い</td><td>リストは要素の集合、ndarrayは数値計算向けの多次元配列として考える。</td></tr>
-      <tr><td>shapeの読み方</td><td>2次元配列では(行, 列)の順で読む。1次元配列では列ベクトルと混同しやすい。</td></tr>
-      <tr><td>条件抽出</td><td>比較結果はTrue/Falseの配列になり、それを使って対象要素を取り出す。</td></tr>
-    </tbody>
-  </table>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="numpyの環境準備">NumPyの環境準備</h3>
   <p><strong>NumPy</strong>は、高速な数値演算をはじめ、学術計算も広く対応しているPythonの外部ライブラリ。
@@ -250,11 +236,11 @@ array([[ 35,  50],
     </li>
   </ul>
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>NumPyのndarrayは、数値計算に適した多次元配列。</li>
-  <li>shape、ndim、dtypeを確認すると、配列の構造を把握しやすい。</li>
-  <li>配列演算や条件抽出は、機械学習前処理の基本になる。</li>
-</ul>
+  <ul>
+    <li>NumPyのndarrayは、Pythonのリストとは異なる、数値計算に適した多次元配列。</li>
+    <li>shape、ndim、dtypeで配列の構造を確認できる。2次元配列のshapeは(行, 列)の順で、1次元配列は列ベクトルとは異なる。</li>
+    <li>配列演算や、比較結果のTrue/False配列を使った条件抽出は、数値処理や機械学習の前処理の基本となる。</li>
+  </ul>
   <h2 id="参考文献">参考文献</h2>
   <ul>
     <li>斎藤 康毅（\(2018\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>

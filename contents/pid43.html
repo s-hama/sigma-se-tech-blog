@@ -10,20 +10,6 @@
   <li>LabelEncoderでラベルを数値化する理由。</li>
   <li>SVMモデルを保存し、別プログラムで読み込んで推定する流れ。</li>
 </ul>
-  <h2 id="注意したい点">注意したい点</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">注意したい点</th>
-        <th scope="col">確認する観点</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>素性ベクトルとラベルの混同</td><td>Xは発話内容の数値表現、Yは発話行為タイプの数値表現。</td></tr>
-      <tr><td>モデル保存の中身</td><td>vectorizer、label_encoder、svcをセットで保存しないと推定時に同じ変換ができない。</td></tr>
-      <tr><td>学習データの品質</td><td>例文が偏ると、正しくない発話行為タイプを推定しやすくなる。</td></tr>
-    </tbody>
-  </table>
   <h2 id="解説と実装サンプル">解説と実装サンプル</h2>
   <h3 id="モデル学習の実装サンプル">モデル学習の実装サンプル</h3>
   <p>先行記事で作成した学習データ<code>da_samples.dat</code>（＊1）を<strong>MeCab</strong>（＊2）で最小単位の単語（形態素）に分割し、<strong>SVM</strong>（＊3）で対話行為タイプを推定（モデル学習）する実装サンプル。</p>
@@ -258,11 +244,12 @@ def extract_da(utt):
 東京じゃなくて correct-info
 </code></pre>
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>MeCabで発話を単語分割し、TF-IDFで数値ベクトルに変換する。</li>
-  <li>SVMは発話ベクトルから発話行為タイプを分類する。</li>
-  <li>推定時には、学習時と同じvectorizer、label_encoder、svcを読み込む必要がある。</li>
-</ul>
+  <ul>
+    <li>MeCabで発話を単語分割し、TF-IDFで発話内容を素性ベクトルXへ変換する。発話行為タイプはラベルYとして扱う。</li>
+    <li>SVMは発話ベクトルから発話行為タイプを分類する。</li>
+    <li>推定時にも学習時と同じ変換と分類を再現できるよう、vectorizer、label_encoder、svcをセットで保存して読み込む。</li>
+    <li>学習用の例文が偏ると誤分類しやすくなるため、発話行為タイプごとのデータ内容と件数を確認する。</li>
+  </ul>
   <h2 id="参考文献">参考文献</h2>
 <ul>
   <li>東中 竜一郎、稲葉 通将、水上 雅博（\\(2020\\)）『Pythonでつくる対話システム』株式会社オーム社</li>

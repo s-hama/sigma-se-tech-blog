@@ -9,20 +9,6 @@
   <li>折れ線グラフや散布図でデータの傾向を見る考え方。</li>
   <li>NumPy配列とMatplotlibを組み合わせる使い方。</li>
 </ul>
-  <h2 id="注意したい点">注意したい点</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">注意したい点</th>
-        <th scope="col">確認する観点</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>showの呼び出し忘れ</td><td>スクリプト実行ではplt.show()がないとグラフが表示されないことがある。</td></tr>
-      <tr><td>軸ラベル不足</td><td>グラフだけでは意味が伝わりにくいため、軸名や凡例を付ける。</td></tr>
-      <tr><td>データ数の不一致</td><td>xとyの要素数が違うと描画エラーになる。</td></tr>
-    </tbody>
-  </table>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="matplotlibの環境準備">Matplotlibの環境準備</h3>
   <p><strong>Matplotlib</strong>は、折れ線グラフ、散布図、ヒストグラム、画像などを描画できるPythonライブラリで、NumPyと組み合わせて使用する場面も多い。</p>
@@ -132,11 +118,13 @@
     </li>
   </ul>
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>MatplotlibはPythonでグラフを描く代表的なライブラリ。</li>
-  <li>pyplotでは、データを渡して描画し、ラベルや凡例を加えて見やすくする。</li>
-  <li>可視化は、数値の傾向や異常を確認するための重要な工程。</li>
-</ul>
+  <ul>
+    <li>MatplotlibはPythonでグラフを描く代表的なライブラリ。</li>
+    <li>pyplotでは、要素数をそろえたxとyのデータを渡して描画する。要素数が異なると描画エラーになる。</li>
+    <li>軸名や凡例を付けるとグラフの意味が伝わりやすくなり、数値の傾向や異常を判断しやすくなる。</li>
+    <li>スクリプトから画面に表示する場合は<code>plt.show()</code>、画像として保存する場合は<code>plt.savefig()</code>を使用する。</li>
+    <li><code>imread</code>で読み込んだ画像はNumPy配列として扱われ、<code>imshow</code>で表示できる。</li>
+  </ul>
   <h2 id="参考文献">参考文献</h2>
   <ul>
     <li>斎藤 康毅（\(2018\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
