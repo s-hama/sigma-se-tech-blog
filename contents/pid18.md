@@ -237,5 +237,7 @@ $ python
 - 恒等関数は入力値をそのまま出力するため、主に回帰問題の出力層で使われる。
 - ソフトマックス関数は多クラス分類の出力層で使われ、指数計算のオーバーフローを避ける数値安定化が必要になる。
 
-## 参考文献
-- 斎藤 康毅（\\(2018\\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
+### 参考文献
+- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
+- [O'Reilly Japan「deep-learning-from-scratch」functions.py](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/common/functions.py)
+- [O'Reilly Japan「deep-learning-from-scratch」relu.py](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch03/relu.py)

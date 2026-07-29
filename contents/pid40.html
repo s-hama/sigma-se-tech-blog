@@ -62,7 +62,7 @@
     &gt;&gt;&gt; appid = <span class="hljs-string">&#x27;**********&#x27;</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># 現在の天気情報</span>
-    &gt;&gt;&gt; current_weather_url = <span class="hljs-string">&#x27;http://api.openweathermap.org/data/2.5/weather&#x27;</span>
+    &gt;&gt;&gt; current_weather_url = <span class="hljs-string">&#x27;https://api.openweathermap.org/data/2.5/weather&#x27;</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># API呼出し</span>
     &gt;&gt;&gt; response = requests.get(<span class="hljs-string">&quot;{}?lat={}&amp;lon={}&amp;lang=ja&amp;units=metric&amp;APPID={}&quot;</span>.<span class="hljs-built_in">format</span>(current_weather_url,lat,lon,appid))
@@ -89,7 +89,7 @@
     &gt;&gt;&gt; appid = <span class="hljs-string">&#x27;**********&#x27;</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># 明日以降の天気情報</span>
-    &gt;&gt;&gt; forecast_url = <span class="hljs-string">&#x27;http://api.openweathermap.org/data/2.5/forecast&#x27;</span>
+    &gt;&gt;&gt; forecast_url = <span class="hljs-string">&#x27;https://api.openweathermap.org/data/2.5/forecast&#x27;</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># API呼出し</span>
     response = requests.get(<span class="hljs-string">&quot;{}?lat={}&amp;lon={}&amp;lang=ja&amp;units=metric&amp;APPID={}&quot;</span>.<span class="hljs-built_in">format</span>(forecast_url,lat,lon,appid))
@@ -269,12 +269,13 @@ updater = Updater(TOKEN)
   <li>python-telegram-botを使うと、PythonからTelegram Botを実装できる。</li>
   <li>本格実装の前に、APIとBotの疎通確認を分けて行うと安全。</li>
 </ul>
-  <h2 id="参考文献">参考文献</h2>
+  <h3 id="参考文献">参考文献</h3>
   <ul>
     <li>東中 竜一郎、稲葉 通将、水上 雅博（\(2020\)）『Pythonでつくる対話システム』株式会社オーム社</li>
-  </ul>
-  <h2 id="githubサポートページ">GitHubサポートページ</h2>
-  <ul>
-    <li><a href="https://github.com/dsbook/dsbook" class="link-secondary">https://github.com/dsbook/dsbook</a></li>
+    <li><a href="https://openweathermap.org/api/current" class="link-secondary">OpenWeather - Current weather data</a></li>
+    <li><a href="https://openweathermap.org/api/forecast5" class="link-secondary">OpenWeather - 5 day weather forecast</a></li>
+    <li><a href="https://core.telegram.org/bots/api" class="link-secondary">Telegram - Bot API</a></li>
+    <li><a href="https://docs.python-telegram-bot.org/en/v12.8/" class="link-secondary">python-telegram-bot 12.8 公式ドキュメント</a></li>
+    <li><a href="https://github.com/dsbook/dsbook" class="link-secondary">GitHub - 『Pythonでつくる対話システム』サポートリポジトリ</a></li>
   </ul>
 </div>

@@ -294,5 +294,6 @@ y =
 - AND、NAND、ORは重みとバイアスを変えて表現できるが、ここでは値を手で決めており、データから学習しているわけではない。
 - XORのように直線で分離できない問題は単純パーセプトロンでは表現できず、多層構造が必要になる。
 
-## 参考文献
-- 斎藤 康毅（\\(2018\\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
+### 参考文献
+- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
+- [O'Reilly Japan「deep-learning-from-scratch」ch02 公式サンプルコード](https://github.com/oreilly-japan/deep-learning-from-scratch/tree/master/ch02)

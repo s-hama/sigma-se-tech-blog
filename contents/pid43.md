@@ -16,9 +16,9 @@ Python - タスク指向型対話：5/5 SVMモデル学習と発話行為推定
 ### モデル学習の実装サンプル
 
 先行記事で作成した学習データ`da_samples.dat`（＊1）を**MeCab**（＊2）で最小単位の単語（形態素）に分割し、**SVM**（＊3）で対話行為タイプを推定（モデル学習）する実装サンプル。
-- （＊1）[Python - タスク指向型対話 : フレームベースの環境準備 > SVM（sklearn）と学習データの作成 > 学習データの作成](<https://sigma-se.com/detail/42/#:~:text=%E3%82%92%E8%A7%A3%E8%AA%AC%E3%81%99%E3%82%8B%E3%80%82-,%E5%AD%A6%E7%BF%92%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E4%BD%9C%E6%88%90,-%E3%81%93%E3%81%AE%E6%A1%88%E5%86%85%E5%AF%BE%E8%A9%B1>) 
-- （＊2）[Python - タスク指向型対話 : 状態遷移ベースの環境準備 > MeCab, SCXML > 対話の文章を解析する「MeCab」の概要とインストール](<https://sigma-se.com/detail/39/#:~:text=%E5%AF%BE%E8%A9%B1%E3%81%AE%E6%96%87%E7%AB%A0%E3%82%92%E8%A7%A3%E6%9E%90%E3%81%99%E3%82%8B%E3%80%8CMeCab%E3%80%8D%E3%81%AE%E6%A6%82%E8%A6%81%E3%81%A8%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB>) 
-- （＊3）[Python - タスク指向型対話 : フレームベースの環境準備 > SVM（sklearn）と学習データの作成 > フレームと対話行為を推定するSVM（sklearn）の概要とインストール](<https://sigma-se.com/detail/42/#:~:text=%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%81%A8%E5%AF%BE%E8%A9%B1%E8%A1%8C%E7%82%BA%E3%82%92%E6%8E%A8%E5%AE%9A%E3%81%99%E3%82%8BSVM%EF%BC%88sklearn%EF%BC%89%E3%81%AE%E6%A6%82%E8%A6%81%E3%81%A8%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB>) 
+- （＊1）[Python - タスク指向型対話 : フレームベースの環境準備 > SVM（sklearn）と学習データの作成 > 学習データの作成](<https://sigma-se.com/detail/42/#学習データの作成>)
+- （＊2）[Python - タスク指向型対話 : 状態遷移ベースの環境準備 > MeCab, SCXML > 対話の文章を解析する「MeCab」の概要とインストール](<https://sigma-se.com/detail/39/#対話の文章を解析するmecabの概要とインストール>)
+- （＊3）[Python - タスク指向型対話 : フレームベースの環境準備 > SVM（sklearn）と学習データの作成 > フレームと対話行為を推定するSVM（sklearn）の概要とインストール](<https://sigma-se.com/detail/42/#フレームと対話行為を推定するsvmsklearnの概要とインストール>)
 
 
 - train_da_model.py
@@ -256,8 +256,12 @@ Python - タスク指向型対話：5/5 SVMモデル学習と発話行為推定
 - 推定時にも学習時と同じ変換と分類を再現できるよう、vectorizer、label_encoder、svcをセットで保存して読み込む。
 - 学習用の例文が偏ると誤分類しやすくなるため、発話行為タイプごとのデータ内容と件数を確認する。
 
-## 参考文献
+### 参考文献
 - 東中 竜一郎、稲葉 通将、水上 雅博（\\(2020\\)）『Pythonでつくる対話システム』株式会社オーム社
-
-## GitHubサポートページ
-- https://github.com/dsbook/dsbook
+- [MeCab公式サイト - MeCab: Yet Another Part-of-Speech and Morphological Analyzer](https://taku910.github.io/mecab/)
+- [scikit-learn公式ドキュメント - TfidfVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html)
+- [scikit-learn公式ドキュメント - LabelEncoder](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.LabelEncoder.html)
+- [scikit-learn公式ドキュメント - SVC](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html)
+- [scikit-learn公式ドキュメント - Model persistence](https://scikit-learn.org/stable/model_persistence.html)
+- [dill公式ドキュメント](https://dill.readthedocs.io/en/latest/)
+- [GitHub - 『Pythonでつくる対話システム』サポートリポジトリ](https://github.com/dsbook/dsbook)

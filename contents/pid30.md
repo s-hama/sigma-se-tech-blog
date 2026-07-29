@@ -33,7 +33,7 @@ Pythonの数値系データ型であるbool、int、float、complexの基本操�
 
 - 型の特性
   - イミュータブルオブジェクト : 同一アドレスで変更不可<br>
-  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF>) を参照
+  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可>) を参照
 
   - bool型はint型のサブクラス
     ```python
@@ -177,7 +177,7 @@ Pythonの数値系データ型であるbool、int、float、complexの基本操�
 
 - 型の特性
   - イミュータブルオブジェクト : 同一アドレスで変更不可<br>
-  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF>) を参照
+  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可>) を参照
 
 - 最大値と最小値<br>
 実質、CPUに依存するので上限、下限はない。
@@ -226,7 +226,7 @@ float型は、\\(64\\)ビットの浮動小数点数表現（倍精度浮動小�
 
 - 型の特性
   - イミュータブルオブジェクト : 同一アドレスで変更不可<br>
-  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF>) を参照
+  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可>) を参照
 
 - 最大値と最小値
 int型と同様にCPUに依存する。
@@ -296,7 +296,7 @@ complex型は、**実部**と**虚部**で構成され、虚部は虚数単位�
 
 - 型の特性
   - イミュータブルオブジェクト : 同一アドレスで変更不可<br>
-  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF>) を参照
+  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可>) を参照
 
 - 実部、虚部を別々に取得
     ```python
@@ -358,3 +358,8 @@ complex型は、**実部**と**虚部**で構成され、虚部は虚数単位�
 - boolはintの派生型なのでTrueを1、Falseを0として扱えるが、意味としては真偽値として読む。
 - floatは2進数で正確に表せない値があるため、丸め誤差が発生する場合がある。
 - complexでは虚数単位をjで表す。
+
+### 参考文献
+- [Python公式ドキュメント - 数値型：int、float、complex](https://docs.python.org/ja/3/library/stdtypes.html#numeric-types-int-float-complex)
+- [Python公式ドキュメント - 真理値判定](https://docs.python.org/ja/3/library/stdtypes.html#truth-value-testing)
+- [Python公式チュートリアル - 浮動小数点演算、その問題と制限](https://docs.python.org/ja/3/tutorial/floatingpoint.html)

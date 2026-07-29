@@ -21,7 +21,7 @@ MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベー
     以下、天気情報案内の状態遷移。
 
     ※ 各項目(状態)の解説については、下記先行記事を参照。<br>
-    [Python - タスク指向型対話 : 状態遷移ベースの環境準備 > MeCab, SCXML > 状態遷移によるタスクを遂行する「SCXML」の概要とインストール](<https://sigma-se.com/detail/39/#:~:text=%E7%8A%B6%E6%85%8B%E9%81%B7%E7%A7%BB%E3%81%AB%E3%82%88%E3%82%8B%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E9%81%82%E8%A1%8C%E3%81%99%E3%82%8B%E3%80%8CSCXML%E3%80%8D%E3%81%AE%E6%A6%82%E8%A6%81%E3%81%A8%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB>)
+    [Python - タスク指向型対話 : 状態遷移ベースの環境準備 > MeCab, SCXML > 状態遷移によるタスクを遂行する「SCXML」の概要とインストール](<https://sigma-se.com/detail/39/#状態遷移によるタスクを遂行するscxmlの概要とインストール>)
 
 
     ```xml
@@ -81,8 +81,8 @@ MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベー
                 "ask_date": "日付を言ってください",
                 "ask_type": "情報種別を言ってください"}
 
-        current_weather_url = 'http://api.openweathermap.org/data/2.5/weather'
-        forecast_url = 'http://api.openweathermap.org/data/2.5/forecast'
+        current_weather_url = 'https://api.openweathermap.org/data/2.5/weather'
+        forecast_url = 'https://api.openweathermap.org/data/2.5/forecast'
         appid = '' # 自身のAPPIDを入れてください
 
         def __init__(self):
@@ -445,8 +445,8 @@ MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベー
   上記に続き（＊11）、（＊12）で状態遷移を設定後、発話内容を取得し、Telegramサーバー側の`reply_text`メソッドの引数に添え、発話内容を送信する。
   - （＊11）遷移先がtell_infoである場合は、（＊13）、（＊14）で天気情報を取得し、発話内容（utt）と対話完了フラグ（end）をTrue（完了）で返す。
   - （＊12）遷移先がtell_infoでない場合は、遷移先に応じた発話内容（utt）と対話完了フラグ（end）をFalse（継続）で返す。
-  - （＊13）現在の天気情報取得API（http://api.openweathermap.org/data/2.5/weather）に 緯度、経度、APPID を渡し、結果をJSON形式で返す。
-  - （＊14）未来の天気情報取得API（http://api.openweathermap.org/data/2.5/forecast）に 緯度、経度、APPID を渡し、明日正午頃（12時～15時までのどこか）の天気情報を抽出し、JSON形式で返す。
+  - （＊13）現在の天気情報取得API（https://api.openweathermap.org/data/2.5/weather）に 緯度、経度、APPID を渡し、結果をJSON形式で返す。
+  - （＊14）未来の天気情報取得API（https://api.openweathermap.org/data/2.5/forecast）に 緯度、経度、APPID を渡し、明日正午頃（12時～15時までのどこか）の天気情報を抽出し、JSON形式で返す。
   - （＊11）、（＊12）`reply`メソッド
       ```python
       … (省略) …
@@ -562,8 +562,11 @@ MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベー
 - ユーザーの表現は一定ではないため、形態素解析や条件判定によって入力の揺れを吸収する。
 - 天気APIの呼び出しに失敗した場合を想定し、エラー時の応答も用意する。
 
-## 参考文献
+### 参考文献
 - 東中 竜一郎、稲葉 通将、水上 雅博（\\(2020\\)）『Pythonでつくる対話システム』株式会社オーム社
-
-## GitHubサポートページ
-- https://github.com/dsbook/dsbook
+- [MeCab公式サイト - MeCab: Yet Another Part-of-Speech and Morphological Analyzer](https://taku910.github.io/mecab/)
+- [W3C Recommendation - State Chart XML（SCXML）](https://www.w3.org/TR/scxml/)
+- [OpenWeather - Current weather data](https://openweathermap.org/api/current)
+- [OpenWeather - 5 day weather forecast](https://openweathermap.org/api/forecast5)
+- [python-telegram-bot 12.8 公式ドキュメント](https://docs.python-telegram-bot.org/en/v12.8/)
+- [GitHub - 『Pythonでつくる対話システム』サポートリポジトリ](https://github.com/dsbook/dsbook)

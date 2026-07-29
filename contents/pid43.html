@@ -14,9 +14,9 @@
   <h3 id="モデル学習の実装サンプル">モデル学習の実装サンプル</h3>
   <p>先行記事で作成した学習データ<code>da_samples.dat</code>（＊1）を<strong>MeCab</strong>（＊2）で最小単位の単語（形態素）に分割し、<strong>SVM</strong>（＊3）で対話行為タイプを推定（モデル学習）する実装サンプル。</p>
 <ul>
-  <li>（＊1）<a class="link-secondary" href="https://sigma-se.com/detail/42/#:~:text=%E3%82%92%E8%A7%A3%E8%AA%AC%E3%81%99%E3%82%8B%E3%80%82-,%E5%AD%A6%E7%BF%92%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E4%BD%9C%E6%88%90,-%E3%81%93%E3%81%AE%E6%A1%88%E5%86%85%E5%AF%BE%E8%A9%B1">Python - タスク指向型対話 : フレームベースの環境準備 &gt; SVM（sklearn）と学習データの作成 &gt; 学習データの作成</a></li>
-  <li>（＊2）<a class="link-secondary" href="https://sigma-se.com/detail/39/#:~:text=%E5%AF%BE%E8%A9%B1%E3%81%AE%E6%96%87%E7%AB%A0%E3%82%92%E8%A7%A3%E6%9E%90%E3%81%99%E3%82%8B%E3%80%8CMeCab%E3%80%8D%E3%81%AE%E6%A6%82%E8%A6%81%E3%81%A8%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Python - タスク指向型対話 : 状態遷移ベースの環境準備 &gt; MeCab, SCXML &gt; 対話の文章を解析する「MeCab」の概要とインストール</a></li>
-  <li>（＊3）<a class="link-secondary" href="https://sigma-se.com/detail/42/#:~:text=%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%81%A8%E5%AF%BE%E8%A9%B1%E8%A1%8C%E7%82%BA%E3%82%92%E6%8E%A8%E5%AE%9A%E3%81%99%E3%82%8BSVM%EF%BC%88sklearn%EF%BC%89%E3%81%AE%E6%A6%82%E8%A6%81%E3%81%A8%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Python - タスク指向型対話 : フレームベースの環境準備 &gt; SVM（sklearn）と学習データの作成 &gt; フレームと対話行為を推定するSVM（sklearn）の概要とインストール</a></li>
+  <li>（＊1）<a class="link-secondary" href="https://sigma-se.com/detail/42/#学習データの作成">Python - タスク指向型対話 : フレームベースの環境準備 &gt; SVM（sklearn）と学習データの作成 &gt; 学習データの作成</a></li>
+  <li>（＊2）<a class="link-secondary" href="https://sigma-se.com/detail/39/#対話の文章を解析するmecabの概要とインストール">Python - タスク指向型対話 : 状態遷移ベースの環境準備 &gt; MeCab, SCXML &gt; 対話の文章を解析する「MeCab」の概要とインストール</a></li>
+  <li>（＊3）<a class="link-secondary" href="https://sigma-se.com/detail/42/#フレームと対話行為を推定するsvmsklearnの概要とインストール">Python - タスク指向型対話 : フレームベースの環境準備 &gt; SVM（sklearn）と学習データの作成 &gt; フレームと対話行為を推定するSVM（sklearn）の概要とインストール</a></li>
 </ul>
 <ul>
   <li>train_da_model.py</li>
@@ -250,12 +250,15 @@ def extract_da(utt):
     <li>推定時にも学習時と同じ変換と分類を再現できるよう、vectorizer、label_encoder、svcをセットで保存して読み込む。</li>
     <li>学習用の例文が偏ると誤分類しやすくなるため、発話行為タイプごとのデータ内容と件数を確認する。</li>
   </ul>
-  <h2 id="参考文献">参考文献</h2>
-<ul>
-  <li>東中 竜一郎、稲葉 通将、水上 雅博（\\(2020\\)）『Pythonでつくる対話システム』株式会社オーム社</li>
-</ul>
-  <h2 id="githubサポートページ">GitHubサポートページ</h2>
-<ul>
-  <li><a class="link-secondary" href="https://github.com/dsbook/dsbook">https://github.com/dsbook/dsbook</a></li>
-</ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>東中 竜一郎、稲葉 通将、水上 雅博（\\(2020\\)）『Pythonでつくる対話システム』株式会社オーム社</li>
+    <li><a class="link-secondary" href="https://taku910.github.io/mecab/">MeCab公式サイト - MeCab: Yet Another Part-of-Speech and Morphological Analyzer</a></li>
+    <li><a class="link-secondary" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html">scikit-learn公式ドキュメント - TfidfVectorizer</a></li>
+    <li><a class="link-secondary" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.LabelEncoder.html">scikit-learn公式ドキュメント - LabelEncoder</a></li>
+    <li><a class="link-secondary" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html">scikit-learn公式ドキュメント - SVC</a></li>
+    <li><a class="link-secondary" href="https://scikit-learn.org/stable/model_persistence.html">scikit-learn公式ドキュメント - Model persistence</a></li>
+    <li><a class="link-secondary" href="https://dill.readthedocs.io/en/latest/">dill公式ドキュメント</a></li>
+    <li><a class="link-secondary" href="https://github.com/dsbook/dsbook">GitHub - 『Pythonでつくる対話システム』サポートリポジトリ</a></li>
+  </ul>
 </div>

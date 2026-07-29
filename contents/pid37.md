@@ -225,5 +225,9 @@ Pythonでは、関数もオブジェクトと同じように捉えるため、�
 - mapやfilterの戻り値はイテレータなので、リストが必要な場合はlistへ変換する。
 - 複雑な処理はfor文や内包表記の方が読みやすい場合があり、集約にはsumなどの専用関数も含めて使い分ける。
 
-## 参考文献
+### 参考文献
 - 金城 俊哉（\\(2018\\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム
+- [Python公式ドキュメント - 関数型プログラミング HOWTO](https://docs.python.org/ja/3/howto/functional.html)
+- [Python公式ドキュメント - map](https://docs.python.org/ja/3/library/functions.html#map)
+- [Python公式ドキュメント - filter](https://docs.python.org/ja/3/library/functions.html#filter)
+- [Python公式ドキュメント - functools.reduce](https://docs.python.org/ja/3/library/functools.html#functools.reduce)

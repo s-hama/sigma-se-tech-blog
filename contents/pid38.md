@@ -112,8 +112,7 @@ Pythonの例外処理と組込み例外クラスの基本を整理する。
   </tbody>
 </table>
 
-※ 各項目の詳細は下記マニュアルを参照。
-https://docs.python.org/ja/3.6/library/exceptions.html
+※ 各項目の詳細は[Python公式ドキュメント - 組み込み例外](https://docs.python.org/ja/3/library/exceptions.html)を参照。
 
 ### 組込み例外クラスのツリー表示サンプル
 
@@ -325,5 +324,8 @@ CLASSES
 - 例外を何もせず握りつぶすと原因を追えなくなるため、ログ記録や再送出を検討する。
 - finallyは後片付け、elseは例外が発生しなかった場合の処理に使う。
 
-## 参考文献
+### 参考文献
 - 金城 俊哉（\\(2018\\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム
+- [Python公式ドキュメント - 組み込み例外](https://docs.python.org/ja/3/library/exceptions.html)
+- [Python公式チュートリアル - エラーと例外](https://docs.python.org/ja/3/tutorial/errors.html)
+- [Python公式ドキュメント - 正規表現のシンタックス](https://docs.python.org/ja/3/library/re.html#regular-expression-syntax)

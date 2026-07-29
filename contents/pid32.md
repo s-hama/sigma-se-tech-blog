@@ -22,9 +22,9 @@ set型は、**重複した要素**がなく、要素に**順番を**持たない
 
 - 型の特性
   - ミュータブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > ミュータブル（mutable）: 同一アドレスで変更可](<https://sigma-se.com/detail/29/#:~:text=%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88mutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > ミュータブル（mutable）: 同一アドレスで変更可](<https://sigma-se.com/detail/29/#ミュータブルmutable--同一アドレスで変更可>)
   - イテラブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可>)
 
 - 定義例
     ```python
@@ -326,11 +326,11 @@ str型の表記と似ているが先頭に**b**が付き、bytes型をエンコ�
 
 - 型の特性
   - イミュータブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可>)
   - イテラブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可>)
   - シーケンスオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%EF%BC%88sequence%EF%BC%89%3A%20%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9%E6%8C%87%E5%AE%9A%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#シーケンスsequence--インデックス指定可>)
 
 - 定義例
     ```python
@@ -408,11 +408,11 @@ bytearray型は、bytes型の配列版で文字コードを指定しない場合
 
 - 型の特性
   - ミュータブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > ミュータブル（mutable）: 同一アドレスで変更可](<https://sigma-se.com/detail/29/#:~:text=%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88mutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > ミュータブル（mutable）: 同一アドレスで変更可](<https://sigma-se.com/detail/29/#ミュータブルmutable--同一アドレスで変更可>)
   - イテラブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可>)
   - シーケンスオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%EF%BC%88sequence%EF%BC%89%3A%20%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9%E6%8C%87%E5%AE%9A%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#シーケンスsequence--インデックス指定可>)
 
 - 定義例
     ```python
@@ -518,9 +518,9 @@ file object型は、ファイル操作（読み書き、入出力）を行う型
 
 - 型の特性
   - イミュータブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可>)
   - イテラブルオブジェクト
-    -  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF>)
+    -  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可>)
 
 - 定義例<br>
   open()でファイルを開き、処理終了時にclose()で閉じる。<br>
@@ -789,3 +789,8 @@ file object型は、ファイル操作（読み書き、入出力）を行う型
 - setは重複しない要素を扱う集合型で、順序やインデックスによるアクセスを前提にせず、重複排除や集合演算に使う。
 - bytesは変更不可、bytearrayは変更可能なバイト列として使い分ける。
 - file objectはファイルを読み書きする入口となり、with文を使うと処理後に自動でクローズできる。
+
+### 参考文献
+- [Python公式ドキュメント - 集合型：set、frozenset](https://docs.python.org/ja/3/library/stdtypes.html#set-types-set-frozenset)
+- [Python公式ドキュメント - バイナリシーケンス型：bytes、bytearray、memoryview](https://docs.python.org/ja/3/library/stdtypes.html#binary-sequence-types-bytes-bytearray-memoryview)
+- [Python公式ドキュメント - io：ストリームを扱うコアツール](https://docs.python.org/ja/3/library/io.html)

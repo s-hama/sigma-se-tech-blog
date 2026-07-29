@@ -48,8 +48,8 @@ Python - タスク指向型対話：1/5 状態遷移ベースの環境準備（M
 
 `MeCab`について、ここではインストールと呼出し方のみ解説し、理屈や詳細については触れない。
 
-※ MeCabについての詳細は、下記サイトを参考。<br>
-[【技術解説】形態素解析とは？MeCabインストール手順からPythonでの実行例まで](https://mieruca-ai.com/ai/morphological_analysis_mecab/)
+※ MeCabについての詳細は、下記公式サイトを参考。<br>
+[MeCab: Yet Another Part-of-Speech and Morphological Analyzer](https://taku910.github.io/mecab/)
 
 - MeCabインストール<br>
     Groongaレポジトリの追加とパッケージの最新情報を取得し、mecab本体と辞書ファイルをインストールする。<br>
@@ -222,8 +222,8 @@ Python - タスク指向型対話：1/5 状態遷移ベースの環境準備（M
 - MeCabは日本語発話を単語に分割するために使う。
 - SCXMLは対話状態と遷移条件を表現するために使う。
 
-## 参考文献
+### 参考文献
 - 東中 竜一郎、稲葉 通将、水上 雅博（\\(2020\\)）『Pythonでつくる対話システム』株式会社オーム社
-
-## GitHubサポートページ
-- https://github.com/dsbook/dsbook
+- [MeCab公式サイト - MeCab: Yet Another Part-of-Speech and Morphological Analyzer](https://taku910.github.io/mecab/)
+- [W3C Recommendation - State Chart XML（SCXML）](https://www.w3.org/TR/scxml/)
+- [GitHub - 『Pythonでつくる対話システム』サポートリポジトリ](https://github.com/dsbook/dsbook)

@@ -23,11 +23,11 @@ Unicodeは**文字集合**であり、Unicodeの符号化方式（文字コー�
 
 - 型の特性
   - イミュータブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可>)
   - イテラブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可>)
   - シーケンスオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%EF%BC%88sequence%EF%BC%89%3A%20%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9%E6%8C%87%E5%AE%9A%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#シーケンスsequence--インデックス指定可>)
 
 - 定義例
     ```python
@@ -143,11 +143,11 @@ Unicodeは**文字集合**であり、Unicodeの符号化方式（文字コー�
 
 - 型の特性
   - ミュータブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > ミュータブル（mutable）: 同一アドレスで変更可](<https://sigma-se.com/detail/29/#:~:text=%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88mutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > ミュータブル（mutable）: 同一アドレスで変更可](<https://sigma-se.com/detail/29/#ミュータブルmutable--同一アドレスで変更可>)
   - イテラブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可>)
   - シーケンスオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%EF%BC%88sequence%EF%BC%89%3A%20%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9%E6%8C%87%E5%AE%9A%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#シーケンスsequence--インデックス指定可>)
 
 - 定義例
     ```python
@@ -322,11 +322,11 @@ tuple型は、list型と表記が似ているが、処理速度に重点を置�
 
 - 型の特性
   - イミュータブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可>)
   - イテラブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可>)
   - シーケンスオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%EF%BC%88sequence%EF%BC%89%3A%20%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9%E6%8C%87%E5%AE%9A%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#シーケンスsequence--インデックス指定可>)
 
 - 定義例<br>
 要素数が一つの場合を除き、list型とtuple型の定義例の違いは、大カッコ**[]**であるか小カッコ**()**であるかの違いのみ。
@@ -522,11 +522,11 @@ range型は、for文のループ対象など**範囲指定**を目的とした�
 
 - 型の特性
   - イミュータブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可>)
   - イテラブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可>)
   - シーケンスオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%EF%BC%88sequence%EF%BC%89%3A%20%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9%E6%8C%87%E5%AE%9A%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#シーケンスsequence--インデックス指定可>)
 
 
 - 定義例<br>
@@ -620,11 +620,11 @@ dict型（辞書型）は、データのキーと値がワンセットになっ�
 ※ 多言語のほとんどは、**連想配列**と呼ばれる。
 - 型の特性
   - イミュータブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可>)
   - イテラブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可>)
   - マッピングオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > マッピング（mapping）: 連想配列](<https://sigma-se.com/detail/29/#:~:text=%E3%83%9E%E3%83%83%E3%83%94%E3%83%B3%E3%82%B0%EF%BC%88mapping%EF%BC%89%3A%20%E9%80%A3%E6%83%B3%E9%85%8D%E5%88%97>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > マッピング（mapping）: 連想配列](<https://sigma-se.com/detail/29/#マッピングmapping--連想配列>)
 
 - 定義例
     ```python
@@ -771,3 +771,8 @@ str型、list型、tuple型のように**+演算子**で結合ができない。
 - str、list、tuple、rangeは順序を持つデータとして扱え、listは変更可能、tupleは変更不可として使い分ける。
 - strはimmutableなので、変更に見える操作でも新しい文字列が作られる。
 - dictはキーと値を対応付けるmapping型で、キーによって値へアクセスし、同じキーは重複して保持できない。
+
+### 参考文献
+- [Python公式ドキュメント - テキストシーケンス型：str](https://docs.python.org/ja/3/library/stdtypes.html#text-sequence-type-str)
+- [Python公式ドキュメント - シーケンス型：list、tuple、range](https://docs.python.org/ja/3/library/stdtypes.html#sequence-types-list-tuple-range)
+- [Python公式ドキュメント - マッピング型：dict](https://docs.python.org/ja/3/library/stdtypes.html#mapping-types-dict)

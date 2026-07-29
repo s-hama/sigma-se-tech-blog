@@ -21,7 +21,7 @@
                 以下、天気情報案内の状態遷移。</p>
             <p>※ 各項目(状態)の解説については、下記先行記事を参照。<br>
                 <a class="link-secondary"
-                    href="https://sigma-se.com/detail/39/#:~:text=%E7%8A%B6%E6%85%8B%E9%81%B7%E7%A7%BB%E3%81%AB%E3%82%88%E3%82%8B%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E9%81%82%E8%A1%8C%E3%81%99%E3%82%8B%E3%80%8CSCXML%E3%80%8D%E3%81%AE%E6%A6%82%E8%A6%81%E3%81%A8%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Python
+                    href="https://sigma-se.com/detail/39/#状態遷移によるタスクを遂行するscxmlの概要とインストール">Python
                     - タスク指向型対話 : 状態遷移ベースの環境準備 &gt; MeCab, SCXML &gt; 状態遷移によるタスクを遂行する「SCXML」の概要とインストール</a>
             </p>
             <pre><code class="language-xml"><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;UTF-8&quot;</span>?&gt;</span>
@@ -79,8 +79,8 @@
             <span class="hljs-string">&quot;ask_date&quot;</span>: <span class="hljs-string">&quot;日付を言ってください&quot;</span>,
             <span class="hljs-string">&quot;ask_type&quot;</span>: <span class="hljs-string">&quot;情報種別を言ってください&quot;</span>}
 
-    current_weather_url = <span class="hljs-string">&#x27;http://api.openweathermap.org/data/2.5/weather&#x27;</span>
-    forecast_url = <span class="hljs-string">&#x27;http://api.openweathermap.org/data/2.5/forecast&#x27;</span>
+    current_weather_url = <span class="hljs-string">&#x27;https://api.openweathermap.org/data/2.5/weather&#x27;</span>
+    forecast_url = <span class="hljs-string">&#x27;https://api.openweathermap.org/data/2.5/forecast&#x27;</span>
     appid = <span class="hljs-string">&#x27;&#x27;</span> <span class="hljs-comment"># 自身のAPPIDを入れてください</span>
 
     <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):
@@ -469,11 +469,11 @@ TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
             <ul>
                 <li>（＊11）遷移先がtell_infoである場合は、（＊13）、（＊14）で天気情報を取得し、発話内容（utt）と対話完了フラグ（end）をTrue（完了）で返す。</li>
                 <li>（＊12）遷移先がtell_infoでない場合は、遷移先に応じた発話内容（utt）と対話完了フラグ（end）をFalse（継続）で返す。</li>
-                <li>（＊13）現在の天気情報取得API（<a href="http://api.openweathermap.org/data/2.5/weather"
-                        class="link-secondary">http://api.openweathermap.org/data/2.5/weather</a>）に
+                <li>（＊13）現在の天気情報取得API（<a href="https://api.openweathermap.org/data/2.5/weather"
+                        class="link-secondary">https://api.openweathermap.org/data/2.5/weather</a>）に
                     緯度、経度、APPID を渡し、結果をJSON形式で返す。</li>
-                <li>（＊14）未来の天気情報取得API（<a href="http://api.openweathermap.org/data/2.5/forecast"
-                        class="link-secondary">http://api.openweathermap.org/data/2.5/forecast</a>）に
+                <li>（＊14）未来の天気情報取得API（<a href="https://api.openweathermap.org/data/2.5/forecast"
+                        class="link-secondary">https://api.openweathermap.org/data/2.5/forecast</a>）に
                     緯度、経度、APPID を渡し、明日正午頃（12時～15時までのどこか）の天気情報を抽出し、JSON形式で返す。</li>
                 <li>（＊11）、（＊12）<code>reply</code>メソッド
                     <pre><code class="language-python">… (省略) …
@@ -595,12 +595,14 @@ IndexError: list index out of range
     <li>ユーザーの表現は一定ではないため、形態素解析や条件判定によって入力の揺れを吸収する。</li>
     <li>天気APIの呼び出しに失敗した場合を想定し、エラー時の応答も用意する。</li>
   </ul>
-  <h2 id="参考文献">参考文献</h2>
+  <h3 id="参考文献">参考文献</h3>
     <ul>
         <li>東中 竜一郎、稲葉 通将、水上 雅博（\(2020\)）『Pythonでつくる対話システム』株式会社オーム社</li>
-    </ul>
-    <h2 id="githubサポートページ">GitHubサポートページ</h2>
-    <ul>
-        <li><a href="https://github.com/dsbook/dsbook" class="link-secondary">https://github.com/dsbook/dsbook</a></li>
+        <li><a href="https://taku910.github.io/mecab/" class="link-secondary">MeCab公式サイト - MeCab: Yet Another Part-of-Speech and Morphological Analyzer</a></li>
+        <li><a href="https://www.w3.org/TR/scxml/" class="link-secondary">W3C Recommendation - State Chart XML（SCXML）</a></li>
+        <li><a href="https://openweathermap.org/api/current" class="link-secondary">OpenWeather - Current weather data</a></li>
+        <li><a href="https://openweathermap.org/api/forecast5" class="link-secondary">OpenWeather - 5 day weather forecast</a></li>
+        <li><a href="https://docs.python-telegram-bot.org/en/v12.8/" class="link-secondary">python-telegram-bot 12.8 公式ドキュメント</a></li>
+        <li><a href="https://github.com/dsbook/dsbook" class="link-secondary">GitHub - 『Pythonでつくる対話システム』サポートリポジトリ</a></li>
     </ul>
 </div>

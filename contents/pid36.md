@@ -236,5 +236,7 @@ Pythonのビット演算子を使い、整数を2進数のビット列として�
 - |、^、&はビットごとの比較を行い、左シフトは2倍方向、右シフトは2で割る方向へ値を変化させる。
 - Pythonの整数は固定ビット幅ではないため、ビット反転~xは-(x + 1)として考えると理解しやすい。
 
-## 参考文献
+### 参考文献
 - 金城 俊哉（\\(2018\\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム
+- [Python公式ドキュメント - 整数型におけるビット単位演算](https://docs.python.org/ja/3/library/stdtypes.html#bitwise-operations-on-integer-types)
+- [Python公式ドキュメント - 二項ビット演算](https://docs.python.org/ja/3/reference/expressions.html#binary-bitwise-operations)

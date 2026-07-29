@@ -14,7 +14,7 @@ Python - ニューラルネットワーク：9/14 ミニバッチ学習と交差
 
 ## 概念の説明と実装サンプル
 ### ミニバッチ学習とは
-機械学習では、[Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）> MNISTのデータ仕様](https://sigma-se.com/detail/19/#:~:text=%E3%83%87%E3%83%BC%E3%82%BF%E3%82%BB%E3%83%83%E3%83%88%EF%BC%8810%2C000%E5%80%8B%EF%BC%89-,MNIST%E3%81%AE%E3%83%87%E3%83%BC%E3%82%BF%E4%BB%95%E6%A7%98,-%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92%E3%81%A7%E3%81%AF) のような訓練データすべて(学習用データセット 60,000枚)を対象に損失関数を求める必要がある。
+機械学習では、[Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）> MNISTのデータ仕様](https://sigma-se.com/detail/19/#mnistのデータ仕様) のような訓練データすべて(学習用データセット 60,000枚)を対象に損失関数を求める必要がある。
 
 60,000枚程度であれば問題ないが、ビッグデータでは**数千万のデータ**となり、すべて求めると処理時間もサーバー負荷も膨大となり現実的でない。
 
@@ -22,7 +22,7 @@ Python - ニューラルネットワーク：9/14 ミニバッチ学習と交差
 この学習方法を機械学習分野では、**ミニバッチ学習**と呼び、テレビの視聴率計測など一般的に広く使用されている。
 
 ### 交差エントロピー誤差のミニバッチ学習（定義）
-下記\\(（A）\\)は、[Python - ニューラルネットワーク： 損失関数（2乗和誤差、交差エントロピー誤差）と実装サンプル）> 交差エントロピー誤差の定義](<https://sigma-se.com/detail/22/#:~:text=array(t))%0A0.0-,%E4%BA%A4%E5%B7%AE%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AD%E3%83%94%E3%83%BC%E8%AA%A4%E5%B7%AE%E3%81%AE%E5%AE%9A%E7%BE%A9,-%E4%BA%A4%E5%B7%AE%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AD%E3%83%94%E3%83%BC%E8%AA%A4%E5%B7%AE>) で解説した交差エントロピー誤差の定義。
+下記\\(（A）\\)は、[Python - ニューラルネットワーク： 損失関数（2乗和誤差、交差エントロピー誤差）と実装サンプル）> 交差エントロピー誤差の定義](<https://sigma-se.com/detail/22/#交差エントロピー誤差の定義>) で解説した交差エントロピー誤差の定義。
 
 <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
 \[
@@ -58,8 +58,8 @@ E = -\frac{1}{N}\sum_{i=1}^{n}\sum_{j=1}^{k} t_{nk} \log \ y_{nk}\hspace{5mm}･
 ### 交差エントロピー誤差のミニバッチ学習（MNISTの準備）
 次にMNISTを使った**ミニバッチ学習の準備**と**データの内容**について解説する。
 
-※ MNISTのデータについては、[Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）> MNISTのデータ仕様](https://sigma-se.com/detail/19/#:~:text=%E3%83%87%E3%83%BC%E3%82%BF%E3%82%BB%E3%83%83%E3%83%88%EF%BC%8810%2C000%E5%80%8B%EF%BC%89-,MNIST%E3%81%AE%E3%83%87%E3%83%BC%E3%82%BF%E4%BB%95%E6%A7%98,-%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92%E3%81%A7%E3%81%AF) を参考のこと。<br>
-※ リポジトリクローンについては、[Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）> MNISTのダウンロード](https://sigma-se.com/detail/19/#:~:text=%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E3%83%A9%E3%83%99%E3%83%AB-,MNIST%E3%81%AE%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89,-%E4%B8%8B%E8%A8%98%E3%80%81mnist) を参考のこと。
+※ MNISTのデータについては、[Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）> MNISTのデータ仕様](https://sigma-se.com/detail/19/#mnistのデータ仕様) を参考のこと。<br>
+※ リポジトリクローンについては、[Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）> MNISTのダウンロード](https://sigma-se.com/detail/19/#mnistのダウンロード) を参考のこと。
 
 MNISTの**学習用データセット**と**検証用データセット**をダウンロードする。
 ```bash
@@ -102,7 +102,7 @@ $ python
 
 MNISTの学習用画像データセット（60,000枚）の中から**100枚**抜出して、**交差エントロピー誤差の損失関数**を求めるサンプル。
 
-まず、前準備として、[Python - ニューラルネットワーク： MNISTを使った推論バッチ処理の実装サンプル > 推論バッチ処理の実行準備](https://sigma-se.com/detail/21/#:~:text=%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB-,%E6%8E%A8%E8%AB%96%E3%83%90%E3%83%83%E3%83%81%E5%87%A6%E7%90%86%E3%81%AE%E5%AE%9F%E8%A1%8C%E6%BA%96%E5%82%99,-%E5%89%8D%E3%81%AE%E8%A8%98%E4%BA%8B) で解説した`ch03/neuralnet_mnist_batch.py`の`init_network()`と`predict(network, x)`を定義する。
+まず、前準備として、[Python - ニューラルネットワーク： MNISTを使った推論バッチ処理の実装サンプル > 推論バッチ処理の実行準備](https://sigma-se.com/detail/21/#推論バッチ処理の実行準備) で解説した`ch03/neuralnet_mnist_batch.py`の`init_network()`と`predict(network, x)`を定義する。
 ```bash
 $ cd gitlocalrep    # ローカルのGitリポジトリに移動
 $ cd deep-learning-from-scratch/ch03    # Git (deep-learning-from-scratch) のカレントディレクトリに移動
@@ -220,5 +220,7 @@ one_hot表現では、\\(t=0\\) のデータはすべて \\(0\\) になるが、
 - バッチ全体の交差エントロピー誤差は、データ件数で割った平均として扱う。
 - 正解ラベルがone-hot表現かクラス番号かによって実装が変わるため、ラベル形式と配列のshapeを確認する。
 
-## 参考文献
-- 斎藤 康毅（\\(2018\\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
+### 参考文献
+- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
+- [O'Reilly Japan「deep-learning-from-scratch」functions.py](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/common/functions.py)
+- [NumPy：numpy.random.choice](https://numpy.org/doc/stable/reference/random/generated/numpy.random.choice.html)

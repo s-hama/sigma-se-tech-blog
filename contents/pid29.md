@@ -203,3 +203,8 @@ Pythonの組込みデータ型を理解する前提として、immutable、mutab
 - immutableは変数を再代入できないという意味ではなく、オブジェクト自体を変更できない性質を表す。mutableなオブジェクトは内容を変更できる。
 - sequenceは順序とインデックスを持ち、iterableはfor文などで要素を順に取り出せる性質を表す。
 - mappingはインデックス番号ではなくキーを使って値へアクセスする。型の特性を知ると、Pythonの挙動やエラーを追いやすくなる。
+
+### 参考文献
+- [Python公式ドキュメント - データモデル](https://docs.python.org/ja/3/reference/datamodel.html)
+- [Python公式ドキュメント - 組み込み型](https://docs.python.org/ja/3/library/stdtypes.html)
+- [Python公式ドキュメント - 用語集：iterable](https://docs.python.org/ja/3/glossary.html#term-iterable)

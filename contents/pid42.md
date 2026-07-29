@@ -366,8 +366,9 @@ SVMによる学習は、Pythonの機械学習ライブラリである**sklearn**
 - SVMは発話行為タイプの分類に使う。
 - 学習データの設計と品質が、後続の推定精度に大きく影響する。
 
-## 参考文献
+### 参考文献
 - 東中 竜一郎、稲葉 通将、水上 雅博（\\(2020\\)）『Pythonでつくる対話システム』株式会社オーム社
-
-## GitHubサポートページ
-- https://github.com/dsbook/dsbook
+- [scikit-learn公式ドキュメント - Installing scikit-learn](https://scikit-learn.org/stable/install.html)
+- [scikit-learn公式ドキュメント - SVC](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html)
+- [dill公式ドキュメント](https://dill.readthedocs.io/en/latest/)
+- [GitHub - 『Pythonでつくる対話システム』サポートリポジトリ](https://github.com/dsbook/dsbook)

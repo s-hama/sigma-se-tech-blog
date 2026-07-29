@@ -25,10 +25,7 @@
   </ul>
   <h3 id="mnistのデータ仕様">MNISTのデータ仕様</h3>
   <p>機械学習では画像を数値として扱う必要があるため、<strong>バイナリデータ</strong>となっており、画像とラベルデータが紐付いている。</p>
-  <p>※ 下記、画像、ラベルのデータフォーマットについては、下記サイトを参考に記載。<br>
-    参考URL（WEB ARCH LABO）：<a class="link-secondary"
-      href="https://weblabo.oscasierra.net/python/ai-mnist-data-detail.html">https://weblabo.oscasierra.net/python/ai-mnist-data-detail.html</a>
-  </p>
+  <p>※ 以下の画像・ラベルのデータ形式は、参考文献の「WEB ARCH LABO：MNISTのデータ詳細」を基に整理している。</p>
   <p>以下、画像とラベルのフォーマット仕様。</p>
   <ul>
     <li>
@@ -265,8 +262,11 @@ Resolving deltas: 100% (197/197), <span class="hljs-keyword">done</span>.
     <li>訓練データは学習、テストデータは評価に使い、両者を混ぜない。</li>
     <li>正規化の有無によってピクセル値の範囲が変わるため、後続処理の前提をそろえる。</li>
   </ul>
-  <h2 id="参考文献">参考文献</h2>
+  <h3 id="参考文献">参考文献</h3>
   <ul>
-    <li>斎藤 康毅（\(2018\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
+    <li>斎藤 康毅（\(2016\)）<a href="https://www.oreilly.co.jp/books/9784873117584/" class="link-secondary">『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』</a> 株式会社オライリー・ジャパン</li>
+    <li><a href="https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/dataset/mnist.py" class="link-secondary">O'Reilly Japan「deep-learning-from-scratch」mnist.py</a></li>
+    <li><a href="https://keras.io/api/datasets/mnist/" class="link-secondary">Keras：MNIST digits classification dataset</a></li>
+    <li><a href="https://weblabo.oscasierra.net/python/ai-mnist-data-detail.html" class="link-secondary">WEB ARCH LABO：MNISTのデータ詳細</a></li>
   </ul>
 </div>

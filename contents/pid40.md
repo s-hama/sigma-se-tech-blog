@@ -68,7 +68,7 @@ python-telegram-botはバージョンで書き方が変わるため、記事の�
         >>> appid = '**********'
         >>>
         >>> # 現在の天気情報
-        >>> current_weather_url = 'http://api.openweathermap.org/data/2.5/weather'
+        >>> current_weather_url = 'https://api.openweathermap.org/data/2.5/weather'
         >>>
         >>> # API呼出し
         >>> response = requests.get("{}?lat={}&lon={}&lang=ja&units=metric&APPID={}".format(current_weather_url,lat,lon,appid))
@@ -95,7 +95,7 @@ python-telegram-botはバージョンで書き方が変わるため、記事の�
         >>> appid = '**********'
         >>>
         >>> # 明日以降の天気情報
-        >>> forecast_url = 'http://api.openweathermap.org/data/2.5/forecast'
+        >>> forecast_url = 'https://api.openweathermap.org/data/2.5/forecast'
         >>>
         >>> # API呼出し
         response = requests.get("{}?lat={}&lon={}&lang=ja&units=metric&APPID={}".format(forecast_url,lat,lon,appid))
@@ -258,8 +258,10 @@ python-telegram-botはバージョンで書き方が変わるため、記事の�
 - python-telegram-botを使うと、PythonからTelegram Botを実装できる。
 - 本格実装の前に、APIとBotの疎通確認を分けて行うと安全。
 
-## 参考文献
+### 参考文献
 - 東中 竜一郎、稲葉 通将、水上 雅博（\\(2020\\)）『Pythonでつくる対話システム』株式会社オーム社
-
-## GitHubサポートページ
-- https://github.com/dsbook/dsbook
+- [OpenWeather - Current weather data](https://openweathermap.org/api/current)
+- [OpenWeather - 5 day weather forecast](https://openweathermap.org/api/forecast5)
+- [Telegram - Bot API](https://core.telegram.org/bots/api)
+- [python-telegram-bot 12.8 公式ドキュメント](https://docs.python-telegram-bot.org/en/v12.8/)
+- [GitHub - 『Pythonでつくる対話システム』サポートリポジトリ](https://github.com/dsbook/dsbook)

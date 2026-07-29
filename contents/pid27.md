@@ -56,14 +56,14 @@ w_{21} & w_{22} & w_{23} \\
 以下、参考文献『ゼロから作るDeep Learning』から提供されている `ch04/gradient_simplenet.py` を用いたサンプル解説をしていく。
 
 ※ サンプルコードは、下記Gitからダウンロードする。<br>
-Git(deep-learning-from-scratch)：
-<a href="https://github.com/oreilly-japan/deep-learning-from-scratch">https://github.com/oreilly-japan/deep-learning-from-scratch</a>
+Git（deep-learning-from-scratch）：
+[ch04/gradient_simplenet.py](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch04/gradient_simplenet.py)
 
 ここでは、処理の流れを追いやすくするため、`ch04/gradient_simplenet.py`の`simpleNet`クラスで使われる下記3つの関数を、あえてPython対話モードで定義して確認する。
 
 - ソフトマックス関数：common/functions.pyのsoftmax関数<br>
     ※ ソフトマックス関数の一般的な定義は下記ページを参考。<br>
-    [Python - ニューラルネットワーク： 活性化関数の実装サンプルまとめ（ステップ、シグモイド、ReLU、恒等関数、ソフトマックス関数） > ソフトマックス関数](<https://sigma-se.com/detail/18/#:~:text=pid18_4.png%27)%0A%20%3E%3E%3E-,%E3%82%BD%E3%83%95%E3%83%88%E3%83%9E%E3%83%83%E3%82%AF%E3%82%B9%E9%96%A2%E6%95%B0,-%E5%88%86%E9%A1%9E%E5%95%8F%E9%A1%8C%E3%81%A7>)
+    [Python - ニューラルネットワーク： 活性化関数の実装サンプルまとめ（ステップ、シグモイド、ReLU、恒等関数、ソフトマックス関数） > ソフトマックス関数](<https://sigma-se.com/detail/18/#ソフトマックス関数>)
 
 
     ```python
@@ -84,8 +84,8 @@ Git(deep-learning-from-scratch)：
 
 - 交差エントロピー誤差：common/functions.py の cross_entropy_error関数<br>
     ※ 交差エントロピー誤差の処理内容については、下記ページを参考。<br>
-    [Python - ニューラルネットワーク： 損失関数（2乗和誤差、交差エントロピー誤差）と実装サンプル > ソフトマックス関数](<https://sigma-se.com/detail/22/#:~:text=%EF%BC%89-,%E4%BA%A4%E5%B7%AE%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AD%E3%83%94%E3%83%BC%E8%AA%A4%E5%B7%AE%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB,-%E5%89%8D%E9%A0%85%E3%81%A8%E5%90%8C%E6%A7%98>)
-    [Python - ニューラルネットワーク： 交差エントロピー誤差のミニバッチ学習と実装サンプル](<https://sigma-se.com/detail/23/#:~:text=%E4%BA%A4%E5%B7%AE%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AD%E3%83%94%E3%83%BC%E8%AA%A4%E5%B7%AE%E3%81%AE%E3%83%9F%E3%83%8B%E3%83%90%E3%83%83%E3%83%81%E5%AD%A6%E7%BF%92%EF%BC%88Python%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB%EF%BC%89>)
+    [Python - ニューラルネットワーク： 損失関数（2乗和誤差、交差エントロピー誤差）と実装サンプル > 交差エントロピー誤差と実装サンプル](<https://sigma-se.com/detail/22/#交差エントロピー誤差と実装サンプル>)
+    [Python - ニューラルネットワーク： 交差エントロピー誤差のミニバッチ学習と実装サンプル](<https://sigma-se.com/detail/23/#交差エントロピー誤差のミニバッチ学習python実装サンプル>)
 
     ```python
     >>> # 上記対話モードの続き
@@ -105,7 +105,7 @@ Git(deep-learning-from-scratch)：
 
 - 勾配処理：common/gradient.pyのnumerical_gradient関数<br>
     ※ 勾配の処理内容は下記ページの勾配関数(num_gradient)を参考。<br>
-    [Python - ニューラルネットワーク： 偏微分と勾配の実装サンプル](<https://sigma-se.com/detail/25/#:~:text=%E3%81%AB%E9%81%8E%E3%81%8E%E3%81%AA%E3%81%84%E3%80%82-,%E5%8B%BE%E9%85%8D%E3%81%AEPython%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB,-%E4%B8%8A%E8%A8%98%E3%81%A7%E3%80%81>)
+    [Python - ニューラルネットワーク： 偏微分と勾配の実装サンプル](<https://sigma-se.com/detail/25/#勾配のpython実装サンプル>)
 
 
     ```python
@@ -242,5 +242,6 @@ Git(deep-learning-from-scratch)：
 - 勾配は損失が増える方向を示すため、学習では逆方向へ重みを更新する。
 - 数値勾配は仕組みを理解しやすい一方、大きなネットワークでは計算量が大きくなる。
 
-## 参考文献
-- 斎藤 康毅（\\(2018\\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
+### 参考文献
+- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
+- [O'Reilly Japan「deep-learning-from-scratch」gradient_simplenet.py](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch04/gradient_simplenet.py)

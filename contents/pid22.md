@@ -42,7 +42,7 @@ $ python
 
 - \\(k=10\\) は、10個の要素からなるデータでMNISTで扱うデータ数（0～9の数字）
 - \\(y_{k}\\) にあたる \\(y\\) は、ニューラルネットワークの出力でソフトマックス関数出力値（確率）<br>
-  ※ この出力値の算出処理については、[Python - ニューラルネットワーク： MNISTを使ったニューラルネットワークの推論処理と実装サンプル> 推論処理のニューロン構成と関数定義](https://sigma-se.com/detail/20/#:~:text=%E6%8E%A8%E8%AB%96%E5%87%A6%E7%90%86%E3%81%AE%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%AD%E3%83%B3%E6%A7%8B%E6%88%90%E3%81%A8%E9%96%A2%E6%95%B0%E5%AE%9A%E7%BE%A9) の**predict関数**を参考。
+  ※ この出力値の算出処理については、[Python - ニューラルネットワーク： MNISTを使ったニューラルネットワークの推論処理と実装サンプル> 推論処理のニューロン構成と関数定義](https://sigma-se.com/detail/20/#推論処理のニューロン構成と関数定義) の**predict関数**を参考。
 - \\(t_{k}\\) にあたる \\(t\\) は、教師データでMNISTであらかじめ準備されている正解表す配列（1が正解）
 - \\(y\\) と \\(t\\) は、それぞれの要素同士が対となっている
     - 要素1：数字画像が0の確率が10%（0.1）→ 不正解（0）
@@ -188,5 +188,7 @@ $ python
 - 2乗和誤差は予測値と正解値の差に、交差エントロピー誤差は正解クラスの予測確率に注目する。one-hot表現では正解クラスだけが1になる。
 - 交差エントロピー誤差ではlog(0)を避けるため微小値を加え、学習では損失が小さくなる方向へ重みを更新する。
 
-## 参考文献
-- 斎藤 康毅（\\(2018\\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
+### 参考文献
+- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
+- [O'Reilly Japan「deep-learning-from-scratch」functions.py](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/common/functions.py)
+- [NumPy：numpy.log](https://numpy.org/doc/stable/reference/generated/numpy.log.html)

@@ -25,8 +25,7 @@ MNISTは、画像分類の入門でよく使われるデータセットで、入
 ### MNISTのデータ仕様
 機械学習では画像を数値として扱う必要があるため、**バイナリデータ**となっており、画像とラベルデータが紐付いている。
 
-※ 下記、画像、ラベルのデータフォーマットについては、下記サイトを参考に記載。<br>
-参考URL（WEB ARCH LABO）：https://weblabo.oscasierra.net/python/ai-mnist-data-detail.html
+※ 以下の画像・ラベルのデータ形式は、参考文献の「WEB ARCH LABO：MNISTのデータ詳細」を基に整理している。
 
 以下、画像とラベルのフォーマット仕様。
 - 画像データのフォーマット（train-images-idx3-ubyte、t10k-images-idx3-ubyte）
@@ -185,5 +184,8 @@ $ python
 - 訓練データは学習、テストデータは評価に使い、両者を混ぜない。
 - 正規化の有無によってピクセル値の範囲が変わるため、後続処理の前提をそろえる。
 
-## 参考文献
-- 斎藤 康毅（\\(2018\\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
+### 参考文献
+- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
+- [O'Reilly Japan「deep-learning-from-scratch」mnist.py](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/dataset/mnist.py)
+- [Keras：MNIST digits classification dataset](https://keras.io/api/datasets/mnist/)
+- [WEB ARCH LABO：MNISTのデータ詳細](https://weblabo.oscasierra.net/python/ai-mnist-data-detail.html)

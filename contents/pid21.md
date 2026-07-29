@@ -14,7 +14,7 @@ MNISTの推論処理を1件ずつではなく、複数件まとめて処理す�
 
 ## 概念の説明と実装サンプル
 ### 推論バッチ処理の実行準備
-[前の記事 > Python - ニューラルネットワーク： MNISTを使ったニューラルネットワークの推論処理と実装サンプル > 推論処理の実行準備](https://sigma-se.com/detail/20/#:~:text=%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB-,%E6%8E%A8%E8%AB%96%E5%87%A6%E7%90%86%E3%81%AE%E5%AE%9F%E8%A1%8C%E6%BA%96%E5%82%99,-%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E3%81%AE%E3%80%8E%E3%82%BC) でダウンロードした`ch03/neuralnet_mnist_batch.py`を使ってバッチ処理を説明する。
+[前の記事 > Python - ニューラルネットワーク： MNISTを使ったニューラルネットワークの推論処理と実装サンプル > 推論処理の実行準備](https://sigma-se.com/detail/20/#推論処理の実行準備) でダウンロードした`ch03/neuralnet_mnist_batch.py`を使ってバッチ処理を説明する。
 
 ※ `ch03/neuralnet_mnist_batch.py`は、`ch03/neuralnet_mnist.py`の実行部分をバッチ処理に書き換えたもの（下記Pythonコードのコメントの「# 追記」「# 書き換え」の部分）で、3つの関数については全く同じ。
 
@@ -159,5 +159,7 @@ print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
 - 入力のshapeが変わるため行列計算の次元を確認し、argmaxでは予測クラスを取り出すaxisを正しく指定する。
 - バッチを大きくすると効率化できる一方、メモリ使用量も増えるため、実行環境に合わせて調整する。
 
-## 参考文献
-- 斎藤 康毅（\\(2018\\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
+### 参考文献
+- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
+- [O'Reilly Japan「deep-learning-from-scratch」neuralnet_mnist_batch.py](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch03/neuralnet_mnist_batch.py)
+- [NumPy：numpy.argmax](https://numpy.org/doc/stable/reference/generated/numpy.argmax.html)
