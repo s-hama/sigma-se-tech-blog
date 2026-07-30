@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Case, IntegerField, Q, Value, When
 from django.http import Http404
 from django.views import generic
 from .models import Post
@@ -41,6 +41,27 @@ class PostIndexView(BaseListView):
 
         public_posts = Post.objects.filter(is_publick=True).exclude(category__name="PaidContent")
         context["series_guides"] = [
+            {
+                "label": "Django - VPSで作るDjangoサイト",
+                "summary": "VPS上でDjangoサイトを構築し、公開するまでの手順を解説",
+                "posts": public_posts.filter(
+                    Q(title__icontains="VPSで作るDjangoサイト構築手順 - Nginx編")
+                    | Q(title__icontains="VPSで作るDjangoサイト構築手順 - Apache編")
+                ).annotate(
+                    series_priority=Case(
+                        When(
+                            title__icontains="VPSで作るDjangoサイト構築手順 - Nginx編",
+                            then=Value(0),
+                        ),
+                        When(
+                            title__icontains="VPSで作るDjangoサイト構築手順 - Apache編",
+                            then=Value(1),
+                        ),
+                        default=Value(2),
+                        output_field=IntegerField(),
+                    )
+                ).order_by("series_priority", "pk")[:10],
+            },
             {
                 "label": "暗号技術の仕組み",
                 "summary": "古典暗号から耐量子暗号まで、暗号の考え方を図解と具体例で解説",
@@ -91,11 +112,6 @@ class PostIndexView(BaseListView):
                 "posts": public_posts.filter(
                     Q(title__icontains="Django - Django Debug Toolbar")
                 ).order_by("pk")[:5],
-            },
-            {
-                "label": "Django - VPSで作るDjangoサイト",
-                "summary": "VPS上でDjangoサイトを構築し、公開するまでの手順を解説",
-                "posts": public_posts.filter(title__icontains="VPSで作るDjangoサイト構築手順 - ").order_by("pk")[:5],
             },
             {
                 "label": "応用情報技術 - 基礎",
