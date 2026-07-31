@@ -140,4 +140,5 @@
 
 ### 参考文献
 - 瀬戸 美月（\\(2020\\)）『徹底攻略 応用情報技術者教科書』株式会社インプレス
-- [NIST/SEMATECH e-Handbook of Statistical Methods - Scatter Plot](https://www.itl.nist.gov/div898/handbook/eda/section3/scatterp.htm)
+- [総務省統計局 Data StaRt - 相関と回帰（日本語・相関係数の公的解説）](https://www.stat.go.jp/dstart/point/seminar/02/3-3-2.html)
+- [NIST/SEMATECH e-Handbook of Statistical Methods - Scatter Plot（英語・散布図の公的解説）](https://www.itl.nist.gov/div898/handbook/eda/section3/scatterp.htm)

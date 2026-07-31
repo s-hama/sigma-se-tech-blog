@@ -773,6 +773,6 @@ str型、list型、tuple型のように**+演算子**で結合ができない。
 - dictはキーと値を対応付けるmapping型で、キーによって値へアクセスし、同じキーは重複して保持できない。
 
 ### 参考文献
-- [Python公式ドキュメント - テキストシーケンス型：str](https://docs.python.org/ja/3/library/stdtypes.html#text-sequence-type-str)
-- [Python公式ドキュメント - シーケンス型：list、tuple、range](https://docs.python.org/ja/3/library/stdtypes.html#sequence-types-list-tuple-range)
-- [Python公式ドキュメント - マッピング型：dict](https://docs.python.org/ja/3/library/stdtypes.html#mapping-types-dict)
+- [Python公式ドキュメント - テキストシーケンス型：str（日本語・文字列型の公式解説）](https://docs.python.org/ja/3/library/stdtypes.html#text-sequence-type-str)
+- [Python公式ドキュメント - シーケンス型：list、tuple、range（日本語・シーケンス型の公式解説）](https://docs.python.org/ja/3/library/stdtypes.html#sequence-types-list-tuple-range)
+- [Python公式ドキュメント - マッピング型：dict（日本語・辞書型の公式解説）](https://docs.python.org/ja/3/library/stdtypes.html#mapping-types-dict)

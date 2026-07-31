@@ -110,7 +110,7 @@ Matplotlibのpyplotを使い、Pythonでグラフを描画する基本手順を�
 - `imread`で読み込んだ画像はNumPy配列として扱われ、`imshow`で表示できる。
 
 ## 参考文献
-- 斎藤 康毅（\\(2018\\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
-- [Matplotlib, Getting started](https://matplotlib.org/stable/users/getting_started/)
-- [Matplotlib, Pyplot tutorial](https://matplotlib.org/stable/tutorials/pyplot.html)
-- [Matplotlib, Image tutorial](https://matplotlib.org/stable/tutorials/images.html)
+- 斎藤 康毅（\\(2016\\)）『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
+- [Matplotlib, Getting started（英語・公式導入手順）](https://matplotlib.org/stable/users/getting_started/)
+- [Matplotlib, Pyplot tutorial（英語・グラフ描画の公式入門）](https://matplotlib.org/stable/tutorials/pyplot.html)
+- [Matplotlib, Image tutorial（英語・画像表示の公式解説）](https://matplotlib.org/stable/tutorials/images.html)

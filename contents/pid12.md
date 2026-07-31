@@ -232,8 +232,8 @@ NumPyでは、末尾の次元から比較し、各次元の大きさが等しい
 - 配列演算や、比較結果のTrue/False配列を使った条件抽出は、数値処理や機械学習の前処理の基本となる。
 
 ## 参考文献
-- 斎藤 康毅（\\(2018\\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
-- [NumPy, Installing NumPy](https://numpy.org/install/)
-- [NumPy User Guide, NumPy: the absolute basics for beginners](https://numpy.org/doc/stable/user/absolute_beginners.html)
-- [NumPy User Guide, Broadcasting](https://numpy.org/doc/stable/user/basics.broadcasting.html)
-- [NumPy User Guide, Indexing on ndarrays](https://numpy.org/doc/stable/user/basics.indexing.html)
+- 斎藤 康毅（\\(2016\\)）『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
+- [NumPy, Installing NumPy（英語・公式インストール手順）](https://numpy.org/install/)
+- [NumPy User Guide, NumPy: the absolute basics for beginners（英語・配列操作の公式入門）](https://numpy.org/doc/stable/user/absolute_beginners.html)
+- [NumPy User Guide, Broadcasting（英語・ブロードキャスト仕様）](https://numpy.org/doc/stable/user/basics.broadcasting.html)
+- [NumPy User Guide, Indexing on ndarrays（英語・配列インデックス仕様）](https://numpy.org/doc/stable/user/basics.indexing.html)

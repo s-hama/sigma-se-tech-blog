@@ -272,8 +272,6 @@
 - 集合演算は論理演算と対応し、差集合は一方から要素を除き、対称差集合はどちらか一方だけに含まれる要素を集める。
 
 ### 参考文献
-- [IEEE Standards Association - IEEE 754-2019: IEEE Standard for Floating-Point Arithmetic](https://standards.ieee.org/ieee/754/6210/)
-- [Oracle - Java Language Specification, Chapter 4: Types, Values, and Variables](https://docs.oracle.com/en/java/javase/26/docs/specs/jls/jls-4.html)
-- [Python 3 ドキュメント - 浮動小数点演算、その問題と制限](https://docs.python.org/ja/3/tutorial/floatingpoint.html)
-- [NIST Digital Library of Mathematical Functions - Common Notations and Definitions](https://dlmf.nist.gov/front/introduction)
 - 瀬戸 美月（\\(2020\\)）『徹底攻略 応用情報技術者教科書』株式会社インプレス
+- [Python公式チュートリアル - 浮動小数点演算、その問題と制限（日本語・数値誤差の公式解説）](https://docs.python.org/ja/3/tutorial/floatingpoint.html)
+- [IEEE Standards Association - IEEE 754-2019（英語・浮動小数点数の規格原文）](https://standards.ieee.org/ieee/754/6210/)

@@ -175,9 +175,8 @@ GitHub Freeでも非公開リポジトリを作成できるため、開発準備
 - 作業はブランチを分けて進めると、変更範囲を管理しやすくなる。
 
 ### 参考文献
-- [GitHub Docs, About repositories](https://docs.github.com/en/repositories/creating-and-managing-repositories/about-repositories)
-- [GitHub Docs, Generating a new SSH key and adding it to the ssh-agent](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
-- [GitHub Docs, Adding a new SSH key to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
-- [GitHub Docs, Testing your SSH connection](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/testing-your-ssh-connection)
-- [GitHub Docs, Creating a new repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository)
-- [Git Documentation, git-switch](https://git-scm.com/docs/git-switch)
+- [GitHub Docs「リポジトリについて」（日本語・公式解説）](https://docs.github.com/ja/repositories/creating-and-managing-repositories/about-repositories)
+- [GitHub Docs「新しいSSHキーを生成してssh-agentに追加する」（日本語・公式手順）](https://docs.github.com/ja/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+- [GitHub Docs「GitHubアカウントへの新しいSSHキーの追加」（日本語・公式手順）](https://docs.github.com/ja/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+- [GitHub Docs「SSH接続をテストする」（日本語・公式手順）](https://docs.github.com/ja/authentication/connecting-to-github-with-ssh/testing-your-ssh-connection)
+- [GitHub Docs「新しいリポジトリの作成」（日本語・公式手順）](https://docs.github.com/ja/repositories/creating-and-managing-repositories/creating-a-new-repository)

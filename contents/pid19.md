@@ -185,7 +185,7 @@ $ python
 - 正規化の有無によってピクセル値の範囲が変わるため、後続処理の前提をそろえる。
 
 ### 参考文献
-- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
-- [O'Reilly Japan「deep-learning-from-scratch」mnist.py](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/dataset/mnist.py)
-- [Keras：MNIST digits classification dataset](https://keras.io/api/datasets/mnist/)
-- [WEB ARCH LABO：MNISTのデータ詳細](https://weblabo.oscasierra.net/python/ai-mnist-data-detail.html)
+- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』（日本語・本記事シリーズの基礎文献）](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
+- [TensorFlow「初心者のためのTensorFlow 2.0入門」（日本語・MNISTデータの公式入門）](https://www.tensorflow.org/tutorials/quickstart/beginner?hl=ja)
+- [O'Reilly Japan「deep-learning-from-scratch」mnist.py（Python・公式サンプルコード）](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/dataset/mnist.py)
+- [Keras, MNIST digits classification dataset（英語・データセットAPI仕様）](https://keras.io/api/datasets/mnist/)

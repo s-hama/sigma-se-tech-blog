@@ -76,5 +76,5 @@ Python - ニューラルネットワーク：14/14 学習アルゴリズムの�
 - 一回で最適化されるわけではなく、ミニバッチを変えながら更新を繰り返す。この流れは深層学習フレームワークを理解する基礎となる。
 
 ### 参考文献
-- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
-- [O'Reilly Japan「deep-learning-from-scratch」train_neuralnet.py](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch04/train_neuralnet.py)
+- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』（日本語・本記事シリーズの基礎文献）](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
+- [O'Reilly Japan「deep-learning-from-scratch」train_neuralnet.py（Python・公式サンプルコード）](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch04/train_neuralnet.py)

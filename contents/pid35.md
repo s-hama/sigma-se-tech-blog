@@ -247,5 +247,5 @@ a、b共にTrueである場合は、末尾の要素`b`を返す。
 
 ### 参考文献
 - 金城 俊哉（\\(2018\\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム
-- [Python公式ドキュメント - 真理値判定](https://docs.python.org/ja/3/library/stdtypes.html#truth-value-testing)
-- [Python公式ドキュメント - ブール演算](https://docs.python.org/ja/3/reference/expressions.html#boolean-operations)
+- [Python公式ドキュメント - 真理値判定（日本語・真偽値評価の公式解説）](https://docs.python.org/ja/3/library/stdtypes.html#truth-value-testing)
+- [Python公式ドキュメント - ブール演算（日本語・論理演算子の公式仕様）](https://docs.python.org/ja/3/reference/expressions.html#boolean-operations)

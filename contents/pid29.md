@@ -205,6 +205,6 @@ Pythonの組込みデータ型を理解する前提として、immutable、mutab
 - mappingはインデックス番号ではなくキーを使って値へアクセスする。型の特性を知ると、Pythonの挙動やエラーを追いやすくなる。
 
 ### 参考文献
-- [Python公式ドキュメント - データモデル](https://docs.python.org/ja/3/reference/datamodel.html)
-- [Python公式ドキュメント - 組み込み型](https://docs.python.org/ja/3/library/stdtypes.html)
-- [Python公式ドキュメント - 用語集：iterable](https://docs.python.org/ja/3/glossary.html#term-iterable)
+- [Python 3 ドキュメント「データモデル」（日本語・オブジェクトと型の公式仕様）](https://docs.python.org/ja/3/reference/datamodel.html)
+- [Python 3 ドキュメント「組み込み型」（日本語・各データ型の公式仕様）](https://docs.python.org/ja/3/library/stdtypes.html)
+- [Python 3 ドキュメント「用語集：iterable」（日本語・用語定義）](https://docs.python.org/ja/3/glossary.html#term-iterable)

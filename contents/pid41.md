@@ -564,9 +564,7 @@ MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベー
 
 ### 参考文献
 - 東中 竜一郎、稲葉 通将、水上 雅博（\\(2020\\)）『Pythonでつくる対話システム』株式会社オーム社
-- [MeCab公式サイト - MeCab: Yet Another Part-of-Speech and Morphological Analyzer](https://taku910.github.io/mecab/)
-- [W3C Recommendation - State Chart XML（SCXML）](https://www.w3.org/TR/scxml/)
-- [OpenWeather - Current weather data](https://openweathermap.org/api/current)
-- [OpenWeather - 5 day weather forecast](https://openweathermap.org/api/forecast5)
-- [python-telegram-bot 12.8 公式ドキュメント](https://docs.python-telegram-bot.org/en/v12.8/)
-- [GitHub - 『Pythonでつくる対話システム』サポートリポジトリ](https://github.com/dsbook/dsbook)
+- [W3C Recommendation - State Chart XML（SCXML）（英語・状態遷移記述の仕様原文）](https://www.w3.org/TR/scxml/)
+- [OpenWeather - Current weather data（英語・現在天気APIの公式仕様）](https://openweathermap.org/api/current)
+- [OpenWeather - 5 day weather forecast（英語・予報APIの公式仕様）](https://openweathermap.org/api/forecast5)
+- [python-telegram-bot 12.8 公式ドキュメント（英語・記事で使用する旧版APIの仕様）](https://docs.python-telegram-bot.org/en/v12.8/)

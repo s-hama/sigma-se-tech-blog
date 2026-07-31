@@ -368,7 +368,7 @@ SVMによる学習は、Pythonの機械学習ライブラリである**sklearn**
 
 ### 参考文献
 - 東中 竜一郎、稲葉 通将、水上 雅博（\\(2020\\)）『Pythonでつくる対話システム』株式会社オーム社
-- [scikit-learn公式ドキュメント - Installing scikit-learn](https://scikit-learn.org/stable/install.html)
-- [scikit-learn公式ドキュメント - SVC](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html)
-- [dill公式ドキュメント](https://dill.readthedocs.io/en/latest/)
-- [GitHub - 『Pythonでつくる対話システム』サポートリポジトリ](https://github.com/dsbook/dsbook)
+- [GitHub - 『Pythonでつくる対話システム』サポートリポジトリ（日本語・書籍の学習データと実装例）](https://github.com/dsbook/dsbook)
+- [scikit-learn公式ドキュメント - Installing scikit-learn（英語・インストール手順）](https://scikit-learn.org/stable/install.html)
+- [scikit-learn公式ドキュメント - SVC（英語・SVM分類器のAPI仕様）](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html)
+- [dill公式ドキュメント（英語・シリアライズ機能の公式解説）](https://dill.readthedocs.io/en/latest/)

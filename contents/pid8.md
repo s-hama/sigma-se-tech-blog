@@ -147,8 +147,8 @@ importしていないモジュールは対話モードでも使えない。
 - バージョンや環境変数の違いに注意すると、環境調査にも使いやすい。
 
 ### 参考文献
-- [Python公式ドキュメント - コマンドラインと環境：PYTHONSTARTUP](https://docs.python.org/ja/3/using/cmdline.html#envvar-PYTHONSTARTUP)
-- [Python公式チュートリアル - Pythonを電卓として使う](https://docs.python.org/ja/3/tutorial/introduction.html#using-python-as-a-calculator)
-- [Python公式ドキュメント - sys.path](https://docs.python.org/ja/3/library/sys.html#sys.path)
-- [IPython公式ドキュメント - Using IPython for interactive work](https://ipython.readthedocs.io/en/stable/interactive/index.html)
-- [Python Enhancement Proposals - PEP 20：The Zen of Python](https://peps.python.org/pep-0020/)
+- [Python 3 ドキュメント「コマンドラインと環境：PYTHONSTARTUP」（日本語・公式仕様）](https://docs.python.org/ja/3/using/cmdline.html#envvar-PYTHONSTARTUP)
+- [Python 3 チュートリアル「Pythonを電卓として使う」（日本語・公式入門）](https://docs.python.org/ja/3/tutorial/introduction.html#using-python-as-a-calculator)
+- [Python 3 ドキュメント「sys.path」（日本語・モジュール検索パス仕様）](https://docs.python.org/ja/3/library/sys.html#sys.path)
+- [IPython Documentation, Using IPython for interactive work（英語・対話環境の公式解説）](https://ipython.readthedocs.io/en/stable/interactive/index.html)
+- [Python Enhancement Proposals, PEP 20：The Zen of Python（英語・設計指針原文）](https://peps.python.org/pep-0020/)

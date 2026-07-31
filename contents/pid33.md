@@ -262,4 +262,4 @@ Pythonの算術演算子を使い、数値計算の基本を整理する。
 
 ### 参考文献
 - 金城 俊哉（\\(2018\\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム
-- [Python公式ドキュメント - 二項算術演算](https://docs.python.org/ja/3/reference/expressions.html#binary-arithmetic-operations)
+- [Python公式ドキュメント - 二項算術演算（日本語・算術演算子の公式仕様）](https://docs.python.org/ja/3/reference/expressions.html#binary-arithmetic-operations)

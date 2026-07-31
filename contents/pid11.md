@@ -140,5 +140,6 @@ Djangoの**シグナルと登録済みレシーバー**を一覧で確認する�
 - パネル構成はバージョンによって変わるため、旧版の画面例と利用中の公式ドキュメントを照合する。
 
 ### 参考文献
-- [Django Debug Toolbar, Panels](https://django-debug-toolbar.readthedocs.io/en/stable/panels.html)
-- [Django Debug Toolbar, Configuration](https://django-debug-toolbar.readthedocs.io/en/stable/configuration.html)
+- [Django ドキュメント「データベースアクセスの最適化」（日本語・クエリ分析とデバッグツールの公式解説）](https://docs.djangoproject.com/ja/5.2/topics/db/optimization/)
+- [Django Debug Toolbar Documentation, Panels（英語・表示パネル仕様）](https://django-debug-toolbar.readthedocs.io/en/stable/panels.html)
+- [Django Debug Toolbar Documentation, Configuration（英語・パネル設定仕様）](https://django-debug-toolbar.readthedocs.io/en/stable/configuration.html)

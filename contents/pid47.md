@@ -158,4 +158,5 @@
 
 ### 参考文献
 - 瀬戸 美月（\\(2020\\)）『徹底攻略 応用情報技術者教科書』株式会社インプレス
-- [NASA - Error Mitigation of Point-to-Point Communication for Fault-Tolerant Computing](https://ntrs.nasa.gov/citations/20110008234)
+- [JOGMEC - A/D変換（日本語・アナログ／ディジタル変換の公的解説）](https://journal.jogmec.go.jp/oilgas/termsearch/list/alphanumeric/ad-conversion.html)
+- [NASA - Error Mitigation of Point-to-Point Communication for Fault-Tolerant Computing（英語・誤り訂正方式の技術報告）](https://ntrs.nasa.gov/citations/20110008234)

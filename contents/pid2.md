@@ -168,10 +168,8 @@ Let's Encryptによる期限通知メールは2025年6月4日に終了したた�
 - Let's Encryptは更新が必要なため、取得後の期限確認も運用に含める。
 
 ### 参考文献
-- [The CentOS Project, CentOS Linux（CentOS Linux 7のEOL）](https://www.centos.org/centos-linux/)
-- [Red Hat Enterprise Linux 7 Security Guide, Controlling Traffic](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/security_guide/sec-controlling_traffic)
-- [Apache HTTP Server 2.4, SSL/TLS Encryption](https://httpd.apache.org/docs/2.4/ssl/)
-- [Certbot Documentation, Renewing certificates](https://eff-certbot.readthedocs.io/en/stable/using.html#renewing-certificates)
-- [Let's Encrypt, FAQ：証明書の有効期間](https://letsencrypt.org/docs/faq/#what-is-the-lifetime-for-lets-encrypt-certificates-for-how-long-are-they-valid)
-- [Let's Encrypt, Decreasing Certificate Lifetimes to 45 Days](https://letsencrypt.org/2025/12/02/from-90-to-45.html)
-- [Let's Encrypt, Ending Support for Expiration Notification Emails](https://letsencrypt.org/2025/01/22/ending-expiration-emails.html)
+- [Apache HTTP Server 2.4「SSL/TLS 暗号化」（日本語・公式解説）](https://httpd.apache.org/docs/2.4/ja/ssl/)
+- [The CentOS Project, CentOS Linux（英語・CentOS Linux 7のEOL案内）](https://www.centos.org/centos-linux/)
+- [Certbot Documentation, Renewing certificates（英語・証明書更新手順）](https://eff-certbot.readthedocs.io/en/stable/using.html#renewing-certificates)
+- [Let's Encrypt, Decreasing Certificate Lifetimes to 45 Days（英語・証明書有効期間短縮の公式発表）](https://letsencrypt.org/2025/12/02/from-90-to-45.html)
+- [Let's Encrypt, Ending Support for Expiration Notification Emails（英語・期限通知メール終了の公式発表）](https://letsencrypt.org/2025/01/22/ending-expiration-emails.html)

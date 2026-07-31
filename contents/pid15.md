@@ -295,5 +295,5 @@ y =
 - XORのように直線で分離できない問題は単純パーセプトロンでは表現できず、多層構造が必要になる。
 
 ### 参考文献
-- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
-- [O'Reilly Japan「deep-learning-from-scratch」ch02 公式サンプルコード](https://github.com/oreilly-japan/deep-learning-from-scratch/tree/master/ch02)
+- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』（日本語・本記事シリーズの基礎文献）](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
+- [O'Reilly Japan「deep-learning-from-scratch」ch02（Python・公式サンプルコード）](https://github.com/oreilly-japan/deep-learning-from-scratch/tree/master/ch02)

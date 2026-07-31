@@ -227,7 +227,7 @@ Pythonでは、関数もオブジェクトと同じように捉えるため、�
 
 ### 参考文献
 - 金城 俊哉（\\(2018\\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム
-- [Python公式ドキュメント - 関数型プログラミング HOWTO](https://docs.python.org/ja/3/howto/functional.html)
-- [Python公式ドキュメント - map](https://docs.python.org/ja/3/library/functions.html#map)
-- [Python公式ドキュメント - filter](https://docs.python.org/ja/3/library/functions.html#filter)
-- [Python公式ドキュメント - functools.reduce](https://docs.python.org/ja/3/library/functools.html#functools.reduce)
+- [Python公式ドキュメント - 関数型プログラミング HOWTO（日本語・関数型処理の公式解説）](https://docs.python.org/ja/3/howto/functional.html)
+- [Python公式ドキュメント - map（日本語・mapの公式仕様）](https://docs.python.org/ja/3/library/functions.html#map)
+- [Python公式ドキュメント - filter（日本語・filterの公式仕様）](https://docs.python.org/ja/3/library/functions.html#filter)
+- [Python公式ドキュメント - functools.reduce（日本語・reduceの公式仕様）](https://docs.python.org/ja/3/library/functools.html#functools.reduce)

@@ -250,14 +250,8 @@ DjangoのデプロイチェックとApacheの構文確認を行い、**Apache**�
 - 起動確認はrunserverではなく、最終的にApache経由で確認する。
 
 ### 参考文献
-- [The CentOS Project, CentOS Linux（CentOS Linux 7のEOL）](https://www.centos.org/centos-linux/)
-- [PostgreSQL, Linux downloads（Red Hat family）](https://www.postgresql.org/download/linux/redhat/)
-- [PostgreSQL Documentation, The pg_hba.conf File](https://www.postgresql.org/docs/current/auth-pg-hba-conf.html)
-- [PostgreSQL Documentation, Connections and Authentication](https://www.postgresql.org/docs/current/runtime-config-connection.html)
-- [PostgreSQL 9.6 Documentation, The pg_hba.conf File](https://www.postgresql.org/docs/9.6/auth-pg-hba-conf.html)
-- [PostgreSQL Documentation, Password Authentication（SCRAM）](https://www.postgresql.org/docs/current/auth-password.html)
-- [Psycopg Documentation, Installation（psycopg2）](https://www.psycopg.org/docs/install.html)
-- [Django 2.2 Documentation, Databases（PostgreSQL要件）](https://docs.djangoproject.com/en/2.2/ref/databases/)
-- [Django Documentation, Deployment checklist](https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/)
-- [Django Documentation, SECURE_PROXY_SSL_HEADER](https://docs.djangoproject.com/en/5.2/ref/settings/#secure-proxy-ssl-header)
-- [Django Documentation, The staticfiles app](https://docs.djangoproject.com/en/5.2/ref/contrib/staticfiles/)
+- [Django 2.2 Documentation, Databases（英語・記事内旧環境のPostgreSQL要件）](https://docs.djangoproject.com/en/2.2/ref/databases/)
+- [Django 5.2 ドキュメント「デプロイチェックリスト」（日本語・本番設定の公式解説）](https://docs.djangoproject.com/ja/5.2/howto/deployment/checklist/)
+- [The CentOS Project, CentOS Linux（英語・CentOS Linux 7のEOL案内）](https://www.centos.org/centos-linux/)
+- [PostgreSQL 9.6 Documentation, The pg_hba.conf File（英語・記事内旧環境の認証設定仕様）](https://www.postgresql.org/docs/9.6/auth-pg-hba-conf.html)
+- [PostgreSQL Documentation, Password Authentication（英語・SCRAM認証の公式仕様）](https://www.postgresql.org/docs/current/auth-password.html)

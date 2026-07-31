@@ -116,5 +116,5 @@ MNISTのダウンロードについては、[前の記事 > Python - ニュー�
 - 出力値の中で最大となる位置をargmaxで求め、予測クラスとして扱う。
 
 ### 参考文献
-- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
-- [O'Reilly Japan「deep-learning-from-scratch」neuralnet_mnist.py](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch03/neuralnet_mnist.py)
+- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』（日本語・本記事シリーズの基礎文献）](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
+- [O'Reilly Japan「deep-learning-from-scratch」neuralnet_mnist.py（Python・公式サンプルコード）](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch03/neuralnet_mnist.py)

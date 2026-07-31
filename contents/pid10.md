@@ -117,7 +117,7 @@ settings.pyの最低限必要な設定を変更する。<br>
 - 便利な反面、内部情報を表示するため本番環境では無効化する。
 
 ### 参考文献
-- [Django Debug Toolbar公式ドキュメント - Installation](https://django-debug-toolbar.readthedocs.io/en/stable/installation.html)
-- [Django Debug Toolbar公式ドキュメント - Configuration](https://django-debug-toolbar.readthedocs.io/en/stable/configuration.html)
-- [Django Debug Toolbar公式ドキュメント - Tips：The toolbar isn't displayed!](https://django-debug-toolbar.readthedocs.io/en/stable/tips.html#the-toolbar-isnt-displayed)
-- [Django公式ドキュメント - How to manage static files（Django 6.0）](https://docs.djangoproject.com/en/6.0/howto/static-files/)
+- [Django 6.0 ドキュメント「静的ファイルを管理する」（日本語・公式解説）](https://docs.djangoproject.com/ja/6.0/howto/static-files/)
+- [Django Debug Toolbar Documentation, Installation（英語・導入公式手順）](https://django-debug-toolbar.readthedocs.io/en/stable/installation.html)
+- [Django Debug Toolbar Documentation, Configuration（英語・設定仕様）](https://django-debug-toolbar.readthedocs.io/en/stable/configuration.html)
+- [Django Debug Toolbar Documentation, Tips：The toolbar isn't displayed!（英語・表示トラブルの公式解説）](https://django-debug-toolbar.readthedocs.io/en/stable/tips.html#the-toolbar-isnt-displayed)

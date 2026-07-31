@@ -160,6 +160,6 @@ print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
 - バッチを大きくすると効率化できる一方、メモリ使用量も増えるため、実行環境に合わせて調整する。
 
 ### 参考文献
-- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
-- [O'Reilly Japan「deep-learning-from-scratch」neuralnet_mnist_batch.py](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch03/neuralnet_mnist_batch.py)
-- [NumPy：numpy.argmax](https://numpy.org/doc/stable/reference/generated/numpy.argmax.html)
+- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』（日本語・本記事シリーズの基礎文献）](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
+- [O'Reilly Japan「deep-learning-from-scratch」neuralnet_mnist_batch.py（Python・公式サンプルコード）](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch03/neuralnet_mnist_batch.py)
+- [NumPy Reference, numpy.argmax（英語・最大値インデックス取得の公式仕様）](https://numpy.org/doc/stable/reference/generated/numpy.argmax.html)

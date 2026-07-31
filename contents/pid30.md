@@ -360,6 +360,6 @@ complex型は、**実部**と**虚部**で構成され、虚部は虚数単位�
 - complexでは虚数単位をjで表す。
 
 ### 参考文献
-- [Python公式ドキュメント - 数値型：int、float、complex](https://docs.python.org/ja/3/library/stdtypes.html#numeric-types-int-float-complex)
-- [Python公式ドキュメント - 真理値判定](https://docs.python.org/ja/3/library/stdtypes.html#truth-value-testing)
-- [Python公式チュートリアル - 浮動小数点演算、その問題と制限](https://docs.python.org/ja/3/tutorial/floatingpoint.html)
+- [Python公式ドキュメント - 数値型：int、float、complex（日本語・型と数値演算の公式解説）](https://docs.python.org/ja/3/library/stdtypes.html#numeric-types-int-float-complex)
+- [Python公式ドキュメント - 真理値判定（日本語・真理値判定の公式解説）](https://docs.python.org/ja/3/library/stdtypes.html#truth-value-testing)
+- [Python公式チュートリアル - 浮動小数点演算、その問題と制限（日本語・浮動小数点誤差の公式解説）](https://docs.python.org/ja/3/tutorial/floatingpoint.html)

@@ -107,6 +107,6 @@ breakpoint()やpdb.set_trace()を本番コードへ残さない。
 - breakpoint()やpdb.set_trace()は便利だが、確認後はコードから外す。
 
 ### 参考文献
-- [Python公式ドキュメント - pdb：Pythonデバッガー](https://docs.python.org/ja/3/library/pdb.html)
-- [Python公式ドキュメント - breakpoint()](https://docs.python.org/ja/3/library/functions.html#breakpoint)
-- [Python公式ドキュメント - PYTHONBREAKPOINT](https://docs.python.org/ja/3/using/cmdline.html#envvar-PYTHONBREAKPOINT)
+- [Python 3 ドキュメント「pdb：Pythonデバッガー」（日本語・公式操作仕様）](https://docs.python.org/ja/3/library/pdb.html)
+- [Python 3 ドキュメント「breakpoint()」（日本語・組込み関数仕様）](https://docs.python.org/ja/3/library/functions.html#breakpoint)
+- [Python 3 ドキュメント「PYTHONBREAKPOINT」（日本語・環境変数仕様）](https://docs.python.org/ja/3/using/cmdline.html#envvar-PYTHONBREAKPOINT)

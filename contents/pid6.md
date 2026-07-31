@@ -250,9 +250,8 @@ developブランチに切り替える。<br>
 - resetやpush/pullは影響範囲が大きいため、操作前にブランチと状態を確認する。
 
 ### 参考文献
-- [Git公式ドキュメント - git-status](https://git-scm.com/docs/git-status)
-- [Git公式ドキュメント - git-reset](https://git-scm.com/docs/git-reset)
-- [Git公式ドキュメント - git-revert](https://git-scm.com/docs/git-revert)
-- [Git公式ドキュメント - git-pull](https://git-scm.com/docs/git-pull)
-- [Git公式ドキュメント - git-switch](https://git-scm.com/docs/git-switch)
-- [Git公式ドキュメント - git-restore](https://git-scm.com/docs/git-restore)
+- [Pro Git 第2版（日本語・Gitの概念と基本操作）](https://git-scm.com/book/ja/v2)
+- [Git Documentation, git-status（英語・状態確認コマンド仕様）](https://git-scm.com/docs/git-status)
+- [Git Documentation, git-reset（英語・変更取消しコマンド仕様）](https://git-scm.com/docs/git-reset)
+- [Git Documentation, git-pull（英語・リモート変更取込みコマンド仕様）](https://git-scm.com/docs/git-pull)
+- [Git Documentation, Reset, restore and revert（英語・変更取消し操作の公式解説）](https://git-scm.com/docs/git#_reset_restore_and_revert)

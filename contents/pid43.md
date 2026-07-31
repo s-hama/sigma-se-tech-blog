@@ -258,10 +258,7 @@ Python - タスク指向型対話：5/5 SVMモデル学習と発話行為推定
 
 ### 参考文献
 - 東中 竜一郎、稲葉 通将、水上 雅博（\\(2020\\)）『Pythonでつくる対話システム』株式会社オーム社
-- [MeCab公式サイト - MeCab: Yet Another Part-of-Speech and Morphological Analyzer](https://taku910.github.io/mecab/)
-- [scikit-learn公式ドキュメント - TfidfVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html)
-- [scikit-learn公式ドキュメント - LabelEncoder](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.LabelEncoder.html)
-- [scikit-learn公式ドキュメント - SVC](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html)
-- [scikit-learn公式ドキュメント - Model persistence](https://scikit-learn.org/stable/model_persistence.html)
-- [dill公式ドキュメント](https://dill.readthedocs.io/en/latest/)
-- [GitHub - 『Pythonでつくる対話システム』サポートリポジトリ](https://github.com/dsbook/dsbook)
+- [MeCab公式サイト - MeCab: Yet Another Part-of-Speech and Morphological Analyzer（日本語・形態素解析器の公式解説）](https://taku910.github.io/mecab/)
+- [scikit-learn公式ドキュメント - TfidfVectorizer（英語・TF-IDF変換のAPI仕様）](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html)
+- [scikit-learn公式ドキュメント - SVC（英語・SVM分類器のAPI仕様）](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html)
+- [dill公式ドキュメント（英語・モデル保存に用いる機能の公式解説）](https://dill.readthedocs.io/en/latest/)

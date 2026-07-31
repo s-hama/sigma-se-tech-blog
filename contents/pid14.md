@@ -381,7 +381,7 @@ MathJaxのTeX入力では、分数や行列をMathMLより短い記述で表せ�
 - HTMLの記号やブログの変換処理によるエスケープ漏れに注意し、数式を壊れないテキストとして管理すると記事を保守しやすい。
 
 ### 参考文献
-- [MathJax Documentation, Getting Started with MathJax Components](https://docs.mathjax.org/en/stable/web/start.html)
-- [MathJax Documentation, Input Components](https://docs.mathjax.org/en/stable/web/components/input.html)
-- [W3C, MathML Core](https://www.w3.org/TR/mathml-core/)
-- [MDN Web Docs, MathML element reference](https://developer.mozilla.org/en-US/docs/Web/MathML/Reference/Element)
+- [MDN Web Docs「MathML要素リファレンス」（日本語・要素別解説）](https://developer.mozilla.org/ja/docs/Web/MathML/Reference/Element)
+- [MathJax Documentation, Getting Started with MathJax Components（英語・導入公式手順）](https://docs.mathjax.org/en/stable/web/start.html)
+- [MathJax Documentation, Input Components（英語・入力形式の公式仕様）](https://docs.mathjax.org/en/stable/web/components/input.html)
+- [W3C, MathML Core（英語・Web標準仕様原文）](https://www.w3.org/TR/mathml-core/)

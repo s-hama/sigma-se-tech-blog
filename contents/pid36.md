@@ -238,5 +238,5 @@ Pythonのビット演算子を使い、整数を2進数のビット列として�
 
 ### 参考文献
 - 金城 俊哉（\\(2018\\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム
-- [Python公式ドキュメント - 整数型におけるビット単位演算](https://docs.python.org/ja/3/library/stdtypes.html#bitwise-operations-on-integer-types)
-- [Python公式ドキュメント - 二項ビット演算](https://docs.python.org/ja/3/reference/expressions.html#binary-bitwise-operations)
+- [Python公式ドキュメント - 整数型におけるビット単位演算（日本語・整数のビット演算の公式解説）](https://docs.python.org/ja/3/library/stdtypes.html#bitwise-operations-on-integer-types)
+- [Python公式ドキュメント - 二項ビット演算（日本語・ビット演算子の公式仕様）](https://docs.python.org/ja/3/reference/expressions.html#binary-bitwise-operations)

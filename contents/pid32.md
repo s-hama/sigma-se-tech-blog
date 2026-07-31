@@ -791,6 +791,6 @@ file object型は、ファイル操作（読み書き、入出力）を行う型
 - file objectはファイルを読み書きする入口となり、with文を使うと処理後に自動でクローズできる。
 
 ### 参考文献
-- [Python公式ドキュメント - 集合型：set、frozenset](https://docs.python.org/ja/3/library/stdtypes.html#set-types-set-frozenset)
-- [Python公式ドキュメント - バイナリシーケンス型：bytes、bytearray、memoryview](https://docs.python.org/ja/3/library/stdtypes.html#binary-sequence-types-bytes-bytearray-memoryview)
-- [Python公式ドキュメント - io：ストリームを扱うコアツール](https://docs.python.org/ja/3/library/io.html)
+- [Python公式ドキュメント - 集合型：set、frozenset（日本語・集合型の公式解説）](https://docs.python.org/ja/3/library/stdtypes.html#set-types-set-frozenset)
+- [Python公式ドキュメント - バイナリシーケンス型：bytes、bytearray、memoryview（日本語・バイト列の公式解説）](https://docs.python.org/ja/3/library/stdtypes.html#binary-sequence-types-bytes-bytearray-memoryview)
+- [Python公式ドキュメント - io：ストリームを扱うコアツール（日本語・ファイル入出力の公式解説）](https://docs.python.org/ja/3/library/io.html)

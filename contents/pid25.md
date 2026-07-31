@@ -226,5 +226,5 @@ Python - ニューラルネットワーク：11/14 偏微分と勾配ベクト�
 - 数値微分で配列の値を一時的に書き換える場合は、計算後に元の値へ戻して破壊的変更を残さない。
 
 ### 参考文献
-- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
-- [O'Reilly Japan「deep-learning-from-scratch」gradient.py](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/common/gradient.py)
+- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』（日本語・本記事シリーズの基礎文献）](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
+- [O'Reilly Japan「deep-learning-from-scratch」gradient.py（Python・公式サンプルコード）](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/common/gradient.py)

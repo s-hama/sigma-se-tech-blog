@@ -326,6 +326,5 @@ CLASSES
 
 ### 参考文献
 - 金城 俊哉（\\(2018\\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム
-- [Python公式ドキュメント - 組み込み例外](https://docs.python.org/ja/3/library/exceptions.html)
-- [Python公式チュートリアル - エラーと例外](https://docs.python.org/ja/3/tutorial/errors.html)
-- [Python公式ドキュメント - 正規表現のシンタックス](https://docs.python.org/ja/3/library/re.html#regular-expression-syntax)
+- [Python公式ドキュメント - 組み込み例外（日本語・例外クラスの公式解説）](https://docs.python.org/ja/3/library/exceptions.html)
+- [Python公式チュートリアル - エラーと例外（日本語・例外処理の公式解説）](https://docs.python.org/ja/3/tutorial/errors.html)

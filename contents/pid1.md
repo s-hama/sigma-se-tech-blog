@@ -120,6 +120,7 @@ PostgreSQL
 - SSHはrootログインを避け、公開鍵認証を使うことで安全性を高める。
 
 ### 参考文献
-- [The CentOS Project, CentOS Linux（CentOS Linux 7のEOL）](https://www.centos.org/centos-linux/)
-- [RFC Editor, RFC 1034：Domain names - concepts and facilities](https://www.rfc-editor.org/rfc/rfc1034.html)
-- [OpenBSD Manual Pages, sshd_config(5)](https://man.openbsd.org/sshd_config)
+- [JPRS「インターネットでもやっぱり『名前』が大切！ドメイン名とDNSの基礎知識」（日本語・DNS基礎資料）](https://jprs.jp/related-info/event/pdf/Interop2025-jprs-seminarA.pdf)
+- [The CentOS Project, CentOS Linux（英語・CentOS Linux 7のEOL案内）](https://www.centos.org/centos-linux/)
+- [RFC Editor, RFC 1034：Domain names - concepts and facilities（英語・DNS仕様原文）](https://www.rfc-editor.org/rfc/rfc1034.html)
+- [OpenBSD Manual Pages, sshd_config(5)（英語・SSH設定仕様）](https://man.openbsd.org/sshd_config)

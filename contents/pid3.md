@@ -181,10 +181,8 @@ Apacheの設定ファイル**httpd.conf**の設定内容を確認する。<br>
 - VirtualHostではHTTPからHTTPSへのリダイレクトとDjango起動設定を分けて考える。
 
 ### 参考文献
-- [The CentOS Project, CentOS Linux（CentOS Linux 7のEOL）](https://www.centos.org/centos-linux/)
-- [Python Documentation, venv — Creation of virtual environments](https://docs.python.org/3/library/venv.html)
-- [Django Documentation, How to use Django with Apache and mod_wsgi](https://docs.djangoproject.com/en/5.2/howto/deployment/wsgi/modwsgi/)
-- [Django 2.2 Documentation, How to use Django with Apache and mod_wsgi](https://docs.djangoproject.com/en/2.2/howto/deployment/wsgi/modwsgi/)
-- [mod_wsgi Documentation, Virtual Environments](https://modwsgi.readthedocs.io/en/develop/user-guides/virtual-environments.html)
-- [Apache HTTP Server 2.4, Virtual Host Documentation](https://httpd.apache.org/docs/2.4/vhosts/)
-- [Apache HTTP Server 2.4, mod_ssl：SSLCertificateFileとSSLCertificateChainFile](https://httpd.apache.org/docs/2.4/mod/mod_ssl.html)
+- [Python 3 ドキュメント「venv — 仮想環境の作成」（日本語・公式仕様）](https://docs.python.org/ja/3/library/venv.html)
+- [Django 5.2 ドキュメント「DjangoをApacheとmod_wsgiとともに使うには？」（日本語・現行構成の公式解説）](https://docs.djangoproject.com/ja/5.2/howto/deployment/wsgi/modwsgi/)
+- [Django 2.2 Documentation, How to use Django with Apache and mod_wsgi（英語・記事内旧環境の公式解説）](https://docs.djangoproject.com/en/2.2/howto/deployment/wsgi/modwsgi/)
+- [The CentOS Project, CentOS Linux（英語・CentOS Linux 7のEOL案内）](https://www.centos.org/centos-linux/)
+- [mod_wsgi Documentation, Virtual Environments（英語・仮想環境連携の公式解説）](https://modwsgi.readthedocs.io/en/develop/user-guides/virtual-environments.html)

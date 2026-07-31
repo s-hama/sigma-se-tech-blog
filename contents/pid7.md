@@ -112,7 +112,8 @@ flake8は、pyflakes、pycodestyle、mccabeを組み合わせて、論理的な�
 - まずは最小限の設定から始め、必要に応じてチェックを増やすと扱いやすい。
 
 ### 参考文献
-- [Python Enhancement Proposals - PEP 8：Style Guide for Python Code](https://peps.python.org/pep-0008/)
-- [Vim公式リポジトリ - filetype.txt](https://github.com/vim/vim/blob/master/runtime/doc/filetype.txt)
-- [Flake8公式ドキュメント - Using Flake8](https://flake8.pycqa.org/en/latest/user/index.html)
-- [PyCQA - mccabe](https://github.com/PyCQA/mccabe)
+- [Python ドキュメント「間奏曲：コーディングスタイル」（日本語・PEP 8の要点をまとめた公式解説）](https://docs.python.org/ja/3/tutorial/controlflow.html#intermezzo-coding-style)
+- [Python Enhancement Proposals, PEP 8：Style Guide for Python Code（英語・Pythonコーディング規約原文）](https://peps.python.org/pep-0008/)
+- [Vim Reference Manual, filetype.txt（英語・ファイルタイプ設定仕様）](https://github.com/vim/vim/blob/master/runtime/doc/filetype.txt)
+- [Flake8 Documentation, Using Flake8（英語・コードチェック公式手順）](https://flake8.pycqa.org/en/latest/user/index.html)
+- [PyCQA, mccabe（英語・複雑度チェック実装元）](https://github.com/PyCQA/mccabe)

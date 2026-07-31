@@ -221,6 +221,6 @@ one_hot表現では、\\(t=0\\) のデータはすべて \\(0\\) になるが、
 - 正解ラベルがone-hot表現かクラス番号かによって実装が変わるため、ラベル形式と配列のshapeを確認する。
 
 ### 参考文献
-- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
-- [O'Reilly Japan「deep-learning-from-scratch」functions.py](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/common/functions.py)
-- [NumPy：numpy.random.choice](https://numpy.org/doc/stable/reference/random/generated/numpy.random.choice.html)
+- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』（日本語・本記事シリーズの基礎文献）](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
+- [O'Reilly Japan「deep-learning-from-scratch」functions.py（Python・公式サンプルコード）](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/common/functions.py)
+- [NumPy Reference, numpy.random.choice（英語・標本抽出関数の公式仕様）](https://numpy.org/doc/stable/reference/random/generated/numpy.random.choice.html)

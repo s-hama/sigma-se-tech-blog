@@ -211,4 +211,4 @@ $ python
 
 ### 参考文献
 - 金城 俊哉（\\(2018\\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム
-- [Python公式ドキュメント - 累算代入文](https://docs.python.org/ja/3/reference/simple_stmts.html#augmented-assignment-statements)
+- [Python公式ドキュメント - 累算代入文（日本語・複合代入の公式仕様）](https://docs.python.org/ja/3/reference/simple_stmts.html#augmented-assignment-statements)

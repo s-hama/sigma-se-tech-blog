@@ -218,4 +218,5 @@
 
 ### 参考文献
 - 瀬戸 美月（\\(2020\\)）『徹底攻略 応用情報技術者教科書』株式会社インプレス
-- [Claude E. Shannon, A Mathematical Theory of Communication](https://doi.org/10.1002/j.1538-7305.1948.tb01338.x)
+- [情報通信研究機構 - 画像圧縮と情報量（日本語・エントロピーと符号化の公的解説）](https://www.nict.go.jp/publication/CRL_News/back_number/153/153.htm)
+- [Claude E. Shannon, A Mathematical Theory of Communication（英語・情報理論の原論文）](https://doi.org/10.1002/j.1538-7305.1948.tb01338.x)

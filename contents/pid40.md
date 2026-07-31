@@ -260,8 +260,7 @@ python-telegram-botはバージョンで書き方が変わるため、記事の�
 
 ### 参考文献
 - 東中 竜一郎、稲葉 通将、水上 雅博（\\(2020\\)）『Pythonでつくる対話システム』株式会社オーム社
-- [OpenWeather - Current weather data](https://openweathermap.org/api/current)
-- [OpenWeather - 5 day weather forecast](https://openweathermap.org/api/forecast5)
-- [Telegram - Bot API](https://core.telegram.org/bots/api)
-- [python-telegram-bot 12.8 公式ドキュメント](https://docs.python-telegram-bot.org/en/v12.8/)
-- [GitHub - 『Pythonでつくる対話システム』サポートリポジトリ](https://github.com/dsbook/dsbook)
+- [OpenWeather - Current weather data（英語・現在天気APIの公式仕様）](https://openweathermap.org/api/current)
+- [OpenWeather - 5 day weather forecast（英語・予報APIの公式仕様）](https://openweathermap.org/api/forecast5)
+- [Telegram - Bot API（英語・Bot APIの公式仕様）](https://core.telegram.org/bots/api)
+- [python-telegram-bot 12.8 公式ドキュメント（英語・記事で使用する旧版APIの仕様）](https://docs.python-telegram-bot.org/en/v12.8/)

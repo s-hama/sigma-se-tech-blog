@@ -224,6 +224,6 @@ $ python
 - 線形変換だけを重ねても全体は線形のままだが、非線形な活性化関数を使うと複雑な関係を表現しやすくなる。
 
 ### 参考文献
-- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
-- [O'Reilly Japan「deep-learning-from-scratch」step_function.py](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch03/step_function.py)
-- [O'Reilly Japan「deep-learning-from-scratch」sigmoid.py](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch03/sigmoid.py)
+- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』（日本語・本記事シリーズの基礎文献）](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
+- [O'Reilly Japan「deep-learning-from-scratch」step_function.py（Python・公式サンプルコード）](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch03/step_function.py)
+- [O'Reilly Japan「deep-learning-from-scratch」sigmoid.py（Python・公式サンプルコード）](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch03/sigmoid.py)
