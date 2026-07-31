@@ -3,7 +3,7 @@
 <html lang="ja">
 
 <head>
-    <title>{% block title %}sigma-se{% endblock %}</title>
+    <title>{% block title %}SIGMA-SE{% endblock %}</title>
     {% block canonical %}{% endblock %}
     <!-- Required meta tags always come first -->
     <meta charset="utf-8">
@@ -28,7 +28,8 @@
     <link rel="icon" type="image/svg+xml" href="{% static 'tblog/img/fav/favicon.svg' %}" />
     <link rel="shortcut icon" href="{% static 'tblog/img/fav/favicon.ico' %}" />
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'tblog/img/fav/apple-touch-icon.png' %}" />
-    <meta name="apple-mobile-web-app-title" content="sigma-se" />
+    <meta name="application-name" content="SIGMA-SE" />
+    <meta name="apple-mobile-web-app-title" content="SIGMA-SE" />
     <link rel="manifest" href="{% static 'tblog/img/fav/site.webmanifest' %}" />
 
     <!-- Src Disp : highlight Var 9.13.0 -->
@@ -39,10 +40,23 @@
     <!-- SNS Other -->
     <meta property="og:url" content="{% block og_url %}https://sigma-se.com{% endblock %}" />
     <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="SIGMA-SE" />
     <meta property="og:title" content="{% block og_title %}SIGMA-SE Math & Tech Library{% endblock %}" />
     <meta property="og:description" content="Engineer Math & Tech Library" />
     <!-- <meta property="og:image" content="{% static 'tblog/img/SIGMA-SE2.jpg' %}" /> -->
     <meta property="author" content="SIGMA-SE Math & Tech Library" />
+
+    {% if request.path == '/' %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "SIGMA-SE",
+      "alternateName": ["SIGMA-SE Math & Tech Library", "sigma-se.com"],
+      "url": "https://sigma-se.com/"
+    }
+    </script>
+    {% endif %}
 
     <!-- SNS Buttom -->
     <!-- <link rel="stylesheet" href="{% static 'tblog/sns-icon.css' %}"> -->
