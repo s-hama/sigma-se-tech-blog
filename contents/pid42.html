@@ -3,13 +3,17 @@
   <p>フレームベースのタスク指向型対話システムに向けて、SVM（scikit-learn）の役割と学習データの作成手順を整理する。</p>
   <p>フレームベースでは、発話から対話行為タイプや必要なスロット情報を推定し、対話管理に渡す。状態遷移ベースより柔軟な入力を扱いやすくなる一方で、学習データの作り方が重要になる。</p>
   <p>ここでは、SVMの準備、発話行為タイプとコンセプトの定義、学習データ生成の流れを確認する。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>フレームベースの対話システムの考え方。</li>
-  <li>対話行為タイプ、コンセプト、スロットの関係。</li>
-  <li>SVMを使って発話を分類する理由。</li>
-  <li>学習データを作成する流れ。</li>
-</ul>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
+      設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
+    <li><a href="#タスク指向型対話システムフレームベースのシステム構成について" class="link-secondary">タスク指向型対話システム（フレームベース）のシステム構成について</a><br>
+      タスク指向型対話システム（フレームベース）のシステム構成についてと各要素の役割を整理。</li>
+    <li><a href="#フレームと対話行為を推定するsvmsklearnの概要とインストール" class="link-secondary">フレームと対話行為を推定するSVM（sklearn）の概要とインストール</a><br>
+      フレームと対話行為を推定するSVM（sklearn）の概要とインストールの手順と確認ポイントを整理。</li>
+    <li><a href="#学習データの作成" class="link-secondary">学習データの作成</a><br>
+      学習データの作成の手順と確認ポイントを整理。</li>
+  </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <ul>
     <li>フレームと状態の違い<br>
@@ -55,7 +59,7 @@
       <p>sklearn, dillのインストール</p>
       <pre><code class="language-bash">$ pip3 install sklearn
 </code></pre>
-      <p>また、学習結果を保存するため シリアライズモジュールである<strong>dill</strong>もインストールする。</p>
+      <p>また、学習結果を保存するため シリアライズモジュールである<strong>dill</strong>もインストール。</p>
       <pre><code class="language-bash">$ pip3 install dill
 </code></pre>
     </li>
@@ -278,7 +282,7 @@ types = [<span class="hljs-string">&quot;天気&quot;</span>,<span class="hljs-s
     </li>
     <li>
       <p>da_samples.datを書き込みモードで定義<br>
-        作成する学習用データファイル<code>da_samples.dat</code>を新規作成し、書き込みモードで開いた<code>fp</code>を定義する。<br>
+        作成する学習用データファイル<code>da_samples.dat</code>を新規作成し、書き込みモードで開いた<code>fp</code>を定義。<br>
         ※ openは、指定したファイルが存在しなければ新規作成した状態で開き、存在していれば上書き状態で開く。<br>
         但し、指定したファイルがおかれているディレクトリが存在しない場合は、エラーとなるので注意。</p>
       <pre><code class="language-python">… (省略) …
@@ -289,12 +293,12 @@ fp = <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;da_
     </li>
     <li>
       <p>examples.txtファイルの読み込み<br>
-        上記で準備した代表データ（examples.txt）を読み込みモードで開き、読み込んだ行数分ループし（＊3）or（＊4）or（＊5）を実行する。<br></p>
+        上記で準備した代表データ（examples.txt）を読み込みモードで開き、読み込んだ行数分ループし（＊3）or（＊4）or（＊5）を実行。<br></p>
       <ul>
-        <li>（＊3）正規表現モジュール<code>re</code>で<code>da=</code>から始まるかどうかチェックし、始まるのであれば、右辺の発話行為タイプを<code>da</code>に保持する。</li>
+        <li>（＊3）正規表現モジュール<code>re</code>で<code>da=</code>から始まるかどうかチェックし、始まるのであれば、右辺の発話行為タイプを<code>da</code>に保持。</li>
         <li>（＊4）空白行とみなしスキップし、何もしない。</li>
         <li>
-          （＊5）XMLとして解析するため（最上位のタグは1つでなければならない）、対象行を<code>dummy</code>タグで囲い、<code>fromstring</code>で文字列から<code>xml.etree.ElementTree.Element</code>にパースしたものを<code>root</code>に保持する。
+          （＊5）XMLとして解析するため（最上位のタグは1つでなければならない）、対象行を<code>dummy</code>タグで囲い、<code>fromstring</code>で文字列から<code>xml.etree.ElementTree.Element</code>にパースしたものを<code>root</code>に保持。
           この<code>root</code>を引数に\(1000\)回<code>random_generate</code>メソッド（処理詳細は下記（＊6）を参照）を呼出し、対話行為タイプと<code>random_generate</code>の戻り値<code>sample</code>を<code>fp</code>に書き込む。
           <pre><code class="language-python">da = <span class="hljs-string">&#x27;&#x27;</span>
 <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;examples.txt&quot;</span>,<span class="hljs-string">&quot;r&quot;</span>):
@@ -347,7 +351,7 @@ fp.close()
   <ul>
     <li>
       <p>generate_da_samples.pyの実行確認<br>
-        上記の代表データ（examples.txt）がgenerate_da_samples.pyと同じフォルダ内にある状態で実行する。<br>
+        上記の代表データ（examples.txt）がgenerate_da_samples.pyと同じフォルダ内にある状態で実行。<br>
         （もちろんgenerate_da_samples.pyまでのファイルパスは各自環境に合わせて読み替える。）</p>
       <pre><code class="language-bash">$ python ~/gitlocalrep/dsbook/generate_da_samples.py
 </code></pre>
@@ -382,7 +386,7 @@ correct-info 広島じゃない
   <p>以上で学習データの準備が完了。</p>
   <h2 id="まとめ">まとめ</h2>
 <ul>
-  <li>フレームベースでは、発話から対話行為タイプやスロット情報を推定する。</li>
+  <li>フレームベースでは、発話から対話行為タイプやスロット情報を推定。</li>
   <li>SVMは発話行為タイプの分類に使う。</li>
   <li>学習データの設計と品質が、後続の推定精度に大きく影響する。</li>
 </ul>

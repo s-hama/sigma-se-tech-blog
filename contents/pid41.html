@@ -3,14 +3,16 @@
   <p>MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベースの天気情報案内Botを実装する。</p>
   <p>この方式では、ユーザーの発話内容を解析し、対話状態を更新しながら、必要な情報がそろったタイミングで天気APIを呼び出す。どの状態で何を聞くか、どの入力で状態が変わるかを明確にできる点が特徴となる。</p>
   <p>ここでは、状態遷移ベースの実装コード、処理の流れ、実行確認を順番に確認する。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>状態遷移ベースの天気案内Botの構成。</li>
-  <li>ユーザー発話を解析して状態を進める流れ。</li>
-  <li>SCXMLで定義した状態とPython処理の関係。</li>
-  <li>Telegram上でBotを実行確認する方法。</li>
-</ul>
     <p>※ 学習用の簡易的なものであるため、地名の指定は都道府県のみ、取得範囲は今日か明日のみ、種別は天気と気温のみとする。</p>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#状態遷移ベースの実装" class="link-secondary">状態遷移ベースの実装</a><br>
+      状態遷移ベースの実装の意味と要点を具体例から整理。</li>
+    <li><a href="#状態遷移ベースの解説" class="link-secondary">状態遷移ベースの解説</a><br>
+      状態遷移ベースの解説の意味と要点を具体例から整理。</li>
+    <li><a href="#状態遷移ベースの実行確認" class="link-secondary">状態遷移ベースの実行確認</a><br>
+      状態遷移ベースの実行について、確認する項目と結果の見方を整理。</li>
+  </ul>
     <h2 id="実装内容">実装内容</h2>
     <h3 id="状態遷移ベースの実装">状態遷移ベースの実装</h3>
     <p>先行記事で解説した文章解析の<code>MeCab</code>、状態遷移の<code>SCXML</code>、天気情報取得の<code>OpenWeatherMap</code>、メッセンジャーアプリの<code>Telegram</code>を使用して、タスク指向型の天気情報案内対話システムを実装する。
@@ -239,7 +241,7 @@
         <li>
             <p>TelegramBotクラス (telegram_bot.py)<br>
                 先行記事で解説したTelegramサーバー(Bot)との通信処理。<br>
-                Telegramサーバーとの通信を開始し、上記 WeatherSystemクラス(応答制御)の結果をBotに送信する。<br>
+                Telegramサーバーとの通信を開始し、上記 WeatherSystemクラス(応答制御)の結果をBotに送信。<br>
                 ※ 実行前に<code>TOKEN</code>を自身のものに書換えること。</p>
             <pre><code class="language-python"><span class="hljs-keyword">from</span> telegram.ext <span class="hljs-keyword">import</span> Updater, CommandHandler, MessageHandler, Filters
 
@@ -299,7 +301,7 @@ TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 </code></pre>
             <ul>
                 <li>（＊1）WeatherSystemクラスのコンストラクタ<br>
-                    QCoreApplicationでQtモジュールのメインインスタンス「app」を生成し、sessiondicを辞書型(dict)で定義する。
+                    QCoreApplicationでQtモジュールのメインインスタンス「app」を生成し、sessiondicを辞書型(dict)で定義。
                     <pre><code class="language-python">… (省略) …
     <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):
         <span class="hljs-comment"># Qtに関するおまじない</span>
@@ -310,7 +312,7 @@ TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 </code></pre>
                 </li>
                 <li>（＊2）TelegramBotクラスのコンストラクタ<br>
-                    自身のsystemにWeatherSystemクラスのインスタンスを設定する。
+                    自身のsystemにWeatherSystemクラスのインスタンスを設定。
                     <pre><code class="language-python">… (省略) …
     <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, system</span>):
         self.system = system
@@ -347,7 +349,7 @@ TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         <li>
             <p><code>initial_message</code>メソッドの実行<br>
                 次に<code>initial_message</code>メソッドへ、ユーザー発話情報<code>input</code>を渡し、<code>initial_message</code>メソッドでは、（＊4）のイベントループの初期設定、及び（＊5）の状態遷移の初期設定と（＊6）Botの初回発話内容を作成し返す。
-                そして、戻り値の発話内容(&quot;utt&quot;)をTelegramサーバー側の<code>reply_text</code>メソッドの引数に添え、発話内容を送信する。</p>
+                そして、戻り値の発話内容(&quot;utt&quot;)をTelegramサーバー側の<code>reply_text</code>メソッドの引数に添え、発話内容を送信。</p>
             <ul>
                 <li>（＊4）QEventLoopメソッドにてWeatherSystemクラスのイベントループ（el : イベント待機(監視)を永続実行する仕組み）を同期に設定。</li>
                 <li>（＊5）SCXMLファイルの読み、WeatherSystemクラスにセッションID単位の状態遷移情報（place、date、type）を保持するsessiondicを定義。</li>
@@ -391,7 +393,7 @@ TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
             <p><code>message</code>メソッドの実行<br>
                 その後、ユーザーがTelegramクライアントから発話したタイミングで上記で設定（待機）していたメッセージハンドラを受付け、messageメソッドが実行される。
                 messageメソッドでは、まずユーザーの発話内容（Telegramサーバー側の text
-                から取得したutt（発話内容））とユーザーのセッションIDでユーザー発話情報<code>input</code>を定義する。</p>
+                から取得したutt（発話内容））とユーザーのセッションIDでユーザー発話情報<code>input</code>を定義。</p>
             <ul>
                 <li><code>message</code>メソッド
                     <pre><code class="language-python">… (省略) …
@@ -465,7 +467,7 @@ TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         </li>
         <li>
             <p>発話内容の送信<br>
-                上記に続き（＊11）、（＊12）で状態遷移を設定後、発話内容を取得し、Telegramサーバー側の<code>reply_text</code>メソッドの引数に添え、発話内容を送信する。</p>
+                上記に続き（＊11）、（＊12）で状態遷移を設定後、発話内容を取得し、Telegramサーバー側の<code>reply_text</code>メソッドの引数に添え、発話内容を送信。</p>
             <ul>
                 <li>（＊11）遷移先がtell_infoである場合は、（＊13）、（＊14）で天気情報を取得し、発話内容（utt）と対話完了フラグ（end）をTrue（完了）で返す。</li>
                 <li>（＊12）遷移先がtell_infoでない場合は、遷移先に応じた発話内容（utt）と対話完了フラグ（end）をFalse（継続）で返す。</li>
@@ -573,7 +575,7 @@ IndexError: list index out of range
         </li>
         <li>
             <p>続けてstartコマンドを実行<br>
-                Telegramクライアントから「/start」を入力して、対話を開始する。<br>
+                Telegramクライアントから「/start」を入力して、対話を開始。<br>
                 以降、地名、日付（今日 or 明日）、情報種別（天気 or 気温）の入力による状態遷移で天気情報を返す。</p>
         </li>
         <li>

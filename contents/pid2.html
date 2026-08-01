@@ -3,6 +3,27 @@
   <p>VPS上でApacheを起動し、HTTP/HTTPS通信を許可し、Let&#x27;s EncryptでSSL/TLS証明書を取得する流れを整理する。</p>
   <p>Webサイトを公開するには、Webサーバーの起動だけでなく、firewalld、DocumentRoot、HTTPS、証明書更新までつなげて確認する必要がある。特にSSL/TLSは、一度取得して終わりではなく、期限管理まで含めて運用する。</p>
   <p>※ 注意：この記事は、2018年当時のCentOS 7.4環境をもとにした構築記録である。<br>CentOS 7は2024年6月30日にサポートを終了しているため、新規構築ではサポート中のOSと、そのOS向けにCertbot公式サイトが案内する手順を利用する。</p>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#前提環境" class="link-secondary">前提環境</a><br>
+      手順で使用するOS、ソフトウェア、構成などの前提条件を確認。</li>
+    <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
+      設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
+    <li><a href="#apachehttpdインストール" class="link-secondary">Apache(httpd)インストール</a><br>
+      Apache(httpd)インストールの手順と確認ポイントを整理。</li>
+    <li><a href="#ファイアウォールの設定" class="link-secondary">ファイアウォールの設定</a><br>
+      ファイアウォールの設定の手順と確認ポイントを整理。</li>
+    <li><a href="#httpd自動起動の確認" class="link-secondary">httpd自動起動の確認</a><br>
+      httpd自動起動について、確認する項目と結果の見方を整理。</li>
+    <li><a href="#documentrootの権限変更" class="link-secondary">DocumentRootの権限変更</a><br>
+      DocumentRootの権限変更の手順と確認ポイントを整理。</li>
+    <li><a href="#https用ポートの確認" class="link-secondary">HTTPS用ポートの確認</a><br>
+      HTTPS用ポートについて、確認する項目と結果の見方を整理。</li>
+    <li><a href="#ssltls証明書設定" class="link-secondary">SSL/TLS証明書設定</a><br>
+      SSL/TLS証明書設定の手順と確認ポイントを整理。</li>
+    <li><a href="#lets-encryptの定期更新" class="link-secondary">Let's Encryptの定期更新</a><br>
+      Let&#x27;s Encryptの定期更新の手順と確認ポイントを整理。</li>
+  </ul>
   <h2 id="前提環境">前提環境</h2>
   <ul>
     <li>OS<br>
@@ -18,14 +39,6 @@
     <li>ドメイン<br>
       example.com</li>
   </ul>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-  <ul>
-    <li>Apacheのインストールと起動確認。</li>
-    <li>HTTP/HTTPSをfirewalldで許可する手順。</li>
-    <li>DocumentRootの権限設定。</li>
-    <li>mod_sslとCertbotによるSSL/TLS証明書取得。</li>
-    <li>Let&#x27;s Encrypt証明書の更新確認。</li>
-  </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <ul>
     <li>HTTPとHTTPS<br>
@@ -33,7 +46,7 @@
     <li>--permanent<br>
       付けない設定は再起動後に消えることがある。</li>
     <li>証明書取得失敗<br>
-      DNS未反映やApache起動中のポート競合を確認する。</li>
+      DNS未反映やApache起動中のポート競合を確認。</li>
     <li>自動更新<br>
       証明書の取得だけでなく、更新確認まで運用に含める。</li>
   </ul>
@@ -65,7 +78,7 @@ $ firewall-cmd --zone=public --list-services
   <h3 id="httpd自動起動の確認">httpd自動起動の確認</h3>
   <ul>
     <li>インストール時に有効化した自動起動設定を確認<br>
-      <code>enabled</code>と表示されれば、OS起動時にhttpdも起動する。
+      <code>enabled</code>と表示されれば、OS起動時にhttpdも起動。
       <pre><code class="language-bash">$ systemctl is-enabled httpd
 </code></pre>
     </li>
@@ -119,7 +132,7 @@ $ <span class="hljs-built_in">chmod</span> 755 html
     </li>
     <li>
       <p>起動確認<br>
-        <code>active (running)</code>であることを確認する。長いプロセス一覧を転載するより、サービス状態と設定構文を確認する方が切り分けやすい。</p>
+        <code>active (running)</code>であることを確認。長いプロセス一覧を転載するより、サービス状態と設定構文を確認する方が切り分けやすい。</p>
       <pre><code class="language-bash">$ apachectl configtest
 $ systemctl restart httpd
 $ systemctl status httpd
@@ -138,7 +151,7 @@ $ systemctl status httpd
       </p>
       <pre><code class="language-bash">$ yum install certbot python2-certbot-apache
 </code></pre>
-      <p>※ 上記はCentOS 7当時のパッケージ名である。現在はCertbot公式のインストール手順で、利用中のOSとWebサーバーを選択して確認する。</p>
+      <p>※ 上記はCentOS 7当時のパッケージ名である。現在はCertbot公式のインストール手順で、利用中のOSとWebサーバーを選択して確認。</p>
     </li>
     <li>
       <p>CertbotでSSL証明書を取得する</p>
@@ -156,7 +169,7 @@ $ systemctl status httpd
     Let's Encryptによる期限通知メールは2025年6月4日に終了したため、メールを更新確認の代わりにはできない。</p>
   <ul>
     <li>
-      <p>インストール方法に応じてsystemd timerまたはcronの自動更新設定を確認し、<code>--dry-run</code>で更新をテストする。通常の更新では、期限が近い証明書だけを対象とする<code>certbot renew</code>を使い、<code>--force-renewal</code>は常用しない。</p>
+      <p>インストール方法に応じてsystemd timerまたはcronの自動更新設定を確認し、<code>--dry-run</code>で更新をテスト。通常の更新では、期限が近い証明書だけを対象とする<code>certbot renew</code>を使い、<code>--force-renewal</code>は常用しない。</p>
       <pre><code class="language-bash">$ systemctl list-timers --all | grep certbot
 $ sudo certbot renew --dry-run
 $ sudo certbot renew
@@ -165,12 +178,12 @@ $ openssl x509 -in /etc/letsencrypt/live/example.com/fullchain.pem -noout -dates
     </li>
     <li>
       <p>有効期限の確認<br>
-        <code>certbot renew --dry-run</code>が成功することに加え、外部監視や定期的な証明書確認を用意して更新失敗を検知する。</p>
+        <code>certbot renew --dry-run</code>が成功することに加え、外部監視や定期的な証明書確認を用意して更新失敗を検知。</p>
     </li>
   </ul>
   <h2 id="まとめ">まとめ</h2>
   <ul>
-    <li>Apacheを公開するには、httpd、firewalld、DocumentRootをまとめて確認する。</li>
+    <li>Apacheを公開するには、httpd、firewalld、DocumentRootをまとめて確認。</li>
     <li>HTTPS化では、mod_sslとSSL/TLS証明書の設定が必要になる。</li>
     <li>Let&#x27;s Encryptは更新が必要なため、取得後の期限確認も運用に含める。</li>
   </ul>

@@ -2,20 +2,23 @@
   <h2 id="概要">概要</h2>
   <p>Django Debug Toolbarを導入し、settings.pyとurls.pyへ必要な設定を追加する手順を整理する。</p>
   <p>Django Debug Toolbarは、リクエスト、レスポンス、SQL、テンプレートなどの情報をブラウザ上で確認できる開発支援ツールとなる。<br>開発時の調査には便利だが、本番環境や公開サーバーでの利用を想定して強化されたツールではないため、開発環境だけで有効にすることが重要になる。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
+  <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
-    <li>django-debug-toolbarの役割。</li>
-    <li>仮想環境へパッケージをインストールする手順。</li>
-    <li>INSTALLED_APPSとMIDDLEWAREへの追加方法。</li>
-    <li>INTERNAL_IPSの意味。</li>
-    <li>urls.pyで__debug__用URLを追加する方法。</li>
+    <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
+      設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
+    <li><a href="#django-debug-toolbarの導入" class="link-secondary">django-debug-toolbarの導入</a><br>
+      django-debug-toolbarの導入の手順と確認ポイントを整理。</li>
+    <li><a href="#django-debug-toolbarの設定追加" class="link-secondary">django-debug-toolbarの設定追加</a><br>
+      django-debug-toolbarの設定追加の手順と確認ポイントを整理。</li>
+    <li><a href="#debug-toolbarの表示確認" class="link-secondary">Debug Toolbarの表示確認</a><br>
+      Debug Toolbarの表示について、確認する項目と結果の見方を整理。</li>
   </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <ul>
     <li>Toolbarが出ない<br>
-      DEBUG、INTERNAL_IPS、URL設定、MIDDLEWAREの順に確認する。</li>
+      DEBUG、INTERNAL_IPS、URL設定、MIDDLEWAREの順に確認。</li>
     <li>CSSやJavaScriptが読み込めない<br>
-      staticfilesの設定とブラウザーの開発者ツールを確認する。</li>
+      staticfilesの設定とブラウザーの開発者ツールを確認。</li>
     <li>設定順序<br>
       DebugToolbarMiddlewareは早い位置に置き、レスポンスを圧縮するミドルウェアより後に置く。</li>
     <li>本番利用<br>
@@ -27,7 +30,7 @@
   <ul>
     <li>
       <p>django-debug-toolbarのインストール<br>
-        仮想環境を有効にしてから、公式手順どおり<code>python -m pip</code>でインストールする。<br>利用中のPython・Djangoに対応するバージョンは、インストール前に公式ドキュメントで確認する。<br>
+        仮想環境を有効にしてから、公式手順どおり<code>python -m pip</code>でインストール。<br>利用中のPython・Djangoに対応するバージョンは、インストール前に公式ドキュメントで確認。<br>
         ※ 仮想環境とDjangoの準備は、<a href="https://sigma-se.com/detail/3/" class="link-secondary">Djangoインストール</a>を参照。</p>
       <pre><code class="language-bash">$ source /var/www/vops/bin/activate
 (vops) $ python -m pip install django-debug-toolbar
@@ -35,18 +38,18 @@
     </li>
     <li>
       <p>Django側の前提設定<br>
-        通常の<code>startproject</code>で作成したプロジェクトでは設定済みだが、<code>INSTALLED_APPS</code>に<code>django.contrib.staticfiles</code>があり、<code>TEMPLATES</code>のDjangoTemplatesバックエンドで<code>APP_DIRS=True</code>になっていることを確認する。</p>
+        通常の<code>startproject</code>で作成したプロジェクトでは設定済みだが、<code>INSTALLED_APPS</code>に<code>django.contrib.staticfiles</code>があり、<code>TEMPLATES</code>のDjangoTemplatesバックエンドで<code>APP_DIRS=True</code>になっていることを確認。</p>
     </li>
   </ul>
   <h3 id="django-debug-toolbarの設定追加">django-debug-toolbarの設定追加</h3>
   <ul>
     <li>
       <p>settings.pyの設定<br>
-        settings.pyの最低限必要な設定を変更する。</p>
+        settings.pyの最低限必要な設定を変更。</p>
       <ul>
         <li>
           <p>DEBUGモードの変更<br>
-            開発環境で<code>DEBUG=True</code>となるように設定する。<br>本番環境と設定を共有している場合は、環境変数や設定ファイルを分け、本番で誤って有効にならないようにする。</p>
+            開発環境で<code>DEBUG=True</code>となるように設定。<br>本番環境と設定を共有している場合は、環境変数や設定ファイルを分け、本番で誤って有効にならないようにする。</p>
           <pre><code class="language-python">DEBUG = True
 </code></pre>
         </li>
@@ -74,7 +77,7 @@
           <p>INTERNAL_IPSの追加</p>
           <pre><code class="language-python">INTERNAL_IPS = ["127.0.0.1"]
 </code></pre>
-          <p>既定の表示判定では、Djangoが認識する接続元IPが<code>INTERNAL_IPS</code>に含まれる場合だけToolbarが表示される。<br>Docker、リバースプロキシ、別の開発サーバーを利用する場合は見えるIPが変わるため、公式ドキュメントの<code>SHOW_TOOLBAR_CALLBACK</code>も含めて環境に合わせて設定する。<br>単に常に<code>True</code>を返す設定を公開環境へ置かないよう注意する。</p>
+          <p>既定の表示判定では、Djangoが認識する接続元IPが<code>INTERNAL_IPS</code>に含まれる場合だけToolbarが表示される。<br>Docker、リバースプロキシ、別の開発サーバーを利用する場合は見えるIPが変わるため、公式ドキュメントの<code>SHOW_TOOLBAR_CALLBACK</code>も含めて環境に合わせて設定。<br>単に常に<code>True</code>を返す設定を公開環境へ置かないよう注意。</p>
         </li>
       </ul>
     </li>
@@ -87,7 +90,7 @@ urlpatterns = [
     # アプリケーションのURL
 ] + debug_toolbar_urls()
 </code></pre>
-      <p>使用しているバージョンやプロジェクト方針によってURLを明示する場合は、古い<code>url()</code>ではなく<code>path()</code>を使用する。</p>
+      <p>使用しているバージョンやプロジェクト方針によってURLを明示する場合は、古い<code>url()</code>ではなく<code>path()</code>を使用。</p>
       <pre><code class="language-python">from django.conf import settings
 from django.urls import include, path
 
@@ -119,7 +122,7 @@ if settings.DEBUG:
   <ul>
     <li>Django Debug Toolbarは、Django開発時の調査を助けるデバッグツールとなる。</li>
     <li>導入には、パッケージインストール、settings.py、urls.pyの設定が必要になる。</li>
-    <li>便利な反面、内部情報を表示するため本番環境では無効化する。</li>
+    <li>便利な反面、内部情報を表示するため本番環境では無効化。</li>
   </ul>
   <h3 id="参考文献">参考文献</h3>
   <ul>

@@ -3,6 +3,23 @@
   <p>PostgreSQLの初期設定、Djangoのデータベース接続、settings.pyの本番向け設定、起動確認までを整理する。</p>
   <p>Djangoサイトを公開する最後の段階では、データベース、マイグレーション、セキュリティ設定、静的ファイル、Apache連携をまとめて確認する必要がある。runserverと本番起動の違いも押さえておく。</p>
   <p>注意：この記事は、2018年当時のCentOS 7.4環境の構築記録をもとに、前記事で採用した後年の旧バージョン（Django 2.2、psycopg2 2.8系）と整合するよう再構成した例であり、2018年当時のパッケージ構成を厳密に再現するものではない。<br>CentOS 7標準のPostgreSQL 9.2はDjango 2.2の要件（PostgreSQL 9.4以上）を満たさないため、PGDG版PostgreSQL 9.6を使用する。<br>これらはすべてサポート終了済みなので、新規の本番環境へ採用しない。<br>以下では、データベースをDjangoと同じVPSで動かす構成を前提とする。</p>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#前提環境" class="link-secondary">前提環境</a><br>
+      手順で使用するOS、ソフトウェア、構成などの前提条件を確認。</li>
+    <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
+      設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
+    <li><a href="#データベースの環境構築" class="link-secondary">データベースの環境構築</a><br>
+      データベースの環境構築の手順と確認ポイントを整理。</li>
+    <li><a href="#django周りの設定" class="link-secondary">Django周りの設定</a><br>
+      Django周りの設定の手順と確認ポイントを整理。</li>
+    <li><a href="#postgresql周りの設定" class="link-secondary">PostgreSQL周りの設定</a><br>
+      PostgreSQL周りの設定の手順と確認ポイントを整理。</li>
+    <li><a href="#settingspyの設定" class="link-secondary">settings.pyの設定</a><br>
+      settings.pyの設定の手順と確認ポイントを整理。</li>
+    <li><a href="#起動確認" class="link-secondary">起動確認</a><br>
+      起動について、確認する項目と結果の見方を整理。</li>
+  </ul>
   <h2 id="前提環境">前提環境</h2>
   <ul>
     <li>OS<br>
@@ -18,20 +35,12 @@
     <li>ドメイン<br>
       example.com</li>
   </ul>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-  <ul>
-    <li>PostgreSQLの初期化、ユーザー、データベース作成。</li>
-    <li>Djangoのmakemigrationsとmigrateの役割。</li>
-    <li>settings.pyで確認する本番向け設定。</li>
-    <li>DATABASES、STATIC、MEDIA、LOGGINGの基本。</li>
-    <li>runserverとApache経由の起動確認の違い。</li>
-  </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <ul>
     <li>データベースユーザー<br>
       作成したユーザー名とDjangoのDATABASES設定を一致させる。</li>
     <li>DEBUG設定<br>
-      本番ではFalseにし、ALLOWED_HOSTSを正しく設定する。</li>
+      本番ではFalseにし、ALLOWED_HOSTSを正しく設定。</li>
     <li>マイグレーション<br>
       モデル変更後はmakemigrationsとmigrateを忘れない。</li>
     <li>runserverとApache<br>
@@ -42,13 +51,13 @@
   <ul>
     <li>
       <p>PostgreSQL 9.6インストール（旧環境の例）<br>
-        当時のPostgreSQL公式Yumリポジトリ（PGDG 9.6）を有効化した後、Django 2.2の要件を満たすPostgreSQL 9.6を導入する。<br>現在はPostgreSQL 9.6もサポート終了済みなので、このパッケージ名を新規構築へ流用せず、サポート中のOSとPostgreSQLを選ぶ。</p>
+        当時のPostgreSQL公式Yumリポジトリ（PGDG 9.6）を有効化した後、Django 2.2の要件を満たすPostgreSQL 9.6を導入。<br>現在はPostgreSQL 9.6もサポート終了済みなので、このパッケージ名を新規構築へ流用せず、サポート中のOSとPostgreSQLを選ぶ。</p>
       <pre><code class="language-bash">$ yum -y install postgresql96-server postgresql96-devel gcc
 </code></pre>
     </li>
     <li>
       <p>DjangoからPostgreSQLへ接続するドライバーをインストール<br>
-        この記事のPython 3.6環境では、対応する<code>psycopg2</code>を仮想環境へ導入する。新しい環境では、利用中のDjangoが対応する<code>psycopg</code>または<code>psycopg2</code>と公式の導入方法を確認する。</p>
+        この記事のPython 3.6環境では、対応する<code>psycopg2</code>を仮想環境へ導入。新しい環境では、利用中のDjangoが対応する<code>psycopg</code>または<code>psycopg2</code>と公式の導入方法を確認。</p>
       <pre><code class="language-bash">$ <span class="hljs-built_in">source</span> /var/www/vops/bin/activate
 $ <span class="hljs-built_in">export</span> PATH=<span class="hljs-string">&quot;/usr/pgsql-9.6/bin:<span class="hljs-variable">$PATH</span>&quot;</span>
 $ python -m pip install <span class="hljs-string">"psycopg2&lt;2.9"</span>
@@ -56,7 +65,7 @@ $ python -m pip install <span class="hljs-string">"psycopg2&lt;2.9"</span>
     </li>
     <li>
       <p>データベースとユーザーの作成<br>
-        データベース<strong>exampledb</strong>とアクセスユーザー<strong>appuser</strong>を作成する。<br>PostgreSQLでは引用符なしの識別子が小文字へ変換されるため、SQLとDjangoの設定で最初から小文字に統一する。</p>
+        データベース<strong>exampledb</strong>とアクセスユーザー<strong>appuser</strong>を作成。<br>PostgreSQLでは引用符なしの識別子が小文字へ変換されるため、SQLとDjangoの設定で最初から小文字に統一する。</p>
       <pre><code class="language-bash">$ /usr/pgsql-9.6/bin/postgresql96-setup initdb    <span class="hljs-comment"># データベースの初期化</span>
 $ systemctl start postgresql-9.6    <span class="hljs-comment"># PostgreSQLを起動</span>
 $ systemctl enable postgresql-9.6    <span class="hljs-comment"># 自動起動を有効化</span>
@@ -86,7 +95,7 @@ postgres=# ALTER ROLE appuser SET timezone TO &#x27;Asia/Tokyo&#x27;;
     </li>
     <li>
       <p>マイグレーションファイルをデータベースに反映<br>
-        マイグレーションファイルを基に、データベースの構造(テーブルの作成や更新)を変更する。</p>
+        マイグレーションファイルを基に、データベースの構造(テーブルの作成や更新)を変更。</p>
       <pre><code class="language-bash">$ /var/www/vops/bin/python /var/www/vops/ops/manage.py migrate
 </code></pre>
     </li>
@@ -109,15 +118,15 @@ listen_addresses = <span class="hljs-string">&#x27;localhost&#x27;</span>
 </code></pre>
     </li>
     <li>
-      <p><strong>pg_hba.conf（認証設定ファイル）</strong>にドメイン情報を追加<br>ローカルホストから<code>exampledb</code>へ接続するルールを追加する。<br>アドレス欄はサーバー自身ではなく、接続元クライアントの範囲を表す。<br><code>pg_hba.conf</code>は上から順に最初に一致したルールが使われるため、<code>host all all 127.0.0.1/32 ...</code>のような広いルールより前へ挿入する。</p>
+      <p><strong>pg_hba.conf（認証設定ファイル）</strong>にドメイン情報を追加<br>ローカルホストから<code>exampledb</code>へ接続するルールを追加。<br>アドレス欄はサーバー自身ではなく、接続元クライアントの範囲を表す。<br><code>pg_hba.conf</code>は上から順に最初に一致したルールが使われるため、<code>host all all 127.0.0.1/32 ...</code>のような広いルールより前へ挿入する。</p>
       <pre><code class="language-bash">$ vim /var/lib/pgsql/9.6/data/pg_hba.conf
 <span class="hljs-comment"># ローカルホスト向けの広いhostルールより前へ追加</span>
 host    exampledb    appuser    127.0.0.1/32    md5
 </code></pre>
-      <p><code>md5</code>はこの旧環境に合わせた認証方式である。現行PostgreSQLではSCRAM認証を優先し、サーバーとクライアントの対応状況を公式ドキュメントで確認する。</p>
+      <p><code>md5</code>はこの旧環境に合わせた認証方式である。現行PostgreSQLではSCRAM認証を優先し、サーバーとクライアントの対応状況を公式ドキュメントで確認。</p>
     </li>
     <li>
-      <p>PostgreSQLの再起動<br><code>listen_addresses</code>と<code>pg_hba.conf</code>を変更した後、PostgreSQLを再起動する。<br>5432番ポートは<code>firewalld</code>で公開しない。データベースを別サーバーへ分離する場合だけ、接続元IP、TLS、クラウド側のセキュリティグループを含めて別途設計する。</p>
+      <p>PostgreSQLの再起動<br><code>listen_addresses</code>と<code>pg_hba.conf</code>を変更した後、PostgreSQLを再起動。<br>5432番ポートは<code>firewalld</code>で公開しない。データベースを別サーバーへ分離する場合だけ、接続元IP、TLS、クラウド側のセキュリティグループを含めて別途設計。</p>
       <pre><code class="language-bash">$ systemctl restart postgresql-9.6
 </code></pre>
     </li>
@@ -149,7 +158,7 @@ host    exampledb    appuser    127.0.0.1/32    md5
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 </code></pre>
-      <p><code>SECURE_PROXY_SSL_HEADER</code>は、TLSを終端する信頼済みリバースプロキシが<code>X-Forwarded-Proto</code>を設定し、外部から届いた同名ヘッダーを除去できる場合にだけ設定する。<br>ApacheのHTTPS VirtualHostからmod_wsgiへ直接渡す今回の構成では不要となる。</p>
+      <p><code>SECURE_PROXY_SSL_HEADER</code>は、TLSを終端する信頼済みリバースプロキシが<code>X-Forwarded-Proto</code>を設定し、外部から届いた同名ヘッダーを除去できる場合にだけ設定。<br>ApacheのHTTPS VirtualHostからmod_wsgiへ直接渡す今回の構成では不要となる。</p>
     </li>
     <li>ROOT_URLCONFの修正
       <pre><code class="language-bash">ROOT_URLCONF = <span class="hljs-string">&#x27;ops.urls&#x27;</span>    <span class="hljs-comment"># URLとビューを対応付けるURLconfモジュールを指定</span>
@@ -167,7 +176,7 @@ CSRF_COOKIE_SECURE = True
     }
 }
 </code></pre>
-      <p>パスワードや<code>SECRET_KEY</code>はソースコードへ直接書かず、環境変数や権限を制限した設定ファイルから読み込む。<br>この例では<code>DJANGO_DB_PASSWORD</code>が未設定だとDjango起動時にエラーになるため、<code>manage.py</code>を実行するシェルだけでなく、Apacheサービスの起動環境にも同じ値を安全に渡す必要がある。<br>具体的な受渡し方法はOSやサービス管理方法に合わせ、権限を制限した環境ファイルやシークレット管理機能を利用する。</p>
+      <p>パスワードや<code>SECRET_KEY</code>はソースコードへ直接書かず、環境変数や権限を制限した設定ファイルから読み込む。<br>この例では<code>DJANGO_DB_PASSWORD</code>が未設定だとDjango起動時にエラーになるため、<code>manage.py</code>を実行するシェルだけでなく、Apacheサービスの起動環境にも同じ値を安全に渡す必要がある。<br>具体的な受渡し方法はOSやサービス管理方法に合わせ、権限を制限した環境ファイルやシークレット管理機能を利用。</p>
     </li>
     <li>日本語化、タイムゾーンの設定
       <pre><code class="language-bash">LANGUAGE_CODE = <span class="hljs-string">&#x27;ja&#x27;</span>
@@ -184,7 +193,7 @@ MEDIA_URL = <span class="hljs-string">&#x27;/media/&#x27;</span>
 MEDIA_ROOT = os.path.join(BASE_DIR, <span class="hljs-string">&#x27;media&#x27;</span>)
 </code></pre>
       <p><code>MEDIA_ROOT</code>はアップロードファイルの保存先を定めるだけで、<code>DEBUG=False</code>の環境でApacheから自動配信されるわけではない。<br>メディア機能を使う場合は、アップロードされた内容を実行させない安全なApache設定またはオブジェクトストレージを別途用意する。</p>
-      <p><code>STATIC_ROOT</code>を設定した後、Apacheが配信する静的ファイルを集約する。</p>
+      <p><code>STATIC_ROOT</code>を設定した後、Apacheが配信する静的ファイルを集約。</p>
       <pre><code class="language-bash">$ /var/www/vops/bin/python /var/www/vops/ops/manage.py collectstatic --noinput
 </code></pre>
     </li>
@@ -226,27 +235,27 @@ MEDIA_ROOT = os.path.join(BASE_DIR, <span class="hljs-string">&#x27;media&#x27;<
   <ul>
     <li>
       <p>Django単体の診断<br>
-        <strong>manage.py</strong>の<code>runserver</code>をループバックアドレスだけにバインドし、VPS内から確認する。<br>これは問題の切り分け用であり、本番トラフィックには使用しない。<br>上記の<code>SECURE_SSL_REDIRECT=True</code>が有効なため、このHTTPリクエストではHTTPSへのリダイレクトが返ればDjangoが応答していることを確認できる。<br>画面内容まで確認する場合は、本番設定を弱めず、リダイレクトを無効にした開発用設定を別途使用する。</p>
+        <strong>manage.py</strong>の<code>runserver</code>をループバックアドレスだけにバインドし、VPS内から確認。<br>これは問題の切り分け用であり、本番トラフィックには使用しない。<br>上記の<code>SECURE_SSL_REDIRECT=True</code>が有効なため、このHTTPリクエストではHTTPSへのリダイレクトが返ればDjangoが応答していることを確認できる。<br>画面内容まで確認する場合は、本番設定を弱めず、リダイレクトを無効にした開発用設定を別途使用。</p>
       <pre><code class="language-bash">$ /var/www/vops/bin/python /var/www/vops/ops/manage.py runserver 127.0.0.1:8080
 $ curl -I -H &#x27;Host: example.com&#x27; http://127.0.0.1:8080/
 </code></pre>
     </li>
     <li>
       <p>本番環境の起動確認<br>
-        DjangoのデプロイチェックとApacheの構文確認を行い、<strong>Apache</strong>、<strong>PostgreSQL</strong>を再起動する。<br>その後、https://example.comへアクセスし、作成したアプリがApache経由で表示されれば成功となる。</p>
+        DjangoのデプロイチェックとApacheの構文確認を行い、<strong>Apache</strong>、<strong>PostgreSQL</strong>を再起動。<br>その後、https://example.comへアクセスし、作成したアプリがApache経由で表示されれば成功となる。</p>
       <pre><code class="language-bash">$ /var/www/vops/bin/python /var/www/vops/ops/manage.py check --deploy
 $ apachectl configtest
 $ systemctl restart postgresql-9.6 httpd
 $ curl -I https://example.com/
 </code></pre>
-      <p>モデルを修正した場合は、<strong>manage.py</strong>の<code>makemigrations</code>、<code>migrate</code>を実行する。<br><code>runserver</code>とApacheは通常は別ポートで動くため競合するわけではないが、確認先を取り違えないよう、単体診断後は<code>runserver</code>を停止してApache経由の結果を確認する。</p>
+      <p>モデルを修正した場合は、<strong>manage.py</strong>の<code>makemigrations</code>、<code>migrate</code>を実行。<br><code>runserver</code>とApacheは通常は別ポートで動くため競合するわけではないが、確認先を取り違えないよう、単体診断後は<code>runserver</code>を停止してApache経由の結果を確認。</p>
     </li>
   </ul>
   <h2 id="まとめ">まとめ</h2>
   <ul>
-    <li>Djangoサイト公開の仕上げでは、PostgreSQL、マイグレーション、settings.pyをまとめて確認する。</li>
+    <li>Djangoサイト公開の仕上げでは、PostgreSQL、マイグレーション、settings.pyをまとめて確認。</li>
     <li>本番環境ではDEBUGを無効化し、ALLOWED_HOSTSやSSL/TLS関連設定を整える。</li>
-    <li>起動確認はrunserverではなく、最終的にApache経由で確認する。</li>
+    <li>起動確認はrunserverではなく、最終的にApache経由で確認。</li>
   </ul>
   <h3 id="参考文献">参考文献</h3>
   <ul>

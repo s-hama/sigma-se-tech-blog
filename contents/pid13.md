@@ -5,18 +5,18 @@ Python - Matplotlib：pyplotでグラフを描画する基本操作
 Matplotlibのpyplotを使い、Pythonでグラフを描画する基本手順を整理する。
 数値だけを眺めても傾向はつかみにくいため、折れ線グラフや散布図として可視化することで、変化、分布、外れ値を確認しやすくなる。<br>ここでは、インストール、基本的な描画、複数系列、ラベルや凡例の設定を実行例で確認する。
 
-## この記事で扱うこと
-- pyplotを使ったグラフ描画の基本的な流れ。
-- x軸、y軸、タイトル、凡例を設定する方法。
-- 折れ線グラフや散布図でデータの傾向を見る考え方。
-- NumPy配列とMatplotlibを組み合わせる使い方。
+## この記事の構成
+- [Matplotlibの環境準備](#matplotlibの環境準備)<br>
+  Matplotlibの環境準備の手順と確認ポイントを整理。
+- [Matplotlibの使用方法](#matplotlibの使用方法)<br>
+  Matplotlibの使用方法をコードや具体例で確認。
 
 ## 実施内容
 ### Matplotlibの環境準備
 **Matplotlib**は、折れ線グラフ、散布図、ヒストグラム、画像などを描画できるPythonライブラリで、NumPyと組み合わせて使用する場面も多い。
 
 - Matplotlibのインストール<br>
-使用するPython環境を明確にするため、次のようにPython経由でpipを実行する。
+使用するPython環境を明確にするため、次のようにPython経由でpipを実行。
   ```bash
   $ python -m pip install matplotlib
   ```
@@ -24,7 +24,7 @@ Matplotlibのpyplotを使い、Pythonでグラフを描画する基本手順を�
 
 ### Matplotlibの使用方法
 - 区間、刻み幅、グラフタイトル、軸ラベルの設定と表示<br>
-二次関数**y = x^2**を例に区間、刻み幅、グラフタイトル、軸ラベルを設定してグラフを描画する。<br>`np.arange(0, 20, 0.01)`は、0以上20未満の値を0.01刻みで生成する。
+二次関数**y = x^2**を例に区間、刻み幅、グラフタイトル、軸ラベルを設定してグラフを描画する。<br>`np.arange(0, 20, 0.01)`は、0以上20未満の値を0.01刻みで生成。
   ```bash
   $ python
    >>> import numpy as np
@@ -46,7 +46,7 @@ Matplotlibのpyplotを使い、Pythonでグラフを描画する基本手順を�
   ![0以上20未満の二次関数y=x^2を描画した折れ線グラフ](/static/tblog/img/pid13_1.png)
 
 - 2つのグラフ、凡例の設定と表示<br>
-三角関数**y = sin(x)**と**y = cos(x)**を例に凡例の設定を行い、2つのグラフを表示する。
+三角関数**y = sin(x)**と**y = cos(x)**を例に凡例の設定を行い、2つのグラフを表示。
   ```bash
   $ python
    >>> import numpy as np
@@ -73,8 +73,8 @@ Matplotlibのpyplotを使い、Pythonでグラフを描画する基本手順を�
   ![0以上6未満のsin関数とcos関数を重ねて描画したグラフ](/static/tblog/img/pid13_2.png)
 
 - **imread**を使った画像表示<br>
-`matplotlib.image`の`imread`によって画像をNumPy配列として読み込み、`pyplot.imshow`で座標軸上に表示する。<br>
-ここでは、透過背景のPythonロゴ画像「pid13_3.png」を読み込み、描画結果を「pid13_4.png」として保存する。<br>読み込んだ配列の`shape`を確認すると、画像の高さ、幅、色チャンネル数も確認できる。
+`matplotlib.image`の`imread`によって画像をNumPy配列として読み込み、`pyplot.imshow`で座標軸上に表示。<br>
+ここでは、透過背景のPythonロゴ画像「pid13_3.png」を読み込み、描画結果を「pid13_4.png」として保存。<br>読み込んだ配列の`shape`を確認すると、画像の高さ、幅、色チャンネル数も確認できる。
 
   - 読み込み元の画像「pid13_3.png」
   ![imreadで読み込む透過背景のPythonロゴ画像](/static/tblog/img/pid13_3.png)
@@ -106,7 +106,7 @@ Matplotlibのpyplotを使い、Pythonでグラフを描画する基本手順を�
 - MatplotlibはPythonでグラフを描く代表的なライブラリ。
 - pyplotでは、要素数をそろえたxとyのデータを渡して描画する。要素数が異なると描画エラーになる。
 - 軸名や凡例を付けるとグラフの意味が伝わりやすくなり、数値の傾向や異常を判断しやすくなる。
-- スクリプトから画面に表示する場合は`plt.show()`、画像として保存する場合は`plt.savefig()`を使用する。
+- スクリプトから画面に表示する場合は`plt.show()`、画像として保存する場合は`plt.savefig()`を使用。
 - `imread`で読み込んだ画像はNumPy配列として扱われ、`imshow`で表示できる。
 
 ## 参考文献

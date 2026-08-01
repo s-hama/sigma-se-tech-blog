@@ -6,11 +6,13 @@ MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベー
 この方式では、ユーザーの発話内容を解析し、対話状態を更新しながら、必要な情報がそろったタイミングで天気APIを呼び出す。どの状態で何を聞くか、どの入力で状態が変わるかを明確にできる点が特徴となる。
 ここでは、状態遷移ベースの実装コード、処理の流れ、実行確認を順番に確認する。
 
-## この記事で扱うこと
-- 状態遷移ベースの天気案内Botの構成。
-- ユーザー発話を解析して状態を進める流れ。
-- SCXMLで定義した状態とPython処理の関係。
-- Telegram上でBotを実行確認する方法。
+## この記事の構成
+- [状態遷移ベースの実装](#状態遷移ベースの実装)<br>
+  状態遷移ベースの実装の意味と要点を具体例から整理。
+- [状態遷移ベースの解説](#状態遷移ベースの解説)<br>
+  状態遷移ベースの解説の意味と要点を具体例から整理。
+- [状態遷移ベースの実行確認](#状態遷移ベースの実行確認)<br>
+  状態遷移ベースの実行について、確認する項目と結果の見方を整理。
 
 ## 実装内容
 ### 状態遷移ベースの実装
@@ -240,7 +242,7 @@ MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベー
 
 - TelegramBotクラス (telegram_bot.py)<br>
     先行記事で解説したTelegramサーバー(Bot)との通信処理。<br>
-    Telegramサーバーとの通信を開始し、上記 WeatherSystemクラス(応答制御)の結果をBotに送信する。<br>
+    Telegramサーバーとの通信を開始し、上記 WeatherSystemクラス(応答制御)の結果をBotに送信。<br>
     ※ 実行前に`TOKEN`を自身のものに書換えること。
 
     ```python
@@ -299,7 +301,7 @@ MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベー
       bot.run()
   ```
   - （＊1）WeatherSystemクラスのコンストラクタ<br>
-      QCoreApplicationでQtモジュールのメインインスタンス「app」を生成し、sessiondicを辞書型(dict)で定義する。
+      QCoreApplicationでQtモジュールのメインインスタンス「app」を生成し、sessiondicを辞書型(dict)で定義。
       ```python
       … (省略) …
           def __init__(self):
@@ -310,7 +312,7 @@ MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベー
       … (省略) …
       ```
   - （＊2）TelegramBotクラスのコンストラクタ<br>
-      自身のsystemにWeatherSystemクラスのインスタンスを設定する。
+      自身のsystemにWeatherSystemクラスのインスタンスを設定。
       ```python
       … (省略) …
           def __init__(self, system):
@@ -341,7 +343,7 @@ MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベー
   ```
 - `initial_message`メソッドの実行<br>
   次に`initial_message`メソッドへ、ユーザー発話情報`input`を渡し、`initial_message`メソッドでは、（＊4）のイベントループの初期設定、及び（＊5）の状態遷移の初期設定と（＊6）Botの初回発話内容を作成し返す。
-  そして、戻り値の発話内容("utt")をTelegramサーバー側の`reply_text`メソッドの引数に添え、発話内容を送信する。
+  そして、戻り値の発話内容("utt")をTelegramサーバー側の`reply_text`メソッドの引数に添え、発話内容を送信。
   - （＊4）QEventLoopメソッドにてWeatherSystemクラスのイベントループ（el : イベント待機(監視)を永続実行する仕組み）を同期に設定。
   - （＊5）SCXMLファイルの読み込み、WeatherSystemクラスにセッションID単位の状態遷移情報（place、date、type）を保持するsessiondicを定義。
   - （＊6）状態遷移を初期に設定後、初期状態の状態遷移ID（"ask_place"）の内容（"地名を言ってください"）を取得し、戻り値でuttと連結したものを返す。<br>
@@ -380,7 +382,7 @@ MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベー
       ```
 - `message`メソッドの実行<br>
   その後、ユーザーがTelegramクライアントから発話したタイミングで上記で設定（待機）していたメッセージハンドラを受付け、messageメソッドが実行される。
-  messageメソッドでは、まずユーザーの発話内容（Telegramサーバー側の text から取得したutt（発話内容））とユーザーのセッションIDでユーザー発話情報`input`を定義する。
+  messageメソッドでは、まずユーザーの発話内容（Telegramサーバー側の text から取得したutt（発話内容））とユーザーのセッションIDでユーザー発話情報`input`を定義。
   -  `message`メソッド
       ```python
       … (省略) …
@@ -442,7 +444,7 @@ MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベー
                   … (省略) …
           ```
 - 発話内容の送信<br>
-  上記に続き（＊11）、（＊12）で状態遷移を設定後、発話内容を取得し、Telegramサーバー側の`reply_text`メソッドの引数に添え、発話内容を送信する。
+  上記に続き（＊11）、（＊12）で状態遷移を設定後、発話内容を取得し、Telegramサーバー側の`reply_text`メソッドの引数に添え、発話内容を送信。
   - （＊11）遷移先がtell_infoである場合は、（＊13）、（＊14）で天気情報を取得し、発話内容（utt）と対話完了フラグ（end）をTrue（完了）で返す。
   - （＊12）遷移先がtell_infoでない場合は、遷移先に応じた発話内容（utt）と対話完了フラグ（end）をFalse（継続）で返す。
   - （＊13）現在の天気情報取得API（https://api.openweathermap.org/data/2.5/weather）に 緯度、経度、APPID を渡し、結果をJSON形式で返す。
@@ -545,7 +547,7 @@ MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベー
     ```
 
 - 続けてstartコマンドを実行<br>
-    Telegramクライアントから「/start」を入力して、対話を開始する。<br>
+    Telegramクライアントから「/start」を入力して、対話を開始。<br>
     以降、地名、日付（今日 or 明日）、情報種別（天気 or 気温）の入力による状態遷移で天気情報を返す。
 
 - 東京で今日（実行時となる2020/08/22 22:30分頃）の天気と気温

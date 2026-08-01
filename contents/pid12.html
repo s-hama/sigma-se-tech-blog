@@ -2,13 +2,13 @@
   <h2 id="概要">概要</h2>
   <p>NumPyのndarrayを使い、Pythonで配列を効率よく扱うための基本操作を整理する。</p>
   <p>Python標準のリストでも複数の値は扱えるが、数値計算や機械学習では、配列同士の演算、条件抽出、行列計算をまとめて実行できるndarrayの理解が重要になる。<br>ここでは、配列の作成、次元や形状の確認、要素アクセス、ブロードキャスト、条件指定による抽出を、対話モードの実行例で確認する。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>ndarrayとPythonリストの違い。</li>
-  <li>配列の次元、形状、データ型を確認する方法。</li>
-  <li>配列同士の演算やブロードキャストの基本。</li>
-  <li>インデックス指定、スライス、条件抽出の使い方。</li>
-</ul>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#numpyの環境準備" class="link-secondary">NumPyの環境準備</a><br>
+      NumPyの環境準備の手順と確認ポイントを整理。</li>
+    <li><a href="#numpyの使用方法" class="link-secondary">NumPyの使用方法</a><br>
+      NumPyの使用方法をコードや具体例で確認。</li>
+  </ul>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="numpyの環境準備">NumPyの環境準備</h3>
   <p><strong>NumPy</strong>は、高速な数値演算をはじめ、学術計算も広く対応しているPythonの外部ライブラリ。
@@ -16,7 +16,7 @@
   </p>
   <ul>
     <li>NumPyインストール<br>
-      使用するPython環境を明確にするため、次のようにPython経由でpipを実行する。
+      使用するPython環境を明確にするため、次のようにPython経由でpipを実行。
       <pre><code class="language-bash">$ python -m pip install numpy
 </code></pre>
       インストール後は<code>python -c "import numpy as np; print(np.__version__)"</code>で、読み込まれたNumPyのバージョンを確認できる。

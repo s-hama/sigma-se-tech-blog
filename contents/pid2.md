@@ -10,6 +10,26 @@ Webサイトを公開するには、Webサーバーの起動だけでなく、fi
 ※ 注意：この記事は、2018年当時のCentOS 7.4環境をもとにした構築記録である。<br>
 CentOS 7は2024年6月30日にサポートを終了しているため、新規構築ではサポート中のOSと、そのOS向けにCertbot公式サイトが案内する手順を利用する。
 
+## この記事の構成
+- [前提環境](#前提環境)<br>
+  手順で使用するOS、ソフトウェア、構成などの前提条件を確認。
+- [作業時の注意点](#作業時の注意点)<br>
+  設定変更やコマンド実行前に確認しておきたい注意点を整理。
+- [Apache(httpd)インストール](#apachehttpdインストール)<br>
+  Apache(httpd)インストールの手順と確認ポイントを整理。
+- [ファイアウォールの設定](#ファイアウォールの設定)<br>
+  ファイアウォールの設定の手順と確認ポイントを整理。
+- [httpd自動起動の確認](#httpd自動起動の確認)<br>
+  httpd自動起動について、確認する項目と結果の見方を整理。
+- [DocumentRootの権限変更](#documentrootの権限変更)<br>
+  DocumentRootの権限変更の手順と確認ポイントを整理。
+- [HTTPS用ポートの確認](#https用ポートの確認)<br>
+  HTTPS用ポートについて、確認する項目と結果の見方を整理。
+- [SSL/TLS証明書設定](#ssltls証明書設定)<br>
+  SSL/TLS証明書設定の手順と確認ポイントを整理。
+- [Let's Encryptの定期更新](#lets-encryptの定期更新)<br>
+  Let's Encryptの定期更新の手順と確認ポイントを整理。
+
 ## 前提環境
 
 - OS<br>
@@ -25,13 +45,6 @@ PostgreSQL
 - ドメイン<br>
 example.com
 
-## この記事で扱うこと
-- Apacheのインストールと起動確認。
-- HTTP/HTTPSをfirewalldで許可する手順。
-- DocumentRootの権限設定。
-- mod_sslとCertbotによるSSL/TLS証明書取得。
-- Let's Encrypt証明書の更新確認。
-
 ## 作業時の注意点
 
 - HTTPとHTTPS<br>
@@ -39,7 +52,7 @@ example.com
 - --permanent<br>
 付けない設定は再起動後に消えることがある。
 - 証明書取得失敗<br>
-DNS未反映やApache起動中のポート競合を確認する。
+DNS未反映やApache起動中のポート競合を確認。
 - 自動更新<br>
 証明書の取得だけでなく、更新確認まで運用に含める。
 
@@ -67,7 +80,7 @@ httpで自身のドメイン(http://example.com)にアクセスし、`Testing 12
 
 ### httpd自動起動の確認
 - インストール時に有効化した自<br>
-`enabled`と表示されれば、OS起動時にhttpdも起動する。
+`enabled`と表示されれば、OS起動時にhttpdも起動。
   ```bash
   $ systemctl is-enabled httpd
   ```
@@ -117,7 +130,7 @@ httpで自身のドメイン(http://example.com)にアクセスし、`Testing 12
   ```
 
 - 起動確認
-`active (running)`であることを確認する。長いプロセス一覧を転載するより、サービス状態と設定構文を確認する方が切り分けやすい。
+`active (running)`であることを確認。長いプロセス一覧を転載するより、サービス状態と設定構文を確認する方が切り分けやすい。
   ```bash
   $ apachectl configtest
   $ systemctl restart httpd
@@ -135,7 +148,7 @@ httpで自身のドメイン(http://example.com)にアクセスし、`Testing 12
   ```bash
   $ yum install certbot python2-certbot-apache
   ```
-  ※ 上記はCentOS 7当時のパッケージ名である。現在はCertbot公式のインストール手順で、利用中のOSとWebサーバーを選択して確認する。
+  ※ 上記はCentOS 7当時のパッケージ名である。現在はCertbot公式のインストール手順で、利用中のOSとWebサーバーを選択して確認。
 
 - CertbotでSSL証明書を取得する
   ```bash
@@ -151,7 +164,7 @@ Let's Encryptの`classic`プロファイルで発行される既定の証明書�
 短期証明書のプロファイルや段階的な有効期間短縮も案内されているため、「3か月ごと」の固定スケジュールではなくCertbotの更新判定に任せる。<br>
 Let's Encryptによる期限通知メールは2025年6月4日に終了したため、メールを更新確認の代わりにはできない。
 
-- インストール方法に応じてsystemd timerまたはcronの自動更新設定を確認し、`--dry-run`で更新をテストする。通常の更新では、期限が近い証明書だけを対象とする`certbot renew`を使い、`--force-renewal`は常用しない。
+- インストール方法に応じてsystemd timerまたはcronの自動更新設定を確認し、`--dry-run`で更新をテスト。通常の更新では、期限が近い証明書だけを対象とする`certbot renew`を使い、`--force-renewal`は常用しない。
   ```bash
   $ systemctl list-timers --all | grep certbot
   $ sudo certbot renew --dry-run
@@ -160,10 +173,10 @@ Let's Encryptによる期限通知メールは2025年6月4日に終了したた�
   ```
 
 - 有効期限の確認<br>
-`certbot renew --dry-run`が成功することに加え、外部監視や定期的な証明書確認を用意して更新失敗を検知する。
+`certbot renew --dry-run`が成功することに加え、外部監視や定期的な証明書確認を用意して更新失敗を検知。
 
 ## まとめ
-- Apacheを公開するには、httpd、firewalld、DocumentRootをまとめて確認する。
+- Apacheを公開するには、httpd、firewalld、DocumentRootをまとめて確認。
 - HTTPS化では、mod_sslとSSL/TLS証明書の設定が必要になる。
 - Let's Encryptは更新が必要なため、取得後の期限確認も運用に含める。
 

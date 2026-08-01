@@ -2,13 +2,14 @@
   <h2 id="概要">概要</h2>
   <p>Python標準デバッガーであるPdbの使い方を、ブレークポイント、ステップ実行、変数確認を中心に整理する。</p>
   <p>Pdbを使うと、print文だけでは追いにくい処理の流れを、停止位置ごとに確認できる。<br>関数の中へ入るのか、次の行へ進むのか、変数の値をどう見るのかを押さえると、原因調査がしやすくなる。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
+  <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
-    <li><code>breakpoint()</code>または<code>pdb.set_trace()</code>で処理を止める方法。</li>
-    <li>ステップ実行で処理の流れを追う方法。</li>
-    <li>pコマンドで変数の値を確認する方法。</li>
-    <li>step、next、return、continueの違い。</li>
-    <li>listやargsで停止位置の情報を見る方法。</li>
+    <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
+      設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
+    <li><a href="#pdbの使用例" class="link-secondary">Pdbの使用例</a><br>
+      Pdbの使用例をコードや具体例で確認。</li>
+    <li><a href="#pdbの基本操作方法" class="link-secondary">Pdbの基本操作方法</a><br>
+      Pdbの基本操作方法をコードや具体例で確認。</li>
   </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <ul>
@@ -26,7 +27,7 @@
   <ul>
     <li>
       <p>説明用のサンプルプログラムを作成<br>
-        説明用に下記<code>debug_example.py</code>を作成する。<br></p>
+        説明用に下記<code>debug_example.py</code>を作成。<br></p>
       <pre><code class="language-python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">a, b, c</span>):
     <span class="hljs-keyword">return</span> a + b + c
 
@@ -37,7 +38,7 @@ step = add(<span class="hljs-number">1</span>, <span class="hljs-number">2</span
 step = add(<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>)
 print(step)
 </code></pre>
-      <p><code>breakpoint()</code>はPython 3.7以降で利用でき、既定では<code>pdb.set_trace()</code>を呼び出す。<br>Python 3.6以前では、<code>import pdb; pdb.set_trace()</code>を同じ位置へ記述する。</p>
+      <p><code>breakpoint()</code>はPython 3.7以降で利用でき、既定では<code>pdb.set_trace()</code>を呼び出す。<br>Python 3.6以前では、<code>import pdb; pdb.set_trace()</code>を同じ位置へ記述。</p>
     </li>
     <li>
       <p><code>debug_example.py</code>を実行<br>
@@ -86,28 +87,28 @@ c = 3
     </li>
     <li>
       <p>[<code>r</code>] or [<code>return</code>]<br>
-        現在の関数が戻るまで実行する。</p>
+        現在の関数が戻るまで実行。</p>
     </li>
     <li>
       <p>[<code>c</code>] or [<code>continue</code>]<br>
-        次回の<strong>ブレークポイントまで停止せず</strong>実行する。</p>
+        次回の<strong>ブレークポイントまで停止せず</strong>実行。</p>
     </li>
     <li>
       <p>[<code>l</code>] or [<code>list</code>]<br>
-        現在停止行の<strong>前後のソース</strong>を表示する。</p>
+        現在停止行の<strong>前後のソース</strong>を表示。</p>
     </li>
     <li>
       <p>[<code>a</code>] or [<code>args</code>]<br>
-        現在停止している<strong>関数の引数</strong>を表示する。</p>
+        現在停止している<strong>関数の引数</strong>を表示。</p>
     </li>
     <li>
       <p>[<strong>p &lt;式&gt;</strong>]<br>
-        現在のコンテキストで式を評価し、結果を表示する。
+        現在のコンテキストで式を評価し、結果を表示。
       </p>
     </li>
     <li>
       <p>[<code>q</code>] or [<code>quit</code>]<br>
-        デバッグ中のプログラムを終了する。
+        デバッグ中のプログラムを終了。
       </p>
     </li>
   </ul>

@@ -2,13 +2,16 @@
   <h2 id="概要">概要</h2>
   <p>Pythonの対話モードの基本操作と、PYTHONSTARTUPを使った起動時スクリプトの設定方法を整理する。</p>
   <p>対話モードは、短いコードの確認、ライブラリの挙動確認、環境変数やパスの調査に便利な実験場所になる。<br>PYTHONSTARTUPを使うと、毎回使うimportや補助関数を起動時に読み込める。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
+  <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
-    <li><code>python</code>または<code>python3</code>コマンドで対話モードを起動する方法。</li>
-    <li>sys.pathなどを対話的に確認する流れ。</li>
-    <li>exit()やCtrl+Dで終了する方法。</li>
-    <li>PYTHONSTARTUPで起動時スクリプトを読み込む方法。</li>
-    <li>IPythonやimport thisなどの補足的な使い方。</li>
+    <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
+      設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
+    <li><a href="#対話モードの使用例" class="link-secondary">対話モードの使用例</a><br>
+      対話モードの使用例をコードや具体例で確認。</li>
+    <li><a href="#環境変数pythonstartupの設定" class="link-secondary">環境変数（PYTHONSTARTUP）の設定</a><br>
+      環境変数（PYTHONSTARTUP）の設定の手順と確認ポイントを整理。</li>
+    <li><a href="#その他対話モードの補足" class="link-secondary">その他、対話モードの補足</a><br>
+      直前の実行結果や組込みヘルプなど、対話モードの便利な機能を確認。</li>
   </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <ul>
@@ -26,7 +29,7 @@
   <ul>
     <li>
       <p>対話モードの起動<br>
-        引数なしで<code>python</code>または<code>python3</code>コマンドを実行すると、<strong>対話モード</strong>が起動する。どちらのコマンド名を使うかはOSや環境によって異なるため、先にバージョンを確認する。<br>
+        引数なしで<code>python</code>または<code>python3</code>コマンドを実行すると、<strong>対話モード</strong>が起動。どちらのコマンド名を使うかはOSや環境によって異なるため、先にバージョンを確認。<br>
         対話モードでは、入力待ち状態を表す「&gt;&gt;&gt;」の後に直接コードを書いて実行することができる。<br>
         以下の表示例はPython 3.6.4当時の実行結果であり、現在のPythonではバージョン表記、起動メッセージ、<code>sys.path</code>の内容などが異なる。基本操作は同じとなる。<br></p>
       <pre><code class="language-bash">$ python -V    <span class="hljs-comment"># バージョン確認</span>
@@ -53,7 +56,7 @@ $ python    <span class="hljs-comment"># 対話モード起動 (マイナーバ�
     </li>
     <li>
       <p>対話モードの終了<br>
-        <code>exit()</code>を実行する。Unix系OSでは「Ctrl」+「D」、Windowsでは「Ctrl」+「Z」を押してから「Enter」でも終了できる。<br></p>
+        <code>exit()</code>を実行。Unix系OSでは「Ctrl」+「D」、Windowsでは「Ctrl」+「Z」を押してから「Enter」でも終了できる。<br></p>
       <pre><code class="language-bash">$ python
  Python 3.6.4 (default, Dec 19 2017, 14:48:12)
  [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
@@ -79,7 +82,7 @@ $ python    <span class="hljs-comment"># 対話モード起動 (マイナーバ�
  NameError: name <span class="hljs-string">&#x27;sys&#x27;</span> is not defined
  &gt;&gt;&gt;
 </code></pre>
-      <p><code>sys</code>をインポートしていないので当然エラーが発生する。</p>
+      <p><code>sys</code>をインポートしていないので当然エラーが発生。</p>
     </li>
     <li>
       <p><strong>PYTHONSTARTUP</strong>に<code>import sys</code>を追記<br>
@@ -90,7 +93,7 @@ $ vim  ~/.pythonstartup    <span class="hljs-comment"># import sys を追記</sp
  import sys
 $ <span class="hljs-built_in">export</span> PYTHONSTARTUP=<span class="hljs-string">&quot;$HOME/.pythonstartup&quot;</span>    <span class="hljs-comment"># 起動時スクリプトのパスを設定</span>
 </code></pre>
-      <p><code>export</code>の効果は現在のシェルに限られる。常に有効にする場合は、利用しているシェルに応じて<code>.zshrc</code>や<code>.bashrc</code>などへ同じ設定を記述する。</p>
+      <p><code>export</code>の効果は現在のシェルに限られる。常に有効にする場合は、利用しているシェルに応じて<code>.zshrc</code>や<code>.bashrc</code>などへ同じ設定を記述。</p>
     </li>
     <li>
       <p>再度対話モードで<code>sys.path</code>を実行<br></p>
@@ -111,7 +114,7 @@ $ <span class="hljs-built_in">export</span> PYTHONSTARTUP=<span class="hljs-stri
   <ul>
     <li>
       <p>直前に表示された式の結果を参照する<br>
-        対話モードでは、最後に<strong>表示された式の結果</strong>が<code>_</code>（アンダーバー）に保持される。<br><code>_</code>を評価しても直前のコードを再実行するわけではなく、保存されている値を参照する。明示的に<code>_</code>へ代入するとこの用途で扱いにくくなるため、通常の変数名には使わない。<br></p>
+        対話モードでは、最後に<strong>表示された式の結果</strong>が<code>_</code>（アンダーバー）に保持される。<br><code>_</code>を評価しても直前のコードを再実行するわけではなく、保存されている値を参照。明示的に<code>_</code>へ代入するとこの用途で扱いにくくなるため、通常の変数名には使わない。<br></p>
       <pre><code class="language-bash">$ python
  [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
  Type <span class="hljs-string">&quot;help&quot;</span>, <span class="hljs-string">&quot;copyright&quot;</span>, <span class="hljs-string">&quot;credits&quot;</span> or <span class="hljs-string">&quot;license&quot;</span> <span class="hljs-keyword">for</span> more information.
@@ -132,7 +135,7 @@ $ <span class="hljs-built_in">export</span> PYTHONSTARTUP=<span class="hljs-stri
       <pre><code class="language-bash">$ python -i example.py
 &gt;&gt;&gt;
 </code></pre>
-      <p><code>-i</code>でスクリプト実行後に対話モードへ入る場合、<code>PYTHONSTARTUP</code>のファイルは読み込まれない点に注意する。</p>
+      <p><code>-i</code>でスクリプト実行後に対話モードへ入る場合、<code>PYTHONSTARTUP</code>のファイルは読み込まれない点に注意。</p>
     </li>
     <li>
       <p><strong>IPython</strong>の導入<br>

@@ -3,6 +3,25 @@
   <p>VPS上にPython、Django、mod_wsgiを導入し、ApacheからDjangoアプリケーションを起動するための設定を整理する。</p>
   <p>Djangoを本番環境で動かす場合、開発用のrunserverではなく、ApacheなどのWebサーバーからWSGI経由でアプリケーションを呼び出す構成を理解することが重要になる。</p>
   <p>注意：この記事は、2018年当時のCentOS 7.4、Python 3.6環境の構築記録をもとに、手順同士の互換性を確認しやすい後年の旧バージョン（Django 2.2、mod_wsgi 4.9.4）へ置き換えて再構成した例である。<br>2018年当時のパッケージ構成を厳密に再現するものではない。<br>CentOS 7、Python 3.6、ここで扱うDjangoとmod_wsgiはいずれもサポート終了済みで、IUSリポジトリも現在の新規構築には使用できない。<br>新規構築ではサポート中の環境を選び、ここではApacheとmod_wsgiを接続する考え方を中心に参照する。</p>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#前提環境" class="link-secondary">前提環境</a><br>
+      手順で使用するOS、ソフトウェア、構成などの前提条件を確認。</li>
+    <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
+      設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
+    <li><a href="#centosにパッケージリポジトリを導入" class="link-secondary">CentOSにパッケージリポジトリを導入</a><br>
+      CentOSにパッケージリポジトリを導入の手順と確認ポイントを整理。</li>
+    <li><a href="#pythonインストール" class="link-secondary">Pythonインストール</a><br>
+      Pythonインストールの手順と確認ポイントを整理。</li>
+    <li><a href="#djangoインストール" class="link-secondary">Djangoインストール</a><br>
+      Djangoインストールの手順と確認ポイントを整理。</li>
+    <li><a href="#アプリケーション作成" class="link-secondary">アプリケーション作成</a><br>
+      アプリケーション作成の手順と確認ポイントを整理。</li>
+    <li><a href="#mod_wsgiインストール" class="link-secondary">mod_wsgiインストール</a><br>
+      mod_wsgiインストールの手順と確認ポイントを整理。</li>
+    <li><a href="#wsgiと仮想ホストの設定ファイル作成" class="link-secondary">WSGIと仮想ホストの設定ファイル作成</a><br>
+      WSGIと仮想ホストの設定ファイル作成の手順と確認ポイントを整理。</li>
+  </ul>
   <h2 id="前提環境">前提環境</h2>
   <ul>
     <li>OS<br>
@@ -17,14 +36,6 @@
       PostgreSQL</li>
     <li>ドメイン<br>
       example.com</li>
-  </ul>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-  <ul>
-    <li>EPEL/IUSリポジトリを利用していた当時の背景。</li>
-    <li>Pythonとvenvによる仮想環境の作成。</li>
-    <li>Djangoプロジェクトとアプリケーションの作成。</li>
-    <li>mod_wsgiを使ってApacheとDjangoを接続する流れ。</li>
-    <li>VirtualHostとWSGI設定の役割。</li>
   </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <ul>
@@ -42,7 +53,7 @@
   <ul>
     <li>
       <p>開発パッケージのインストール<br>
-        EPELリポジトリを有効化する。<br>
+        EPELリポジトリを有効化。<br>
         ※ EPELはCentOSやRHELにない便利なパッケージを提供する外部リポジトリ。</p>
       <pre><code class="language-bash">$ yum -y install epel-release
 </code></pre>
@@ -76,7 +87,7 @@ Python 3.6.4
   <ul>
     <li>
       <p>venvで仮想環境を構築<br>
-        Pythonの仮想環境を作成するパッケージは、他にも<strong>virtualenv</strong>、<strong>anaconda</strong>、<strong>pyenv</strong>、<strong>pyenv-virtualenv</strong>など多数あるが、ここでは、Python3から標準搭載されている<strong>venv</strong>を使用する。<br>
+        Pythonの仮想環境を作成するパッケージは、他にも<strong>virtualenv</strong>、<strong>anaconda</strong>、<strong>pyenv</strong>、<strong>pyenv-virtualenv</strong>など多数あるが、ここでは、Python3から標準搭載されている<strong>venv</strong>を使用。<br>
         <br>
         ※ <code>vops</code>は、仮想環境が入るディレクトリ名なので各自の環境に合わせること。
       </p>
@@ -85,7 +96,7 @@ Python 3.6.4
     </li>
     <li>
       <p>仮想環境上にDjangoをインストール<br>
-        <code>pip</code>で<strong>Django</strong>をインストールする。無指定で最新版を入れるとPython 3.6では動作しないため、この旧環境を再現する場合は対応するバージョンへ固定する。Django 2.2自体もサポート終了済みである。
+        <code>pip</code>で<strong>Django</strong>をインストール。無指定で最新版を入れるとPython 3.6では動作しないため、この旧環境を再現する場合は対応するバージョンへ固定。Django 2.2自体もサポート終了済みである。
       </p>
       <pre><code class="language-bash">$ <span class="hljs-built_in">source</span> /var/www/vops/bin/activate    <span class="hljs-comment"># 仮想環境起動</span>
 $ python -m pip install <span class="hljs-string">&quot;Django==2.2.*&quot;</span>
@@ -101,7 +112,7 @@ $ django-admin startproject ops /var/www/vops/ops
   </ul>
   <h3 id="アプリケーション作成">アプリケーション作成</h3>
   <ul>
-    <li>実際にプログラムを配置するDjangoアプリケーションを作成する。<br>
+    <li>実際にプログラムを配置するDjangoアプリケーションを作成。<br>
       ※ ここでは、例として<strong>webapp</strong>という名称にする。
       <pre><code class="language-bash">$ <span class="hljs-built_in">source</span> /var/www/vops/bin/activate    <span class="hljs-comment"># 仮想環境起動</span>
 $ <span class="hljs-built_in">cd</span> /var/www/vops/ops
@@ -112,7 +123,7 @@ $ python manage.py startapp webapp
   <h3 id="mod_wsgiインストール">mod_wsgiインストール</h3>
   <ul>
     <li><code>httpd-devel</code>、Cコンパイラ、<code>mod_wsgi</code>をインストール
-      <code>mod_wsgi</code>をソースからビルドするため、Apacheの開発ファイル<code>httpd-devel</code>とCコンパイラ<code>gcc</code>を先にインストールする。Pythonの開発ファイルは前述の<code>python36u-devel</code>で導入済みとなる。<br>
+      <code>mod_wsgi</code>をソースからビルドするため、Apacheの開発ファイル<code>httpd-devel</code>とCコンパイラ<code>gcc</code>を先にインストール。Pythonの開発ファイルは前述の<code>python36u-devel</code>で導入済みとなる。<br>
       <pre><code class="language-bash">$ <span class="hljs-built_in">source</span> /var/www/vops/bin/activate    <span class="hljs-comment"># 仮想環境起動</span>
 $ yum install -y httpd httpd-devel gcc    <span class="hljs-comment"># mod_wsgiのビルドに必要な開発環境をインストール</span>
 $ python -m pip install <span class="hljs-string">&quot;mod_wsgi==4.9.4&quot;</span>    <span class="hljs-comment"># Python 3.6対応版へ固定</span>
@@ -124,7 +135,7 @@ $ python -m pip install <span class="hljs-string">&quot;mod_wsgi==4.9.4&quot;</s
   <ul>
     <li>
       <p>Apache設定ファイルの確認<br>
-        Apacheの設定ファイル<strong>httpd.conf</strong>の設定内容を確認する。<br></p>
+        Apacheの設定ファイル<strong>httpd.conf</strong>の設定内容を確認。<br></p>
       <pre><code class="language-bash">$ <span class="hljs-built_in">cat</span> /etc/httpd/conf/httpd.conf
 …
 Include conf.modules.d/*.conf  
@@ -134,13 +145,13 @@ IncludeOptional conf.d/*.conf
       <ul>
         <li>補足<br>
           上記<code>Include</code>は、<code>conf.modules.d</code>(module系の設定ファイル)配下の<code>*.conf</code>をロードする設定、<code>IncludeOptional</code>は、<code>conf.d</code>(その他設定系のファイル)配下の<code>*.conf</code>をロードする設定となる。<br><br>
-          そのため、次項で<strong>WSGI設定ファイル(django-wsgi.conf)</strong>と<strong>仮想ホスト設定ファイル(django.conf)</strong>を作成し、Apacheからmod_wsgiを介し、Djangoを起動できるよう、wsgi_module設定ファイルを作成する。<br>
+          そのため、次項で<strong>WSGI設定ファイル(django-wsgi.conf)</strong>と<strong>仮想ホスト設定ファイル(django.conf)</strong>を作成し、Apacheからmod_wsgiを介し、Djangoを起動できるよう、wsgi_module設定ファイルを作成。<br>
         </li>
       </ul>
     </li>
     <li>
       <p>WSGI設定ファイル作成<br>
-        <code>mod_wsgi-express module-config</code>で、現在の環境に対応する<code>LoadModule</code>と<code>WSGIPythonHome</code>を確認する。ハードコードした共有ライブラリ名はPythonやCPUアーキテクチャによって変わるため、コマンドの出力を<code>/etc/httpd/conf.modules.d/django-wsgi.conf</code>へ反映する。<br>
+        <code>mod_wsgi-express module-config</code>で、現在の環境に対応する<code>LoadModule</code>と<code>WSGIPythonHome</code>を確認。ハードコードした共有ライブラリ名はPythonやCPUアーキテクチャによって変わるため、コマンドの出力を<code>/etc/httpd/conf.modules.d/django-wsgi.conf</code>へ反映。<br>
       </p>
       <pre><code class="language-bash">$ /var/www/vops/bin/mod_wsgi-express module-config
 LoadModule wsgi_module <span class="hljs-string">&quot;/var/www/vops/lib64/python3.6/site-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so&quot;</span>
@@ -149,7 +160,7 @@ WSGIPythonHome <span class="hljs-string">&quot;/var/www/vops&quot;</span>
     </li>
     <li>
       <p>仮想ホスト設定ファイル作成<br>
-        前記事で<code>certbot --apache</code>を実行した場合は、Certbotが同じ<code>ServerName</code>のVirtualHostを生成または編集していることがある。<br><code>httpd -S</code>で現在の定義を確認し、同じホスト名・ポートのVirtualHostを重複作成せず、既存のHTTPS用設定へWSGIと静的ファイルの設定を統合する。<br>該当する定義がない場合は、<code>/etc/httpd/conf.d</code>配下に<strong>django.conf</strong>を作成する。<br>以下は一つに統合した設定例であり、記号を含まないApache設定として記述している。<br>
+        前記事で<code>certbot --apache</code>を実行した場合は、Certbotが同じ<code>ServerName</code>のVirtualHostを生成または編集していることがある。<br><code>httpd -S</code>で現在の定義を確認し、同じホスト名・ポートのVirtualHostを重複作成せず、既存のHTTPS用設定へWSGIと静的ファイルの設定を統合。<br>該当する定義がない場合は、<code>/etc/httpd/conf.d</code>配下に<strong>django.conf</strong>を作成。<br>以下は一つに統合した設定例であり、記号を含まないApache設定として記述している。<br>
       </p>
       <pre><code class="language-apache">&lt;VirtualHost *:443&gt;
     ServerName example.com
@@ -180,16 +191,16 @@ WSGIPythonHome <span class="hljs-string">&quot;/var/www/vops&quot;</span>
 </code></pre>
       <ul>
         <li>設定項目の補足<br>
-          <code>&lt;VirtualHost *:443&gt;</code>はSSL/TLS用、<code>&lt;VirtualHost *:80&gt;</code>はHTTPからHTTPSへのリダイレクト用となる。<code>ServerName</code>には自身のドメインを設定する。<br><br>
+          <code>&lt;VirtualHost *:443&gt;</code>はSSL/TLS用、<code>&lt;VirtualHost *:80&gt;</code>はHTTPからHTTPSへのリダイレクト用となる。<code>ServerName</code>には自身のドメインを設定。<br><br>
           証明書設定はCentOS 7.4標準のApache 2.4.6を前提に、<code>cert.pem</code>と<code>chain.pem</code>を別々に指定している。Apache 2.4.8以降では<code>SSLCertificateFile</code>に<code>fullchain.pem</code>を指定し、<code>SSLCertificateChainFile</code>は省略できる。<code>httpd -v</code>でバージョンを確認し、Certbotが生成した設定を優先する。秘密鍵の読取り権限は必要最小限にする。<br><br>
-          <code>WSGIDaemonProcess</code>の<code>python-home</code>は仮想環境のルート、<code>python-path</code>はDjangoプロジェクトをimportできるディレクトリを指定する。<code>WSGIProcessGroup</code>には同じプロセスグループ名を設定し、<code>WSGIScriptAlias</code>には<code>wsgi.py</code>へのパスを指定する。<br><br>
+          <code>WSGIDaemonProcess</code>の<code>python-home</code>は仮想環境のルート、<code>python-path</code>はDjangoプロジェクトをimportできるディレクトリを指定。<code>WSGIProcessGroup</code>には同じプロセスグループ名を設定し、<code>WSGIScriptAlias</code>には<code>wsgi.py</code>へのパスを指定。<br><br>
           <code>Alias /static/</code>は<code>collectstatic</code>で<code>STATIC_ROOT</code>へ集約した静的ファイルを配信する設定で、URLとファイルパスの末尾の<code>/</code>を対応させる。<br></li>
       </ul>
     </li>
   </ul>
   <h2 id="まとめ">まとめ</h2>
   <ul>
-    <li>Django本番構成では、Apacheからmod_wsgiを介してアプリケーションを起動する。</li>
+    <li>Django本番構成では、Apacheからmod_wsgiを介してアプリケーションを起動。</li>
     <li>Pythonの仮想環境、Djangoプロジェクト、WSGI設定のパスをそろえることが重要となる。</li>
     <li>VirtualHostではHTTPからHTTPSへのリダイレクトとDjango起動設定を分けて考える。</li>
   </ul>

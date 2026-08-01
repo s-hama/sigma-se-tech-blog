@@ -3,13 +3,16 @@
   <p>Django Debug Toolbarで確認できる代表的な表示パネルと、<code>DEBUG_TOOLBAR_PANELS</code>によるカスタマイズ方法を整理する。</p>
   <p>Toolbarの各パネルは、バージョン、処理時間、SQL、テンプレート、キャッシュ、ログなど、画面表示時の内部情報を確認する入口になる。<br>どのパネルで何を見られるかを知っておくと、原因調査の流れを作りやすい。</p>
   <p>掲載画像はDjango 2.0.2を利用していた当時の画面であり、現行版とはパネル名や構成が異なる。<br>画像は画面の見方をつかむための旧版例として使用し、現行版との差分もあわせて説明する。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
+  <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
-    <li>Versions、Timer、Settingsなどの基本パネルの役割。</li>
-    <li>Headers、Request、SQL、Templatesで確認できる情報。</li>
-    <li>Cache、Signals、旧版のLogging、Redirectsの使いどころ。</li>
-    <li><code>DEBUG_TOOLBAR_PANELS</code>で表示パネルを変更する方法。</li>
-    <li>プロファイリング用パネルを有効にする考え方。</li>
+    <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
+      設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
+    <li><a href="#表示パネルの概要説明" class="link-secondary">表示パネルの概要説明</a><br>
+      各パネルで確認できるリクエスト、SQL、テンプレートなどの情報を整理。</li>
+    <li><a href="#現行版での主な違い" class="link-secondary">現行版での主な違い</a><br>
+      現行版での主な違いを対比し、それぞれの特徴を整理。</li>
+    <li><a href="#表示パネルのカスタマイズ" class="link-secondary">表示パネルのカスタマイズ</a><br>
+      表示するパネルを設定で追加・削除・並べ替える方法を確認。</li>
   </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <ul>
@@ -30,13 +33,13 @@
   <ol>
     <li>
       <p>Versions<br>
-        Python、Django、インストール済みアプリなど、調査対象の<strong>バージョン情報</strong>を確認する。依存ライブラリ固有の不具合を調べるときは、まずここで実行環境を特定する。<br>
+        Python、Django、インストール済みアプリなど、調査対象の<strong>バージョン情報</strong>を確認。依存ライブラリ固有の不具合を調べるときは、まずここで実行環境を特定する。<br>
         <img src="/static/tblog/img/pid11_1.png" alt="Versionsパネルに表示されたDjangoなどのバージョン情報">
       </p>
     </li>
     <li>
       <p>Timer（掲載画像では「時刻」）<br>
-        リクエスト処理の<strong>CPU時間と経過時間</strong>を確認する。<br>掲載画像ではブラウザ側のタイミングも別欄に表示されている。<br>
+        リクエスト処理の<strong>CPU時間と経過時間</strong>を確認。<br>掲載画像ではブラウザ側のタイミングも別欄に表示されている。<br>
         <img src="/static/tblog/img/pid11_2.png" alt="Timerパネルに表示されたCPU時間と経過時間"><br>
       </p>
       <ul>
@@ -90,19 +93,19 @@
     </li>
     <li>
       <p>Cache<br>
-        リクエスト中に行われた<strong>キャッシュ操作</strong>や処理時間を確認する。<br>キャッシュが期待どおり使われているか、同じキーへ不要なアクセスがないかを調べる入口になる。<br>
+        リクエスト中に行われた<strong>キャッシュ操作</strong>や処理時間を確認。<br>キャッシュが期待どおり使われているか、同じキーへ不要なアクセスがないかを調べる入口になる。<br>
         <img src="/static/tblog/img/pid11_9.png" alt="Cacheパネルに表示されたキャッシュ操作の情報">
       </p>
     </li>
     <li>
       <p>Signals<br>
-        Djangoの<strong>シグナルと登録済みレシーバー</strong>を一覧で確認する。<br>意図したレシーバーが登録されているかを調べる際に役立つ。<br>
+        Djangoの<strong>シグナルと登録済みレシーバー</strong>を一覧で確認。<br>意図したレシーバーが登録されているかを調べる際に役立つ。<br>
         <img src="/static/tblog/img/pid11_10.png" alt="Signalsパネルに表示されたシグナルとレシーバーの一覧">
       </p>
     </li>
     <li>
       <p>Logging<br>
-        当時の組み込みLoggingパネルでは、Pythonのloggingモジュールで出力したログを確認できた。<br>現行版の組み込みパネル一覧には含まれていないため、現在の環境では通常のログ出力や対応する外部ツールを利用する。<br>
+        当時の組み込みLoggingパネルでは、Pythonのloggingモジュールで出力したログを確認できた。<br>現行版の組み込みパネル一覧には含まれていないため、現在の環境では通常のログ出力や対応する外部ツールを利用。<br>
         <img src="/static/tblog/img/pid11_11.png" alt="旧版のLoggingパネルに表示されたリクエスト処理中のログ">
       </p>
     </li>
@@ -115,7 +118,7 @@
   <p>掲載画像の旧版と比べ、現行版の組み込みパネルにはHistory、Alerts、Communityなどが追加されている。<br>一方、旧版のLoggingパネルは現行版の組み込み一覧には含まれない。</p>
   <ul>
     <li>History<br>
-      過去のリクエストを選び、その時点のToolbar情報を確認する。<br>リダイレクト前後の調査にも利用できる。</li>
+      過去のリクエストを選び、その時点のToolbar情報を確認。<br>リダイレクト前後の調査にも利用できる。</li>
     <li>Alerts<br>
       ファイル入力を含むフォームで<code>enctype="multipart/form-data"</code>が不足している場合など、既知の問題を通知する。</li>
     <li>Redirects<br>
@@ -148,13 +151,13 @@
     </li>
     <li>
       <p><strong>プロファイリング情報</strong>の確認例<br>
-        Profilingパネルを有効にすると、関数ごとの呼び出し回数や処理時間を確認できる。<br>Python 3.12以降では、公式ドキュメントに記載された実行条件もあわせて確認する。<br>
+        Profilingパネルを有効にすると、関数ごとの呼び出し回数や処理時間を確認できる。<br>Python 3.12以降では、公式ドキュメントに記載された実行条件もあわせて確認。<br>
         <img src="/static/tblog/img/pid11_12.png" alt="旧版のProfilingパネルに表示された関数ごとの処理時間">
       </p>
     </li>
     <li>
       <p>その他のパネルについて<br>
-        公式ドキュメントには<strong>サードパーティ製</strong>のパネルも掲載されているが、Django Debug Toolbar本体による正式サポートの対象外である。<br>導入前に、対応バージョンや更新状況を確認する。</p>
+        公式ドキュメントには<strong>サードパーティ製</strong>のパネルも掲載されているが、Django Debug Toolbar本体による正式サポートの対象外である。<br>導入前に、対応バージョンや更新状況を確認。</p>
     </li>
   </ul>
   <h2 id="まとめ">まとめ</h2>

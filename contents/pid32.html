@@ -3,13 +3,17 @@
   <p>set、bytes、bytearray、file objectの基本操作を整理する。</p>
   <p>これらはlistやdictほど最初に触れる機会は多くないが、集合演算、バイナリデータ、ファイル入出力を扱うときに重要になる。</p>
   <p>ここでは、重複を持たない集合、変更不可/変更可能なバイト列、ファイル操作の基本を実行例で確認する。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>setによる集合演算の基本。</li>
-  <li>bytesとbytearrayの違い。</li>
-  <li>バイナリデータを扱うときの考え方。</li>
-  <li>file objectを使った読み書きの基本。</li>
-</ul>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#set型--集合" class="link-secondary">set型 : 集合</a><br>
+      set型 : 集合の意味と要点を具体例から整理。</li>
+    <li><a href="#bytes型--バイト" class="link-secondary">bytes型 : バイト</a><br>
+      bytes型 : バイトの意味と要点を具体例から整理。</li>
+    <li><a href="#bytearray型--バイト配列" class="link-secondary">bytearray型 : バイト配列</a><br>
+      bytearray型 : バイト配列の意味と要点を具体例から整理。</li>
+    <li><a href="#file object型--ファイル操作オブジェクト" class="link-secondary">file object型 : ファイル操作オブジェクト</a><br>
+      file object型 : ファイル操作オブジェクトの意味と要点を具体例から整理。</li>
+  </ul>
   <h2 id="各データ型の操作方法">各データ型の操作方法</h2>
   <h3 id="set型--集合">set型 : 集合</h3>
   <p>set型は、<strong>重複した要素</strong>がなく、要素に<strong>順番を</strong>持たない配列のような集合。</p>
@@ -586,8 +590,8 @@ TypeError: encoding without a string argument
     <li>
       <p>定義例<br>
         open()でファイルを開き、処理終了時にclose()で閉じる。<br>
-        open()の第\(1\)引数にファイルパスを指定して定義する。<br>
-        第2引数のmodeは、読み書きの指定やテキスト or バイナリの指定に使用する。<br></p>
+        open()の第\(1\)引数にファイルパスを指定して定義。<br>
+        第2引数のmodeは、読み書きの指定やテキスト or バイナリの指定に使用。<br></p>
       <ul>
         <li>
           <p><code>mode</code>の種類</p>

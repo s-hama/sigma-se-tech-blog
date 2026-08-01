@@ -3,13 +3,19 @@
   <p>Pythonの組込みデータ型を理解する前提として、immutable、mutable、iterable、sequence、mappingの意味を整理する。</p>
   <p>これらの用語は、list、tuple、dict、setなどの挙動を説明するときに頻繁に登場する。単語だけを暗記するより、値を変更できるか、繰り返し処理できるか、インデックスで参照できるかという観点で分けると理解しやすい。</p>
   <p>ここでは、代表的なデータ型を例に、それぞれの特性がコード上でどのように現れるかを確認する。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>immutableとmutableの違い。</li>
-  <li>iterable、sequence、mappingの関係。</li>
-  <li>データ型の特性がfor文、添字アクセス、代入操作にどう影響するか。</li>
-  <li>エラーが出たときに、型の性質から原因を考える方法。</li>
-</ul>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#イミュータブルimmutable--同一アドレスで変更不可" class="link-secondary">イミュータブル（immutable）: 同一アドレスで変更不可</a><br>
+      イミュータブル（immutable）: 同一アドレスで変更不可の手順と確認ポイントを整理。</li>
+    <li><a href="#ミュータブルmutable--同一アドレスで変更可" class="link-secondary">ミュータブル（mutable）: 同一アドレスで変更可</a><br>
+      ミュータブル（mutable）: 同一アドレスで変更可の手順と確認ポイントを整理。</li>
+    <li><a href="#イテラブルiterable--反復抽出可" class="link-secondary">イテラブル（iterable）: 反復抽出可</a><br>
+      イテラブル（iterable）: 反復抽出可の意味と要点を具体例から整理。</li>
+    <li><a href="#シーケンスsequence--インデックス指定可" class="link-secondary">シーケンス（sequence）: インデックス指定可</a><br>
+      シーケンス（sequence）: インデックス指定可の意味と要点を具体例から整理。</li>
+    <li><a href="#マッピングmapping--連想配列" class="link-secondary">マッピング（mapping）: 連想配列</a><br>
+      マッピング（mapping）: 連想配列の意味と要点を具体例から整理。</li>
+  </ul>
   <h2 id="各データ型の特性">各データ型の特性</h2>
   <h3 id="イミュータブルimmutable--同一アドレスで変更不可">イミュータブル（immutable）: 同一アドレスで変更不可</h3>
   <p>同一オブジェクト（アドレスが同一）での値の変更ができないオブジェクト。<br>
@@ -211,7 +217,7 @@
   <ul>
     <li>immutableは変数を再代入できないという意味ではなく、オブジェクト自体を変更できない性質を表す。mutableなオブジェクトは内容を変更できる。</li>
     <li>sequenceは順序とインデックスを持ち、iterableはfor文などで要素を順に取り出せる性質を表す。</li>
-    <li>mappingはインデックス番号ではなくキーを使って値へアクセスする。型の特性を知ると、Pythonの挙動やエラーを追いやすくなる。</li>
+    <li>mappingはインデックス番号ではなくキーを使って値へアクセス。型の特性を知ると、Pythonの挙動やエラーを追いやすくなる。</li>
   </ul>
   <h3 id="参考文献">参考文献</h3>
   <ul>

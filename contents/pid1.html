@@ -3,6 +3,23 @@
   <p>VPS上でDjangoサイトを公開する前段階として、VPS契約、OSインストール、独自ドメイン、DNS設定、SSH初期設定を整理する。</p>
   <p>この段階では、アプリケーションの実装よりも「安全にサーバーへ接続できること」と「ドメイン名でサーバーへ到達できること」が重要になる。後続のApache、Django、PostgreSQL設定の土台になるため、SSHとDNSの確認を丁寧に行う。</p>
   <p>※ 注意：この記事は、2018年当時のCentOS 7.4環境をもとにした構築記録である。<br>CentOS 7は2024年6月30日にサポートを終了しており、セキュリティ更新も提供されない。<br>新規構築ではサポート中のOSを選び、以下のコマンドは旧環境の構成を理解するための参考として利用する。</p>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#前提環境" class="link-secondary">前提環境</a><br>
+      手順で使用するOS、ソフトウェア、構成などの前提条件を確認。</li>
+    <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
+      設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
+    <li><a href="#vps契約" class="link-secondary">VPS契約</a><br>
+      VPS事業者とプランを選び、契約する際の確認ポイントを整理。</li>
+    <li><a href="#osインストール" class="link-secondary">OSインストール</a><br>
+      OSインストールの手順と確認ポイントを整理。</li>
+    <li><a href="#独自ドメインの契約" class="link-secondary">独自ドメインの契約</a><br>
+      独自ドメインとサービスを選び、契約する際の確認ポイントを整理。</li>
+    <li><a href="#ドメインのdns設定" class="link-secondary">ドメインのDNS設定</a><br>
+      ドメインのDNS設定の手順と確認ポイントを整理。</li>
+    <li><a href="#sshの初期設定" class="link-secondary">SSHの初期設定</a><br>
+      SSHの初期設定の手順と確認ポイントを整理。</li>
+  </ul>
   <h2 id="前提環境">前提環境</h2>
   <ul>
     <li>OS<br>
@@ -16,14 +33,6 @@
     <li>データベース<br>
       PostgreSQL</li>
   </ul>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-  <ul>
-    <li>VPS契約時に確認する観点。</li>
-    <li>CentOS環境の初期確認方法。</li>
-    <li>独自ドメインとDNS設定の基本。</li>
-    <li>Aレコードとネームサーバー設定の役割。</li>
-    <li>rootログイン禁止と公開鍵認証の考え方。</li>
-  </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <ul>
     <li>ドメイン契約とDNS設定<br>
@@ -31,7 +40,7 @@
     <li>Aレコードとネームサーバー<br>
       どこで名前解決を管理するかと、どのIPへ向けるかを分けて考える。</li>
     <li>rootログイン禁止<br>
-      一般ユーザーでログインできることを確認してから無効化する。</li>
+      一般ユーザーでログインできることを確認してから無効化。</li>
     <li>パスワード認証の無効化<br>
       公開鍵で接続できることを確認してから切り替える。</li>
   </ul>
@@ -50,7 +59,7 @@
     </li>
     <li>
       <p>CentOS7_x86_64(標準)をインストール<br>
-        インストールは、SAKURA VPS管理者用のコントロールパネルからGUI操作でインストールする。</p>
+        インストールは、SAKURA VPS管理者用のコントロールパネルからGUI操作でインストール。</p>
       <pre><code class="language-bash">$ <span class="hljs-built_in">cat</span> /etc/redhat-release
 CentOS Linux release 7.4.1708 (Core)
 </code></pre>
@@ -60,7 +69,7 @@ CentOS Linux release 7.4.1708 (Core)
   <ul>
     <li>ドメインの維持費、サーバー同時契約などの機能性、サポート体制など、何を重視するかの基準をもとにサービスを選ぶ。</li>
     <li>ここでは、Whois情報の公開代行、自動更新の有無、サポートの充実に基準を置き「お名前.com」で独自ドメインを取得した。</li>
-    <li>以降、この独自ドメインを<strong>example.com</strong>と表記する。</li>
+    <li>以降、この独自ドメインを<strong>example.com</strong>と表記。</li>
   </ul>
   <h3 id="ドメインのdns設定">ドメインのDNS設定</h3>
   <p>※ 契約したサービスによって操作方法が初期状態が異なるので設定方法については割愛する。</p>
@@ -76,7 +85,7 @@ TTL: 3600
     </li>
     <li>
       <p>ドメイン側のネームサーバー設定（お名前.com）<br>
-        <strong>example.com</strong>のドメイン設定でVPSのネームサーバーを登録する。<br>
+        <strong>example.com</strong>のドメイン設定でVPSのネームサーバーを登録。<br>
         ※ 設定が反映されるまで数時間〜数日かかるので注意。
       </p>
     </li>
@@ -90,21 +99,21 @@ TTL: 3600
   <ul>
     <li>
       <p>rootログインの無効化<br>
-        ログイン用の一般ユーザーを作成し、管理作業に必要な場合は<code>wheel</code>グループへ追加する。</p>
+        ログイン用の一般ユーザーを作成し、管理作業に必要な場合は<code>wheel</code>グループへ追加。</p>
       <pre><code class="language-bash">$ adduser vpsuser
 $ passwd vpsuser
 $ usermod -aG wheel vpsuser
 </code></pre>
-      <p>手元のPCで鍵を作成し、公開鍵だけをVPSへ登録する。秘密鍵は手元のPCから外へ出さない。</p>
+      <p>手元のPCで鍵を作成し、公開鍵だけをVPSへ登録。秘密鍵は手元のPCから外へ出さない。</p>
       <pre><code class="language-bash">$ ssh-keygen -t ed25519 -C "vpsuser@example.com"
 $ ssh-copy-id vpsuser@example.com
 $ ssh vpsuser@example.com
 </code></pre>
-      <p><code>ssh-copy-id</code>を利用できない場合は、公開鍵の内容をVPS側の<code>~/.ssh/authorized_keys</code>へ登録し、<code>.ssh</code>を<code>700</code>、<code>authorized_keys</code>を<code>600</code>に設定する。</p>
+      <p><code>ssh-copy-id</code>を利用できない場合は、公開鍵の内容をVPS側の<code>~/.ssh/authorized_keys</code>へ登録し、<code>.ssh</code>を<code>700</code>、<code>authorized_keys</code>を<code>600</code>に設定。</p>
     </li>
     <li>
       <p>SSHの設定変更<br>
-        <strong>別のターミナルから一般ユーザーの公開鍵認証に成功することを確認してから</strong>、rootログインとパスワード認証を無効化する。</p>
+        <strong>別のターミナルから一般ユーザーの公開鍵認証に成功することを確認してから</strong>、rootログインとパスワード認証を無効化。</p>
       <pre><code class="language-bash">$ vim /etc/ssh/sshd_config
 PermitRootLogin no
 PubkeyAuthentication yes

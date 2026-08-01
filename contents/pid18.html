@@ -3,20 +3,26 @@
   <p>ステップ関数、シグモイド関数、ReLU関数、恒等関数、ソフトマックス関数をPythonで実装し、それぞれの使いどころを整理する。</p>
   <p>活性化関数はすべて同じ役割ではなく、中間層で使いやすいもの、回帰の出力層で使うもの、分類の出力層で使うものがある。</p>
   <p>ここでは、関数ごとの特徴とNumPy実装をまとめて確認する。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>代表的な活性化関数の特徴。</li>
-  <li>中間層と出力層で使われる関数の違い。</li>
-  <li>NumPyで各関数を実装する方法。</li>
-  <li>ソフトマックス関数で確率のような出力を作る考え方。</li>
-</ul>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#ステップ関数" class="link-secondary">ステップ関数</a><br>
+      ステップ関数の仕組みと要点を具体例から整理。</li>
+    <li><a href="#シグモイド関数" class="link-secondary">シグモイド関数</a><br>
+      シグモイド関数の仕組みと要点を具体例から整理。</li>
+    <li><a href="#relu関数" class="link-secondary">ReLU関数</a><br>
+      ReLU関数の仕組みと要点を具体例から整理。</li>
+    <li><a href="#恒等関数" class="link-secondary">恒等関数</a><br>
+      恒等関数の仕組みと要点を具体例から整理。</li>
+    <li><a href="#ソフトマックス関数" class="link-secondary">ソフトマックス関数</a><br>
+      ソフトマックス関数の仕組みと要点を具体例から整理。</li>
+  </ul>
   <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
   <h3 id="ステップ関数">ステップ関数</h3>
   <p><a class="link-secondary" href="https://sigma-se.com/detail/17/">前の記事 &gt; ニューラルネットワークの活性化関数と実装サンプル</a>
     で触れた<strong>ステップ関数</strong>で、線形の<strong>活性化関数</strong>であり<strong>階段関数</strong>とも呼ばれる。</p>
   <ul>
     <li>定義<br>
-      \(x\) が \(0\) より大きければ、\(1\) を出力し、\(0\) 以下であれば \(0\) を出力する。</li>
+      \(x\) が \(0\) より大きければ、\(1\) を出力し、\(0\) 以下であれば \(0\) を出力。</li>
   </ul>
   <div
     style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
@@ -106,7 +112,7 @@
     ※ 最近では、ニューラルネットワークにおいて、<strong>シグモイド関数</strong>より、<strong>ReLU関数</strong>が多く用いられるようになった。<br></p>
   <ul>
     <li>定義<br>
-      \(x\) が \(0\) より大きい場合、\(x\) を出力し、\(0\) 以下である場合、\(0\) を出力する。</li>
+      \(x\) が \(0\) より大きい場合、\(x\) を出力し、\(0\) 以下である場合、\(0\) を出力。</li>
   </ul>
   <div
     style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
@@ -152,7 +158,7 @@
   <p><strong>出力層</strong>で使われる線形の<strong>活性化関数</strong>に分類される。</p>
   <ul>
     <li>定義<br>
-      \(x\) をそのまま出力する。</li>
+      \(x\) をそのまま出力。</li>
   </ul>
   <div
     style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">

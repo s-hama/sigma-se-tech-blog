@@ -3,13 +3,19 @@
   <p>Pythonで頻繁に使うstr、list、tuple、range、dictの基本操作を整理する。</p>
   <p>これらの型は、文字列、複数要素の管理、繰り返し処理、キーと値の対応付けなど、日常的なPythonコードの中心になる。</p>
   <p>ここでは、作成、参照、更新、反復、メソッドの使い方を、型ごとの性質とあわせて確認する。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>str、list、tuple、range、dictの役割。</li>
-  <li>sequence型とmapping型の違い。</li>
-  <li>要素の参照、更新、追加、削除の基本。</li>
-  <li>for文やin演算子での扱い方。</li>
-</ul>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#str型--文字列型" class="link-secondary">str型 : 文字列型</a><br>
+      str型 : 文字列型の意味と要点を具体例から整理。</li>
+    <li><a href="#list型--配列型" class="link-secondary">list型 : 配列型</a><br>
+      list型 : 配列型の意味と要点を具体例から整理。</li>
+    <li><a href="#tuple型--定数の配列型" class="link-secondary">tuple型 : 定数の配列型</a><br>
+      tuple型 : 定数の配列型の意味と要点を具体例から整理。</li>
+    <li><a href="#range型--範囲指定" class="link-secondary">range型 : 範囲指定</a><br>
+      range型 : 範囲指定の意味と要点を具体例から整理。</li>
+    <li><a href="#dict型--連想配列型辞書型" class="link-secondary">dict型 : 連想配列型（辞書型）</a><br>
+      dict型 : 連想配列型（辞書型）の意味と要点を具体例から整理。</li>
+  </ul>
   <h2 id="各データ型の操作方法">各データ型の操作方法</h2>
   <h3 id="str型--文字列型">str型 : 文字列型</h3>
   <p>文字列（Unicode文字）の並びを表す型。</p>
@@ -118,7 +124,7 @@ defg
               </tr>
             </tbody>
           </table>
-          ※ エスケープ（\\）は、特別な意味を持つ文字を無効化する。
+          ※ エスケープ（\\）は、特別な意味を持つ文字を無効化。
         </li>
       </ul>
     </li>
@@ -631,7 +637,7 @@ defg
     </li>
     <li>
       <p>定義例<br>
-        <strong>開始位置</strong>（デフォルト 0）、<strong>終了位置</strong>、<strong>増加幅</strong>（デフォルト\(1\)）を指定し定義する。<br>
+        <strong>開始位置</strong>（デフォルト 0）、<strong>終了位置</strong>、<strong>増加幅</strong>（デフォルト\(1\)）を指定し定義。<br>
         ※ range型のオブジェクト要素を可視化するため、list型に変換した出力をしている。
       </p>
       <pre><code class="language-python">$ python

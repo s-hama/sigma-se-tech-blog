@@ -6,15 +6,19 @@ Python - タスク指向型対話：2/5 OpenWeatherMap・Telegramの環境準備
 天気案内Botでは、天気情報を外部APIから取得し、ユーザーとのやり取りをメッセンジャー上で行う必要がある。OpenWeatherMapは天気情報の取得、Telegramはユーザーとの対話画面、python-telegram-botはBot実装の接続部分を担当する。
 ここでは、API利用登録、Bot作成、ライブラリのインストール、オウム返しBotによる疎通確認までを扱う。
 
-## この記事で扱うこと
-- OpenWeatherMapで天気情報を取得する準備。
-- Telegram Botを作成してトークンを取得する流れ。
-- python-telegram-botを使った基本的な対話処理。
-- 外部APIとメッセンジャーを組み合わせる構成。
+## この記事の構成
+- [作業時の注意点](#作業時の注意点)<br>
+  設定変更やコマンド実行前に確認しておきたい注意点を整理。
+- [天気情報を取得する「OpenWeatherMap」WebAPIの概要と利用登録](#天気情報を取得するopenweathermapwebapiの概要と利用登録)<br>
+  天気情報を取得する「OpenWeatherMap」WebAPIの概要と利用登録の手順と確認ポイントを整理。
+- [メッセンジャーアプリ「Telegram」の利用登録と「python-telegram-bot」のインストール](#メッセンジャーアプリtelegramの利用登録とpython-telegram-botのインストール)<br>
+  メッセンジャーアプリ「Telegram」の利用登録と「python-telegram-bot」のインストールの手順と確認ポイントを整理。
+- [TelegramBotを使用した対話サンプル（オウム返し）](#telegrambotを使用した対話サンプルオウム返し)<br>
+  TelegramBotを使用した対話サンプル（オウム返し）の意味と要点を具体例から整理。
 
 ## 作業時の注意点
 - APIキーとBotトークン<br>
-コードに直書きすると漏えいリスクがあるため、環境変数や設定ファイルで管理する。
+コードに直書きすると漏えいリスクがあるため、環境変数や設定ファイルで管理。
 - 疎通確認の順番<br>
 天気APIとTelegram Botを別々に確認してから結合すると原因を切り分けやすい。
 - ライブラリのバージョン<br>
@@ -33,17 +37,17 @@ python-telegram-botはバージョンで書き方が変わるため、記事の�
 そして、APIをコールするには、`API Key`が必要でアカウント作成する必要がある。
 
 - OpenWeatherMapのアカウント作成<br>
-    下記のアカウント作成ページ【Create New Account】を開き、`Username`、`Enter email`、`Password`、`Repeat password`を入力し、「Create Account」ボタンクリックでアカウントを作成する。
+    下記のアカウント作成ページ【Create New Account】を開き、`Username`、`Enter email`、`Password`、`Repeat password`を入力し、「Create Account」ボタンクリックでアカウントを作成。
 
     【Create New Account】: https://home.openweathermap.org/users/sign_up
 
-    アカウント作成後、ログインした状態で下記のAPIKey確認ページ【api_keys】開くと`Key`欄にAPIKeyが表示されるので、ここからAPIKeyを確認する。<br>
+    アカウント作成後、ログインした状態で下記のAPIKey確認ページ【api_keys】開くと`Key`欄にAPIKeyが表示されるので、ここからAPIKeyを確認。<br>
     ※ 登録完了のメール本文でもAPIKeyを確認できる。
 
     【api_keys】: https://home.openweathermap.org/api_keys
 
     また、PythonからURLへアクセスするため、サードパーティライブラリである`Requests`が必要。<br>
-    ※ 標準ライブラリ`urllib`でもアクセスできるが、`Requests`の方がシンプルであるため、これを使用する。
+    ※ 標準ライブラリ`urllib`でもアクセスできるが、`Requests`の方がシンプルであるため、これを使用。
 
 - Requestsのインストール
     ```bash
@@ -54,7 +58,7 @@ python-telegram-botはバージョンで書き方が変わるため、記事の�
     以下、準備されている2つのAPI**現在の天気情報**と**天気予報**の呼出確認となる。
 
 - 呼出し確認（現在の天気情報）<br>
-    福岡県（県庁）の緯度、経度を指定して現在の天気情報（JSON）を取得する。<br>
+    福岡県（県庁）の緯度、経度を指定して現在の天気情報（JSON）を取得。<br>
     ※ API呼出しの`units=metric`は、気温を摂氏で取得する指定とする。
     ```python
     $ python
@@ -80,7 +84,7 @@ python-telegram-botはバージョンで書き方が変わるため、記事の�
     ```
 
 - 呼出し確認（天気予報）
-    上記と同じ、福岡県（県庁）の緯度、経度を指定して天気予報を取得する。<br>
+    上記と同じ、福岡県（県庁）の緯度、経度を指定して天気予報を取得。<br>
     ※ `list`配列に3時間毎の天気予報（JSON）が格納されいる。<br>
     （＊1）4つ目以降の`list`配列は割愛
     ```python
@@ -117,7 +121,7 @@ python-telegram-botはバージョンで書き方が変わるため、記事の�
 最後に対話で使用するメッセンジャーアプリ`Telegram`の利用登録（アカウント作成）とPythonから`Telegram`を認識できるようにするためのライブラリである`python-telegram-bot`をインストールする。
 
 - Telegramインストーラのダウンロードとアカウント作成<br>
-    下記のTelegramトップページ【Telegram Top】を開き、インストール端末に応じたインストーラを選択し、ダウンロードする。<br>
+    下記のTelegramトップページ【Telegram Top】を開き、インストール端末に応じたインストーラを選択し、ダウンロード。<br>
     ※ Windowsなら「Telegram for Pc/Mac/Linux」リンク →「Get Telegram for Windows」ボタンでダウンロード。<br>
     ※ Linuxなら「Telegram for Pc/Mac/Linux」リンク →「Show all platforms」リンク→「Get Telegram for Linux 64 bit」ボタンでダウンロード。
 
@@ -127,18 +131,18 @@ python-telegram-botはバージョンで書き方が変わるため、記事の�
     ※ 国番号を付加した電話番号を入力後、SMS確認コードの本人確認が必要。
 
 - スクリーンネームの登録とアクセストークンの取得<br>
-    新しいBotの作成とスクリーンネームの登録を行い、アクセストークンを取得する。
+    新しいBotの作成とスクリーンネームの登録を行い、アクセストークンを取得。
 
     アカウント作成後、左サイドメニュー上部のユーザー検索欄から「@BotFather」で検索し、「Start」ボタンクリックで「@BotFather」と対話できる状態にする。
 
-    以降は、下記のように**Bot名**の入力と**スクリーンネーム**を登録し、アクセストークンを取得する。
+    以降は、下記のように**Bot名**の入力と**スクリーンネーム**を登録し、アクセストークンを取得。
 
     - Bot名の入力（Botの新規作成）<br>
-        「Alright, a new bot. How are we going to call it? Please choose a name for your bot.」と表示されるので、任意のBot名を入力する。<br>
+        「Alright, a new bot. How are we going to call it? Please choose a name for your bot.」と表示されるので、任意のBot名を入力。<br>
         ※ 下記サンプルでは「SHamaBot 」と入力している。
 
     - スクリーンネームの登録<br>
-        「Good. Now let's choose a username for your bot. It must end in `bot`. Like this, for example: TetrisBot or tetris_bot.」<br>と表示されるので、末尾が`bot`で終わるスクリーンネームを入力する。（既に使用されているスクリーンネームは使用不可。）
+        「Good. Now let's choose a username for your bot. It must end in `bot`. Like this, for example: TetrisBot or tetris_bot.」<br>と表示されるので、末尾が`bot`で終わるスクリーンネームを入力。（既に使用されているスクリーンネームは使用不可。）
 
         ※ 下記サンプルでは、Bot名と同じ「SHamaBot 」で入力したところ、既に使用されているスクリーンネームであったため「sorry this username is already taken. please try something different」とエラーが出ている。<br>
         そのため「GSHamaBot」の再入力で登録している。
@@ -232,7 +236,7 @@ python-telegram-botはバージョンで書き方が変わるため、記事の�
         ※ initial_messageの戻り値dict型のendは、対話の完了フラグ（True:完了、False:継続）<br>
     - その後、ユーザーがTelegramクライアントから発話すると、上記で設定（待機）していたメッセージハンドラを受付け、messageメソッドが実行される
     - messageメソッドでは、まずユーザーの発話内容（Telegramサーバー側の text から取得したutt（発話内容））とユーザーのセッションIDでユーザー発話情報inputを定義
-    続けて reply メソッドで発話内容を取得後（＊1）、Telegramサーバー側の reply_text メソッドに発信内容を渡して送信する。<br>
+    続けて reply メソッドで発話内容を取得後（＊1）、Telegramサーバー側の reply_text メソッドに発信内容を渡して送信。<br>
         （＊1）発話内容は、オウム返し するため、引数の発話内容 input['utt'] をそのまま返している。
 
 
@@ -240,7 +244,7 @@ python-telegram-botはバージョンで書き方が変わるため、記事の�
     以下、(1)、(2)の実行確認結果。<br>
     ※「telegram_bot.py」のアクセストークン(TOKEN)を、自身のものに置き換えることを忘れずに。
 
-    「echo_system.py」の実行にて対話を開始する。
+    「echo_system.py」の実行にて対話を開始。
     ```python
     $ python ~/gitlocalrep/dsbook/echo_system.py
     /root/gitlocalrep/dsbook/telegram_bot.py:29: TelegramDeprecationWarning: Old Handler API is deprecated - see https://git.io/fxJuV for details

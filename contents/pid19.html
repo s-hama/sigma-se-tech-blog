@@ -3,13 +3,17 @@
   <p>手書き数字画像データセットであるMNISTを取得し、ニューラルネットワークのサンプルで扱える形にする手順を整理する。</p>
   <p>MNISTは、画像分類の入門でよく使われるデータセットで、入力データ、ラベル、訓練データ、テストデータの関係を確認するのに向いている。</p>
   <p>ここでは、データの仕様、ダウンロード処理、画像としての表示確認までを扱う。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>MNISTの画像データとラベルの構成。</li>
-  <li>訓練データとテストデータの違い。</li>
-  <li>データをダウンロードして読み込む流れ。</li>
-  <li>画像データを表示して中身を確認する方法。</li>
-</ul>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#mnistとは" class="link-secondary">MNISTとは</a><br>
+      MNISTの意味と基本的な考え方を整理。</li>
+    <li><a href="#mnistのデータ仕様" class="link-secondary">MNISTのデータ仕様</a><br>
+      MNISTのデータ仕様の意味と要点を具体例から整理。</li>
+    <li><a href="#mnistのダウンロード" class="link-secondary">MNISTのダウンロード</a><br>
+      MNISTのダウンロードの手順と確認ポイントを整理。</li>
+    <li><a href="#画像データ表示確認" class="link-secondary">画像データ表示確認</a><br>
+      画像データ表示について、確認する項目と結果の見方を整理。</li>
+  </ul>
   <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
   <h3 id="mnistとは">MNISTとは</h3>
   <p><strong>MNIST</strong>（Mixed National Institute of Standards and Technology
@@ -163,7 +167,7 @@ Resolving deltas: 100% (197/197), <span class="hljs-keyword">done</span>.
     <li>
       <p>カレントディレクトに移動<br>
         <code>mnist.py</code>の利用時は、カレントディレクトを ch01、ch02、ch03 … ch08 のいずれかで実施する必要がある。<br>
-        ここでは、ch03から実施する。
+        ここでは、ch03から実施。
       </p>
       <pre><code class="language-bash">$ <span class="hljs-built_in">cd</span> deep-learning-from-scratch/ch03
 </code></pre>
@@ -211,11 +215,11 @@ Resolving deltas: 100% (197/197), <span class="hljs-keyword">done</span>.
     </li>
     <li>
       <p>load_mnist関数の概要<br>
-        引数 normalize は、入力画像を<strong>0.0 ～ 1.0 に正規化するかどうか</strong>Bool値で設定する。<br>
+        引数 normalize は、入力画像を<strong>0.0 ～ 1.0 に正規化するかどうか</strong>Bool値で設定。<br>
         Falseの場合、入力画像のピクセルは 0 ～ 255 となる。<br>
-        引数 flatten は、入力画像を<strong>1次元にするかどうか</strong>Bool 値で設定する。<br>
+        引数 flatten は、入力画像を<strong>1次元にするかどうか</strong>Bool 値で設定。<br>
         Falseの場合、入力画像は1 * 28 * 28 の3次元配列として格納され、Trueの場合、1次元配列(要素：784)として格納される。<br>
-        引数 one_hot_label は、ラベルを <strong>one_hot表現で格納するか</strong>Bool値で設定する。<br>
+        引数 one_hot_label は、ラベルを <strong>one_hot表現で格納するか</strong>Bool値で設定。<br>
         one_hot 表現の場合は、正解となるラベルのみ 1 でそれ以外は、0 の配列となる。<br>
         戻り値は、（訓練画像, 訓練ラベル）, （テスト画像, テストラベル）の形式でMNISTデータを返す。</p>
     </li>

@@ -6,11 +6,15 @@ MathJaxを使い、Webページ上でMathMLやLaTeX形式の数式を表示す�
 技術記事では、数式を画像ではなくテキストとして扱えると、拡大表示、検索、修正がしやすくなる。
 ここでは、MathJaxの読み込み、MathMLの基本要素、LaTeXによる数式表現をサンプルで確認する。
 
-## この記事で扱うこと
-- MathJaxをWebページへ読み込む基本。
-- MathMLで数式を構造的に表す考え方。
-- LaTeX記法で分数、添字、平方根などを表示する方法。
-- ブログ記事で数式を書くときの注意点。
+## この記事の構成
+- [MathJaxの導入](#mathjaxの導入)<br>
+  MathJaxの導入の手順と確認ポイントを整理。
+- [MathMLの要素](#mathmlの要素)<br>
+  MathMLを構成する主な要素と、数式を構造化して記述する方法を整理。
+- [MathMLの表示サンプル](#mathmlの表示サンプル)<br>
+  MathMLの表示サンプルをコードや具体例で確認。
+- [LaTeXの表示サンプル](#latexの表示サンプル)<br>
+  LaTeXの表示サンプルをコードや具体例で確認。
 
 ## 実施内容
 ### MathJaxの導入
@@ -21,7 +25,7 @@ MathJaxはCDNからJavaScriptを読み込むだけで導入できる。
   ```html
   <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
   ```
-  `mathjax@4`は最新の4.x系を取得する指定である。<br>再現性を重視する環境では`mathjax@4.0.0`のように完全なバージョンを固定する。TeXだけを処理する場合は`tex-chtml.js`など、用途に合う小さなコンポーネントも選べる。
+  `mathjax@4`は最新の4.x系を取得する指定である。<br>再現性を重視する環境では`mathjax@4.0.0`のように完全なバージョンを固定。TeXだけを処理する場合は`tex-chtml.js`など、用途に合う小さなコンポーネントも選べる。
 
 ### MathMLの要素
 MathMLでは、トップレベルの`<math>`内に`<mn>`や`<mo>`などの要素を組み合わせ、数式の構造を記述する。
@@ -115,7 +119,7 @@ MathMLでは、トップレベルの`<math>`内に`<mn>`や`<mo>`などの要素
     ```
 
 - 逆行列
-  - \(2 \times 2\)行列の逆行列を表示する。ただし、逆行列が存在する条件は\(ad-bc \neq 0\)である。
+  - \(2 \times 2\)行列の逆行列を表示。ただし、逆行列が存在する条件は\(ad-bc \neq 0\)である。
   - 表示
     <div style="display: flex; overflow-x: auto; white-space: nowrap; height: 10rem; margin-left: 1rem; font-size: 1.2em; margin-top: 0.25em;">
       <math>

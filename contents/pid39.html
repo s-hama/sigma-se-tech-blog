@@ -3,13 +3,17 @@
   <p>状態遷移ベースのタスク指向型対話システムを作るために、MeCabとSCXMLの役割、インストール手順、全体構成を整理する。</p>
   <p>状態遷移ベースでは、ユーザーの発話を解析し、現在の状態に応じて次の応答や処理を決める。形態素解析を行うMeCabと、状態遷移を表現するSCXMLを理解しておくと、後続の天気案内Bot実装を追いやすくなる。</p>
   <p>ここでは、対話システムの構成、MeCabによる発話解析、SCXMLによる状態定義の準備を確認する。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>タスク指向型対話と非タスク指向型対話の違い。</li>
-  <li>状態遷移ベースの対話システムの構成。</li>
-  <li>MeCabを使って日本語発話を形態素解析する理由。</li>
-  <li>SCXMLで状態遷移を表現する考え方。</li>
-</ul>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
+      設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
+    <li><a href="#タスク指向型対話システム-状態遷移ベース-のシステム構成について" class="link-secondary">タスク指向型対話システム (状態遷移ベース) のシステム構成について</a><br>
+      タスク指向型対話システム (状態遷移ベース) のシステム構成についてと各要素の役割を整理。</li>
+    <li><a href="#対話の文章を解析するmecabの概要とインストール" class="link-secondary">対話の文章を解析する「MeCab」の概要とインストール</a><br>
+      対話の文章を解析する「MeCab」の概要とインストールの手順と確認ポイントを整理。</li>
+    <li><a href="#状態遷移によるタスクを遂行するscxmlの概要とインストール" class="link-secondary">状態遷移によるタスクを遂行する「SCXML」の概要とインストール</a><br>
+      状態遷移によるタスクを遂行する「SCXML」の概要とインストールの手順と確認ポイントを整理。</li>
+  </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <ul>
     <li>MeCabの役割<br>
@@ -46,7 +50,7 @@
   <ul>
     <li>
       <p>MeCabインストール<br>
-        Groongaレポジトリの追加とパッケージの最新情報を取得し、mecab本体と辞書ファイルをインストールする。<br></p>
+        Groongaレポジトリの追加とパッケージの最新情報を取得し、mecab本体と辞書ファイルをインストール。<br></p>
       <ul>
         <li>Groongaレポジトリ追加
           <pre><code class="language-bash">$ sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
@@ -74,7 +78,7 @@ EOS
 </code></pre>
         </li>
         <li>mecab-python3のインストール<br>
-          最後に上記でインストールしたMeCabをPython3から呼び出せるように<code>mecab-python3</code>をインストールし、Pythonからの呼出しを確認する。
+          最後に上記でインストールしたMeCabをPython3から呼び出せるように<code>mecab-python3</code>をインストールし、Pythonからの呼出しを確認。
           <pre><code class="language-bash">$ pip3 install mecab-python3
 </code></pre>
         </li>
@@ -117,14 +121,14 @@ Traceback (most recent call last):
 RuntimeError
 &gt;&gt;&gt;
 </code></pre>
-          <p>この環境では、PythonからMeCabを呼び出す際に<code>unidic-lite</code>の追加インストールが必要だった。MeCab本体と辞書を入れていてもPythonバインディング側で辞書を見つけられないことがあるため、まずはエラーメッセージに従って不足している辞書を追加する。</p>
-          <p>エラーメッセージの通り<code>unidic-lite</code>をインストールする。</p>
+          <p>この環境では、PythonからMeCabを呼び出す際に<code>unidic-lite</code>の追加インストールが必要だった。MeCab本体と辞書を入れていてもPythonバインディング側で辞書を見つけられないことがあるため、まずはエラーメッセージに従って不足している辞書を追加。</p>
+          <p>エラーメッセージの通り<code>unidic-lite</code>をインストール。</p>
           <pre><code class="language-bash">$ pip3 install unidic-lite
 </code></pre>
         </li>
         <li>
           <p>再度、呼出し確認<br>
-            今度は、対話モード (インタプリタ)でなくプログラムファイルを実行する。</p>
+            今度は、対話モード (インタプリタ)でなくプログラムファイルを実行。</p>
           <pre><code class="language-bash">$ python ~/gitlocalrep/dsbook/mecab-python3_test.py
 &gt;昨日はいい天気でしたね
 BOS/EOS,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*
@@ -175,13 +179,13 @@ $ nkf -w8 --overwrite ~/gitlocalrep/dsbook/mecab-python3_test.py
     <li>
       <p>SCXMLのインストール(PySide2)<br>
         PythonでGUI作成のために用いられる <strong>Qtライブラリ</strong>の処理系である<strong>Qt for
-          Python</strong>（PySide2）の<strong>QScxmlStateMachine</strong>という <strong>有限状態オートマトン</strong>を表現するクラスを使用する。</p>
+          Python</strong>（PySide2）の<strong>QScxmlStateMachine</strong>という <strong>有限状態オートマトン</strong>を表現するクラスを使用。</p>
       <p>PySide2をインストール(ver.2-5.15.0)</p>
       <pre><code class="language-bash">$ <span class="hljs-built_in"></span>source</span> /var/www/vops/bin/activate <span class="hljs-comment"># 仮想環境起動</span>
 $ pip3.6 install PySide2 <span class="hljs-comment"># PySide2をインストール</span>
 </code></pre>
       <p>上記でPythonから <strong>SCXML</strong> を使えるようになった。</p>
-      <p>ここでは、次に示す <strong>SCXML</strong> 各要素の解説に留め、次の記事以降でPythonから呼び出す実装サンプルを確認する。</p>
+      <p>ここでは、次に示す <strong>SCXML</strong> 各要素の解説に留め、次の記事以降でPythonから呼び出す実装サンプルを確認。</p>
     </li>
     <li>
       <p>天気情報案内の状態遷移図(SCXML)<br>

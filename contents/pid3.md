@@ -9,6 +9,24 @@ Djangoを本番環境で動かす場合、開発用のrunserverではなく、Ap
 
 ※ 注意：この記事は、2018年当時のCentOS 7.4、Python 3.6環境の構築記録をもとに、手順同士の互換性を確認しやすい後年の旧バージョン（Django 2.2、mod_wsgi 4.9.4）へ置き換えて再構成した例である。<br>2018年当時のパッケージ構成を厳密に再現するものではない。<br>CentOS 7、Python 3.6、ここで扱うDjangoとmod_wsgiはいずれもサポート終了済みで、IUSリポジトリも現在の新規構築には使用できない。<br>新規構築ではサポート中の環境を選び、ここではApacheとmod_wsgiを接続する考え方を中心に参照する。
 
+## この記事の構成
+- [前提環境](#前提環境)<br>
+  手順で使用するOS、ソフトウェア、構成などの前提条件を確認。
+- [作業時の注意点](#作業時の注意点)<br>
+  設定変更やコマンド実行前に確認しておきたい注意点を整理。
+- [CentOSにパッケージリポジトリを導入](#centosにパッケージリポジトリを導入)<br>
+  CentOSにパッケージリポジトリを導入の手順と確認ポイントを整理。
+- [Pythonインストール](#pythonインストール)<br>
+  Pythonインストールの手順と確認ポイントを整理。
+- [Djangoインストール](#djangoインストール)<br>
+  Djangoインストールの手順と確認ポイントを整理。
+- [アプリケーション作成](#アプリケーション作成)<br>
+  アプリケーション作成の手順と確認ポイントを整理。
+- [mod_wsgiインストール](#mod_wsgiインストール)<br>
+  mod_wsgiインストールの手順と確認ポイントを整理。
+- [WSGIと仮想ホストの設定ファイル作成](#wsgiと仮想ホストの設定ファイル作成)<br>
+  WSGIと仮想ホストの設定ファイル作成の手順と確認ポイントを整理。
+
 ## 前提環境
 
 - OS<br>
@@ -24,13 +42,6 @@ PostgreSQL
 - ドメイン<br>
 example.com
 
-## この記事で扱うこと
-- EPEL/IUSリポジトリを利用していた当時の背景。
-- Pythonとvenvによる仮想環境の作成。
-- Djangoプロジェクトとアプリケーションの作成。
-- mod_wsgiを使ってApacheとDjangoを接続する流れ。
-- VirtualHostとWSGI設定の役割。
-
 ## 作業時の注意点
 
 - venvとシステムPython<br>
@@ -45,7 +56,7 @@ DjangoアプリのstaticとApacheのAlias設定を対応させる。
 ## 実施内容
 ### CentOSにパッケージリポジトリを導入
 - 開発パッケージのインストール<br>
-EPELリポジトリを有効化する。<br>
+EPELリポジトリを有効化。<br>
 ※ EPELはCentOSやRHELにない便利なパッケージを提供する外部リポジトリ。
   ```bash
   $ yum -y install epel-release
@@ -74,7 +85,7 @@ EPELリポジトリを有効化する。<br>
 
 ### Djangoインストール
 - venvで仮想環境を構築<br>
-Pythonの仮想環境を作成するパッケージは、他にも**virtualenv**、**anaconda**、**pyenv**、**pyenv-virtualenv**など多数あるが、ここでは、Python3から標準搭載されている**venv**を使用する。<br>
+Pythonの仮想環境を作成するパッケージは、他にも**virtualenv**、**anaconda**、**pyenv**、**pyenv-virtualenv**など多数あるが、ここでは、Python3から標準搭載されている**venv**を使用。<br>
 <br>
 ※ `vops`は、仮想環境が入るディレクトリ名なので各自の環境に合わせること。
   ```bash
@@ -82,7 +93,7 @@ Pythonの仮想環境を作成するパッケージは、他にも**virtualenv**
   ```
 
 - 仮想環境上にDjangoをインストール<br>
-`pip`で**Django**をインストールする。無指定で最新版を入れるとPython 3.6では動作しないため、この旧環境を再現する場合は対応するバージョンへ固定する。Django 2.2自体もサポート終了済みである。
+`pip`で**Django**をインストール。無指定で最新版を入れるとPython 3.6では動作しないため、この旧環境を再現する場合は対応するバージョンへ固定。Django 2.2自体もサポート終了済みである。
   ```bash
   $ source /var/www/vops/bin/activate    # 仮想環境起動
   $ python -m pip install "Django==2.2.*"
@@ -96,7 +107,7 @@ Pythonの仮想環境を作成するパッケージは、他にも**virtualenv**
   ```
 
 ### アプリケーション作成
-- 実際にプログラムを配置するDjangoアプリケーションを作成する。<br>
+- 実際にプログラムを配置するDjangoアプリケーションを作成。<br>
 ※ ここでは、例として**webapp**という名称にする。
   ```bash
   $ source /var/www/vops/bin/activate    # 仮想環境起動
@@ -106,7 +117,7 @@ Pythonの仮想環境を作成するパッケージは、他にも**virtualenv**
 
 ### mod_wsgiインストール
 - `httpd-devel`、Cコンパイラ、`mod_wsgi`をインストール
-`mod_wsgi`をソースからビルドするため、Apacheの開発ファイル`httpd-devel`とCコンパイラ`gcc`を先にインストールする。Pythonの開発ファイルは前述の`python36u-devel`で導入済みとなる。<br>
+`mod_wsgi`をソースからビルドするため、Apacheの開発ファイル`httpd-devel`とCコンパイラ`gcc`を先にインストール。Pythonの開発ファイルは前述の`python36u-devel`で導入済みとなる。<br>
   ```bash
   $ source /var/www/vops/bin/activate    # 仮想環境起動
   $ yum install -y httpd httpd-devel gcc    # mod_wsgiのビルドに必要な開発環境をインストール
@@ -116,7 +127,7 @@ Pythonの仮想環境を作成するパッケージは、他にも**virtualenv**
 
 ### WSGIと仮想ホストの設定ファイル作成
 - Apache設定ファイルの確認<br>
-Apacheの設定ファイル**httpd.conf**の設定内容を確認する。<br>
+Apacheの設定ファイル**httpd.conf**の設定内容を確認。<br>
   ```bash
   $ cat /etc/httpd/conf/httpd.conf
   …
@@ -126,10 +137,10 @@ Apacheの設定ファイル**httpd.conf**の設定内容を確認する。<br>
   ```
   - 補足<br>
 上記`Include`は、`conf.modules.d`(module系の設定ファイル)配下の`*.conf`をロードする設定、`IncludeOptional`は、`conf.d`(その他設定系のファイル)配下の`*.conf`をロードする設定となる。<br><br>
-そのため、次項で**WSGI設定ファイル(django-wsgi.conf)**と**仮想ホスト設定ファイル(django.conf)**を作成し、Apacheからmod_wsgiを介し、Djangoを起動できるよう、wsgi_module設定ファイルを作成する。<br>
+そのため、次項で**WSGI設定ファイル(django-wsgi.conf)**と**仮想ホスト設定ファイル(django.conf)**を作成し、Apacheからmod_wsgiを介し、Djangoを起動できるよう、wsgi_module設定ファイルを作成。<br>
 
 - WSGI設定ファイル作成<br>
-`mod_wsgi-express module-config`で、現在の環境に対応する`LoadModule`と`WSGIPythonHome`を確認する。ハードコードした共有ライブラリ名はPythonやCPUアーキテクチャによって変わるため、コマンドの出力を`/etc/httpd/conf.modules.d/django-wsgi.conf`へ反映する。<br>
+`mod_wsgi-express module-config`で、現在の環境に対応する`LoadModule`と`WSGIPythonHome`を確認。ハードコードした共有ライブラリ名はPythonやCPUアーキテクチャによって変わるため、コマンドの出力を`/etc/httpd/conf.modules.d/django-wsgi.conf`へ反映。<br>
   ```bash
   $ /var/www/vops/bin/mod_wsgi-express module-config
   LoadModule wsgi_module "/var/www/vops/lib64/python3.6/site-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so"
@@ -138,8 +149,8 @@ Apacheの設定ファイル**httpd.conf**の設定内容を確認する。<br>
 
 - 仮想ホスト設定ファイル作成<br>
 前記事で`certbot --apache`を実行した場合は、Certbotが同じ`ServerName`のVirtualHostを生成または編集していることがある。<br>
-`httpd -S`で現在の定義を確認し、同じホスト名・ポートのVirtualHostを重複作成せず、既存のHTTPS用設定へWSGIと静的ファイルの設定を統合する。<br>
-該当する定義がない場合は、`/etc/httpd/conf.d`配下に**django.conf**を作成する。<br>
+`httpd -S`で現在の定義を確認し、同じホスト名・ポートのVirtualHostを重複作成せず、既存のHTTPS用設定へWSGIと静的ファイルの設定を統合。<br>
+該当する定義がない場合は、`/etc/httpd/conf.d`配下に**django.conf**を作成。<br>
 以下は一つに統合した設定例であり、記号を含まないApache設定として記述している。<br>
   ```apache
   <VirtualHost *:443>
@@ -170,13 +181,13 @@ Apacheの設定ファイル**httpd.conf**の設定内容を確認する。<br>
   </VirtualHost>
   ```
   - 設定項目の補足<br>
-  `<VirtualHost *:443>`はSSL/TLS用、`<VirtualHost *:80>`はHTTPからHTTPSへのリダイレクト用となる。`ServerName`には自身のドメインを設定する。<br><br>
+  `<VirtualHost *:443>`はSSL/TLS用、`<VirtualHost *:80>`はHTTPからHTTPSへのリダイレクト用となる。`ServerName`には自身のドメインを設定。<br><br>
   証明書設定はCentOS 7.4標準のApache 2.4.6を前提に、`cert.pem`と`chain.pem`を別々に指定している。Apache 2.4.8以降では`SSLCertificateFile`に`fullchain.pem`を指定し、`SSLCertificateChainFile`は省略できる。`httpd -v`でバージョンを確認し、Certbotが生成した設定を優先する。秘密鍵の読取り権限は必要最小限にする。<br><br>
-  `WSGIDaemonProcess`の`python-home`は仮想環境のルート、`python-path`はDjangoプロジェクトをimportできるディレクトリを指定する。`WSGIProcessGroup`には同じプロセスグループ名を設定し、`WSGIScriptAlias`には`wsgi.py`へのパスを指定する。<br><br>
+  `WSGIDaemonProcess`の`python-home`は仮想環境のルート、`python-path`はDjangoプロジェクトをimportできるディレクトリを指定。`WSGIProcessGroup`には同じプロセスグループ名を設定し、`WSGIScriptAlias`には`wsgi.py`へのパスを指定。<br><br>
   `Alias /static/`は`collectstatic`で`STATIC_ROOT`へ集約した静的ファイルを配信する設定で、URLとファイルパスの末尾の`/`を対応させる。<br>
 
 ## まとめ
-- Django本番構成では、Apacheからmod_wsgiを介してアプリケーションを起動する。
+- Django本番構成では、Apacheからmod_wsgiを介してアプリケーションを起動。
 - Pythonの仮想環境、Djangoプロジェクト、WSGI設定のパスをそろえることが重要となる。
 - VirtualHostではHTTPからHTTPSへのリダイレクトとDjango起動設定を分けて考える。
 

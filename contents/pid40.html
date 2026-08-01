@@ -3,17 +3,22 @@
   <p>状態遷移ベースの天気案内Botで使用するOpenWeatherMap、Telegram、python-telegram-botの準備手順を整理する。</p>
   <p>天気案内Botでは、天気情報を外部APIから取得し、ユーザーとのやり取りをメッセンジャー上で行う必要がある。OpenWeatherMapは天気情報の取得、Telegramはユーザーとの対話画面、python-telegram-botはBot実装の接続部分を担当する。</p>
   <p>ここでは、API利用登録、Bot作成、ライブラリのインストール、オウム返しBotによる疎通確認までを扱う。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>OpenWeatherMapで天気情報を取得する準備。</li>
-  <li>Telegram Botを作成してトークンを取得する流れ。</li>
-  <li>python-telegram-botを使った基本的な対話処理。</li>
-  <li>外部APIとメッセンジャーを組み合わせる構成。</li>
-</ul>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
+      設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
+    <li><a href="#天気情報を取得するopenweathermapwebapiの概要と利用登録" class="link-secondary">天気情報を取得する「OpenWeatherMap」WebAPIの概要と利用登録</a><br>
+      天気情報を取得する「OpenWeatherMap」WebAPIの概要と利用登録の手順と確認ポイントを整理。</li>
+    <li><a href="#メッセンジャーアプリtelegramの利用登録とpython-telegram-botのインストール" class="link-secondary">メッセンジャーアプリ「Telegram」の利用登録と「python-telegram-bot」のインストール
+  </a><br>
+      メッセンジャーアプリ「Telegram」の利用登録と「python-telegram-bot」のインストールの手順と確認ポイントを整理。</li>
+    <li><a href="#telegrambotを使用した対話サンプルオウム返し" class="link-secondary">TelegramBotを使用した対話サンプル（オウム返し）</a><br>
+      TelegramBotを使用した対話サンプル（オウム返し）の意味と要点を具体例から整理。</li>
+  </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <ul>
     <li>APIキーとBotトークン<br>
-      コードに直書きすると漏えいリスクがあるため、環境変数や設定ファイルで管理する。</li>
+      コードに直書きすると漏えいリスクがあるため、環境変数や設定ファイルで管理。</li>
     <li>疎通確認の順番<br>
       天気APIとTelegram Botを別々に確認してから結合すると原因を切り分けやすい。</li>
     <li>ライブラリのバージョン<br>
@@ -31,14 +36,14 @@
       <p>OpenWeatherMapのアカウント作成<br>
         下記のアカウント作成ページ【Create New
         Account】を開き、<code>Username</code>、<code>Enter email</code>、<code>Password</code>、<code>Repeat password</code>を入力し、「Create
-        Account」ボタンクリックでアカウントを作成する。</p>
+        Account」ボタンクリックでアカウントを作成。</p>
       <p>【Create New Account】: <a
           href="https://home.openweathermap.org/users/sign_up" class="link-secondary">https://home.openweathermap.org/users/sign_up</a></p>
-      <p>アカウント作成後、ログインした状態で下記のAPIKey確認ページ【api_keys】開くと<code>Key</code>欄にAPIKeyが表示されるので、ここからAPIKeyを確認する。<br>
+      <p>アカウント作成後、ログインした状態で下記のAPIKey確認ページ【api_keys】開くと<code>Key</code>欄にAPIKeyが表示されるので、ここからAPIKeyを確認。<br>
         ※ 登録完了のメール本文でもAPIKeyを確認できる。</p>
       <p>【api_keys】: <a href="https://home.openweathermap.org/api_keys" class="link-secondary">https://home.openweathermap.org/api_keys</a></p>
       <p>また、PythonからURLへアクセスするため、サードパーティライブラリである<code>Requests</code>が必要。<br>
-        ※ 標準ライブラリ<code>urllib</code>でもアクセスできるが、<code>Requests</code>の方がシンプルであるため、これを使用する。</p>
+        ※ 標準ライブラリ<code>urllib</code>でもアクセスできるが、<code>Requests</code>の方がシンプルであるため、これを使用。</p>
     </li>
     <li>
       <p>Requestsのインストール</p>
@@ -49,7 +54,7 @@
     </li>
     <li>
       <p>呼出し確認（現在の天気情報）<br>
-        福岡県（県庁）の緯度、経度を指定して現在の天気情報（JSON）を取得する。<br>
+        福岡県（県庁）の緯度、経度を指定して現在の天気情報（JSON）を取得。<br>
         ※ API呼出しの<code>units=metric</code>は、気温を摂氏で取得する指定とする。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-keyword">import</span> requests
@@ -75,7 +80,7 @@
     </li>
     <li>
       <p>呼出し確認（天気予報）
-        上記と同じ、福岡県（県庁）の緯度、経度を指定して天気予報を取得する。<br>
+        上記と同じ、福岡県（県庁）の緯度、経度を指定して天気予報を取得。<br>
         ※ <code>list</code>配列に3時間毎の天気予報（JSON）が格納されいる。<br>
         （＊1）4つ目以降の<code>list</code>配列は割愛</p>
       <pre><code class="language-python">$ python
@@ -115,7 +120,7 @@
   <ul>
     <li>
       <p>Telegramインストーラのダウンロードとアカウント作成<br>
-        下記のTelegramトップページ【Telegram Top】を開き、インストール端末に応じたインストーラを選択し、ダウンロードする。<br>
+        下記のTelegramトップページ【Telegram Top】を開き、インストール端末に応じたインストーラを選択し、ダウンロード。<br>
         ※ Windowsなら「Telegram for Pc/Mac/Linux」リンク →「Get Telegram for Windows」ボタンでダウンロード。<br>
         ※ Linuxなら「Telegram for Pc/Mac/Linux」リンク →「Show all platforms」リンク→「Get Telegram for Linux 64 bit」ボタンでダウンロード。</p>
       <p>【Telegram Top】: <a href="https://telegram.org" class="link-secondary">https://telegram.org</a></p>
@@ -124,20 +129,20 @@
     </li>
     <li>
       <p>スクリーンネームの登録とアクセストークンの取得<br>
-        新しいBotの作成とスクリーンネームの登録を行い、アクセストークンを取得する。</p>
+        新しいBotの作成とスクリーンネームの登録を行い、アクセストークンを取得。</p>
       <p>アカウント作成後、左サイドメニュー上部のユーザー検索欄から「@BotFather」で検索し、「Start」ボタンクリックで「@BotFather」と対話できる状態にする。</p>
-      <p>以降は、下記のように<strong>Bot名</strong>の入力と<strong>スクリーンネーム</strong>を登録し、アクセストークンを取得する。</p>
+      <p>以降は、下記のように<strong>Bot名</strong>の入力と<strong>スクリーンネーム</strong>を登録し、アクセストークンを取得。</p>
       <ul>
         <li>
           <p>Bot名の入力（Botの新規作成）<br>
             「Alright, a new bot. How are we going to call it? Please choose a name for your
-            bot.」と表示されるので、任意のBot名を入力する。<br>
+            bot.」と表示されるので、任意のBot名を入力。<br>
             ※ 下記サンプルでは「SHamaBot 」と入力している。</p>
         </li>
         <li>
           <p>スクリーンネームの登録<br>
             「Good. Now let's choose a username for your bot. It must end in <code>bot</code>. Like this, for example:
-            TetrisBot or tetris_bot.」<br>と表示されるので、末尾が<code>bot</code>で終わるスクリーンネームを入力する。（既に使用されているスクリーンネームは使用不可。）</p>
+            TetrisBot or tetris_bot.」<br>と表示されるので、末尾が<code>bot</code>で終わるスクリーンネームを入力。（既に使用されているスクリーンネームは使用不可。）</p>
           <p>※ 下記サンプルでは、Bot名と同じ「SHamaBot 」で入力したところ、既に使用されているスクリーンネームであったため「sorry this username is already taken. please
             try something different」とエラーが出ている。<br>
             そのため「GSHamaBot」の再入力で登録している。</p>
@@ -241,7 +246,7 @@ TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
               ※ initial_messageの戻り値dict型のendは、対話の完了フラグ（True:完了、False:継続）<br></li>
             <li>その後、ユーザーがTelegramクライアントから発話すると、上記で設定（待機）していたメッセージハンドラを受付け、messageメソッドが実行される</li>
             <li>messageメソッドでは、まずユーザーの発話内容（Telegramサーバー側の text から取得したutt（発話内容））とユーザーのセッションIDでユーザー発話情報inputを定義
-              続けて reply メソッドで発話内容を取得後（＊1）、Telegramサーバー側の reply_text メソッドに発信内容を渡して送信する。<br>
+              続けて reply メソッドで発話内容を取得後（＊1）、Telegramサーバー側の reply_text メソッドに発信内容を渡して送信。<br>
               （＊1）発話内容は、オウム返し するため、引数の発話内容 input['utt'] をそのまま返している。</li>
           </ul>
         </li>
@@ -251,7 +256,7 @@ TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
       <p>上記「対話サンプル (オウム返し)」の実行確認<br>
         以下、(1)、(2)の実行確認結果。<br>
         ※「telegram_bot.py」のアクセストークン(TOKEN)を、自身のものに置き換えることを忘れずに。</p>
-      <p>「echo_system.py」の実行にて対話を開始する。</p>
+      <p>「echo_system.py」の実行にて対話を開始。</p>
       <pre><code class="language-python">$ python ~/gitlocalrep/dsbook/echo_system.py
 /root/gitlocalrep/dsbook/telegram_bot.py:<span class="hljs-number">29</span>: TelegramDeprecationWarning: Old Handler API <span class="hljs-keyword">is</span> deprecated - see https://git.io/fxJuV <span class="hljs-keyword">for</span> details
 updater = Updater(TOKEN)

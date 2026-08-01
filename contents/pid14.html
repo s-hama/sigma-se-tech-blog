@@ -3,13 +3,17 @@
   <p>MathJaxを使い、Webページ上でMathMLやLaTeX形式の数式を表示する方法を整理する。</p>
   <p>技術記事では、数式を画像ではなくテキストとして扱えると、拡大表示、検索、修正がしやすくなる。</p>
   <p>ここでは、MathJaxの読み込み、MathMLの基本要素、LaTeXによる数式表現をサンプルで確認する。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>MathJaxをWebページへ読み込む基本。</li>
-  <li>MathMLで数式を構造的に表す考え方。</li>
-  <li>LaTeX記法で分数、添字、平方根などを表示する方法。</li>
-  <li>ブログ記事で数式を書くときの注意点。</li>
-</ul>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#mathjaxの導入" class="link-secondary">MathJaxの導入</a><br>
+      MathJaxの導入の手順と確認ポイントを整理。</li>
+    <li><a href="#mathmlの要素" class="link-secondary">MathMLの要素</a><br>
+      MathMLを構成する主な要素と、数式を構造化して記述する方法を整理。</li>
+    <li><a href="#mathmlの表示サンプル" class="link-secondary">MathMLの表示サンプル</a><br>
+      MathMLの表示サンプルをコードや具体例で確認。</li>
+    <li><a href="#latexの表示サンプル" class="link-secondary">LaTeXの表示サンプル</a><br>
+      LaTeXの表示サンプルをコードや具体例で確認。</li>
+  </ul>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="mathjaxの導入">MathJaxの導入</h3>
   <p>MathJaxはCDNからJavaScriptを読み込むだけで導入できる。</p>
@@ -18,7 +22,7 @@
       TeXとMathMLを入力として受け取り、CommonHTMLで表示する公式ドキュメントの構成例は次のとおり。
       <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">defer</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 </code></pre>
-      <code>mathjax@4</code>は最新の4.x系を取得する指定である。<br>再現性を重視する環境では<code>mathjax@4.0.0</code>のように完全なバージョンを固定する。TeXだけを処理する場合は<code>tex-chtml.js</code>など、用途に合う小さなコンポーネントも選べる。
+      <code>mathjax@4</code>は最新の4.x系を取得する指定である。<br>再現性を重視する環境では<code>mathjax@4.0.0</code>のように完全なバージョンを固定。TeXだけを処理する場合は<code>tex-chtml.js</code>など、用途に合う小さなコンポーネントも選べる。
     </li>
   </ul>
   <h3 id="mathmlの要素">MathMLの要素</h3>
@@ -128,7 +132,7 @@
     </li>
     <li>
       <p>逆行列</p>
-      <p>\(2 \times 2\)行列の逆行列を表示する。ただし、逆行列が存在する条件は\(ad-bc \neq 0\)である。</p>
+      <p>\(2 \times 2\)行列の逆行列を表示。ただし、逆行列が存在する条件は\(ad-bc \neq 0\)である。</p>
       <ul>
         <li>表示<div style="display: flex; overflow-x: auto; white-space: nowrap; height: 10rem; margin-left: 1rem; font-size: 1.2em; margin-top: 0.25em;">
             <math>
