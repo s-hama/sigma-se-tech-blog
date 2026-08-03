@@ -19,7 +19,7 @@
   <div
     style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
     \[
-    f_{x_{0}}(x_{0}, x_{1}) = ∂_{x_{0}}(x_{0}, x_{1}) = \frac{∂\ (x_{0}, x_{1})}{∂x_{0}}
+    \frac{\partial f}{\partial x_{0}}(x_{0}, x_{1})
     \]
   </div>
   <div
@@ -30,8 +30,7 @@
   </div>
   <ul>
     <li>
-      <p>\(f_{x_{0}}(x_{0}, x_{1})\)、\(∂_{x_{0}}(x_{0}, x_{1})\)、\(\frac{∂\ (x_{0}, x_{1})}{∂x_{0}}\) は、\(f(x)\) を
-        \(x_{0}\) で偏微分した結果（偏導関数）を表す記号。</p>
+      <p>\(\frac{\partial f}{\partial x_{0}}(x_{0},x_{1})\) は、\(x_{1}\)を固定し、\(f(x_{0},x_{1})\)を\(x_{0}\)で偏微分した結果（偏導関数）を表す記号。</p>
     </li>
     <li>
       <p>微分の定義については、前ページを参考のこと
@@ -53,7 +52,6 @@
     &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">func_ex</span>(<span class="hljs-params">x0, x1</span>):
     ...     <span class="hljs-keyword">return</span> x0**<span class="hljs-number">2</span> + x1**<span class="hljs-number">2</span>
     ...
-    &gt;&gt;&gt; x = np.arange(-<span class="hljs-number">3.0</span>, <span class="hljs-number">3.0</span>, <span class="hljs-number">0.1</span>)
     &gt;&gt;&gt; x0 = np.arange(-<span class="hljs-number">3.0</span>, <span class="hljs-number">3.0</span>, <span class="hljs-number">0.1</span>)
     &gt;&gt;&gt; x1 = np.arange(-<span class="hljs-number">3.0</span>, <span class="hljs-number">3.0</span>, <span class="hljs-number">0.1</span>)
     &gt;&gt;&gt; X0, X1 = np.meshgrid(x0, x1)
@@ -70,7 +68,7 @@
     Text(<span class="hljs-number">0.5</span>, <span class="hljs-number">0.92</span>, <span class="hljs-string">&#x27;f(x0, x1) = x0^2+x1^2 # arange:-3.0, 3.0, 0.1, label:f(x0, x_{1}), x0, x_{1}&#x27;</span>)
     &gt;&gt;&gt; ax.plot_wireframe(X0, X1, Z)
     [&lt;mpl_toolkits.mplot3d.art3d.Line3DCollection <span class="hljs-built_in">object</span> at <span class="hljs-number">0x7f6ae0cec6d8</span>&gt;]
-    &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;/static/tblog/img/pid25_1.png&#x27;</span>)
+    &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;pid25_1.png&#x27;</span>)
     &gt;&gt;&gt;
 </code></pre>
       <p><img src="/static/tblog/img/pid25_1.png" alt="pid25_1"></p>
@@ -79,33 +77,32 @@
       <p>次に偏微分のPython実装サンプル<br>
         まず、どの変数に対して偏微分するか前提が必要となる。</p>
       <p>例えば、関数 \(f(x_{0}, x_{1}) = x^2_{0} + x^2_{1}\) で \(x_{0} = 5\)、\(x_{1} = 10\) とした時</p>
-      <p>\(x_{0}\) に対する偏微分を求めるには、まず \(x_{1}\) に対して解析的な微分（真の微分：\(y = x^{n}\)⇒\(y’ = nx^{n-1}\)）を行う。</p>
+      <p>\(x_{0}\) に対する偏微分を求めるには、もう一方の変数 \(x_{1}\) を10に固定し、\(x_{0}\)だけを変数として扱う。</p>
       <br>
-      <p>\(x^2_{0} + x^2_{1}\) を \(x_{1}\) で解析的な微分をすると</p>
+      <p>\(x_{1}=10\)を代入すると</p>
       <div
         style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
         \[
-        x^2_{0} + 2x_{1}\hspace{5mm}･･･（A）
+        f(x_{0},10) = x^2_{0} + 10^2 = x^2_{0} + 100\hspace{5mm}･･･（A）
         \]
       </div>
       と表せる。
       <br><br>
-      <p>ここで偏微分の対象は、\(x_{0}\) なので、\(（A）\) を \(x_{1} = 10\) とし</p>
+      <p>この一変数関数を\(x_{0}\)で微分すると</p>
       <div
         style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
         \[
-        x^2_{0} + 2\times10\hspace{5mm}･･･（B）
+        \frac{d}{dx_{0}}(x^2_{0}+100)=2x_{0}\hspace{5mm}･･･（B）
         \]
       </div>
-      <p>と表せ、この\(（B）\)を \(x_{0}\) で<strong>偏微分</strong>することになる。<br></p>
-      <p>\(（B）\)は、下記サンプル <strong>func_partial_dif</strong>と表せるため、これに対して \(x_{0} = 5.0\) で数値微分する形で偏微分を求めることができる。</p>
+      <p>下記サンプルでは\(（A）\)の一変数関数を <strong>func_partial_dif</strong>とし、\(x_{0} = 5.0\) で数値微分する。結果は\(（B）\)の\(2x_{0}=10\)とほぼ一致する。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">num_dif</span>(<span class="hljs-params">f, x</span>):    <span class="hljs-comment"># 下記（＊ num_dif）参照</span>
     ...     h = <span class="hljs-number">1e-4</span>
     ...     <span class="hljs-keyword">return</span> (f(x+h) - f(x-h)) / (<span class="hljs-number">2</span> * h)
     ...
     &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">func_partial_dif</span>(<span class="hljs-params">x0</span>):
-    ...     <span class="hljs-keyword">return</span> x0*x0 + <span class="hljs-number">2.0</span>**<span class="hljs-number">10.0</span>
+    ...     <span class="hljs-keyword">return</span> x0*x0 + <span class="hljs-number">10.0</span>**<span class="hljs-number">2</span>
     ...
     &gt;&gt;&gt; num_dif(func_partial_dif, <span class="hljs-number">5.0</span>)
     <span class="hljs-number">9.999999999976694</span>
@@ -118,28 +115,28 @@
     </li>
     <li>
       <p>次項の解説ため \(x_{1}\) に対する偏微分の方も求めておく<br>
-        \(x_{0}\) で解析的微分をすると</p>
+        同様に、\(x_{0}=5\)を固定すると</p>
       <div
         style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
         \[
-        2x_{0} + x^2_{1}\hspace{5mm}･･･（C）
+        f(5,x_{1}) = 5^2 + x^2_{1} = 25 + x^2_{1}\hspace{5mm}･･･（C）
         \]
       </div>
-      <p>と表せ、偏微分の対象は、\(x_{1}\) なので、この\(（C）\)を \(x_{0} = 5\) とした</p>
+      <p>と表せる。この一変数関数を\(x_{1}\)で微分すると</p>
       <div
         style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
         \[
-        2*5 + x^2_{1}\hspace{5mm}･･･（D）
+        \frac{d}{dx_{1}}(25+x^2_{1})=2x_{1}\hspace{5mm}･･･（D）
         \]
       </div>
-      <p>を \(x_{1}\) で偏微分する。</p>
+      <p>下記サンプルでは\(（C）\)の一変数関数を\(x_{1}=10\)で数値微分し、\(（D）\)の\(2x_{1}=20\)と比較する。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">num_dif</span>(<span class="hljs-params">f, x</span>):
     ...     h = <span class="hljs-number">1e-4</span>
     ...     <span class="hljs-keyword">return</span> (f(x+h) - f(x-h)) / (<span class="hljs-number">2</span> * h)
     ...
     &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">func_partial_dif</span>(<span class="hljs-params">x1</span>):
-    ...     <span class="hljs-keyword">return</span> <span class="hljs-number">2.0</span>**<span class="hljs-number">5.0</span> + x1*x1
+    ...     <span class="hljs-keyword">return</span> <span class="hljs-number">5.0</span>**<span class="hljs-number">2</span> + x1*x1
     ...
     &gt;&gt;&gt; num_dif(func_partial_dif, <span class="hljs-number">10.0</span>)
     <span class="hljs-number">19.99999999995339</span>
@@ -150,8 +147,7 @@
   </ul>
   <h3 id="勾配のpython実装サンプル">勾配のPython実装サンプル</h3>
   <p>上記で、\(x_{0}\)、\(x_{1}\) それぞれの偏微分について実装サンプルを解説したが、次は、<strong>同時に偏微分する場合</strong>を考える。</p>
-  <p>\(x_{0}\)、\(x_{1}\) 両方の偏微分 \(\displaystyle \left(\frac{∂\ (x_{0}, x_{1})}{∂x_{0}}, \frac{∂\ (x_{0}, x_{1})}{∂x_{1}}
-    \right)\) を<strong>ベクトルとしてまとめたもの</strong>を<strong>勾配</strong>という。</p>
+  <p>\(x_{0}\)、\(x_{1}\) 両方の偏微分 \(\displaystyle \left(\frac{\partial f}{\partial x_{0}}, \frac{\partial f}{\partial x_{1}} \right)\) を<strong>ベクトルとしてまとめたもの</strong>を<strong>勾配</strong>という。</p>
   <ul>
     <li>
       <p>勾配の実装サンプル<br>
@@ -197,21 +193,14 @@
     array([-<span class="hljs-number">6.</span>, <span class="hljs-number">8.</span>])
     &gt;&gt;&gt;
 </code></pre>
-      <p>上記の勾配はすべて、解析的な微分（真の微分）\(y = x^{n}\)⇒\(y’ = nx^{n-1}\) となる \((2x_{0} , 2x_{1})\) になっていることがわかる。</p>
+      <p>上記の数値勾配は、解析的に求めた勾配 \((2x_{0}, 2x_{1})\) とほぼ一致していることが分かる。</p>
       <p>それぞれの勾配を見てみると</p>
       <p>\((5.0,\ 10.0)\) ⇒ \((10.0,\ 20.0)\)<br>
         \((0.0,\ 10.0)\) ⇒ \((0.0,\ 20.0)\)<br>
         \((5.0,\ 0.0)\) ⇒ \((10.0,\ 0.0)\)<br>
         \((2.0,\ -4.0)\) ⇒ \((4.0,\ -8.0)\)<br>
         \((-3.0,\ 4.0)\) ⇒ \((-6.0,\ 8.0)\)<br></p>
-      <p>となっており、ベクトルを逆にした勾配を見ると</p>
-      <p>\((10.0,\ 20.0)\) ⇒ \((5.0,\ 10.0)\)<br>
-        \((0.0,\ 20.0)\) ⇒ \((0.0,\ 10.0)\)<br>
-        \((10.0,\ 0.0)\) ⇒ \((5.0,\ 0.0)\)<br>
-        \((4.0,\ -8.0)\) ⇒ \((2.0,\ -4.0)\)<br>
-        \((-6.0,\ 8.0)\) ⇒ \((-3.0,\ 4.0)\)<br></p>
-      <p>となり、<strong>すべて原点 \(0\) の方向にベクトルが向いている</strong>ことがわかる。</p>
-      <p>この勾配は、原点 \(0\) から遠くなればなるほどベクトルが大きく（長さ）なっており、それぞれの場所において、この関数がどれだけ最小値（この記事に例では \(0\)）から離れているか、大きさや方向を示している。</p>
+      <p>となる。勾配は関数値が最も増える方向を向くため、この二次関数では原点から外側を向く。最小値を探す勾配降下法では、その反対方向である負の勾配へ更新する。原点から遠いほど勾配ベクトルの長さも大きくなる。</p>
     </li>
   </ul>
 

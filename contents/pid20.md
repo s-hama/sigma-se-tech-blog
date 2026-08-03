@@ -47,7 +47,7 @@ MNISTのダウンロードについては、[前の記事 > Python - ニュー�
 
   def init_network():
       with open("sample_weight.pkl", 'rb') as f:
-      network = pickle.load(f)
+          network = pickle.load(f)
       return network
 
   def predict(network, x):
@@ -64,7 +64,7 @@ MNISTのダウンロードについては、[前の記事 > Python - ニュー�
 
   `init_network()`では、pickleファイルとなる`sample_weight.pkl`を読み込んでいる。
 
-  ※ pickleファイルには、重みとバイアスのパラメータがdictionary型で保存されている。<br>
+  ※ pickleファイルには、重みとバイアスのパラメータがdictionary型で保存されている。信頼できないpickleは任意のコードを実行する危険があるため、配布元を確認したファイルだけを読み込む。<br>
   ※ predict(network, x)のsigmoid, softmaxについては、下記を参考。<br>
   ・[Python - ニューラルネットワーク： ニューラルネットワークの活性化関数と実装サンプル](https://sigma-se.com/detail/17/)<br>
   ・[Python - ニューラルネットワーク： 活性化関数の実装サンプルまとめ（ステップ、シグモイド、ReLU、恒等関数、ソフトマックス関数）](https://sigma-se.com/detail/18/)
@@ -88,20 +88,20 @@ MNISTのダウンロードについては、[前の記事 > Python - ニュー�
 - 実行処理の解説<br>
   1. `get_data()`でMNISTデータセットを取得。<br>
   2. `init_network()`でpickleファイルを読み込む。<br>
-  3. \\(x\\)の画像データ60000枚をfor文でループ。<br>
-  4. 1枚の画像データに対して`predict(network, x[i])`を実行し、下記のNumPy配列のように数字0～9それぞれの確立を出力。<br>
+  3. \\(x\\)のテスト画像データ10,000枚をfor文でループ。<br>
+  4. 1枚の画像データに対して`predict(network, x[i])`を実行し、下記のNumPy配列のように数字0～9それぞれの確率を出力。<br>
     ※ 0である確率：20%、1である確率：10%、2である確率：4%、… 9である確率：5%
-      ```python
+      ```text
       [ 0.2, 0.1, 0.04 , … , 0.05  ]    # 0 ～ 9 それぞれの確率 (20%, 10%, 4%,  … , 5%)
       ```
   5. 「4.」の結果であるNumPy配列\\(y\\)に対して、最も確率が高い要素のインデックスを取得。<br>
   6. 推論処理出した「5.」の予測結果が正解ラベル\\(t\\)と一致しているかチェック。<br>
-  7. 一致していれば、認識制度を加算。<br> 
+  7. 一致していれば、正解数を加算。<br>
   8. 最後に正解率を出力。<br>
 
 - 実行結果<br>
 実際に上記を対話モードで実行すると`Accuracy:0.9352`が出力される。
-  ```python
+  ```bash
   $ cd gitlocalrep
   $ cd deep-learning-from-scratch/ch03
   $ source /var/www/vops/bin/activate

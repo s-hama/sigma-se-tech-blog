@@ -11,8 +11,8 @@ Pythonで頻繁に使うstr、list、tuple、range、dictの基本操作を整�
   str型 : 文字列型の意味と要点を具体例から整理。
 - [list型 : 配列型](#list型--配列型)<br>
   list型 : 配列型の意味と要点を具体例から整理。
-- [tuple型 : 定数の配列型](#tuple型--定数の配列型)<br>
-  tuple型 : 定数の配列型の意味と要点を具体例から整理。
+- [tuple型 : イミュータブルなシーケンス型](#tuple型--イミュータブルなシーケンス型)<br>
+  tupleの生成方法と、要素の並びを変更できない性質を整理。
 - [range型 : 範囲指定](#range型--範囲指定)<br>
   range型 : 範囲指定の意味と要点を具体例から整理。
 - [dict型 : 連想配列型（辞書型）](#dict型--連想配列型辞書型)<br>
@@ -24,12 +24,11 @@ Pythonで頻繁に使うstr、list、tuple、range、dictの基本操作を整�
 
 文字列（Unicode文字）の並びを表す型。
 
-Unicodeは**文字集合**であり、Unicodeの符号化方式（文字コード）である**UTF-8**や**UTF-16**と混同しないように注意。<br>
-例えば、別の文字集合である**JISX0208**なら**符号化方式**は、**ISO-2022-JP**（通称JISコード）か**Shift-JIS**となるように、文字集合に対応する符号化方式（文字コード）は決まっている。
+Unicodeは文字に符号位置を割り当てる規格であり、その文字列をバイト列へ変換する符号化方式には**UTF-8**、**UTF-16**、**UTF-32**などがある。同じ文字列でも符号化方式によってバイト列は異なるため、文字とバイト列を区別する。
 
 - 型の特性
   - イミュータブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: オブジェクト自体を変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可>)
   - イテラブルオブジェクト
     - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可>)
   - シーケンスオブジェクト
@@ -116,28 +115,21 @@ Unicodeは**文字集合**であり、Unicodeの符号化方式（文字コー�
         >>>
     ```
 
-- ダブルクォーテーションで囲む場合、シングルクォーテーションのエスケープ（\\）は省略可能
+- 文字列にダブルクォーテーションを含める場合、外側をシングルクォーテーションで囲むとエスケープ不要<br>
+    `"This is a "string""`のように、外側と内側をどちらもダブルクォーテーションにすると、文字列の終端を判別できず`SyntaxError`となる。
     ```python
     $ python
-        >>> str_a = "This is a "string""    # エスケープがないとエラーとなる
-        File "<stdin>", line 1
-            str_a = "This is a "string""
-        SyntaxError: invalid syntax
-        >>> str_b = 'This is a "string"'    # シングルクォーテーションで囲った場合はエスケープは不要
+        >>> str_b = 'This is a "string"'
         >>> print(str_b)
         This is a "string"
         >>>
     ```
 
-- シングルクォーテーションで囲む場合、ダブルクォーテーションのエスケープ（\\）は省略可能
+- 文字列にシングルクォーテーションを含める場合、外側をダブルクォーテーションで囲むとエスケープ不要<br>
+    `'Let's'`のように、外側と内側をどちらもシングルクォーテーションにすると、同様に`SyntaxError`となる。
     ```python
     $ python
-        >>> str_a = 'Let\'s'    # エスケープがないとエラーとなる
-        File "<stdin>", line 1
-            str_a = 'Let's'
-                        ^
-        SyntaxError: invalid syntax
-        >>> str_a = "Let's"    # ダブルクォーテーションで囲った場合はエスケープは不要
+        >>> str_a = "Let's"
         >>> print(str_a)
         Let's
         >>>
@@ -149,7 +141,7 @@ Unicodeは**文字集合**であり、Unicodeの符号化方式（文字コー�
 
 - 型の特性
   - ミュータブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > ミュータブル（mutable）: 同一アドレスで変更可](<https://sigma-se.com/detail/29/#ミュータブルmutable--同一アドレスで変更可>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > ミュータブル（mutable）: オブジェクト自体を変更可](<https://sigma-se.com/detail/29/#ミュータブルmutable--オブジェクト自体を変更可>)
   - イテラブルオブジェクト
     - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可>)
   - シーケンスオブジェクト
@@ -321,21 +313,21 @@ Unicodeは**文字集合**であり、Unicodeの符号化方式（文字コー�
         >>>
     ```
 
-### tuple型 : 定数の配列型
+### tuple型 : イミュータブルなシーケンス型
 
-tuple型は、list型と表記が似ているが、処理速度に重点を置いているため、list型に比べ使用メモリが小さくなっている。<br>
-その分、同一アドレスでの要素の**追加**、**削除**、**変更**ができないイミュータブルオブジェクトであるため、**定数配列**とも呼ばれる。
+tuple型は、要素の並びを保持するイミュータブルなシーケンス型である。生成後に要素の**追加**、**削除**、**置換**はできないが、tupleの要素がlistなどのミュータブルオブジェクトであれば、そのオブジェクトの内容は変更できる。<br>
+「定数」と同じ意味ではなく、tupleが保証するのは要素を指す参照の並びを変更できないことである。
 
 - 型の特性
   - イミュータブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: オブジェクト自体を変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可>)
   - イテラブルオブジェクト
     - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可>)
   - シーケンスオブジェクト
     - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#シーケンスsequence--インデックス指定可>)
 
 - 定義例<br>
-要素数が一つの場合を除き、list型とtuple型の定義例の違いは、大カッコ**[]**であるか小カッコ**()**であるかの違いのみ。
+tupleを作る構文上の要点は小カッコではなくカンマである。小カッコは式を見やすくまとめるために使われ、要素が一つのtupleでは末尾のカンマが必要となる。
     ```python
     $ python
         >>> # 変数 tuple_a を空配列で定義
@@ -411,7 +403,7 @@ tuple型は、list型と表記が似ているが、処理速度に重点を置�
     ```
 
 - tuple要素の取得<br>
-要素の取得も、list型とtuple型の違いは、大カッコ**[]**であるか小カッコ**()**であるかの違いのみ。
+list型と同じく、インデックスやスライスの指定には大カッコ**[]**を使う。小カッコ**()**は要素取得の記号ではない。
     ```python
     $ python
         >>> # 変数 tuple_a を string型の1次元配列で定義
@@ -458,7 +450,7 @@ tuple型は、list型と表記が似ているが、処理速度に重点を置�
 
 - tuple型要素の追加、変更、削除<br>
 tuple型は、**イミュータブルオブジェクト**であるため要素個別の変更ができない。<br>
-  - 同一アドレス（変数の再定義なし）である場合、追加・変更・削除はすべてエラーになる
+  - tupleオブジェクト自体の要素は置換・削除できない
     ```python
     $ python
         >>> tuple_a = (10, 20, 30)
@@ -477,26 +469,26 @@ tuple型は、**イミュータブルオブジェクト**であるため要素�
         >>>
     ```
 
-  - 同一アドレスでない場合（変数の再定義する）の追加・変更・削除は、**別アドレスで定義される**ためエラーにならない
+  - 変数を別のtupleへ再代入することはできる。`+=` やtuple同士の `+` も元のtupleを変更せず、新しいtupleを作って変数へ代入する
     ```python
     $ python
         >>> tuple_a = (10, 20, 30)
         >>> id(tuple_a)    # idを確認
         139970050305480
         >>>
-        >>> tuple_a = (15, 25, 35)    # (15, 25, 35)で別アドレスとして再定義（元のオブジェクトは抹消される）
+        >>> tuple_a = (15, 25, 35)    # 新しいtupleを変数tuple_aへ再代入
         >>> print(tuple_a)
         (15, 25, 35)
         >>> id(tuple_a)    # 上記のidと違う
         139970050305840
         >>>
-        >>> tuple_a += (45, 55)    # (15, 25, 35, 45, 55)で別アドレスとして再定義（元のオブジェクトは抹消される）
+        >>> tuple_a += (45, 55)    # 連結した新しいtupleを変数tuple_aへ再代入
         >>> print(tuple_a)
         (15, 25, 35, 45, 55)
         >>> id(tuple_a)    # 上記のidと違う
         139970050257232
         >>>
-        >>> tuple_a = tuple_a + (45, 55, 65)    # (15, 25, 35) + (45, 55, 65) で別アドレスとして再定義（元のオブジェクトは抹消される）
+        >>> tuple_a = tuple_a + (45, 55, 65)    # 連結した新しいtupleを変数tuple_aへ再代入
         >>> print(tuple_a)
         (15, 25, 35, 45, 55, 65)
         >>> id(tuple_a)    # 上記のidと違う
@@ -528,7 +520,7 @@ range型は、for文のループ対象など**範囲指定**を目的とした�
 
 - 型の特性
   - イミュータブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: オブジェクト自体を変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可>)
   - イテラブルオブジェクト
     - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可>)
   - シーケンスオブジェクト
@@ -622,11 +614,10 @@ range型の生成時、float型は指定できないためリスト内包表記�
 
 ### dict型 : 連想配列型（辞書型）
 
-dict型（辞書型）は、データのキーと値がワンセットになった配列。<br>
-※ 多言語のほとんどは、**連想配列**と呼ばれる。
+dict型（辞書型）は、キーと値の対応関係を保持するミュータブルなマッピング型である。他の言語では、同種のデータ構造を**連想配列**や**ハッシュマップ**と呼ぶ場合がある。
 - 型の特性
-  - イミュータブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可>)
+  - ミュータブルオブジェクト
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > ミュータブル（mutable）: オブジェクト自体を変更可](<https://sigma-se.com/detail/29/#ミュータブルmutable--オブジェクト自体を変更可>)
   - イテラブルオブジェクト
     - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可>)
   - マッピングオブジェクト
@@ -725,7 +716,7 @@ dict型（辞書型）は、データのキーと値がワンセットになっ�
     ```
 
 - 変更時の注意<br>
-dict型は代入時、参照渡しするため代入元のdict型に影響を与えたくない場合、**copy**を使用すること。
+単純な代入ではdictを複製せず、二つの変数が同じオブジェクトを参照する。外側のdictを別のオブジェクトにしたい場合は`copy()`で浅いコピーを作る。値の中にlistやdictがあり、それらも再帰的に複製したい場合は`copy.deepcopy()`を検討する。
     ```python
     $ python
         >>> # copyを使用しない場合

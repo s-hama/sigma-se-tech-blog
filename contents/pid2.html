@@ -2,9 +2,10 @@
   <h2 id="概要">概要</h2>
   <p>VPS上でApacheを起動し、HTTP/HTTPS通信を許可し、Let&#x27;s EncryptでSSL/TLS証明書を取得する流れを整理する。</p>
   <p>Webサイトを公開するには、Webサーバーの起動だけでなく、firewalld、DocumentRoot、HTTPS、証明書更新までつなげて確認する必要がある。特にSSL/TLSは、一度取得して終わりではなく、期限管理まで含めて運用する。</p>
-  <p>※ 注意：この記事は、2018年当時のCentOS 7.4環境をもとにした構築記録である。<br>CentOS 7は2024年6月30日にサポートを終了しているため、新規構築ではサポート中のOSと、そのOS向けにCertbot公式サイトが案内する手順を利用する。</p>
   <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
+    <li><a href="#対象環境と利用上の注意" class="link-secondary">対象環境と利用上の注意</a><br>
+      本文記載時の環境と現在そのまま利用できない箇所を確認。</li>
     <li><a href="#前提環境" class="link-secondary">前提環境</a><br>
       手順で使用するOS、ソフトウェア、構成などの前提条件を確認。</li>
     <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
@@ -23,6 +24,17 @@
       SSL/TLS証明書設定の手順と確認ポイントを整理。</li>
     <li><a href="#lets-encryptの定期更新" class="link-secondary">Let's Encryptの定期更新</a><br>
       Let&#x27;s Encryptの定期更新の手順と確認ポイントを整理。</li>
+  </ul>
+  <h2 id="対象環境と利用上の注意">対象環境と利用上の注意</h2>
+  <ul>
+    <li>本文記載時の環境<br>
+      2018年当時のCentOS 7.4、Apache 2.4系、firewalld、当時のCertbot導入方法を利用した構築記録。</li>
+    <li>確認時期<br>
+      2026年8月にApache、firewalld、Certbotの公式資料と照合。<br>
+      現在の環境で証明書の取得・更新を含む一連の手順は再実行していない。</li>
+    <li>現在そのまま利用できない箇所<br>
+      CentOS 7はサポート終了済みであり、Certbotのパッケージ名や導入方法も現在とは異なる。<br>
+      新規構築ではサポート中のOSを選び、Certbot公式サイトが対象OS・Webサーバー向けに案内する現行手順を利用する。</li>
   </ul>
   <h2 id="前提環境">前提環境</h2>
   <ul>
@@ -77,7 +89,7 @@ $ firewall-cmd --zone=public --list-services
   </ul>
   <h3 id="httpd自動起動の確認">httpd自動起動の確認</h3>
   <ul>
-    <li>インストール時に有効化した自動起動設定を確認<br>
+    <li>httpdの自動起動設定を確認<br>
       <code>enabled</code>と表示されれば、OS起動時にhttpdも起動。
       <pre><code class="language-bash">$ systemctl is-enabled httpd
 </code></pre>

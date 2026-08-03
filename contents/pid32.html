@@ -25,8 +25,8 @@
         <li>ミュータブルオブジェクト
           <ul>
             <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#ミュータブルmutable--同一アドレスで変更可">Python
-                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; ミュータブル（mutable）: 同一アドレスで変更可</a></li>
+                href="https://sigma-se.com/detail/29/#ミュータブルmutable--オブジェクト自体を変更可">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; ミュータブル（mutable）: オブジェクト自体を変更可</a></li>
           </ul>
         </li>
         <li>イテラブルオブジェクト
@@ -80,7 +80,7 @@
     </li>
     <li>
       <p>set型要素の追加、削除<br>
-        ※ 他の型とは違い<strong>pop</strong>は、ランダムで要素を削除することに注意。</p>
+        ※ <code>pop()</code>は位置を指定できず、任意の要素を一つ削除して返す。無作為抽出を保証する操作ではない。</p>
       <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 要素を追加</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>}
@@ -117,7 +117,7 @@ KeyError: <span class="hljs-number">100</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_e)
 <span class="hljs-built_in">set</span>()
 &gt;&gt;&gt;
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ランダムで要素を削除</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 任意の要素を一つ削除</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_f = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_f.pop())
 <span class="hljs-number">1</span>
@@ -212,7 +212,7 @@ KeyError: <span class="hljs-number">100</span>
         </li>
         <li>
           <p>対称差集合（^ 演算子 or symmetric_difference）<br>
-            積集合の逆（どちらか一方にあるものを取得する）で排他的論理和（XOR）と同義。</p>
+            二つの集合のどちらか一方だけに含まれる要素を取得する。集合の包含判定をビットで考えると、排他的論理和（XOR）に対応する。</p>
           <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ^ 演算子を用いた対称差集合</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
@@ -336,8 +336,8 @@ TypeError: symmetric_difference() takes exactly one argument (<span class="hljs-
     </li>
   </ul>
   <h3 id="bytes型--バイト">bytes型 : バイト</h3>
-  <p>bytes型は、<strong>byte</strong>のイミュータブルオブジェクト（同一アドレスで変更不可）。</p>
-  <p>str型の表記と似ているが先頭に<strong>b</strong>が付き、bytes型をエンコードするとstr型となり、bytes型をデコードするとstr型に戻る。</p>
+  <p>bytes型は、各要素が \(0\) から \(255\) の整数となるイミュータブルなバイト列である。</p>
+  <p>文字列を指定した符号化方式で<code>str.encode()</code>するとbytes型になり、bytes型を同じ符号化方式で<code>bytes.decode()</code>するとstr型に戻る。bytesリテラルは先頭に<strong>b</strong>を付ける。</p>
   <ul>
     <li>
       <p>型の特性</p>
@@ -345,8 +345,8 @@ TypeError: symmetric_difference() takes exactly one argument (<span class="hljs-
         <li>イミュータブルオブジェクト
           <ul>
             <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可">Python
-                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a>
+                href="https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: オブジェクト自体を変更不可</a>
             </li>
           </ul>
         </li>
@@ -405,7 +405,7 @@ TypeError: symmetric_difference() takes exactly one argument (<span class="hljs-
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(byte_f)
 &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bytes&#x27;</span>&gt;
 &gt;&gt;&gt;
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ※ 上記でbを付加すると、デフォルトASCIIとなるのでUTF-8でないとエラーが発生する。</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># bytesオブジェクトを変換元にした場合、encoding引数は指定できない。</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>byte_f = <span class="hljs-built_in">bytes</span>(<span class="hljs-string">b&#x27;abc&#x27;</span>, <span class="hljs-string">&#x27;utf-8&#x27;</span>)
 Traceback (most recent call last):
   File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
@@ -436,8 +436,7 @@ TypeError: encoding without a string argument
     </li>
   </ul>
   <h3 id="bytearray型--バイト配列">bytearray型 : バイト配列</h3>
-  <p>bytearray型は、bytes型の配列版で文字コードを指定しない場合（デフォルト）は、ASCIIでエンコードされる。</p>
-  <p>各要素の入れ替えを前提としたミュータブルオブジェクト（同一アドレスで変更可）。</p>
+  <p>bytearray型は、bytes型に対応するミュータブルなバイト列であり、各要素を同じオブジェクト上で変更できる。文字列から生成する場合は、<code>bytearray('abc', 'utf-8')</code>のように符号化方式の指定が必要であり、文字コードのデフォルト値はない。</p>
   <ul>
     <li>
       <p>型の特性</p>
@@ -445,8 +444,8 @@ TypeError: encoding without a string argument
         <li>ミュータブルオブジェクト
           <ul>
             <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#ミュータブルmutable--同一アドレスで変更可">Python
-                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; ミュータブル（mutable）: 同一アドレスで変更可</a></li>
+                href="https://sigma-se.com/detail/29/#ミュータブルmutable--オブジェクト自体を変更可">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; ミュータブル（mutable）: オブジェクト自体を変更可</a></li>
           </ul>
         </li>
         <li>イテラブルオブジェクト
@@ -565,26 +564,19 @@ TypeError: encoding without a string argument
     </li>
   </ul>
   <h3 id="file object型--ファイル操作オブジェクト">file object型 : ファイル操作オブジェクト</h3>
-  <p>file object型は、ファイル操作（読み書き、入出力）を行う型で、ファイルの内容取得や編集、新規作成などの一連のファイル操作が可能。</p>
+  <p><code>open()</code>は、モードに応じて<code>io.TextIOWrapper</code>や<code>io.BufferedReader</code>などのファイルオブジェクトを返す。単一の「file object型」があるのではなく、共通のファイル操作インターフェースを持つ複数のクラスがある。</p>
   <ul>
     <li>
       <p>型の特性</p>
       <ul>
-        <li>イミュータブルオブジェクト
-          <ul>
-            <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可">Python
-                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a>
-            </li>
-          </ul>
-        </li>
-        <li>イテラブルオブジェクト
+        <li>テキストファイルは行単位で反復できるイテラブルオブジェクト
           <ul>
             <li><a class="link-secondary"
                 href="https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可">Python
                 - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イテラブル（iterable）: 反復抽出可</a></li>
           </ul>
         </li>
+        <li>使用後はクローズが必要なため、通常は<code>with open(...) as f:</code>で扱う</li>
       </ul>
     </li>
     <li>
@@ -606,10 +598,10 @@ TypeError: encoding without a string argument
           </ul>
         </li>
         <li>
-          <p>下記サンプルでは<code>~/data/sample.txt</code>を事前に作成している前提</p>
+          <p>下記サンプルでは、カレントディレクトリの<code>data/sample.txt</code>を事前に作成している前提</p>
           <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># テキストファイルをopen() で開く。</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/sample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/sample.txt&#x27;</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>tFile = <span class="hljs-built_in">open</span>(fPath)
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># テキストであるため、io.TextIOWrapperとして定義される。</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(tFile)
@@ -639,8 +631,8 @@ TypeError: encoding without a string argument
       <p><code>mode='r'</code>：読込モード（書込不可）<br>
         modeの引数なしでデフォルト <strong>'r'</strong> で open() するため、省略する。<br>
         以下、open(mode='r')で開いた後の読込方法。<br>
-        ※ 下記サンプルでは<code>~/data/sample.txt</code>を事前に作成している前提。<br></p>
-      <pre><code class="language-python">line1 work file sample
+        ※ 下記サンプルでは<code>data/sample.txt</code>を事前に作成している前提。<code>open()</code>は<code>~</code>をホームディレクトリへ自動展開しない。<br></p>
+      <pre><code class="language-text">line1 work file sample
 line2 work file sample
 line3 work file sample
 line4 work file sample
@@ -650,7 +642,7 @@ line5 work file sample
         <li><code>read()</code>：全行読込
           <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># read()で全文読込</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/sample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/sample.txt&#x27;</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
 <span class="hljs-meta">... </span>    fLines = tFile.read()
 <span class="hljs-meta">... </span>    <span class="hljs-built_in">type</span>(fLines)
@@ -668,7 +660,7 @@ line5 work file sample
         <li><code>readlines()</code>：リスト型で全行読込<br>
           <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># readlines()で行分割したリスト型で全行読込</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/sample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/sample.txt&#x27;</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
 <span class="hljs-meta">... </span>    fLines = tFile.readlines()
 <span class="hljs-meta">... </span>    <span class="hljs-built_in">type</span>(fLines)
@@ -733,13 +725,13 @@ line5 work file sample
     <li>
       <p><code>mode='w'</code>：書込モード（読込不可）<br>
         以下、open(mode='w')で開いた後の書込方法。<br>
-        ※ 下記サンプルでは<code>~/data</code>フォルダがあることが事前。<br></p>
+        ※ 下記サンプルでは<code>data</code>フォルダがあることが前提。<br></p>
       <ul>
         <li>
           <p><code>write()</code>：新規作成</p>
           <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># write()でファイルを新規作成</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/newsample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/newsample.txt&#x27;</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>fInput = <span class="hljs-string">&#x27;line1 new work file sample&#x27;</span>
 &gt;&gt;&gt;
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> tFile:
@@ -758,7 +750,7 @@ line1 new work file sample
           <p><code>write()</code>：書込（上書き）<br>
             ※ 上記の続き（newsample.txtが作成済）</p>
           <pre><code class="language-python">$ python
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/newsample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/newsample.txt&#x27;</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># read()で全行読込</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
 <span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(tFile.read())
@@ -782,7 +774,7 @@ edit new work file sample
         <li>
           <p><code>writelines()</code>：リスト型で全行書込</p>
           <pre><code class="language-python">$ python
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/newsample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/newsample.txt&#x27;</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># writelines()でリスト型を全行書込</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>fInput = [<span class="hljs-string">&#x27;line1&#x27;</span>, <span class="hljs-string">&#x27;line2&#x27;</span>, <span class="hljs-string">&#x27;line3&#x27;</span>, <span class="hljs-string">&#x27;line4&#x27;</span>, <span class="hljs-string">&#x27;line5&#x27;</span>]
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> tFile:
@@ -794,7 +786,7 @@ edit new work file sample
 line1line2line3line4line5
 &gt;&gt;&gt;
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ※ 改行コードを排除して書込する場合</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/newsample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/newsample.txt&#x27;</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>fInput = [<span class="hljs-string">&#x27;line1&#x27;</span>, <span class="hljs-string">&#x27;line2&#x27;</span>, <span class="hljs-string">&#x27;line3&#x27;</span>, <span class="hljs-string">&#x27;line4&#x27;</span>, <span class="hljs-string">&#x27;line5&#x27;</span>]
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> tFile:
 <span class="hljs-meta">... </span>    tFile.write(<span class="hljs-string">&#x27;\n&#x27;</span>.join(fInput))
@@ -814,7 +806,7 @@ line5
         <li>
           <p><code>pass</code>で空ファイルを新規作成<br></p>
           <pre><code class="language-python">$ python
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/empty.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/empty.txt&#x27;</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 空ファイルを新規作成</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;w&#x27;</span>):
 <span class="hljs-meta">... </span>    <span class="hljs-keyword">pass</span>    <span class="hljs-comment"># 何もしない</span>
@@ -831,8 +823,8 @@ line5
     <li>
       <p><code>mode='a'</code>：追加・書込モード（読込不可）<br>
         以下、open(mode='a') で開いた後の書込方法。<br>
-        ※ 下記サンプルでは、<code>~/data/sample.txt</code>を事前に作成している前提。<br></p>
-      <pre><code class="language-python">line1 work file sample
+        ※ 下記サンプルでは、<code>data/sample.txt</code>を事前に作成している前提。<br></p>
+      <pre><code class="language-text">line1 work file sample
 line2 work file sample
 line3 work file sample
 line4 work file sample
@@ -842,7 +834,7 @@ line5 work file sample
         <li><code>write()</code>：末尾に追加
           <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># write()で末尾に追加</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/sample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/sample.txt&#x27;</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>fAdd = <span class="hljs-string">&#x27;\nline6 work file sample&#x27;</span>    <span class="hljs-comment"># 改行コードも込み</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;a&#x27;</span>) <span class="hljs-keyword">as</span> tFile:
 <span class="hljs-meta">... </span>    tFile.writelines(fAdd)

@@ -4,6 +4,8 @@
   <p>Gitを使った開発では、ローカルリポジトリとリモートリポジトリの関係を理解しておくと、clone、branch、pushの意味が分かりやすくなる。この記事は、開発を始める前の初期設定に焦点を当てる。</p>
   <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
+    <li><a href="#対象環境と利用上の注意" class="link-secondary">対象環境と利用上の注意</a><br>
+      本文記載時の環境と現在そのまま利用できない箇所を確認。</li>
     <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
       設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
     <li><a href="#Git、GitHubのリポジトリ構成イメージ" class="link-secondary">Git、GitHubのリポジトリ構成イメージ</a><br>
@@ -20,6 +22,18 @@
       git cloneコマンドの役割と基本操作を具体例から確認。</li>
     <li><a href="#ブランチの確認作成切り替え" class="link-secondary">ブランチの確認・作成・切り替え</a><br>
       ブランチの確認・作成・切り替えについて、確認する項目と結果の見方を整理。</li>
+  </ul>
+  <h2 id="対象環境と利用上の注意">対象環境と利用上の注意</h2>
+  <ul>
+    <li>本文記載時の環境<br>
+      Gitコマンドを実行できる端末と、GitHubのWeb画面・SSH接続を利用する環境。<br>
+      <code>git switch</code>はGit 2.23以降を前提とする。</li>
+    <li>確認時期<br>
+      2026年8月にGit・GitHubの公式資料と照合。<br>
+      GitHubの現行画面で全手順は再実行していない。</li>
+    <li>現在そのまま利用できない箇所<br>
+      GitHubの画面名、認証方針、既定ブランチは変更される場合がある。<br>
+      表示が異なる場合はGitHub公式の現行手順を確認し、古いGitでは<code>git switch</code>の代わりに<code>git checkout</code>を利用する。</li>
   </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <ul>

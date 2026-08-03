@@ -32,44 +32,45 @@
           <tr>
             <td>+=</td>
             <td>a += b</td>
-            <td>a = a + b と同義。<br>（ a に b を加算した結果を a に代入 ）</td>
+            <td>a に b を加算し、結果を a に代入。</td>
           </tr>
           <tr>
             <td>-=</td>
             <td>a -= b</td>
-            <td>a = a - b と同義。<br>（ a から b を減算した結果を a に代入 ）</td>
+            <td>a から b を減算し、結果を a に代入。</td>
           </tr>
           <tr>
             <td>*=</td>
             <td>a *= b</td>
-            <td>a = a * b と同義。<br>（ a に b を乗算した結果を a に代入 ）</td>
+            <td>a に b を乗算し、結果を a に代入。</td>
           </tr>
           <tr>
             <td>/=</td>
             <td>a /= b</td>
-            <td>a = a / b と同義。<br>（ a を b で除算した結果を a に代入 ）</td>
+            <td>a を b で除算し、結果を a に代入。</td>
           </tr>
           <tr>
             <td>//=</td>
             <td>a //= b</td>
-            <td>a = a // b と同義。<br>（ a を b で整数除算した結果を a に代入 ）</td>
+            <td>a を b で切り下げ除算し、結果を a に代入。</td>
           </tr>
           <tr>
             <td>%=</td>
             <td>a %= b</td>
-            <td>a = a % b と同義。<br>（ a と b で剰余した結果を a に代入 ）</td>
+            <td>a を b で割った剰余を a に代入。</td>
           </tr>
           <tr>
             <td>**=</td>
             <td>a **= b</td>
-            <td>a = a ** b と同義。<br>（ a を b でべき乗した結果を a に代入 ）</td>
+            <td>a の b 乗を a に代入。</td>
           </tr>
         </tbody>
       </table>
     </li>
   </ul>
+  <p><code>a += b</code>は<code>a = a + b</code>に近い計算だが、完全に同一ではない。複合代入は左辺を一度だけ評価し、型が対応していれば同じオブジェクトをその場で変更する。この違いはlistなどのミュータブルな型や、添字・属性を左辺にした場合に現れる。</p>
   <p>以降、実装サンプルを対話モード（インタプリタ）で解説する。</p>
-  <p>※ 演算結果の <strong>最大値</strong>、<strong>最小値</strong> についてはPCのスペックに依存する。詳しくは下記を参考。<br></p>
+  <p>※ int型は任意精度であり、float型とcomplex型の有限値の範囲は実装環境の浮動小数点形式に依存する。詳しくは下記を参考。<br></p>
   <ul>
     <li><a class="link-secondary"
         href="https://sigma-se.com/detail/30/#int型--数値整数">Python
@@ -85,7 +86,7 @@
   <ul>
     <li>
       <p>加算（+=）<br>
-        ※ a = a + b と同義（簡略表記したもの）</p>
+        ※ 数値型では<code>a = a + b</code>に近い結果となるが、複合代入は左辺を一度だけ評価する。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-comment"># int型の 2 に 3 を加算複合代入</span>
     &gt;&gt;&gt; int_a = <span class="hljs-number">2</span>
@@ -119,7 +120,7 @@
     &gt;&gt;&gt; float_a -= -<span class="hljs-number">5.9</span>
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
     <span class="hljs-number">10.9</span>
-    &gt;&gt;&gt; <span class="hljs-comment"># complex型の 5 + 5j に 10 + 10j を減算複合代入</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># complex型の 5 + 5j に 10 - 10j を減算複合代入</span>
     &gt;&gt;&gt; complex_a = <span class="hljs-number">5</span> + <span class="hljs-number">5j</span>
     &gt;&gt;&gt; complex_a -= <span class="hljs-number">10</span> - <span class="hljs-number">10j</span>
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_a)
@@ -193,9 +194,9 @@
     &gt;&gt;&gt; complex_a //= <span class="hljs-number">2</span> + <span class="hljs-number">2j</span>
     Traceback (most recent call last):
     File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
-    TypeError: can<span class="hljs-string">&#x27;t take floor of complex number.
+    TypeError: unsupported operand type(s) for //: <span class="hljs-string">&#x27;complex&#x27;</span> and <span class="hljs-string">&#x27;complex&#x27;</span>
     &gt;&gt;&gt;
-</span></code></pre>
+</code></pre>
     </li>
     <li>
       <p>剰余（%=）<br>
@@ -216,9 +217,10 @@
     &gt;&gt;&gt; complex_a %= <span class="hljs-number">2</span>
     Traceback (most recent call last):
     File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
-    TypeError: can<span class="hljs-string">&#x27;t mod complex numbers.
+    TypeError: unsupported operand type(s) for %: <span class="hljs-string">&#x27;complex&#x27;</span> and <span class="hljs-string">&#x27;int&#x27;</span>
     &gt;&gt;&gt;
-</span></code></pre>
+</code></pre>
+      <p>※ 例外メッセージの文言はPythonのバージョンで変わる場合があるが、複素数に <code>//</code> や <code>%</code> を適用すると <code>TypeError</code> になる点が重要。</p>
     </li>
   </ul>
   <h3 id="べき乗">べき乗（**=）</h3>

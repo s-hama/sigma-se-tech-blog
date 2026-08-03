@@ -9,8 +9,8 @@
       str型 : 文字列型の意味と要点を具体例から整理。</li>
     <li><a href="#list型--配列型" class="link-secondary">list型 : 配列型</a><br>
       list型 : 配列型の意味と要点を具体例から整理。</li>
-    <li><a href="#tuple型--定数の配列型" class="link-secondary">tuple型 : 定数の配列型</a><br>
-      tuple型 : 定数の配列型の意味と要点を具体例から整理。</li>
+    <li><a href="#tuple型--イミュータブルなシーケンス型" class="link-secondary">tuple型 : イミュータブルなシーケンス型</a><br>
+      tupleの生成方法と、要素の並びを変更できない性質を整理。</li>
     <li><a href="#range型--範囲指定" class="link-secondary">range型 : 範囲指定</a><br>
       range型 : 範囲指定の意味と要点を具体例から整理。</li>
     <li><a href="#dict型--連想配列型辞書型" class="link-secondary">dict型 : 連想配列型（辞書型）</a><br>
@@ -19,10 +19,7 @@
   <h2 id="各データ型の操作方法">各データ型の操作方法</h2>
   <h3 id="str型--文字列型">str型 : 文字列型</h3>
   <p>文字列（Unicode文字）の並びを表す型。</p>
-  <p>
-    Unicodeは<strong>文字集合</strong>であり、Unicodeの符号化方式（文字コード）である<strong>UTF-8</strong>や<strong>UTF-16</strong>と混同しないように注意。<br>
-    例えば、別の文字集合である<strong>JISX0208</strong>なら<strong>符号化方式</strong>は、<strong>ISO-2022-JP</strong>（通称JISコード）か<strong>Shift-JIS</strong>となるように、文字集合に対応する符号化方式（文字コード）は決まっている。
-  </p>
+  <p>Unicodeは文字に符号位置を割り当てる規格であり、その文字列をバイト列へ変換する符号化方式には<strong>UTF-8</strong>、<strong>UTF-16</strong>、<strong>UTF-32</strong>などがある。同じ文字列でも符号化方式によってバイト列は異なるため、文字とバイト列を区別する。</p>
   <ul>
     <li>
       <p>型の特性</p>
@@ -30,8 +27,8 @@
         <li>イミュータブルオブジェクト
           <ul>
             <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可">Python
-                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a>
+                href="https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: オブジェクト自体を変更不可</a>
             </li>
           </ul>
         </li>
@@ -155,31 +152,26 @@ defg
 </code></pre>
     </li>
     <li>
-      <p>ダブルクォーテーションで囲む場合、シングルクォーテーションのエスケープ（\）は省略可能</p>
+      <p>文字列にダブルクォーテーションを含める場合、外側をシングルクォーテーションで囲むとエスケープ不要<br>
+        <code>&quot;This is a &quot;string&quot;&quot;</code>のように、外側と内側をどちらもダブルクォーテーションにすると、文字列の終端を判別できず<code>SyntaxError</code>となる。
+      </p>
       <pre><code class="language-python">$ python
-    &gt;&gt;&gt; str_a = <span class="hljs-string">&quot;This is a &quot;</span>string<span class="hljs-string">&quot;&quot;</span>    <span class="hljs-comment"># エスケープがないとエラーとなる</span>
-    File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>
-        str_a = <span class="hljs-string">&quot;This is a &quot;</span>string<span class="hljs-string">&quot;&quot;</span>
-    SyntaxError: invalid syntax
-    &gt;&gt;&gt; str_b = <span class="hljs-string">&#x27;This is a &quot;string&quot;&#x27;</span>    <span class="hljs-comment"># シングルクォーテーションで囲った場合はエスケープは不要</span>
+    &gt;&gt;&gt; str_b = <span class="hljs-string">&#x27;This is a &quot;string&quot;&#x27;</span>
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(str_b)
     This <span class="hljs-keyword">is</span> a <span class="hljs-string">&quot;string&quot;</span>
     &gt;&gt;&gt;
 </code></pre>
     </li>
     <li>
-      <p>シングルクォーテーションで囲む場合、ダブルクォーテーションのエスケープ（\）は省略可能</p>
+      <p>文字列にシングルクォーテーションを含める場合、外側をダブルクォーテーションで囲むとエスケープ不要<br>
+        <code>&#x27;Let&#x27;s&#x27;</code>のように、外側と内側をどちらもシングルクォーテーションにすると、同様に<code>SyntaxError</code>となる。
+      </p>
       <pre><code class="language-python">$ python
-    &gt;&gt;&gt; str_a = <span class="hljs-string">&#x27;Let\&#x27;s&#x27;</span>    <span class="hljs-comment"># エスケープがないとエラーとなる</span>
-    File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>
-        str_a = <span class="hljs-string">&#x27;Let&#x27;</span>s<span class="hljs-string">&#x27;
-                    ^
-    SyntaxError: invalid syntax
-    &gt;&gt;&gt; str_a = &quot;Let&#x27;</span>s<span class="hljs-string">&quot;    # ダブルクォーテーションで囲った場合はエスケープは不要
-    &gt;&gt;&gt; print(str_a)
+    &gt;&gt;&gt; str_a = <span class="hljs-string">&quot;Let&#x27;s&quot;</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(str_a)
     Let&#x27;s
     &gt;&gt;&gt;
-</span></code></pre>
+</code></pre>
     </li>
   </ul>
   <h3 id="list型--配列型">list型 : 配列型</h3>
@@ -191,8 +183,8 @@ defg
         <li>ミュータブルオブジェクト
           <ul>
             <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#ミュータブルmutable--同一アドレスで変更可">Python
-                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; ミュータブル（mutable）: 同一アドレスで変更可</a></li>
+                href="https://sigma-se.com/detail/29/#ミュータブルmutable--オブジェクト自体を変更可">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; ミュータブル（mutable）: オブジェクト自体を変更可</a></li>
           </ul>
         </li>
         <li>イテラブルオブジェクト
@@ -379,10 +371,9 @@ defg
     </li>
   </ul>
   <hr>
-  <h3 id="tuple型--定数の配列型">tuple型 : 定数の配列型</h3>
-  <p>tuple型は、list型と表記が似ているが、処理速度に重点を置いているため、list型に比べ使用メモリが小さくなっている。<br>
-    その分、同一アドレスでの要素の<strong>追加</strong>、<strong>削除</strong>、<strong>変更</strong>ができないイミュータブルオブジェクトであるため、<strong>定数配列</strong>とも呼ばれる。
-  </p>
+  <h3 id="tuple型--イミュータブルなシーケンス型">tuple型 : イミュータブルなシーケンス型</h3>
+  <p>tuple型は、要素の並びを保持するイミュータブルなシーケンス型である。生成後に要素の<strong>追加</strong>、<strong>削除</strong>、<strong>置換</strong>はできないが、tupleの要素がlistなどのミュータブルオブジェクトであれば、そのオブジェクトの内容は変更できる。<br>
+    「定数」と同じ意味ではなく、tupleが保証するのは要素を指す参照の並びを変更できないことである。</p>
   <ul>
     <li>
       <p>型の特性</p>
@@ -390,8 +381,8 @@ defg
         <li>イミュータブルオブジェクト
           <ul>
             <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可">Python
-                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a>
+                href="https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: オブジェクト自体を変更不可</a>
             </li>
           </ul>
         </li>
@@ -413,7 +404,7 @@ defg
     </li>
     <li>
       <p>定義例<br>
-        要素数が一つの場合を除き、list型とtuple型の定義例の違いは、大カッコ<strong>[]</strong>であるか小カッコ<strong>()</strong>であるかの違いのみ。</p>
+        tupleを作る構文上の要点は小カッコではなくカンマである。小カッコは式を見やすくまとめるために使われ、要素が一つのtupleでは末尾のカンマが必要となる。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-comment"># 変数 tuple_a を空配列で定義</span>
     &gt;&gt;&gt; tuple_a = ()
@@ -489,7 +480,7 @@ defg
     </li>
     <li>
       <p>tuple要素の取得<br>
-        要素の取得も、list型とtuple型の違いは、大カッコ<strong>[]</strong>であるか小カッコ<strong>()</strong>であるかの違いのみ。</p>
+        list型と同じく、インデックスやスライスの指定には大カッコ<strong>[]</strong>を使う。小カッコ<strong>()</strong>は要素取得の記号ではない。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-comment"># 変数 tuple_a を string型の1次元配列で定義</span>
     &gt;&gt;&gt; tuple_a = (<span class="hljs-string">&#x27;a&#x27;</span>, <span class="hljs-string">&#x27;b&#x27;</span>, <span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-string">&#x27;d&#x27;</span>, <span class="hljs-string">&#x27;e&#x27;</span>)
@@ -538,7 +529,7 @@ defg
         tuple型は、<strong>イミュータブルオブジェクト</strong>であるため要素個別の変更ができない。<br></p>
       <ul>
         <li>
-          <p>同一アドレス（変数の再定義なし）である場合、追加・変更・削除はすべてエラーになる</p>
+          <p>tupleオブジェクト自体の要素は置換・削除できない</p>
           <pre><code class="language-python">$ python
     &gt;&gt;&gt; tuple_a = (<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>)
     &gt;&gt;&gt; <span class="hljs-built_in">id</span>(tuple_a)    <span class="hljs-comment"># idを確認</span>
@@ -557,25 +548,25 @@ defg
 </span></code></pre>
         </li>
         <li>
-          <p>同一アドレスでない場合（変数の再定義する）の追加・変更・削除は、<strong>別アドレスで定義される</strong>ためエラーにならない</p>
+          <p>変数を別のtupleへ再代入することはできる。<code>+=</code> やtuple同士の <code>+</code> も元のtupleを変更せず、新しいtupleを作って変数へ代入する</p>
           <pre><code class="language-python">$ python
     &gt;&gt;&gt; tuple_a = (<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>)
     &gt;&gt;&gt; <span class="hljs-built_in">id</span>(tuple_a)    <span class="hljs-comment"># idを確認</span>
     <span class="hljs-number">139970050305480</span>
     &gt;&gt;&gt;
-    &gt;&gt;&gt; tuple_a = (<span class="hljs-number">15</span>, <span class="hljs-number">25</span>, <span class="hljs-number">35</span>)    <span class="hljs-comment"># (15, 25, 35)で別アドレスとして再定義（元のオブジェクトは抹消される）</span>
+    &gt;&gt;&gt; tuple_a = (<span class="hljs-number">15</span>, <span class="hljs-number">25</span>, <span class="hljs-number">35</span>)    <span class="hljs-comment"># 新しいtupleを変数tuple_aへ再代入</span>
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(tuple_a)
     (<span class="hljs-number">15</span>, <span class="hljs-number">25</span>, <span class="hljs-number">35</span>)
     &gt;&gt;&gt; <span class="hljs-built_in">id</span>(tuple_a)    <span class="hljs-comment"># 上記のidと違う</span>
     <span class="hljs-number">139970050305840</span>
     &gt;&gt;&gt;
-    &gt;&gt;&gt; tuple_a += (<span class="hljs-number">45</span>, <span class="hljs-number">55</span>)    <span class="hljs-comment"># (15, 25, 35, 45, 55)で別アドレスとして再定義（元のオブジェクトは抹消される）</span>
+    &gt;&gt;&gt; tuple_a += (<span class="hljs-number">45</span>, <span class="hljs-number">55</span>)    <span class="hljs-comment"># 連結した新しいtupleを変数tuple_aへ再代入</span>
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(tuple_a)
     (<span class="hljs-number">15</span>, <span class="hljs-number">25</span>, <span class="hljs-number">35</span>, <span class="hljs-number">45</span>, <span class="hljs-number">55</span>)
     &gt;&gt;&gt; <span class="hljs-built_in">id</span>(tuple_a)    <span class="hljs-comment"># 上記のidと違う</span>
     <span class="hljs-number">139970050257232</span>
     &gt;&gt;&gt;
-    &gt;&gt;&gt; tuple_a = tuple_a + (<span class="hljs-number">45</span>, <span class="hljs-number">55</span>, <span class="hljs-number">65</span>)    <span class="hljs-comment"># (15, 25, 35) + (45, 55, 65) で別アドレスとして再定義（元のオブジェクトは抹消される）</span>
+    &gt;&gt;&gt; tuple_a = tuple_a + (<span class="hljs-number">45</span>, <span class="hljs-number">55</span>, <span class="hljs-number">65</span>)    <span class="hljs-comment"># 連結した新しいtupleを変数tuple_aへ再代入</span>
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(tuple_a)
     (<span class="hljs-number">15</span>, <span class="hljs-number">25</span>, <span class="hljs-number">35</span>, <span class="hljs-number">45</span>, <span class="hljs-number">55</span>, <span class="hljs-number">65</span>)
     &gt;&gt;&gt; <span class="hljs-built_in">id</span>(tuple_a)    <span class="hljs-comment"># 上記のidと違う</span>
@@ -614,8 +605,8 @@ defg
         <li>イミュータブルオブジェクト
           <ul>
             <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可">Python
-                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a>
+                href="https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: オブジェクト自体を変更不可</a>
             </li>
           </ul>
         </li>
@@ -723,17 +714,16 @@ defg
     </li>
   </ul>
   <h3 id="dict型--連想配列型辞書型">dict型 : 連想配列型（辞書型）</h3>
-  <p>dict型（辞書型）は、データのキーと値がワンセットになった配列。<br>
-    ※ 多言語のほとんどは、<strong>連想配列</strong>と呼ばれる。</p>
+  <p>dict型（辞書型）は、キーと値の対応関係を保持するミュータブルなマッピング型である。他の言語では、同種のデータ構造を<strong>連想配列</strong>や<strong>ハッシュマップ</strong>と呼ぶ場合がある。</p>
   <ul>
     <li>
       <p>型の特性</p>
       <ul>
-        <li>イミュータブルオブジェクト
+        <li>ミュータブルオブジェクト
           <ul>
             <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可">Python
-                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a>
+                href="https://sigma-se.com/detail/29/#ミュータブルmutable--オブジェクト自体を変更可">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; ミュータブル（mutable）: オブジェクト自体を変更可</a>
             </li>
           </ul>
         </li>
@@ -847,7 +837,7 @@ defg
     </li>
     <li>
       <p>変更時の注意<br>
-        dict型は代入時、参照渡しするため代入元のdict型に影響を与えたくない場合、<strong>copy</strong>を使用すること。</p>
+        単純な代入ではdictを複製せず、二つの変数が同じオブジェクトを参照する。外側のdictを別のオブジェクトにしたい場合は<code>copy()</code>で浅いコピーを作る。値の中にlistやdictがあり、それらも再帰的に複製したい場合は<code>copy.deepcopy()</code>を検討する。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-comment"># copyを使用しない場合</span>
     &gt;&gt;&gt; dict_a = {<span class="hljs-string">&#x27;key1&#x27;</span>: <span class="hljs-number">100</span>, <span class="hljs-string">&#x27;key2&#x27;</span>: <span class="hljs-number">200</span>, <span class="hljs-string">&#x27;key3&#x27;</span>: <span class="hljs-number">300</span>}

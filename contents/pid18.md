@@ -20,7 +20,7 @@ Python - ニューラルネットワーク：4/14 代表的な活性化関数の
 
 ## 概念の説明と実装サンプル
 ### ステップ関数
-[前の記事 > ニューラルネットワークの活性化関数と実装サンプル](https://sigma-se.com/detail/17/) で触れた**ステップ関数**で、線形の**活性化関数**であり**階段関数**とも呼ばれる。
+[前の記事 > ニューラルネットワークの活性化関数と実装サンプル](https://sigma-se.com/detail/17/) で触れた**ステップ関数**で、不連続な非線形の**活性化関数**であり**階段関数**とも呼ばれる。
 
 - 定義<br>
 \\(x\\) が \\(0\\) より大きければ、\\(1\\) を出力し、\\(0\\) 以下であれば \\(0\\) を出力。
@@ -42,14 +42,14 @@ $ python
  >>> import numpy as np
  >>> import matplotlib.pylab as plt
  >>> def step_func(x):    # ステップ関数の定義
- ...    return np.array(x > 0, dtype=np.int)
+ ...    return np.array(x > 0, dtype=int)
  ...
 ```
 
 - グラフ出力
 ```bash
 $ python
- >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5 まで、描画制度を 0.1 刻みに設定
+ >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5まで、描画間隔を0.1刻みに設定
  >>> y = step_func(x)    # ステップ関数をコール
  >>> plt.title("step_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
  Text(0.5, 1.0, 'step_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y')
@@ -61,15 +61,15 @@ $ python
  Text(0, 0.5, 'y')
  >>> plt.plot(x, y)    # グラフの描画
  [&lt;matplotlib.lines.Line2D object at 0x7fc13041e278&gt;]
- >>> plt.savefig('/var/www/vops/ops/macuos/static/macuos/img/pid18_1.png'))    # グラフの出力
+ >>> plt.savefig('pid18_1.png')    # グラフの出力
 ```
 ![pid18_1](/static/tblog/img/pid18_1.png)
 
 ### シグモイド関数
-[前の記事 > ニューラルネットワークの活性化関数と実装サンプル](https://sigma-se.com/detail/17/) で触れた**シグモイド関数**で、非線形のの**活性化関数**に分類される。
+[前の記事 > ニューラルネットワークの活性化関数と実装サンプル](https://sigma-se.com/detail/17/) で触れた**シグモイド関数**で、非線形の**活性化関数**に分類される。
 
 - 定義<br>
-出力値は、\\(x\\) が小さいほど \\(0\\) になく近づき、\\(x\\) が大きいほど \\(1\\) に限りなく近づく。
+出力値は、\\(x\\) が小さいほど \\(0\\) に近づき、\\(x\\) が大きいほど \\(1\\) に近づく。
 <div style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
 \[
 h(x) = \frac{1}{1+e^{-x}}
@@ -82,14 +82,14 @@ $ python
  >>> import numpy as np
  >>> import matplotlib.pylab as plt
  >>> def sigmoid_func(x):    # シグモイド関数の定義
- ...     return 1 / (1 + np.exp(-x))    # 自然対数の低 (e) の -x 乗
+ ...     return 1 / (1 + np.exp(-x))    # 自然対数の底 (e) の -x 乗
  ...
 ```
 
 - グラフ出力
 ```bash
 $ python
- >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5 まで、描画制度を 0.1 刻みに設定
+ >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5まで、描画間隔を0.1刻みに設定
  >>> y = sigmoid_func(x)    # シグモイド関数をコール
  >>> plt.title("sigmoid_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
  Text(0.5, 1.0, 'sigmoid_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y')
@@ -107,7 +107,7 @@ $ python
 
 
 ### ReLU関数
-**ReLU**（Rectified Linear Unit：ランプ関数、正規化線形関数）と呼ばれ、非線形の**活性化関数**に分類される。<br>
+**ReLU**（Rectified Linear Unit：正規化線形ユニット）と呼ばれ、非線形の**活性化関数**に分類される。<br>
 ※ 最近では、ニューラルネットワークにおいて、**シグモイド関数**より、**ReLU関数**が多く用いられるようになった。<br>
 
 - 定義<br>
@@ -137,7 +137,7 @@ $ python
 - グラフ出力
 ```bash
 $ python
- >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5 まで、描画制度を 0.1 刻みに設定
+ >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5まで、描画間隔を0.1刻みに設定
  >>> y = relu_func(x)    # ReLU関数をコール
  >>> plt.title("relu_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
  Text(0.5, 1.0, 'relu_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y')
@@ -171,7 +171,7 @@ h(x) = x
 $ python
  >>> import numpy as np
  >>> import matplotlib.pylab as plt
- >>> def koutou_func(x):    # 恒等関数の定義
+ >>> def identity_func(x):    # 恒等関数の定義
  ...     return x
  ...
 ```
@@ -179,10 +179,10 @@ $ python
 - グラフ出力
 ```bash
 $ python
- >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5 まで、描画制度を 0.1 刻みに設定
- >>> y = koutou_func(x)    # 恒等関数をコール
- >>> plt.title("koutou_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
- Text(0.5, 1.0, 'koutou_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y')
+ >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5まで、描画間隔を0.1刻みに設定
+ >>> y = identity_func(x)    # 恒等関数をコール
+ >>> plt.title("identity_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
+ Text(0.5, 1.0, 'identity_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y')
  >>> plt.xlabel("x")    # x軸のラベルを設定
  Text(0.5, 0, 'x')
  >>> plt.ylabel("y")    # y軸のラベルを設定
@@ -199,7 +199,7 @@ $ python
 **分類問題**で使われる非線形の**活性化関数**に分類される。
 
 - 定義<br>
-\\(n \leqq k\\) の時、\\(k\\) 番目の出力 \\(h(x_{k})\\) を表す。
+\\(k=1,\ldots,n\\) とすると、\\(k\\) 番目の出力 \\(h(x_{k})\\) を次の式で表す。各出力は入力ベクトル全体に依存し、出力の合計は\\(1\\)になる。
 <div style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
 \[
 {\normalsize
@@ -212,30 +212,24 @@ h(x_{k}) = \frac{e^{x_{k}}}{\sum_{i=1}^{n} e^{x_{i}}}
 ```bash
 $ python
  >>> def softmax_func(x):    # ソフトマックス関数の定義
- ...     exp_x = np.exp(x)
+ ...     shifted_x = x - np.max(x)    # オーバーフローを防ぐ
+ ...     exp_x = np.exp(shifted_x)
  ...     sum_exp_x = np.sum(exp_x)
  ...     y = exp_x / sum_exp_x
  ...     return y
  ...    
 ```
 
-- グラフ出力
+- 実行例
 ```bash
 $ python
- >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5 まで、描画制度を 0.1 刻みに設定
- >>> y = koutou_func(x)    # ソフトマックス関数をコール
- >>> plt.title("softmax_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
- Text(0.5, 1.0, 'softmax_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y')
- >>> plt.xlabel("x")    # x軸のラベルを設定
- Text(0.5, 0, 'x')
- >>> plt.ylabel("y")    # y軸のラベルを設定
- Text(0, 0.5, 'y')
- >>> plt.plot(x, y)
- [&lt;matplotlib.lines.Line2D object at 0x7ff04a9c4d68&gt;]
- >>> plt.savefig('/var/www/vops/ops/macuos/static/macuos/img/pid18_5.png')
- >>>
+ >>> x = np.array([0.3, 2.9, 4.0])
+ >>> y = softmax_func(x)
+ >>> y
+ array([0.01821127, 0.24519181, 0.73659691])
+ >>> np.sum(y)
+ 1.0
 ```
-![pid18_5](/static/tblog/img/pid18_5.png)
 
 
 ## まとめ

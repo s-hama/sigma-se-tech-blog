@@ -89,7 +89,7 @@ Matplotlibのpyplotを使い、Pythonでグラフを描画する基本手順を�
      (500, 500, 4)
      >>> plt.imshow(img)    # 画像表示
      <matplotlib.image.AxesImage object at 0x7f4b80106f60>
-     >>> plt.title('b_id36_3.png Read with image.imread \n and output as b_id36_4.png in pyplot.imshow')
+     >>> plt.title('pid13_3.png Read with image.imread \n and output as pid13_4.png in pyplot.imshow')
      >>> plt.savefig('pid13_4.png')
      >>> plt.close()
     ```
@@ -97,7 +97,7 @@ Matplotlibのpyplotを使い、Pythonでグラフを描画する基本手順を�
   - 上記で出力した画像「pid13_4.png」
   ![Pythonロゴ画像をimshowで描画した結果](/static/tblog/img/pid13_4.png)
 
-  掲載画像のタイトルにある`b_id36_3.png`と`b_id36_4.png`は、旧サイトで使用していたファイル名である。<br>`shape`の値や保存画像の余白は、元画像やMatplotlibのバージョン・設定によって異なる。
+  `shape`の値や保存画像の余白は、元画像やMatplotlibのバージョン・設定によって異なる。
 
 - その他のグラフ<br>
 上記以外にも`plt.scatter()`による散布図、`plt.hist()`によるヒストグラムなど、さまざまなグラフに対応している。<br>目的に合うグラフを選び、軸名、単位、凡例を付けると、画像だけを見ても意味を判断しやすくなる。

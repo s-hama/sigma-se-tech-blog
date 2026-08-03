@@ -47,7 +47,7 @@ sys.path.append(os.pardir) <span class="hljs-comment"># 親ディレクトリの
 
 <span class="hljs-keyword">def</span> <span class="hljs-title function_">init_network</span>():
     <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;sample_weight.pkl&quot;</span>, <span class="hljs-string">&#x27;rb&#x27;</span>) <span class="hljs-keyword">as</span> f:
-    network = pickle.load(f)
+        network = pickle.load(f)
     <span class="hljs-keyword">return</span> network
 
 <span class="hljs-keyword">def</span> <span class="hljs-title function_">predict</span>(<span class="hljs-params">network, x</span>):
@@ -62,7 +62,7 @@ sys.path.append(os.pardir) <span class="hljs-comment"># 親ディレクトリの
     <span class="hljs-keyword">return</span> y
 </code></pre>
       <p><code>init_network()</code>では、pickleファイルとなる<code>sample_weight.pkl</code>を読み込んでいる。</p>
-      <p>※ pickleファイルには、重みとバイアスのパラメータがdictionary型で保存されている。<br>
+      <p>※ pickleファイルには、重みとバイアスのパラメータがdictionary型で保存されている。信頼できないpickleは任意のコードを実行する危険があるため、配布元を確認したファイルだけを読み込む。<br>
         ※ predict(network, x)のsigmoid, softmaxについては、下記を参考。<br>
         ・<a class="link-secondary" href="https://sigma-se.com/detail/17/">Python - ニューラルネットワーク： ニューラルネットワークの活性化関数と実装サンプル</a><br>
         ・<a class="link-secondary" href="https://sigma-se.com/detail/18/">Python - ニューラルネットワーク： 活性化関数の実装サンプルまとめ（ステップ、シグモイド、ReLU、恒等関数、ソフトマックス関数）</a></p>
@@ -90,22 +90,22 @@ accuracy_cnt = <span class="hljs-number">0</span>
       <ol>
         <li><code>get_data()</code>でMNISTデータセットを取得。<br></li>
         <li><code>init_network()</code>でpickleファイルを読み込む。<br></li>
-        <li>\(x\)の画像データ60000枚をfor文でループ。<br></li>
-        <li>1枚の画像データに対して<code>predict(network, x[i])</code>を実行し、下記のNumPy配列のように数字0～9それぞれの確立を出力。<br>
+        <li>\(x\)のテスト画像データ10,000枚をfor文でループ。<br></li>
+        <li>1枚の画像データに対して<code>predict(network, x[i])</code>を実行し、下記のNumPy配列のように数字0～9それぞれの確率を出力。<br>
           ※ 0である確率：20%、1である確率：10%、2である確率：4%、… 9である確率：5%
-          <pre><code class="language-python">[ <span class="hljs-number">0.2</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.04</span> , … , <span class="hljs-number">0.05</span>  ]    <span class="hljs-comment"># 0 ～ 9 それぞれの確率 (20%, 10%, 4%,  … , 5%)</span>
+          <pre><code class="language-text">[ <span class="hljs-number">0.2</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.04</span> , … , <span class="hljs-number">0.05</span>  ]    <span class="hljs-comment"># 0 ～ 9 それぞれの確率 (20%, 10%, 4%,  … , 5%)</span>
 </code></pre>
         </li>
         <li>「4.」の結果であるNumPy配列\(y\)に対して、最も確率が高い要素のインデックスを取得。<br></li>
         <li>推論処理出した「5.」の予測結果が正解ラベル\(t\)と一致しているかチェック。<br></li>
-        <li>一致していれば、認識制度を加算。<br></li>
+        <li>一致していれば、正解数を加算。<br></li>
         <li>最後に正解率を出力。<br></li>
       </ol>
     </li>
     <li>
       <p>実行結果<br>
         実際に上記を対話モードで実行すると<code>Accuracy:0.9352</code>が出力される。</p>
-      <pre><code class="language-python">$ cd gitlocalrep
+      <pre><code class="language-bash">$ cd gitlocalrep
 $ cd deep-learning-<span class="hljs-keyword">from</span>-scratch/ch03
 $ source /var/www/vops/<span class="hljs-built_in">bin</span>/activate
 $ python neuralnet_mnist.py

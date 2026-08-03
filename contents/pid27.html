@@ -14,22 +14,17 @@
   </ul>
   <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
   <h3 id="重みに対する勾配法とは">重みに対する勾配法とは</h3>
-  <p><strong>重み</strong>は、正解に対して<strong>入力値</strong>がどれだけ影響するかを示す<strong>重要度</strong>を表す。</p>
-  <p>
-    <strong>重み</strong>という言葉からは全くイメージできない意味を持つが、これは英語の<strong>Weigh</strong>を直訳し、<strong>重み</strong>となっているからであり、本来は<strong>大切さ</strong>、<strong>価値</strong>、<strong>重要性</strong>という意味で命名されている。
-  </p>
-  <p>そして、この<strong>重み</strong>（重要度）は、一般的に<strong>Weigh</strong>の \(w\) を取り、\(w_{0}\)、\(w_{1}\)、\(w_{2}\)
-    …で表現され、<strong>評価的に具体的な数値を入れてみて損失結果を計る</strong>ためのパラメータとなる。</p>
+  <p><strong>重み</strong>（weight）は、入力をどの程度増幅・減衰させて次の層へ伝えるかを決める係数で、一般に \(w_{0}\)、\(w_{1}\)、\(w_{2}\) …のように表す。学習では、損失が小さくなるようにこの値を更新する。重みの絶対値だけで入力特徴の重要度を常に判断できるわけではなく、他の重みや活性化関数も含めて解釈する必要がある。</p>
   <p>ニューラルネットワークでは、この<strong>重み</strong>に対して、<a href="https://sigma-se.com/detail/26/" class="link-secondary">Python - ニューラルネットワーク： 勾配降下法の実装サンプル</a>
-    で解説した<strong>勾配降下法</strong>を実施し、最適な<strong>重み</strong>を求めていく。</p>
-  <p>また、下記に示す行列のよう色々なパターンの<strong>重み</strong>を行列計算で一斉に<strong>偏微分</strong>し、最適な<strong>重み</strong>を求めていく。</p>
+    で解説した<strong>勾配降下法</strong>を実施し、損失が小さくなるように値を更新していく。</p>
+  <p>層の重みを行列で管理する場合、各要素に対する損失の偏微分を同じ形状の行列にまとめる。以下の数値勾配の実装では、重み要素を一つずつ変化させて偏微分を近似する。</p>
   <div
     style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
     \[
     W =
     \begin{pmatrix}
-    w_{11} & w_{12} & w_{13} \\
-    w_{21} & w_{22} & w_{23} \\
+    w_{11} &amp; w_{12} &amp; w_{13} \\
+    w_{21} &amp; w_{22} &amp; w_{23} \\
     \end{pmatrix}
     \]
   </div>
@@ -38,14 +33,13 @@
     \[
     \frac{∂L}{∂W} =
     \begin{pmatrix}
-    \frac{∂L}{∂w_{11}} & \frac{∂L}{∂w_{12}} & \frac{∂L}{∂w_{13}} \\
-    \frac{∂L}{∂w_{21}} & \frac{∂L}{∂w_{22}} & \frac{∂L}{∂w_{23}} \\
+    \frac{∂L}{∂w_{11}} &amp; \frac{∂L}{∂w_{12}} &amp; \frac{∂L}{∂w_{13}} \\
+    \frac{∂L}{∂w_{21}} &amp; \frac{∂L}{∂w_{22}} &amp; \frac{∂L}{∂w_{23}} \\
     \end{pmatrix}
     \]
   </div>
-  <p>\(W\) は、一斉に偏微分しようとしている2行3列の<strong>重み</strong>達。<br>
-    \(L\) は、対象となる<strong>損失関数</strong>で \(\displaystyle \frac{∂L}{∂W}\) の各要素で偏微分し、<strong>損失関数</strong>\(L\)
-    の<strong>勾配</strong>を求めている。</p>
+  <p>\(W\) は2行3列の重み行列。<br>
+    \(L\) は対象となる損失関数で、\(\displaystyle \frac{∂L}{∂W}\) は各重みに対する偏微分をまとめた勾配行列を表す。</p>
   <p>以降は、この<strong>勾配</strong>を求める実装サンプルを確認する。</p>
   <h3 id="重みに対する勾配のpython実装サンプル">重みに対する勾配のPython実装サンプル</h3>
   <p>以下、参考文献『ゼロから作るDeep Learning』から提供されている <code>ch04/gradient_simplenet.py</code> を用いたサンプル解説をしていく。</p>
@@ -140,7 +134,8 @@
 &gt;&gt;&gt;
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">class</span> <span class="hljs-title class_">simpleNet</span>:
 <span class="hljs-meta">... </span>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):
-<span class="hljs-meta">... </span>        self.W = np.random.randn(<span class="hljs-number">2</span>,<span class="hljs-number">3</span>)
+<span class="hljs-meta">... </span>        self.W = np.array([[<span class="hljs-number">0.5</span>, -<span class="hljs-number">0.2</span>, <span class="hljs-number">0.1</span>],
+<span class="hljs-meta">... </span>                           [<span class="hljs-number">0.3</span>,  <span class="hljs-number">0.4</span>, -<span class="hljs-number">0.5</span>]])
 ...
 <span class="hljs-meta">... </span>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">predict</span>(<span class="hljs-params">self, x</span>):
 <span class="hljs-meta">... </span>        <span class="hljs-keyword">return</span> np.dot(x, self.W)
@@ -169,11 +164,11 @@
       <pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 上記対話モードの続き</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>net = simpleNet()
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(net.W)
-[[ <span class="hljs-number">0.49236891</span> -<span class="hljs-number">1.2239298</span>  -<span class="hljs-number">1.13722119</span>]
-[ <span class="hljs-number">0.05405365</span> -<span class="hljs-number">0.79897152</span> -<span class="hljs-number">0.08066587</span>]]
+[[ <span class="hljs-number">0.5</span> -<span class="hljs-number">0.2</span>  <span class="hljs-number">0.1</span>]
+ [ <span class="hljs-number">0.3</span>  <span class="hljs-number">0.4</span> -<span class="hljs-number">0.5</span>]]
 &gt;&gt;&gt;
 </code></pre>
-      <p><code>simpleNet()</code>により、2x3行列のランダムな数値が生成される。</p>
+      <p>説明を再現できるように、ここでは2x3行列の重みを固定している。実際の学習では一般に、適切な方法で初期化した重みを利用する。</p>
     </li>
     <li>
       <p>評価結果（積）の確認</p>
@@ -181,23 +176,23 @@
 <span class="hljs-meta">&gt;&gt;&gt; </span>x = np.array([<span class="hljs-number">0.6</span>, <span class="hljs-number">0.9</span>])
 <span class="hljs-meta">&gt;&gt;&gt; </span>p = net.predict(x)
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(p)
-[ <span class="hljs-number">1.05414809</span> <span class="hljs-number">0.63071653</span> <span class="hljs-number">1.1328074</span>  ]
+[ <span class="hljs-number">0.57</span>  <span class="hljs-number">0.24</span> -<span class="hljs-number">0.39</span>]
 <span class="hljs-meta">&gt;&gt;&gt; </span>np.argmax(p)
-<span class="hljs-number">2</span>
+<span class="hljs-number">0</span>
 &gt;&gt;&gt;
 </code></pre>
       <p><code>predict(x)</code>により、入力データ \([0.6, 0.9]\) と重みパラメータ<code>net.W</code>の評価結果（積）を算出している。
-        （最大インデックスは、2）</p>
+        （最大インデックスは0）</p>
     </li>
     <li>
       <p>損失関数の結果確認</p>
       <pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 上記対話モードの続き</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>t = np.array([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>])
 <span class="hljs-meta">&gt;&gt;&gt; </span>net.loss(x, t)
-<span class="hljs-number">0.92806853663411326</span>
+<span class="hljs-number">1.7028014787132717</span>
 &gt;&gt;&gt;
 </code></pre>
-      <p>上記で最大インデックスとなった\(2\)が正解ラベルとなる状態で損失関数の結果は、約\(0.93\)</p>
+      <p>正解ラベルを\(2\)としたときの損失は約\(1.70\)となる。現在の予測クラス0とは一致していない。</p>
     </li>
     <li>
       <p>勾配の結果確認</p>
@@ -207,8 +202,8 @@
 ...
 <span class="hljs-meta">&gt;&gt;&gt; </span>dW = numerical_gradient(f, net.W)
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(dW)
-[[ <span class="hljs-number">0.21924763</span>  <span class="hljs-number">0.14356247</span> -<span class="hljs-number">0.36281009</span> ]
-[ <span class="hljs-number">0.32887144</span>  <span class="hljs-number">0.2153437</span> -<span class="hljs-number">0.544211514</span>]]
+[[ <span class="hljs-number">0.28546734</span>  <span class="hljs-number">0.20522925</span> -<span class="hljs-number">0.49069659</span>]
+ [ <span class="hljs-number">0.42820101</span>  <span class="hljs-number">0.30784387</span> -<span class="hljs-number">0.73604488</span>]]
 &gt;&gt;&gt;
 </code></pre>
       <p><code>net.loss(x, t)</code>を<code>f(W)</code>とし、勾配処理（<code>numerical_gradient</code>）を実施している。</p>
@@ -217,10 +212,21 @@
       </p>
     </li>
     <li>
+      <p>重みの更新確認</p>
+      <pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>loss_before = net.loss(x, t)
+<span class="hljs-meta">&gt;&gt;&gt; </span>learning_rate = <span class="hljs-number">0.1</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>net.W -= learning_rate * dW
+<span class="hljs-meta">&gt;&gt;&gt; </span>loss_after = net.loss(x, t)
+<span class="hljs-meta">&gt;&gt;&gt; </span>loss_before, loss_after
+(<span class="hljs-number">1.7028014787132717</span>, <span class="hljs-number">1.5860075067483186</span>)
+</code></pre>
+      <p>勾配の逆方向へ重みを1回更新すると、この例では損失が約1.70から約1.59へ減少する。</p>
+    </li>
+    <li>
       <p>結果から見る結論</p>
       <p>重みパラメータ \(w_{11}\) と重みパラメータ \(w_{23}\) にスポットを当てた結果を見る。</p>
-      <p>\(w_{11}\) が \(h\)分増加すると、\(\displaystyle \frac{∂L}{∂W}\) の \(\displaystyle \frac{∂L}{∂w_{11}}\) は、約\(0.2\)となり、\(0.2\)増加している。</p>
-      <p>一方、\(w_{23}\) は \(h\) 分増加すると、\(\displaystyle \frac{∂L}{∂W}\) の \(\displaystyle \frac{∂L}{∂w_{23}}\) が約\(-0.5\)となり、\(0.5\)減少している。</p>
+      <p>\(\displaystyle \frac{∂L}{∂w_{11}}\) は約\(0.29\)であるため、\(w_{11}\)を微小量\(h\)増やすと、損失はおよそ\(0.29h\)増える。</p>
+      <p>一方、\(\displaystyle \frac{∂L}{∂w_{23}}\) は約\(-0.74\)であるため、\(w_{23}\)を微小量\(h\)増やすと、損失はおよそ\(0.74h\)減る。</p>
       <p>よって、
         重みパラメータ \(w_{11}\) は、<strong>マイナス方向</strong>に。<br>
         重みパラメータ \(w_{23}\) は、<strong>プラス方向</strong>に<strong>更新すべき</strong>という結論となる。</p>

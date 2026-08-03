@@ -20,7 +20,7 @@ Python - ニューラルネットワーク：1/14 単純パーセプトロンの
 
 ## 概念の説明と実装サンプル
 ### パーセプトロンとは
-アメリカの心理学者・計算機科学者であるフランク・ローゼンブラットが1943年に発表された最初の**人工ニューロン**（形式ニューロン）の考え方を基に1957年に考案したアルゴリズム。<br>
+1943年にマカロックとピッツが形式ニューロンを提案し、その考え方を発展させてフランク・ローゼンブラットが1950年代にパーセプトロンを提案した。<br>
 ※ 形式ニューロンとは、**脳神経細胞**（ニューロン）をモデル化したニューロンのことを指す。
 
 パーセプトロンは、ニューラルネットワークやディープラーニングなどAI分野の礎になっており、これらを理解する上では必要不可欠な概念となる。
@@ -63,8 +63,8 @@ y =
 {\small
 y =
 \begin{cases}
-0 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=0}^{n} x_{i}w_{i} \leqq \theta\\
-1 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=0}^{n} x_{i}w_{i} > \theta
+0 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=1}^{n} x_{i}w_{i} \leqq \theta\\
+1 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=1}^{n} x_{i}w_{i} > \theta
 \end{cases}\hspace{5mm}･･･（C）
 }
 \]
@@ -92,8 +92,8 @@ y =
         <tr><td>1</td><td>1</td><td>1</td></tr>
       </tbody>
     </table>
-  - Pyhonサンプル<br>
-  上記のANDゲートを満たすパラメータとなるように \\(w_{1}, w_{2}, \theta\\) を \\((w_{1}, w_{2}, \theta)\\) \\(= (0.5, 0.5, 0.9)\\) と置いて、Pyhonで表現してみる。
+  - Pythonサンプル<br>
+  上記のANDゲートを満たすパラメータとなるように \\(w_{1}, w_{2}, \theta\\) を \\((w_{1}, w_{2}, \theta)\\) \\(= (0.5, 0.5, 0.9)\\) と置いて、Pythonで表現してみる。
     ```bash
     $ python
     >>> def AND(x1, x2):
@@ -132,8 +132,8 @@ y =
         <tr><td>1</td><td>1</td><td>0</td></tr>
       </tbody>
     </table>
-  - Pyhonサンプル<br>
-  上記 **1.** と同様に上記のNANDゲートを満たすパラメータ \\(w_{1}, w_{2}, \theta\\) を \\((w_{1}, w_{2}, \theta)\\) \\(= (-0.5, -0.5, -0.9)\\) と置いて、Pyhonで表現したもの。
+  - Pythonサンプル<br>
+  上記 **1.** と同様に上記のNANDゲートを満たすパラメータ \\(w_{1}, w_{2}, \theta\\) を \\((w_{1}, w_{2}, \theta)\\) \\(= (-0.5, -0.5, -0.9)\\) と置いて、Pythonで表現したもの。
     ```bash
     $ python
     >>> def NAND(x1, x2):
@@ -172,8 +172,8 @@ y =
         <tr><td>1</td><td>1</td><td>1</td></tr>
       </tbody>
     </table>
-  - Pyhonサンプル<br>
-  上記 **1.**、**2.** と同様に上記のORゲートを満たすパラメータ \\(w_{1}, w_{2}, \theta\\) を \\((w_{1}, w_{2}, \theta)\\) \\(= (0.9, 0.9, -0.5)\\) と置いて、Pyhonで表現したもの。
+  - Pythonサンプル<br>
+  上記 **1.**、**2.** と同様に上記のORゲートを満たすパラメータ \\(w_{1}, w_{2}, \theta\\) を \\((w_{1}, w_{2}, \theta)\\) \\(= (0.9, 0.9, 0.5)\\) と置いて、Pythonで表現したもの。
     ```bash
     $ python
     >>> def OR(x1, x2):
@@ -253,8 +253,8 @@ y =
 {\small
 y =
 \begin{cases}
-0 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=0}^{n} x_{i}w_{i} + b \leqq 0 \\
-1 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=0}^{n} x_{i}w_{i} + b > 0
+0 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=1}^{n} x_{i}w_{i} + b \leqq 0 \\
+1 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=1}^{n} x_{i}w_{i} + b > 0
 \end{cases}\hspace{5mm}･･･（F）
 }
 \]

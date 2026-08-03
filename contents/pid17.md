@@ -22,7 +22,7 @@ Python - ニューラルネットワーク：3/14 活性化関数の役割と実
 ### パーセプトロンと活性化関数
 **活性化関数**（activation function）は、**伝達関数**（transfer function）とも呼ばれ、入力値の**総和を出力に変換する**関数のことを言い、入力値がどのように発火するか（活性化するか・伝達されるか）を決定する役割を持つ。
 
-[前の記事 > 多層パーセプトロンの概念と実装サンプル](https://sigma-se.com/detail/16/) で触れた入力値が2つあるパーセプトロン\\(（A）\\)も活性化関数と言えるが、一般的な活性化関数の表現に書き換えると右辺を \\(a = b + x_{1}w_{1} + x_{2}w_{2} \\) と置き、\\(（B）\\) 、\\(y\\) を \\(h(a)\\) で表現した\\(（C）\\)のように表せる。
+[前の記事 > 多層パーセプトロンの概念と実装サンプル](https://sigma-se.com/detail/16/) で触れた入力値が2つあるパーセプトロン\\(（A）\\)は、ステップ関数を活性化関数として用いるモデルである。一般的な活性化関数の表現に書き換えると右辺を \\(a = b + x_{1}w_{1} + x_{2}w_{2} \\) と置き、\\(（B）\\) 、\\(y\\) を \\(h(a)\\) で表現した\\(（C）\\)のように表せる。
 
 <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
 \[
@@ -78,21 +78,18 @@ h(a) =
 　<img src="/static/tblog/img/pid17_1.svg" alt="pid17_1" style="width: 80%; height: auto; margin-top: -1.25rem;" />
 </div>
 
-上記の \\(a\\)、\\(h(x)\\)、\\(y\\) の 〇 を **ニューロン**（またはノード）と呼ぶ。
+図の丸は処理単位となる**ニューロン**（またはノード）を表し、\\(a\\)、\\(h(a)\\)、\\(y\\) はその途中の値や関数を表す。
 
-上記の通り、\\(（C）\\)で表される活性化関数は、バイアスを境に出力が切り替わる関数となっているが、このような関数を**ステップ関数**または、**階段関数**という。
+上記のとおり、\\(（C）\\)で表される活性化関数は、バイアスを境に出力が切り替わる関数となっているが、このような関数を**ステップ関数**または**階段関数**という。
 
-従ってパーセプトロンは、活性化関数に分類される**ステップ関数**を用いて表現されてる。
+従って、このパーセプトロンは活性化関数に**ステップ関数**を用いて表現される。
 
-この活性化関数は、**ステップ関数**ではなく、次項で触れる**シグモイト関数**を用いることで、自動学習が可能なニューラルネットワークを表現できるようになる。
-
-※ 単純/多層パーセプトロンでは、意図した論理回路が実現するように適切な \\(w\\)（重み）を人力で判断しなければならなかったが、ニューラルネットワークでは、その判断を自動学習できるようになる。
+パーセプトロンにも重みを更新する学習則はあるが、ステップ関数はほとんどの点で微分が\\(0\\)となるため、勾配を逆伝播して多層ネットワークを学習する方法には適さない。シグモイド関数のように微分可能な活性化関数を使うと、損失の勾配に基づいて各層の重みを更新できる。
 
 ### ニューラルネットワークと活性化関数（シグモイド関数）
 ニューラルネットワークで使用される活性化関数の一つに**シグモイド関数**（sigmoid function）がある。
 
-前項で触れたパーセプトロンもニューラルネットワークも入力値を関数で変換し出力してるが、
-その違いは、**ステップ関数**であるか**シグモイド関数**であるかだけの違い。
+パーセプトロンもニューラルネットワークも入力値を関数で変換して出力するが、両者の違いは活性化関数だけではない。層の構成、学習方法、損失関数なども含めてモデルが決まる。ここでは、そのうち活性化関数の違いに注目する。
 
 ここで深く掘り下げないが一般的なシグモイド関数は、下記\\(（D）\\)で表される実関数を指している。
 <div style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
@@ -108,7 +105,7 @@ h(x) = \frac{1}{1+e^{-x}}\hspace{5mm}･･･（E）
 \]
 </div>
 
-※ \\(e=2.718281828…\\) は、無理数で自然対数の低を表し、ネイピア数という。
+※ \\(e=2.718281828…\\) は、自然対数の底となる無理数で、ネイピア数という。
 
 以降では、**ステップ関数とシグモイド関数の実装サンプル**を比較しながら、それぞれの違いを確認する。
 
@@ -120,7 +117,7 @@ $ python
  >>> import numpy as np
  >>> def step_func(x):    # （＊1） ステップ関数の定義
  ...     y = x > 0
- ...     return y.astype(np.int)
+ ...     return y.astype(int)
  ...
 ```
 
@@ -132,7 +129,7 @@ $ python
  array([-0.5,  0.5,  1.5])
 ```
 
-ここで（＊4）の通り、\\(x\\) を \\(x > 0\\) とするとbool値のNumPy配列が返さる。
+ここで（＊4）のとおり、\\(x > 0\\)を評価するとbool値のNumPy配列が返される。
 ```bash
 $ python
  >>> x > 0    # （＊4） NumPy配列をbool値で表示
@@ -142,7 +139,7 @@ $ python
 さらに（＊5）でこの \\(x > 0\\) をastypeでint変換している。
 ```bash
 $ python
- >>> (x > 0).astype(np.int)    # （＊5） NumPy配列のbool値を 0：false、1：true で表示
+ >>> (x > 0).astype(int)    # （＊5） NumPy配列のbool値を 0：false、1：true で表示
  array([0, 1, 1])
  >>>
 ```
@@ -154,13 +151,13 @@ $ python
  >>> import numpy as np
  >>> import matplotlib.pylab as plt
  >>> def step_func(x):    # （＊6） ステップ関数の定義
- ...    return np.array(x > 0, dtype=np.int)
+ ...    return np.array(x > 0, dtype=int)
  ...
 ```
 
 上記（＊6）のグラフ出力
 ```bash
- >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5 まで、描画制度を 0.1 刻みに設定
+ >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5まで、描画間隔を0.1刻みに設定
  >>> y = step_func(x)    # （＊6） ステップ関数をコール
  >>> plt.title("step_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
  Text(0.5, 1.0, 'step_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y')
@@ -172,7 +169,7 @@ $ python
  Text(0, 0.5, 'y')
  >>> plt.plot(x, y)    # グラフの描画
  [&lt;matplotlib.lines.Line2D object at 0x7f7e0a48e2b0&gt;]
- >>> plt.savefig('/var/www/vops/ops/macuos/static/macuos/img/b_id40_2.png')    # グラフの出力
+ >>> plt.savefig('pid17_2.png')    # グラフの出力
 ```
 
 ![pid17_2](/static/tblog/img/pid17_2.png)
@@ -186,7 +183,7 @@ $ python
  >>> import numpy as np
  >>> import matplotlib.pylab as plt
  >>> def sigmoid_func(x):    # （＊7） シグモイド関数の定義
- ...     return 1 / (1 + np.exp(-x))    # 自然対数の低 (e) の -x 乗
+ ...     return 1 / (1 + np.exp(-x))    # 自然対数の底 (e) の -x 乗
  ...
 ```
 
@@ -200,7 +197,7 @@ $ python
 
 上記（＊7）のグラフ出力
 ```bash
- >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5 まで、描画制度を 0.1 刻みに設定
+ >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5まで、描画間隔を0.1刻みに設定
  >>> y = sigmoid_func(x)    # （＊7） シグモイド関数をコール
  >>> plt.title("sigmoid_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
  Text(0.5, 1.0, 'sigmoid_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y')
@@ -212,7 +209,7 @@ $ python
  Text(0, 0.5, 'y')
  >>> plt.plot(x, y)
  [&lt;matplotlib.lines.Line2D object at 0x7ff62b64fcf8&gt;]
- >>> plt.savefig('/var/www/vops/ops/macuos/static/macuos/img/b_id40_3.png')    # グラフの出力
+ >>> plt.savefig('pid17_3.png')    # グラフの出力
 ```
 
 ![pid17_3](/static/tblog/img/pid17_3.png)

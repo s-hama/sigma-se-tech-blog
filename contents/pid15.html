@@ -18,7 +18,7 @@
   </ul>
   <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
   <h3 id="パーセプトロンとは">パーセプトロンとは</h3>
-  <p>アメリカの心理学者・計算機科学者であるフランク・ローゼンブラットが1943年に発表された最初の<strong>人工ニューロン</strong>（形式ニューロン）の考え方を基に1957年に考案したアルゴリズム。<br>
+  <p>1943年にマカロックとピッツが形式ニューロンを提案し、その考え方を発展させてフランク・ローゼンブラットが1950年代にパーセプトロンを提案した。<br>
     ※ 形式ニューロンとは、<strong>脳神経細胞</strong>（ニューロン）をモデル化したニューロンのことを指す。</p>
   <p>パーセプトロンは、ニューラルネットワークやディープラーニングなどAI分野の礎になっており、これらを理解する上では必要不可欠な概念となる。</p>
   <p>
@@ -59,8 +59,8 @@
     {\small
     y =
     \begin{cases}
-    0 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=0}^{n} x_{i}w_{i} \leqq \theta\\
-    1 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=0}^{n} x_{i}w_{i} > \theta
+    0 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=1}^{n} x_{i}w_{i} \leqq \theta\\
+    1 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=1}^{n} x_{i}w_{i} > \theta
     \end{cases}\hspace{5mm}･･･（C）
     }
     \]
@@ -104,9 +104,9 @@
             </tbody>
           </table>
         </li>
-        <li>Pyhonサンプル<br>
+        <li>Pythonサンプル<br>
           上記のANDゲートを満たすパラメータとなるように \(w_{1}, w_{2}, \theta\) を \((w_{1}, w_{2}, \theta)\) \(= (0.5, 0.5, 0.9)\)
-          と置いて、Pyhonで表現してみる。
+          と置いて、Pythonで表現してみる。
           <pre><code class="language-bash">$ python
 &gt;&gt;&gt; def AND(x1, x2):
 ...     w1, w2, theta = 0.5, 0.5, 0.9
@@ -164,9 +164,9 @@
             </tbody>
           </table>
         </li>
-        <li>Pyhonサンプル<br>
+        <li>Pythonサンプル<br>
           上記 <strong>1.</strong> と同様に上記のNANDゲートを満たすパラメータ \(w_{1}, w_{2}, \theta\) を \((w_{1}, w_{2}, \theta)\) \(= (-0.5,
-          -0.5, -0.9)\) と置いて、Pyhonで表現したもの。
+          -0.5, -0.9)\) と置いて、Pythonで表現したもの。
           <pre><code class="language-bash">$ python
 &gt;&gt;&gt; def NAND(x1, x2):
 ...     w1, w2, theta = -0.5, -0.5, -0.9
@@ -224,9 +224,9 @@
             </tbody>
           </table>
         </li>
-        <li>Pyhonサンプル<br>
+        <li>Pythonサンプル<br>
           上記 <strong>1.</strong>、<strong>2.</strong> と同様に上記のORゲートを満たすパラメータ \(w_{1}, w_{2}, \theta\) を \((w_{1}, w_{2},
-          \theta)\) \(= (0.9, 0.9, -0.5)\) と置いて、Pyhonで表現したもの。
+          \theta)\) \(= (0.9, 0.9, 0.5)\) と置いて、Pythonで表現したもの。
           <pre><code class="language-bash">$ python
 &gt;&gt;&gt; def OR(x1, x2):
 ...     w1, w2, theta = 0.9, 0.9, 0.5
@@ -303,8 +303,8 @@
     {\small
     y =
     \begin{cases}
-    0 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=0}^{n} x_{i}w_{i} + b \leqq 0 \\
-    1 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=0}^{n} x_{i}w_{i} + b > 0
+    0 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=1}^{n} x_{i}w_{i} + b \leqq 0 \\
+    1 \hspace{5pt}\text{if}\hspace{5pt}\sum_{i=1}^{n} x_{i}w_{i} + b > 0
     \end{cases}\hspace{5mm}･･･（F）
     }
     \]

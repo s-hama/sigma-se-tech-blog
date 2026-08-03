@@ -18,18 +18,18 @@ MNISTは、画像分類の入門でよく使われるデータセットで、入
 
 ## 概念の説明と実装サンプル
 ### MNISTとは
-**MNIST**（Mixed National Institute of Standards and Technology database）とは、数字画像（1～9）から構成され、手書き数字の訓練画像が60,000枚、テスト画像が10,000枚が用意された画像データセットのことで、機械学習の分野で最も利用されている。
+**MNIST**（Modified National Institute of Standards and Technology database）とは、0～9の手書き数字で構成され、訓練画像60,000枚とテスト画像10,000枚が用意された画像データセットである。
 
 また、手書き数字の訓練画像が60,000枚、テスト画像が10,000枚の「1枚」に対して**画像データ**と**その画像の正解となるラベルデータ**がペアとなっており、下記の4つのファイルで構成されている。
 - train-images-idx3-ubyte : 学習用 画像データセット（60,000枚）
 - train-labels-idx1-ubyte : 学習用 ラベルデータセット（60,000個）
-- t10k-images-idx3-ubyte : 検証用 画像データセット（10,000枚）
-- t10k-labels-idx1-ubyte : 検証用 ラベルデータセット（10,000個）
+- t10k-images-idx3-ubyte : テスト用 画像データセット（10,000枚）
+- t10k-labels-idx1-ubyte : テスト用 ラベルデータセット（10,000個）
 
 ### MNISTのデータ仕様
 機械学習では画像を数値として扱う必要があるため、**バイナリデータ**となっており、画像とラベルデータが紐付いている。
 
-※ 以下の画像・ラベルのデータ形式は、参考文献の「WEB ARCH LABO：MNISTのデータ詳細」を基に整理している。
+※ 以下の画像・ラベルの形式は、MNISTで使われるIDXファイルのヘッダーとデータ配置を整理したもの。
 
 以下、画像とラベルのフォーマット仕様。
 - 画像データのフォーマット（train-images-idx3-ubyte、t10k-images-idx3-ubyte）
@@ -65,7 +65,7 @@ MNISTは、画像分類の入門でよく使われるデータセットで、入
       </tr>
     </thead>
     <tbody>
-      <tr><td>0000</td><td>32 bit integer</td><td>0x00000803(2049)</td><td>識別子（定数）</td></tr>
+      <tr><td>0000</td><td>32 bit integer</td><td>0x00000801(2049)</td><td>識別子（定数）</td></tr>
       <tr><td>0004</td><td>32 bit integer</td><td>60000 or 10000</td><td>ラベルデータの数</td></tr>
       <tr><td>0008</td><td>unsigned byte</td><td>0 ～ 9</td><td>1つ目のデータのラベル</td></tr>
       <tr><td>0009</td><td>unsigned byte</td><td>0 ～ 9</td><td>2つ目のデータのラベル</td></tr>
@@ -100,7 +100,7 @@ Git（deep-learning-from-scratch）：https://github.com/oreilly-japan/deep-lear
 - ダウンロード<br>
 下記、load_mnistによってMNISTデータセットのダウンロードを行っているが、初回のみオンラインである必要があり数分かかる。<br />
 初回で読み込み時に`pickle`というローカルファイルが作成され、ダウンロード結果を保持しているので、2回目以降は、オフラインかつ、すぐに処理が終わる。<br />
-※ Pythonの`pickle`は、プログラム実行中のオブジェクト情報をファイルとして保存できる機能。
+※ Pythonの`pickle`は、Pythonオブジェクトをファイルへ保存・復元する機能。信頼できないpickleを読み込むと任意のコードが実行される危険があるため、この例では取得元を確認したファイルだけを使用する。
   ```bash
   $ python
    >>> import sys, os
@@ -127,13 +127,13 @@ Git（deep-learning-from-scratch）：https://github.com/oreilly-japan/deep-lear
    Creating pickle file ...
    Done!
    >>>
-   >>> print(x_train.shape)    # データ形状の確認：学習用 ラベルデータセット
+   >>> print(x_train.shape)    # データ形状の確認：学習用 画像データセット
    (60000, 784)
-   >>> print(t_train.shape)    # データ形状の確認：学習用 画像データセット
+   >>> print(t_train.shape)    # データ形状の確認：学習用 ラベルデータセット
    (60000,)
-   >>> print(x_test.shape)    # データ形状の確認：検証用 ラベルデータセット
+   >>> print(x_test.shape)    # データ形状の確認：テスト用 画像データセット
    (10000, 784)
-   >>> print(t_test.shape)    # データ形状の確認：検証用 画像データセット
+   >>> print(t_test.shape)    # データ形状の確認：テスト用 ラベルデータセット
    (10000,)
    >>>
   ```
@@ -160,7 +160,7 @@ $ python
  >>>
  >>> def img_save(img):
  ...     pil_img = Image.fromarray(np.uint8(img))
- ...     pil_img.save('/var/www/vops/ops/macuos/static/macuos/img/pid19_1.png')    # ＊1 mnist_show.py では、pil_img.show()
+ ...     pil_img.save('pid19_1.png')    # ＊1 mnist_show.py では、pil_img.show()
  ...
  >>> (x_train, t_train), (x_test, t_test) = load_mnist(flatten=True, normalize=False)
  >>>

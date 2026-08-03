@@ -98,24 +98,24 @@ for i in range(0, len(x), batch_size):    # （＊2）
 print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
 ```
 
-- （＊1）どの程度のバッチ（束）で処理するかの**バッチ数**
+- （＊1）一度に何件処理するかを表す**バッチサイズ**
 - （＊2）0 ～ len(x) のインデックスで増加幅が100となる \\(i\\)（1周の処理対象が100要素）のループ処理<br>
-    `range`は、指定した開始と終了時のインデックスで配列を作成。<br>
+    `range`は、開始値以上・終了値未満の整数列を表す`range`オブジェクトを作成。<br>
     第3引数は、増加するスパンを指定できる。
 
     ```python
     $ python
-    >>> list(range(0, 10))   # 0 ～ 10 までの配列
+    >>> list(range(0, 10))   # 0以上10未満の整数
     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    >>> list(range(5, 10))   # 5 ～ 10 までの配列
+    >>> list(range(5, 10))   # 5以上10未満の整数
     [5, 6, 7, 8, 9]
-    >>> list(range(1, 27, 3))   # 1 ～ 27 までのインデックスを3ずつ増加
+    >>> list(range(1, 27, 3))   # 1以上27未満で3ずつ増加
     [1, 4, 7, 10, 13, 16, 19, 22, 25]
     ```
 
-- （＊3）xの \\(i\\) ～ \\(i\\) + batch_size の配列をx_batchに取得<br>
-    ループ1週目は、\\(i\\) = 0 なのでx_batchには0～99の配列が格納される。<br>
-    ループ2週目は、\\(i\\) = 100 なのでx_batchには、100～199の配列が格納される。
+- （＊3）xの \\(i\\) 以上 \\(i\\) + batch_size 未満の行をx_batchに取得<br>
+    ループ1周目は、\\(i\\) = 0 なのでx_batchには0～99行目の画像が格納される。<br>
+    ループ2周目は、\\(i\\) = 100 なのでx_batchには100～199行目の画像が格納される。バッチサイズが100なら、x_batchのshapeは`(100, 784)`、予測結果y_batchのshapeは`(100, 10)`となる。
 - （＊4）`predict`の結果をy_batchに取得<br>
     `predict(network, x_batch)`のsigmoid, softmaxについては下記を参考。<br>
     - [Python - ニューラルネットワーク： ニューラルネットワークの活性化関数と実装サンプル](https://sigma-se.com/detail/17/)<br>
@@ -146,8 +146,8 @@ print("Accuracy:" + str(float(accuracy_cnt) / len(x)))
         ```python
         $ python
         >>> import numpy as np
-        >>> p = np.array([0.1, 0.3, 0.2, 0.9, 0.5, 0.3, 0.9, 0.1, 0.4, 0.8])
-        >>> t = np.array([0.1, 0.4, 0.2, 0.9, 0.5, 0.4, 0.9, 0.2, 0.5, 0.9])
+        >>> p = np.array([0, 3, 2, 9, 5, 3, 9, 1, 4, 8])
+        >>> t = np.array([0, 4, 2, 9, 5, 4, 9, 2, 5, 9])
         >>> print(p==t)
         [ True False  True  True  True False  True False False False]
         >>> np.sum(p==t)

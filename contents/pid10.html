@@ -4,6 +4,8 @@
   <p>Django Debug Toolbarは、リクエスト、レスポンス、SQL、テンプレートなどの情報をブラウザ上で確認できる開発支援ツールとなる。<br>開発時の調査には便利だが、本番環境や公開サーバーでの利用を想定して強化されたツールではないため、開発環境だけで有効にすることが重要になる。</p>
   <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
+    <li><a href="#対象環境と利用上の注意" class="link-secondary">対象環境と利用上の注意</a><br>
+      本文記載時の環境と現在そのまま利用できない箇所を確認。</li>
     <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
       設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
     <li><a href="#django-debug-toolbarの導入" class="link-secondary">django-debug-toolbarの導入</a><br>
@@ -12,6 +14,18 @@
       django-debug-toolbarの設定追加の手順と確認ポイントを整理。</li>
     <li><a href="#debug-toolbarの表示確認" class="link-secondary">Debug Toolbarの表示確認</a><br>
       Debug Toolbarの表示について、確認する項目と結果の見方を整理。</li>
+  </ul>
+  <h2 id="対象環境と利用上の注意">対象環境と利用上の注意</h2>
+  <ul>
+    <li>本文記載時の環境<br>
+      掲載画像はDjango 2.0.2と当時のDjango Debug Toolbarを利用した旧環境。<br>
+      設定例は現行版の公式手順に合わせて補足している。</li>
+    <li>確認時期<br>
+      2026年8月にDjango Debug Toolbarの公式資料と照合。<br>
+      現行版を新規環境へ導入する一連の手順は再実行していない。</li>
+    <li>現在そのまま利用できない箇所<br>
+      対応するPython・Djangoのバージョン、URL設定、ミドルウェア要件はDjango Debug Toolbarの版によって異なる。<br>
+      インストール前に利用する版の公式ドキュメントを確認し、本番環境では有効にしない。</li>
   </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <ul>

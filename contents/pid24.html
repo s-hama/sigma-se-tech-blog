@@ -20,25 +20,18 @@
     前の記事でも触れた交差エントロピー誤差などの損失関数が取る値は、<strong>小さいほど正解に近づいている</strong>が、もちろんそこで終わりではなく<strong>今の結果より正解に近い</strong>パラメータ候補（重み、バイアス）を決めてさらに正解に近づけなければ意味がない。
   </p>
   <p>そこで基準になるのが<strong>重みパラメータの微分結果（勾配値）</strong>である。</p>
-  <p>具体的な説明は割愛するが、<strong>一つの重みパラメータの微分結果</strong>と<strong>損失関数の結果</strong>は、密接な関係にある。</p>
-  <p>
-    <strong>微分結果が負</strong>であれば、正の方向に重みパラメータを変化させることで損失関数の結果も小さくなり、同様に<strong>微分結果が正</strong>であれば、負の方向に重みパラメータを変化させることで損失関数の結果も小さくなる。
-  </p>
-  <p>この要領で重みパラメータを変化幅を少しずつ減らしながらこの作業を繰り返すことで、<strong>微分結果が \(0\) に収束し、その結果、損失関数の結果も \(0\) に収束する</strong>ことになる。</p>
-  <p>但し、この概念を理解する上で注意しなければならないのが <a class="link-secondary"
-      href="https://sigma-se.com/detail/18/#ステップ関数">Python - ニューラルネットワーク： 活性化関数の実装サンプルまとめ（ステップ、シグモイド、ReLU、恒等関数、ソフトマックス関数）&gt; ステップ関数</a> のように、<strong>\(x = 0\) 以外の値で微分結果が
-      \(0\)（勾配が\(0\)）となるような損失関数</strong>では、そもそも正解に近づけようがないため、微分する意味がない。</p>
-  <p>つまり、<strong>損失関数は連続（曲線状の変化をしている）でなければ</strong>、微分する意味がない。</p>
-  <p>
-    また、この<strong>連続性をもつこと</strong>とは、<strong>損失関数の結果が実数である</strong>ということになるが、<strong>実数と実数の間に隙間はない</strong>ので、いくらでも際限なく損失関数の<strong>極微量な区間の微分結果を探索する</strong>ことができ、ここに微分の性質が利用されている。
-  </p>
+  <p>ある重みに対する損失の微分は、その重みをわずかに増やしたときに損失がどちらへどの程度変化するかを表す。</p>
+  <p>現在の点の近くでは、<strong>微分結果が負</strong>なら重みを正の方向へ、<strong>微分結果が正</strong>なら負の方向へ少し動かすと、損失が小さくなると判断できる。</p>
+  <p>この更新を繰り返すと、勾配が0に近い停留点へ到達する場合がある。ただし、停留点は局所最小値や鞍点の場合もあり、損失そのものが0になるとは限らない。</p>
+  <p>ステップ関数は損失関数ではなく活性化関数である。ステップ関数のように不連続で、ほとんどの点で微分が0となる関数を多層ネットワークの活性化関数に使うと、勾配を前の層へ伝えにくい。</p>
+  <p>通常の勾配法では、損失をパラメータで微分できることが必要になる。連続であるだけでは微分可能とは限らず、ReLUのように一部で微分できない関数では、実装上の微分値や劣勾配を定めて扱う。</p>
   <h3 id="微分のおさらい">微分のおさらい</h3>
   <p>微分とは、簡単に言うと<strong>極微量な区間である点 \(f(x)\), \(f(x+\Delta x)\) の変化量（傾き、勾配）を表したもの</strong>。</p>
   <p>そして、厳密に言うとこの極微量な区間 \(f(x)\), \(f(x+\Delta x)\) の差を<strong>限りなく \(0\) に近づけた時の変化量</strong>を表しており、一般的に下記のように定義される。</p>
   <div
     style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
     \[
-    f’(x) = \frac{df(x)}{dx}
+    f'(x) = \frac{df(x)}{dx}
     \]
   </div>
   <div
@@ -47,24 +40,23 @@
     \frac{df(x)}{dx} = \lim_{\Delta x \to 0} \frac{ f(x+\Delta x) - f(x) }{\Delta x}
     \]
   </div>
-  <p>※ \(f’(x)\) と \(\frac{df(x)}{dx}\) は、\(f(x)\) を \(x\) で微分した結果（導関数）を表す記号。</p>
+  <p>※ \(f'(x)\) と \(\frac{df(x)}{dx}\) は、\(f(x)\) を \(x\) で微分した結果（導関数）を表す記号。</p>
   <p>また、この記事で解説しているニューラルネットワークでの微分は、この極微量な区間 \((f(x), f(x+\Delta x))\)
     の差を<strong>プログラム言語の型の認識できる程度の微量なもの</strong>であることを前提としている。<br>
     （プログラム言語の型の認識できるレベルで\(0\)に近づけるため、微量な誤差が発生するため。）</p>
-  <p>この微分を <strong>数値微分</strong>と表現し、下記誤差がない高校数学の解析的な微分（真の微分）と区別する。</p>
-  <p>高校数学の微分「\(y = x^{n}\) ⇒ \(y’ = nx^{n-1}\)」は、<strong>誤差がない解析的な微分</strong>（真の微分）であり、上記の定義に従い、区間 \((f(x), f(x+\Delta
-    x))\) の差を限りなく \(0\) に近づけた値を作業的に計算し求めている。</p>
+  <p>このように、有限の差分幅を使って導関数を近似する方法を<strong>数値微分</strong>という。有限差分には、差分幅を \(0\) にできないことによる打切り誤差と、浮動小数点数の丸め誤差が含まれる。</p>
+  <p>一方、高校数学で扱う「\(y = x^{n}\) ⇒ \(y' = nx^{n-1}\)」のような<strong>解析的微分</strong>では、微分法則を使って導関数を記号的に求める。数値微分は、その導関数の値をプログラムで近似する方法として区別する。</p>
   <h3 id="数値微分の関数定義python実装サンプル">数値微分の関数定義（Python実装サンプル）</h3>
   <p>上記で触れたが数値微分なので<strong>プログラム言語の型の認識できるレベル</strong>でなければならない。</p>
-  <p>もし、\(h\) を下記のように \(10^{-50}\) とし、NumPy.float32の型が認識できないほどの微量な値である場合、<strong>丸め誤差</strong>により、\(0.0\) となってしまう。</p>
+  <p>もし、\(h\) を下記のように \(10^{-50}\) とすると、浮動小数点数の丸めにより<code>x + h</code>が<code>x</code>と同じ値として扱われたり、差の計算で有効桁を失ったりする。</p>
   <pre><code class="language-python">$ python
  &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">num_dif</span>(<span class="hljs-params">f, x</span>):
- ...     h = <span class="hljs-number">10e-50</span>
+ ...     h = <span class="hljs-number">1e-50</span>
  ...     <span class="hljs-keyword">return</span> (f(x+h) - f(x)) / h
  ...
  &gt;&gt;&gt;
 </code></pre>
-  <p>従って、NumPy.float32型で丸目誤差がでないラインである \(10^{-4} = 0.0001\) となる必要がある。</p>
+  <p>ここでは、数値微分の例でよく使われる \(10^{-4} = 0.0001\) を採用する。ただし、適切な差分幅は関数とデータ型によって異なる。</p>
   <pre><code class="language-python">$ python
  &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">num_dif</span>(<span class="hljs-params">f, x</span>):
  ...     h = <span class="hljs-number">1e-4</span>
@@ -90,7 +82,7 @@
  &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">func_ex</span>(<span class="hljs-params">x</span>):
  ...     <span class="hljs-keyword">return</span> <span class="hljs-number">0.05</span>*x**<span class="hljs-number">2</span> + <span class="hljs-number">0.5</span>*x
  &gt;&gt;&gt;
- &gt;&gt;&gt; x = np.arange(<span class="hljs-number">0.0</span>, <span class="hljs-number">20.0</span>, <span class="hljs-number">0.1</span>)    <span class="hljs-comment"># 区間を0～20 まで、描画制度を 0.1 刻みに設定</span>
+ &gt;&gt;&gt; x = np.arange(<span class="hljs-number">0.0</span>, <span class="hljs-number">20.0</span>, <span class="hljs-number">0.1</span>)    <span class="hljs-comment"># 区間を0～20まで、描画間隔を0.1刻みに設定</span>
  &gt;&gt;&gt; y = func_ex(x)
  &gt;&gt;&gt;
  &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;y = 0.05x^2+0.5x \n# arange:0, 20, 0.1, xlabel:x, ylabel:f(x)&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
@@ -101,7 +93,7 @@
  Text(<span class="hljs-number">0</span>, <span class="hljs-number">0.5</span>, <span class="hljs-string">&#x27;f(x)&#x27;</span>)
  &gt;&gt;&gt; plt.plot(x,y)    <span class="hljs-comment"># グラフの描画</span>
  [&lt;matplotlib.lines.Line2D <span class="hljs-built_in">object</span> at <span class="hljs-number">0x7f1f0e6f5be0</span>&gt;]
- &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;/static/tblog/img/pid24_1.png&#x27;</span>)
+ &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;pid24_1.png&#x27;</span>)
  &gt;&gt;&gt;
 </code></pre>
   <p><img src="/static/tblog/img/pid24_1.png" alt="pid24_1"></p>
@@ -114,8 +106,8 @@
  <span class="hljs-number">1.4999999999965041</span>
  &gt;&gt;&gt;
 </code></pre>
-  <p>真の微分では、\(f(x) = 0.05x^{2} + 0.5x \) ⇒ \(f’(x) = 0.1x + 0.5 \) より、\(x = 5\) の場合は \(1.0 \) 、\(x = 10\) の場合は \(1.5 \)
-    となるので、\(0.9999…\) と \(1.4999…\) という結果は、<strong>非常に小さい誤差で数値微分できている</strong>ことになる。</p>
+  <p>解析的には、\(f(x) = 0.05x^{2} + 0.5x \) ⇒ \(f'(x) = 0.1x + 0.5 \) より、\(x = 5\) の場合は \(1.0 \) 、\(x = 10\) の場合は \(1.5 \)
+    となる。したがって、\(0.9999…\) と \(1.4999…\) という数値微分の結果は、それぞれの導関数の値を小さい誤差で近似している。</p>
 
   <h2 id="まとめ">まとめ</h2>
   <ul>

@@ -36,8 +36,8 @@ Pythonの数値系データ型であるbool、int、float、complexの基本操�
     ```
 
 - 型の特性
-  - イミュータブルオブジェクト : 同一アドレスで変更不可<br>
-  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可>) を参照
+  - イミュータブルオブジェクト : オブジェクト自体を変更不可<br>
+  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: オブジェクト自体を変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可>) を参照
 
   - bool型はint型のサブクラス
     ```python
@@ -47,24 +47,24 @@ Pythonの数値系データ型であるbool、int、float、complexの基本操�
     ```
 
 - int型のサブクラスであることによる振る舞い
-  - 数値型 \\(0\\)、\\(1\\)と同義
+  - 数値演算では `True` を \\(1\\)、`False` を \\(0\\) として扱える
     ```python
     $ python
-        >>> True == 1    # Trueは、1と同義
+        >>> True == 1    # 数値として比較すると等しい
         True
         >>>
-        >>> False == 0    # Falseは、0と同義
+        >>> False == 0    # 数値として比較すると等しい
         True
         >>>
     ```
 
-- 数値型と同義であるため、四則演算ができる
+- int型のサブクラスであるため、数値演算にも利用できる
     ```python
     $ python
         >>> True + True + True   # 加算
         3
         >>> 6 - False   # 減算
-        5
+        6
         >>> 100 * False   # 乗算
         0
         >>> 100 / True   # 除算
@@ -82,63 +82,63 @@ Pythonの数値系データ型であるbool、int、float、complexの基本操�
     ```python
     $ python
         >>> # False : bool型のFalse
-        ... bool(False)
+        >>> bool(False)
         False
         >>>
         >>> # None : 何もないことを示すオブジェクト ( 多言語で良く見かける null は、Pythonでは None と表現する )
-        ... bool(None)
+        >>> bool(None)
         False
         >>>
         >>> # 0 : int型(整数)のゼロ
-        ... bool(0)
+        >>> bool(0)
         False
         >>>
         >>> # 0.0 :  float型(浮動小数点数)のゼロ
-        ... bool(0.0)
+        >>> bool(0.0)
         False
         >>>
         >>> # 0j :  complex型(複素数)のゼロ
-        ... bool(0j)
+        >>> bool(0j)
         False
         >>>
         >>> # Decimal(0) :  decimal型のゼロ ※ decimal型は組込みデータ型でない
-        ... from decimal import Decimal    # decimal型は組込みデータ型でない
+        >>> from decimal import Decimal    # decimal型は組込みデータ型でない
         >>> bool(Decimal(0))
         False
         >>>
         >>> # Fraction(0, 1) :  fraction型(有理数)のゼロ
-        ... from fractions import Fraction    # fraction型は組込みデータ型でない
+        >>> from fractions import Fraction    # fraction型は組込みデータ型でない
         >>> bool(Fraction(0, 1))
         False
         >>>
         >>> # '' : str型(文字列)の空文字
-        ... bool('')
+        >>> bool('')
         False
         >>>
         >>> # [] : list型(配列)の空配列
-        ... bool([])
+        >>> bool([])
         False
         >>>
         >>> # {} : dict型(連想配列)の空配列
-        ... bool({})
+        >>> bool({})
         False
         >>>
         >>> # () : tuple型(タプル)の空配列
-        ... bool(())
+        >>> bool(())
         False
         >>>
         >>> # set() : set型(集合)の空配列
-        ... bool(set())
+        >>> bool(set())
         False
         >>>
         >>> # range(0) : range型(数値配列)の空配列
-        ... bool(range(0))
+        >>> bool(range(0))
         False
         >>>
         >>>
     ```
 - Trueと判定されるオブジェクト<br>
-  上記、Falseと判定されるオブジェクト以外のオブジェクトすべてTrueと判定される。
+  ここに挙げた代表的な偽と判定される値以外も、各型の `__bool__()` または `__len__()` などの真偽値規則に従って判定される。
 
 ### int型 : 数値（整数）
 
@@ -180,36 +180,24 @@ Pythonの数値系データ型であるbool、int、float、complexの基本操�
     ```
 
 - 型の特性
-  - イミュータブルオブジェクト : 同一アドレスで変更不可<br>
-  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可>) を参照
+  - イミュータブルオブジェクト : オブジェクト自体を変更不可<br>
+  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: オブジェクト自体を変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可>) を参照
 
-- 最大値と最小値<br>
-実質、CPUに依存するので上限、下限はない。
-
-- \\(32\\)ビットマシンの場合<br>
-    最大 \\(2,147,483,647\\) :（\\(2^{31} - 1\\) \\(= 2147483647\\)）<br>
-    最小 \\(-2,147,483,648\\) :（\\(- 2^{31}\\) \\(= -2147483648\\)）
-
-- \\(62\\)ビットマシンの場合<br>
-    最大 \\(9,223,372,036\\)\\(,854,775,807\\) :（\\(2^{63} - 1\\) \\(= 922337203\\)\\(6854775807\\)）<br>
-    最小 \\(-9,223,372,036\\)\\(,854,775,808\\) :（\\(- 2^{63}\\) \\(= -922337203\\)\\(6854775808\\)）
-
-- 最大は、**maxsize**で確認できる<br>
-    ※ 下記、対話モード実施環境のCPUは、\\(64\\)ビット。
+- 値の範囲<br>
+Pythonのint型は任意精度であり、固定された最大値・最小値を持たない。扱える大きさは利用可能なメモリなどの実行環境の資源に制約される。<br>
+`sys.maxsize`はint型の最大値ではなく、リストや文字列などの要素数・インデックスに使える実装上の上限を示す値である。
     ```python
     $ python
         >>> import sys
         >>>
-        >>> print(sys.maxsize)
+        >>> print(sys.maxsize)    # int型の最大値ではない
         9223372036854775807
         >>>
     ```
 
 ### float型 : 浮動小数点数型
 
-float型は、\\(64\\)ビットの浮動小数点数表現（倍精度浮動小数点数）であり、C言語の倍精度浮動小数点数型である`double`を使用して実装されている。
-
-他言語の多くは、\\(32\\)ビットの浮動小数点数表現（単精度浮動小数点数）をfloat\\(64\\)、ビットの浮動小数点数表現（倍精度浮動小数点数）をdoubleとして型が分かれているが、Pythonは倍精度浮動小数点数をfloatとし\\(32\\)ビットの単精度浮動小数点数の型はない。
+Pythonのfloat型は、通常はC言語の`double`と同じ倍精度浮動小数点数として実装される。CPythonの一般的な環境ではIEEE 754のbinary64に相当するが、正確な精度や範囲は`sys.float_info`で確認する。Pythonの組込み型には、単精度専用のfloat型はない。
 
 - 定義例
     ```python
@@ -220,28 +208,22 @@ float型は、\\(64\\)ビットの浮動小数点数表現（倍精度浮動小�
         >>> type(float_a)
         <class 'float'>
         >>>
-        >>> float_b = 1.2345    # 固定小数点数でfloat_bを定義
+        >>> float_b = 1.2345    # 小数点を含む通常表記でfloat_bを定義
         >>> float_b
         1.2345
-        >>> type(float_b)    # 固定小数点数もfloatとして扱われる
+        >>> type(float_b)    # 通常の小数表記もfloatとして扱われる
         <class 'float'>
         >>>
     ```
 
 - 型の特性
-  - イミュータブルオブジェクト : 同一アドレスで変更不可<br>
-  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可>) を参照
+  - イミュータブルオブジェクト : オブジェクト自体を変更不可<br>
+  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: オブジェクト自体を変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可>) を参照
 
-- 最大値と最小値
-int型と同様にCPUに依存する。
+- 値の範囲<br>
+一般的なCPython環境では、正の有限最大値は約 \\(1.7976931348623157 \\times 10^{308}\\) となる。`sys.float_info.min`は正の**正規化数**の最小値であり、表現できる正の値全体の最小値ではない。\\(0\\)に最も近い正の非正規化数は`math.ulp(0.0)`で確認できる。
 
-- 64ビットマシンの場合<br>
-    正の最大値 \\(1.79769313\\)\\(48623157e+308\\)<br>
-    正規化数の正の最小値 \\(2.2250738\\)\\(585072014e-308\\)<br>
-    負の最小値 \\(-1.797693\\)\\(1348623157e+308\\)<br>
-    ※ 正規化数
-
-- 最大・最小は、**float_info**でも確認できる。
+- 実行環境の値を**float_info**で確認
     ```python
     $ python
         >>> import sys
@@ -255,10 +237,14 @@ int型と同様にCPUに依存する。
         >>> print(sys.float_info.min)    # 正規化数の正の最小値
         2.2250738585072014e-308
         >>>
+        >>> import math
+        >>> math.ulp(0.0)    # 0に最も近い正の非正規化数
+        5e-324
+        >>>
         >>> -sys.float_info.max    # 負の最小値
         -1.7976931348623157e+308
         >>>
-        >>> -1.8e+308    # 最小値を下回る数値は「inf」と表現される。
+        >>> -1.8e+308    # 負の有限値の範囲を下回ると「-inf」と表現される。
         -inf
         >>>
         >>> sys.float_info    # float_infoの情報すべて
@@ -268,8 +254,7 @@ int型と同様にCPUに依存する。
 
 ### complex型 : 複素数型
 
-complex型は、**実部**と**虚部**で構成され、虚部は虚数単位（\\(2\\)乗して\\(-1\\)となる）の \\(j\\) と表現する。<br>
-※ 数学の虚数単位は、\\(i\\)（imaginary part）で表現されるが、工学での \\(i\\) は、他の単位で使用されているケースがあり、混乱を招くため \\(j\\) が使われている。
+complex型は、**実部**と**虚部**で構成され、虚数単位（\\(2\\)乗して\\(-1\\)となる）を \\(j\\) で表現する。数学では \\(i\\) が一般的だが、電気工学では \\(i\\) を電流に使うため、虚数単位に \\(j\\) を使う慣習がある。Pythonの複素数リテラルもこの \\(j\\) を採用している。
 
 - 定義例
     ```python
@@ -295,12 +280,12 @@ complex型は、**実部**と**虚部**で構成され、虚部は虚数単位�
         >>>
     ```
 
-- 最大値と最小値
-実部と虚部の値はそれぞれ **浮動小数点**でfloat型なのでfloat型と同様にCPUに依存する。
+- 値の範囲<br>
+実部と虚部はそれぞれfloat型で保持されるため、有限値の範囲や丸めの性質はfloat型と同様となる。
 
 - 型の特性
-  - イミュータブルオブジェクト : 同一アドレスで変更不可<br>
-  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--同一アドレスで変更不可>) を参照
+  - イミュータブルオブジェクト : オブジェクト自体を変更不可<br>
+  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: オブジェクト自体を変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可>) を参照
 
 - 実部、虚部を別々に取得
     ```python
@@ -318,6 +303,7 @@ complex型は、**実部**と**虚部**で構成され、虚部は虚数単位�
     $ python
         >>> complex_a = 123j   # complex型の変数 complex_a を123jで定義
         >>> type(complex_a)
+        <class 'complex'>
         >>> complex_b = complex_a * complex_a    # 123jを二乗する
         >>> print(complex_b)    # -15129の実部のみとなる
         (-15129+0j)

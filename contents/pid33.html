@@ -34,7 +34,7 @@
           <tr>
             <td>+</td>
             <td>+a</td>
-            <td>正の整数：実質 a と同義。（暗黙的変換で用いる）</td>
+            <td>単項プラス：数値に単項正演算を適用する。</td>
           </tr>
           <tr>
             <td>-</td>
@@ -64,7 +64,7 @@
           <tr>
             <td>//</td>
             <td>a // b</td>
-            <td>整数除算：a を b で割った結果から小数以下を切り捨てる。</td>
+            <td>切り下げ除算：a を b で割った商を負の無限大方向へ丸める。</td>
           </tr>
           <tr>
             <td>%</td>
@@ -81,7 +81,7 @@
     </li>
   </ul>
   <p>以降、実装サンプルを対話モード（インタプリタ）で解説する。</p>
-  <p>※ 演算結果の <strong>最大値</strong>、<strong>最小値</strong> についてはPCのスペックに依存する。詳しくは下記を参考。<br></p>
+  <p>※ int型は任意精度であり、float型とcomplex型の有限値の範囲は実装環境の浮動小数点形式に依存する。詳しくは下記を参考。<br></p>
   <ul>
     <li><a class="link-secondary"
         href="https://sigma-se.com/detail/30/#int型--数値整数">Python
@@ -106,7 +106,7 @@
     <span class="hljs-number">5</span>
     &gt;&gt;&gt;
 </code></pre>
-      <p>上記の通り、int型に単項プラス演算子を付加しても結果は同じだが、boolean型からint型の<strong>暗黙的な変換</strong>を利用してコーディングするケースがある。</p>
+      <p>上記の通り、通常のint型に単項プラス演算子を適用しても値は変わらない。bool型はint型のサブクラスであるため、単項プラスの結果はint型の<code>0</code>または<code>1</code>となるが、型変換を意図する場合は<code>int(value)</code>と明示する方が読みやすい。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># boolean を定義し、単項プラス演算子でintに変換</span>
@@ -236,14 +236,14 @@
 </code></pre>
     </li>
     <li>
-      <p>除算（//） ※商のみ<br>
-        除算（//）は、演算結果の<strong>商（整数部のみ）</strong>を返す。</p>
+      <p>切り下げ除算（//）<br>
+        <code>//</code>は、除算結果を負の無限大方向へ丸めた商を返す。単なる小数部の切捨てではないため、負数では<code>-5.5 // 0.2</code>が<code>-28.0</code>となる。int同士なら結果はint、少なくとも一方がfloatなら結果はfloatとなる。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># int型の 6 を 2 で除算 (//)</span>
     &gt;&gt;&gt; int_a = <span class="hljs-number">5</span> // <span class="hljs-number">2</span>
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a)
-    <span class="hljs-number">2.0</span>
+    <span class="hljs-number">2</span>
     &gt;&gt;&gt; <span class="hljs-comment"># float型の -6.5 を 0.5 で除算 (//)</span>
     &gt;&gt;&gt; float_a = -<span class="hljs-number">5.5</span> // <span class="hljs-number">0.2</span>
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
@@ -252,7 +252,7 @@
     &gt;&gt;&gt; complex_a = <span class="hljs-number">3j</span> // <span class="hljs-number">2</span>
     Traceback (most recent call last):
     File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
-    TypeError: <span class="hljs-string">&quot;can&#x27;t take floor of complex number.&quot;</span>
+    TypeError: unsupported operand type(s) for //: <span class="hljs-string">&#x27;complex&#x27;</span> and <span class="hljs-string">&#x27;int&#x27;</span>
     &gt;&gt;&gt;
 </code></pre>
     </li>
@@ -275,9 +275,10 @@
     &gt;&gt;&gt; complex_a = <span class="hljs-number">5j</span> % <span class="hljs-number">2</span>
     Traceback (most recent call last):
     File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
-    TypeError: <span class="hljs-string">&quot;can&#x27;t mod complex numbers.&quot;</span>
+    TypeError: unsupported operand type(s) for %: <span class="hljs-string">&#x27;complex&#x27;</span> and <span class="hljs-string">&#x27;int&#x27;</span>
     &gt;&gt;&gt;
 </code></pre>
+      <p>※ 例外メッセージの文言はPythonのバージョンで変わる場合があるが、複素数に <code>//</code> や <code>%</code> を適用すると <code>TypeError</code> になる点が重要。</p>
     </li>
   </ul>
   <h3 id="べき乗">べき乗（**）</h3>
@@ -311,7 +312,7 @@
 
   <h2 id="まとめ">まとめ</h2>
   <ul>
-    <li>通常の除算には /、切り捨て除算には //、剰余には % を使い、目的に応じて区別。</li>
+    <li>通常の除算には /、負の無限大方向へ丸める切り下げ除算には //、剰余には % を使い、目的に応じて区別。</li>
     <li>負数を含む剰余は直感と異なる場合があるため、必要に応じて実行結果を確認。</li>
     <li>べき乗演算子 ** は他の算術演算子より優先されるため、複雑な式では括弧を使って計算順序を明確にする。</li>
   </ul>

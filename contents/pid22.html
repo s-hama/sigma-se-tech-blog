@@ -18,18 +18,18 @@
   </ul>
     <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
     <h3 id="ニューラルネットワークで使用する損失関数">ニューラルネットワークで使用する損失関数</h3>
-    <p>ニューラルネットワークの学習とは、<strong>訓練データを基に意図した結果となる最適な重みパラメータを判別する</strong>ことを指す。</p>
-    <p>学習するためには、<strong>損失関数</strong>というニューラルネットワークの性能の悪さを表す指標を基準に、その値が<strong>最も小さくなる重み</strong>となるように<strong>自己探索（最適な重みパラメータを探す）</strong>していくことになる。
+    <p>ニューラルネットワークの学習とは、<strong>訓練データに対する損失が小さくなるように重みパラメータを更新する</strong>ことを指す。</p>
+    <p>学習では、ニューラルネットワークの予測と正解のずれを表す<strong>損失関数</strong>を基準に、その値が小さくなる方向へ重みを更新する。一般のニューラルネットワークでは、大域的に最小の値へ到達するとは限らない。
     </p>
     <p>ここでは、代表的な損失関数である<strong>2乗和誤差</strong>、<strong>交差エントロピー誤差</strong>をPython実装サンプルで確認する。</p>
     <h3 id="2乗和誤差の定義">2乗和誤差の定義</h3>
-    <p>2乗和誤差（mean squared error）は、残差平方和とも呼ばれ、<strong>ターゲットとなる2つの変数差の2乗を総和し、2で割った値</strong>を取る。</p>
+    <p>ここで扱う2乗和誤差は、予測値と正解値の差を2乗して合計し、微分を簡潔にするため全体へ\(\frac{1}{2}\)を掛けた値である。全要素の平均を取る平均二乗誤差（MSE）とは区別する。</p>
     <p>この2つの変数のうち \(y_{k}\) をニューラルネットワークの出力、もう1つの \(t_{k}\) を教師データ（訓練データ）と置く。<br>
         ※ \(k\) はデータの次元数</p>
     <div
         style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
         \[
-        E = \frac{1}{2}\sum_{i=1}^{n} (y_{k}-t_{k})^2\hspace{5mm}･･･（A）
+        E = \frac{1}{2}\sum_{k=1}^{K} (y_{k}-t_{k})^2\hspace{5mm}･･･（A）
         \]
     </div>
     <h3 id="2乗和誤差の実装サンプル">2乗和誤差の実装サンプル</h3>
@@ -67,41 +67,41 @@
     <p>これを関数で定義し、上記の \(y\) と \(t\) で実行してみる。</p>
     <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">mean_squared_error</span>(<span class="hljs-params">y, t</span>):
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">half_squared_error</span>(<span class="hljs-params">y, t</span>):
 <span class="hljs-meta">... </span>    <span class="hljs-keyword">return</span> <span class="hljs-number">0.5</span> * np.<span class="hljs-built_in">sum</span>((y-t)**<span class="hljs-number">2</span>)
 ...
 <span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
 <span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
-<span class="hljs-meta">&gt;&gt;&gt; </span>mean_squared_error(np.array(y), np.array(t))
+<span class="hljs-meta">&gt;&gt;&gt; </span>half_squared_error(np.array(y), np.array(t))
 <span class="hljs-number">0.09750000000000003</span>
 </code></pre>
-    <p>正解である2が60%となり、上記mean_squared_errorの結果は、<strong>約0.0975</strong>となった。</p>
+    <p>正解である2が60%となり、上記<code>half_squared_error</code>の結果は、<strong>約0.0975</strong>となった。</p>
     <p>試しにわざとはずして不正解である7が60%となる \(y\) で結果を見てみると</p>
     <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">mean_squared_error</span>(<span class="hljs-params">y, t</span>):
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">half_squared_error</span>(<span class="hljs-params">y, t</span>):
 <span class="hljs-meta">... </span>    <span class="hljs-keyword">return</span> <span class="hljs-number">0.5</span> * np.<span class="hljs-built_in">sum</span>((y-t)**<span class="hljs-number">2</span>)
 ...
 <span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
 <span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
-<span class="hljs-meta">&gt;&gt;&gt; </span>mean_squared_error(np.array(y), np.array(t))
+<span class="hljs-meta">&gt;&gt;&gt; </span>half_squared_error(np.array(y), np.array(t))
 <span class="hljs-number">0.5975</span>
 </code></pre>
     <p>結果は0.5975となり、<strong>約6倍（損失が6倍）</strong>まで大きくなってしまう。</p>
-    <p>ちなみに正解である2が100%となる下記 \(y\) だと、結果は<strong>0</strong>となり、損失が<strong>0（間違った予測し）</strong>ということになる。</p>
+    <p>ちなみに正解である2が100%となる下記 \(y\) だと、結果は<strong>0</strong>となり、予測値と教師データが一致していることを表す。</p>
     <pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">1.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
 <span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
-<span class="hljs-meta">&gt;&gt;&gt; </span>mean_squared_error(np.array(y), np.array(t))
+<span class="hljs-meta">&gt;&gt;&gt; </span>half_squared_error(np.array(y), np.array(t))
 <span class="hljs-number">0.0</span>
 </code></pre>
     <h3 id="交差エントロピー誤差の定義">交差エントロピー誤差の定義</h3>
-    <p>交差エントロピー誤差（cross entropy error）は、クロスエントロピーとも呼ばれ、ターゲットとなる2つの変数のうち、一方を自然対数（底は \(e\)）として双方の積総和にマイナスをかけた値を取る。</p>
+    <p>交差エントロピー誤差（cross entropy error）は、各クラスの教師データに予測確率の自然対数（底は \(e\)）を掛け、その総和へマイナスを付けた値を取る。</p>
     <p>この2つの変数のうち \(y_{k}\) をニューラルネットワークの出力、もう1つの \(t_{k}\) を<strong>教師データ（訓練データ）</strong>とする。<br>
         ※ \(k\) はデータの次元数</p>
     <div
         style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
         \[
-        E = -\sum_{i=1}^{n} t_{k} \log y_{k}\hspace{5mm}･･･（B）
+        E = -\sum_{k=1}^{K} t_{k} \log y_{k}\hspace{5mm}･･･（B）
         \]
     </div>
     <h3 id="交差エントロピー誤差と実装サンプル">交差エントロピー誤差と実装サンプル</h3>

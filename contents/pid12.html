@@ -11,8 +11,8 @@
   </ul>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="numpyの環境準備">NumPyの環境準備</h3>
-  <p><strong>NumPy</strong>は、高速な数値演算をはじめ、学術計算も広く対応しているPythonの外部ライブラリ。
-    Python自体は、動的言語(非コンパイル型言語)で<strong>数値演算が遅い</strong>が、NumPyは、静的型付け言語である<strong>C</strong>、<strong>C++</strong>、<strong>Fortran</strong>で実装されているため、高速な数値演算を可能にしている。
+  <p><strong>NumPy</strong>は、高速な数値演算をはじめ、科学技術計算で広く利用されるPythonの外部ライブラリ。
+    同じデータ型の値を連続的に扱う<code>ndarray</code>と、Cなどで実装されたベクトル化処理を利用することで、Pythonのループを要素ごとに実行する場合より効率よく数値計算できる。
   </p>
   <ul>
     <li>NumPyインストール<br>
@@ -40,8 +40,7 @@
     </li>
     <li>
       <p>一次元配列同士の四則演算<br>
-        <strong>要素数が同じ</strong>である場合、それぞれの要素同士で四則演算が可能。<br>
-        ※ 但し、下記ブロードキャストは例外で 要素数が一致していなくても 四則演算が可能。
+        <strong>形状が同じ</strong>配列同士、または後述するブロードキャストが可能な形状同士では、それぞれの要素を対応させて四則演算できる。
       </p>
       <pre><code class="language-bash">$ python
  &gt;&gt;&gt; import numpy as np

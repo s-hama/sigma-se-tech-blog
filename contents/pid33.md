@@ -33,13 +33,13 @@ Pythonの算術演算子を使い、数値計算の基本を整理する。
       </tr>
     </thead>
     <tbody>
-      <tr><td>+</td><td>+a</td><td>正の整数：実質 a と同義。（暗黙的変換で用いる）</td></tr>
+      <tr><td>+</td><td>+a</td><td>単項プラス：数値に単項正演算を適用する。</td></tr>
       <tr><td>-</td><td>-a</td><td>符号反転：a の符号を反転する。</td></tr>
       <tr><td>+</td><td>a + b</td><td>加算：a に b を足す。</td></tr>
       <tr><td>-</td><td>a - b</td><td>減算：a から b を引く。</td></tr>
       <tr><td>*</td><td>a * b</td><td>乗算：a に b を掛ける。</td></tr>
       <tr><td>/</td><td>a / b</td><td>除算：a を b で割る。</td></tr>
-      <tr><td>//</td><td>a // b</td><td>整数除算：a を b で割った結果から小数以下を切り捨てる。</td></tr>
+      <tr><td>//</td><td>a // b</td><td>切り下げ除算：a を b で割った商を負の無限大方向へ丸める。</td></tr>
       <tr><td>%</td><td>a % b</td><td>剰余：a を b で割った余り。</td></tr>
       <tr><td>**</td><td>a ** b</td><td>べき乗：a の b 乗。</td></tr>
     </tbody>
@@ -47,7 +47,7 @@ Pythonの算術演算子を使い、数値計算の基本を整理する。
 
 以降、実装サンプルを対話モード（インタプリタ）で解説する。
 
-※ 演算結果の **最大値**、**最小値** についてはPCのスペックに依存する。詳しくは下記を参考。<br>
+※ int型は任意精度であり、float型とcomplex型の有限値の範囲は実装環境の浮動小数点形式に依存する。詳しくは下記を参考。<br>
 - [Python - 組込みデータ型まとめ : bool , int, float, complex > int型 : 数値（整数）](<https://sigma-se.com/detail/30/#int型--数値整数>)
 - [Python - 組込みデータ型まとめ : bool , int, float, complex > float型 : 浮動小数点数型](<https://sigma-se.com/detail/30/#float型--浮動小数点数型>)
 - [Python - 組込みデータ型まとめ : bool , int, float, complex > complex型 : 複素数型](<https://sigma-se.com/detail/30/#complex型--複素数型>)
@@ -65,7 +65,7 @@ Pythonの算術演算子を使い、数値計算の基本を整理する。
         5
         >>>
     ```
-    上記の通り、int型に単項プラス演算子を付加しても結果は同じだが、boolean型からint型の**暗黙的な変換**を利用してコーディングするケースがある。
+    上記の通り、通常のint型に単項プラス演算子を適用しても値は変わらない。bool型はint型のサブクラスであるため、単項プラスの結果はint型の`0`または`1`となるが、型変換を意図する場合は`int(value)`と明示する方が読みやすい。
     ```python
     $ python
         >>>
@@ -191,15 +191,15 @@ Pythonの算術演算子を使い、数値計算の基本を整理する。
         >>>
     ```
 
-- 除算（//） ※商のみ<br>
-    除算（//）は、演算結果の**商（整数部のみ）**を返す。
+- 切り下げ除算（//）<br>
+    `//`は、除算結果を負の無限大方向へ丸めた商を返す。単なる小数部の切捨てではないため、負数では`-5.5 // 0.2`が`-28.0`となる。int同士なら結果はint、少なくとも一方がfloatなら結果はfloatとなる。
     ```python
     $ python
         >>>
         >>> # int型の 6 を 2 で除算 (//)
         >>> int_a = 5 // 2
         >>> print(int_a)
-        2.0
+        2
         >>> # float型の -6.5 を 0.5 で除算 (//)
         >>> float_a = -5.5 // 0.2
         >>> print(float_a)
@@ -208,7 +208,7 @@ Pythonの算術演算子を使い、数値計算の基本を整理する。
         >>> complex_a = 3j // 2
         Traceback (most recent call last):
         File "<stdin>", line 1, in <module>
-        TypeError: "can't take floor of complex number."
+        TypeError: unsupported operand type(s) for //: 'complex' and 'int'
         >>>
     ```
 
@@ -231,9 +231,10 @@ Pythonの算術演算子を使い、数値計算の基本を整理する。
         >>> complex_a = 5j % 2
         Traceback (most recent call last):
         File "<stdin>", line 1, in <module>
-        TypeError: "can't mod complex numbers."
+        TypeError: unsupported operand type(s) for %: 'complex' and 'int'
         >>>
     ```
+    ※ 例外メッセージの文言はPythonのバージョンで変わる場合があるが、複素数に `//` や `%` を適用すると `TypeError` になる点が重要。
 ### べき乗（**）
 - **底**と**指数**の演算結果（底のべき乗）<br>
     ```python
@@ -262,7 +263,7 @@ Pythonの算術演算子を使い、数値計算の基本を整理する。
 
 
 ## まとめ
-- 通常の除算には /、切り捨て除算には //、剰余には % を使い、目的に応じて区別。
+- 通常の除算には /、負の無限大方向へ丸める切り下げ除算には //、剰余には % を使い、目的に応じて区別。
 - 負数を含む剰余は直感と異なる場合があるため、必要に応じて実行結果を確認。
 - べき乗演算子 ** は他の算術演算子より優先されるため、複雑な式では括弧を使って計算順序を明確にする。
 

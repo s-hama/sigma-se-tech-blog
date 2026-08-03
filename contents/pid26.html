@@ -21,36 +21,32 @@
     <li><a href="https://sigma-se.com/detail/24/" class="link-secondary">Python - ニューラルネットワーク： 損失関数と数値微分（勾配）の実装サンプル</a></li>
     <li><a href="https://sigma-se.com/detail/25/" class="link-secondary">Python - ニューラルネットワーク： 偏微分と勾配の実装サンプル</a></li>
   </ul>
-  <p>
-    そこでより正確な<strong>最小値</strong>を求めるために、この<strong>勾配</strong>を複数回実施して、その勾配が示す方向に基準をずらしながら<strong>損失関数の結果が最小となる値</strong>を探していく。
-  </p>
+  <p>そこで、現在の点から勾配の逆方向へ少しずつ移動し、関数値を小さくする点を反復して探す。</p>
   <p>これを<strong>勾配法</strong>といい、最小値を探す<strong>勾配降下法</strong>と最大値を探す<strong>勾配上昇法</strong>に分類される。<br>
     ※ ニューラルネットワークの学習では、<strong>勾配降下法</strong>が多く用いられている。</p>
-  <p>
-    ニューラルネットワークでも最適な<strong>重み</strong>や<strong>バイアス</strong>を学習時に決定するため、<strong>勾配法</strong>を用いて<strong>損失関数の結果が最小となる値</strong>を算出していくことになる。
-  </p>
+  <p>ニューラルネットワークでは、<strong>勾配法</strong>を用いて損失を小さくする<strong>重み</strong>や<strong>バイアス</strong>を探す。ただし、初期値、学習率、関数の形によっては局所最小値や鞍点に近づいたり、発散したりするため、大域的な最小値への到達は保証されない。</p>
   <p>変数が \(x_{0}\) と \(x_{1}\) の2つである場合を例に<strong>勾配降下法</strong>を数式で表現すると</p>
   <div
     style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
     \[
-    x_{0} = x_{0} - μ\frac{∂\ (x_{0}, x_{1})}{∂x_{0}}\hspace{5mm}･･･（A）
+    x_{0}^{(r+1)} = x_{0}^{(r)} - μ\frac{\partial f}{\partial x_{0}}\left(x^{(r)}\right)\hspace{5mm}･･･（A）
     \]
   </div>
   <div
     style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
     \[
-    x_{1} = x_{1} - μ\frac{∂\ (x_{0}, x_{1})}{∂x_{1}}\hspace{5mm}･･･（B）
+    x_{1}^{(r+1)} = x_{1}^{(r)} - μ\frac{\partial f}{\partial x_{1}}\left(x^{(r)}\right)\hspace{5mm}･･･（B）
     \]
   </div>
   <p>と表せ、<strong>\(μ\)</strong>
     を<strong>学習率</strong>といい、複数回の勾配を実施するにあたって前回の勾配が示す方向へどのくらい進めるかの<strong>基準値</strong>となる。<br>
     （勾配1回に対し、\(（A）\)と\(（B）\)をそれぞれ一回実施する。）</p>
-  <p>※ \(\displaystyle \frac{∂\ (x_{0}, x_{1})}{∂x_{0}}\) と \(\displaystyle \frac{∂\ (x_{0}, x_{1})}{∂x_{1}}\) の<strong>偏微分</strong>については、<a
+  <p>※ \(\displaystyle \frac{∂ f}{∂x_{0}}\) と \(\displaystyle \frac{∂ f}{∂x_{1}}\) の<strong>偏微分</strong>については、<a
       href="https://sigma-se.com/detail/25/#勾配のpython実装サンプル" class="link-secondary">Python - ニューラルネットワーク： 偏微分と勾配の実装サンプル &gt; 勾配のPython実装サンプル</a> を参考のこと。</p>
   <ul>
     <li><strong>学習率</strong>についての補足<br>
-      下記の記事で触れている<strong>重み</strong>は、機械学習アルゴリズムにより自動で変化していくが、<strong>学習率</strong>は、あらかじめ人の手で設定するパラメータとなり、深層学習では勾配法によって、<strong>最適化できない（しない）<strong>パラメータになる。<br>
-          （このようなパラメータを</strong>ハイパーパラメータ</strong>という。）
+      下記の記事で触れている<strong>重み</strong>は、機械学習アルゴリズムにより自動で変化していくが、<strong>学習率</strong>は、あらかじめ人の手で設定するパラメータとなり、深層学習では勾配法によって、<strong>最適化できない（しない）パラメータ</strong>になる。<br>
+      （このようなパラメータを<strong>ハイパーパラメータ</strong>という。）
       <ul>
         <li><a href="https://sigma-se.com/detail/15/" class="link-secondary">Python - ニューラルネットワーク： 単純パーセプトロンの概念と実装サンプル</a></li>
         <li><a href="https://sigma-se.com/detail/16/" class="link-secondary">Python - ニューラルネットワーク： 多層パーセプトロンの概念と実装サンプル</a></li>
@@ -91,7 +87,7 @@
         この<strong>勾配関数</strong>（num_gradient）をラップした形の<strong>勾配法</strong>となる上記\(（A）\)と\(（B）\)の実装サンプル。</p>
       <pre><code class="language-python">    &gt;&gt;&gt; <span class="hljs-comment"># 上記対話モードの続き</span>
     &gt;&gt;&gt; <span class="hljs-keyword">def</span> <span class="hljs-title function_">gradient_descent</span>(<span class="hljs-params">f, init_x, lr=<span class="hljs-number">0.01</span>, step_num=<span class="hljs-number">100</span></span>):
-    ...     x = init_x
+    ...     x = init_x.copy()    <span class="hljs-comment"># 呼び出し元の初期値を変更しない</span>
     ...
     ...     <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(step_num):
     ...         grad = num_gradient(f, x)    <span class="hljs-comment"># 上記 勾配関数「num_gradient」をコール</span>
@@ -141,16 +137,16 @@
       <p>試しに、学習率を<strong>極端に増減</strong>させてみると</p>
       <pre><code class="language-python">    &gt;&gt;&gt; <span class="hljs-comment"># 上記対話モードの続き</span>
     &gt;&gt;&gt; gradient_descent(func_ex, init_x=init_x, lr=<span class="hljs-number">10</span>, step_num=<span class="hljs-number">100</span>)
-    array([ <span class="hljs-number">3.10343509e+12</span>, -<span class="hljs-number">8.05258867e+12</span>])
+    array([ <span class="hljs-number">4.78115669e+12</span>, -<span class="hljs-number">8.05260147e+12</span>])
     &gt;&gt;&gt;
     &gt;&gt;&gt; gradient_descent(func_ex, init_x=init_x, lr=<span class="hljs-number">1e-10</span>, step_num=<span class="hljs-number">100</span>)
     array([-<span class="hljs-number">14.9999997</span>,  <span class="hljs-number">19.9999996</span>])
     &gt;&gt;&gt;
 </code></pre>
-      <p>学習率を \(10\) とした場合、\(x_{0}\) \(= 3.10343509e+12\) 、\(x_{1}\) \(= -8.05258867e+12\) となりプラス方向に大きく発散している。</p>
+      <p>学習率を \(10\) とした場合、値の絶対値が大きくなって発散している。</p>
       <p>これは、学習率が大きすぎることを意味しており、反対に学習率を \(1e-10\) と \(0\) に近づけすぎると \(x_{0} = -14.9999997\) 、\(x_{1} = 19.9999996\)
         となり初期値とほぼ同じ値が出力され、学習率が小さすぎることを意味している。</p>
-      <p>実際のニューラルネットワークの学習においても、以上のように妥当な<strong>学習率</strong>を事前に決め、<strong>勾配</strong>を繰り返し、真の最小値を求めていくことになる。</p>
+      <p>実際のニューラルネットワークでも、学習率を調整しながら勾配に基づく更新を繰り返す。ただし、一般の損失関数では大域的な最小値へ到達する保証はない。</p>
     </li>
   </ul>
 
