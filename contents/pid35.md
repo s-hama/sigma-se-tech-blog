@@ -22,7 +22,7 @@ Pythonの論理演算子であるor、and、notの基本的な使い方を整理
 
 ### 論理演算子の種類
 
-**論理演算子**には、bool型に加え、数値型である int型、float型、complex型や文字列である str型、リスト型であるlist型、tuple型、dict型の指定ができる。
+Pythonでは、bool型に限らずすべてのオブジェクトが真偽値として評価される。組込み型では数値のゼロ、空の文字列やコンテナ、`None`などが`False`となり、それ以外は原則として`True`となる。独自クラスでは`__bool__()`または`__len__()`で判定方法を定義できる。
 
 - 各データ型の参考
   - [Python - 組込みデータ型まとめ : bool , int, float, complex > bool型 : 真偽リテラル](<https://sigma-se.com/detail/30/#bool型--真偽リテラル>)
@@ -31,7 +31,7 @@ Pythonの論理演算子であるor、and、notの基本的な使い方を整理
   - [Python - 組込みデータ型まとめ : bool , int, float, complex > complex型 : 複素数型](<https://sigma-se.com/detail/30/#complex型--複素数型>)
   - [Python - 組込みデータ型まとめ : str, list, tuple, range, dict > str型 : 文字列型](<https://sigma-se.com/detail/31/#str型--文字列型>)
   - [Python - 組込みデータ型まとめ : str, list, tuple, range, dict > list型 : 配列型](<https://sigma-se.com/detail/31/#list型--配列型>)
-  - [Python - 組込みデータ型まとめ : str, list, tuple, range, dict > tuple型 : 定数の配列型](<https://sigma-se.com/detail/31/#tuple型--定数の配列型>)
+  - [Python - 組込みデータ型まとめ : str, list, tuple, range, dict > tuple型 : イミュータブルなシーケンス型](<https://sigma-se.com/detail/31/#tuple型--イミュータブルなシーケンス型>)
   - [Python - 組込みデータ型まとめ : str, list, tuple, range, dict > range型 : 範囲指定](<https://sigma-se.com/detail/31/#range型--範囲指定>)
 
 - 論理演算子一覧（or, and, not の三つのみ）
@@ -87,7 +87,7 @@ Pythonの論理演算子であるor、and、notの基本的な使い方を整理
 以降、論理演算子に関する実装サンプルを対話モード（インタプリタ）で解説する。
 
 ### 論理和（or）
-`a and b`は、前方から評価していき`True`となる要素が見つかった時点で（**ショートサーキット**と呼ぶ）その要素を返す。<br>
+`a or b`は、前方から評価して最初に`True`となるオペランドを返す。そこで評価を終える動作を**ショートサーキット**という。<br>
 a、b共にFalseである場合は、末尾の要素`b`を返す。
 
 - 論理和パターン

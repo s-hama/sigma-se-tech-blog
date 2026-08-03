@@ -7,6 +7,8 @@ Python - タスク指向型対話：2/5 OpenWeatherMap・Telegramの環境準備
 ここでは、API利用登録、Bot作成、ライブラリのインストール、オウム返しBotによる疎通確認までを扱う。
 
 ## この記事の構成
+- [対象環境と利用上の注意](#対象環境と利用上の注意)<br>
+  本文記載時の環境と現在そのまま利用できない箇所を確認。
 - [作業時の注意点](#作業時の注意点)<br>
   設定変更やコマンド実行前に確認しておきたい注意点を整理。
 - [天気情報を取得する「OpenWeatherMap」WebAPIの概要と利用登録](#天気情報を取得するopenweathermapwebapiの概要と利用登録)<br>
@@ -15,6 +17,16 @@ Python - タスク指向型対話：2/5 OpenWeatherMap・Telegramの環境準備
   メッセンジャーアプリ「Telegram」の利用登録と「python-telegram-bot」のインストールの手順と確認ポイントを整理。
 - [TelegramBotを使用した対話サンプル（オウム返し）](#telegrambotを使用した対話サンプルオウム返し)<br>
   TelegramBotを使用した対話サンプル（オウム返し）の意味と要点を具体例から整理。
+
+## 対象環境と利用上の注意
+- 本文記載時の環境<br>
+2020年7月時点のOpenWeatherMap APIと、python-telegram-bot \\(12.8\\)の同期APIを使った手順。
+- 確認時期<br>
+2026年8月にTelegram Bot API、python-telegram-bot、OpenWeatherMapの公式資料と照合し、記載内容を見直した。
+- 現在そのまま利用できない箇所<br>
+掲載コード全体は現行サービス・ライブラリで再実行していない。<br>
+料金、呼出し上限、登録画面、APIレスポンスは変更され得る。<br>
+現行のpython-telegram-botは掲載コードとAPIが異なるため、旧コードをそのまま新規利用せず、利用する版を固定して公式サンプルへ合わせる。
 
 ## 作業時の注意点
 - APIキーとBotトークン<br>
@@ -33,7 +45,7 @@ python-telegram-botはバージョンで書き方が変わるため、記事の�
 
 【OpenWeatherMap】: https://openweathermap.org/<br>
 
-また、Freeプランでも毎分最大60回APIをコールでき、3時間毎の天気予報を5日後まで取得できるので学習用としては十分。<br>
+本文記載時はFreeプランで毎分60回までの呼出しと、3時間ごとの5日予報を利用できた。料金、呼出し上限、利用できるAPIは変更されるため、実装時はOpenWeatherMap公式の料金・APIページで現行条件を確認する。<br>
 そして、APIをコールするには、`API Key`が必要でアカウント作成する必要がある。
 
 - OpenWeatherMapのアカウント作成<br>
@@ -155,10 +167,9 @@ python-telegram-botはバージョンで書き方が変わるため、記事の�
         ![pid40_1](/static/tblog/img/pid40_1.png)
 
 - 「python-telegram-bot」のインストール<br>
-    pipからインストールするだけ。<br>
-    これでPythonで記述されたプログラムをTelegramが認識できるようになり、またその逆も可能となる。
+    掲載コードは旧版 \\(12.8\\) のAPIを使うため、再現する場合は隔離した仮想環境で版を固定する。新規実装では現行版の公式サンプルを使用する。
     ```bash
-    $ pip3 install python-telegram-bot
+    $ pip3 install 'python-telegram-bot==12.8'
     ```
 
 ### TelegramBotを使用した対話サンプル（オウム返し）
@@ -166,12 +177,13 @@ python-telegram-botはバージョンで書き方が変わるため、記事の�
 下記の（＊1）、（＊2）が上記で登録した`@GSHamaBot`のレスポンスをPythonでオウム返しする実装サンプルで、（＊1）のTelegramBotクラスは、GSHamaBot（Telegramサーバー側）との**通信処理**で、（＊2）のEchoSystemクラスは、Botが応答する内容の**制御処理**となる。
 
 - （＊1）TelegramBotクラス（telegram_bot.py）<br>
-    ※ 実行前に **TOKEN** を先ほど取得したアクセストークンに書換えること。
+    ※ 実行前にアクセストークンを環境変数`TELEGRAM_BOT_TOKEN`へ設定する。ソースコードへ直書きしない。
     ```python
+    import os
     from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-    # アクセストークン（先ほど発行されたアクセストークンに書換えること）
-    TOKEN = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    # アクセストークンは環境変数から取得
+    TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 
     class TelegramBot:
         def __init__(self, system):

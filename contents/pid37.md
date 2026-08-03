@@ -11,8 +11,8 @@ Pythonの高階関数として、map、filter、reduceの基本的な使い方�
   高階関数の意味と基本的な考え方を整理。
 - [map（要素別の演算）](#map要素別の演算)<br>
   map（要素別の演算）の仕組みと要点を具体例から整理。
-- [filter（指定要素の除外）](#filter指定要素の除外)<br>
-  filter（指定要素の除外）の意味と要点を具体例から整理。
+- [filter（条件に合う要素の抽出）](#filter条件に合う要素の抽出)<br>
+  条件を満たす元の要素だけを遅延評価で取り出す方法を整理。
 - [reduce（畳込み演算）](#reduce畳込み演算)<br>
   reduce（畳込み演算）の仕組みと要点を具体例から整理。
 
@@ -52,15 +52,13 @@ Pythonでは、関数もオブジェクトと同じように捉えるため、�
         ...         return x + y
         ...     return add_param
         ...
-        >>> #  h_order_func(5)の戻り値である add_param(y) に 10 を指定して実行
-        >>> h_order_func(5)(10)
+        >>> # h_order_func(5)が返す関数を受け取り、10を指定して実行
+        >>> add_five = h_order_func(5)
+        >>> add_five(10)
         15
         >>>
-        >>> #  ※ h_order_func(5) の 戻り値は、下記の add_param(y) の定義となり、x が 5 に置き換わっている状態となる
-        ...     def add_param(y):
-        ...         return 5 + y
-        >>>
     ```
+    `h_order_func(5)`が返す関数は、外側の関数へ渡した`x = 5`を保持する。そのため、返された関数へ`10`を渡すと`5 + 10`が計算される。
 
 - 関数を引数と戻り値の両方に持つ高階関数
     ```python
@@ -75,21 +73,19 @@ Pythonでは、関数もオブジェクトと同じように捉えるため、�
         >>> def add_five(x):
         ...     return x + 5
         >>>
-        >>> #  h_order_func(add_five)の戻り値である add_func(x, y) に 1, 2 を指定して実行
-        >>> h_order_func(add_five)(1, 2)
+        >>> # h_order_func(add_five)が返す関数を受け取り、1と2を指定して実行
+        >>> combined_func = h_order_func(add_five)
+        >>> combined_func(1, 2)
         8
         >>>
-        >>> #  ※ h_order_func(add_five) の 戻り値は、下記の add_func(x, y) の定義となり、関数 func(x) が 関数 add_five(x) に置き換えられた状態となる
-        ...     def add_func(x, y):
-        ...         return x + 5 + y
-        >>>
     ```
+    `h_order_func(add_five)`が返す関数では、`func(x)`として`add_five(x)`が呼ばれる。そのため、`combined_func(1, 2)`は`(1 + 5) + 2`となる。
 
 以降、高階関数 `map`, `filter`, `reduce` を実装サンプルで解説する。
 
 ### map（要素別の演算）
 
-`map(function, iterable)` は、第 \\(2\\) 引数（iterable）に指定したイテレータ（各要素の反復処理ができるインターフェース）の各要素に対して、第 \\(1\\)引数（function）を実行した結果をイテレータで返す。
+`map(function, iterable)` は、第 \\(2\\) 引数に指定したイテラブルの各要素へ、第 \\(1\\)引数の関数を適用した結果を返す。戻り値は遅延評価されるmapイテレータとなる。
 
 - 実装サンプル
     ```python
@@ -133,9 +129,9 @@ Pythonでは、関数もオブジェクトと同じように捉えるため、�
         >>>
     ```
 
-### filter（指定要素の除外）
+### filter（条件に合う要素の抽出）
 
-`filter(function, iterable)` は、第 \\(2\\) 引数（iterable）に指定したイテレータの各要素に対して、第 \\(1\\) 引数（function）の実行結果がTrueとなるイテレータを返す。
+`filter(function, iterable)` は、第 \\(2\\) 引数に指定したイテラブルの各要素を関数で判定し、結果がTrueとなる**元の要素**を返す。戻り値は遅延評価されるfilterイテレータとなる。
 
 - 実装サンプル
     ```python
@@ -169,7 +165,7 @@ Pythonでは、関数もオブジェクトと同じように捉えるため、�
         >>>
     ```
 
-- 上記の実装サンプルのmapを使用せず内包表記で記述
+- 上記の実装サンプルのfilterを使用せず内包表記で記述
     ```python
     $ python
         >>> # filter(is_plus, list_a) と同義
@@ -188,7 +184,7 @@ Pythonでは、関数もオブジェクトと同じように捉えるため、�
 **第3引数**（initializer）は、初期値を指定することができる。
 初期値を指定した場合、最初の演算は、**初期値** と第 \\(2\\) 引数（iterable）の先頭要素で第 \\(1\\) 引数（function）を実行する。
 
-※ **内包表記** は、**畳込み演算** に対応していないため、**reduce** は、内包表記で表現できない。
+※ 内包表記には、複数要素を一つの値へ直接集約する構文はない。合計には`sum()`などの専用関数を優先し、一般的な畳込みが必要な場合に`reduce()`を検討する。
 
 - 実装サンプル
     ```python

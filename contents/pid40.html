@@ -5,6 +5,8 @@
   <p>ここでは、API利用登録、Bot作成、ライブラリのインストール、オウム返しBotによる疎通確認までを扱う。</p>
   <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
+    <li><a href="#対象環境と利用上の注意" class="link-secondary">対象環境と利用上の注意</a><br>
+      本文記載時の環境と現在そのまま利用できない箇所を確認。</li>
     <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
       設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
     <li><a href="#天気情報を取得するopenweathermapwebapiの概要と利用登録" class="link-secondary">天気情報を取得する「OpenWeatherMap」WebAPIの概要と利用登録</a><br>
@@ -14,6 +16,17 @@
       メッセンジャーアプリ「Telegram」の利用登録と「python-telegram-bot」のインストールの手順と確認ポイントを整理。</li>
     <li><a href="#telegrambotを使用した対話サンプルオウム返し" class="link-secondary">TelegramBotを使用した対話サンプル（オウム返し）</a><br>
       TelegramBotを使用した対話サンプル（オウム返し）の意味と要点を具体例から整理。</li>
+  </ul>
+  <h2 id="対象環境と利用上の注意">対象環境と利用上の注意</h2>
+  <ul>
+    <li>本文記載時の環境<br>
+      2020年7月時点のOpenWeatherMap APIと、python-telegram-bot \(12.8\)の同期APIを使った手順。</li>
+    <li>確認時期<br>
+      2026年8月にTelegram Bot API、python-telegram-bot、OpenWeatherMapの公式資料と照合し、記載内容を見直した。</li>
+    <li>現在そのまま利用できない箇所<br>
+      掲載コード全体は現行サービス・ライブラリで再実行していない。<br>
+      料金、呼出し上限、登録画面、APIレスポンスは変更され得る。<br>
+      現行のpython-telegram-botは掲載コードとAPIが異なるため、旧コードをそのまま新規利用せず、利用する版を固定して公式サンプルへ合わせる。</li>
   </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <ul>
@@ -29,7 +42,7 @@
   <p>天気情報は、無償で天気情報を取得できる<code>OpenWeatherMap</code>のWebAPIを用いて取得する。<br>
     下記トップページにアクセスすると<code>GUI</code>でも天気情報を確認することができる。</p>
   <p>【OpenWeatherMap】: <a href="https://openweathermap.org/" class="link-secondary">https://openweathermap.org/</a><br></p>
-  <p>また、Freeプランでも毎分最大60回APIをコールでき、3時間毎の天気予報を5日後まで取得できるので学習用としては十分。<br>
+  <p>本文記載時はFreeプランで毎分60回までの呼出しと、3時間ごとの5日予報を利用できた。料金、呼出し上限、利用できるAPIは変更されるため、実装時はOpenWeatherMap公式の料金・APIページで現行条件を確認する。<br>
     そして、APIをコールするには、<code>API Key</code>が必要でアカウント作成する必要がある。</p>
   <ul>
     <li>
@@ -101,7 +114,7 @@
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># 結果出力</span>
     &gt;&gt;&gt; response.json()[<span class="hljs-string">&quot;list&quot;</span>][<span class="hljs-number">0</span>]
-    {<span class="hljs-string">&#x27;dt&#x27;</span>: <span class="hljs-number">1595084400</span>, <span class="hljs-string">&#x27;main&#x27;</span>: {<span class="hljs-string">&#x27;temp&#x27;</span>: <span class="hljs-number">24.97</span>, <span class="hljs-string">&#x27;feels_like&#x27;</span>: <span class="hljs-number">28.68</span>, <span class="hljs-string">&#x27;temp_min&#x27;</span>: <span class="hljs-number">24.37</span>, <span class="hljs-string">&#x27;temp_max&#x27;</span>: <span class="hljs-number">24.97</span>, <span class="hljs-string">&#x27;pressure&#x27;</span>: <span class="hljs-number">1010</span>, <span class="hljs-string">&#x27;sea_level&#x27;</span>: <span class="hljs-number">1010</span>, <span class="hljs-string">&#x27;grnd_level&#x27;</span>: <span class="hljs-number">1009</span>, <span class="hljs-string">&#x27;humidity&#x27;</span>: <span class="hljs-number">79</span>, <span class="hljs-string">&#x27;temp_kf&#x27;</span>: <span class="hljs-number">0.6</span>}, <span class="hljs-string">&#x27;weather&#x27;</span>: [{<span class="hljs-string">&#x27;id&#x27;</span>: <span class="hljs-number">804</span>, <span class="hljs-string">&#x27;main&#x27;</span>: <span class="hljs-string">&#x27;Clouds&#x27;</span>, <span class="hljs-string">&#x27;description&#x27;</span>: <span class="hljs-string">&#x27;厚い雲&#x27;</span>, <span class="hljs-string">&#x27;icon&#x27;</span>: <span class="hljs-string">&#x27;04n&#x27;</span>}], <span class="hljs-string">&#x27;clouds&#x27;</span>: {<span class="hljs-string">&#x27;all&#x27;</span>: <span class="hljs-number">100</span>}, <span class="hljs-string">&#x27'wind&#x27;</span>: {<span class="hljs-string">&#x27;speed&#x27;</span>: <span class="hljs-number">0.72</span>, <span class="hljs-string">&#x27;deg&#x27;</span>: <span class="hljs-number">54</span>}, <span class="hljs-string">&#x27;visibility&#x27;</span>: <span class="hljs-number">10000</span>, <span class="hljs-string">&#x27;pop&#x27;</span>: <span class="hljs-number">0</span>, <span class="hljs-string">&#x27;sys&#x27;</span>: {<span class="hljs-string">&#x27;pod&#x27;</span>: <span class="hljs-string">&#x27;n&#x27;</span>}, <span class="hljs-string">&#x27;dt_txt&#x27;</span>: <span class="hljs-string">&#x27;2020-07-18 15:00:00&#x27;</span>}
+    {<span class="hljs-string">&#x27;dt&#x27;</span>: <span class="hljs-number">1595084400</span>, <span class="hljs-string">&#x27;main&#x27;</span>: {<span class="hljs-string">&#x27;temp&#x27;</span>: <span class="hljs-number">24.97</span>, <span class="hljs-string">&#x27;feels_like&#x27;</span>: <span class="hljs-number">28.68</span>, <span class="hljs-string">&#x27;temp_min&#x27;</span>: <span class="hljs-number">24.37</span>, <span class="hljs-string">&#x27;temp_max&#x27;</span>: <span class="hljs-number">24.97</span>, <span class="hljs-string">&#x27;pressure&#x27;</span>: <span class="hljs-number">1010</span>, <span class="hljs-string">&#x27;sea_level&#x27;</span>: <span class="hljs-number">1010</span>, <span class="hljs-string">&#x27;grnd_level&#x27;</span>: <span class="hljs-number">1009</span>, <span class="hljs-string">&#x27;humidity&#x27;</span>: <span class="hljs-number">79</span>, <span class="hljs-string">&#x27;temp_kf&#x27;</span>: <span class="hljs-number">0.6</span>}, <span class="hljs-string">&#x27;weather&#x27;</span>: [{<span class="hljs-string">&#x27;id&#x27;</span>: <span class="hljs-number">804</span>, <span class="hljs-string">&#x27;main&#x27;</span>: <span class="hljs-string">&#x27;Clouds&#x27;</span>, <span class="hljs-string">&#x27;description&#x27;</span>: <span class="hljs-string">&#x27;厚い雲&#x27;</span>, <span class="hljs-string">&#x27;icon&#x27;</span>: <span class="hljs-string">&#x27;04n&#x27;</span>}], <span class="hljs-string">&#x27;clouds&#x27;</span>: {<span class="hljs-string">&#x27;all&#x27;</span>: <span class="hljs-number">100</span>}, <span class="hljs-string">&#x27;wind&#x27;</span>: {<span class="hljs-string">&#x27;speed&#x27;</span>: <span class="hljs-number">0.72</span>, <span class="hljs-string">&#x27;deg&#x27;</span>: <span class="hljs-number">54</span>}, <span class="hljs-string">&#x27;visibility&#x27;</span>: <span class="hljs-number">10000</span>, <span class="hljs-string">&#x27;pop&#x27;</span>: <span class="hljs-number">0</span>, <span class="hljs-string">&#x27;sys&#x27;</span>: {<span class="hljs-string">&#x27;pod&#x27;</span>: <span class="hljs-string">&#x27;n&#x27;</span>}, <span class="hljs-string">&#x27;dt_txt&#x27;</span>: <span class="hljs-string">&#x27;2020-07-18 15:00:00&#x27;</span>}
     &gt;&gt;&gt;
     &gt;&gt;&gt; response.json()[<span class="hljs-string">&quot;list&quot;</span>][<span class="hljs-number">1</span>]
     {<span class="hljs-string">&#x27;dt&#x27;</span>: <span class="hljs-number">1595095200</span>, <span class="hljs-string">&#x27;main&#x27;</span>: {<span class="hljs-string">&#x27;temp&#x27;</span>: <span class="hljs-number">24.65</span>, <span class="hljs-string">&#x27;feels_like&#x27;</span>: <span class="hljs-number">27.75</span>, <span class="hljs-string">&#x27;temp_min&#x27;</span>: <span class="hljs-number">24.41</span>, <span class="hljs-string">&#x27;temp_max&#x27;</span>: <span class="hljs-number">24.65</span>, <span class="hljs-string">&#x27;pressure&#x27;</span>: <span class="hljs-number">1010</span>, <span class="hljs-string">&#x27;sea_level&#x27;</span>: <span class="hljs-number">1010</span>, <span class="hljs-string">&#x27;grnd_level&#x27;</span>: <span class="hljs-number">1009</span>, <span class="hljs-string">&#x27;humidity&#x27;</span>: <span class="hljs-number">75</span>, <span class="hljs-string">&#x27;temp_kf&#x27;</span>: <span class="hljs-number">0.24</span>}, <span class="hljs-string">&#x27;weather&#x27;</span>: [{<span class="hljs-string">&#x27;id&#x27;</span>: <span class="hljs-number">804</span>, <span class="hljs-string">&#x27;main&#x27;</span>: <span class="hljs-string">&#x27;Clouds&#x27;</span>, <span class="hljs-string">&#x27;description&#x27;</span>: <span class="hljs-string">&#x27;厚い雲&#x27;</span>, <span class="hljs-string">&#x27;icon&#x27;</span>: <span class="hljs-string">&#x27;04n&#x27;</span>}], <span class="hljs-string">&#x27;clouds&#x27;</span>: {<span class="hljs-string">&#x27;all&#x27;</span>: <span class="hljs-number">100</span>}, <span class="hljs-string">&#x27;wind&#x27;</span>: {<span class="hljs-string">&#x27;speed&#x27;</span>: <span class="hljs-number">0.79</span>, <span class="hljs-string">&#x27;deg&#x27;</span>: <span class="hljs-number">157</span>}, <span class="hljs-string">&#x27;visibility&#x27;</span>: <span class="hljs-number">10000</span>, <span class="hljs-string">&#x27;pop&#x27;</span>: <span class="hljs-number">0</span>, <span class="hljs-string">&#x27;sys&#x27;</span>: {<span class="hljs-string">&#x27;pod&#x27;</span>: <span class="hljs-string">&#x27;n&#x27;</span>}, <span class="hljs-string">&#x27;dt_txt&#x27;</span>: <span class="hljs-string">&#x27;2020-07-18 18:00:00&#x27;</span>}
@@ -159,9 +172,8 @@
     </li>
     <li>
       <p>「python-telegram-bot」のインストール<br>
-        pipからインストールするだけ。<br>
-        これでPythonで記述されたプログラムをTelegramが認識できるようになり、またその逆も可能となる。</p>
-      <pre><code class="language-bash">$ pip3 install python-telegram-bot
+        掲載コードは旧版 \(12.8\) のAPIを使うため、再現する場合は隔離した仮想環境で版を固定する。新規実装では現行版の公式サンプルを使用する。</p>
+      <pre><code class="language-bash">$ pip3 install &#x27;python-telegram-bot==12.8&#x27;
 </code></pre>
     </li>
   </ul>
@@ -172,11 +184,12 @@
   <ul>
     <li>
       <p>（＊1）TelegramBotクラス（telegram_bot.py）<br>
-        ※ 実行前に <strong>TOKEN</strong> を先ほど取得したアクセストークンに書換えること。</p>
-      <pre><code class="language-python"><span class="hljs-keyword">from</span> telegram.ext <span class="hljs-keyword">import</span> Updater, CommandHandler, MessageHandler, Filters
+        ※ 実行前にアクセストークンを環境変数<code>TELEGRAM_BOT_TOKEN</code>へ設定する。ソースコードへ直書きしない。</p>
+      <pre><code class="language-python"><span class="hljs-keyword">import</span> os
+<span class="hljs-keyword">from</span> telegram.ext <span class="hljs-keyword">import</span> Updater, CommandHandler, MessageHandler, Filters
 
-<span class="hljs-comment"># アクセストークン（先ほど発行されたアクセストークンに書換えること）</span>
-TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&quot;</span>
+<span class="hljs-comment"># アクセストークンは環境変数から取得</span>
+TOKEN = os.environ[<span class="hljs-string">&quot;TELEGRAM_BOT_TOKEN&quot;</span>]
 
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">TelegramBot</span>:
     <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, system</span>):

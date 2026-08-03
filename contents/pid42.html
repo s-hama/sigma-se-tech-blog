@@ -5,6 +5,8 @@
   <p>ここでは、SVMの準備、発話行為タイプとコンセプトの定義、学習データ生成の流れを確認する。</p>
   <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
+    <li><a href="#対象環境と利用上の注意" class="link-secondary">対象環境と利用上の注意</a><br>
+      本文記載時の環境と現在そのまま利用できない箇所を確認。</li>
     <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
       設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
     <li><a href="#タスク指向型対話システムフレームベースのシステム構成について" class="link-secondary">タスク指向型対話システム（フレームベース）のシステム構成について</a><br>
@@ -13,6 +15,16 @@
       フレームと対話行為を推定するSVM（sklearn）の概要とインストールの手順と確認ポイントを整理。</li>
     <li><a href="#学習データの作成" class="link-secondary">学習データの作成</a><br>
       学習データの作成の手順と確認ポイントを整理。</li>
+  </ul>
+  <h2 id="対象環境と利用上の注意">対象環境と利用上の注意</h2>
+  <ul>
+    <li>本文記載時の環境<br>
+      CentOS \(7\)、Python \(3.6\)系、当時のscikit-learn・MeCab・dillを前提とした学習用実装。</li>
+    <li>確認時期<br>
+      2026年8月にscikit-learn公式資料と照合し、インストール方法、モデル評価、保存時の注意を見直した。</li>
+    <li>現在そのまま利用できない箇所<br>
+      データ生成・学習コード全体は現行環境で再実行していない。<br>
+      旧OSや未固定の旧ライブラリをそのまま新規利用せず、現行環境では依存版を固定し、学習用・評価用データを分離して結果を検証する。</li>
   </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <ul>
@@ -39,7 +51,7 @@
     まず、<strong>フレーム</strong>とは、一度に複数の情報を受付けられるように<strong>スロット</strong>と呼ばれる<strong>属性</strong>と<strong>値</strong>からなる入力情報を複数持つデータ構造のことで、遂行手法としてフレームベースとも呼ばれる。
   </p>
   <p>
-    フレームベースの基本処理構成は、<strong>発話処理部</strong>、<strong>対話管理部</strong>（状態更新、行動決定）、<strong>発話生成部</strong>から成っていて、<strong>パイプラインアーキテクチャ</strong>または<strong>Vモデル</strong>とも呼ばれる。<br>
+    フレームベースの基本処理構成は、<strong>発話処理部</strong>、<strong>対話管理部</strong>（状態更新、行動決定）、<strong>発話生成部</strong>を順に接続するパイプラインとして表せる。ソフトウェア開発工程を表す<strong>Vモデル</strong>とは別の概念となる。<br>
     ※ ここでは、フレームベースに関する解説は概要レベルに留め、次の記事以降でSVMやCRFを絡めた実装を例に掘り下げていく。</p>
   <p>始めのユーザーの発話直後に処理される<strong>発話処理部</strong>では、発話内容から<strong>発話の意図となる対話行為</strong>を推定する。</p>
   <p><strong>対話行為</strong>は、対話の大分類（意図）を表す<strong>対話行為タイプ</strong>とその詳細情報である<strong>コンセプト</strong>で構成される。</p>
@@ -52,12 +64,12 @@
       （上記フレームのスロット（属性／値）と（＊2）のスロットは表現は同じ「スロット」という表現だが意味が違うので混同注意。）</li>
   </ul>
   <p>この<strong>対話行為タイプ</strong>を推定するためにパターン識別用の機械学習方法の一つである<strong>SVM</strong>（support vector machine）を使用する。<br>
-    ※ パターン識別の理屈については、ここで触れないがデータを2つのグループに分類する問題に優れており、2分類化することにおいては、最も優秀な識別能力を持つとされる。</p>
+    ※ SVMは2値分類を基本とするが、scikit-learnの<code>SVC</code>は複数の2値分類器を組み合わせて多クラス分類にも対応する。どの分類器が最も良いかは、データ量、特徴量、評価指標などによって異なる。</p>
   <p>SVMによる学習は、Pythonの機械学習ライブラリである<strong>sklearn</strong>（scikit-learn）を用いて実装する。</p>
   <ul>
     <li>
-      <p>sklearn, dillのインストール</p>
-      <pre><code class="language-bash">$ pip3 install sklearn
+      <p>scikit-learn、dillのインストール</p>
+      <pre><code class="language-bash">$ pip3 install scikit-learn
 </code></pre>
       <p>また、学習結果を保存するため シリアライズモジュールである<strong>dill</strong>もインストール。</p>
       <pre><code class="language-bash">$ pip3 install dill
@@ -224,24 +236,24 @@ types = [<span class="hljs-string">&quot;天気&quot;</span>,<span class="hljs-s
         <span class="hljs-keyword">if</span> elem.tag == <span class="hljs-string">&quot;place&quot;</span>:
             pref = random.choice(prefs)
             buf += pref
-        <span class="hljs-keyword"></span>elif</span> elem.tag == <span class="hljs-string">&quot;date&quot;</span>:
+        <span class="hljs-keyword">elif</span> elem.tag == <span class="hljs-string">&quot;date&quot;</span>:
             date = random.choice(dates)
             buf += date
-        <span class="hljs-keyword"></span>elif</span> elem.tag == <span class="hljs-string">&quot;type&quot;</span>:
+        <span class="hljs-keyword">elif</span> elem.tag == <span class="hljs-string">&quot;type&quot;</span>:
             _<span class="hljs-built_in">type</span> =  random.choice(types)
             buf += _<span class="hljs-built_in">type</span>
         <span class="hljs-keyword">if</span> elem.tail <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>:
             buf += elem.tail
-    <span class="hljs-keyword"></span>return</span> buf
+    <span class="hljs-keyword">return</span> buf
 
-<span class="hljs-comment"></span># 学習用ファイルの書き出し先</span>
+<span class="hljs-comment"># 学習用ファイルの書き出し先</span>
 fp = <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;da_samples.dat&quot;</span>,<span class="hljs-string">&quot;w&quot;</span>)
 
 da = <span class="hljs-string">&#x27;&#x27;</span>
 <span class="hljs-comment"># examples.txt ファイルの読み込み</span>
 <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;examples.txt&quot;</span>,<span class="hljs-string">&quot;r&quot;</span>):
     line = line.rstrip()
-    <span class="hljs-comment"></span># da= から始まる行から対話行為タイプを取得</span>
+    <span class="hljs-comment"># da= から始まる行から対話行為タイプを取得</span>
     <span class="hljs-keyword">if</span> re.search(<span class="hljs-string">r&#x27;^da=&#x27;</span>,line):
         da = line.replace(<span class="hljs-string">&#x27;da=&#x27;</span>,<span class="hljs-string">&#x27;&#x27;</span>)
     <span class="hljs-comment"># 空行は無視</span>
@@ -253,7 +265,7 @@ da = <span class="hljs-string">&#x27;&#x27;</span>
         <span class="hljs-comment"># 各サンプル文を1000倍に増やす</span>
         <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1000</span>):
             sample = random_generate(root)
-            <span class="hljs-comment"></span># 対話行為タイプ，発話文，タグとその文字位置を学習用ファイルに書き出す</span>
+            <span class="hljs-comment"># 対話行為タイプ，発話文，タグとその文字位置を学習用ファイルに書き出す</span>
             fp.write(da + <span class="hljs-string">&quot;\t&quot;</span> + sample + <span class="hljs-string">&quot;\n&quot;</span>)
 
 fp.close()
@@ -326,15 +338,15 @@ fp = <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;da_
         <span class="hljs-keyword">if</span> elem.tag == <span class="hljs-string">&quot;place&quot;</span>:
             pref = random.choice(prefs)
             buf += pref
-        <span class="hljs-keyword"></span>elif</span> elem.tag == <span class="hljs-string">&quot;date&quot;</span>:
+        <span class="hljs-keyword">elif</span> elem.tag == <span class="hljs-string">&quot;date&quot;</span>:
             date = random.choice(dates)
             buf += date
-        <span class="hljs-keyword"></span>elif</span> elem.tag == <span class="hljs-string">&quot;type&quot;</span>:
+        <span class="hljs-keyword">elif</span> elem.tag == <span class="hljs-string">&quot;type&quot;</span>:
             _<span class="hljs-built_in">type</span> =  random.choice(types)
             buf += _<span class="hljs-built_in">type</span>
         <span class="hljs-keyword">if</span> elem.tail <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>:
             buf += elem.tail
-    <span class="hljs-keyword"></span>return</span> buf
+    <span class="hljs-keyword">return</span> buf
 </code></pre>
         </li>
       </ul>
@@ -358,7 +370,8 @@ fp.close()
     </li>
     <li>
       <p>da_samples.datの確認<br>
-        代表データ（examples.txt）の学習データが40個でそれぞれ\(1000\)個の学習データを出力しているため、da_samples.datは、\(10000\)個のデータとなっている。</p>
+        代表データ（examples.txt）が40個あり、それぞれから\(1000\)個を生成するため、重複を含めた出力行数は \(40 \times 1000 = 40000\) 行となる。</p>
+      <p>※ 同じテンプレートから置換して作った文は互いに強く似る。モデル評価では、生成後の行を無作為に分けるだけでなく、元テンプレート単位で学習用と評価用を分離し、類似文の混入によるデータ漏洩を避ける。</p>
       <pre><code class="language-bash">$ <span class="hljs-built_in">cat</span> ~/gitlocalrep/dsbook/da_samples.dat
 request-weather 高知
 request-weather 大分

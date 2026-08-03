@@ -2,11 +2,13 @@
 Python - タスク指向型対話：3/5 状態遷移ベースの天気案内Bot実装
 
 ## 概要
-MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベースの天気情報案内Botを実装する。
+SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベースの天気情報案内Botを実装する。先行記事ではMeCabを準備したが、この記事の掲載コードは都道府県名などの単純な部分文字列検索を使い、MeCabによる形態素解析は行っていない。
 この方式では、ユーザーの発話内容を解析し、対話状態を更新しながら、必要な情報がそろったタイミングで天気APIを呼び出す。どの状態で何を聞くか、どの入力で状態が変わるかを明確にできる点が特徴となる。
 ここでは、状態遷移ベースの実装コード、処理の流れ、実行確認を順番に確認する。
 
 ## この記事の構成
+- [対象環境と利用上の注意](#対象環境と利用上の注意)<br>
+  本文記載時の環境と現在そのまま利用できない箇所を確認。
 - [状態遷移ベースの実装](#状態遷移ベースの実装)<br>
   状態遷移ベースの実装の意味と要点を具体例から整理。
 - [状態遷移ベースの解説](#状態遷移ベースの解説)<br>
@@ -14,10 +16,19 @@ MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベー
 - [状態遷移ベースの実行確認](#状態遷移ベースの実行確認)<br>
   状態遷移ベースの実行について、確認する項目と結果の見方を整理。
 
+## 対象環境と利用上の注意
+- 本文記載時の環境<br>
+CentOS \\(7\\)、Python \\(3.6\\)系、PySide2、python-telegram-bot \\(12.8\\)、2020年時点のOpenWeatherMap APIを前提とした実装。
+- 確認時期<br>
+2026年8月に状態遷移の説明を参照先の公式資料と照合し、記載内容を見直した。
+- 現在そのまま利用できない箇所<br>
+掲載コード全体は現行環境で再実行していない。<br>
+旧OS・旧Telegram API・PySide2をそのまま新規利用せず、現行版へ移植する際は非同期API、PySide6、資格情報管理、タイムゾーン、通信エラー処理を再設計する。
+
 ## 実装内容
 ### 状態遷移ベースの実装
 
-先行記事で解説した文章解析の`MeCab`、状態遷移の`SCXML`、天気情報取得の`OpenWeatherMap`、メッセンジャーアプリの`Telegram`を使用して、タスク指向型の天気情報案内対話システムを実装する。
+状態遷移の`SCXML`、天気情報取得の`OpenWeatherMap`、メッセンジャーアプリの`Telegram`を使用して、タスク指向型の天気情報案内対話システムを実装する。発話解析は学習用に単純化し、文字列に都道府県名、「今日」「明日」、「天気」「気温」が含まれるかを判定する。
 
 - SCXML (states.scxml)<br>
     以下、天気情報案内の状態遷移。
@@ -45,8 +56,9 @@ MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベー
 - WeatherSystemクラス (weather_system.py)<br>
     Telegramクライアントの発話内容を解析し、状態遷移に応じた応答制御と遷移制御を行う。<br>
 
-    ※ 実行前に`APPID`を自身のものに書換えること。
+    ※ 実行前にOpenWeatherMapのAPIキーを環境変数`OPENWEATHER_API_KEY`へ設定する。
     ```python
+    import os
     import sys
     from PySide2 import QtCore, QtScxml
     import requests
@@ -85,7 +97,7 @@ MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベー
 
         current_weather_url = 'https://api.openweathermap.org/data/2.5/weather'
         forecast_url = 'https://api.openweathermap.org/data/2.5/forecast'
-        appid = '' # 自身のAPPIDを入れてください
+        appid = os.environ['OPENWEATHER_API_KEY']
 
         def __init__(self):
             # Qtに関するおまじない
@@ -556,7 +568,9 @@ MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベー
 - 福岡で明日正午頃（12時～15時までのどこか）の天気と気温
     ![pid41_2](/static/tblog/img/pid41_2.png)
 
-今日（東京）、明日（福岡）ともに実装に沿った期待通りの結果が得られた。
+画像は2020年8月の旧環境で取得した実行結果であり、当時の掲載実装に沿った応答を確認した記録となる。現行APIでの同じ結果は未検証。
+
+※ 掲載実装はローカル時刻から「明日正午」のUNIX時刻を作るため、サーバーのタイムゾーンが対象地域と異なると予報時刻がずれる。また、HTTPタイムアウト、ステータス確認、再試行を実装していないため、そのまま本番利用しない。
 
 ## まとめ
 - 状態遷移ベースでは、現在の状態と入力に応じて次の処理を決める。

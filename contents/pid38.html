@@ -5,6 +5,8 @@
   <p>ここでは、try、except、else、finallyの役割と、代表的な組込み例外クラスの位置づけを確認する。</p>
   <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
+    <li><a href="#対象環境と利用上の注意" class="link-secondary">対象環境と利用上の注意</a><br>
+      本文記載時の環境と現在そのまま利用できない箇所を確認。</li>
     <li><a href="#例外処理と例外クラス" class="link-secondary">例外処理と例外クラス</a><br>
       例外処理と例外クラスの意味と要点を具体例から整理。</li>
     <li><a href="#組込み例外クラス一覧" class="link-secondary">組込み例外クラス一覧</a><br>
@@ -12,28 +14,40 @@
     <li><a href="#組込み例外クラスのツリー表示サンプル" class="link-secondary">組込み例外クラスのツリー表示サンプル</a><br>
       組込み例外クラスのツリー表示サンプルをコードや具体例で確認。</li>
   </ul>
+  <h2 id="対象環境と利用上の注意">対象環境と利用上の注意</h2>
+  <ul>
+    <li>本文記載時の環境<br>
+      Python \(3.6.4\)。掲載した例外クラスのツリー出力は、この環境で取得したもの。</li>
+    <li>確認時期<br>
+      2026年8月にPython公式ドキュメントと照合し、例外処理の基本仕様と記載内容を見直した。</li>
+    <li>現在そのまま利用できない箇所<br>
+      掲載コード全体を現行Pythonでは再実行していない。<br>
+      Pythonの更新で例外階層は追加・変更されるため、掲載ツリーを現行版の完全な一覧として利用せず、利用中のバージョンの公式ドキュメントを確認する。</li>
+  </ul>
   <h2 id="解説と実装サンプル">解説と実装サンプル</h2>
   <h3 id="例外処理と例外クラス">例外処理と例外クラス</h3>
   <p>
     文字通り、<strong>例外</strong>（正常系でない想定外のエラー）が発生した場合に対処する処理を<strong>例外処理</strong>と呼び、Pythonでは、メイン処理を<strong>try句</strong>に、例外処理を<strong>except句</strong>に書く。</p>
   <p>また、<strong>except句</strong>に指定する<strong>例外クラス</strong>によって、どの例外をキャッチするか指定することができる。</p>
   <ul>
-    <li>例外クラス BaseException を指定した場合の構文例
+    <li><code>ValueError</code>を捕捉し、<code>else</code>と<code>finally</code>を使う構文例
       <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">try</span>:
-<span class="hljs-meta">... </span>    <span class="hljs-comment"># メイン処理を記載…</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">except</span> BaseException:
-<span class="hljs-meta">... </span>    <span class="hljs-comment"># BaseExceptionクラスでキャッチした場合の例外処理を記載…</span>
-&gt;&gt;&gt;
+<span class="hljs-meta">... </span>    value = <span class="hljs-built_in">int</span>(<span class="hljs-string">&#x27;123&#x27;</span>)
+<span class="hljs-meta">... </span><span class="hljs-keyword">except</span> <span class="hljs-built_in">ValueError</span>:
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;整数へ変換できません&#x27;</span>)
+<span class="hljs-meta">... </span><span class="hljs-keyword">else</span>:
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(value)    <span class="hljs-comment"># 例外が発生しなかった場合だけ実行</span>
+<span class="hljs-meta">... </span><span class="hljs-keyword">finally</span>:
+<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;処理終了&#x27;</span>)    <span class="hljs-comment"># 例外の有無にかかわらず実行</span>
+<span class="hljs-number">123</span>
+処理終了
 </code></pre>
     </li>
   </ul>
-  <p>
-    ただし、<code>BaseException</code>は、Pythonすべての組込み<strong>例外クラス</strong>の派生元（基底）となっており、すべての例外キャッチしてしまうため（ユーザーの妨げになる場合もあるため）、<code>Exception</code>クラス等のキャッチしたい用途に応じた<strong>例外クラス</strong>を指定する。
-  </p>
+  <p><code>BaseException</code>は<code>SystemExit</code>や<code>KeyboardInterrupt</code>も含む最上位の基底クラスであり、通常のアプリケーション処理で直接捕捉しない。可能な限り<code>ValueError</code>など原因に対応する具体的な例外クラスを指定する。</p>
   <h3 id="組込み例外クラス一覧">組込み例外クラス一覧</h3>
-  <p>以下、Pythonの組込み <strong>例外クラス</strong>とそれぞれの概要。<br>
-    すべて前項で記載した <code>BaseException</code>から派生する。<br></p>
+  <p>以下は、本文記載時の環境を基準にした代表的な組込み <strong>例外クラス</strong>とそれぞれの概要。すべて<code>BaseException</code>から派生するが、一覧は現行版の全クラスを網羅しない。<br></p>
   <table class="table" style="width: 100%; table-layout: fixed;">
     <thead>
       <tr>
@@ -76,7 +90,7 @@
       </tr>
       <tr>
         <td>&nbsp;┃┣ FloatingPointError</td>
-        <td>浮動小数点の演算で失敗した場合。※ 3.7以降のバージョンでは使われていないので注意。（＊1）</td>
+        <td>浮動小数点演算に関する例外クラス。Python公式ドキュメントでは「現在は使われていない」とされている。</td>
       </tr>
       <tr>
         <td>&nbsp;┃┣ OverflowError</td>
@@ -332,7 +346,7 @@
     </li>
     <li>
       <p>上記の実行結果</p>
-      <pre><code class="language-python">Python Version: <span class="hljs-number">3.6</span><span class="hljs-number">.4</span>
+      <pre><code class="language-text">Python Version: <span class="hljs-number">3.6</span><span class="hljs-number">.4</span>
 
 BaseException
 <span class="hljs-meta">... </span>Exception

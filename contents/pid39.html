@@ -5,6 +5,8 @@
   <p>ここでは、対話システムの構成、MeCabによる発話解析、SCXMLによる状態定義の準備を確認する。</p>
   <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
+    <li><a href="#対象環境と利用上の注意" class="link-secondary">対象環境と利用上の注意</a><br>
+      本文記載時の環境と現在そのまま利用できない箇所を確認。</li>
     <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
       設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
     <li><a href="#タスク指向型対話システム-状態遷移ベース-のシステム構成について" class="link-secondary">タスク指向型対話システム (状態遷移ベース) のシステム構成について</a><br>
@@ -13,6 +15,16 @@
       対話の文章を解析する「MeCab」の概要とインストールの手順と確認ポイントを整理。</li>
     <li><a href="#状態遷移によるタスクを遂行するscxmlの概要とインストール" class="link-secondary">状態遷移によるタスクを遂行する「SCXML」の概要とインストール</a><br>
       状態遷移によるタスクを遂行する「SCXML」の概要とインストールの手順と確認ポイントを整理。</li>
+  </ul>
+  <h2 id="対象環境と利用上の注意">対象環境と利用上の注意</h2>
+  <ul>
+    <li>本文記載時の環境<br>
+      CentOS \(7\)、Python \(3.6\)系、PySide2 \(5.15.0\)、Windows \(10\)版Telegramを前提とした手順。</li>
+    <li>確認時期<br>
+      2026年8月にMeCab、SCXML、Qt for Pythonの公式資料と照合し、記載内容を見直した。</li>
+    <li>現在そのまま利用できない箇所<br>
+      掲載コマンドとコード全体は現行環境で再実行していない。<br>
+      CentOS \(7\)とPython \(3.6\)は新規構築に使用せず、現行のサポート対象OS・PythonとPySide6への移行資料を確認する。</li>
   </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
   <ul>
@@ -91,14 +103,14 @@ EOS
 
 mecab = MeCab.Tagger()
 
-<span class="hljs-comment"></span># python3-mecabのバグ回避のため，空文字をparse</span>
+<span class="hljs-comment"># python3-mecabのバグ回避のため，空文字をparse</span>
 mecab.parse(<span class="hljs-string">&#x27;&#x27;</span>)
 
-<span class="hljs-comment"></span># 標準入力からテキストを受け取る</span>
-text = <span class="hljs-built_in">input</span>(<span class="hljs-string">&quot;&amp;gt;&quot;</span>)
+<span class="hljs-comment"># 標準入力からテキストを受け取る</span>
+text = <span class="hljs-built_in">input</span>(<span class="hljs-string">&quot;&gt;&quot;</span>)
 
 node = mecab.parseToNode(text)
-<span class="hljs-keyword"></span>while</span> node:
+<span class="hljs-keyword">while</span> node:
     <span class="hljs-built_in">print</span>(node.surface, node.feature)
     node = node.<span class="hljs-built_in">next</span>
 </code></pre>
@@ -109,9 +121,9 @@ node = mecab.parseToNode(text)
         <li>
           <p>対話モード (インタプリタ)で確認</p>
           <pre><code class="language-python">$ python
-<span class="hljs-meta"></span>&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> MeCab
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> MeCab
 &gt;&gt;&gt;
-<span class="hljs-meta"></span>&gt;&gt;&gt; </span>mecab = MeCab.Tagger() <span class="hljs-comment"># MeCabのインスタンス生成</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>mecab = MeCab.Tagger() <span class="hljs-comment"># MeCabのインスタンス生成</span>
 Failed when trying to initialize MeCab. Some things to check:
 ...（省略）...
 Traceback (most recent call last):
@@ -181,7 +193,7 @@ $ nkf -w8 --overwrite ~/gitlocalrep/dsbook/mecab-python3_test.py
         PythonでGUI作成のために用いられる <strong>Qtライブラリ</strong>の処理系である<strong>Qt for
           Python</strong>（PySide2）の<strong>QScxmlStateMachine</strong>という <strong>有限状態オートマトン</strong>を表現するクラスを使用。</p>
       <p>PySide2をインストール(ver.2-5.15.0)</p>
-      <pre><code class="language-bash">$ <span class="hljs-built_in"></span>source</span> /var/www/vops/bin/activate <span class="hljs-comment"># 仮想環境起動</span>
+      <pre><code class="language-bash">$ <span class="hljs-built_in">source</span> /var/www/vops/bin/activate <span class="hljs-comment"># 仮想環境起動</span>
 $ pip3.6 install PySide2 <span class="hljs-comment"># PySide2をインストール</span>
 </code></pre>
       <p>上記でPythonから <strong>SCXML</strong> を使えるようになった。</p>
@@ -207,11 +219,9 @@ $ pip3.6 install PySide2 <span class="hljs-comment"># PySide2をインストー�
 </code></pre>
     </li>
   </ul>
-  <p><code>state</code>要素、<code>final</code>要素それぞれが一つの状態遷移を表す。</p>
-  <p>また、その子要素である<code>transition</code>の<code>event</code>は、ユーザー応答の結果が期待したワードである場合（例えば
-    &quot;place&quot;（場所）でいうと、&quot;福岡県福岡市&quot;など地名を含んでいる場合）、このイベントが発火した状態となりこの場合、<code>target</code>に指定されている次の状態
-    &quot;ask_date&quot; に遷移する。</p>
-  <p>イベントが期待したワードでなければ、イベントは発火せず、同じ状態遷移を繰り返す。</p>
+  <p><code>state</code>要素は通常の状態、<code>final</code>要素は状態機械の終了を示す最終状態を表す。状態から別の状態へ移る規則は<code>transition</code>要素で定義する。</p>
+  <p><code>transition</code>の<code>event</code>には、アプリケーション側から状態機械へ送るイベント名を指定する。SCXML自体が「福岡県福岡市」などの自然言語を判定するわけではない。アプリケーションが発話から地名を抽出できた場合に<code>place</code>イベントを送信すると、<code>target</code>に指定した<code>ask_date</code>へ遷移する。</p>
+  <p>アプリケーションが対応するイベントを送らなければ遷移は発生せず、現在の状態に留まる。</p>
   <p>上記の要領で<code>ask_place</code>（地名指定）→ <code>ask_date</code>（日時指定）→ <code>ask_type</code>（種別：天気 or
     気温）と状態遷移が進むと、最後に<code>final</code>要素の天気情報の取得結果を返す状態に遷移し、天気情報を返して処理を終了する。</p>
   <p>以上で<code>MeCab</code>と<code>SCXML</code>の環境準備が完了。</p>

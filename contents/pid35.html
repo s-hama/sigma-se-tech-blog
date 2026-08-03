@@ -18,7 +18,7 @@
   </ul>
   <h2 id="各論理演算子の使い方と実装サンプル">各論理演算子の使い方と実装サンプル</h2>
   <h3 id="論理演算子の種類">論理演算子の種類</h3>
-  <p><strong>論理演算子</strong>には、bool型に加え、数値型である int型、float型、complex型や文字列である str型、リスト型であるlist型、tuple型、dict型の指定ができる。</p>
+  <p>Pythonでは、bool型に限らずすべてのオブジェクトが真偽値として評価される。組込み型では数値のゼロ、空の文字列やコンテナ、<code>None</code>などが<code>False</code>となり、それ以外は原則として<code>True</code>となる。独自クラスでは<code>__bool__()</code>または<code>__len__()</code>で判定方法を定義できる。</p>
   <ul>
     <li>
       <p>各データ型の参考</p>
@@ -42,8 +42,8 @@
             href="https://sigma-se.com/detail/31/#list型--配列型">Python
             - 組込みデータ型まとめ : str, list, tuple, range, dict &gt; list型 : 配列型</a></li>
         <li><a class="link-secondary"
-            href="https://sigma-se.com/detail/31/#tuple型--定数の配列型">Python
-            - 組込みデータ型まとめ : str, list, tuple, range, dict &gt; tuple型 : 定数の配列型</a></li>
+            href="https://sigma-se.com/detail/31/#tuple型--イミュータブルなシーケンス型">Python
+            - 組込みデータ型まとめ : str, list, tuple, range, dict &gt; tuple型 : イミュータブルなシーケンス型</a></li>
         <li><a class="link-secondary"
             href="https://sigma-se.com/detail/31/#range型--範囲指定">Python
             - 組込みデータ型まとめ : str, list, tuple, range, dict &gt; range型 : 範囲指定</a></li>
@@ -156,7 +156,7 @@
   </ul>
   <p>以降、論理演算子に関する実装サンプルを対話モード（インタプリタ）で解説する。</p>
   <h3 id="論理和or">論理和（or）</h3>
-  <p><code>a and b</code>は、前方から評価していき<code>True</code>となる要素が見つかった時点で（<strong>ショートサーキット</strong>と呼ぶ）その要素を返す。<br>
+  <p><code>a or b</code>は、前方から評価して最初に<code>True</code>となるオペランドを返す。そこで評価を終える動作を<strong>ショートサーキット</strong>という。<br>
     a、b共にFalseである場合は、末尾の要素<code>b</code>を返す。</p>
   <ul>
     <li>

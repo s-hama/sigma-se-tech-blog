@@ -7,12 +7,23 @@ Pythonの例外処理と組込み例外クラスの基本を整理する。
 ここでは、try、except、else、finallyの役割と、代表的な組込み例外クラスの位置づけを確認する。
 
 ## この記事の構成
+- [対象環境と利用上の注意](#対象環境と利用上の注意)<br>
+  本文記載時の環境と現在そのまま利用できない箇所を確認。
 - [例外処理と例外クラス](#例外処理と例外クラス)<br>
   例外処理と例外クラスの意味と要点を具体例から整理。
 - [組込み例外クラス一覧](#組込み例外クラス一覧)<br>
   組込み例外クラス一覧の意味と要点を具体例から整理。
 - [組込み例外クラスのツリー表示サンプル](#組込み例外クラスのツリー表示サンプル)<br>
   組込み例外クラスのツリー表示サンプルをコードや具体例で確認。
+
+## 対象環境と利用上の注意
+- 本文記載時の環境<br>
+Python \\(3.6.4\\)。掲載した例外クラスのツリー出力は、この環境で取得したもの。
+- 確認時期<br>
+2026年8月にPython公式ドキュメントと照合し、例外処理の基本仕様と記載内容を見直した。
+- 現在そのまま利用できない箇所<br>
+掲載コード全体を現行Pythonでは再実行していない。<br>
+Pythonの更新で例外階層は追加・変更されるため、掲載ツリーを現行版の完全な一覧として利用せず、利用中のバージョンの公式ドキュメントを確認する。
 
 ## 解説と実装サンプル
 
@@ -22,22 +33,26 @@ Pythonの例外処理と組込み例外クラスの基本を整理する。
 
 また、**except句**に指定する**例外クラス**によって、どの例外をキャッチするか指定することができる。
 
-- 例外クラス BaseException を指定した場合の構文例
+- `ValueError`を捕捉し、`else`と`finally`を使う構文例
     ```python
     $ python
     >>> try:
-    ...     # メイン処理を記載…
-    >>> except BaseException:
-    ...     # BaseExceptionクラスでキャッチした場合の例外処理を記載…
-    >>>
+    ...     value = int('123')
+    ... except ValueError:
+    ...     print('整数へ変換できません')
+    ... else:
+    ...     print(value)    # 例外が発生しなかった場合だけ実行
+    ... finally:
+    ...     print('処理終了')    # 例外の有無にかかわらず実行
+    123
+    処理終了
     ```
 
-ただし、`BaseException`は、Pythonすべての組込み**例外クラス**の派生元（基底）となっており、すべての例外キャッチしてしまうため（ユーザーの妨げになる場合もあるため）、`Exception`クラス等のキャッチしたい用途に応じた**例外クラス**を指定する。
+`BaseException`は`SystemExit`や`KeyboardInterrupt`も含む最上位の基底クラスであり、通常のアプリケーション処理で直接捕捉しない。可能な限り`ValueError`など原因に対応する具体的な例外クラスを指定する。
 
 ### 組込み例外クラス一覧
 
-以下、Pythonの組込み **例外クラス**とそれぞれの概要。<br>
-すべて前項で記載した `BaseException`から派生する。<br>
+以下は、本文記載時の環境を基準にした代表的な組込み **例外クラス**とそれぞれの概要。すべて`BaseException`から派生するが、一覧は現行版の全クラスを網羅しない。<br>
 
 <table class="table" style="width: 100%; table-layout: fixed;">
   <thead>
@@ -55,7 +70,7 @@ Pythonの例外処理と組込み例外クラスの基本を整理する。
     <tr><td>&nbsp;┣ StopIteration</td><td>イテレータによる次の領域参照時（next()、イテレータの__next__()）、対象が存在しない場合。</td></tr>
     <tr><td>&nbsp;┣ StopAsyncIteration</td><td>非同期イテレータによる次の領域参照時（非同期イテレータの__anext__()）、対象が存在しない場合。</td></tr>
     <tr><td>&nbsp;┣ ArithmeticError</td><td>算術演算で例外が発生した場合。（OverflowError, ZeroDivisionError, FloatingPointError の基底クラス。）</td></tr>
-    <tr><td>&nbsp;┃┣ FloatingPointError</td><td>浮動小数点の演算で失敗した場合。※ 3.7以降のバージョンでは使われていないので注意。（＊1）</td></tr>
+    <tr><td>&nbsp;┃┣ FloatingPointError</td><td>浮動小数点演算に関する例外クラス。Python公式ドキュメントでは「現在は使われていない」とされている。</td></tr>
     <tr><td>&nbsp;┃┣ OverflowError</td><td>算術演算結果が表現できない値になった場合。</td></tr>
     <tr><td>&nbsp;┃┗ ZeroDivisionError</td><td>除算や剰余演算でゼロ割り演算された場合。</td></tr>
     <tr><td>&nbsp;┣ AssertionError</td><td>assertが失敗した場合。</td></tr>
@@ -146,7 +161,7 @@ Pythonの例外処理と組込み例外クラスの基本を整理する。
     ```
 
 - 上記の実行結果
-    ```python
+    ```text
     Python Version: 3.6.4
 
     BaseException

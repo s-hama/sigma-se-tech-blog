@@ -7,10 +7,21 @@ Python - タスク指向型対話：5/5 SVMモデル学習と発話行為推定
 ここでは、モデル学習、モデル保存、推定用プログラム、実行結果の確認までを順番に見る。
 
 ## この記事の構成
+- [対象環境と利用上の注意](#対象環境と利用上の注意)<br>
+  本文記載時の環境と現在そのまま利用できない箇所を確認。
 - [モデル学習の実装サンプル](#モデル学習の実装サンプル)<br>
   モデル学習の実装サンプルをコードや具体例で確認。
 - [学習結果の確認](#学習結果の確認)<br>
   学習結果について、確認する項目と結果の見方を整理。
+
+## 対象環境と利用上の注意
+- 本文記載時の環境<br>
+CentOS \\(7\\)、Python \\(3.6\\)系、当時のscikit-learn・MeCab・dillを前提としたモデル学習・保存例。
+- 確認時期<br>
+2026年8月にscikit-learn公式資料と照合し、モデル評価とモデル永続化の注意を見直した。
+- 現在そのまま利用できない箇所<br>
+掲載コード全体は現行環境で再実行していない。<br>
+旧環境をそのまま新規利用せず、依存版を固定し、信頼できるモデルファイルだけを読み込み、学習データと分離した評価データで性能を確認する。
 
 ## 解説と実装サンプル
 ### モデル学習の実装サンプル
@@ -144,6 +155,8 @@ Python - タスク指向型対話：5/5 SVMモデル学習と発話行為推定
         dill.dump(svc, f)
     ```
 
+    ※ `dill`や`pickle`形式の読込みは任意のコードを実行し得るため、自分で生成した信頼できるファイルだけを読み込む。また、scikit-learnは異なるバージョン間でのモデル読込みを保証しないため、Pythonと依存ライブラリのバージョン、学習コード、データの識別情報も一緒に記録する。
+
 - 実行確認<br>
     上記実装サンプル（train_da_model.py）の実行確認<br>
     ※ 実行後`svc.model`が生成されていれば成功。
@@ -153,7 +166,7 @@ Python - タスク指向型対話：5/5 SVMモデル学習と発話行為推定
 
 ### 学習結果の確認
 
-前項で作成した`svc.model`が正しく推定できるか以下のテストプログラムを実行して確認する。
+前項で作成した`svc.model`を読み込み、推定処理が動くかを以下のプログラムで確認する。この確認は少数例による**疎通確認**であり、未知データに対する分類精度の評価ではない。
 
 - `da_extractor.py`（テストプログラム）
     ```python
@@ -250,10 +263,13 @@ Python - タスク指向型対話：5/5 SVMモデル学習と発話行為推定
     東京じゃなくて correct-info
     ```
 
+分類性能を評価する場合は、学習に使っていないデータを用意し、正解率だけでなく適合率、再現率、混同行列などを確認する。同じテンプレートから生成した類似文が学習用と評価用の両方へ入ると、実際より高く評価されるため、元テンプレート単位で分離する。
+
 ## まとめ
 - MeCabで発話を単語分割し、TF-IDFで発話内容を素性ベクトルXへ変換。発話行為タイプはラベルYとして扱う。
 - SVMは発話ベクトルから発話行為タイプを分類。
 - 推定時にも学習時と同じ変換と分類を再現できるよう、vectorizer、label_encoder、svcをセットで保存して読み込む。
+- 掲載した3文の推定は疎通確認であり、モデルの性能評価には独立した評価データと評価指標が必要。
 - 学習用の例文が偏ると誤分類しやすくなるため、発話行為タイプごとのデータ内容と件数を確認。
 
 ### 参考文献
@@ -261,4 +277,6 @@ Python - タスク指向型対話：5/5 SVMモデル学習と発話行為推定
 - [MeCab公式サイト - MeCab: Yet Another Part-of-Speech and Morphological Analyzer（日本語・形態素解析器の公式解説）](https://taku910.github.io/mecab/)
 - [scikit-learn公式ドキュメント - TfidfVectorizer（英語・TF-IDF変換のAPI仕様）](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html)
 - [scikit-learn公式ドキュメント - SVC（英語・SVM分類器のAPI仕様）](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html)
+- [scikit-learn公式ドキュメント - Model persistence（英語・保存形式の安全性と互換性）](https://scikit-learn.org/stable/model_persistence.html)
+- [scikit-learn公式ドキュメント - train_test_split（英語・学習用と評価用データの分割）](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html)
 - [dill公式ドキュメント（英語・モデル保存に用いる機能の公式解説）](https://dill.readthedocs.io/en/latest/)
