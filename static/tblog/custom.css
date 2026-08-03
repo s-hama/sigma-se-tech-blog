@@ -46,6 +46,50 @@ body {
     transition: none;
 }
 
+.post-meta {
+    margin-top: .35rem;
+}
+
+.post-meta-taxonomy,
+.post-meta-dates {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.post-meta-taxonomy {
+    gap: .2rem;
+}
+
+.post-meta-dates {
+    gap: 0;
+    justify-content: flex-end;
+    line-height: 1.4;
+    margin-top: .35rem;
+}
+
+.post-date {
+    white-space: nowrap;
+}
+
+.card-meta {
+    background-color: var(--bs-light);
+    border-bottom: var(--bs-card-border-width) solid var(--bs-card-border-color);
+    padding: .75rem 1rem .35rem;
+}
+
+.card-meta .post-meta,
+.card-footer .post-meta {
+    margin-top: 0;
+}
+
+.card-meta + .card-body {
+    padding-top: .5rem;
+}
+
+.card-meta + .card-body .post-body > h2:first-child {
+    margin-top: 1rem;
+}
+
 .btn-list-link:hover {
     color: var(--bs-white) !important;
     background-color: var(--bs-gray-700);
