@@ -14,6 +14,8 @@
   </ul>
   <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
   <h3 id="推論処理の実行準備">推論処理の実行準備</h3>
+  <ul>
+    <li>サンプルコードとデータの準備<br>
   <p>参考文献の『ゼロから作るDeep Learning』から提供されている推論処理のサンプルコード（<code>ch03/neuralnet_mnist.py</code>）をダウンロードする。</p>
   <p>Git（deep-learning-from-scratch）：
     <a class="link-secondary"
@@ -22,7 +24,12 @@
   <p>MNISTのダウンロードについては、<a class="link-secondary"
       href="https://sigma-se.com/detail/19/#mnistのダウンロード">前の記事
       &gt; Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）&gt; MNISTのダウンロード</a>を参照</p>
+    </li>
+  </ul>
+
   <h3 id="推論処理のニューロン構成と関数定義">推論処理のニューロン構成と関数定義</h3>
+  <ul>
+    <li>ネットワーク構成と関数<br>
   <ul>
     <li>
       <p>ニューロン構成について<br>
@@ -68,7 +75,12 @@ sys.path.append(os.pardir) <span class="hljs-comment"># 親ディレクトリの
         ・<a class="link-secondary" href="https://sigma-se.com/detail/18/">Python - ニューラルネットワーク： 活性化関数の実装サンプルまとめ（ステップ、シグモイド、ReLU、恒等関数、ソフトマックス関数）</a></p>
     </li>
   </ul>
+    </li>
+  </ul>
+
   <h3 id="推論処理の実行">推論処理の実行</h3>
+  <ul>
+    <li>推論処理と認識精度<br>
   <ul>
     <li>
       <p>ch03/neuralnet_mnist.py内の実行処理</p>
@@ -114,6 +126,8 @@ Accuracy:<span class="hljs-number">0.9352</span>
       <p>
         上記実装サンプルでは、93％程度の精度だったが、実際のニューラルネットワークでは、さらにニューラルネットワークの構造や「4.」の関数<code>predict</code>内の処理にあたる学習方法を工夫し、99％以上の精度を出していく。
       </p>
+    </li>
+  </ul>
     </li>
   </ul>
 

@@ -39,6 +39,8 @@
   </ul>
   <h2 id="解説と実装サンプル">解説と実装サンプル</h2>
   <h3 id="天気情報を取得するopenweathermapwebapiの概要と利用登録">天気情報を取得する「OpenWeatherMap」WebAPIの概要と利用登録</h3>
+  <ul>
+    <li>天気APIの準備と疎通確認<br>
   <p>天気情報は、無償で天気情報を取得できる<code>OpenWeatherMap</code>のWebAPIを用いて取得する。<br>
     下記トップページにアクセスすると<code>GUI</code>でも天気情報を確認することができる。</p>
   <p>【OpenWeatherMap】: <a href="https://openweathermap.org/" class="link-secondary">https://openweathermap.org/</a><br></p>
@@ -125,8 +127,13 @@
 </code></pre>
     </li>
   </ul>
+    </li>
+  </ul>
+
   <h3 id="メッセンジャーアプリtelegramの利用登録とpython-telegram-botのインストール">メッセンジャーアプリ「Telegram」の利用登録と「python-telegram-bot」のインストール
   </h3>
+  <ul>
+    <li>Telegram Botの準備<br>
   <p>
     最後に対話で使用するメッセンジャーアプリ<code>Telegram</code>の利用登録（アカウント作成）とPythonから<code>Telegram</code>を認識できるようにするためのライブラリである<code>python-telegram-bot</code>をインストールする。
   </p>
@@ -177,7 +184,12 @@
 </code></pre>
     </li>
   </ul>
+    </li>
+  </ul>
+
   <h3 id="telegrambotを使用した対話サンプルオウム返し">TelegramBotを使用した対話サンプル（オウム返し）</h3>
+  <ul>
+    <li>オウム返しBotの実装と確認<br>
   <p>
     下記の（＊1）、（＊2）が上記で登録した<code>@GSHamaBot</code>のレスポンスをPythonでオウム返しする実装サンプルで、（＊1）のTelegramBotクラスは、GSHamaBot（Telegramサーバー側）との<strong>通信処理</strong>で、（＊2）のEchoSystemクラスは、Botが応答する内容の<strong>制御処理</strong>となる。
   </p>
@@ -281,6 +293,9 @@ updater = Updater(TOKEN)
       </p>
     </li>
   </ul>
+    </li>
+  </ul>
+
   <h2 id="まとめ">まとめ</h2>
 <ul>
   <li>OpenWeatherMapは天気情報取得、Telegramは対話インターフェースとして使う。</li>

@@ -16,11 +16,18 @@
   </ul>
   <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
   <h3 id="ミニバッチ学習とは">ミニバッチ学習とは</h3>
+  <ul>
+    <li>全件学習とミニバッチ学習の違い<br>
   <p>機械学習では、<a class="link-secondary"
       href="https://sigma-se.com/detail/19/#mnistのデータ仕様">Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）&gt; MNISTのデータ仕様</a> のような訓練データすべて(学習用データセット 60,000枚)を対象に損失関数を求める必要がある。</p>
   <p>データが多い場合、全件から毎回損失と勾配を求めると計算量が大きくなる。そこで訓練データの一部を抽出し、その平均損失から全体の損失を確率的に推定する方法を<strong>ミニバッチ学習</strong>という。</p>
   <p>ミニバッチから得る値には抽出によるばらつきがあるため、100件なら常に十分という意味ではない。バッチサイズは、推定のばらつき、計算効率、メモリ使用量を考慮して決める。</p>
+    </li>
+  </ul>
+
   <h3 id="交差エントロピー誤差のミニバッチ学習定義">交差エントロピー誤差のミニバッチ学習（定義）</h3>
+  <ul>
+    <li>1件とミニバッチの数式<br>
   <p>下記\(（A）\)は、<a class="link-secondary" href="https://sigma-se.com/detail/22/#交差エントロピー誤差の定義">Python - ニューラルネットワーク： 損失関数（2乗和誤差、交差エントロピー誤差）と実装サンプル）&gt; 交差エントロピー誤差の定義</a> で解説した交差エントロピー誤差の定義。</p>
   <div
     style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
@@ -51,7 +58,12 @@
     <li>\(t_{nk}\)：n番目のデータに対するk番目の正解ラベル。</li>
     <li>\(y_{nk}\)：n番目のデータに対するk番目の予測確率。</li>
   </ul>
+    </li>
+  </ul>
+
   <h3 id="交差エントロピー誤差のミニバッチ学習mnistの準備">交差エントロピー誤差のミニバッチ学習（MNISTの準備）</h3>
+  <ul>
+    <li>MNISTデータの読み込み<br>
   <p>次にMNISTを使った<strong>ミニバッチ学習の準備</strong>と<strong>データの内容</strong>について解説する。</p>
   <p>※ MNISTのデータについては、<a class="link-secondary"
       href="https://sigma-se.com/detail/19/#mnistのデータ仕様">Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）&gt; MNISTのデータ仕様</a> を参考のこと。<br>
@@ -98,7 +110,12 @@ $ python
       </ul>
     </li>
   </ul>
+    </li>
+  </ul>
+
   <h3 id="交差エントロピー誤差のミニバッチ学習python実装サンプル">交差エントロピー誤差のミニバッチ学習（Python実装サンプル）</h3>
+  <ul>
+    <li>ミニバッチ抽出と損失計算<br>
   <p>最後に上記で準備したMNISTのデータセットを使い、<strong>ミニバッチ学習のPython実装サンプル</strong>について解説する。</p>
   <p>MNISTの学習用画像データセット（60,000枚）の中から<strong>100枚</strong>抜出して、<strong>交差エントロピー誤差の損失関数</strong>を求めるサンプル。</p>
   <p>まず、前準備として、<a class="link-secondary"
@@ -202,6 +219,8 @@ $ python
   </ul>
   <pre><code class="language-bash">...     <span class="hljs-built_in">return</span> -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size
 </code></pre>
+    </li>
+  </ul>
 
   <h2 id="まとめ">まとめ</h2>
   <ul>

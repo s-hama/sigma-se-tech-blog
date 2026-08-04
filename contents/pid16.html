@@ -14,6 +14,8 @@
   </ul>
   <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
   <h3 id="単純パーセプトロンの限界">単純パーセプトロンの限界</h3>
+  <ul>
+    <li>XORを表現できない理由<br>
   <p><a class="link-secondary" href="https://sigma-se.com/detail/15/">前の記事</a> で単純パーセプトロンを<strong>AND、NAND、OR
       の論理回路</strong>で実装できることを説明したが、<strong>排他的論理和</strong>と呼ばれる下記<strong>XORゲート</strong>になると、以下で示す<strong>非線形</strong>でしか
     \(0\) と \(1\) の領域を分けられない。<br>
@@ -130,7 +132,12 @@
       <p><img src="/static/tblog/img/pid16_2.png" alt="pid16_2"></p>
     </li>
   </ul>
+    </li>
+  </ul>
+
   <h3 id="多層パーセプトロンの概念">多層パーセプトロンの概念</h3>
+  <ul>
+    <li>論理ゲートを組み合わせる考え方<br>
   <p>上記で触れたとおり、単純パーセプトロンではXORゲートを表現できないが、複数のパーセプトロンを中間層で組み合わせる<strong>多層パーセプトロン</strong>では表現できる。
   </p>
   <p>単純パーセプトロンの説明で触れてきた<strong>AND、NAND、ORゲート</strong>を下記 <strong>1.</strong> ～ <strong>3.</strong> で組み合わせれば、<strong>4.
@@ -241,7 +248,12 @@
       </ul>
     </li>
   </ul>
+    </li>
+  </ul>
+
   <h3 id="多層パーセプトロンの実装サンプル">多層パーセプトロンの実装サンプル</h3>
+  <ul>
+    <li>XORゲートのPython実装<br>
   <p>最後に実装サンプル。</p>
   <ul>
     <li>
@@ -305,6 +317,8 @@
 </code></pre>
       <p>上記（＊4）～（＊7）の通り、<strong>XORゲート</strong>が実装できた。<br>
         （<strong>XORゲートの真理値表</strong>の \(y\) が出力できている。）</p>
+    </li>
+  </ul>
     </li>
   </ul>
 

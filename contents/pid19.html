@@ -16,6 +16,8 @@
   </ul>
   <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
   <h3 id="mnistとは">MNISTとは</h3>
+  <ul>
+    <li>データセットの構成<br>
   <p><strong>MNIST</strong>（Modified National Institute of Standards and Technology
     database）とは、0～9の手書き数字で構成され、訓練画像60,000枚とテスト画像10,000枚が用意された画像データセットである。</p>
   <p>
@@ -27,7 +29,12 @@
     <li>t10k-images-idx3-ubyte : テスト用 画像データセット（10,000枚）</li>
     <li>t10k-labels-idx1-ubyte : テスト用 ラベルデータセット（10,000個）</li>
   </ul>
+    </li>
+  </ul>
+
   <h3 id="mnistのデータ仕様">MNISTのデータ仕様</h3>
+  <ul>
+    <li>画像・ラベルデータの形式<br>
   <p>機械学習では画像を数値として扱う必要があるため、<strong>バイナリデータ</strong>となっており、画像とラベルデータが紐付いている。</p>
   <p>※ 以下の画像・ラベルの形式は、MNISTで使われるIDXファイルのヘッダーとデータ配置を整理したもの。</p>
   <p>以下、画像とラベルのフォーマット仕様。</p>
@@ -147,7 +154,12 @@
       </table>
     </li>
   </ul>
+    </li>
+  </ul>
+
   <h3 id="mnistのダウンロード">MNISTのダウンロード</h3>
+  <ul>
+    <li>データ取得と読み込み<br>
   <p>下記、<code>mnist.py</code>を使用し、MNISTをダウンロードする。</p>
   <p>Git（deep-learning-from-scratch）：<a class="link-secondary"
       href="https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/dataset/mnist.py">https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/dataset/mnist.py</a>
@@ -224,7 +236,12 @@ Resolving deltas: 100% (197/197), <span class="hljs-keyword">done</span>.
         戻り値は、（訓練画像, 訓練ラベル）, （テスト画像, テストラベル）の形式でMNISTデータを返す。</p>
     </li>
   </ul>
+    </li>
+  </ul>
+
   <h3 id="画像データ表示確認">画像データ表示確認</h3>
+  <ul>
+    <li>手書き数字画像の表示<br>
   <p><code>ch03/mnist_show.py</code>に訓練画像1枚目「5」の確認用ソースコードが記載されている。<br>
     下記は、この中の<code>show</code>にあたる箇所を<code>save</code>に置換え、画像ファイルを出力するサンプル。</p>
   <pre><code class="language-bash">$ python
@@ -256,6 +273,8 @@ Resolving deltas: 100% (197/197), <span class="hljs-keyword">done</span>.
     <li>pid19_1.png<br>
       期待通り、数字の手書き画像「5」が出力された。<br>
       <img src="/static/tblog/img/pid19_1.png" alt="pid19_1">
+    </li>
+  </ul>
     </li>
   </ul>
 

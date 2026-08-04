@@ -14,6 +14,8 @@
   </ul>
   <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
   <h3 id="推論バッチ処理の実行準備">推論バッチ処理の実行準備</h3>
+  <ul>
+    <li>バッチ推論用コードの準備<br>
   <p><a
       href="https://sigma-se.com/detail/20/#推論処理の実行準備" class="link-secondary">前の記事
       &gt; Python - ニューラルネットワーク： MNISTを使ったニューラルネットワークの推論処理と実装サンプル &gt; 推論処理の実行準備</a>
@@ -62,7 +64,12 @@ accuracy_cnt = <span class="hljs-number">0</span>
 
 <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Accuracy:&quot;</span> + <span class="hljs-built_in">str</span>(<span class="hljs-built_in">float</span>(accuracy_cnt) / <span class="hljs-built_in">len</span>(x)))
 </code></pre>
+    </li>
+  </ul>
+
   <h3 id="推論バッチ処理の実行">推論バッチ処理の実行</h3>
+  <ul>
+    <li>バッチ推論の実行結果<br>
   <p>
     上記の実行部分は、<code>ch03/neuralnet_mnist.py</code>の実行部分を<strong>100個単位</strong>でバッチ実行しているため、<code>ch03/neuralnet_mnist_batch.py</code>内の実行部分を実行すると<code>neuralnet_mnist.py</code>の実行時と同じ<code>Accuracy:0.9352</code>が出力される。
   </p>
@@ -80,7 +87,12 @@ $ python neuralnet_mnist_batch.py
       </p>
     </li>
   </ul>
+    </li>
+  </ul>
+
   <h3 id="推論バッチ処理の解説">推論バッチ処理の解説</h3>
+  <ul>
+    <li>コードの処理手順<br>
   <p>実行部分（Pythonコードのコメントの「# 追記」「# 書き換え」の部分）を（＊1）〜（＊6）と置く。</p>
   <pre><code class="language-python">x, t = get_data()
 network = init_network()
@@ -170,6 +182,8 @@ accuracy_cnt = <span class="hljs-number">0</span>
 </code></pre>
         </li>
       </ul>
+    </li>
+  </ul>
     </li>
   </ul>
 

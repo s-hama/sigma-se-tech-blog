@@ -24,6 +24,8 @@
   </ul>
   <h2 id="解説と実装サンプル">解説と実装サンプル</h2>
   <h3 id="モデル学習の実装サンプル">モデル学習の実装サンプル</h3>
+  <ul>
+    <li>TF-IDF・SVMモデルの学習<br>
   <p>先行記事で作成した学習データ<code>da_samples.dat</code>（＊1）を<strong>MeCab</strong>（＊2）で最小単位の単語（形態素）に分割し、<strong>SVM</strong>（＊3）で対話行為タイプを推定（モデル学習）する実装サンプル。</p>
 <ul>
   <li>（＊1）<a class="link-secondary" href="https://sigma-se.com/detail/42/#学習データの作成">Python - タスク指向型対話 : フレームベースの環境準備 &gt; SVM（sklearn）と学習データの作成 &gt; 学習データの作成</a></li>
@@ -159,7 +161,12 @@ with open(&quot;svc.model&quot;,&quot;wb&quot;) as f:
     ※ 実行後<code>svc.model</code>が生成されていれば成功。</p>
   <pre><code class="language-bash">$ python ~/gitlocalrep/dsbook/train_da_model.py
 </code></pre>
+    </li>
+  </ul>
+
   <h3 id="学習結果の確認">学習結果の確認</h3>
+  <ul>
+    <li>発話行為タイプの推定<br>
   <p>前項で作成した<code>svc.model</code>を読み込み、推定処理が動くかを以下のプログラムで確認する。この確認は少数例による<strong>疎通確認</strong>であり、未知データに対する分類精度の評価ではない。</p>
 <ul>
   <li><code>da_extractor.py</code>（テストプログラム）</li>
@@ -257,6 +264,9 @@ def extract_da(utt):
 東京じゃなくて correct-info
 </code></pre>
   <p>分類性能を評価する場合は、学習に使っていないデータを用意し、正解率だけでなく適合率、再現率、混同行列などを確認する。同じテンプレートから生成した類似文が学習用と評価用の両方へ入ると、実際より高く評価されるため、元テンプレート単位で分離する。</p>
+    </li>
+  </ul>
+
   <h2 id="まとめ">まとめ</h2>
   <ul>
     <li>MeCabで発話を単語分割し、TF-IDFで発話内容を素性ベクトルXへ変換。発話行為タイプはラベルYとして扱う。</li>

@@ -26,6 +26,8 @@
   </ul>
   <h2 id="解説と実装サンプル">解説と実装サンプル</h2>
   <h3 id="例外処理と例外クラス">例外処理と例外クラス</h3>
+  <ul>
+    <li>try・exceptと例外クラス<br>
   <p>
     文字通り、<strong>例外</strong>（正常系でない想定外のエラー）が発生した場合に対処する処理を<strong>例外処理</strong>と呼び、Pythonでは、メイン処理を<strong>try句</strong>に、例外処理を<strong>except句</strong>に書く。</p>
   <p>また、<strong>except句</strong>に指定する<strong>例外クラス</strong>によって、どの例外をキャッチするか指定することができる。</p>
@@ -46,7 +48,12 @@
     </li>
   </ul>
   <p><code>BaseException</code>は<code>SystemExit</code>や<code>KeyboardInterrupt</code>も含む最上位の基底クラスであり、通常のアプリケーション処理で直接捕捉しない。可能な限り<code>ValueError</code>など原因に対応する具体的な例外クラスを指定する。</p>
+    </li>
+  </ul>
+
   <h3 id="組込み例外クラス一覧">組込み例外クラス一覧</h3>
+  <ul>
+    <li>代表的な例外と発生条件<br>
   <p>以下は、本文記載時の環境を基準にした代表的な組込み <strong>例外クラス</strong>とそれぞれの概要。すべて<code>BaseException</code>から派生するが、一覧は現行版の全クラスを網羅しない。<br></p>
   <table class="table" style="width: 100%; table-layout: fixed;">
     <thead>
@@ -316,7 +323,12 @@
     </tbody>
   </table>
   <p>※ 各項目の詳細は<a href="https://docs.python.org/ja/3/library/exceptions.html" class="link-secondary">Python公式ドキュメント - 組み込み例外</a>を参照。</p>
+    </li>
+  </ul>
+
   <h3 id="組込み例外クラスのツリー表示サンプル">組込み例外クラスのツリー表示サンプル</h3>
+  <ul>
+    <li>例外階層の出力<br>
   <p>以下、前項の組込み例外クラス一覧をツリー表示した実装サンプル。<br>
     <code>classtree</code>関数に<code>BaseException</code>を渡し、再帰的に<code>BaseException</code>を出力している。<br>
   </p>
@@ -516,6 +528,8 @@ CLASSES
             SystemExit
             …（以降省略）
 </code></pre>
+    </li>
+  </ul>
 
   <h2 id="まとめ">まとめ</h2>
   <ul>

@@ -18,6 +18,8 @@
   </ul>
   <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
   <h3 id="ステップ関数">ステップ関数</h3>
+  <ul>
+    <li>0と1を切り替える処理<br>
   <p><a class="link-secondary" href="https://sigma-se.com/detail/17/">前の記事 &gt; ニューラルネットワークの活性化関数と実装サンプル</a>
     で触れた<strong>ステップ関数</strong>で、不連続な非線形の<strong>活性化関数</strong>であり<strong>階段関数</strong>とも呼ばれる。</p>
   <ul>
@@ -65,7 +67,12 @@
  &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;pid18_1.png&#x27;</span>)    <span class="hljs-comment"># グラフの出力</span>
 </code></pre>
   <p><img src="/static/tblog/img/pid18_1.png" alt="pid18_1"></p>
+    </li>
+  </ul>
+
   <h3 id="シグモイド関数">シグモイド関数</h3>
+  <ul>
+    <li>滑らかな出力への変換<br>
   <p><a class="link-secondary" href="https://sigma-se.com/detail/17/">前の記事 &gt; ニューラルネットワークの活性化関数と実装サンプル</a>
     で触れた<strong>シグモイド関数</strong>で、非線形の<strong>活性化関数</strong>に分類される。</p>
   <ul>
@@ -107,7 +114,12 @@
  &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;/var/www/vops/ops/macuos/static/macuos/img/pid18_2.png&#x27;</span>)    <span class="hljs-comment"># グラフの出力</span>
 </code></pre>
   <p><img src="/static/tblog/img/pid18_2.png" alt="pid18_2"></p>
+    </li>
+  </ul>
+
   <h3 id="relu関数">ReLU関数</h3>
+  <ul>
+    <li>0以下を0にする処理<br>
   <p><strong>ReLU</strong>（Rectified Linear Unit：正規化線形ユニット）と呼ばれ、非線形の<strong>活性化関数</strong>に分類される。<br>
     ※ 最近では、ニューラルネットワークにおいて、<strong>シグモイド関数</strong>より、<strong>ReLU関数</strong>が多く用いられるようになった。<br></p>
   <ul>
@@ -154,7 +166,12 @@
  &gt;&gt;&gt;
 </code></pre>
   <p><img src="/static/tblog/img/pid18_3.png" alt="pid18_3"></p>
+    </li>
+  </ul>
+
   <h3 id="恒等関数">恒等関数</h3>
+  <ul>
+    <li>入力をそのまま出力する処理<br>
   <p><strong>出力層</strong>で使われる線形の<strong>活性化関数</strong>に分類される。</p>
   <ul>
     <li>定義<br>
@@ -197,7 +214,12 @@
 
 </code></pre>
   <p><img src="/static/tblog/img/pid18_4.png" alt="pid18_4"></p>
+    </li>
+  </ul>
+
   <h3 id="ソフトマックス関数">ソフトマックス関数</h3>
+  <ul>
+    <li>確率分布への変換<br>
   <p><strong>分類問題</strong>で使われる非線形の<strong>活性化関数</strong>に分類される。</p>
   <ul>
     <li>定義<br>
@@ -234,6 +256,8 @@
  &gt;&gt;&gt; np.sum(y)
  1.0
 </code></pre>
+    </li>
+  </ul>
 
   <h2 id="まとめ">まとめ</h2>
   <ul>
