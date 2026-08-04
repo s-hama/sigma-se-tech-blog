@@ -319,6 +319,11 @@ a.list-group-last-item {
     padding-left: 1rem;
 }
 
+.policy-section-content,
+.policy-subsection-content {
+    padding-left: 1rem;
+}
+
 .recommended-series-group ul {
     margin-bottom: 0;
     padding-left: 2.25rem;
