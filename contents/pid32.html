@@ -3,28 +3,17 @@
   <p>set、bytes、bytearray、file objectの基本操作を整理する。</p>
   <p>これらはlistやdictほど最初に触れる機会は多くないが、集合演算、バイナリデータ、ファイル入出力を扱うときに重要になる。</p>
   <p>ここでは、重複を持たない集合、変更不可/変更可能なバイト列、ファイル操作の基本を実行例で確認する。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>setによる集合演算の基本。</li>
-  <li>bytesとbytearrayの違い。</li>
-  <li>バイナリデータを扱うときの考え方。</li>
-  <li>file objectを使った読み書きの基本。</li>
-</ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">確認項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>Python環境</td><td>対話モードとファイルを作成できる作業ディレクトリを用意する。</td></tr>
-      <tr><td>前提知識</td><td>list、dict、文字列の基本操作を確認しておく。</td></tr>
-      <tr><td>確認観点</td><td>テキストデータとバイナリデータの違いを意識する。</td></tr>
-    </tbody>
-  </table>
-
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#set型--集合" class="link-secondary">set型 : 集合</a><br>
+      set型 : 集合の意味と要点を具体例から整理。</li>
+    <li><a href="#bytes型--バイト" class="link-secondary">bytes型 : バイト</a><br>
+      bytes型 : バイトの意味と要点を具体例から整理。</li>
+    <li><a href="#bytearray型--バイト配列" class="link-secondary">bytearray型 : バイト配列</a><br>
+      bytearray型 : バイト配列の意味と要点を具体例から整理。</li>
+    <li><a href="#file object型--ファイル操作オブジェクト" class="link-secondary">file object型 : ファイル操作オブジェクト</a><br>
+      file object型 : ファイル操作オブジェクトの意味と要点を具体例から整理。</li>
+  </ul>
   <h2 id="各データ型の操作方法">各データ型の操作方法</h2>
   <h3 id="set型--集合">set型 : 集合</h3>
   <p>set型は、<strong>重複した要素</strong>がなく、要素に<strong>順番を</strong>持たない配列のような集合。</p>
@@ -36,14 +25,14 @@
         <li>ミュータブルオブジェクト
           <ul>
             <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#:~:text=%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88mutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E5%8F%AF">Python
-                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; ミュータブル（mutable）: 同一アドレスで変更可</a></li>
+                href="https://sigma-se.com/detail/29/#ミュータブルmutable--オブジェクト自体を変更可">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; ミュータブル（mutable）: オブジェクト自体を変更可</a></li>
           </ul>
         </li>
         <li>イテラブルオブジェクト
           <ul>
             <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF">Python
+                href="https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可">Python
                 - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イテラブル（iterable）: 反復抽出可</a></li>
           </ul>
         </li>
@@ -91,7 +80,7 @@
     </li>
     <li>
       <p>set型要素の追加、削除<br>
-        ※ 他の型とは違い<strong>pop</strong>は、ランダムで要素を削除することに注意。</p>
+        ※ <code>pop()</code>は位置を指定できず、任意の要素を一つ削除して返す。無作為抽出を保証する操作ではない。</p>
       <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 要素を追加</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>}
@@ -128,7 +117,7 @@ KeyError: <span class="hljs-number">100</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_e)
 <span class="hljs-built_in">set</span>()
 &gt;&gt;&gt;
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ランダムで要素を削除</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 任意の要素を一つ削除</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_f = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_f.pop())
 <span class="hljs-number">1</span>
@@ -222,17 +211,17 @@ KeyError: <span class="hljs-number">100</span>
 </code></pre>
         </li>
         <li>
-          <p>対象差集合（^ 演算子 or symmetric_difference）<br>
-            積集合の逆（どちらか一方にあるものを取得する）で排他的論理和（XOR）と同義。</p>
+          <p>対称差集合（^ 演算子 or symmetric_difference）<br>
+            二つの集合のどちらか一方だけに含まれる要素を取得する。集合の包含判定をビットで考えると、排他的論理和（XOR）に対応する。</p>
           <pre><code class="language-python">$ python
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ^ 演算子を用いた対象差集合</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ^ 演算子を用いた対称差集合</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_b = {<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>}
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_c = set_a ^ set_b
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_c)
 {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>}
 &gt;&gt;&gt;
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># symmetric_differenceを用いた対象差集合</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># symmetric_differenceを用いた対称差集合</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_d = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_e = {<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>}
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_f = set_d.symmetric_difference(set_e)
@@ -347,8 +336,8 @@ TypeError: symmetric_difference() takes exactly one argument (<span class="hljs-
     </li>
   </ul>
   <h3 id="bytes型--バイト">bytes型 : バイト</h3>
-  <p>bytes型は、<strong>byte</strong>のイミュータブルオブジェクト（同一アドレスで変更不可）。</p>
-  <p>str型の表記と似ているが先頭に<strong>b</strong>が付き、bytes型をエンコードするとstr型となり、bytes型をデコードするとstr型に戻る。</p>
+  <p>bytes型は、各要素が \(0\) から \(255\) の整数となるイミュータブルなバイト列である。</p>
+  <p>文字列を指定した符号化方式で<code>str.encode()</code>するとbytes型になり、bytes型を同じ符号化方式で<code>bytes.decode()</code>するとstr型に戻る。bytesリテラルは先頭に<strong>b</strong>を付ける。</p>
   <ul>
     <li>
       <p>型の特性</p>
@@ -356,22 +345,22 @@ TypeError: symmetric_difference() takes exactly one argument (<span class="hljs-
         <li>イミュータブルオブジェクト
           <ul>
             <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF">Python
-                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a>
+                href="https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: オブジェクト自体を変更不可</a>
             </li>
           </ul>
         </li>
         <li>イテラブルオブジェクト
           <ul>
             <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF">Python
+                href="https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可">Python
                 - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イテラブル（iterable）: 反復抽出可</a></li>
           </ul>
         </li>
         <li>シーケンスオブジェクト
           <ul>
             <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%EF%BC%88sequence%EF%BC%89%3A%20%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9%E6%8C%87%E5%AE%9A%E5%8F%AF">Python
+                href="https://sigma-se.com/detail/29/#シーケンスsequence--インデックス指定可">Python
                 - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; シーケンス（sequence）: インデックス指定可</a></li>
           </ul>
         </li>
@@ -416,7 +405,7 @@ TypeError: symmetric_difference() takes exactly one argument (<span class="hljs-
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(byte_f)
 &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bytes&#x27;</span>&gt;
 &gt;&gt;&gt;
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ※ 上記でbを付加すると、デフォルトASCIIとなるのでUTF-8でないとエラーが発生する。</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># bytesオブジェクトを変換元にした場合、encoding引数は指定できない。</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>byte_f = <span class="hljs-built_in">bytes</span>(<span class="hljs-string">b&#x27;abc&#x27;</span>, <span class="hljs-string">&#x27;utf-8&#x27;</span>)
 Traceback (most recent call last):
   File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
@@ -447,8 +436,7 @@ TypeError: encoding without a string argument
     </li>
   </ul>
   <h3 id="bytearray型--バイト配列">bytearray型 : バイト配列</h3>
-  <p>bytearray型は、bytes型の配列版で文字コードを指定しない場合（デフォルト）は、ASCIIでエンコードされる。</p>
-  <p>各要素の入れ替えを前提としたミュータブルオブジェクト（同一アドレスで変更可）。</p>
+  <p>bytearray型は、bytes型に対応するミュータブルなバイト列であり、各要素を同じオブジェクト上で変更できる。文字列から生成する場合は、<code>bytearray('abc', 'utf-8')</code>のように符号化方式の指定が必要であり、文字コードのデフォルト値はない。</p>
   <ul>
     <li>
       <p>型の特性</p>
@@ -456,21 +444,21 @@ TypeError: encoding without a string argument
         <li>ミュータブルオブジェクト
           <ul>
             <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#:~:text=%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88mutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E5%8F%AF">Python
-                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; ミュータブル（mutable）: 同一アドレスで変更可</a></li>
+                href="https://sigma-se.com/detail/29/#ミュータブルmutable--オブジェクト自体を変更可">Python
+                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; ミュータブル（mutable）: オブジェクト自体を変更可</a></li>
           </ul>
         </li>
         <li>イテラブルオブジェクト
           <ul>
             <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF">Python
+                href="https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可">Python
                 - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イテラブル（iterable）: 反復抽出可</a></li>
           </ul>
         </li>
         <li>シーケンスオブジェクト
           <ul>
             <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%EF%BC%88sequence%EF%BC%89%3A%20%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9%E6%8C%87%E5%AE%9A%E5%8F%AF">Python
+                href="https://sigma-se.com/detail/29/#シーケンスsequence--インデックス指定可">Python
                 - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; シーケンス（sequence）: インデックス指定可</a></li>
           </ul>
         </li>
@@ -576,33 +564,26 @@ TypeError: encoding without a string argument
     </li>
   </ul>
   <h3 id="file object型--ファイル操作オブジェクト">file object型 : ファイル操作オブジェクト</h3>
-  <p>file object型は、ファイル操作（読み書き、入出力）を行う型で、ファイルの内容取得や編集、新規作成などの一連のファイル操作が可能。</p>
+  <p><code>open()</code>は、モードに応じて<code>io.TextIOWrapper</code>や<code>io.BufferedReader</code>などのファイルオブジェクトを返す。単一の「file object型」があるのではなく、共通のファイル操作インターフェースを持つ複数のクラスがある。</p>
   <ul>
     <li>
       <p>型の特性</p>
       <ul>
-        <li>イミュータブルオブジェクト
+        <li>テキストファイルは行単位で反復できるイテラブルオブジェクト
           <ul>
             <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF">Python
-                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a>
-            </li>
-          </ul>
-        </li>
-        <li>イテラブルオブジェクト
-          <ul>
-            <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF">Python
+                href="https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可">Python
                 - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イテラブル（iterable）: 反復抽出可</a></li>
           </ul>
         </li>
+        <li>使用後はクローズが必要なため、通常は<code>with open(...) as f:</code>で扱う</li>
       </ul>
     </li>
     <li>
       <p>定義例<br>
         open()でファイルを開き、処理終了時にclose()で閉じる。<br>
-        open()の第\(1\)引数にファイルパスを指定して定義する。<br>
-        第2引数のmodeは、読み書きの指定やテキスト or バイナリの指定に使用する。<br></p>
+        open()の第\(1\)引数にファイルパスを指定して定義。<br>
+        第2引数のmodeは、読み書きの指定やテキスト or バイナリの指定に使用。<br></p>
       <ul>
         <li>
           <p><code>mode</code>の種類</p>
@@ -617,10 +598,10 @@ TypeError: encoding without a string argument
           </ul>
         </li>
         <li>
-          <p>下記サンプルでは<code>~/data/sample.txt</code>を事前に作成している前提</p>
+          <p>下記サンプルでは、カレントディレクトリの<code>data/sample.txt</code>を事前に作成している前提</p>
           <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># テキストファイルをopen() で開く。</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/sample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/sample.txt&#x27;</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>tFile = <span class="hljs-built_in">open</span>(fPath)
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># テキストであるため、io.TextIOWrapperとして定義される。</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(tFile)
@@ -650,8 +631,8 @@ TypeError: encoding without a string argument
       <p><code>mode='r'</code>：読込モード（書込不可）<br>
         modeの引数なしでデフォルト <strong>'r'</strong> で open() するため、省略する。<br>
         以下、open(mode='r')で開いた後の読込方法。<br>
-        ※ 下記サンプルでは<code>~/data/sample.txt</code>を事前に作成している前提。<br></p>
-      <pre><code class="language-python">line1 work file sample
+        ※ 下記サンプルでは<code>data/sample.txt</code>を事前に作成している前提。<code>open()</code>は<code>~</code>をホームディレクトリへ自動展開しない。<br></p>
+      <pre><code class="language-text">line1 work file sample
 line2 work file sample
 line3 work file sample
 line4 work file sample
@@ -661,7 +642,7 @@ line5 work file sample
         <li><code>read()</code>：全行読込
           <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># read()で全文読込</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/sample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/sample.txt&#x27;</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
 <span class="hljs-meta">... </span>    fLines = tFile.read()
 <span class="hljs-meta">... </span>    <span class="hljs-built_in">type</span>(fLines)
@@ -679,7 +660,7 @@ line5 work file sample
         <li><code>readlines()</code>：リスト型で全行読込<br>
           <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># readlines()で行分割したリスト型で全行読込</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/sample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/sample.txt&#x27;</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
 <span class="hljs-meta">... </span>    fLines = tFile.readlines()
 <span class="hljs-meta">... </span>    <span class="hljs-built_in">type</span>(fLines)
@@ -744,13 +725,13 @@ line5 work file sample
     <li>
       <p><code>mode='w'</code>：書込モード（読込不可）<br>
         以下、open(mode='w')で開いた後の書込方法。<br>
-        ※ 下記サンプルでは<code>~/data</code>フォルダがあることが事前。<br></p>
+        ※ 下記サンプルでは<code>data</code>フォルダがあることが前提。<br></p>
       <ul>
         <li>
           <p><code>write()</code>：新規作成</p>
           <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># write()でファイルを新規作成</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/newsample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/newsample.txt&#x27;</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>fInput = <span class="hljs-string">&#x27;line1 new work file sample&#x27;</span>
 &gt;&gt;&gt;
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> tFile:
@@ -769,7 +750,7 @@ line1 new work file sample
           <p><code>write()</code>：書込（上書き）<br>
             ※ 上記の続き（newsample.txtが作成済）</p>
           <pre><code class="language-python">$ python
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/newsample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/newsample.txt&#x27;</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># read()で全行読込</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
 <span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(tFile.read())
@@ -793,7 +774,7 @@ edit new work file sample
         <li>
           <p><code>writelines()</code>：リスト型で全行書込</p>
           <pre><code class="language-python">$ python
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/newsample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/newsample.txt&#x27;</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># writelines()でリスト型を全行書込</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>fInput = [<span class="hljs-string">&#x27;line1&#x27;</span>, <span class="hljs-string">&#x27;line2&#x27;</span>, <span class="hljs-string">&#x27;line3&#x27;</span>, <span class="hljs-string">&#x27;line4&#x27;</span>, <span class="hljs-string">&#x27;line5&#x27;</span>]
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> tFile:
@@ -805,7 +786,7 @@ edit new work file sample
 line1line2line3line4line5
 &gt;&gt;&gt;
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ※ 改行コードを排除して書込する場合</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/newsample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/newsample.txt&#x27;</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>fInput = [<span class="hljs-string">&#x27;line1&#x27;</span>, <span class="hljs-string">&#x27;line2&#x27;</span>, <span class="hljs-string">&#x27;line3&#x27;</span>, <span class="hljs-string">&#x27;line4&#x27;</span>, <span class="hljs-string">&#x27;line5&#x27;</span>]
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> tFile:
 <span class="hljs-meta">... </span>    tFile.write(<span class="hljs-string">&#x27;\n&#x27;</span>.join(fInput))
@@ -825,7 +806,7 @@ line5
         <li>
           <p><code>pass</code>で空ファイルを新規作成<br></p>
           <pre><code class="language-python">$ python
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/empty.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/empty.txt&#x27;</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 空ファイルを新規作成</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;w&#x27;</span>):
 <span class="hljs-meta">... </span>    <span class="hljs-keyword">pass</span>    <span class="hljs-comment"># 何もしない</span>
@@ -842,8 +823,8 @@ line5
     <li>
       <p><code>mode='a'</code>：追加・書込モード（読込不可）<br>
         以下、open(mode='a') で開いた後の書込方法。<br>
-        ※ 下記サンプルでは、<code>~/data/sample.txt</code>を事前に作成している前提。<br></p>
-      <pre><code class="language-python">line1 work file sample
+        ※ 下記サンプルでは、<code>data/sample.txt</code>を事前に作成している前提。<br></p>
+      <pre><code class="language-text">line1 work file sample
 line2 work file sample
 line3 work file sample
 line4 work file sample
@@ -853,7 +834,7 @@ line5 work file sample
         <li><code>write()</code>：末尾に追加
           <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># write()で末尾に追加</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;~/data/sample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/sample.txt&#x27;</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>fAdd = <span class="hljs-string">&#x27;\nline6 work file sample&#x27;</span>    <span class="hljs-comment"># 改行コードも込み</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;a&#x27;</span>) <span class="hljs-keyword">as</span> tFile:
 <span class="hljs-meta">... </span>    tFile.writelines(fAdd)
@@ -874,32 +855,16 @@ line6 work file sample
     </li>
   </ul>
 
-  <h2 id="違いを整理する">違いを整理する</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">比較する項目</th>
-        <th scope="col">整理するポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>setは順序を前提にしない</td><td>重複排除や集合演算に使う。インデックスで取り出す用途には向かない。</td></tr>
-      <tr><td>bytesとbytearray</td><td>bytesは変更不可、bytearrayは変更可能。</td></tr>
-      <tr><td>ファイルのclose漏れ</td><td>with文を使うと、処理後に自動でクローズできる。</td></tr>
-    </tbody>
-  </table>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-<ul>
-  <li>重複排除<br>
-    ID一覧やタグ一覧から重複を消す処理でsetが使える。</li>
-  <li>ファイル・通信処理<br>
-    画像、圧縮ファイル、通信データなどではbytesの理解が必要になる。</li>
-</ul>
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>setは重複しない要素の集合を扱う型。</li>
-  <li>bytesは変更不可、bytearrayは変更可能なバイト列。</li>
-  <li>file objectはファイル読み書きの入口になる。</li>
-</ul>
-
+  <ul>
+    <li>setは重複しない要素を扱う集合型で、順序やインデックスによるアクセスを前提にせず、重複排除や集合演算に使う。</li>
+    <li>bytesは変更不可、bytearrayは変更可能なバイト列として使い分ける。</li>
+    <li>file objectはファイルを読み書きする入口となり、with文を使うと処理後に自動でクローズできる。</li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#set-types-set-frozenset" class="link-secondary">Python公式ドキュメント - 集合型：set、frozenset（日本語・集合型の公式解説）</a></li>
+    <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#binary-sequence-types-bytes-bytearray-memoryview" class="link-secondary">Python公式ドキュメント - バイナリシーケンス型：bytes、bytearray、memoryview（日本語・バイト列の公式解説）</a></li>
+    <li><a href="https://docs.python.org/ja/3/library/io.html" class="link-secondary">Python公式ドキュメント - io：ストリームを扱うコアツール（日本語・ファイル入出力の公式解説）</a></li>
+  </ul>
 </div>

@@ -6,236 +6,239 @@ Python - タスク指向型対話：1/5 状態遷移ベースの環境準備（M
 状態遷移ベースでは、ユーザーの発話を解析し、現在の状態に応じて次の応答や処理を決める。形態素解析を行うMeCabと、状態遷移を表現するSCXMLを理解しておくと、後続の天気案内Bot実装を追いやすくなる。
 ここでは、対話システムの構成、MeCabによる発話解析、SCXMLによる状態定義の準備を確認する。
 
-## この記事で扱うこと
-- タスク指向型対話と非タスク指向型対話の違い。
-- 状態遷移ベースの対話システムの構成。
-- MeCabを使って日本語発話を形態素解析する理由。
-- SCXMLで状態遷移を表現する考え方。
+## この記事の構成
+- [対象環境と利用上の注意](#対象環境と利用上の注意)<br>
+  本文記載時の環境と現在そのまま利用できない箇所を確認。
+- [作業時の注意点](#作業時の注意点)<br>
+  設定変更やコマンド実行前に確認しておきたい注意点を整理。
+- [タスク指向型対話システム (状態遷移ベース) のシステム構成について](#タスク指向型対話システム-状態遷移ベース-のシステム構成について)<br>
+  タスク指向型対話システム (状態遷移ベース) のシステム構成についてと各要素の役割を整理。
+- [対話の文章を解析する「MeCab」の概要とインストール](#対話の文章を解析するmecabの概要とインストール)<br>
+  対話の文章を解析する「MeCab」の概要とインストールの手順と確認ポイントを整理。
+- [状態遷移によるタスクを遂行する「SCXML」の概要とインストール](#状態遷移によるタスクを遂行するscxmlの概要とインストール)<br>
+  状態遷移によるタスクを遂行する「SCXML」の概要とインストールの手順と確認ポイントを整理。
 
-## 作業前に確認すること
-| 確認項目 | 内容 |
-| --- | --- |
-| Python環境 | 後続記事の実装に合わせて、Linux上でPythonを実行できる状態にしておく。 |
-| MeCab | 日本語文を単語単位に分割するために使用する。 |
-| SCXML | 対話状態と遷移条件をXMLとして表すために使用する。 |
+## 対象環境と利用上の注意
+- 本文記載時の環境<br>
+CentOS \\(7\\)、Python \\(3.6\\)系、PySide2 \\(5.15.0\\)、Windows \\(10\\)版Telegramを前提とした手順。
+- 確認時期<br>
+2026年8月にMeCab、SCXML、Qt for Pythonの公式資料と照合し、記載内容を見直した。
+- 現在そのまま利用できない箇所<br>
+掲載コマンドとコード全体は現行環境で再実行していない。<br>
+CentOS \\(7\\)とPython \\(3.6\\)は新規構築に使用せず、現行のサポート対象OS・PythonとPySide6への移行資料を確認する。
 
 ## 作業時の注意点
-| 作業時の注意点 | 確認する観点 |
-| --- | --- |
-| MeCabの役割 | 応答を生成するライブラリではなく、発話を解析するための形態素解析器。 |
-| SCXMLの役割 | 処理そのものを書くのではなく、状態と遷移の構造を表す。 |
-| 状態遷移ベースの限界 | 想定した状態と遷移を設計する必要があり、自由な雑談には向かない。 |
+- MeCabの役割<br>
+応答を生成するライブラリではなく、発話を解析するための形態素解析器。
+- SCXMLの役割<br>
+処理そのものを書くのではなく、状態と遷移の構造を表す。
+- 状態遷移ベースの限界<br>
+想定した状態と遷移を設計する必要があり、自由な雑談には向かない。
 
 ## 解説と実装サンプル
 
 ### タスク指向型対話システム (状態遷移ベース) のシステム構成について
+- 構成要素と処理の流れ<br>
+    **タスク指向型**とは、対話システムが特定のタスクを遂行することを指し、これから次の記事以降でも継続して解説する天気情報案内や特定の業務を対象とした予約システム、検索システムなど遂行業務を定めている分類のことをいう。
 
-**タスク指向型**とは、対話システムが特定のタスクを遂行することを指し、これから次の記事以降でも継続して解説する天気情報案内や特定の業務を対象とした予約システム、検索システムなど遂行業務を定めている分類のことをいう。
+    また、これと対極する**非タスク指向型**は、雑談システムなどの特定タスク遂行を目的とせず、遂行業務を定めていない分類のことをいう。
 
-また、これと対極する**非タスク指向型**は、雑談システムなどの特定タスク遂行を目的とせず、遂行業務を定めていない分類のことをいう。
+    システム構成は、**Pythonで作成する対話システム**、**Telegramサーバー**、**Telegramをインストールしたクライアント端末**（Android、iPhone、Windows、Linux、Macなど）の単純な \\(3\\) 構成でデータベースも使わない。<br>
+    ※ 以降、Telegramインストールした端末を**Telegramクライアント**と表現する。
 
-システム構成は、**Pythonで作成する対話システム**、**Telegramサーバー**、**Telegramをインストールしたクライアント端末**（Android、iPhone、Windows、Linux、Macなど）の単純な \\(3\\) 構成でデータベースも使わない。<br>
-※ 以降、Telegramインストールした端末を**Telegramクライアント**と表現する。
+    大まかな処理の流れとしては、**Pythonで作成する対話システム**を起動すると、 これが**Bot**として**Telegramクライアント**に表示され、ユーザー要求の入力待ち状態となる。
 
-大まかな処理の流れとしては、**Pythonで作成する対話システム**を起動すると、 これが**Bot**として**Telegramクライアント**に表示され、ユーザー要求の入力待ち状態となる。
+    そして、ユーザーが要求（入力）すると**Telegramサーバー**を介し、**対話システム**（Bot）の応答制御処理を経て、結果をユーザーに返し、対話をしていく。
 
-そして、ユーザーが要求（入力）すると**Telegramサーバー**を介し、**対話システム**（Bot）の応答制御処理を経て、結果をユーザーに返し、対話をしていく。
+    ここからは、外部ライブラリとなる`MeCab`と`SCXML`の概要とインストール手順を確認する。
+    これ以外にも使用する`Telegram`、`OpenWeatherMap`については、次の記事以降で扱う。
 
-ここからは、外部ライブラリとなる`MeCab`と`SCXML`の概要とインストール手順を確認する。
-これ以外にも使用する`Telegram`、`OpenWeatherMap`については、次の記事以降で扱う。
-
-以降の実装では、TelegramクライアントをWindows 10、Pythonの対話システムをLinux（CentOS 7）で動かす前提としている。コマンドやファイルパスは、自身の環境に合わせて読み替える。
+    以降の実装では、TelegramクライアントをWindows 10、Pythonの対話システムをLinux（CentOS 7）で動かす前提としている。コマンドやファイルパスは、自身の環境に合わせて読み替える。
 
 ### 対話の文章を解析する「MeCab」の概要とインストール
+- 形態素解析の準備<br>
+    まずは、大前提となる文章解析について<br>
+    対話の文章解析用に形態素解析（＊1）エンジンのオープンソースである`MeCab`を用いて作成する。<br>
+    （＊1）文章を解析し、最小単位の単語（形態素）に分割すること。
 
-まずは、大前提となる文章解析について<br>
-対話の文章解析用に形態素解析（＊1）エンジンのオープンソースである`MeCab`を用いて作成する。<br>
-（＊1）文章を解析し、最小単位の単語（形態素）に分割すること。
+    `MeCab`について、ここではインストールと呼出し方のみ解説し、理屈や詳細については触れない。
 
-`MeCab`について、ここではインストールと呼出し方のみ解説し、理屈や詳細については触れない。
+    ※ MeCabについての詳細は、下記公式サイトを参考。<br>
+    [MeCab: Yet Another Part-of-Speech and Morphological Analyzer](https://taku910.github.io/mecab/)
 
-※ MeCabについての詳細は、下記サイトを参考。<br>
-[【技術解説】形態素解析とは？MeCabインストール手順からPythonでの実行例まで](https://mieruca-ai.com/ai/morphological_analysis_mecab/)
+    - MeCabインストール<br>
+        Groongaレポジトリの追加とパッケージの最新情報を取得し、mecab本体と辞書ファイルをインストール。<br>
+        - Groongaレポジトリ追加
+            ```bash
+            $ sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
+            ```
+        - パッケージ情報の更新
+            ```bash
+            $ sudo yum makecache
+            ```
+        - MeCab本体と辞書ファイルをインストール
+            ```bash
+            $ sudo yum install mecab mecab-devel mecab-ipadic
+            ```
+        - 呼出し確認
+            ```bash
+            $ mecab
+            昨日はいい天気でしたね
+            昨日 名詞,副詞可能,*,*,*,*,昨日,キノウ,キノー
+            は 助詞,係助詞,*,*,*,*,は,ハ,ワ
+            いい 形容詞,自立,*,*,形容詞・イイ,基本形,いい,イイ,イイ
+            天気 名詞,一般,*,*,*,*,天気,テンキ,テンキ
+            でし 助動詞,*,*,*,特殊・デス,連用形,です,デシ,デシ
+            た 助動詞,*,*,*,特殊・タ,基本形,た,タ,タ
+            ね 助詞,終助詞,*,*,*,*,ね,ネ,ネ
+            EOS
+            ```
+        - mecab-python3のインストール<br>
+            最後に上記でインストールしたMeCabをPython3から呼び出せるように`mecab-python3`をインストールし、Pythonからの呼出しを確認。
+            ```bash
+            $ pip3 install mecab-python3
+            ```
 
-- MeCabインストール<br>
-    Groongaレポジトリの追加とパッケージの最新情報を取得し、mecab本体と辞書ファイルをインストールする。<br>
-    - Groongaレポジトリ追加
-        ```bash
-        $ sudo yum install -y https://packages.groonga.org/centos/groonga-release-latest.noarch.rpm
+    - Pythonから呼出し確認<br>
+        以下、呼出し確認のサンプルコード`mecab-python3_test.py`
+        ```python
+        import MeCab
+
+        mecab = MeCab.Tagger()
+
+        # python3-mecabのバグ回避のため，空文字をparse
+        mecab.parse('')
+
+        # 標準入力からテキストを受け取る
+        text = input(">")
+
+        node = mecab.parseToNode(text)
+        while node:
+            print(node.surface, node.feature)
+            node = node.next
         ```
-    - パッケージ情報の更新
-        ```bash
-        $ sudo yum makecache
-        ```
-    - MeCab本体と辞書ファイルをインストール
-        ```bash
-        $ sudo yum install mecab mecab-devel mecab-ipadic
-        ```
-    - 呼出し確認
-        ```bash
-        $ mecab
-        昨日はいい天気でしたね
-        昨日 名詞,副詞可能,*,*,*,*,昨日,キノウ,キノー
-        は 助詞,係助詞,*,*,*,*,は,ハ,ワ
-        いい 形容詞,自立,*,*,形容詞・イイ,基本形,いい,イイ,イイ
-        天気 名詞,一般,*,*,*,*,天気,テンキ,テンキ
-        でし 助動詞,*,*,*,特殊・デス,連用形,です,デシ,デシ
-        た 助動詞,*,*,*,特殊・タ,基本形,た,タ,タ
-        ね 助詞,終助詞,*,*,*,*,ね,ネ,ネ
-        EOS
-        ```
-    - mecab-python3のインストール<br>
-        最後に上記でインストールしたMeCabをPython3から呼び出せるように`mecab-python3`をインストールし、Pythonからの呼出しを確認する。
-        ```bash
-        $ pip3 install mecab-python3
-        ```
 
-- Pythonから呼出し確認<br>
-    以下、呼出し確認のサンプルコード`mecab-python3_test.py`
-    ```python
-    import MeCab
+        このまま、上記サンプルコードを実行すると、3行目の`MeCab.Tagger`でMeCabのインスタンス生成時に近代文語と言われる`unidic-lite`のインストール`pip install unidic-lite`コマンドで実施するようエラーがでる。
 
-    mecab = MeCab.Tagger()
+      - 対話モード (インタプリタ)で確認
+          ```python
+          $ python
+          >>> import MeCab
+          >>>
+          >>> mecab = MeCab.Tagger() # MeCabのインスタンス生成
+          Failed when trying to initialize MeCab. Some things to check:
+          ...（省略）...
+          Traceback (most recent call last):
+            File "<stdin>", line 1, in <module>
+            File "/var/www/vops/lib64/python3.6/site-packages/MeCab/__init__.py", line 105, in __init__
+              super(Tagger, self).__init__(args)
+          RuntimeError
+          >>>
+          ```
 
-    # python3-mecabのバグ回避のため，空文字をparse
-    mecab.parse('')
+          この環境では、PythonからMeCabを呼び出す際に`unidic-lite`の追加インストールが必要だった。MeCab本体と辞書を入れていてもPythonバインディング側で辞書を見つけられないことがあるため、まずはエラーメッセージに従って不足している辞書を追加。
 
-    # 標準入力からテキストを受け取る
-    text = input("&gt;")
+          エラーメッセージの通り`unidic-lite`をインストール。
+          ```bash
+          $ pip3 install unidic-lite
+          ```
 
-    node = mecab.parseToNode(text)
-    while node:
-        print(node.surface, node.feature)
-        node = node.next
-    ```
-
-    このまま、上記サンプルコードを実行すると、3行目の`MeCab.Tagger`でMeCabのインスタンス生成時に近代文語と言われる`unidic-lite`のインストール`pip install unidic-lite`コマンドで実施するようエラーがでる。
-
-  - 対話モード (インタプリタ)で確認
-      ```python
-      $ python
-      >>> import MeCab
-      >>>
-      >>> mecab = MeCab.Tagger() # MeCabのインスタンス生成
-      Failed when trying to initialize MeCab. Some things to check:
-      ...（省略）...
-      Traceback (most recent call last):
-        File "<stdin>", line 1, in <module>
-        File "/var/www/vops/lib64/python3.6/site-packages/MeCab/__init__.py", line 105, in __init__
-          super(Tagger, self).__init__(args)
-      RuntimeError
-      >>>
-      ```
-
-      この環境では、PythonからMeCabを呼び出す際に`unidic-lite`の追加インストールが必要だった。MeCab本体と辞書を入れていてもPythonバインディング側で辞書を見つけられないことがあるため、まずはエラーメッセージに従って不足している辞書を追加する。
-
-      エラーメッセージの通り`unidic-lite`をインストールする。
-      ```bash
-      $ pip3 install unidic-lite
-      ```
-
-  - 再度、呼出し確認<br>
-    今度は、対話モード (インタプリタ)でなくプログラムファイルを実行する。
-    ```bash
-    $ python ~/gitlocalrep/dsbook/mecab-python3_test.py
-    >昨日はいい天気でしたね
-    BOS/EOS,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*
-    昨日 名詞,普通名詞,副詞可能,*,*,*,キノウ,昨日,昨日,キノー,昨日,キノー,和,*,*,*,*,キノウ,キノウ,キノウ,キノウ,*,*,"2,0",C2,*
-    は 助詞,係助詞,*,*,*,*,ハ,は,は,ワ,は,ワ,和,*,*,*,*,ハ,ハ,ハ,ハ,*,*,*,"動詞%F2@0,名詞%F1,形容詞%F2@-1",*
-    いい 形容詞,非自立可能,*,*,形容詞,連体形-一般,ヨイ,良い,いい,イー,いい,イー,和,*,*,*,*,イイ,イイ,イイ,イイ,*,*,1,C3,*
-    天気 名詞,普通名詞,一般,*,*,*,テンキ,天気,天気,テンキ,天気,テンキ,漢,*,*,*,*,テンキ,テンキ,テンキ,テンキ,*,*,1,C1,*
-    でし 助動詞,*,*,*,助動詞-デス,連用形-一般,デス,です,でし,デシ,です,デス,和,*,*,*,*,デシ,デス,デシ,デス,*,*,*,"形容詞%F2@-1,動詞%F2@0,名詞%F2@1",*
-    た 助動詞,*,*,*,助動詞-タ,終止形-一般,タ,た,た,タ,た,タ,和,*,*,*,*,タ,タ,タ,タ,*,*,*,"動詞%F2@1,形容詞%F4@-2",*
-    ね 助詞,終助詞,*,*,*,*,ネ,ね,ね,ネ,ね,ネ,和,*,*,*,*,ネ,ネ,ネ,ネ,*,*,*,"動詞%F1,名詞%F1,形容詞%F1",*
-    BOS/EOS,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*
-    ```
-
-    上記が**形態素解析**した結果となる。
-
-    また、実行環境によっては 下記（＊2）の文字コードに起因するエラーになるため、下記（＊3）を参考に文字コードを**UTF8**等 に変換後、実行すること。
-
-    - （＊2）文字コードに起因するエラー
+      - 再度、呼出し確認<br>
+        今度は、対話モード (インタプリタ)でなくプログラムファイルを実行。
         ```bash
         $ python ~/gitlocalrep/dsbook/mecab-python3_test.py
         >昨日はいい天気でしたね
-        Traceback (most recent call last):
-        File "~/gitlocalrep/dsbook/mecab-python3_test.py", line 11, in <module>
-            node = mecab.parseToNode(text)
-        TypeError: in method 'Tagger_parseToNode', argument 2 of type 'char const *'
+        BOS/EOS,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*
+        昨日 名詞,普通名詞,副詞可能,*,*,*,キノウ,昨日,昨日,キノー,昨日,キノー,和,*,*,*,*,キノウ,キノウ,キノウ,キノウ,*,*,"2,0",C2,*
+        は 助詞,係助詞,*,*,*,*,ハ,は,は,ワ,は,ワ,和,*,*,*,*,ハ,ハ,ハ,ハ,*,*,*,"動詞%F2@0,名詞%F1,形容詞%F2@-1",*
+        いい 形容詞,非自立可能,*,*,形容詞,連体形-一般,ヨイ,良い,いい,イー,いい,イー,和,*,*,*,*,イイ,イイ,イイ,イイ,*,*,1,C3,*
+        天気 名詞,普通名詞,一般,*,*,*,テンキ,天気,天気,テンキ,天気,テンキ,漢,*,*,*,*,テンキ,テンキ,テンキ,テンキ,*,*,1,C1,*
+        でし 助動詞,*,*,*,助動詞-デス,連用形-一般,デス,です,でし,デシ,です,デス,和,*,*,*,*,デシ,デス,デシ,デス,*,*,*,"形容詞%F2@-1,動詞%F2@0,名詞%F2@1",*
+        た 助動詞,*,*,*,助動詞-タ,終止形-一般,タ,た,た,タ,た,タ,和,*,*,*,*,タ,タ,タ,タ,*,*,*,"動詞%F2@1,形容詞%F4@-2",*
+        ね 助詞,終助詞,*,*,*,*,ネ,ね,ね,ネ,ね,ネ,和,*,*,*,*,ネ,ネ,ネ,ネ,*,*,*,"動詞%F1,名詞%F1,形容詞%F1",*
+        BOS/EOS,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*
         ```
 
-    - （＊3）文字コードをUTF8に変換
-        ```bash
-        $ LANG=ja_JP.UTF8
-        $ nkf -w8 --overwrite ~/gitlocalrep/dsbook/mecab-python3_test.py
-        ```
+        上記が**形態素解析**した結果となる。
+
+        また、実行環境によっては 下記（＊2）の文字コードに起因するエラーになるため、下記（＊3）を参考に文字コードを**UTF8**等 に変換後、実行すること。
+
+        - （＊2）文字コードに起因するエラー
+            ```bash
+            $ python ~/gitlocalrep/dsbook/mecab-python3_test.py
+            >昨日はいい天気でしたね
+            Traceback (most recent call last):
+            File "~/gitlocalrep/dsbook/mecab-python3_test.py", line 11, in <module>
+                node = mecab.parseToNode(text)
+            TypeError: in method 'Tagger_parseToNode', argument 2 of type 'char const *'
+            ```
+
+        - （＊3）文字コードをUTF8に変換
+            ```bash
+            $ LANG=ja_JP.UTF8
+            $ nkf -w8 --overwrite ~/gitlocalrep/dsbook/mecab-python3_test.py
+            ```
 
 ### 状態遷移によるタスクを遂行する「SCXML」の概要とインストール
+- 状態遷移の準備<br>
+    **状態遷移**とは、**状態遷移ベース**または、**ネットワーク方式**とも呼ばれ、天気情報案内を例にすると**場所**や**日付**など、天気情報を取得する（絞込む）ための条件を対話で聞き出し、次の要求状態へと遷移させ、これを繰返し業務遂行する手法のこと。
 
-**状態遷移**とは、**状態遷移ベース**または、**ネットワーク方式**とも呼ばれ、天気情報案内を例にすると**場所**や**日付**など、天気情報を取得する（絞込む）ための条件を対話で聞き出し、次の要求状態へと遷移させ、これを繰返し業務遂行する手法のこと。
+    ※ **状態遷移ベース**は、タスク指向型対話システムの遂行手法としては、最もシンプルだが、情報を一つ一つ聞き出すといったシステム主導型の対話になる。
+    一問一答でユーザーを問い詰めるような遂行ではなく、一度に複数の情報を受け付ける**フレームベース**という遂行方法もあり、この詳細については次の記事以降で扱う。
 
-※ **状態遷移ベース**は、タスク指向型対話システムの遂行手法としては、最もシンプルだが、情報を一つ一つ聞き出すといったシステム主導型の対話になる。
-一問一答でユーザーを問い詰めるような遂行ではなく、一度に複数の情報を受け付ける**フレームベース**という遂行方法もあり、この詳細については次の記事以降で扱う。
+    また、それぞれの状態遷移や受け付ける動作、組合わせなどの情報を表現するモデルのことを**有限状態オートマトン**（有限状態機械）といい、このモデルを状態遷移させてタスクを遂行する。
 
-また、それぞれの状態遷移や受け付ける動作、組合わせなどの情報を表現するモデルのことを**有限状態オートマトン**（有限状態機械）といい、このモデルを状態遷移させてタスクを遂行する。
+    **有限状態オートマトン**の詳細には深く触れないが、状態設計をすべてコードで表すと複雑になりやすい。そこで、**有限状態オートマトン**を記述するためのマークアップ言語である**SCXML**（State Chart XML）を用いて状態遷移を表現する。
 
-**有限状態オートマトン**の詳細には深く触れないが、状態設計をすべてコードで表すと複雑になりやすい。そこで、**有限状態オートマトン**を記述するためのマークアップ言語である**SCXML**（State Chart XML）を用いて状態遷移を表現する。
+    - SCXMLのインストール(PySide2)<br>
+        PythonでGUI作成のために用いられる **Qtライブラリ**の処理系である**Qt for Python**（PySide2）の**QScxmlStateMachine**という **有限状態オートマトン**を表現するクラスを使用。
 
-- SCXMLのインストール(PySide2)<br>
-    PythonでGUI作成のために用いられる **Qtライブラリ**の処理系である**Qt for Python**（PySide2）の**QScxmlStateMachine**という **有限状態オートマトン**を表現するクラスを使用する。
+        PySide2をインストール(ver.2-5.15.0)
+        ```bash
+        $ source /var/www/vops/bin/activate # 仮想環境起動
+        $ pip3.6 install PySide2 # PySide2をインストール
+        ```
+        上記でPythonから **SCXML** を使えるようになった。
 
-    PySide2をインストール(ver.2-5.15.0)
-    ```bash
-    $ source /var/www/vops/bin/activate # 仮想環境起動
-    $ pip3.6 install PySide2 # PySide2をインストール
-    ```
-    上記でPythonから **SCXML** を使えるようになった。
+        ここでは、次に示す **SCXML** 各要素の解説に留め、次の記事以降でPythonから呼び出す実装サンプルを確認。
 
-    ここでは、次に示す **SCXML** 各要素の解説に留め、次の記事以降でPythonから呼び出す実装サンプルを確認する。
+    - 天気情報案内の状態遷移図(SCXML)<br>
+        以下、**SCXML** で記載した天気情報案内の状態遷移図。
 
-- 天気情報案内の状態遷移図(SCXML)<br>
-    以下、**SCXML** で記載した天気情報案内の状態遷移図。
+        states.scxml<br>
+        ```xml
+        <?xml version="1.0" encoding="UTF-8"?>
+        <scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" initial="ask_place">
+          <state id="ask_place">
+            <transition event="place" target="ask_date"/>
+          </state>
+          <state id="ask_date">
+            <transition event="date" target="ask_type"/>
+          </state>
+          <state id="ask_type">
+            <transition event="type" target="tell_info"/>
+          </state>
+          <final id="tell_info"/>
+        </scxml>
+        ```
 
-    states.scxml<br>
-    ```xml
-    <?xml version="1.0" encoding="UTF-8"?>
-    <scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" initial="ask_place">
-      <state id="ask_place">
-        <transition event="place" target="ask_date"/>
-      </state>
-      <state id="ask_date">
-        <transition event="date" target="ask_type"/>
-      </state>
-      <state id="ask_type">
-        <transition event="type" target="tell_info"/>
-      </state>
-      <final id="tell_info"/>
-    </scxml>
-    ```
+    `state`要素は通常の状態、`final`要素は状態機械の終了を示す最終状態を表す。状態から別の状態へ移る規則は`transition`要素で定義する。
 
-`state`要素、`final`要素それぞれが一つの状態遷移を表す。
+    `transition`の`event`には、アプリケーション側から状態機械へ送るイベント名を指定する。SCXML自体が「福岡県福岡市」などの自然言語を判定するわけではない。アプリケーションが発話から地名を抽出できた場合に`place`イベントを送信すると、`target`に指定した`ask_date`へ遷移する。
 
-また、その子要素である`transition`の`event`は、ユーザー応答の結果が期待したワードである場合（例えば "place"（場所）でいうと、"福岡県福岡市"など地名を含んでいる場合）、このイベントが発火した状態となりこの場合、`target`に指定されている次の状態 "ask_date" に遷移する。
+    アプリケーションが対応するイベントを送らなければ遷移は発生せず、現在の状態に留まる。
 
-イベントが期待したワードでなければ、イベントは発火せず、同じ状態遷移を繰り返す。
+    上記の要領で`ask_place`（地名指定）→ `ask_date`（日時指定）→ `ask_type`（種別：天気 or 気温）と状態遷移が進むと、最後に`final`要素の天気情報の取得結果を返す状態に遷移し、天気情報を返して処理を終了する。
 
-上記の要領で`ask_place`（地名指定）→ `ask_date`（日時指定）→ `ask_type`（種別：天気 or 気温）と状態遷移が進むと、最後に`final`要素の天気情報の取得結果を返す状態に遷移し、天気情報を返して処理を終了する。
-
-以上で`MeCab`と`SCXML`の環境準備が完了。
-
-## 実務とのつながり
-- 問い合わせBotの基礎<br>
-    予約、FAQ、天気案内など、決まった流れで処理できる対話では状態遷移ベースが使いやすい。
-- 設計と実装の分離<br>
-    状態をSCXMLで表すと、対話の流れをコードから切り離して確認しやすくなる。
+    以上で`MeCab`と`SCXML`の環境準備が完了。
 
 ## まとめ
 - 状態遷移ベースは、現在の状態と入力に応じて次の処理を決める方式。
 - MeCabは日本語発話を単語に分割するために使う。
 - SCXMLは対話状態と遷移条件を表現するために使う。
 
-## 参考文献
+### 参考文献
 - 東中 竜一郎、稲葉 通将、水上 雅博（\\(2020\\)）『Pythonでつくる対話システム』株式会社オーム社
-
-## GitHubサポートページ
-- https://github.com/dsbook/dsbook
+- [MeCab公式サイト - MeCab: Yet Another Part-of-Speech and Morphological Analyzer（日本語・形態素解析器の公式解説）](https://taku910.github.io/mecab/)
+- [GitHub - 『Pythonでつくる対話システム』サポートリポジトリ（日本語・書籍の実装例）](https://github.com/dsbook/dsbook)
+- [W3C Recommendation - State Chart XML（SCXML）（英語・SCXMLの仕様原文）](https://www.w3.org/TR/scxml/)

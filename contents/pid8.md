@@ -5,39 +5,48 @@ Python - 対話モード：PYTHONSTARTUPと起動時設定の使い方
 
 Pythonの対話モードの基本操作と、PYTHONSTARTUPを使った起動時スクリプトの設定方法を整理する。
 
-対話モードは、短いコードの確認、ライブラリの挙動確認、環境変数やパスの調査に便利な実験場所になる。PYTHONSTARTUPを使うと、毎回使うimportや補助関数を起動時に読み込める。
+対話モードは、短いコードの確認、ライブラリの挙動確認、環境変数やパスの調査に便利な実験場所になる。<br>PYTHONSTARTUPを使うと、毎回使うimportや補助関数を起動時に読み込める。
 
-## この記事で扱うこと
-- pythonコマンドで対話モードを起動する方法。
-- sys.pathなどを対話的に確認する流れ。
-- exit()やCtrl+Dで終了する方法。
-- PYTHONSTARTUPで起動時スクリプトを読み込む方法。
-- IPythonやimport thisなどの補足的な使い方。
+## この記事の構成
+- [対象環境と利用上の注意](#対象環境と利用上の注意)<br>
+  本文記載時の環境と現在そのまま利用できない箇所を確認。
+- [作業時の注意点](#作業時の注意点)<br>
+  設定変更やコマンド実行前に確認しておきたい注意点を整理。
+- [対話モードの使用例](#対話モードの使用例)<br>
+  対話モードの使用例をコードや具体例で確認。
+- [環境変数（PYTHONSTARTUP）の設定](#環境変数pythonstartupの設定)<br>
+  環境変数（PYTHONSTARTUP）の設定の手順と確認ポイントを整理。
+- [その他、対話モードの補足](#その他対話モードの補足)<br>
+  直前の実行結果や組込みヘルプなど、対話モードの便利な機能を確認。
 
-## 作業前に確認すること
+## 対象環境と利用上の注意
 
-| 項目 | 確認内容 |
-| --- | --- |
-| Pythonコマンド | 利用しているPythonのバージョンを確認する。 |
-| 対話モード | >>> の後にコードを入力して即時実行する。 |
-| PYTHONSTARTUP | 起動時に読み込むスクリプトのパスを環境変数に設定する。 |
-| 共通import | 毎回使う標準ライブラリを起動時に読み込める。 |
-| -iオプション | ファイル実行後に対話モードへ入れる。 |
+- 本文記載時の環境<br>
+掲載した出力はCentOS 7上のPython 3.6.4を利用した当時の例。
+- 確認時期<br>
+2026年8月にPythonの公式資料と照合し、基本動作を確認。<br>
+掲載環境と同じ条件では再実行していない。
+- 現在そのまま利用できない箇所<br>
+起動メッセージ、実行コマンド名、`sys.path`、シェルの起動設定はOS・Python・仮想環境で異なる。<br>
+出力値やパスは現在の環境で読み替える。
 
 ## 作業時の注意点
 
-| 作業時の注意点 | 確認ポイント |
-| --- | --- |
-| pythonとpython3 | 環境によって起動するバージョンが違うことがある。 |
-| sys未定義エラー | importしていないモジュールは対話モードでも使えない。 |
-| PYTHONSTARTUPの範囲 | 通常のスクリプト実行ではなく、対話モード起動時に効く。 |
-| アンダーバー | 直前の結果を保持するため、通常変数名として使うと混乱しやすい。 |
+- pythonとpython3<br>
+環境によって起動するバージョンが違うことがある。
+- sys未定義エラー<br>
+importしていないモジュールは対話モードでも使えない。
+- PYTHONSTARTUPの範囲<br>
+通常のスクリプト実行ではなく、対話モード起動時に効く。
+- アンダーバー<br>
+直前に表示された式の結果を保持するため、通常変数名として代入すると混乱しやすい。
 
 ## 実施内容
 ### 対話モードの使用例
 - 対話モードの起動<br>
-Pythonのバージョン問わず、`python`コマンドを実行することで**対話モード**が起動する。<br>
+引数なしで`python`または`python3`コマンドを実行すると、**対話モード**が起動。どちらのコマンド名を使うかはOSや環境によって異なるため、先にバージョンを確認。<br>
 対話モードでは、入力待ち状態を表す「>>>」の後に直接コードを書いて実行することができる。<br>
+以下の表示例はPython 3.6.4当時の実行結果であり、現在のPythonではバージョン表記、起動メッセージ、`sys.path`の内容などが異なる。基本操作は同じとなる。<br>
   ```bash
   $ python -V    # バージョン確認
    Python 3.6.4
@@ -61,7 +70,7 @@ Pythonのバージョン問わず、`python`コマンドを実行することで
   ```
 
 - 対話モードの終了<br>
-「Ctrl」+「D」押下または、`exit()`を実行する。<br>
+`exit()`を実行。Unix系OSでは「Ctrl」+「D」、Windowsでは「Ctrl」+「Z」を押してから「Enter」でも終了できる。<br>
   ```bash
   $ python
    Python 3.6.4 (default, Dec 19 2017, 14:48:12)
@@ -82,11 +91,11 @@ Pythonのバージョン問わず、`python`コマンドを実行することで
    Type "help", "copyright", "credits" or "license" for more information.
    >>> sys.path
    Traceback (most recent call last):
-     File "", line 1, in 
+     File "<stdin>", line 1, in <module>
    NameError: name 'sys' is not defined
    >>>
   ```
-  `sys`をインポートしていないので当然エラーが発生する。
+  `sys`をインポートしていないので当然エラーが発生。
 
 - **PYTHONSTARTUP**に`import sys`を追記<br>
 ホームディレクトリに`.pythonstartup`を作成後、環境変数「PYTHONSTARTUP」に`.pythonstartup`を設定し、`import sys`を追記する。<br>
@@ -94,8 +103,9 @@ Pythonのバージョン問わず、`python`コマンドを実行することで
   $ touch  ~/.pythonstartup    # 空ファイル新規作成
   $ vim  ~/.pythonstartup    # import sys を追記
    import sys
-  $ export PYTHONSTARTUP=~/.pythonstartup    # 環境変数「PYTHONSTARTUP」にpythonstartup を設定
+  $ export PYTHONSTARTUP="$HOME/.pythonstartup"    # 起動時スクリプトのパスを設定
   ```
+  `export`の効果は現在のシェルに限られる。常に有効にする場合は、利用しているシェルに応じて`.zshrc`や`.bashrc`などへ同じ設定を記述。
 
 - 再度対話モードで`sys.path`を実行<br>
   ```bash
@@ -113,8 +123,8 @@ Pythonのバージョン問わず、`python`コマンドを実行することで
 上記の要領で、Pythonの標準ライブラリなどの共通モジュールを環境変数(PYTHONSTARTUP)に設定しておくと対話モードのコーディングが簡潔になる。
 
 ### その他、対話モードの補足
-- 最後に実行されたコードを再度実行する<br>
-最後に実行したコードは、変数_（アンダーバー）に格納されているため、_（アンダーバー）を実行することで再実行できる。<br>
+- 直前に表示された式の結果を参照する<br>
+対話モードでは、最後に**表示された式の結果**が`_`（アンダーバー）に保持される。<br>`_`を評価しても直前のコードを再実行するわけではなく、保存されている値を参照。<br>明示的に`_`へ代入するとこの用途で扱いにくくなるため、通常の変数名には使わない。<br>
   ```bash
   $ python
    [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
@@ -135,100 +145,26 @@ Pythonのバージョン問わず、`python`コマンドを実行することで
   $ python -i example.py
   >>>
   ```
+  `-i`でスクリプト実行後に対話モードへ入る場合、`PYTHONSTARTUP`のファイルは読み込まれない点に注意。
 
 - **IPython**の導入<br>
-対話モードをデバッガーのように利用できる**IPython**というパッケージもある。<br>
-IPythonをインストールするとTABキーでの補完、シェルコマンドの使用、pythonデバッガー(pdb)との連携ができるようになる。<br>
+標準の対話モードを拡張した**IPython**というパッケージもある。<br>
+  IPythonをインストールすると、TABキーによる補完、入力履歴、シェルコマンド、Pythonデバッガー（Pdb）との連携などを利用できる。<br>
   ```bash
-  $ pip install ipython
+  $ python -m pip install ipython
   ```
 
-- Python開発者の心構え（The Zen of Python）<br>
-対話モードでも`import this`で原文確認できる。<br>
-以下は、**The Zen of Python**は、Pythonの開発者の一人「Tim Peters」によって書かれた**Pythonらしさ**を端的にまとめた文章。<br>
-  - 原文
-    ```bash
-    $ python
-    Python 3.6.4 (default, Dec 19 2017, 14:48:12)
-    [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
-    Type "help", "copyright", "credits" or "license" for more information.
-    >>> import this
-    The Zen of Python, by Tim Peters
-
-    Beautiful is better than ugly.
-    Explicit is better than implicit.
-    Simple is better than complex.
-    Complex is better than complicated.
-    Flat is better than nested.
-    Sparse is better than dense.
-    Readability counts.
-    Special cases aren't special enough to break the rules.
-    Although practicality beats purity.
-    Errors should never pass silently.
-    Unless explicitly silenced.
-    In the face of ambiguity, refuse the temptation to guess.
-    There should be one-- and preferably only one --obvious way to do it.
-    Although that way may not be obvious at first unless you're Dutch.
-    Now is better than never.
-    Although never is often better than *right* now.
-    If the implementation is hard to explain, it's a bad idea.
-    If the implementation is easy to explain, it may be a good idea.
-    Namespaces are one honking great idea -- let's do more of those!
-    ```
-
-  - 和訳
-    ```
-    The Zen of Python, by Tim Peters
-
-    Beautiful is better than ugly.
-    醜いより美しいほうがいい。
-    Explicit is better than implicit.
-    暗示するより明示するほうがいい。
-    Simple is better than complex.
-    複雑であるよりは平易であるほうがいい。
-    Complex is better than complicated.
-    それでも、込み入っているよりは複雑であるほうがまし。
-    Flat is better than nested.
-    ネストは浅いほうがいい。
-    Sparse is better than dense.
-    密集しているよりは隙間があるほうがいい。
-    Readability counts.
-    読みやすいことは善である。
-    Special cases aren't special enough to break the rules.
-    特殊であることはルールを破る理由にならない。
-    Although practicality beats purity.
-    しかし、実用性を求めると純粋さが失われることがある。
-    Errors should never pass silently.
-    エラーは隠すな、無視するな。
-    Unless explicitly silenced.
-    ただし、わざと隠されているのなら見逃せ。
-    In the face of ambiguity, refuse the temptation to guess.
-    曖昧なものに出逢ったら、その意味を適当に推測してはいけない。
-    There should be one-- and preferably only one --obvious way to do it.
-    何かいいやり方があるはずだ。誰が見ても明らかな、たったひとつのやり方が。
-    Although that way may not be obvious at first unless you're Dutch.
-    そのやり方は一目見ただけではわかりにくいかもしれない。オランダ人にだけわかりやすいなんてこともあるかもしれない。
-    Now is better than never.
-    ずっとやらないでいるよりは、今やれ。
-    Although never is often better than *right* now.
-    でも、今"すぐ"にやるよりはやらないほうがマシなことが多い。
-    If the implementation is hard to explain, it's a bad idea.
-    コードの内容を説明するのが難しいのなら、それは悪い実装である。
-    If the implementation is easy to explain, it may be a good idea.
-    コードの内容を容易に説明できるのなら、おそらくそれはよい実装である。
-    Namespaces are one honking great idea -- let's do more of those!
-    名前空間は優れたアイデアであるため、積極的に利用すべきである。
-    ```
-
-## 実務とのつながり
-- 動作確認<br>
-    短い式や標準ライブラリの挙動をすぐ確認できる。
-- 環境調査<br>
-    sys.pathやモジュール読み込み先の確認に使える。
-- 開発効率<br>
-    よく使う準備処理をPYTHONSTARTUPへまとめられる。
+- Pythonの設計原則（The Zen of Python）<br>
+対話モードで`import this`を実行すると、Tim Petersがまとめた「The Zen of Python」を確認できる。<br>全文を覚えるものではなく、可読性、明示性、単純さ、名前空間など、Pythonコードを設計・レビューするときの判断軸として読むと役立つ。背景と原文はPEP 20で確認できる。
 
 ## まとめ
 - Pythonの対話モードは、小さなコードをすぐ試すための実験環境になる。
 - PYTHONSTARTUPを使うと、起動時に共通処理を読み込める。
 - バージョンや環境変数の違いに注意すると、環境調査にも使いやすい。
+
+### 参考文献
+- [Python 3 ドキュメント「コマンドラインと環境：PYTHONSTARTUP」（日本語・公式仕様）](https://docs.python.org/ja/3/using/cmdline.html#envvar-PYTHONSTARTUP)
+- [Python 3 チュートリアル「Pythonを電卓として使う」（日本語・公式入門）](https://docs.python.org/ja/3/tutorial/introduction.html#using-python-as-a-calculator)
+- [Python 3 ドキュメント「sys.path」（日本語・モジュール検索パス仕様）](https://docs.python.org/ja/3/library/sys.html#sys.path)
+- [IPython Documentation, Using IPython for interactive work（英語・対話環境の公式解説）](https://ipython.readthedocs.io/en/stable/interactive/index.html)
+- [Python Enhancement Proposals, PEP 20：The Zen of Python（英語・設計指針原文）](https://peps.python.org/pep-0020/)

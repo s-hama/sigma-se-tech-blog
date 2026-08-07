@@ -3,47 +3,40 @@
   <p>手書き数字画像データセットであるMNISTを取得し、ニューラルネットワークのサンプルで扱える形にする手順を整理する。</p>
   <p>MNISTは、画像分類の入門でよく使われるデータセットで、入力データ、ラベル、訓練データ、テストデータの関係を確認するのに向いている。</p>
   <p>ここでは、データの仕様、ダウンロード処理、画像としての表示確認までを扱う。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>MNISTの画像データとラベルの構成。</li>
-  <li>訓練データとテストデータの違い。</li>
-  <li>データをダウンロードして読み込む流れ。</li>
-  <li>画像データを表示して中身を確認する方法。</li>
-</ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">確認項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>Python環境</td><td>NumPyとMatplotlibが使える状態にしておく。</td></tr>
-      <tr><td>データセット</td><td>外部からデータを取得するため、ネットワーク接続が必要になる場合がある。</td></tr>
-      <tr><td>前提知識</td><td>配列のshapeとラベルの意味を確認しておく。</td></tr>
-    </tbody>
-  </table>
-
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#mnistとは" class="link-secondary">MNISTとは</a><br>
+      MNISTの意味と基本的な考え方を整理。</li>
+    <li><a href="#mnistのデータ仕様" class="link-secondary">MNISTのデータ仕様</a><br>
+      MNISTのデータ仕様の意味と要点を具体例から整理。</li>
+    <li><a href="#mnistのダウンロード" class="link-secondary">MNISTのダウンロード</a><br>
+      MNISTのダウンロードの手順と確認ポイントを整理。</li>
+    <li><a href="#画像データ表示確認" class="link-secondary">画像データ表示確認</a><br>
+      画像データ表示について、確認する項目と結果の見方を整理。</li>
+  </ul>
   <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
   <h3 id="mnistとは">MNISTとは</h3>
-  <p><strong>MNIST</strong>（Mixed National Institute of Standards and Technology
-    database）とは、数字画像（1～9）から構成され、手書き数字の訓練画像が60,000枚、テスト画像が10,000枚が用意された画像データセットのことで、機械学習の分野で最も利用されている。</p>
+  <ul>
+    <li>データセットの構成<br>
+  <p><strong>MNIST</strong>（Modified National Institute of Standards and Technology
+    database）とは、0～9の手書き数字で構成され、訓練画像60,000枚とテスト画像10,000枚が用意された画像データセットである。</p>
   <p>
     また、手書き数字の訓練画像が60,000枚、テスト画像が10,000枚の「1枚」に対して<strong>画像データ</strong>と<strong>その画像の正解となるラベルデータ</strong>がペアとなっており、下記の4つのファイルで構成されている。
   </p>
   <ul>
     <li>train-images-idx3-ubyte : 学習用 画像データセット（60,000枚）</li>
     <li>train-labels-idx1-ubyte : 学習用 ラベルデータセット（60,000個）</li>
-    <li>t10k-images-idx3-ubyte : 検証用 画像データセット（10,000枚）</li>
-    <li>t10k-labels-idx1-ubyte : 検証用 ラベルデータセット（10,000個）</li>
+    <li>t10k-images-idx3-ubyte : テスト用 画像データセット（10,000枚）</li>
+    <li>t10k-labels-idx1-ubyte : テスト用 ラベルデータセット（10,000個）</li>
   </ul>
+    </li>
+  </ul>
+
   <h3 id="mnistのデータ仕様">MNISTのデータ仕様</h3>
+  <ul>
+    <li>画像・ラベルデータの形式<br>
   <p>機械学習では画像を数値として扱う必要があるため、<strong>バイナリデータ</strong>となっており、画像とラベルデータが紐付いている。</p>
-  <p>※ 下記、画像、ラベルのデータフォーマットについては、下記サイトを参考に記載。<br>
-    参考URL（WEB ARCH LABO）：<a class="link-secondary"
-      href="https://weblabo.oscasierra.net/python/ai-mnist-data-detail.html">https://weblabo.oscasierra.net/python/ai-mnist-data-detail.html</a>
-  </p>
+  <p>※ 以下の画像・ラベルの形式は、MNISTで使われるIDXファイルのヘッダーとデータ配置を整理したもの。</p>
   <p>以下、画像とラベルのフォーマット仕様。</p>
   <ul>
     <li>
@@ -124,7 +117,7 @@
           <tr>
             <td>0000</td>
             <td>32 bit integer</td>
-            <td>0x00000803(2049)</td>
+            <td>0x00000801(2049)</td>
             <td>識別子（定数）</td>
           </tr>
           <tr>
@@ -161,7 +154,12 @@
       </table>
     </li>
   </ul>
+    </li>
+  </ul>
+
   <h3 id="mnistのダウンロード">MNISTのダウンロード</h3>
+  <ul>
+    <li>データ取得と読み込み<br>
   <p>下記、<code>mnist.py</code>を使用し、MNISTをダウンロードする。</p>
   <p>Git（deep-learning-from-scratch）：<a class="link-secondary"
       href="https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/dataset/mnist.py">https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/dataset/mnist.py</a>
@@ -181,7 +179,7 @@ Resolving deltas: 100% (197/197), <span class="hljs-keyword">done</span>.
     <li>
       <p>カレントディレクトに移動<br>
         <code>mnist.py</code>の利用時は、カレントディレクトを ch01、ch02、ch03 … ch08 のいずれかで実施する必要がある。<br>
-        ここでは、ch03から実施する。
+        ここでは、ch03から実施。
       </p>
       <pre><code class="language-bash">$ <span class="hljs-built_in">cd</span> deep-learning-from-scratch/ch03
 </code></pre>
@@ -190,7 +188,7 @@ Resolving deltas: 100% (197/197), <span class="hljs-keyword">done</span>.
       <p>ダウンロード<br>
         下記、load_mnistによってMNISTデータセットのダウンロードを行っているが、初回のみオンラインである必要があり数分かかる。<br />
         初回で読み込み時に<code>pickle</code>というローカルファイルが作成され、ダウンロード結果を保持しているので、2回目以降は、オフラインかつ、すぐに処理が終わる。<br />
-        ※ Pythonの<code>pickle</code>は、プログラム実行中のオブジェクト情報をファイルとして保存できる機能。</p>
+        ※ Pythonの<code>pickle</code>は、Pythonオブジェクトをファイルへ保存・復元する機能。信頼できないpickleを読み込むと任意のコードが実行される危険があるため、この例では取得元を確認したファイルだけを使用する。</p>
       <pre><code class="language-bash">$ python
  &gt;&gt;&gt; import sys, os
  &gt;&gt;&gt; sys.path.append(os.pardir)    <span class="hljs-comment"># 親ディレクトリのファイルをインポートするための設定</span>
@@ -216,29 +214,34 @@ Resolving deltas: 100% (197/197), <span class="hljs-keyword">done</span>.
  Creating pickle file ...
  Done!
  &gt;&gt;&gt;
- &gt;&gt;&gt; <span class="hljs-built_in">print</span>(x_train.shape)    <span class="hljs-comment"># データ形状の確認：学習用 ラベルデータセット</span>
+ &gt;&gt;&gt; <span class="hljs-built_in">print</span>(x_train.shape)    <span class="hljs-comment"># データ形状の確認：学習用 画像データセット</span>
  (60000, 784)
- &gt;&gt;&gt; <span class="hljs-built_in">print</span>(t_train.shape)    <span class="hljs-comment"># データ形状の確認：学習用 画像データセット</span>
+ &gt;&gt;&gt; <span class="hljs-built_in">print</span>(t_train.shape)    <span class="hljs-comment"># データ形状の確認：学習用 ラベルデータセット</span>
  (60000,)
- &gt;&gt;&gt; <span class="hljs-built_in">print</span>(x_test.shape)    <span class="hljs-comment"># データ形状の確認：検証用 ラベルデータセット</span>
+ &gt;&gt;&gt; <span class="hljs-built_in">print</span>(x_test.shape)    <span class="hljs-comment"># データ形状の確認：テスト用 画像データセット</span>
  (10000, 784)
- &gt;&gt;&gt; <span class="hljs-built_in">print</span>(t_test.shape)    <span class="hljs-comment"># データ形状の確認：検証用 画像データセット</span>
+ &gt;&gt;&gt; <span class="hljs-built_in">print</span>(t_test.shape)    <span class="hljs-comment"># データ形状の確認：テスト用 ラベルデータセット</span>
  (10000,)
  &gt;&gt;&gt;
 </code></pre>
     </li>
     <li>
       <p>load_mnist関数の概要<br>
-        引数 normalize は、入力画像を<strong>0.0 ～ 1.0 に正規化するかどうか</strong>Bool値で設定する。<br>
+        引数 normalize は、入力画像を<strong>0.0 ～ 1.0 に正規化するかどうか</strong>Bool値で設定。<br>
         Falseの場合、入力画像のピクセルは 0 ～ 255 となる。<br>
-        引数 flatten は、入力画像を<strong>1次元にするかどうか</strong>Bool 値で設定する。<br>
+        引数 flatten は、入力画像を<strong>1次元にするかどうか</strong>Bool 値で設定。<br>
         Falseの場合、入力画像は1 * 28 * 28 の3次元配列として格納され、Trueの場合、1次元配列(要素：784)として格納される。<br>
-        引数 one_hot_label は、ラベルを <strong>one_hot表現で格納するか</strong>Bool値で設定する。<br>
+        引数 one_hot_label は、ラベルを <strong>one_hot表現で格納するか</strong>Bool値で設定。<br>
         one_hot 表現の場合は、正解となるラベルのみ 1 でそれ以外は、0 の配列となる。<br>
         戻り値は、（訓練画像, 訓練ラベル）, （テスト画像, テストラベル）の形式でMNISTデータを返す。</p>
     </li>
   </ul>
+    </li>
+  </ul>
+
   <h3 id="画像データ表示確認">画像データ表示確認</h3>
+  <ul>
+    <li>手書き数字画像の表示<br>
   <p><code>ch03/mnist_show.py</code>に訓練画像1枚目「5」の確認用ソースコードが記載されている。<br>
     下記は、この中の<code>show</code>にあたる箇所を<code>save</code>に置換え、画像ファイルを出力するサンプル。</p>
   <pre><code class="language-bash">$ python
@@ -250,7 +253,7 @@ Resolving deltas: 100% (197/197), <span class="hljs-keyword">done</span>.
  &gt;&gt;&gt;
  &gt;&gt;&gt; def img_save(img):
  ...     pil_img = Image.fromarray(np.uint8(img))
- ...     pil_img.save(<span class="hljs-string">&#x27;/var/www/vops/ops/macuos/static/macuos/img/pid19_1.png&#x27;</span>)    <span class="hljs-comment"># ＊1 mnist_show.py では、pil_img.show()</span>
+ ...     pil_img.save(<span class="hljs-string">&#x27;pid19_1.png&#x27;</span>)    <span class="hljs-comment"># ＊1 mnist_show.py では、pil_img.show()</span>
  ...
  &gt;&gt;&gt; (x_train, t_train), (x_test, t_test) = load_mnist(flatten=True, normalize=False)
  &gt;&gt;&gt;
@@ -272,36 +275,21 @@ Resolving deltas: 100% (197/197), <span class="hljs-keyword">done</span>.
       <img src="/static/tblog/img/pid19_1.png" alt="pid19_1">
     </li>
   </ul>
+    </li>
+  </ul>
 
-  <h2 id="違いを整理する">違いを整理する</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">比較する項目</th>
-        <th scope="col">整理するポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>画像と配列の対応</td><td>画像はピクセル値の配列として扱われる。見た目の数字と配列の形を結び付ける。</td></tr>
-      <tr><td>訓練データとテストデータ</td><td>学習に使うデータと評価に使うデータを混ぜない。</td></tr>
-      <tr><td>正規化の有無</td><td>ピクセル値を0から1に変換するかどうかで、後続の処理の値の範囲が変わる。</td></tr>
-    </tbody>
-  </table>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-<ul>
-  <li>データ確認の重要性<br>
-    学習前にshape、件数、ラベル、画像表示を確認すると、入力ミスに早く気付ける。</li>
-  <li>画像分類の基本<br>
-    MNISTは小さいデータセットだが、画像分類の流れを学ぶ入口として使いやすい。</li>
-</ul>
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>MNISTは手書き数字画像と正解ラベルのデータセット。</li>
-  <li>訓練データとテストデータを分けて扱う。</li>
-  <li>学習前にshapeや画像表示でデータの中身を確認することが大切。</li>
-</ul>
-  <h2 id="参考文献">参考文献</h2>
   <ul>
-    <li>斎藤 康毅（\(2018\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
+    <li>MNISTは手書き数字の画像と正解ラベルから構成され、画像はピクセル値の配列として扱われる。</li>
+    <li>shapeや画像表示を確認すると、配列の形と実際の画像を対応付けやすい。</li>
+    <li>訓練データは学習、テストデータは評価に使い、両者を混ぜない。</li>
+    <li>正規化の有無によってピクセル値の範囲が変わるため、後続処理の前提をそろえる。</li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>斎藤 康毅（\(2016\)）<a href="https://www.oreilly.co.jp/books/9784873117584/" class="link-secondary">『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』（日本語・本記事シリーズの基礎文献）</a> 株式会社オライリー・ジャパン</li>
+    <li><a href="https://www.tensorflow.org/tutorials/quickstart/beginner?hl=ja" class="link-secondary">TensorFlow「初心者のためのTensorFlow 2.0入門」（日本語・MNISTデータの公式入門）</a></li>
+    <li><a href="https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/dataset/mnist.py" class="link-secondary">O'Reilly Japan「deep-learning-from-scratch」mnist.py（Python・公式サンプルコード）</a></li>
+    <li><a href="https://keras.io/api/datasets/mnist/" class="link-secondary">Keras, MNIST digits classification dataset（英語・データセットAPI仕様）</a></li>
   </ul>
 </div>

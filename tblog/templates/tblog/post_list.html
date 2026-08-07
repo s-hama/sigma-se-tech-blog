@@ -39,12 +39,7 @@
 <div class="border-primary mb-3">
   <a class="btn btn-outline-primary btn-list-link col-12 col-sm-12 {% if post.category.name == 'PaidContent' %}disabled{% endif %}" href="{% url 'tblog:detail' post.pk %}">
     <h4>{{ post.title }}</h4>
-    <span class="badge category-parent">{{ post.category.parent }}</span>
-    <span class="badge category-child">{{ post.category }}</span>
-    {% for tag in post.tag.all|dictsort:"name" %}
-    <span class="badge category-grandchild">{{ tag.name }}</span>
-    {% endfor %}
-    <span class="float-end">{{ post.created_at }}</span>
+    {% include "tblog/post_meta.html" %}
   </a>
 </div>
 {% endfor %}

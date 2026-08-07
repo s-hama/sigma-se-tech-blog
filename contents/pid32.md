@@ -6,19 +6,15 @@ set、bytes、bytearray、file objectの基本操作を整理する。
 これらはlistやdictほど最初に触れる機会は多くないが、集合演算、バイナリデータ、ファイル入出力を扱うときに重要になる。
 ここでは、重複を持たない集合、変更不可/変更可能なバイト列、ファイル操作の基本を実行例で確認する。
 
-## この記事で扱うこと
-- setによる集合演算の基本。
-- bytesとbytearrayの違い。
-- バイナリデータを扱うときの考え方。
-- file objectを使った読み書きの基本。
-
-## 作業前に確認すること
-| 確認項目 | 内容 |
-| --- | --- |
-| Python環境 | 対話モードとファイルを作成できる作業ディレクトリを用意する。 |
-| 前提知識 | list、dict、文字列の基本操作を確認しておく。 |
-| 確認観点 | テキストデータとバイナリデータの違いを意識する。 |
-
+## この記事の構成
+- [set型 : 集合](#set型--集合)<br>
+  set型 : 集合の意味と要点を具体例から整理。
+- [bytes型 : バイト](#bytes型--バイト)<br>
+  bytes型 : バイトの意味と要点を具体例から整理。
+- [bytearray型 : バイト配列](#bytearray型--バイト配列)<br>
+  bytearray型 : バイト配列の意味と要点を具体例から整理。
+- [file object型 : ファイル操作オブジェクト](#file object型--ファイル操作オブジェクト)<br>
+  file object型 : ファイル操作オブジェクトの意味と要点を具体例から整理。
 
 ## 各データ型の操作方法
 
@@ -30,9 +26,9 @@ set型は、**重複した要素**がなく、要素に**順番を**持たない
 
 - 型の特性
   - ミュータブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > ミュータブル（mutable）: 同一アドレスで変更可](<https://sigma-se.com/detail/29/#:~:text=%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88mutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > ミュータブル（mutable）: オブジェクト自体を変更可](<https://sigma-se.com/detail/29/#ミュータブルmutable--オブジェクト自体を変更可>)
   - イテラブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可>)
 
 - 定義例
     ```python
@@ -75,7 +71,7 @@ set型は、**重複した要素**がなく、要素に**順番を**持たない
     ```
 
 - set型要素の追加、削除<br>
-※ 他の型とは違い**pop**は、ランダムで要素を削除することに注意。
+※ `pop()`は位置を指定できず、任意の要素を一つ削除して返す。無作為抽出を保証する操作ではない。
     ```python
     $ python
     >>> # 要素を追加
@@ -113,7 +109,7 @@ set型は、**重複した要素**がなく、要素に**順番を**持たない
     >>> print(set_e)
     set()
     >>>
-    >>> # ランダムで要素を削除
+    >>> # 任意の要素を一つ削除
     >>> set_f = {1, 2, 3, 4, 5}
     >>> print(set_f.pop())
     1
@@ -204,18 +200,18 @@ set型は、**重複した要素**がなく、要素に**順番を**持たない
     >>>
     ```
 
-  - 対象差集合（^ 演算子 or symmetric_difference）<br>
-  積集合の逆（どちらか一方にあるものを取得する）で排他的論理和（XOR）と同義。
+  - 対称差集合（^ 演算子 or symmetric_difference）<br>
+  二つの集合のどちらか一方だけに含まれる要素を取得する。集合の包含判定をビットで考えると、排他的論理和（XOR）に対応する。
     ```python
     $ python
-    >>> # ^ 演算子を用いた対象差集合
+    >>> # ^ 演算子を用いた対称差集合
     >>> set_a = {1, 2, 3, 4, 5}
     >>> set_b = {4, 5, 6, 7}
     >>> set_c = set_a ^ set_b
     >>> print(set_c)
     {1, 2, 3, 6, 7}
     >>>
-    >>> # symmetric_differenceを用いた対象差集合
+    >>> # symmetric_differenceを用いた対称差集合
     >>> set_d = {1, 2, 3, 4, 5}
     >>> set_e = {4, 5, 6, 7}
     >>> set_f = set_d.symmetric_difference(set_e)
@@ -328,17 +324,17 @@ set型は、**重複した要素**がなく、要素に**順番を**持たない
 
 ### bytes型 : バイト
 
-bytes型は、**byte**のイミュータブルオブジェクト（同一アドレスで変更不可）。
+bytes型は、各要素が \\(0\\) から \\(255\\) の整数となるイミュータブルなバイト列である。
 
-str型の表記と似ているが先頭に**b**が付き、bytes型をエンコードするとstr型となり、bytes型をデコードするとstr型に戻る。
+文字列を指定した符号化方式で`str.encode()`するとbytes型になり、bytes型を同じ符号化方式で`bytes.decode()`するとstr型に戻る。bytesリテラルは先頭に**b**を付ける。
 
 - 型の特性
   - イミュータブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: オブジェクト自体を変更不可](<https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可>)
   - イテラブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可>)
   - シーケンスオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%EF%BC%88sequence%EF%BC%89%3A%20%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9%E6%8C%87%E5%AE%9A%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#シーケンスsequence--インデックス指定可>)
 
 - 定義例
     ```python
@@ -379,7 +375,7 @@ str型の表記と似ているが先頭に**b**が付き、bytes型をエンコ�
     >>> type(byte_f)
     <class 'bytes'>
     >>>
-    >>> # ※ 上記でbを付加すると、デフォルトASCIIとなるのでUTF-8でないとエラーが発生する。
+    >>> # bytesオブジェクトを変換元にした場合、encoding引数は指定できない。
     >>> byte_f = bytes(b'abc', 'utf-8')
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
@@ -410,17 +406,15 @@ str型の表記と似ているが先頭に**b**が付き、bytes型をエンコ�
 
 ### bytearray型 : バイト配列
 
-bytearray型は、bytes型の配列版で文字コードを指定しない場合（デフォルト）は、ASCIIでエンコードされる。
-
-各要素の入れ替えを前提としたミュータブルオブジェクト（同一アドレスで変更可）。
+bytearray型は、bytes型に対応するミュータブルなバイト列であり、各要素を同じオブジェクト上で変更できる。文字列から生成する場合は、`bytearray('abc', 'utf-8')`のように符号化方式の指定が必要であり、文字コードのデフォルト値はない。
 
 - 型の特性
   - ミュータブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > ミュータブル（mutable）: 同一アドレスで変更可](<https://sigma-se.com/detail/29/#:~:text=%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88mutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > ミュータブル（mutable）: オブジェクト自体を変更可](<https://sigma-se.com/detail/29/#ミュータブルmutable--オブジェクト自体を変更可>)
   - イテラブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可>)
   - シーケンスオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%B7%E3%83%BC%E3%82%B1%E3%83%B3%E3%82%B9%EF%BC%88sequence%EF%BC%89%3A%20%E3%82%A4%E3%83%B3%E3%83%87%E3%83%83%E3%82%AF%E3%82%B9%E6%8C%87%E5%AE%9A%E5%8F%AF>)
+    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > シーケンス（sequence）: インデックス指定可](<https://sigma-se.com/detail/29/#シーケンスsequence--インデックス指定可>)
 
 - 定義例
     ```python
@@ -522,18 +516,17 @@ bytearray型は、bytes型の配列版で文字コードを指定しない場合
 
 ### file object型 : ファイル操作オブジェクト
 
-file object型は、ファイル操作（読み書き、入出力）を行う型で、ファイルの内容取得や編集、新規作成などの一連のファイル操作が可能。
+`open()`は、モードに応じて`io.TextIOWrapper`や`io.BufferedReader`などのファイルオブジェクトを返す。単一の「file object型」があるのではなく、共通のファイル操作インターフェースを持つ複数のクラスがある。
 
 - 型の特性
-  - イミュータブルオブジェクト
-    - [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イミュータブル（immutable）: 同一アドレスで変更不可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF>)
-  - イテラブルオブジェクト
-    -  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%86%E3%83%A9%E3%83%96%E3%83%AB%EF%BC%88iterable%EF%BC%89%3A%20%E5%8F%8D%E5%BE%A9%E6%8A%BD%E5%87%BA%E5%8F%AF>)
+  - テキストファイルは行単位で反復できるイテラブルオブジェクト
+    -  [Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping > イテラブル（iterable）: 反復抽出可](<https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可>)
+  - 使用後はクローズが必要なため、通常は`with open(...) as f:`で扱う
 
 - 定義例<br>
   open()でファイルを開き、処理終了時にclose()で閉じる。<br>
-  open()の第\\(1\\)引数にファイルパスを指定して定義する。<br>
-  第2引数のmodeは、読み書きの指定やテキスト or バイナリの指定に使用する。<br>
+  open()の第\\(1\\)引数にファイルパスを指定して定義。<br>
+  第2引数のmodeは、読み書きの指定やテキスト or バイナリの指定に使用。<br>
 
   - `mode`の種類
     - `r`：読込モード（書込不可）
@@ -544,11 +537,11 @@ file object型は、ファイル操作（読み書き、入出力）を行う型
     - `a+`：読込・書込モードで開いて、追加モード（ファイルの末尾に追加）
     - `b`：バイナリモードで開いて、上記`mode`と併用する。
 
-  - 下記サンプルでは`~/data/sample.txt`を事前に作成している前提
+  - 下記サンプルでは、カレントディレクトリの`data/sample.txt`を事前に作成している前提
     ```python
     $ python
     >>> # テキストファイルをopen() で開く。
-    >>> fPath = '~/data/sample.txt'
+    >>> fPath = 'data/sample.txt'
     >>> tFile = open(fPath)
     >>> # テキストであるため、io.TextIOWrapperとして定義される。
     >>> type(tFile)
@@ -576,8 +569,8 @@ file object型は、ファイル操作（読み書き、入出力）を行う型
 - `mode='r'`：読込モード（書込不可）<br>
   modeの引数なしでデフォルト **'r'** で open() するため、省略する。<br>
   以下、open(mode='r')で開いた後の読込方法。<br>
-  ※ 下記サンプルでは`~/data/sample.txt`を事前に作成している前提。<br>
-  ```python
+  ※ 下記サンプルでは`data/sample.txt`を事前に作成している前提。`open()`は`~`をホームディレクトリへ自動展開しない。<br>
+  ```text
   line1 work file sample
   line2 work file sample
   line3 work file sample
@@ -589,7 +582,7 @@ file object型は、ファイル操作（読み書き、入出力）を行う型
       ```python
       $ python
       >>> # read()で全文読込
-      >>> fPath = '~/data/sample.txt'
+      >>> fPath = 'data/sample.txt'
       >>> with open(fPath) as tFile:
       ...     fLines = tFile.read()
       ...     type(fLines)
@@ -607,7 +600,7 @@ file object型は、ファイル操作（読み書き、入出力）を行う型
       ```python
       $ python
       >>> # readlines()で行分割したリスト型で全行読込
-      >>> fPath = '~/data/sample.txt'
+      >>> fPath = 'data/sample.txt'
       >>> with open(fPath) as tFile:
       ...     fLines = tFile.readlines()
       ...     type(fLines)
@@ -669,13 +662,13 @@ file object型は、ファイル操作（読み書き、入出力）を行う型
 
 - `mode='w'`：書込モード（読込不可）<br>
   以下、open(mode='w')で開いた後の書込方法。<br>
-  ※ 下記サンプルでは`~/data`フォルダがあることが事前。<br>
+  ※ 下記サンプルでは`data`フォルダがあることが前提。<br>
 
   - `write()`：新規作成
       ```python
       $ python
       >>> # write()でファイルを新規作成
-      >>> fPath = '~/data/newsample.txt'
+      >>> fPath = 'data/newsample.txt'
       >>> fInput = 'line1 new work file sample'
       >>>
       >>> with open(fPath, mode='w') as tFile:
@@ -693,7 +686,7 @@ file object型は、ファイル操作（読み書き、入出力）を行う型
     ※ 上記の続き（newsample.txtが作成済）
       ```python
       $ python
-      >>> fPath = '~/data/newsample.txt'
+      >>> fPath = 'data/newsample.txt'
       >>> # read()で全行読込
       >>> with open(fPath) as tFile:
       ...     print(tFile.read())
@@ -717,7 +710,7 @@ file object型は、ファイル操作（読み書き、入出力）を行う型
   - `writelines()`：リスト型で全行書込
       ```python
       $ python
-      >>> fPath = '~/data/newsample.txt'
+      >>> fPath = 'data/newsample.txt'
       >>> # writelines()でリスト型を全行書込
       >>> fInput = ['line1', 'line2', 'line3', 'line4', 'line5']
       >>> with open(fPath, mode='w') as tFile:
@@ -729,7 +722,7 @@ file object型は、ファイル操作（読み書き、入出力）を行う型
       line1line2line3line4line5
       >>>
       >>> # ※ 改行コードを排除して書込する場合
-      >>> fPath = '~/data/newsample.txt'
+      >>> fPath = 'data/newsample.txt'
       >>> fInput = ['line1', 'line2', 'line3', 'line4', 'line5']
       >>> with open(fPath, mode='w') as tFile:
       ...     tFile.write('\n'.join(fInput))
@@ -748,7 +741,7 @@ file object型は、ファイル操作（読み書き、入出力）を行う型
   - `pass`で空ファイルを新規作成<br>
       ```python
       $ python
-      >>> fPath = '~/data/empty.txt'
+      >>> fPath = 'data/empty.txt'
       >>> # 空ファイルを新規作成
       >>> with open(fPath, mode='w'):
       ...     pass    # 何もしない
@@ -762,8 +755,8 @@ file object型は、ファイル操作（読み書き、入出力）を行う型
 
 - `mode='a'`：追加・書込モード（読込不可）<br>
   以下、open(mode='a') で開いた後の書込方法。<br>
-  ※ 下記サンプルでは、`~/data/sample.txt`を事前に作成している前提。<br>
-  ```python
+  ※ 下記サンプルでは、`data/sample.txt`を事前に作成している前提。<br>
+  ```text
   line1 work file sample
   line2 work file sample
   line3 work file sample
@@ -775,7 +768,7 @@ file object型は、ファイル操作（読み書き、入出力）を行う型
       ```python
       $ python
       >>> # write()で末尾に追加
-      >>> fPath = '~/data/sample.txt'
+      >>> fPath = 'data/sample.txt'
       >>> fAdd = '\nline6 work file sample'    # 改行コードも込み
       >>> with open(fPath, mode='a') as tFile:
       ...     tFile.writelines(fAdd)
@@ -793,20 +786,12 @@ file object型は、ファイル操作（読み書き、入出力）を行う型
       ```
 
 
-## 違いを整理する
-| 比較する項目 | 整理するポイント |
-| --- | --- |
-| setは順序を前提にしない | 重複排除や集合演算に使う。インデックスで取り出す用途には向かない。 |
-| bytesとbytearray | bytesは変更不可、bytearrayは変更可能。 |
-| ファイルのclose漏れ | with文を使うと、処理後に自動でクローズできる。 |
-
-## 実務とのつながり
-- 重複排除<br>
-    ID一覧やタグ一覧から重複を消す処理でsetが使える。
-- ファイル・通信処理<br>
-    画像、圧縮ファイル、通信データなどではbytesの理解が必要になる。
-
 ## まとめ
-- setは重複しない要素の集合を扱う型。
-- bytesは変更不可、bytearrayは変更可能なバイト列。
-- file objectはファイル読み書きの入口になる。
+- setは重複しない要素を扱う集合型で、順序やインデックスによるアクセスを前提にせず、重複排除や集合演算に使う。
+- bytesは変更不可、bytearrayは変更可能なバイト列として使い分ける。
+- file objectはファイルを読み書きする入口となり、with文を使うと処理後に自動でクローズできる。
+
+### 参考文献
+- [Python公式ドキュメント - 集合型：set、frozenset（日本語・集合型の公式解説）](https://docs.python.org/ja/3/library/stdtypes.html#set-types-set-frozenset)
+- [Python公式ドキュメント - バイナリシーケンス型：bytes、bytearray、memoryview（日本語・バイト列の公式解説）](https://docs.python.org/ja/3/library/stdtypes.html#binary-sequence-types-bytes-bytearray-memoryview)
+- [Python公式ドキュメント - io：ストリームを扱うコアツール（日本語・ファイル入出力の公式解説）](https://docs.python.org/ja/3/library/io.html)

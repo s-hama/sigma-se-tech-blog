@@ -1,55 +1,42 @@
 <div class="post-body">
     <h2 id="概要">概要</h2>
-  <p>MeCab、SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベースの天気情報案内Botを実装する。</p>
+  <p>SCXML、OpenWeatherMap、Telegramを組み合わせ、状態遷移ベースの天気情報案内Botを実装する。先行記事ではMeCabを準備したが、この記事の掲載コードは都道府県名などの単純な部分文字列検索を使い、MeCabによる形態素解析は行っていない。</p>
   <p>この方式では、ユーザーの発話内容を解析し、対話状態を更新しながら、必要な情報がそろったタイミングで天気APIを呼び出す。どの状態で何を聞くか、どの入力で状態が変わるかを明確にできる点が特徴となる。</p>
   <p>ここでは、状態遷移ベースの実装コード、処理の流れ、実行確認を順番に確認する。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>状態遷移ベースの天気案内Botの構成。</li>
-  <li>ユーザー発話を解析して状態を進める流れ。</li>
-  <li>SCXMLで定義した状態とPython処理の関係。</li>
-  <li>Telegram上でBotを実行確認する方法。</li>
-</ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">確認項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>前提記事</td><td>pid39とpid40の環境準備を済ませておく。</td></tr>
-      <tr><td>API情報</td><td>OpenWeatherMapのAPIキーとTelegram Botトークンを用意する。</td></tr>
-      <tr><td>実行環境</td><td>Botを起動し続けられるPython実行環境を用意する。</td></tr>
-    </tbody>
-  </table>
-  <h2 id="注意したい点">注意したい点</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">注意したい点</th>
-        <th scope="col">確認する観点</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>状態が増えすぎる</td><td>すべてを状態として表すと複雑になりやすい。必要な状態を絞る。</td></tr>
-      <tr><td>入力の揺れ</td><td>ユーザーの表現は一定ではないため、形態素解析や条件判定で吸収する必要がある。</td></tr>
-      <tr><td>外部APIエラー</td><td>天気APIが失敗した場合の応答も考えておく。</td></tr>
-    </tbody>
-  </table>
     <p>※ 学習用の簡易的なものであるため、地名の指定は都道府県のみ、取得範囲は今日か明日のみ、種別は天気と気温のみとする。</p>
-    <h2 id="実装内容">実装内容</h2>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#対象環境と利用上の注意" class="link-secondary">対象環境と利用上の注意</a><br>
+      本文記載時の環境と現在そのまま利用できない箇所を確認。</li>
+    <li><a href="#状態遷移ベースの実装" class="link-secondary">状態遷移ベースの実装</a><br>
+      状態遷移ベースの実装の意味と要点を具体例から整理。</li>
+    <li><a href="#状態遷移ベースの解説" class="link-secondary">状態遷移ベースの解説</a><br>
+      状態遷移ベースの解説の意味と要点を具体例から整理。</li>
+    <li><a href="#状態遷移ベースの実行確認" class="link-secondary">状態遷移ベースの実行確認</a><br>
+      状態遷移ベースの実行について、確認する項目と結果の見方を整理。</li>
+  </ul>
+  <h2 id="対象環境と利用上の注意">対象環境と利用上の注意</h2>
+  <ul>
+    <li>本文記載時の環境<br>
+      CentOS \(7\)、Python \(3.6\)系、PySide2、python-telegram-bot \(12.8\)、2020年時点のOpenWeatherMap APIを前提とした実装。</li>
+    <li>確認時期<br>
+      2026年8月に状態遷移の説明を参照先の公式資料と照合し、記載内容を見直した。</li>
+    <li>現在そのまま利用できない箇所<br>
+      掲載コード全体は現行環境で再実行していない。<br>
+      旧OS・旧Telegram API・PySide2をそのまま新規利用せず、現行版へ移植する際は非同期API、PySide6、資格情報管理、タイムゾーン、通信エラー処理を再設計する。</li>
+  </ul>
+  <h2 id="実装内容">実装内容</h2>
     <h3 id="状態遷移ベースの実装">状態遷移ベースの実装</h3>
-    <p>先行記事で解説した文章解析の<code>MeCab</code>、状態遷移の<code>SCXML</code>、天気情報取得の<code>OpenWeatherMap</code>、メッセンジャーアプリの<code>Telegram</code>を使用して、タスク指向型の天気情報案内対話システムを実装する。
-    </p>
+  <ul>
+    <li>SCXML・対話制御・Bot連携<br>
+    <p>状態遷移の<code>SCXML</code>、天気情報取得の<code>OpenWeatherMap</code>、メッセンジャーアプリの<code>Telegram</code>を使用して、タスク指向型の天気情報案内対話システムを実装する。発話解析は学習用に単純化し、文字列に都道府県名、「今日」「明日」、「天気」「気温」が含まれるかを判定する。</p>
     <ul>
         <li>
             <p>SCXML (states.scxml)<br>
                 以下、天気情報案内の状態遷移。</p>
             <p>※ 各項目(状態)の解説については、下記先行記事を参照。<br>
                 <a class="link-secondary"
-                    href="https://sigma-se.com/detail/39/#:~:text=%E7%8A%B6%E6%85%8B%E9%81%B7%E7%A7%BB%E3%81%AB%E3%82%88%E3%82%8B%E3%82%BF%E3%82%B9%E3%82%AF%E3%82%92%E9%81%82%E8%A1%8C%E3%81%99%E3%82%8B%E3%80%8CSCXML%E3%80%8D%E3%81%AE%E6%A6%82%E8%A6%81%E3%81%A8%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Python
+                    href="https://sigma-se.com/detail/39/#状態遷移によるタスクを遂行するscxmlの概要とインストール">Python
                     - タスク指向型対話 : 状態遷移ベースの環境準備 &gt; MeCab, SCXML &gt; 状態遷移によるタスクを遂行する「SCXML」の概要とインストール</a>
             </p>
             <pre><code class="language-xml"><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;UTF-8&quot;</span>?&gt;</span>
@@ -70,8 +57,9 @@
         <li>
             <p>WeatherSystemクラス (weather_system.py)<br>
                 Telegramクライアントの発話内容を解析し、状態遷移に応じた応答制御と遷移制御を行う。<br></p>
-            <p>※ 実行前に<code>APPID</code>を自身のものに書換えること。</p>
-            <pre><code class="language-python"><span class="hljs-keyword">import</span> sys
+            <p>※ 実行前にOpenWeatherMapのAPIキーを環境変数<code>OPENWEATHER_API_KEY</code>へ設定する。</p>
+            <pre><code class="language-python"><span class="hljs-keyword">import</span> os
+<span class="hljs-keyword">import</span> sys
 <span class="hljs-keyword">from</span> PySide2 <span class="hljs-keyword">import</span> QtCore, QtScxml
 <span class="hljs-keyword">import</span> requests
 <span class="hljs-keyword">import</span> json
@@ -107,9 +95,9 @@
             <span class="hljs-string">&quot;ask_date&quot;</span>: <span class="hljs-string">&quot;日付を言ってください&quot;</span>,
             <span class="hljs-string">&quot;ask_type&quot;</span>: <span class="hljs-string">&quot;情報種別を言ってください&quot;</span>}
 
-    current_weather_url = <span class="hljs-string">&#x27;http://api.openweathermap.org/data/2.5/weather&#x27;</span>
-    forecast_url = <span class="hljs-string">&#x27;http://api.openweathermap.org/data/2.5/forecast&#x27;</span>
-    appid = <span class="hljs-string">&#x27;&#x27;</span> <span class="hljs-comment"># 自身のAPPIDを入れてください</span>
+    current_weather_url = <span class="hljs-string">&#x27;https://api.openweathermap.org/data/2.5/weather&#x27;</span>
+    forecast_url = <span class="hljs-string">&#x27;https://api.openweathermap.org/data/2.5/forecast&#x27;</span>
+    appid = os.environ[<span class="hljs-string">&#x27;OPENWEATHER_API_KEY&#x27;</span>]
 
     <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):
         <span class="hljs-comment"># Qtに関するおまじない</span>
@@ -267,7 +255,7 @@
         <li>
             <p>TelegramBotクラス (telegram_bot.py)<br>
                 先行記事で解説したTelegramサーバー(Bot)との通信処理。<br>
-                Telegramサーバーとの通信を開始し、上記 WeatherSystemクラス(応答制御)の結果をBotに送信する。<br>
+                Telegramサーバーとの通信を開始し、上記 WeatherSystemクラス(応答制御)の結果をBotに送信。<br>
                 ※ 実行前に<code>TOKEN</code>を自身のものに書換えること。</p>
             <pre><code class="language-python"><span class="hljs-keyword">from</span> telegram.ext <span class="hljs-keyword">import</span> Updater, CommandHandler, MessageHandler, Filters
 
@@ -306,7 +294,12 @@ TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 </code></pre>
         </li>
     </ul>
+    </li>
+  </ul>
+
     <h3 id="状態遷移ベースの解説">状態遷移ベースの解説</h3>
+  <ul>
+    <li>状態遷移に沿った処理の流れ<br>
     <p>以下、上記の<code>SCXML</code>, <code>WeatherSystem</code>, <code>TelegramBot</code>について実行順に解説する。</p>
     <ul>
         <li>
@@ -327,7 +320,7 @@ TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 </code></pre>
             <ul>
                 <li>（＊1）WeatherSystemクラスのコンストラクタ<br>
-                    QCoreApplicationでQtモジュールのメインインスタンス「app」を生成し、sessiondicを辞書型(dict)で定義する。
+                    QCoreApplicationでQtモジュールのメインインスタンス「app」を生成し、sessiondicを辞書型(dict)で定義。
                     <pre><code class="language-python">… (省略) …
     <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):
         <span class="hljs-comment"># Qtに関するおまじない</span>
@@ -338,7 +331,7 @@ TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 </code></pre>
                 </li>
                 <li>（＊2）TelegramBotクラスのコンストラクタ<br>
-                    自身のsystemにWeatherSystemクラスのインスタンスを設定する。
+                    自身のsystemにWeatherSystemクラスのインスタンスを設定。
                     <pre><code class="language-python">… (省略) …
     <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, system</span>):
         self.system = system
@@ -375,7 +368,7 @@ TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         <li>
             <p><code>initial_message</code>メソッドの実行<br>
                 次に<code>initial_message</code>メソッドへ、ユーザー発話情報<code>input</code>を渡し、<code>initial_message</code>メソッドでは、（＊4）のイベントループの初期設定、及び（＊5）の状態遷移の初期設定と（＊6）Botの初回発話内容を作成し返す。
-                そして、戻り値の発話内容(&quot;utt&quot;)をTelegramサーバー側の<code>reply_text</code>メソッドの引数に添え、発話内容を送信する。</p>
+                そして、戻り値の発話内容(&quot;utt&quot;)をTelegramサーバー側の<code>reply_text</code>メソッドの引数に添え、発話内容を送信。</p>
             <ul>
                 <li>（＊4）QEventLoopメソッドにてWeatherSystemクラスのイベントループ（el : イベント待機(監視)を永続実行する仕組み）を同期に設定。</li>
                 <li>（＊5）SCXMLファイルの読み、WeatherSystemクラスにセッションID単位の状態遷移情報（place、date、type）を保持するsessiondicを定義。</li>
@@ -419,7 +412,7 @@ TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
             <p><code>message</code>メソッドの実行<br>
                 その後、ユーザーがTelegramクライアントから発話したタイミングで上記で設定（待機）していたメッセージハンドラを受付け、messageメソッドが実行される。
                 messageメソッドでは、まずユーザーの発話内容（Telegramサーバー側の text
-                から取得したutt（発話内容））とユーザーのセッションIDでユーザー発話情報<code>input</code>を定義する。</p>
+                から取得したutt（発話内容））とユーザーのセッションIDでユーザー発話情報<code>input</code>を定義。</p>
             <ul>
                 <li><code>message</code>メソッド
                     <pre><code class="language-python">… (省略) …
@@ -493,15 +486,15 @@ TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         </li>
         <li>
             <p>発話内容の送信<br>
-                上記に続き（＊11）、（＊12）で状態遷移を設定後、発話内容を取得し、Telegramサーバー側の<code>reply_text</code>メソッドの引数に添え、発話内容を送信する。</p>
+                上記に続き（＊11）、（＊12）で状態遷移を設定後、発話内容を取得し、Telegramサーバー側の<code>reply_text</code>メソッドの引数に添え、発話内容を送信。</p>
             <ul>
                 <li>（＊11）遷移先がtell_infoである場合は、（＊13）、（＊14）で天気情報を取得し、発話内容（utt）と対話完了フラグ（end）をTrue（完了）で返す。</li>
                 <li>（＊12）遷移先がtell_infoでない場合は、遷移先に応じた発話内容（utt）と対話完了フラグ（end）をFalse（継続）で返す。</li>
-                <li>（＊13）現在の天気情報取得API（<a href="http://api.openweathermap.org/data/2.5/weather"
-                        class="link-secondary">http://api.openweathermap.org/data/2.5/weather</a>）に
+                <li>（＊13）現在の天気情報取得API（<a href="https://api.openweathermap.org/data/2.5/weather"
+                        class="link-secondary">https://api.openweathermap.org/data/2.5/weather</a>）に
                     緯度、経度、APPID を渡し、結果をJSON形式で返す。</li>
-                <li>（＊14）未来の天気情報取得API（<a href="http://api.openweathermap.org/data/2.5/forecast"
-                        class="link-secondary">http://api.openweathermap.org/data/2.5/forecast</a>）に
+                <li>（＊14）未来の天気情報取得API（<a href="https://api.openweathermap.org/data/2.5/forecast"
+                        class="link-secondary">https://api.openweathermap.org/data/2.5/forecast</a>）に
                     緯度、経度、APPID を渡し、明日正午頃（12時～15時までのどこか）の天気情報を抽出し、JSON形式で返す。</li>
                 <li>（＊11）、（＊12）<code>reply</code>メソッド
                     <pre><code class="language-python">… (省略) …
@@ -577,7 +570,12 @@ TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         </li>
     </ul>
     <p>このように、ユーザーの入力に応じて状態遷移を制御し、天気情報や気温情報を返す対話システムが実現されている。</p>
+    </li>
+  </ul>
+
     <h3 id="状態遷移ベースの実行確認">状態遷移ベースの実行確認</h3>
+  <ul>
+    <li>天気案内Botの動作確認<br>
     <p>以下、上記の実装プログラム（＊1）〜（＊3）の実行確認。</p>
     <ul>
         <li>
@@ -601,7 +599,7 @@ IndexError: list index out of range
         </li>
         <li>
             <p>続けてstartコマンドを実行<br>
-                Telegramクライアントから「/start」を入力して、対話を開始する。<br>
+                Telegramクライアントから「/start」を入力して、対話を開始。<br>
                 以降、地名、日付（今日 or 明日）、情報種別（天気 or 気温）の入力による状態遷移で天気情報を返す。</p>
         </li>
         <li>
@@ -615,26 +613,24 @@ IndexError: list index out of range
             </p>
         </li>
     </ul>
-    <p>今日（東京）、明日（福岡）ともに実装に沿った期待通りの結果が得られた。</p>
-    <h2 id="実務とのつながり">実務とのつながり</h2>
-<ul>
-  <li>業務フローBot<br>
-    問い合わせ、予約、申請など、決まった手順がある処理では状態遷移ベースが実装しやすい。</li>
-  <li>保守性<br>
-    状態と遷移を整理しておくと、対話の分岐追加や不具合調査がしやすくなる。</li>
-</ul>
+    <p>画像は2020年8月の旧環境で取得した実行結果であり、当時の掲載実装に沿った応答を確認した記録となる。現行APIでの同じ結果は未検証。</p>
+    <p>※ 掲載実装はローカル時刻から「明日正午」のUNIX時刻を作るため、サーバーのタイムゾーンが対象地域と異なると予報時刻がずれる。また、HTTPタイムアウト、ステータス確認、再試行を実装していないため、そのまま本番利用しない。</p>
+    </li>
+  </ul>
+
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>状態遷移ベースでは、現在の状態と入力に応じて次の処理を決める。</li>
-  <li>天気案内Botでは、必要な情報を集めてから天気APIを呼び出す。</li>
-  <li>状態が複雑になりすぎないよう、対話設計を先に整理することが重要。</li>
-</ul>
-  <h2 id="参考文献">参考文献</h2>
+  <ul>
+    <li>状態遷移ベースでは、現在の状態と入力に応じて次の処理を決める。</li>
+    <li>天気案内Botでは、必要な状態を絞って対話の流れを設計し、必要な情報がそろってから天気APIを呼び出す。</li>
+    <li>ユーザーの表現は一定ではないため、形態素解析や条件判定によって入力の揺れを吸収する。</li>
+    <li>天気APIの呼び出しに失敗した場合を想定し、エラー時の応答も用意する。</li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
     <ul>
         <li>東中 竜一郎、稲葉 通将、水上 雅博（\(2020\)）『Pythonでつくる対話システム』株式会社オーム社</li>
-    </ul>
-    <h2 id="githubサポートページ">GitHubサポートページ</h2>
-    <ul>
-        <li><a href="https://github.com/dsbook/dsbook" class="link-secondary">https://github.com/dsbook/dsbook</a></li>
+        <li><a href="https://www.w3.org/TR/scxml/" class="link-secondary">W3C Recommendation - State Chart XML（SCXML）（英語・状態遷移記述の仕様原文）</a></li>
+        <li><a href="https://openweathermap.org/api/current" class="link-secondary">OpenWeather - Current weather data（英語・現在天気APIの公式仕様）</a></li>
+        <li><a href="https://openweathermap.org/api/forecast5" class="link-secondary">OpenWeather - 5 day weather forecast（英語・予報APIの公式仕様）</a></li>
+        <li><a href="https://docs.python-telegram-bot.org/en/v12.8/" class="link-secondary">python-telegram-bot 12.8 公式ドキュメント（英語・記事で使用する旧版APIの仕様）</a></li>
     </ul>
 </div>

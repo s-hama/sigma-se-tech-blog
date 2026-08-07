@@ -3,44 +3,48 @@
   <p>ニューラルネットワークの学習で使う損失関数について、2乗和誤差と交差エントロピー誤差を中心に整理する。</p>
   <p>損失関数は、モデルの予測が正解からどれくらい外れているかを数値で表す関数となる。</p>
   <p>ここでは、予測値と正解ラベルを使って損失を計算し、学習で何を小さくしようとしているのかを確認する。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>損失関数が学習で果たす役割。</li>
-  <li>2乗和誤差の考え方と実装。</li>
-  <li>交差エントロピー誤差の考え方と実装。</li>
-  <li>正解ラベルと予測値の関係。</li>
-</ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">確認項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>NumPy</td><td>配列演算、log、sumの基本を確認しておく。</td></tr>
-      <tr><td>分類問題</td><td>出力値と正解ラベルを比較する流れを理解しておく。</td></tr>
-      <tr><td>前提知識</td><td>ソフトマックス関数の出力を確認しておく。</td></tr>
-    </tbody>
-  </table>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#ニューラルネットワークで使用する損失関数" class="link-secondary">ニューラルネットワークで使用する損失関数</a><br>
+      学習における損失関数の役割と、予測値・正解値の関係を整理。</li>
+    <li><a href="#2乗和誤差の定義" class="link-secondary">2乗和誤差の定義</a><br>
+      2乗和誤差の定義と、式や用語が表す意味を整理。</li>
+    <li><a href="#2乗和誤差の実装サンプル" class="link-secondary">2乗和誤差の実装サンプル</a><br>
+      2乗和誤差の実装サンプルをコードや具体例で確認。</li>
+    <li><a href="#交差エントロピー誤差の定義" class="link-secondary">交差エントロピー誤差の定義</a><br>
+      交差エントロピー誤差の定義と、式や用語が表す意味を整理。</li>
+    <li><a href="#交差エントロピー誤差と実装サンプル" class="link-secondary">交差エントロピー誤差と実装サンプル</a><br>
+      交差エントロピー誤差と実装サンプルをコードや具体例で確認。</li>
+  </ul>
     <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
     <h3 id="ニューラルネットワークで使用する損失関数">ニューラルネットワークで使用する損失関数</h3>
-    <p>ニューラルネットワークの学習とは、<strong>訓練データを基に意図した結果となる最適な重みパラメータを判別する</strong>ことを指す。</p>
-    <p>学習するためには、<strong>損失関数</strong>というニューラルネットワークの性能の悪さを表す指標を基準に、その値が<strong>最も小さくなる重み</strong>となるように<strong>自己探索（最適な重みパラメータを探す）</strong>していくことになる。
+  <ul>
+    <li>損失関数の役割<br>
+    <p>ニューラルネットワークの学習とは、<strong>訓練データに対する損失が小さくなるように重みパラメータを更新する</strong>ことを指す。</p>
+    <p>学習では、ニューラルネットワークの予測と正解のずれを表す<strong>損失関数</strong>を基準に、その値が小さくなる方向へ重みを更新する。一般のニューラルネットワークでは、大域的に最小の値へ到達するとは限らない。
     </p>
     <p>ここでは、代表的な損失関数である<strong>2乗和誤差</strong>、<strong>交差エントロピー誤差</strong>をPython実装サンプルで確認する。</p>
+    </li>
+  </ul>
+
     <h3 id="2乗和誤差の定義">2乗和誤差の定義</h3>
-    <p>2乗和誤差（mean squared error）は、残差平方和とも呼ばれ、<strong>ターゲットとなる2つの変数差の2乗を総和し、2で割った値</strong>を取る。</p>
+  <ul>
+    <li>数式と変数の意味<br>
+    <p>ここで扱う2乗和誤差は、予測値と正解値の差を2乗して合計し、微分を簡潔にするため全体へ\(\frac{1}{2}\)を掛けた値である。全要素の平均を取る平均二乗誤差（MSE）とは区別する。</p>
     <p>この2つの変数のうち \(y_{k}\) をニューラルネットワークの出力、もう1つの \(t_{k}\) を教師データ（訓練データ）と置く。<br>
         ※ \(k\) はデータの次元数</p>
     <div
         style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
         \[
-        E = \frac{1}{2}\sum_{i=1}^{n} (y_{k}-t_{k})^2\hspace{5mm}･･･（A）
+        E = \frac{1}{2}\sum_{k=1}^{K} (y_{k}-t_{k})^2\hspace{5mm}･･･（A）
         \]
     </div>
+    </li>
+  </ul>
+
     <h3 id="2乗和誤差の実装サンプル">2乗和誤差の実装サンプル</h3>
+  <ul>
+    <li>2乗和誤差の計算確認<br>
     <p><a href="https://sigma-se.com/detail/19/" class="link-secondary">Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）</a>
         で触れたMNISTデータセットを用いたと想定して、10個の要素からなるデータを例に解説する。</p>
     <pre><code class="language-python">$ python
@@ -51,7 +55,7 @@
         <li>\(k=10\) は、10個の要素からなるデータでMNISTで扱うデータ数（0～9の数字）</li>
         <li>\(y_{k}\) にあたる \(y\) は、ニューラルネットワークの出力でソフトマックス関数出力値（確率）<br>
             ※ この出力値の算出処理については、<a
-                href="https://sigma-se.com/detail/20/#:~:text=%E6%8E%A8%E8%AB%96%E5%87%A6%E7%90%86%E3%81%AE%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%AD%E3%83%B3%E6%A7%8B%E6%88%90%E3%81%A8%E9%96%A2%E6%95%B0%E5%AE%9A%E7%BE%A9" class="link-secondary">Python - ニューラルネットワーク： MNISTを使ったニューラルネットワークの推論処理と実装サンプル&gt; 推論処理のニューロン構成と関数定義</a> の<strong>predict関数</strong>を参考。</li>
+                href="https://sigma-se.com/detail/20/#推論処理のニューロン構成と関数定義" class="link-secondary">Python - ニューラルネットワーク： MNISTを使ったニューラルネットワークの推論処理と実装サンプル&gt; 推論処理のニューロン構成と関数定義</a> の<strong>predict関数</strong>を参考。</li>
         <li>\(t_{k}\) にあたる \(t\) は、教師データでMNISTであらかじめ準備されている正解表す配列（1が正解）</li>
         <li>\(y\) と \(t\) は、それぞれの要素同士が対となっている
             <ul>
@@ -75,44 +79,54 @@
     <p>これを関数で定義し、上記の \(y\) と \(t\) で実行してみる。</p>
     <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">mean_squared_error</span>(<span class="hljs-params">y, t</span>):
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">half_squared_error</span>(<span class="hljs-params">y, t</span>):
 <span class="hljs-meta">... </span>    <span class="hljs-keyword">return</span> <span class="hljs-number">0.5</span> * np.<span class="hljs-built_in">sum</span>((y-t)**<span class="hljs-number">2</span>)
 ...
 <span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
 <span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
-<span class="hljs-meta">&gt;&gt;&gt; </span>mean_squared_error(np.array(y), np.array(t))
+<span class="hljs-meta">&gt;&gt;&gt; </span>half_squared_error(np.array(y), np.array(t))
 <span class="hljs-number">0.09750000000000003</span>
 </code></pre>
-    <p>正解である2が60%となり、上記mean_squared_errorの結果は、<strong>約0.0975</strong>となった。</p>
+    <p>正解である2が60%となり、上記<code>half_squared_error</code>の結果は、<strong>約0.0975</strong>となった。</p>
     <p>試しにわざとはずして不正解である7が60%となる \(y\) で結果を見てみると</p>
     <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">mean_squared_error</span>(<span class="hljs-params">y, t</span>):
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">half_squared_error</span>(<span class="hljs-params">y, t</span>):
 <span class="hljs-meta">... </span>    <span class="hljs-keyword">return</span> <span class="hljs-number">0.5</span> * np.<span class="hljs-built_in">sum</span>((y-t)**<span class="hljs-number">2</span>)
 ...
 <span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
 <span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
-<span class="hljs-meta">&gt;&gt;&gt; </span>mean_squared_error(np.array(y), np.array(t))
+<span class="hljs-meta">&gt;&gt;&gt; </span>half_squared_error(np.array(y), np.array(t))
 <span class="hljs-number">0.5975</span>
 </code></pre>
     <p>結果は0.5975となり、<strong>約6倍（損失が6倍）</strong>まで大きくなってしまう。</p>
-    <p>ちなみに正解である2が100%となる下記 \(y\) だと、結果は<strong>0</strong>となり、損失が<strong>0（間違った予測し）</strong>ということになる。</p>
+    <p>ちなみに正解である2が100%となる下記 \(y\) だと、結果は<strong>0</strong>となり、予測値と教師データが一致していることを表す。</p>
     <pre><code class="language-python"><span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">1.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
 <span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
-<span class="hljs-meta">&gt;&gt;&gt; </span>mean_squared_error(np.array(y), np.array(t))
+<span class="hljs-meta">&gt;&gt;&gt; </span>half_squared_error(np.array(y), np.array(t))
 <span class="hljs-number">0.0</span>
 </code></pre>
+    </li>
+  </ul>
+
     <h3 id="交差エントロピー誤差の定義">交差エントロピー誤差の定義</h3>
-    <p>交差エントロピー誤差（cross entropy error）は、クロスエントロピーとも呼ばれ、ターゲットとなる2つの変数のうち、一方を自然対数（底は \(e\)）として双方の積総和にマイナスをかけた値を取る。</p>
+  <ul>
+    <li>数式と変数の意味<br>
+    <p>交差エントロピー誤差（cross entropy error）は、各クラスの教師データに予測確率の自然対数（底は \(e\)）を掛け、その総和へマイナスを付けた値を取る。</p>
     <p>この2つの変数のうち \(y_{k}\) をニューラルネットワークの出力、もう1つの \(t_{k}\) を<strong>教師データ（訓練データ）</strong>とする。<br>
         ※ \(k\) はデータの次元数</p>
     <div
         style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
         \[
-        E = -\sum_{i=1}^{n} t_{k} \log y_{k}\hspace{5mm}･･･（B）
+        E = -\sum_{k=1}^{K} t_{k} \log y_{k}\hspace{5mm}･･･（B）
         \]
     </div>
+    </li>
+  </ul>
+
     <h3 id="交差エントロピー誤差と実装サンプル">交差エントロピー誤差と実装サンプル</h3>
+  <ul>
+    <li>交差エントロピー誤差の計算確認<br>
     <p>前項と同様に、10個の要素からなるデータを例に解説する。</p>
     <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
@@ -169,37 +183,19 @@
 <span class="hljs-number">2.302584092994546</span>
 </code></pre>
     <p>結果は約2.302となり、<strong>約4倍（損失が4倍）</strong>まで大きくなり、前項と同様に妥当な<strong>損失値が得られている</strong>ことが分かる。</p>
+    </li>
+  </ul>
 
-
-  <h2 id="違いを整理する">違いを整理する</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">比較する項目</th>
-        <th scope="col">整理するポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>損失と精度の違い</td><td>損失は予測の悪さを連続値で表し、精度は正解率として数える。</td></tr>
-      <tr><td>log(0)の問題</td><td>交差エントロピー誤差ではlog(0)を避けるため微小値を加える。</td></tr>
-      <tr><td>one-hot表現</td><td>正解ラベルを配列で表す場合、正解クラスだけが1になる。</td></tr>
-    </tbody>
-  </table>
-    <h2 id="実務とのつながり">実務とのつながり</h2>
-<ul>
-  <li>モデル改善の指標<br>
-    学習中に損失が下がっているかを見ることで、モデルが改善しているか判断しやすい。</li>
-  <li>異常検知<br>
-    損失が発散する、nanになる場合は、学習率や入力値、log計算を見直す手がかりになる。</li>
-</ul>
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>損失関数は、予測と正解のずれを数値化する関数。</li>
-  <li>2乗和誤差は差の大きさ、交差エントロピー誤差は正解クラスの予測確率に注目する。</li>
-  <li>学習では、損失を小さくする方向に重みを更新する。</li>
-</ul>
-  <h2 id="参考文献">参考文献</h2>
-    <ul>
-        <li>斎藤 康毅（\(2018\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
-    </ul>
+  <ul>
+    <li>損失は予測の悪さを連続値で表し、精度は正解した割合を表すため、役割が異なる。</li>
+    <li>2乗和誤差は予測値と正解値の差に、交差エントロピー誤差は正解クラスの予測確率に注目する。one-hot表現では正解クラスだけが1になる。</li>
+    <li>交差エントロピー誤差ではlog(0)を避けるため微小値を加え、学習では損失が小さくなる方向へ重みを更新。</li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>斎藤 康毅（\(2016\)）<a href="https://www.oreilly.co.jp/books/9784873117584/" class="link-secondary">『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』（日本語・本記事シリーズの基礎文献）</a> 株式会社オライリー・ジャパン</li>
+    <li><a href="https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/common/functions.py" class="link-secondary">O'Reilly Japan「deep-learning-from-scratch」functions.py（Python・公式サンプルコード）</a></li>
+    <li><a href="https://numpy.org/doc/stable/reference/generated/numpy.log.html" class="link-secondary">NumPy Reference, numpy.log（英語・自然対数関数の公式仕様）</a></li>
+  </ul>
 </div>

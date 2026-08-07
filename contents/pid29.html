@@ -3,32 +3,22 @@
   <p>Pythonの組込みデータ型を理解する前提として、immutable、mutable、iterable、sequence、mappingの意味を整理する。</p>
   <p>これらの用語は、list、tuple、dict、setなどの挙動を説明するときに頻繁に登場する。単語だけを暗記するより、値を変更できるか、繰り返し処理できるか、インデックスで参照できるかという観点で分けると理解しやすい。</p>
   <p>ここでは、代表的なデータ型を例に、それぞれの特性がコード上でどのように現れるかを確認する。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>immutableとmutableの違い。</li>
-  <li>iterable、sequence、mappingの関係。</li>
-  <li>データ型の特性がfor文、添字アクセス、代入操作にどう影響するか。</li>
-  <li>エラーが出たときに、型の性質から原因を考える方法。</li>
-</ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">確認項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>Python環境</td><td>対話モードで型やidを確認できる状態にしておく。</td></tr>
-      <tr><td>前提知識</td><td>str、list、tuple、dict、setなどの名前を見たことがある状態で読む。</td></tr>
-      <tr><td>確認観点</td><td>値そのものを変更しているのか、新しい値を作っているのかを意識する。</td></tr>
-    </tbody>
-  </table>
-
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#イミュータブルimmutable--オブジェクト自体を変更不可" class="link-secondary">イミュータブル（immutable）: オブジェクト自体を変更不可</a><br>
+      オブジェクト自体を変更できない性質と、変数への再代入との違いを整理。</li>
+    <li><a href="#ミュータブルmutable--オブジェクト自体を変更可" class="link-secondary">ミュータブル（mutable）: オブジェクト自体を変更可</a><br>
+      オブジェクト自体を変更できる性質を具体例から整理。</li>
+    <li><a href="#イテラブルiterable--反復抽出可" class="link-secondary">イテラブル（iterable）: 反復抽出可</a><br>
+      イテラブル（iterable）: 反復抽出可の意味と要点を具体例から整理。</li>
+    <li><a href="#シーケンスsequence--インデックス指定可" class="link-secondary">シーケンス（sequence）: インデックス指定可</a><br>
+      シーケンス（sequence）: インデックス指定可の意味と要点を具体例から整理。</li>
+    <li><a href="#マッピングmapping--連想配列" class="link-secondary">マッピング（mapping）: 連想配列</a><br>
+      マッピング（mapping）: 連想配列の意味と要点を具体例から整理。</li>
+  </ul>
   <h2 id="各データ型の特性">各データ型の特性</h2>
-  <h3 id="イミュータブルimmutable--同一アドレスで変更不可">イミュータブル（immutable）: 同一アドレスで変更不可</h3>
-  <p>同一オブジェクト（アドレスが同一）での値の変更ができないオブジェクト。<br>
-    そのため、値を変更すると別オブジェクト（別のアドレス）として再生成される。</p>
+  <h3 id="イミュータブルimmutable--オブジェクト自体を変更不可">イミュータブル（immutable）: オブジェクト自体を変更不可</h3>
+  <p>生成後にオブジェクト自体の状態を変更できない性質を<strong>イミュータブル</strong>という。変数へ別のオブジェクトを再代入することはできるが、元のオブジェクトが書き換わるわけではない。<code>id()</code>は実行中のオブジェクトを識別する値であり、必ずしもメモリアドレスそのものを表すとは限らない。</p>
   <ul>
     <li>
       <p>イミュータブルな型: Python公式ページのドキュメント</p>
@@ -41,48 +31,27 @@
         <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#tuple" class="link-secondary">tuple 型</a></li>
         <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#range" class="link-secondary">range 型</a></li>
         <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#bytes" class="link-secondary">bytes 型</a></li>
-        <li><a href="https://docs.python.org/ja/3/glossary.html#term-file-object" class="link-secondary">file object 型</a></li>
       </ul>
     </li>
     <li>
-      <p>int型（イミュータブル）を例に変更前の値と変更後の値のアドレスを比較</p>
+      <p>int型（イミュータブル）を例に、再代入が元のオブジェクトを変更しないことを確認</p>
       <pre><code class="language-python">$ python
-    <span class="hljs-comment"># int_a を int型 の 1で定義</span>
     &gt;&gt;&gt; int_a = <span class="hljs-number">1</span>
+    &gt;&gt;&gt; int_b = int_a
     &gt;&gt;&gt; <span class="hljs-built_in">type</span>(int_a)
     &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;int&#x27;</span>&gt;
-    <span class="hljs-comment"># int_a のアドレスを確認</span>
-    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(int_a)
-    <span class="hljs-number">139837241521312</span>
-    <span class="hljs-comment"># int_a を 2 に変更</span>
-    &gt;&gt;&gt; int_a = <span class="hljs-number">2</span>
-    <span class="hljs-comment"># int_a のアドレスを確認 ⇒ 変更前と別アドレスとなる。</span>
-    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(int_a)
-    <span class="hljs-number">139837241521344</span>
+    &gt;&gt;&gt; int_a += <span class="hljs-number">1</span>
+    &gt;&gt;&gt; int_a
+    <span class="hljs-number">2</span>
+    &gt;&gt;&gt; int_b
+    <span class="hljs-number">1</span>
 </code></pre>
+      <p><code>int_a += 1</code>では整数オブジェクト1を書き換えず、計算結果の整数オブジェクト2を<code>int_a</code>へ再代入する。そのため、元の1を参照している<code>int_b</code>は変化しない。</p>
     </li>
-    <li>
-      <p>bool型（イミュータブル）を例に変更前の値と変更後の値のアドレスを比較</p>
-      <pre><code class="language-python">$ python
-    <span class="hljs-comment"># bool_a を bool型の False で定義</span>
-    &gt;&gt;&gt; bool_a = <span class="hljs-literal">False</span>
-    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(bool_a)
-    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bool&#x27;</span>&gt;
-    <span class="hljs-comment"># bool_a のアドレスを確認</span>
-    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(bool_a)
-    <span class="hljs-number">139837241113440</span>
-    <span class="hljs-comment"># bool_a を True に変更</span>
-    &gt;&gt;&gt; bool_a = <span class="hljs-literal">True</span>
-    <span class="hljs-comment"># bool_a のアドレスを確認 ⇒ 変更前と別アドレスとなる。</span>
-    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(bool_a)
-    <span class="hljs-number">139837241113408</span>
-</code></pre>
-    </li>
+    <li>tuple自体はイミュータブルだが、要素にlistなどのミュータブルなオブジェクトを含めることはできる。その場合、tuple内の参照は置き換えられないが、参照先のlistの内容は変更できる。</li>
   </ul>
-  <h3 id="ミュータブルmutable--同一アドレスで変更可">ミュータブル（mutable）: 同一アドレスで変更可</h3>
-  <p>同一オブジェクト（アドレスが同一）で値を変更できるオブジェクト。<br>
-    （値を変更してもアドレスが変わらない。）</p>
-  <p>また、オブジェクトの一部を変更できるデータ型は、オブジェクトの中身を頻繁に編集することを前提としているため、アドレスが変わらない（わざわざ変える必要がない）ミュータブルとなっている。</p>
+  <h3 id="ミュータブルmutable--オブジェクト自体を変更可">ミュータブル（mutable）: オブジェクト自体を変更可</h3>
+  <p>生成後にオブジェクト自体の状態や内容を変更できる性質を<strong>ミュータブル</strong>という。同じオブジェクトを複数の変数が参照している場合、一方から内容を変更すると、もう一方から見える内容にも反映される。</p>
   <ul>
     <li>
       <p>ミュータブルな型: Python公式ページのドキュメント</p>
@@ -94,29 +63,25 @@
       </ul>
     </li>
     <li>
-      <p>list型（ミュータブル）を例に変更前の値と変更後の値のアドレスを比較</p>
+      <p>list型（ミュータブル）を例に、同じオブジェクトを参照する変数への影響を確認</p>
       <pre><code class="language-python">$ python
-    <span class="hljs-comment"># list_a を list型で定義</span>
-    &gt;&gt;&gt; list_a = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>]
+    &gt;&gt;&gt; list_a = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]
+    &gt;&gt;&gt; list_b = list_a
     &gt;&gt;&gt; <span class="hljs-built_in">type</span>(list_a)
     &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;list&#x27;</span>&gt;
-    <span class="hljs-comment"># list_a のアドレスを確認</span>
-    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(list_a)
-    <span class="hljs-number">139837220876360</span>
-    <span class="hljs-comment"># list_a に 7 を追加</span>
-    &gt;&gt;&gt; list_a.append(<span class="hljs-number">7</span>)
-    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a)
-    [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">7</span>]
-    <span class="hljs-comment"># list_a のアドレスを確認 ⇒ 変更前と同一アドレスとなっている。</span>
-    &gt;&gt;&gt; <span class="hljs-built_in">id</span>(list_a)
-    <span class="hljs-number">139837220876360</span>
+    &gt;&gt;&gt; list_a.append(<span class="hljs-number">4</span>)
+    &gt;&gt;&gt; list_a
+    [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]
+    &gt;&gt;&gt; list_b
+    [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>]
 </code></pre>
+      <p><code>append()</code>はlistオブジェクト自体を変更するため、同じlistを参照している<code>list_b</code>からも変更後の内容が見える。</p>
     </li>
   </ul>
   <h3 id="イテラブルiterable--反復抽出可">イテラブル（iterable）: 反復抽出可</h3>
   <p>要素を一つずつ抽出し、反復処理ができるオブジェクト。<br>
     （特殊な加工なしで for文のループ対象として使用できるオブジェクト）</p>
-  <p>また、ミュータブルオブジェクトはすべてイテラブルなオブジェクトとなる。</p>
+  <p>ミュータブルかどうかと、イテラブルかどうかは別の性質である。例えば、通常のファイルオブジェクトは反復できるが、イミュータブル／ミュータブルという分類だけで反復可能性は決まらない。</p>
   <ul>
     <li>
       <p>イテラブルな型: Python公式ページのドキュメント</p>
@@ -159,7 +124,7 @@
     </li>
   </ul>
   <h3 id="シーケンスsequence--インデックス指定可">シーケンス（sequence）: インデックス指定可</h3>
-  <p>インデックスを指定して直接要素にアクセスできるオブジェクト。</p>
+  <p>要素に順序があり、0から始まる整数インデックスで要素へアクセスできるオブジェクト。</p>
   <p>また、ミュータブルと同様にシーケンスオブジェクトはすべてイテラブルなオブジェクトとなる。</p>
   <ul>
     <li>
@@ -201,7 +166,7 @@
     ※ 一般的に連想配列と言われる配列のこと。</p>
   <ul>
     <li>
-      <p>マッピング型は、dict型のみ: Python公式ページのドキュメント</p>
+      <p>組込みの代表的なマッピング型: Python公式ページのドキュメント</p>
       <ul>
         <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#dict" class="link-secondary">dict 型</a></li>
       </ul>
@@ -222,32 +187,16 @@
     </li>
   </ul>
 
-  <h2 id="違いを整理する">違いを整理する</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">比較する項目</th>
-        <th scope="col">整理するポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>immutableは変数が変わらないという意味ではない</td><td>変数には別のオブジェクトを再代入できる。変えられないのはオブジェクト自体。</td></tr>
-      <tr><td>iterableとsequenceの混同</td><td>sequenceは順序とインデックスを持つ。iterableはforで取り出せる性質。</td></tr>
-      <tr><td>mappingの理解</td><td>インデックス番号ではなく、キーを使って値にアクセスする。</td></tr>
-    </tbody>
-  </table>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-<ul>
-  <li>バグ調査<br>
-    listを関数に渡したあと中身が変わる、tupleで代入できない、といった挙動はmutable/immutableの理解で整理できる。</li>
-  <li>API設計<br>
-    戻り値を変更してよいデータとして渡すか、変更されにくい形で渡すかを判断しやすくなる。</li>
-</ul>
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>immutableは変更不可、mutableは変更可能なオブジェクトを指す。</li>
-  <li>iterable、sequence、mappingは、値の取り出し方やアクセス方法を表す。</li>
-  <li>型の特性を知ると、Pythonのエラーや挙動を追いやすくなる。</li>
-</ul>
-
+  <ul>
+    <li>immutableは変数を再代入できないという意味ではなく、オブジェクト自体を変更できない性質を表す。mutableなオブジェクトは内容を変更できる。</li>
+    <li>sequenceは順序とインデックスを持ち、iterableはfor文などで要素を順に取り出せる性質を表す。</li>
+    <li>mappingはインデックス番号ではなくキーを使って値へアクセス。型の特性を知ると、Pythonの挙動やエラーを追いやすくなる。</li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li><a href="https://docs.python.org/ja/3/reference/datamodel.html" class="link-secondary">Python 3 ドキュメント「データモデル」（日本語・オブジェクトと型の公式仕様）</a></li>
+    <li><a href="https://docs.python.org/ja/3/library/stdtypes.html" class="link-secondary">Python 3 ドキュメント「組み込み型」（日本語・各データ型の公式仕様）</a></li>
+    <li><a href="https://docs.python.org/ja/3/glossary.html#term-iterable" class="link-secondary">Python 3 ドキュメント「用語集：iterable」（日本語・用語定義）</a></li>
+  </ul>
 </div>

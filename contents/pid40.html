@@ -3,61 +3,62 @@
   <p>状態遷移ベースの天気案内Botで使用するOpenWeatherMap、Telegram、python-telegram-botの準備手順を整理する。</p>
   <p>天気案内Botでは、天気情報を外部APIから取得し、ユーザーとのやり取りをメッセンジャー上で行う必要がある。OpenWeatherMapは天気情報の取得、Telegramはユーザーとの対話画面、python-telegram-botはBot実装の接続部分を担当する。</p>
   <p>ここでは、API利用登録、Bot作成、ライブラリのインストール、オウム返しBotによる疎通確認までを扱う。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>OpenWeatherMapで天気情報を取得する準備。</li>
-  <li>Telegram Botを作成してトークンを取得する流れ。</li>
-  <li>python-telegram-botを使った基本的な対話処理。</li>
-  <li>外部APIとメッセンジャーを組み合わせる構成。</li>
-</ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">確認項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>OpenWeatherMap</td><td>APIキーを取得し、天気情報を取得できる状態にする。</td></tr>
-      <tr><td>Telegram</td><td>BotFatherでBotを作成し、Botトークンを控える。</td></tr>
-      <tr><td>Python環境</td><td>python-telegram-botをインストールし、サンプルを実行できる状態にする。</td></tr>
-    </tbody>
-  </table>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#対象環境と利用上の注意" class="link-secondary">対象環境と利用上の注意</a><br>
+      本文記載時の環境と現在そのまま利用できない箇所を確認。</li>
+    <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
+      設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
+    <li><a href="#天気情報を取得するopenweathermapwebapiの概要と利用登録" class="link-secondary">天気情報を取得する「OpenWeatherMap」WebAPIの概要と利用登録</a><br>
+      天気情報を取得する「OpenWeatherMap」WebAPIの概要と利用登録の手順と確認ポイントを整理。</li>
+    <li><a href="#メッセンジャーアプリtelegramの利用登録とpython-telegram-botのインストール" class="link-secondary">メッセンジャーアプリ「Telegram」の利用登録と「python-telegram-bot」のインストール
+  </a><br>
+      メッセンジャーアプリ「Telegram」の利用登録と「python-telegram-bot」のインストールの手順と確認ポイントを整理。</li>
+    <li><a href="#telegrambotを使用した対話サンプルオウム返し" class="link-secondary">TelegramBotを使用した対話サンプル（オウム返し）</a><br>
+      TelegramBotを使用した対話サンプル（オウム返し）の意味と要点を具体例から整理。</li>
+  </ul>
+  <h2 id="対象環境と利用上の注意">対象環境と利用上の注意</h2>
+  <ul>
+    <li>本文記載時の環境<br>
+      2020年7月時点のOpenWeatherMap APIと、python-telegram-bot \(12.8\)の同期APIを使った手順。</li>
+    <li>確認時期<br>
+      2026年8月にTelegram Bot API、python-telegram-bot、OpenWeatherMapの公式資料と照合し、記載内容を見直した。</li>
+    <li>現在そのまま利用できない箇所<br>
+      掲載コード全体は現行サービス・ライブラリで再実行していない。<br>
+      料金、呼出し上限、登録画面、APIレスポンスは変更され得る。<br>
+      現行のpython-telegram-botは掲載コードとAPIが異なるため、旧コードをそのまま新規利用せず、利用する版を固定して公式サンプルへ合わせる。</li>
+  </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">作業時の注意点</th>
-        <th scope="col">確認する観点</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>APIキーとBotトークン</td><td>コードに直書きすると漏えいリスクがあるため、環境変数や設定ファイルで管理する。</td></tr>
-      <tr><td>疎通確認の順番</td><td>天気APIとTelegram Botを別々に確認してから結合すると原因を切り分けやすい。</td></tr>
-      <tr><td>ライブラリのバージョン</td><td>python-telegram-botはバージョンで書き方が変わるため、記事のコードと環境を合わせる。</td></tr>
-    </tbody>
-  </table>
+  <ul>
+    <li>APIキーとBotトークン<br>
+      コードに直書きすると漏えいリスクがあるため、環境変数や設定ファイルで管理。</li>
+    <li>疎通確認の順番<br>
+      天気APIとTelegram Botを別々に確認してから結合すると原因を切り分けやすい。</li>
+    <li>ライブラリのバージョン<br>
+      python-telegram-botはバージョンで書き方が変わるため、記事のコードと環境を合わせる。</li>
+  </ul>
   <h2 id="解説と実装サンプル">解説と実装サンプル</h2>
   <h3 id="天気情報を取得するopenweathermapwebapiの概要と利用登録">天気情報を取得する「OpenWeatherMap」WebAPIの概要と利用登録</h3>
+  <ul>
+    <li>天気APIの準備と疎通確認<br>
   <p>天気情報は、無償で天気情報を取得できる<code>OpenWeatherMap</code>のWebAPIを用いて取得する。<br>
     下記トップページにアクセスすると<code>GUI</code>でも天気情報を確認することができる。</p>
   <p>【OpenWeatherMap】: <a href="https://openweathermap.org/" class="link-secondary">https://openweathermap.org/</a><br></p>
-  <p>また、Freeプランでも毎分最大60回APIをコールでき、3時間毎の天気予報を5日後まで取得できるので学習用としては十分。<br>
+  <p>本文記載時はFreeプランで毎分60回までの呼出しと、3時間ごとの5日予報を利用できた。料金、呼出し上限、利用できるAPIは変更されるため、実装時はOpenWeatherMap公式の料金・APIページで現行条件を確認する。<br>
     そして、APIをコールするには、<code>API Key</code>が必要でアカウント作成する必要がある。</p>
   <ul>
     <li>
       <p>OpenWeatherMapのアカウント作成<br>
         下記のアカウント作成ページ【Create New
         Account】を開き、<code>Username</code>、<code>Enter email</code>、<code>Password</code>、<code>Repeat password</code>を入力し、「Create
-        Account」ボタンクリックでアカウントを作成する。</p>
+        Account」ボタンクリックでアカウントを作成。</p>
       <p>【Create New Account】: <a
           href="https://home.openweathermap.org/users/sign_up" class="link-secondary">https://home.openweathermap.org/users/sign_up</a></p>
-      <p>アカウント作成後、ログインした状態で下記のAPIKey確認ページ【api_keys】開くと<code>Key</code>欄にAPIKeyが表示されるので、ここからAPIKeyを確認する。<br>
+      <p>アカウント作成後、ログインした状態で下記のAPIKey確認ページ【api_keys】開くと<code>Key</code>欄にAPIKeyが表示されるので、ここからAPIKeyを確認。<br>
         ※ 登録完了のメール本文でもAPIKeyを確認できる。</p>
       <p>【api_keys】: <a href="https://home.openweathermap.org/api_keys" class="link-secondary">https://home.openweathermap.org/api_keys</a></p>
       <p>また、PythonからURLへアクセスするため、サードパーティライブラリである<code>Requests</code>が必要。<br>
-        ※ 標準ライブラリ<code>urllib</code>でもアクセスできるが、<code>Requests</code>の方がシンプルであるため、これを使用する。</p>
+        ※ 標準ライブラリ<code>urllib</code>でもアクセスできるが、<code>Requests</code>の方がシンプルであるため、これを使用。</p>
     </li>
     <li>
       <p>Requestsのインストール</p>
@@ -68,7 +69,7 @@
     </li>
     <li>
       <p>呼出し確認（現在の天気情報）<br>
-        福岡県（県庁）の緯度、経度を指定して現在の天気情報（JSON）を取得する。<br>
+        福岡県（県庁）の緯度、経度を指定して現在の天気情報（JSON）を取得。<br>
         ※ API呼出しの<code>units=metric</code>は、気温を摂氏で取得する指定とする。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-keyword">import</span> requests
@@ -81,7 +82,7 @@
     &gt;&gt;&gt; appid = <span class="hljs-string">&#x27;**********&#x27;</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># 現在の天気情報</span>
-    &gt;&gt;&gt; current_weather_url = <span class="hljs-string">&#x27;http://api.openweathermap.org/data/2.5/weather&#x27;</span>
+    &gt;&gt;&gt; current_weather_url = <span class="hljs-string">&#x27;https://api.openweathermap.org/data/2.5/weather&#x27;</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># API呼出し</span>
     &gt;&gt;&gt; response = requests.get(<span class="hljs-string">&quot;{}?lat={}&amp;lon={}&amp;lang=ja&amp;units=metric&amp;APPID={}&quot;</span>.<span class="hljs-built_in">format</span>(current_weather_url,lat,lon,appid))
@@ -94,7 +95,7 @@
     </li>
     <li>
       <p>呼出し確認（天気予報）
-        上記と同じ、福岡県（県庁）の緯度、経度を指定して天気予報を取得する。<br>
+        上記と同じ、福岡県（県庁）の緯度、経度を指定して天気予報を取得。<br>
         ※ <code>list</code>配列に3時間毎の天気予報（JSON）が格納されいる。<br>
         （＊1）4つ目以降の<code>list</code>配列は割愛</p>
       <pre><code class="language-python">$ python
@@ -108,14 +109,14 @@
     &gt;&gt;&gt; appid = <span class="hljs-string">&#x27;**********&#x27;</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># 明日以降の天気情報</span>
-    &gt;&gt;&gt; forecast_url = <span class="hljs-string">&#x27;http://api.openweathermap.org/data/2.5/forecast&#x27;</span>
+    &gt;&gt;&gt; forecast_url = <span class="hljs-string">&#x27;https://api.openweathermap.org/data/2.5/forecast&#x27;</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># API呼出し</span>
     response = requests.get(<span class="hljs-string">&quot;{}?lat={}&amp;lon={}&amp;lang=ja&amp;units=metric&amp;APPID={}&quot;</span>.<span class="hljs-built_in">format</span>(forecast_url,lat,lon,appid))
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># 結果出力</span>
     &gt;&gt;&gt; response.json()[<span class="hljs-string">&quot;list&quot;</span>][<span class="hljs-number">0</span>]
-    {<span class="hljs-string">&#x27;dt&#x27;</span>: <span class="hljs-number">1595084400</span>, <span class="hljs-string">&#x27;main&#x27;</span>: {<span class="hljs-string">&#x27;temp&#x27;</span>: <span class="hljs-number">24.97</span>, <span class="hljs-string">&#x27;feels_like&#x27;</span>: <span class="hljs-number">28.68</span>, <span class="hljs-string">&#x27;temp_min&#x27;</span>: <span class="hljs-number">24.37</span>, <span class="hljs-string">&#x27;temp_max&#x27;</span>: <span class="hljs-number">24.97</span>, <span class="hljs-string">&#x27;pressure&#x27;</span>: <span class="hljs-number">1010</span>, <span class="hljs-string">&#x27;sea_level&#x27;</span>: <span class="hljs-number">1010</span>, <span class="hljs-string">&#x27;grnd_level&#x27;</span>: <span class="hljs-number">1009</span>, <span class="hljs-string">&#x27;humidity&#x27;</span>: <span class="hljs-number">79</span>, <span class="hljs-string">&#x27;temp_kf&#x27;</span>: <span class="hljs-number">0.6</span>}, <span class="hljs-string">&#x27;weather&#x27;</span>: [{<span class="hljs-string">&#x27;id&#x27;</span>: <span class="hljs-number">804</span>, <span class="hljs-string">&#x27;main&#x27;</span>: <span class="hljs-string">&#x27;Clouds&#x27;</span>, <span class="hljs-string">&#x27;description&#x27;</span>: <span class="hljs-string">&#x27;厚い雲&#x27;</span>, <span class="hljs-string">&#x27;icon&#x27;</span>: <span class="hljs-string">&#x27;04n&#x27;</span>}], <span class="hljs-string">&#x27;clouds&#x27;</span>: {<span class="hljs-string">&#x27;all&#x27;</span>: <span class="hljs-number">100</span>}, <span class="hljs-string">&#x27'wind&#x27;</span>: {<span class="hljs-string">&#x27;speed&#x27;</span>: <span class="hljs-number">0.72</span>, <span class="hljs-string">&#x27;deg&#x27;</span>: <span class="hljs-number">54</span>}, <span class="hljs-string">&#x27;visibility&#x27;</span>: <span class="hljs-number">10000</span>, <span class="hljs-string">&#x27;pop&#x27;</span>: <span class="hljs-number">0</span>, <span class="hljs-string">&#x27;sys&#x27;</span>: {<span class="hljs-string">&#x27;pod&#x27;</span>: <span class="hljs-string">&#x27;n&#x27;</span>}, <span class="hljs-string">&#x27;dt_txt&#x27;</span>: <span class="hljs-string">&#x27;2020-07-18 15:00:00&#x27;</span>}
+    {<span class="hljs-string">&#x27;dt&#x27;</span>: <span class="hljs-number">1595084400</span>, <span class="hljs-string">&#x27;main&#x27;</span>: {<span class="hljs-string">&#x27;temp&#x27;</span>: <span class="hljs-number">24.97</span>, <span class="hljs-string">&#x27;feels_like&#x27;</span>: <span class="hljs-number">28.68</span>, <span class="hljs-string">&#x27;temp_min&#x27;</span>: <span class="hljs-number">24.37</span>, <span class="hljs-string">&#x27;temp_max&#x27;</span>: <span class="hljs-number">24.97</span>, <span class="hljs-string">&#x27;pressure&#x27;</span>: <span class="hljs-number">1010</span>, <span class="hljs-string">&#x27;sea_level&#x27;</span>: <span class="hljs-number">1010</span>, <span class="hljs-string">&#x27;grnd_level&#x27;</span>: <span class="hljs-number">1009</span>, <span class="hljs-string">&#x27;humidity&#x27;</span>: <span class="hljs-number">79</span>, <span class="hljs-string">&#x27;temp_kf&#x27;</span>: <span class="hljs-number">0.6</span>}, <span class="hljs-string">&#x27;weather&#x27;</span>: [{<span class="hljs-string">&#x27;id&#x27;</span>: <span class="hljs-number">804</span>, <span class="hljs-string">&#x27;main&#x27;</span>: <span class="hljs-string">&#x27;Clouds&#x27;</span>, <span class="hljs-string">&#x27;description&#x27;</span>: <span class="hljs-string">&#x27;厚い雲&#x27;</span>, <span class="hljs-string">&#x27;icon&#x27;</span>: <span class="hljs-string">&#x27;04n&#x27;</span>}], <span class="hljs-string">&#x27;clouds&#x27;</span>: {<span class="hljs-string">&#x27;all&#x27;</span>: <span class="hljs-number">100</span>}, <span class="hljs-string">&#x27;wind&#x27;</span>: {<span class="hljs-string">&#x27;speed&#x27;</span>: <span class="hljs-number">0.72</span>, <span class="hljs-string">&#x27;deg&#x27;</span>: <span class="hljs-number">54</span>}, <span class="hljs-string">&#x27;visibility&#x27;</span>: <span class="hljs-number">10000</span>, <span class="hljs-string">&#x27;pop&#x27;</span>: <span class="hljs-number">0</span>, <span class="hljs-string">&#x27;sys&#x27;</span>: {<span class="hljs-string">&#x27;pod&#x27;</span>: <span class="hljs-string">&#x27;n&#x27;</span>}, <span class="hljs-string">&#x27;dt_txt&#x27;</span>: <span class="hljs-string">&#x27;2020-07-18 15:00:00&#x27;</span>}
     &gt;&gt;&gt;
     &gt;&gt;&gt; response.json()[<span class="hljs-string">&quot;list&quot;</span>][<span class="hljs-number">1</span>]
     {<span class="hljs-string">&#x27;dt&#x27;</span>: <span class="hljs-number">1595095200</span>, <span class="hljs-string">&#x27;main&#x27;</span>: {<span class="hljs-string">&#x27;temp&#x27;</span>: <span class="hljs-number">24.65</span>, <span class="hljs-string">&#x27;feels_like&#x27;</span>: <span class="hljs-number">27.75</span>, <span class="hljs-string">&#x27;temp_min&#x27;</span>: <span class="hljs-number">24.41</span>, <span class="hljs-string">&#x27;temp_max&#x27;</span>: <span class="hljs-number">24.65</span>, <span class="hljs-string">&#x27;pressure&#x27;</span>: <span class="hljs-number">1010</span>, <span class="hljs-string">&#x27;sea_level&#x27;</span>: <span class="hljs-number">1010</span>, <span class="hljs-string">&#x27;grnd_level&#x27;</span>: <span class="hljs-number">1009</span>, <span class="hljs-string">&#x27;humidity&#x27;</span>: <span class="hljs-number">75</span>, <span class="hljs-string">&#x27;temp_kf&#x27;</span>: <span class="hljs-number">0.24</span>}, <span class="hljs-string">&#x27;weather&#x27;</span>: [{<span class="hljs-string">&#x27;id&#x27;</span>: <span class="hljs-number">804</span>, <span class="hljs-string">&#x27;main&#x27;</span>: <span class="hljs-string">&#x27;Clouds&#x27;</span>, <span class="hljs-string">&#x27;description&#x27;</span>: <span class="hljs-string">&#x27;厚い雲&#x27;</span>, <span class="hljs-string">&#x27;icon&#x27;</span>: <span class="hljs-string">&#x27;04n&#x27;</span>}], <span class="hljs-string">&#x27;clouds&#x27;</span>: {<span class="hljs-string">&#x27;all&#x27;</span>: <span class="hljs-number">100</span>}, <span class="hljs-string">&#x27;wind&#x27;</span>: {<span class="hljs-string">&#x27;speed&#x27;</span>: <span class="hljs-number">0.79</span>, <span class="hljs-string">&#x27;deg&#x27;</span>: <span class="hljs-number">157</span>}, <span class="hljs-string">&#x27;visibility&#x27;</span>: <span class="hljs-number">10000</span>, <span class="hljs-string">&#x27;pop&#x27;</span>: <span class="hljs-number">0</span>, <span class="hljs-string">&#x27;sys&#x27;</span>: {<span class="hljs-string">&#x27;pod&#x27;</span>: <span class="hljs-string">&#x27;n&#x27;</span>}, <span class="hljs-string">&#x27;dt_txt&#x27;</span>: <span class="hljs-string">&#x27;2020-07-18 18:00:00&#x27;</span>}
@@ -126,15 +127,20 @@
 </code></pre>
     </li>
   </ul>
+    </li>
+  </ul>
+
   <h3 id="メッセンジャーアプリtelegramの利用登録とpython-telegram-botのインストール">メッセンジャーアプリ「Telegram」の利用登録と「python-telegram-bot」のインストール
   </h3>
+  <ul>
+    <li>Telegram Botの準備<br>
   <p>
     最後に対話で使用するメッセンジャーアプリ<code>Telegram</code>の利用登録（アカウント作成）とPythonから<code>Telegram</code>を認識できるようにするためのライブラリである<code>python-telegram-bot</code>をインストールする。
   </p>
   <ul>
     <li>
       <p>Telegramインストーラのダウンロードとアカウント作成<br>
-        下記のTelegramトップページ【Telegram Top】を開き、インストール端末に応じたインストーラを選択し、ダウンロードする。<br>
+        下記のTelegramトップページ【Telegram Top】を開き、インストール端末に応じたインストーラを選択し、ダウンロード。<br>
         ※ Windowsなら「Telegram for Pc/Mac/Linux」リンク →「Get Telegram for Windows」ボタンでダウンロード。<br>
         ※ Linuxなら「Telegram for Pc/Mac/Linux」リンク →「Show all platforms」リンク→「Get Telegram for Linux 64 bit」ボタンでダウンロード。</p>
       <p>【Telegram Top】: <a href="https://telegram.org" class="link-secondary">https://telegram.org</a></p>
@@ -143,20 +149,20 @@
     </li>
     <li>
       <p>スクリーンネームの登録とアクセストークンの取得<br>
-        新しいBotの作成とスクリーンネームの登録を行い、アクセストークンを取得する。</p>
+        新しいBotの作成とスクリーンネームの登録を行い、アクセストークンを取得。</p>
       <p>アカウント作成後、左サイドメニュー上部のユーザー検索欄から「@BotFather」で検索し、「Start」ボタンクリックで「@BotFather」と対話できる状態にする。</p>
-      <p>以降は、下記のように<strong>Bot名</strong>の入力と<strong>スクリーンネーム</strong>を登録し、アクセストークンを取得する。</p>
+      <p>以降は、下記のように<strong>Bot名</strong>の入力と<strong>スクリーンネーム</strong>を登録し、アクセストークンを取得。</p>
       <ul>
         <li>
           <p>Bot名の入力（Botの新規作成）<br>
             「Alright, a new bot. How are we going to call it? Please choose a name for your
-            bot.」と表示されるので、任意のBot名を入力する。<br>
+            bot.」と表示されるので、任意のBot名を入力。<br>
             ※ 下記サンプルでは「SHamaBot 」と入力している。</p>
         </li>
         <li>
           <p>スクリーンネームの登録<br>
             「Good. Now let's choose a username for your bot. It must end in <code>bot</code>. Like this, for example:
-            TetrisBot or tetris_bot.」<br>と表示されるので、末尾が<code>bot</code>で終わるスクリーンネームを入力する。（既に使用されているスクリーンネームは使用不可。）</p>
+            TetrisBot or tetris_bot.」<br>と表示されるので、末尾が<code>bot</code>で終わるスクリーンネームを入力。（既に使用されているスクリーンネームは使用不可。）</p>
           <p>※ 下記サンプルでは、Bot名と同じ「SHamaBot 」で入力したところ、既に使用されているスクリーンネームであったため「sorry this username is already taken. please
             try something different」とエラーが出ている。<br>
             そのため「GSHamaBot」の再入力で登録している。</p>
@@ -173,24 +179,29 @@
     </li>
     <li>
       <p>「python-telegram-bot」のインストール<br>
-        pipからインストールするだけ。<br>
-        これでPythonで記述されたプログラムをTelegramが認識できるようになり、またその逆も可能となる。</p>
-      <pre><code class="language-bash">$ pip3 install python-telegram-bot
+        掲載コードは旧版 \(12.8\) のAPIを使うため、再現する場合は隔離した仮想環境で版を固定する。新規実装では現行版の公式サンプルを使用する。</p>
+      <pre><code class="language-bash">$ pip3 install &#x27;python-telegram-bot==12.8&#x27;
 </code></pre>
     </li>
   </ul>
+    </li>
+  </ul>
+
   <h3 id="telegrambotを使用した対話サンプルオウム返し">TelegramBotを使用した対話サンプル（オウム返し）</h3>
+  <ul>
+    <li>オウム返しBotの実装と確認<br>
   <p>
     下記の（＊1）、（＊2）が上記で登録した<code>@GSHamaBot</code>のレスポンスをPythonでオウム返しする実装サンプルで、（＊1）のTelegramBotクラスは、GSHamaBot（Telegramサーバー側）との<strong>通信処理</strong>で、（＊2）のEchoSystemクラスは、Botが応答する内容の<strong>制御処理</strong>となる。
   </p>
   <ul>
     <li>
       <p>（＊1）TelegramBotクラス（telegram_bot.py）<br>
-        ※ 実行前に <strong>TOKEN</strong> を先ほど取得したアクセストークンに書換えること。</p>
-      <pre><code class="language-python"><span class="hljs-keyword">from</span> telegram.ext <span class="hljs-keyword">import</span> Updater, CommandHandler, MessageHandler, Filters
+        ※ 実行前にアクセストークンを環境変数<code>TELEGRAM_BOT_TOKEN</code>へ設定する。ソースコードへ直書きしない。</p>
+      <pre><code class="language-python"><span class="hljs-keyword">import</span> os
+<span class="hljs-keyword">from</span> telegram.ext <span class="hljs-keyword">import</span> Updater, CommandHandler, MessageHandler, Filters
 
-<span class="hljs-comment"># アクセストークン（先ほど発行されたアクセストークンに書換えること）</span>
-TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&quot;</span>
+<span class="hljs-comment"># アクセストークンは環境変数から取得</span>
+TOKEN = os.environ[<span class="hljs-string">&quot;TELEGRAM_BOT_TOKEN&quot;</span>]
 
 <span class="hljs-keyword">class</span> <span class="hljs-title class_">TelegramBot</span>:
     <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, system</span>):
@@ -260,7 +271,7 @@ TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
               ※ initial_messageの戻り値dict型のendは、対話の完了フラグ（True:完了、False:継続）<br></li>
             <li>その後、ユーザーがTelegramクライアントから発話すると、上記で設定（待機）していたメッセージハンドラを受付け、messageメソッドが実行される</li>
             <li>messageメソッドでは、まずユーザーの発話内容（Telegramサーバー側の text から取得したutt（発話内容））とユーザーのセッションIDでユーザー発話情報inputを定義
-              続けて reply メソッドで発話内容を取得後（＊1）、Telegramサーバー側の reply_text メソッドに発信内容を渡して送信する。<br>
+              続けて reply メソッドで発話内容を取得後（＊1）、Telegramサーバー側の reply_text メソッドに発信内容を渡して送信。<br>
               （＊1）発話内容は、オウム返し するため、引数の発話内容 input['utt'] をそのまま返している。</li>
           </ul>
         </li>
@@ -270,7 +281,7 @@ TOKEN = <span class="hljs-string">&quot;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
       <p>上記「対話サンプル (オウム返し)」の実行確認<br>
         以下、(1)、(2)の実行確認結果。<br>
         ※「telegram_bot.py」のアクセストークン(TOKEN)を、自身のものに置き換えることを忘れずに。</p>
-      <p>「echo_system.py」の実行にて対話を開始する。</p>
+      <p>「echo_system.py」の実行にて対話を開始。</p>
       <pre><code class="language-python">$ python ~/gitlocalrep/dsbook/echo_system.py
 /root/gitlocalrep/dsbook/telegram_bot.py:<span class="hljs-number">29</span>: TelegramDeprecationWarning: Old Handler API <span class="hljs-keyword">is</span> deprecated - see https://git.io/fxJuV <span class="hljs-keyword">for</span> details
 updater = Updater(TOKEN)
@@ -282,25 +293,21 @@ updater = Updater(TOKEN)
       </p>
     </li>
   </ul>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-<ul>
-  <li>外部サービス連携<br>
-    実務のBot開発では、APIキー、Webhook、Botトークンなどの外部連携情報を安全に管理する必要がある。</li>
-  <li>小さな疎通確認<br>
-    オウム返しBotのような最小構成で確認すると、後続の状態遷移処理を追加しやすい。</li>
-</ul>
+    </li>
+  </ul>
+
   <h2 id="まとめ">まとめ</h2>
 <ul>
   <li>OpenWeatherMapは天気情報取得、Telegramは対話インターフェースとして使う。</li>
   <li>python-telegram-botを使うと、PythonからTelegram Botを実装できる。</li>
   <li>本格実装の前に、APIとBotの疎通確認を分けて行うと安全。</li>
 </ul>
-  <h2 id="参考文献">参考文献</h2>
+  <h3 id="参考文献">参考文献</h3>
   <ul>
     <li>東中 竜一郎、稲葉 通将、水上 雅博（\(2020\)）『Pythonでつくる対話システム』株式会社オーム社</li>
-  </ul>
-  <h2 id="githubサポートページ">GitHubサポートページ</h2>
-  <ul>
-    <li><a href="https://github.com/dsbook/dsbook" class="link-secondary">https://github.com/dsbook/dsbook</a></li>
+    <li><a href="https://openweathermap.org/api/current" class="link-secondary">OpenWeather - Current weather data（英語・現在天気APIの公式仕様）</a></li>
+    <li><a href="https://openweathermap.org/api/forecast5" class="link-secondary">OpenWeather - 5 day weather forecast（英語・予報APIの公式仕様）</a></li>
+    <li><a href="https://core.telegram.org/bots/api" class="link-secondary">Telegram - Bot API（英語・Bot APIの公式仕様）</a></li>
+    <li><a href="https://docs.python-telegram-bot.org/en/v12.8/" class="link-secondary">python-telegram-bot 12.8 公式ドキュメント（英語・記事で使用する旧版APIの仕様）</a></li>
   </ul>
 </div>

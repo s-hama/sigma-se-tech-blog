@@ -1,0 +1,13 @@
+<div class="post-meta">
+  <div class="post-meta-taxonomy">
+    <span class="badge category-parent">{{ post.category.parent }}</span>
+    <span class="badge category-child">{{ post.category }}</span>
+    {% for tag in post.tag.all|dictsort:"name" %}
+      <span class="badge category-grandchild">{{ tag.name }}</span>
+    {% endfor %}
+  </div>
+  <div class="post-meta-dates">
+    <span class="post-date"><span class="post-date-label">作成日：</span><time datetime="{{ post.created_at|date:'c' }}">{{ post.created_at|date:"Y/m/d H:i" }}</time>、</span>
+    <span class="post-date"><span class="post-date-label">更新日：</span><time datetime="{{ post.updated_at|date:'c' }}">{{ post.updated_at|date:"Y/m/d H:i" }}</time></span>
+  </div>
+</div>

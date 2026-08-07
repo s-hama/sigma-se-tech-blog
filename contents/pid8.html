@@ -1,80 +1,50 @@
 <div class="post-body">
   <h2 id="概要">概要</h2>
   <p>Pythonの対話モードの基本操作と、PYTHONSTARTUPを使った起動時スクリプトの設定方法を整理する。</p>
-  <p>対話モードは、短いコードの確認、ライブラリの挙動確認、環境変数やパスの調査に便利な実験場所になる。PYTHONSTARTUPを使うと、毎回使うimportや補助関数を起動時に読み込める。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
+  <p>対話モードは、短いコードの確認、ライブラリの挙動確認、環境変数やパスの調査に便利な実験場所になる。<br>PYTHONSTARTUPを使うと、毎回使うimportや補助関数を起動時に読み込める。</p>
+  <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
-    <li>pythonコマンドで対話モードを起動する方法。</li>
-    <li>sys.pathなどを対話的に確認する流れ。</li>
-    <li>exit()やCtrl+Dで終了する方法。</li>
-    <li>PYTHONSTARTUPで起動時スクリプトを読み込む方法。</li>
-    <li>IPythonやimport thisなどの補足的な使い方。</li>
+    <li><a href="#対象環境と利用上の注意" class="link-secondary">対象環境と利用上の注意</a><br>
+      本文記載時の環境と現在そのまま利用できない箇所を確認。</li>
+    <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
+      設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
+    <li><a href="#対話モードの使用例" class="link-secondary">対話モードの使用例</a><br>
+      対話モードの使用例をコードや具体例で確認。</li>
+    <li><a href="#環境変数pythonstartupの設定" class="link-secondary">環境変数（PYTHONSTARTUP）の設定</a><br>
+      環境変数（PYTHONSTARTUP）の設定の手順と確認ポイントを整理。</li>
+    <li><a href="#その他対話モードの補足" class="link-secondary">その他、対話モードの補足</a><br>
+      直前の実行結果や組込みヘルプなど、対話モードの便利な機能を確認。</li>
   </ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">項目</th>
-        <th scope="col">確認内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Pythonコマンド</td>
-        <td>利用しているPythonのバージョンを確認する。</td>
-      </tr>
-      <tr>
-        <td>対話モード</td>
-        <td>&gt;&gt;&gt; の後にコードを入力して即時実行する。</td>
-      </tr>
-      <tr>
-        <td>PYTHONSTARTUP</td>
-        <td>起動時に読み込むスクリプトのパスを環境変数に設定する。</td>
-      </tr>
-      <tr>
-        <td>共通import</td>
-        <td>毎回使う標準ライブラリを起動時に読み込める。</td>
-      </tr>
-      <tr>
-        <td>-iオプション</td>
-        <td>ファイル実行後に対話モードへ入れる。</td>
-      </tr>
-    </tbody>
-  </table>
+  <h2 id="対象環境と利用上の注意">対象環境と利用上の注意</h2>
+  <ul>
+    <li>本文記載時の環境<br>
+      掲載した出力はCentOS 7上のPython 3.6.4を利用した当時の例。</li>
+    <li>確認時期<br>
+      2026年8月にPythonの公式資料と照合し、基本動作を確認。<br>
+      掲載環境と同じ条件では再実行していない。</li>
+    <li>現在そのまま利用できない箇所<br>
+      起動メッセージ、実行コマンド名、<code>sys.path</code>、シェルの起動設定はOS・Python・仮想環境で異なる。<br>
+      出力値やパスは現在の環境で読み替える。</li>
+  </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">作業時の注意点</th>
-        <th scope="col">整理するポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>pythonとpython3</td>
-        <td>環境によって起動するバージョンが違うことがある。</td>
-      </tr>
-      <tr>
-        <td>sys未定義エラー</td>
-        <td>importしていないモジュールは対話モードでも使えない。</td>
-      </tr>
-      <tr>
-        <td>PYTHONSTARTUPの範囲</td>
-        <td>通常のスクリプト実行ではなく、対話モード起動時に効く。</td>
-      </tr>
-      <tr>
-        <td>アンダーバー</td>
-        <td>直前の結果を保持するため、通常変数名として使うと混乱しやすい。</td>
-      </tr>
-    </tbody>
-  </table>
+  <ul>
+    <li>pythonとpython3<br>
+      環境によって起動するバージョンが違うことがある。</li>
+    <li>sys未定義エラー<br>
+      importしていないモジュールは対話モードでも使えない。</li>
+    <li>PYTHONSTARTUPの範囲<br>
+      通常のスクリプト実行ではなく、対話モード起動時に効く。</li>
+    <li>アンダーバー<br>
+      直前に表示された式の結果を保持するため、通常変数名として代入すると混乱しやすい。</li>
+  </ul>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="対話モードの使用例">対話モードの使用例</h3>
   <ul>
     <li>
       <p>対話モードの起動<br>
-        Pythonのバージョン問わず、<code>python</code>コマンドを実行することで<strong>対話モード</strong>が起動する。<br>
-        対話モードでは、入力待ち状態を表す「&gt;&gt;&gt;」の後に直接コードを書いて実行することができる。<br></p>
+        引数なしで<code>python</code>または<code>python3</code>コマンドを実行すると、<strong>対話モード</strong>が起動。どちらのコマンド名を使うかはOSや環境によって異なるため、先にバージョンを確認。<br>
+        対話モードでは、入力待ち状態を表す「&gt;&gt;&gt;」の後に直接コードを書いて実行することができる。<br>
+        以下の表示例はPython 3.6.4当時の実行結果であり、現在のPythonではバージョン表記、起動メッセージ、<code>sys.path</code>の内容などが異なる。基本操作は同じとなる。<br></p>
       <pre><code class="language-bash">$ python -V    <span class="hljs-comment"># バージョン確認</span>
  Python 3.6.4
 $ python    <span class="hljs-comment"># 対話モード起動 (マイナーバージョンまでを指定しても可)</span>
@@ -99,7 +69,7 @@ $ python    <span class="hljs-comment"># 対話モード起動 (マイナーバ�
     </li>
     <li>
       <p>対話モードの終了<br>
-        「Ctrl」+「D」押下または、<code>exit()</code>を実行する。<br></p>
+        <code>exit()</code>を実行。Unix系OSでは「Ctrl」+「D」、Windowsでは「Ctrl」+「Z」を押してから「Enter」でも終了できる。<br></p>
       <pre><code class="language-bash">$ python
  Python 3.6.4 (default, Dec 19 2017, 14:48:12)
  [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
@@ -121,11 +91,11 @@ $ python    <span class="hljs-comment"># 対話モード起動 (マイナーバ�
  Type <span class="hljs-string">&quot;help&quot;</span>, <span class="hljs-string">&quot;copyright&quot;</span>, <span class="hljs-string">&quot;credits&quot;</span> or <span class="hljs-string">&quot;license&quot;</span> <span class="hljs-keyword">for</span> more information.
  &gt;&gt;&gt; sys.path
  Traceback (most recent call last):
-   File <span class="hljs-string">&quot;&quot;</span>, line 1, <span class="hljs-keyword">in</span> 
+   File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line 1, <span class="hljs-keyword">in</span> &lt;module&gt;
  NameError: name <span class="hljs-string">&#x27;sys&#x27;</span> is not defined
  &gt;&gt;&gt;
 </code></pre>
-      <p><code>sys</code>をインポートしていないので当然エラーが発生する。</p>
+      <p><code>sys</code>をインポートしていないので当然エラーが発生。</p>
     </li>
     <li>
       <p><strong>PYTHONSTARTUP</strong>に<code>import sys</code>を追記<br>
@@ -134,8 +104,9 @@ $ python    <span class="hljs-comment"># 対話モード起動 (マイナーバ�
       <pre><code class="language-bash">$ <span class="hljs-built_in">touch</span>  ~/.pythonstartup    <span class="hljs-comment"># 空ファイル新規作成</span>
 $ vim  ~/.pythonstartup    <span class="hljs-comment"># import sys を追記</span>
  import sys
-$ <span class="hljs-built_in">export</span> PYTHONSTARTUP=~/.pythonstartup    <span class="hljs-comment"># 環境変数「PYTHONSTARTUP」にpythonstartup を設定</span>
+$ <span class="hljs-built_in">export</span> PYTHONSTARTUP=<span class="hljs-string">&quot;$HOME/.pythonstartup&quot;</span>    <span class="hljs-comment"># 起動時スクリプトのパスを設定</span>
 </code></pre>
+      <p><code>export</code>の効果は現在のシェルに限られる。常に有効にする場合は、利用しているシェルに応じて<code>.zshrc</code>や<code>.bashrc</code>などへ同じ設定を記述。</p>
     </li>
     <li>
       <p>再度対話モードで<code>sys.path</code>を実行<br></p>
@@ -155,8 +126,8 @@ $ <span class="hljs-built_in">export</span> PYTHONSTARTUP=~/.pythonstartup    <s
   <h3 id="その他対話モードの補足">その他、対話モードの補足</h3>
   <ul>
     <li>
-      <p>最後に実行されたコードを再度実行する<br>
-        最後に実行したコードは、変数_（アンダーバー）に格納されているため、_（アンダーバー）を実行することで再実行できる。<br></p>
+      <p>直前に表示された式の結果を参照する<br>
+        対話モードでは、最後に<strong>表示された式の結果</strong>が<code>_</code>（アンダーバー）に保持される。<br><code>_</code>を評価しても直前のコードを再実行するわけではなく、保存されている値を参照。明示的に<code>_</code>へ代入するとこの用途で扱いにくくなるため、通常の変数名には使わない。<br></p>
       <pre><code class="language-bash">$ python
  [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
  Type <span class="hljs-string">&quot;help&quot;</span>, <span class="hljs-string">&quot;copyright&quot;</span>, <span class="hljs-string">&quot;credits&quot;</span> or <span class="hljs-string">&quot;license&quot;</span> <span class="hljs-keyword">for</span> more information.
@@ -177,110 +148,32 @@ $ <span class="hljs-built_in">export</span> PYTHONSTARTUP=~/.pythonstartup    <s
       <pre><code class="language-bash">$ python -i example.py
 &gt;&gt;&gt;
 </code></pre>
+      <p><code>-i</code>でスクリプト実行後に対話モードへ入る場合、<code>PYTHONSTARTUP</code>のファイルは読み込まれない点に注意。</p>
     </li>
     <li>
       <p><strong>IPython</strong>の導入<br>
-        対話モードをデバッガーのように利用できる<strong>IPython</strong>というパッケージもある。<br>
-        IPythonをインストールするとTABキーでの補完、シェルコマンドの使用、pythonデバッガー(pdb)との連携ができるようになる。<br></p>
-      <pre><code class="language-bash">$ pip install ipython
+        標準の対話モードを拡張した<strong>IPython</strong>というパッケージもある。<br>
+        IPythonをインストールすると、TABキーによる補完、入力履歴、シェルコマンド、Pythonデバッガー（Pdb）との連携などを利用できる。<br></p>
+      <pre><code class="language-bash">$ python -m pip install ipython
 </code></pre>
     </li>
     <li>
-      <p>Python開発者の心構え（The Zen of Python）<br>
-        対話モードでも<code>import this</code>で原文確認できる。<br>
-        以下は、<strong>The Zen of Python</strong>は、Pythonの開発者の一人「Tim
-        Peters」によって書かれた<strong>Pythonらしさ</strong>を端的にまとめた文章。<br></p>
-      <ul>
-        <li>
-          <p>原文</p>
-          <pre><code class="language-bash">$ python
-Python 3.6.4 (default, Dec 19 2017, 14:48:12)
-[GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
-Type <span class="hljs-string">&quot;help&quot;</span>, <span class="hljs-string">&quot;copyright&quot;</span>, <span class="hljs-string">&quot;credits&quot;</span> or <span class="hljs-string">&quot;license&quot;</span> <span class="hljs-keyword">for</span> more information.
-&gt;&gt;&gt; import this
-The Zen of Python, by Tim Peters
-
-Beautiful is better than ugly.
-Explicit is better than implicit.
-Simple is better than complex.
-Complex is better than complicated.
-Flat is better than nested.
-Sparse is better than dense.
-Readability counts.
-Special cases aren't special enough to break the rules.
-Although practicality beats purity.
-Errors should never pass silently.
-Unless explicitly silenced.
-In the face of ambiguity, refuse the temptation to guess.
-There should be one-- and preferably only one --obvious way to do it.
-Although that way may not be obvious at first unless you're Dutch.
-Now is better than never.
-Although never is often better than *right* now.
-If the implementation is hard to explain, it's a bad idea.
-If the implementation is easy to explain, it may be a good idea.
-Namespaces are one honking great idea -- let's do more of those!
-</code></pre>
-        </li>
-        <li>
-          <p>和訳</p>
-          <pre><code>The Zen of Python, by Tim Peters
-
-Beautiful is better than ugly.
-醜いより美しいほうがいい。
-Explicit is better than implicit.
-暗示するより明示するほうがいい。
-Simple is better than complex.
-複雑であるよりは平易であるほうがいい。
-Complex is better than complicated.
-それでも、込み入っているよりは複雑であるほうがまし。
-Flat is better than nested.
-ネストは浅いほうがいい。
-Sparse is better than dense.
-密集しているよりは隙間があるほうがいい。
-Readability counts.
-読みやすいことは善である。
-Special cases aren't special enough to break the rules.
-特殊であることはルールを破る理由にならない。
-Although practicality beats purity.
-しかし、実用性を求めると純粋さが失われることがある。
-Errors should never pass silently.
-エラーは隠すな、無視するな。
-Unless explicitly silenced.
-ただし、わざと隠されているのなら見逃せ。
-In the face of ambiguity, refuse the temptation to guess.
-曖昧なものに出逢ったら、その意味を適当に推測してはいけない。
-There should be one-- and preferably only one --obvious way to do it.
-何かいいやり方があるはずだ。誰が見ても明らかな、たったひとつのやり方が。
-Although that way may not be obvious at first unless you're Dutch.
-そのやり方は一目見ただけではわかりにくいかもしれない。オランダ人にだけわかりやすいなんてこともあるかもしれない。
-Now is better than never.
-ずっとやらないでいるよりは、今やれ。
-Although never is often better than *right* now.
-でも、今&quot;すぐ&quot;にやるよりはやらないほうがマシなことが多い。
-If the implementation is hard to explain, it's a bad idea.
-コードの内容を説明するのが難しいのなら、それは悪い実装である。
-If the implementation is easy to explain, it may be a good idea.
-コードの内容を容易に説明できるのなら、おそらくそれはよい実装である。
-Namespaces are one honking great idea -- let's do more of those!
-名前空間は優れたアイデアであるため、積極的に利用すべきである。
-</code></pre>
-        </li>
-      </ul>
+      <p>Pythonの設計原則（The Zen of Python）<br>
+        対話モードで<code>import this</code>を実行すると、Tim Petersがまとめた「The Zen of Python」を確認できる。<br>全文を覚えるものではなく、可読性、明示性、単純さ、名前空間など、Pythonコードを設計・レビューするときの判断軸として読むと役立つ。<br>背景と原文はPEP 20で確認できる。</p>
     </li>
-  </ul>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-  <ul>
-    <li>動作確認<br>
-      短い式や標準ライブラリの挙動をすぐ確認できる。</li>
-    <li>環境調査<br>
-      sys.pathやモジュール読み込み先の確認に使える。</li>
-    <li>開発効率<br>
-      よく使う準備処理をPYTHONSTARTUPへまとめられる。</li>
   </ul>
   <h2 id="まとめ">まとめ</h2>
   <ul>
     <li>Pythonの対話モードは、小さなコードをすぐ試すための実験環境になる。</li>
     <li>PYTHONSTARTUPを使うと、起動時に共通処理を読み込める。</li>
     <li>バージョンや環境変数の違いに注意すると、環境調査にも使いやすい。</li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li><a href="https://docs.python.org/ja/3/using/cmdline.html#envvar-PYTHONSTARTUP" class="link-secondary">Python 3 ドキュメント「コマンドラインと環境：PYTHONSTARTUP」（日本語・公式仕様）</a></li>
+    <li><a href="https://docs.python.org/ja/3/tutorial/introduction.html#using-python-as-a-calculator" class="link-secondary">Python 3 チュートリアル「Pythonを電卓として使う」（日本語・公式入門）</a></li>
+    <li><a href="https://docs.python.org/ja/3/library/sys.html#sys.path" class="link-secondary">Python 3 ドキュメント「sys.path」（日本語・モジュール検索パス仕様）</a></li>
+    <li><a href="https://ipython.readthedocs.io/en/stable/interactive/index.html" class="link-secondary">IPython Documentation, Using IPython for interactive work（英語・対話環境の公式解説）</a></li>
+    <li><a href="https://peps.python.org/pep-0020/" class="link-secondary">Python Enhancement Proposals, PEP 20：The Zen of Python（英語・設計指針原文）</a></li>
   </ul>
 </div>

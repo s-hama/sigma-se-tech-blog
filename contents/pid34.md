@@ -6,19 +6,15 @@ Pythonの複合代入演算子を使い、変数の値を更新する書き方�
 複合代入演算子は、`x = x + 1`のような更新処理を`x += 1`のように短く書くための記法となる。
 ここでは、加算、減算、乗算、除算、剰余、べき乗の複合代入を、通常の代入との対応で確認する。
 
-## この記事で扱うこと
-- 複合代入演算子の基本形。
-- 通常の代入文との対応関係。
-- 数値に対する更新処理の書き方。
-- mutableなオブジェクトで注意したい挙動。
-
-## 作業前に確認すること
-| 確認項目 | 内容 |
-| --- | --- |
-| Python環境 | 対話モードで変数の値を更新できる状態にしておく。 |
-| 前提知識 | 算術演算子と代入文の基本を確認しておく。 |
-| 確認観点 | 更新前と更新後の値を必ず比較する。 |
-
+## この記事の構成
+- [複合代入演算子の種類](#複合代入演算子の種類)<br>
+  複合代入演算子の種類と各項目の特徴を整理。
+- [加算（+=）・減算（-=）](#加算減算-)<br>
+  加算（+=）・減算（-=）の意味と要点を具体例から整理。
+- [乗算（*=）・除算（/=・//=）・剰余（%=）](#乗算除算剰余)<br>
+  乗算（*=）・除算（/=・//=）・剰余（%=）の意味と要点を具体例から整理。
+- [べき乗（**=）](#べき乗)<br>
+  べき乗（**=）の意味と要点を具体例から整理。
 
 ## 各複合代入演算子の使い方と実装サンプル
 
@@ -36,26 +32,28 @@ Pythonの複合代入演算子を使い、変数の値を更新する書き方�
         </tr>
     </thead>
     <tbody>
-        <tr><td>+=</td><td>a += b</td><td>a = a + b と同義。<br>（ a に b を加算した結果を a に代入 ）</td></tr>
-        <tr><td>-=</td><td>a -= b</td><td>a = a - b と同義。<br>（ a から b を減算した結果を a に代入 ）</td></tr>
-        <tr><td>*=</td><td>a *= b</td><td>a = a * b と同義。<br>（ a に b を乗算した結果を a に代入 ）</td></tr>
-        <tr><td>/=</td><td>a /= b</td><td>a = a / b と同義。<br>（ a を b で除算した結果を a に代入 ）</td></tr>
-        <tr><td>//=</td><td>a //= b</td><td>a = a // b と同義。<br>（ a を b で整数除算した結果を a に代入 ）</td></tr>
-        <tr><td>%=</td><td>a %= b</td><td>a = a % b と同義。<br>（ a と b で剰余した結果を a に代入 ）</td></tr>
-        <tr><td>**=</td><td>a **= b</td><td>a = a ** b と同義。<br>（ a を b でべき乗した結果を a に代入 ）</td></tr>
+        <tr><td>+=</td><td>a += b</td><td>a に b を加算し、結果を a に代入。</td></tr>
+        <tr><td>-=</td><td>a -= b</td><td>a から b を減算し、結果を a に代入。</td></tr>
+        <tr><td>*=</td><td>a *= b</td><td>a に b を乗算し、結果を a に代入。</td></tr>
+        <tr><td>/=</td><td>a /= b</td><td>a を b で除算し、結果を a に代入。</td></tr>
+        <tr><td>//=</td><td>a //= b</td><td>a を b で切り下げ除算し、結果を a に代入。</td></tr>
+        <tr><td>%=</td><td>a %= b</td><td>a を b で割った剰余を a に代入。</td></tr>
+        <tr><td>**=</td><td>a **= b</td><td>a の b 乗を a に代入。</td></tr>
     </tbody>
     </table>
 
+`a += b`は`a = a + b`に近い計算だが、完全に同一ではない。複合代入は左辺を一度だけ評価し、型が対応していれば同じオブジェクトをその場で変更する。この違いはlistなどのミュータブルな型や、添字・属性を左辺にした場合に現れる。
+
 以降、実装サンプルを対話モード（インタプリタ）で解説する。
 
-※ 演算結果の **最大値**、**最小値** についてはPCのスペックに依存する。詳しくは下記を参考。<br>
-- [Python - 組込みデータ型まとめ : bool , int, float, complex > int型 : 数値（整数）](<https://sigma-se.com/detail/30/#:~:text=%E5%88%A4%E5%AE%9A%E3%81%95%E3%82%8C%E3%82%8B%E3%80%82-,int%E5%9E%8B%20%3A%20%E6%95%B0%E5%80%A4%EF%BC%88%E6%95%B4%E6%95%B0%EF%BC%89,-%E6%95%B4%E6%95%B0%E5%9E%8B%E3%81%A7>)
-- [Python - 組込みデータ型まとめ : bool , int, float, complex > float型 : 浮動小数点数型](<https://sigma-se.com/detail/30/#:~:text=maxsize)%0A%20%20%20%209223372036854775807%0A%20%20%20%20%3E%3E%3E-,float%E5%9E%8B%20%3A%20%E6%B5%AE%E5%8B%95%E5%B0%8F%E6%95%B0%E7%82%B9%E6%95%B0%E5%9E%8B,-float%E5%9E%8B%E3%81%AF>)
-- [Python - 組込みデータ型まとめ : bool , int, float, complex > complex型 : 複素数型](<https://sigma-se.com/detail/30/#:~:text=rounds%3D1)%0A%20%20%20%20%3E%3E%3E-,complex%E5%9E%8B%20%3A%20%E8%A4%87%E7%B4%A0%E6%95%B0%E5%9E%8B,-complex%E5%9E%8B%E3%81%AF>)
+※ int型は任意精度であり、float型とcomplex型の有限値の範囲は実装環境の浮動小数点形式に依存する。詳しくは下記を参考。<br>
+- [Python - 組込みデータ型まとめ : bool , int, float, complex > int型 : 数値（整数）](<https://sigma-se.com/detail/30/#int型--数値整数>)
+- [Python - 組込みデータ型まとめ : bool , int, float, complex > float型 : 浮動小数点数型](<https://sigma-se.com/detail/30/#float型--浮動小数点数型>)
+- [Python - 組込みデータ型まとめ : bool , int, float, complex > complex型 : 複素数型](<https://sigma-se.com/detail/30/#complex型--複素数型>)
 
 ### 加算（+=）・減算（-=）
 - 加算（+=）<br>
-    ※ a = a + b と同義（簡略表記したもの）
+    ※ 数値型では`a = a + b`に近い結果となるが、複合代入は左辺を一度だけ評価する。
     ```python
     $ python
         >>> # int型の 2 に 3 を加算複合代入
@@ -90,7 +88,7 @@ Pythonの複合代入演算子を使い、変数の値を更新する書き方�
         >>> float_a -= -5.9
         >>> print(float_a)
         10.9
-        >>> # complex型の 5 + 5j に 10 + 10j を減算複合代入
+        >>> # complex型の 5 + 5j に 10 - 10j を減算複合代入
         >>> complex_a = 5 + 5j
         >>> complex_a -= 10 - 10j
         >>> print(complex_a)
@@ -162,7 +160,7 @@ Pythonの複合代入演算子を使い、変数の値を更新する書き方�
         >>> complex_a //= 2 + 2j
         Traceback (most recent call last):
         File "<stdin>", line 1, in <module>
-        TypeError: can't take floor of complex number.
+        TypeError: unsupported operand type(s) for //: 'complex' and 'complex'
         >>>
     ```
 
@@ -185,9 +183,10 @@ Pythonの複合代入演算子を使い、変数の値を更新する書き方�
         >>> complex_a %= 2
         Traceback (most recent call last):
         File "<stdin>", line 1, in <module>
-        TypeError: can't mod complex numbers.
+        TypeError: unsupported operand type(s) for %: 'complex' and 'int'
         >>>
     ```
+    ※ 例外メッセージの文言はPythonのバージョンで変わる場合があるが、複素数に `//` や `%` を適用すると `TypeError` になる点が重要。
 
 ### べき乗（**=）
 ※ a = a ** b と同義（簡略表記したもの）
@@ -212,23 +211,11 @@ $ python
 ```
 
 
-## 違いを整理する
-| 比較する項目 | 整理するポイント |
-| --- | --- |
-| 省略形として読む | `x += 1`は`x = x + 1`に近い意味として読むと分かりやすい。 |
-| 型による挙動の違い | listのようなmutableな型では、同じオブジェクトが更新される場合がある。 |
-| 読みやすさ | 短く書けても、複雑な式では通常の代入の方が分かりやすい場合がある。 |
-
-## 実務とのつながり
-- カウンタ更新<br>
-    ループ内で件数や合計値を更新する処理でよく使う。
-- 状態更新<br>
-    ゲーム、シミュレーション、集計処理などで現在値を少しずつ変える場面に向いている。
-
 ## まとめ
-- 複合代入演算子は、演算と代入をまとめて書く記法。
-- `+=`、`-=`、`*=`などは更新処理を簡潔に表せる。
-- mutableな型ではオブジェクト自体が変わる場合があるため注意する。
+- 複合代入演算子は演算と代入をまとめる記法で、x += 1はx = x + 1に近い意味として読める。
+- listなどのmutableな型では、複合代入によって同じオブジェクトの内容が更新される場合がある。
+- 短く書けても複雑な式では読みにくくなるため、通常の代入と使い分ける。
 
-## 参考文献
+### 参考文献
 - 金城 俊哉（\\(2018\\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム
+- [Python公式ドキュメント - 累算代入文（日本語・複合代入の公式仕様）](https://docs.python.org/ja/3/reference/simple_stmts.html#augmented-assignment-statements)
