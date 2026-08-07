@@ -6,240 +6,225 @@ Python - ニューラルネットワーク：9/14 ミニバッチ学習と交差
 学習では、すべてのデータを毎回使うのではなく、一部のデータをまとめて取り出して損失を計算することが多い。
 ここでは、MNISTからミニバッチを取り出し、複数件の予測と正解ラベルに対して平均損失を求める流れを確認する。
 
-## この記事で扱うこと
-- ミニバッチ学習の考え方。
-- ランダムにデータを抽出する方法。
-- バッチ版の交差エントロピー誤差の実装。
-- ラベル形式の違いに対応する方法。
-
-## 作業前に確認すること
-| 確認項目 | 内容 |
-| --- | --- |
-| MNIST | 訓練データと正解ラベルを読み込める状態にしておく。 |
-| NumPy | random.choice、配列インデックス、ブロードキャストを確認しておく。 |
-| 損失関数 | 交差エントロピー誤差の基本式を理解しておく。 |
-
+## この記事の構成
+- [ミニバッチ学習とは](#ミニバッチ学習とは)<br>
+  ミニバッチ学習の意味と基本的な考え方を整理。
+- [交差エントロピー誤差のミニバッチ学習（定義）](#交差エントロピー誤差のミニバッチ学習定義)<br>
+  交差エントロピー誤差のミニバッチ学習（定義）と、式や用語が表す意味を整理。
+- [交差エントロピー誤差のミニバッチ学習（MNISTの準備）](#交差エントロピー誤差のミニバッチ学習mnistの準備)<br>
+  交差エントロピー誤差のミニバッチ学習（MNISTの準備）の手順と確認ポイントを整理。
+- [交差エントロピー誤差のミニバッチ学習（Python実装サンプル）](#交差エントロピー誤差のミニバッチ学習python実装サンプル)<br>
+  交差エントロピー誤差のミニバッチ学習（Python実装サンプル）をコードや具体例で確認。
 
 ## 概念の説明と実装サンプル
 ### ミニバッチ学習とは
-機械学習では、[Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）> MNISTのデータ仕様](https://sigma-se.com/detail/19/#:~:text=%E3%83%87%E3%83%BC%E3%82%BF%E3%82%BB%E3%83%83%E3%83%88%EF%BC%8810%2C000%E5%80%8B%EF%BC%89-,MNIST%E3%81%AE%E3%83%87%E3%83%BC%E3%82%BF%E4%BB%95%E6%A7%98,-%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92%E3%81%A7%E3%81%AF) のような訓練データすべて(学習用データセット 60,000枚)を対象に損失関数を求める必要がある。
+- 全件学習とミニバッチ学習の違い<br>
+    機械学習では、[Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）> MNISTのデータ仕様](https://sigma-se.com/detail/19/#mnistのデータ仕様) のような訓練データすべて(学習用データセット 60,000枚)を対象に損失関数を求める必要がある。
 
-60,000枚程度であれば問題ないが、ビッグデータでは**数千万のデータ**となり、すべて求めると処理時間もサーバー負荷も膨大となり現実的でない。
+    データが多い場合、全件から毎回損失と勾配を求めると計算量が大きくなる。そこで訓練データの一部を抽出し、その平均損失から全体の損失を確率的に推定する方法を**ミニバッチ学習**という。
 
-また、高負荷の割には、100件程度のランダム抽出結果と大きく変わらず、機械学習では数千万データの近似値として十分有効である。
-この学習方法を機械学習分野では、**ミニバッチ学習**と呼び、テレビの視聴率計測など一般的に広く使用されている。
+    ミニバッチから得る値には抽出によるばらつきがあるため、100件なら常に十分という意味ではない。バッチサイズは、推定のばらつき、計算効率、メモリ使用量を考慮して決める。
 
 ### 交差エントロピー誤差のミニバッチ学習（定義）
-下記\\(（A）\\)は、[Python - ニューラルネットワーク： 損失関数（2乗和誤差、交差エントロピー誤差）と実装サンプル）> 交差エントロピー誤差の定義](<https://sigma-se.com/detail/22/#:~:text=array(t))%0A0.0-,%E4%BA%A4%E5%B7%AE%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AD%E3%83%94%E3%83%BC%E8%AA%A4%E5%B7%AE%E3%81%AE%E5%AE%9A%E7%BE%A9,-%E4%BA%A4%E5%B7%AE%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AD%E3%83%94%E3%83%BC%E8%AA%A4%E5%B7%AE>) で解説した交差エントロピー誤差の定義。
+- 1件とミニバッチの数式<br>
+    下記\\(（A）\\)は、[Python - ニューラルネットワーク： 損失関数（2乗和誤差、交差エントロピー誤差）と実装サンプル）> 交差エントロピー誤差の定義](<https://sigma-se.com/detail/22/#交差エントロピー誤差の定義>) で解説した交差エントロピー誤差の定義。
 
-<div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
-\[
-E = -\sum_{i=1}^{n} t_{k} \log y_{k}\hspace{5mm}･･･（A）
-\]
-</div>
+    <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    E = -\sum_{k=1}^{K} t_{k} \log y_{k}\hspace{5mm}･･･（A）
+    \]
+    </div>
 
-- \\(t_{k}\\)：訓練データ
-- \\(y_{k}\\)：ニューラルネットワークの出力
-- \\(k\\)：データの次元数
+    - \\(t_{k}\\)：正解ラベル
+    - \\(y_{k}\\)：ニューラルネットワークの出力
+    - \\(k\\)：データの次元数
 
-これは、一つのデータ（数字 0 ～ 9 のいずれか）に対して、ニューラルネットワークの出力が10個の配列（正解予想）と、訓練データの出力が10個の配列（正解が1、不正解が0）となる損失関数を表している。
+    これは、一つのデータ（数字 0 ～ 9 のいずれか）に対して、ニューラルネットワークの出力が10個の配列（正解予想）と、訓練データの出力が10個の配列（正解が1、不正解が0）となる損失関数を表している。
 
-これをすべてのデータに対して実施し、その和を表現すると下記\\(（B）\\)の定義となる。
+    これをすべてのデータに対して実施し、その和を表現すると下記\\(（B）\\)の定義となる。
 
-<div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
-\[
-{\normalsize
-E = -\frac{1}{N}\sum_{i=1}^{n}\sum_{j=1}^{k} t_{nk} \log \ y_{nk}\hspace{5mm}･･･（B）
-}
-\]
-</div>
+    <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    {\normalsize
+    E = -\frac{1}{N}\sum_{n=1}^{N}\sum_{k=1}^{K} t_{nk} \log y_{nk}\hspace{5mm}･･･（B）
+    }
+    \]
+    </div>
 
-- \\(N\\)：データの個数<br>
-※ MNISTの場合、学習用データセットの60,000個。一つあたりの損失平均となるようにNで割る。
-- \\(k\\)：データの次元数
-※ MNISTの場合、訓練データの種類(数字 0 ～ 9 に対応する10個)<br>
-- \\(t_{nk}\\)：訓練データである\\(t_{k}\\)がN個分。
-※ MNISTの場合、学習用ラベルデータセットの60,000個。<br>
-- \\(y_{nk}\\)：ニューラルネットワークの出力である\\(y_{k}\\)がN個分。
-※ MNISTの場合、学習用ラベルデータセットの60,000個。
+    - \\(N\\)：対象とするデータの個数<br>
+    ※ 全件なら60,000個、ミニバッチならそのバッチサイズ。一つあたりの損失平均となるようにNで割る。
+    - \\(k\\)：データの次元数
+    ※ MNISTの場合、訓練データの種類(数字 0 ～ 9 に対応する10個)<br>
+    - \\(t_{nk}\\)：n番目のデータに対するk番目の正解ラベル。<br>
+    - \\(y_{nk}\\)：n番目のデータに対するk番目の予測確率。
 
 ### 交差エントロピー誤差のミニバッチ学習（MNISTの準備）
-次にMNISTを使った**ミニバッチ学習の準備**と**データの内容**について解説する。
+- MNISTデータの読み込み<br>
+    次にMNISTを使った**ミニバッチ学習の準備**と**データの内容**について解説する。
 
-※ MNISTのデータについては、[Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）> MNISTのデータ仕様](https://sigma-se.com/detail/19/#:~:text=%E3%83%87%E3%83%BC%E3%82%BF%E3%82%BB%E3%83%83%E3%83%88%EF%BC%8810%2C000%E5%80%8B%EF%BC%89-,MNIST%E3%81%AE%E3%83%87%E3%83%BC%E3%82%BF%E4%BB%95%E6%A7%98,-%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92%E3%81%A7%E3%81%AF) を参考のこと。<br>
-※ リポジトリクローンについては、[Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）> MNISTのダウンロード](https://sigma-se.com/detail/19/#:~:text=%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E3%83%A9%E3%83%99%E3%83%AB-,MNIST%E3%81%AE%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89,-%E4%B8%8B%E8%A8%98%E3%80%81mnist) を参考のこと。
+    ※ MNISTのデータについては、[Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）> MNISTのデータ仕様](https://sigma-se.com/detail/19/#mnistのデータ仕様) を参考のこと。<br>
+    ※ リポジトリクローンについては、[Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）> MNISTのダウンロード](https://sigma-se.com/detail/19/#mnistのダウンロード) を参考のこと。
 
-MNISTの**学習用データセット**と**検証用データセット**をダウンロードする。
-```bash
-$ cd gitlocalrep    # ローカルのGitリポジトリに移動
-$ cd deep-learning-from-scratch/ch03    # Git (deep-learning-from-scratch) のカレントディレクトリに移動
-$ python
- >>> import sys, os
- >>> sys.path.append(os.pardir)
- >>> import numpy as np
- >>> from dataset.mnist import load_mnist
- >>>
- >>> (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
- >>>
- >>> print(x_train.shape)     # 詳細は下記（＊2）に記載
- (60000, 784)
- >>> print(t_train.shape)     # 詳細は下記（＊3）に記載
- (60000, 10)
- >>>
-```
+    MNISTの**学習用データセット**と**テスト用データセット**をダウンロードする。
+    ```bash
+    $ cd gitlocalrep    # ローカルのGitリポジトリに移動
+    $ cd deep-learning-from-scratch/ch03    # Git (deep-learning-from-scratch) のカレントディレクトリに移動
+    $ python
+     >>> import sys, os
+     >>> sys.path.append(os.pardir)
+     >>> import numpy as np
+     >>> from dataset.mnist import load_mnist
+     >>>
+     >>> (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
+     >>>
+     >>> print(x_train.shape)     # 詳細は下記（＊2）に記載
+     (60000, 784)
+     >>> print(t_train.shape)     # 詳細は下記（＊3）に記載
+     (60000, 10)
+     >>>
+    ```
 
-- 補足
-  - （＊1）load_mnist関数の引数
-    引数 normalize は、入力画像を 0.0 ～ 1.0 に正規化するかどうかをBool値で設定する。
-    Falseの場合、入力画像のピクセルは 0 ～ 255 となる。
+    - 補足
+      - （＊1）load_mnist関数の引数
+        引数 normalize は、入力画像を 0.0 ～ 1.0 に正規化するかどうかをBool値で設定。
+        Falseの場合、入力画像のピクセルは 0 ～ 255 となる。
 
-    引数 flatten は、入力画像を1次元にするかどうかをBool値で設定する。
-    Falseの場合、入力画像は1 * 28 * 28 の3次元配列として格納され、Trueの場合、1次元配列(要素：784)として格納される。
+        引数 flatten は、入力画像を1次元にするかどうかをBool値で設定。
+        Falseの場合、入力画像は1 * 28 * 28 の3次元配列として格納され、Trueの場合、1次元配列(要素：784)として格納される。
 
-    引数 one_hot_labelは、ラベルをone_hot表現で格納するかどうかをBool値で設定する。
-    one_hot表現の場合は、正解となるラベルのみ1でそれ以外は0の配列となる。
+        引数 one_hot_labelは、ラベルをone_hot表現で格納するかどうかをBool値で設定。
+        one_hot表現の場合は、正解となるラベルのみ1でそれ以外は0の配列となる。
 
-    戻り値は、(訓練画像、訓練ラベル), (テスト画像, テストラベル)の形式でMNISTデータを返す。
-  - （＊2）x_train.shape (形状)
-    784列(= 28 × 28)の画像データが学習用データセット数の60,000枚あることを表している。
-  - （＊3）t_train.shape (形状)
-    10列(正解となるラベルのみ1でそれ以外は0の配列)の教師データが学習用データセット数の60,000個あることを表している。
+        戻り値は、(訓練画像、訓練ラベル), (テスト画像, テストラベル)の形式でMNISTデータを返す。
+      - （＊2）x_train.shape (形状)
+        784列(= 28 × 28)の画像データが学習用データセット数の60,000枚あることを表している。
+      - （＊3）t_train.shape (形状)
+        10列(正解となるラベルのみ1でそれ以外は0の配列)の教師データが学習用データセット数の60,000個あることを表している。
 
 ### 交差エントロピー誤差のミニバッチ学習（Python実装サンプル）
-最後に上記で準備したMNISTのデータセットを使い、**ミニバッチ学習のPython実装サンプル**について解説する。
+- ミニバッチ抽出と損失計算<br>
+    最後に上記で準備したMNISTのデータセットを使い、**ミニバッチ学習のPython実装サンプル**について解説する。
 
-MNISTの学習用画像データセット（60,000枚）の中から**100枚**抜出して、**交差エントロピー誤差の損失関数**を求めるサンプル。
+    MNISTの学習用画像データセット（60,000枚）の中から**100枚**抜出して、**交差エントロピー誤差の損失関数**を求めるサンプル。
 
-まず、前準備として、[Python - ニューラルネットワーク： MNISTを使った推論バッチ処理の実装サンプル > 推論バッチ処理の実行準備](https://sigma-se.com/detail/21/#:~:text=%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB-,%E6%8E%A8%E8%AB%96%E3%83%90%E3%83%83%E3%83%81%E5%87%A6%E7%90%86%E3%81%AE%E5%AE%9F%E8%A1%8C%E6%BA%96%E5%82%99,-%E5%89%8D%E3%81%AE%E8%A8%98%E4%BA%8B) で解説した`ch03/neuralnet_mnist_batch.py`の`init_network()`と`predict(network, x)`を定義する。
-```bash
-$ cd gitlocalrep    # ローカルのGitリポジトリに移動
-$ cd deep-learning-from-scratch/ch03    # Git (deep-learning-from-scratch) のカレントディレクトリに移動
-$ python
- >>> import sys, os
- >>> sys.path.append(os.pardir)
- >>> import numpy as np
- >>> import pickle
- >>> from dataset.mnist import load_mnist
- >>> from common.functions import sigmoid, softmax
- >>>
- >>> def init_network():
- ...     with open("sample_weight.pkl", 'rb') as f:
- ...         network = pickle.load(f)
- ...     return network
- ...
- >>> def predict(network, x):
- ...     W1, W2, W3 = network['W1'], network['W2'], network['W3']
- ...     b1, b2, b3 = network['b1'], network['b2'], network['b3']
- ...     a1 = np.dot(x, W1) + b1
- ...     z1 = sigmoid(a1)
- ...     a2 = np.dot(z1, W2) + b2
- ...     z2 = sigmoid(a2)
- ...     a3 = np.dot(z2, W3) + b3
- ...     y = softmax(a3)
- ...     return y
- ...
- >>>
-```
+    まず、前準備として、[Python - ニューラルネットワーク： MNISTを使った推論バッチ処理の実装サンプル > 推論バッチ処理の実行準備](https://sigma-se.com/detail/21/#推論バッチ処理の実行準備) で解説した`ch03/neuralnet_mnist_batch.py`の`init_network()`と`predict(network, x)`を定義する。
+    ```bash
+    $ cd gitlocalrep    # ローカルのGitリポジトリに移動
+    $ cd deep-learning-from-scratch/ch03    # Git (deep-learning-from-scratch) のカレントディレクトリに移動
+    $ python
+     >>> import sys, os
+     >>> sys.path.append(os.pardir)
+     >>> import numpy as np
+     >>> import pickle
+     >>> from dataset.mnist import load_mnist
+     >>> from common.functions import sigmoid, softmax
+     >>>
+     >>> def init_network():
+     ...     with open("sample_weight.pkl", 'rb') as f:
+     ...         network = pickle.load(f)
+     ...     return network
+     ...
+     >>> def predict(network, x):
+     ...     W1, W2, W3 = network['W1'], network['W2'], network['W3']
+     ...     b1, b2, b3 = network['b1'], network['b2'], network['b3']
+     ...     a1 = np.dot(x, W1) + b1
+     ...     z1 = sigmoid(a1)
+     ...     a2 = np.dot(z1, W2) + b2
+     ...     z2 = sigmoid(a2)
+     ...     a3 = np.dot(z2, W3) + b3
+     ...     y = softmax(a3)
+     ...     return y
+     ...
+     >>>
+    ```
 
-そして、交差エントロピー誤差のミニバッチ学習を定義。
-```bash
- >>> def cross_entropy_error(y, t):
- ...     if y.ndim == 1:    # 次元が 1 の場合
- ...         t = t.reshape(1, t.size)
- ...         y = y.reshape(1, y.size)
- ...     batch_size = y.shape[0]
- ...     return -np.sum(t * np.log(y + 1e-7)) / batch_size
- ...
- >>>
-```
+    そして、交差エントロピー誤差のミニバッチ学習を定義。
+    ```bash
+     >>> def cross_entropy_error(y, t):
+     ...     if y.ndim == 1:    # 次元が 1 の場合
+     ...         t = t.reshape(1, t.size)
+     ...         y = y.reshape(1, y.size)
+     ...     batch_size = y.shape[0]
+     ...     return -np.sum(t * np.log(y + 1e-7)) / batch_size
+     ...
+     >>>
+    ```
 
-\\(y\\) は、ニューラルネットワーク（推論バッチ処理）の出力となり、以降の解説で引数yにpredict(network, x_batch)の戻り値を設定する。
+    \\(y\\) は、ニューラルネットワーク（推論バッチ処理）の出力となり、以降の解説で引数yにpredict(network, x_batch)の戻り値を設定する。
 
-次に、MNISTの学習用データセットと検証用データセットをダウンロードする。
-```bash
- >>> (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
- >>>
-```
+    次に、MNISTの学習用データセットとテスト用データセットをダウンロードする。
+    ```bash
+     >>> (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
+     >>>
+    ```
 
-次にnp.random.choiceを使用しランダムで**100枚**抽出する。
-```bash
- >>> train_size = x_train.shape[0]
- >>> batch_size = 100
- >>> batch_mask = np.random.choice(train_size, batch_size)
- >>> x_batch = x_train[batch_mask]
- >>> t_batch = t_train[batch_mask]
- >>>
- >>> print(batch_mask)    # np.random.choiceの結果
- [ 2759 48331 20881 29315 30035 55711 47969  1338 54067 23424 14789  9722
- 38601 10138 24036 23811   284 43467 41042 39683 49572 20247 29728 23176
- 50987  4855 43468  7179  2815 29033 46578 25623 41615 34833 12651 35969
- 51498 34685 30303 57205 16641 39057 45010 35152 19620 34228 55637 44070
- 25063 14112 45717 32403 32209 26388 27572 53492 46367 15161 38462 26947
- 30193 45931 25658 24854 33528 41892 55989 32053 43699 22615 42090  3430
-  1568 57173 35969 11839 26384 16123 31217 30323 46844 37015 28731 46525
- 15412 19736 16773 12655 37365 52095 11550 46947 34077 31528  9691 44021
-  6473 41599  7001  4999]
- >>>
-```
+    次に`np.random.choice`を使用しランダムで**100件**抽出する。次の呼び出しは標本の重複を許すため、同じ画像が複数回選ばれる場合がある。重複させない場合は`replace=False`を指定する。
+    ```bash
+     >>> train_size = x_train.shape[0]
+     >>> batch_size = 100
+     >>> batch_mask = np.random.choice(train_size, batch_size)
+     >>> x_batch = x_train[batch_mask]
+     >>> t_batch = t_train[batch_mask]
+     >>>
+     >>> print(batch_mask)    # np.random.choiceの結果
+     [ 2759 48331 20881 29315 30035 55711 47969  1338 54067 23424 14789  9722
+     38601 10138 24036 23811   284 43467 41042 39683 49572 20247 29728 23176
+     50987  4855 43468  7179  2815 29033 46578 25623 41615 34833 12651 35969
+     51498 34685 30303 57205 16641 39057 45010 35152 19620 34228 55637 44070
+     25063 14112 45717 32403 32209 26388 27572 53492 46367 15161 38462 26947
+     30193 45931 25658 24854 33528 41892 55989 32053 43699 22615 42090  3430
+      1568 57173 35969 11839 26384 16123 31217 30323 46844 37015 28731 46525
+     15412 19736 16773 12655 37365 52095 11550 46947 34077 31528  9691 44021
+      6473 41599  7001  4999]
+     >>>
+    ```
 
-次に100枚抜き出したニューラルネットワーク(推論バッチ処理)の出力結果をy_batchに取得する。
-```bash
- >>> network = init_network()
- >>> y_batch = predict(network, x_batch)
- >>>
-```
+    次に100枚抜き出したニューラルネットワーク(推論バッチ処理)の出力結果をy_batchに取得する。
+    ```bash
+     >>> network = init_network()
+     >>> y_batch = predict(network, x_batch)
+     >>>
+    ```
 
-そして、最後にニューラルネットワーク(推論バッチ処理)の出力`y_batch`と`t_batch`を引数に交差エントロピー誤差を求める。
-```bash
- >>> cross_entropy_error(y_batch, t_batch)
- 0.20627920610480943
- >>>
-```
+    そして、最後にニューラルネットワーク(推論バッチ処理)の出力`y_batch`と`t_batch`を引数に交差エントロピー誤差を求める。
+    ```bash
+     >>> cross_entropy_error(y_batch, t_batch)
+     0.20627920610480943
+     >>>
+    ```
 
-100枚のミニバッチ学習結果は、**約0.2**という結果になった。
+    100枚のミニバッチ学習結果は、**約0.2**という結果になった。
 
-ちなみに上記はload_mnistで引数`one_hot_label=True`を指定したone_hot表現のミニバッチ処理だが、one_hot表現でなく**ラベルのデータセットをダウンロードした場合**は、下記の実装となる。
-```bash
- >>> def cross_entropy_error(y, t):
- ...     if y.ndim == 1:
- ...         t = t.reshape(1, t.size)
- ...         y = y.reshape(1, y.size)
- ...     batch_size = y.shape[0]
- ...     return -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size
- ...
- >>>
-```
+    ちなみに上記はload_mnistで引数`one_hot_label=True`を指定したone_hot表現のミニバッチ処理だが、one_hot表現でなく**ラベルのデータセットをダウンロードした場合**は、下記の実装となる。
+    ```bash
+     >>> def cross_entropy_error(y, t):
+     ...     if y.ndim == 1:
+     ...         t = t.reshape(1, t.size)
+     ...         y = y.reshape(1, y.size)
+     ...     batch_size = y.shape[0]
+     ...     return -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size
+     ...
+     >>>
+    ```
 
-one_hot表現では、\\(t=0\\) のデータはすべて \\(0\\) になるが、ラベルデータとなると全てデータが対象となる。
+    one-hot表現では正解クラスだけが1となるため全クラスの積を合計する。クラス番号形式では、正解クラスに対応する予測確率だけを配列のインデックスで取り出す。
 
-引数 one_hot_label に関する差異
-- one_hot_label=True の時
-```bash
-...     return -np.sum(t * np.log(y + 1e-7)) / batch_size
-```
-- one_hot_label=False の時
-```bash
-...     return -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size
-```
-
-
-## 違いを整理する
-| 比較する項目 | 整理するポイント |
-| --- | --- |
-| 全件学習との違い | ミニバッチは全データの一部を使って近似的に損失を計算する。 |
-| ラベル形式 | one-hot表現かクラス番号かで実装が変わる。 |
-| 平均を取る位置 | バッチ全体の損失は、件数で割って平均として扱う。 |
-
-## 実務とのつながり
-- 大規模データへの対応<br>
-    全データを一度に処理できない場合でも、ミニバッチなら現実的なメモリ量で学習できる。
-- 学習の安定性<br>
-    バッチサイズは学習速度やばらつきに影響するため、調整対象になる。
+    引数 one_hot_label に関する差異
+    - one_hot_label=True の時
+    ```bash
+    ...     return -np.sum(t * np.log(y + 1e-7)) / batch_size
+    ```
+    - one_hot_label=False の時
+    ```bash
+    ...     return -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size
+    ```
 
 ## まとめ
-- ミニバッチ学習は、データの一部をまとめて使う学習方法。
-- 交差エントロピー誤差は、バッチ内の損失を平均して扱う。
-- ラベル形式と配列shapeを確認することが実装の要点。
+- ミニバッチ学習は、全データではなく一部をまとめて使い、損失を近似的に計算する方法。
+- バッチ全体の交差エントロピー誤差は、データ件数で割った平均として扱う。
+- 正解ラベルがone-hot表現かクラス番号かによって実装が変わるため、ラベル形式と配列のshapeを確認。
 
-## 参考文献
-- 斎藤 康毅（\\(2018\\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
+### 参考文献
+- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』（日本語・本記事シリーズの基礎文献）](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
+- [O'Reilly Japan「deep-learning-from-scratch」functions.py（Python・公式サンプルコード）](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/common/functions.py)
+- [NumPy Reference, numpy.random.choice（英語・標本抽出関数の公式仕様）](https://numpy.org/doc/stable/reference/random/generated/numpy.random.choice.html)

@@ -6,243 +6,230 @@ Python - ニューラルネットワーク：3/14 活性化関数の役割と実
 活性化関数は、入力信号の合計をそのまま次へ渡すのではなく、出力の形を変えるための関数となる。
 ここでは、パーセプトロンとのつながりを確認しながら、なぜ活性化関数が必要になるのかを実装例で見る。
 
-## この記事で扱うこと
-- 活性化関数がニューラルネットワークで果たす役割。
-- ステップ関数とシグモイド関数の違い。
-- NumPyを使った活性化関数の実装方法。
-- 非線形性が表現力に関わる理由。
-
-## 作業前に確認すること
-| 確認項目 | 内容 |
-| --- | --- |
-| NumPy | 配列演算とnp.expの基本を確認しておく。 |
-| 前提知識 | パーセプトロンの入力、重み、バイアスを理解しておく。 |
-| グラフ確認 | 関数の形をイメージするため、Matplotlibが使えると分かりやすい。 |
-
+## この記事の構成
+- [パーセプトロンと活性化関数](#パーセプトロンと活性化関数)<br>
+  パーセプトロンと活性化関数の仕組みと要点を具体例から整理。
+- [ニューラルネットワークと活性化関数（シグモイド関数）](#ニューラルネットワークと活性化関数シグモイド関数)<br>
+  ニューラルネットワークでシグモイド関数を使う考え方を整理。
+- [ステップ関数の実装サンプル](#ステップ関数の実装サンプル)<br>
+  ステップ関数の実装サンプルをコードや具体例で確認。
+- [シグモイド関数の実装サンプル](#シグモイド関数の実装サンプル)<br>
+  シグモイド関数の実装サンプルをコードや具体例で確認。
+- [ステップ関数とシグモイド関数の違い](#ステップ関数とシグモイド関数の違い)<br>
+  ステップ関数とシグモイド関数の違いを対比し、それぞれの特徴を整理。
 
 ## 概念の説明と実装サンプル
 ### パーセプトロンと活性化関数
-**活性化関数**（activation function）は、**伝達関数**（transfer function）とも呼ばれ、入力値の**総和を出力に変換する**関数のことを言い、入力値がどのように発火するか（活性化するか・伝達されるか）を決定する役割を持つ。
+- 活性化関数の役割<br>
+    **活性化関数**（activation function）は、**伝達関数**（transfer function）とも呼ばれ、入力値の**総和を出力に変換する**関数のことを言い、入力値がどのように発火するか（活性化するか・伝達されるか）を決定する役割を持つ。
 
-[前の記事 > 多層パーセプトロンの概念と実装サンプル](https://sigma-se.com/detail/16/) で触れた入力値が2つあるパーセプトロン\\(（A）\\)も活性化関数と言えるが、一般的な活性化関数の表現に書き換えると右辺を \\(a = b + x_{1}w_{1} + x_{2}w_{2} \\) と置き、\\(（B）\\) 、\\(y\\) を \\(h(a)\\) で表現した\\(（C）\\)のように表せる。
+    [前の記事 > 多層パーセプトロンの概念と実装サンプル](https://sigma-se.com/detail/16/) で触れた入力値が2つあるパーセプトロン\\(（A）\\)は、ステップ関数を活性化関数として用いるモデルである。一般的な活性化関数の表現に書き換えると右辺を \\(a = b + x_{1}w_{1} + x_{2}w_{2} \\) と置き、\\(（B）\\) 、\\(y\\) を \\(h(a)\\) で表現した\\(（C）\\)のように表せる。
 
-<div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
-\[
-{\small
-y =
-\begin{cases}
-0 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} \leqq 0 \\
-1 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} > 0
-\end{cases}\hspace{5mm}･･･（A）
-}
-\]
-</div>
+    <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    {\small
+    y =
+    \begin{cases}
+    0 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} \leqq 0 \\
+    1 \hspace{5pt}\text{if}\hspace{5pt}b + x_{1}w_{1} + x_{2}w_{2} > 0
+    \end{cases}\hspace{5mm}･･･（A）
+    }
+    \]
+    </div>
 
-\\(a = b + x_{1}w_{1} + x_{2}w_{2} \\) と置き
+    \\(a = b + x_{1}w_{1} + x_{2}w_{2} \\) と置き
 
-<div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
-\[
-{\small
-y =
-\begin{cases}
-0 \hspace{5pt}\text{if}\hspace{5pt}a \leqq 0 \\
-1 \hspace{5pt}\text{if}\hspace{5pt}a > 0
-\end{cases}\hspace{5mm}･･･（B）
-}
-\]
-</div>
+    <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    {\small
+    y =
+    \begin{cases}
+    0 \hspace{5pt}\text{if}\hspace{5pt}a \leqq 0 \\
+    1 \hspace{5pt}\text{if}\hspace{5pt}a > 0
+    \end{cases}\hspace{5mm}･･･（B）
+    }
+    \]
+    </div>
 
-\\(y\\) = \\(h(a)\\) とすると
+    \\(y\\) = \\(h(a)\\) とすると
 
-<div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
-\[
-{\small
-y = h(b + x_{1}w_{1} + x_{2}w_{2})
-}
-\]
-</div>
-<div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
-\[
-{\small
-h(a) =
-\begin{cases}
-0 \hspace{5pt}\text{if}\hspace{5pt}a \leqq 0 \\
-1 \hspace{5pt}\text{if}\hspace{5pt}a > 0
-\end{cases}\hspace{5mm}･･･（C）
-}
-\]
-</div>
+    <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    {\small
+    y = h(b + x_{1}w_{1} + x_{2}w_{2})
+    }
+    \]
+    </div>
+    <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    {\small
+    h(a) =
+    \begin{cases}
+    0 \hspace{5pt}\text{if}\hspace{5pt}a \leqq 0 \\
+    1 \hspace{5pt}\text{if}\hspace{5pt}a > 0
+    \end{cases}\hspace{5mm}･･･（C）
+    }
+    \]
+    </div>
 
-となり、**入力値の総和**を \\(h(a)\\) によって変換し、出力値である \\(y\\) となることを表わしている。
+    となり、**入力値の総和**を \\(h(a)\\) によって変換し、出力値である \\(y\\) となることを表わしている。
 
-※ \\(（C）\\) のイメージ
-<div style="text-align: center;">
-　<img src="/static/tblog/img/pid17_1.svg" alt="pid17_1" style="width: 80%; height: auto; margin-top: -1.25rem;" />
-</div>
+    ※ \\(（C）\\) のイメージ
+    <div style="text-align: center;">
+    　<img src="/static/tblog/img/pid17_1.svg" alt="pid17_1" style="width: 80%; height: auto; margin-top: -1.25rem;" />
+    </div>
 
-上記の \\(a\\)、\\(h(x)\\)、\\(y\\) の 〇 を **ニューロン**（またはノード）と呼ぶ。
+    図の丸は処理単位となる**ニューロン**（またはノード）を表し、\\(a\\)、\\(h(a)\\)、\\(y\\) はその途中の値や関数を表す。
 
-上記の通り、\\(（C）\\)で表される活性化関数は、バイアスを境に出力が切り替わる関数となっているが、このような関数を**ステップ関数**または、**階段関数**という。
+    上記のとおり、\\(（C）\\)で表される活性化関数は、バイアスを境に出力が切り替わる関数となっているが、このような関数を**ステップ関数**または**階段関数**という。
 
-従ってパーセプトロンは、活性化関数に分類される**ステップ関数**を用いて表現されてる。
+    従って、このパーセプトロンは活性化関数に**ステップ関数**を用いて表現される。
 
-この活性化関数は、**ステップ関数**ではなく、次項で触れる**シグモイト関数**を用いることで、自動学習が可能なニューラルネットワークを表現できるようになる。
-
-※ 単純/多層パーセプトロンでは、意図した論理回路が実現するように適切な \\(w\\)（重み）を人力で判断しなければならなかったが、ニューラルネットワークでは、その判断を自動学習できるようになる。
+    パーセプトロンにも重みを更新する学習則はあるが、ステップ関数はほとんどの点で微分が\\(0\\)となるため、勾配を逆伝播して多層ネットワークを学習する方法には適さない。シグモイド関数のように微分可能な活性化関数を使うと、損失の勾配に基づいて各層の重みを更新できる。
 
 ### ニューラルネットワークと活性化関数（シグモイド関数）
-ニューラルネットワークで使用される活性化関数の一つに**シグモイド関数**（sigmoid function）がある。
+- シグモイド関数を使う考え方<br>
+    ニューラルネットワークで使用される活性化関数の一つに**シグモイド関数**（sigmoid function）がある。
 
-前項で触れたパーセプトロンもニューラルネットワークも入力値を関数で変換し出力してるが、
-その違いは、**ステップ関数**であるか**シグモイド関数**であるかだけの違い。
+    パーセプトロンもニューラルネットワークも入力値を関数で変換して出力するが、両者の違いは活性化関数だけではない。層の構成、学習方法、損失関数なども含めてモデルが決まる。ここでは、そのうち活性化関数の違いに注目する。
 
-ここで深く掘り下げないが一般的なシグモイド関数は、下記\\(（D）\\)で表される実関数を指している。
-<div style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
-\[
-h(x) = \frac{1}{1+e^{-ax}}\hspace{5mm}･･･（D）
-\]
-</div>
+    ここで深く掘り下げないが一般的なシグモイド関数は、下記\\(（D）\\)で表される実関数を指している。
+    <div style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    h(x) = \frac{1}{1+e^{-ax}}\hspace{5mm}･･･（D）
+    \]
+    </div>
 
-\\(a\\) は、ゲイン（増幅値）と呼ばれ、\\(a = 1\\) とした下記\\(（E）\\)は、**神経細胞が持つ性質をモデル化したもの**として用いられており、**標準シグモイド関数**という。
-<div style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
-\[
-h(x) = \frac{1}{1+e^{-x}}\hspace{5mm}･･･（E）
-\]
-</div>
+    \\(a\\) は、ゲイン（増幅値）と呼ばれ、\\(a = 1\\) とした下記\\(（E）\\)は、**神経細胞が持つ性質をモデル化したもの**として用いられており、**標準シグモイド関数**という。
+    <div style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    h(x) = \frac{1}{1+e^{-x}}\hspace{5mm}･･･（E）
+    \]
+    </div>
 
-※ \\(e=2.718281828…\\) は、無理数で自然対数の低を表し、ネイピア数という。
+    ※ \\(e=2.718281828…\\) は、自然対数の底となる無理数で、ネイピア数という。
 
-以降では、**ステップ関数とシグモイド関数の実装サンプル**を比較しながら、それぞれの違いを確認する。
+    以降では、**ステップ関数とシグモイド関数の実装サンプル**を比較しながら、それぞれの違いを確認する。
 
 ### ステップ関数の実装サンプル
-下記（＊1）は、\\(x>0\\) を基準にそれが真であれば、\\(1\\)、そうでなければ \\(0\\) を出力するステップ関数の実装サンプル。
+- ステップ関数の定義と確認<br>
+    下記（＊1）は、\\(x>0\\) を基準にそれが真であれば、\\(1\\)、そうでなければ \\(0\\) を出力するステップ関数の実装サンプル。
 
-```bash
-$ python
- >>> import numpy as np
- >>> def step_func(x):    # （＊1） ステップ関数の定義
- ...     y = x > 0
- ...     return y.astype(np.int)
- ...
-```
+    ```bash
+    $ python
+     >>> import numpy as np
+     >>> def step_func(x):    # （＊1） ステップ関数の定義
+     ...     y = x > 0
+     ...     return y.astype(int)
+     ...
+    ```
 
-上記引数の \\(x\\) を（＊2）のNumPy配列で定義する。
-```bash
-$ python
- >>> x = np.array([-0.5, 0.5, 1.5])    # （＊2） NumPy配列の定義
- >>> x    # （＊3）NumPy配列の確認
- array([-0.5,  0.5,  1.5])
-```
+    上記引数の \\(x\\) を（＊2）のNumPy配列で定義する。
+    ```bash
+    $ python
+     >>> x = np.array([-0.5, 0.5, 1.5])    # （＊2） NumPy配列の定義
+     >>> x    # （＊3）NumPy配列の確認
+     array([-0.5,  0.5,  1.5])
+    ```
 
-ここで（＊4）の通り、\\(x\\) を \\(x > 0\\) とするとbool値のNumPy配列が返さる。
-```bash
-$ python
- >>> x > 0    # （＊4） NumPy配列をbool値で表示
- array([False,  True,  True])
-```
+    ここで（＊4）のとおり、\\(x > 0\\)を評価するとbool値のNumPy配列が返される。
+    ```bash
+    $ python
+     >>> x > 0    # （＊4） NumPy配列をbool値で表示
+     array([False,  True,  True])
+    ```
 
-さらに（＊5）でこの \\(x > 0\\) をastypeでint変換している。
-```bash
-$ python
- >>> (x > 0).astype(np.int)    # （＊5） NumPy配列のbool値を 0：false、1：true で表示
- array([0, 1, 1])
- >>>
-```
+    さらに（＊5）でこの \\(x > 0\\) をastypeでint変換している。
+    ```bash
+    $ python
+     >>> (x > 0).astype(int)    # （＊5） NumPy配列のbool値を 0：false、1：true で表示
+     array([0, 1, 1])
+     >>>
+    ```
 
-よって、（＊2）の引数 \\(x = [-0.5, 0.5, 1.5]\\) が戻り値となる（＊5）のNumPy配列が \\(x = [0, 1, 1]\\) で出力されている。<br>
-さらに、（＊1）を numpy.array の表現に書き換えると（＊6）のように \\(1\\) STEPで表現することができる。
-```bash
-$ python
- >>> import numpy as np
- >>> import matplotlib.pylab as plt
- >>> def step_func(x):    # （＊6） ステップ関数の定義
- ...    return np.array(x > 0, dtype=np.int)
- ...
-```
+    よって、（＊2）の引数 \\(x = [-0.5, 0.5, 1.5]\\) が戻り値となる（＊5）のNumPy配列が \\(x = [0, 1, 1]\\) で出力されている。<br>
+    さらに、（＊1）を numpy.array の表現に書き換えると（＊6）のように \\(1\\) STEPで表現することができる。
+    ```bash
+    $ python
+     >>> import numpy as np
+     >>> import matplotlib.pylab as plt
+     >>> def step_func(x):    # （＊6） ステップ関数の定義
+     ...    return np.array(x > 0, dtype=int)
+     ...
+    ```
 
-上記（＊6）のグラフ出力
-```bash
- >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5 まで、描画制度を 0.1 刻みに設定
- >>> y = step_func(x)    # （＊6） ステップ関数をコール
- >>> plt.title("step_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
- Text(0.5, 1.0, 'step_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y')
- >>> plt.ylim(-0.1, 1.1)    # y軸の範囲を設定
- (-0.1, 1.1)
- >>> plt.xlabel("x")    # x軸のラベルを設定
- Text(0.5, 0, 'x')
- >>> plt.ylabel("y")    # y軸のラベルを設定
- Text(0, 0.5, 'y')
- >>> plt.plot(x, y)    # グラフの描画
- [&lt;matplotlib.lines.Line2D object at 0x7f7e0a48e2b0&gt;]
- >>> plt.savefig('/var/www/vops/ops/macuos/static/macuos/img/b_id40_2.png')    # グラフの出力
-```
+    上記（＊6）のグラフ出力
+    ```bash
+     >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5まで、描画間隔を0.1刻みに設定
+     >>> y = step_func(x)    # （＊6） ステップ関数をコール
+     >>> plt.title("step_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
+     Text(0.5, 1.0, 'step_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y')
+     >>> plt.ylim(-0.1, 1.1)    # y軸の範囲を設定
+     (-0.1, 1.1)
+     >>> plt.xlabel("x")    # x軸のラベルを設定
+     Text(0.5, 0, 'x')
+     >>> plt.ylabel("y")    # y軸のラベルを設定
+     Text(0, 0.5, 'y')
+     >>> plt.plot(x, y)    # グラフの描画
+     [&lt;matplotlib.lines.Line2D object at 0x7f7e0a48e2b0&gt;]
+     >>> plt.savefig('pid17_2.png')    # グラフの出力
+    ```
 
-![pid17_2](/static/tblog/img/pid17_2.png)
+    ![pid17_2](/static/tblog/img/pid17_2.png)
 
-上記グラフの通り \\(x = 0\\) を境に \\(y\\) が \\(0\\) から \\(1\\) に切り替わっており、階段状になっていることからステップ関数は、階段関数とも呼ばれている。
+    上記グラフの通り \\(x = 0\\) を境に \\(y\\) が \\(0\\) から \\(1\\) に切り替わっており、階段状になっていることからステップ関数は、階段関数とも呼ばれている。
 
 ### シグモイド関数の実装サンプル
-上記、**シグモイド関数**\\(（E）\\)の \\(e^{-x}\\) を**NumPy**で書き換えるだけで良く、下記 \\(1\\) STEPのみ。
-```bash
-$ python
- >>> import numpy as np
- >>> import matplotlib.pylab as plt
- >>> def sigmoid_func(x):    # （＊7） シグモイド関数の定義
- ...     return 1 / (1 + np.exp(-x))    # 自然対数の低 (e) の -x 乗
- ...
-```
+- シグモイド関数の定義と確認<br>
+    上記、**シグモイド関数**\\(（E）\\)の \\(e^{-x}\\) を**NumPy**で書き換えるだけで良く、下記 \\(1\\) STEPのみ。
+    ```bash
+    $ python
+     >>> import numpy as np
+     >>> import matplotlib.pylab as plt
+     >>> def sigmoid_func(x):    # （＊7） シグモイド関数の定義
+     ...     return 1 / (1 + np.exp(-x))    # 自然対数の底 (e) の -x 乗
+     ...
+    ```
 
-引数に関しては、ステップ関数と同様にNumPy配列を渡すとNumPy配列で出力される。
-```bash
- >>> x = np.array([-3.0, -2.0, -1.0, 0, 1.0, 2.0, 3.0])
- >>> sigmoid_func(x)
- array([0.04742587, 0.11920292, 0.26894142, 0.5, 0.73105858, 0.88079708, 0.95257413])
- >>>
-```
+    引数に関しては、ステップ関数と同様にNumPy配列を渡すとNumPy配列で出力される。
+    ```bash
+     >>> x = np.array([-3.0, -2.0, -1.0, 0, 1.0, 2.0, 3.0])
+     >>> sigmoid_func(x)
+     array([0.04742587, 0.11920292, 0.26894142, 0.5, 0.73105858, 0.88079708, 0.95257413])
+     >>>
+    ```
 
-上記（＊7）のグラフ出力
-```bash
- >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5 まで、描画制度を 0.1 刻みに設定
- >>> y = sigmoid_func(x)    # （＊7） シグモイド関数をコール
- >>> plt.title("sigmoid_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
- Text(0.5, 1.0, 'sigmoid_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y')
- >>> plt.ylim(-0.1, 1.1)    # y軸の範囲を設定
- (-0.1, 1.1)
- >>> plt.xlabel("x")    # x軸のラベルを設定
- Text(0.5, 0, 'x')
- >>> plt.ylabel("y")    # y軸のラベルを設定
- Text(0, 0.5, 'y')
- >>> plt.plot(x, y)
- [&lt;matplotlib.lines.Line2D object at 0x7ff62b64fcf8&gt;]
- >>> plt.savefig('/var/www/vops/ops/macuos/static/macuos/img/b_id40_3.png')    # グラフの出力
-```
+    上記（＊7）のグラフ出力
+    ```bash
+     >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5まで、描画間隔を0.1刻みに設定
+     >>> y = sigmoid_func(x)    # （＊7） シグモイド関数をコール
+     >>> plt.title("sigmoid_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
+     Text(0.5, 1.0, 'sigmoid_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y')
+     >>> plt.ylim(-0.1, 1.1)    # y軸の範囲を設定
+     (-0.1, 1.1)
+     >>> plt.xlabel("x")    # x軸のラベルを設定
+     Text(0.5, 0, 'x')
+     >>> plt.ylabel("y")    # y軸のラベルを設定
+     Text(0, 0.5, 'y')
+     >>> plt.plot(x, y)
+     [&lt;matplotlib.lines.Line2D object at 0x7ff62b64fcf8&gt;]
+     >>> plt.savefig('pid17_3.png')    # グラフの出力
+    ```
 
-![pid17_3](/static/tblog/img/pid17_3.png)
+    ![pid17_3](/static/tblog/img/pid17_3.png)
 
 ### ステップ関数とシグモイド関数の違い
+- 出力特性の比較<br>
+    **ステップ関数**は、\\(y = 0\\) or \\(y = 1\\) のみの出力なのに対して**シグモイド関数**の出力 \\(y\\) は、**連続的な実数**を出力しており、滑らかな曲線を描いている。
 
-**ステップ関数**は、\\(y = 0\\) or \\(y = 1\\) のみの出力なのに対して**シグモイド関数**の出力 \\(y\\) は、**連続的な実数**を出力しており、滑らかな曲線を描いている。
-
-これは、**ニューラルネットワークのシグモイド関数**がパーセプトロンのステップ関数では表現できない**柔軟性や複雑な処理を表現できる**ことを意味し、自動学習においても重要な役割を果たしている。
-
-
-## 違いを整理する
-| 比較する項目 | 整理するポイント |
-| --- | --- |
-| 活性化関数と損失関数 | 活性化関数は出力を変換する関数、損失関数は予測の悪さを測る関数。 |
-| ステップ関数の不連続性 | 0か1に急に切り替わるため、後の学習処理では扱いにくい。 |
-| 線形関数だけの限界 | 線形変換だけを重ねても、全体としては線形変換のままになる。 |
-
-## 実務とのつながり
-- モデル設計<br>
-    どの活性化関数を使うかは、学習の進みやすさや出力の解釈に影響する。
-- デバッグ観点<br>
-    出力が0付近に偏る、値が大きくなりすぎるなどの問題は、活性化関数の性質と関係することがある。
+    これは、**ニューラルネットワークのシグモイド関数**がパーセプトロンのステップ関数では表現できない**柔軟性や複雑な処理を表現できる**ことを意味し、自動学習においても重要な役割を果たしている。
 
 ## まとめ
-- 活性化関数は、ニューロンの出力を変換する関数。
-- ステップ関数は離散的、シグモイド関数は滑らかな出力を返す。
-- 非線形な活性化関数により、ニューラルネットワークは複雑な関係を表現しやすくなる。
+- 活性化関数はニューロンの出力を変換し、損失関数は予測の悪さを測るため、役割が異なる。
+- ステップ関数は0と1が不連続に切り替わり、シグモイド関数は滑らかな出力を返す。
+- 線形変換だけを重ねても全体は線形のままだが、非線形な活性化関数を使うと複雑な関係を表現しやすくなる。
 
-## 参考文献
-- 斎藤 康毅（\\(2018\\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
+### 参考文献
+- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』（日本語・本記事シリーズの基礎文献）](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
+- [O'Reilly Japan「deep-learning-from-scratch」step_function.py（Python・公式サンプルコード）](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch03/step_function.py)
+- [O'Reilly Japan「deep-learning-from-scratch」sigmoid.py（Python・公式サンプルコード）](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch03/sigmoid.py)

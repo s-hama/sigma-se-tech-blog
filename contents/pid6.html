@@ -1,75 +1,56 @@
-<div div class="post-body">
+<div class="post-body">
   <h2 id="概要">概要</h2>
   <p>Gitの状態管理の考え方と、よく使う基本コマンドを整理する。</p>
-  <p>Gitでは、ワーキングツリー、インデックス、ローカルリポジトリ、リモートリポジトリのどこに変更があるかを理解することが重要になる。コマンドを丸暗記するより、変更がどこからどこへ移動するかを追うと操作ミスを減らせる。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
+  <p>Gitでは、ワーキングツリー、インデックス、ローカルリポジトリ、リモートリポジトリのどこに変更があるかを理解することが重要になる。<br>コマンドを丸暗記するより、変更がどこからどこへ移動するかを追うと操作ミスを減らせる。</p>
+  <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
-    <li>ワーキングツリー、インデックス、ローカルリポジトリ、リモートリポジトリの違い。</li>
-    <li>status、add、commit、diffの基本的な流れ。</li>
-    <li>resetで何が戻るかの考え方。</li>
-    <li>pushとpullでリモートと同期する流れ。</li>
-    <li>checkoutでブランチや特定コミットへ移動する操作。</li>
+    <li><a href="#対象環境と利用上の注意" class="link-secondary">対象環境と利用上の注意</a><br>
+      本文記載時の環境と現在そのまま利用できない箇所を確認。</li>
+    <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
+      設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
+    <li><a href="#状態管理の概念" class="link-secondary">状態管理の概念</a><br>
+      ワーキングツリー、インデックス、ローカル・リモートリポジトリの関係を整理。</li>
+    <li><a href="#git-status--ステータス確認" class="link-secondary">[git status] : ステータス確認</a><br>
+      git statusコマンドの役割と基本操作を具体例から確認。</li>
+    <li><a href="#git-add--インデックスへ反映" class="link-secondary">[git add] : インデックスへ反映</a><br>
+      git addコマンドの役割と基本操作を具体例から確認。</li>
+    <li><a href="#git-commit--ローカルリポジトリへ反映" class="link-secondary">[git commit] : ローカルリポジトリへ反映</a><br>
+      git commitコマンドの役割と基本操作を具体例から確認。</li>
+    <li><a href="#git-diff--差分確認" class="link-secondary">[git diff] : 差分確認</a><br>
+      git diffコマンドの役割と基本操作を具体例から確認。</li>
+    <li><a href="#git-reset--コミットの取り消し" class="link-secondary">[git reset] : コミットの取り消し</a><br>
+      git resetコマンドの役割と基本操作を具体例から確認。</li>
+    <li><a href="#git-push--リモートリポジトリへ反映" class="link-secondary">[git push] : リモートリポジトリへ反映</a><br>
+      git pushコマンドの役割と基本操作を具体例から確認。</li>
+    <li><a href="#git-pull--リモートリポジトリの変更を取込む" class="link-secondary">[git pull] : リモートリポジトリの変更を取込む</a><br>
+      git pullコマンドの役割と基本操作を具体例から確認。</li>
+    <li><a href="#git-checkout--チェックアウト" class="link-secondary">[git checkout] : チェックアウト</a><br>
+      git checkoutコマンドの役割と基本操作を具体例から確認。</li>
   </ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">項目</th>
-        <th scope="col">確認内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>作業場所</td>
-        <td>Git管理下のディレクトリでコマンドを実行する。</td>
-      </tr>
-      <tr>
-        <td>状態確認</td>
-        <td>変更前後でgit statusを確認する習慣を付ける。</td>
-      </tr>
-      <tr>
-        <td>ステージング</td>
-        <td>commit対象に含める変更だけをgit addする。</td>
-      </tr>
-      <tr>
-        <td>履歴操作</td>
-        <td>resetは影響範囲を理解してから使う。</td>
-      </tr>
-      <tr>
-        <td>リモート操作</td>
-        <td>push/pull前に作業ブランチを確認する。</td>
-      </tr>
-    </tbody>
-  </table>
+  <h2 id="対象環境と利用上の注意">対象環境と利用上の注意</h2>
+  <ul>
+    <li>本文記載時の環境<br>
+      Gitの基本コマンドを扱う記事で、旧来の<code>master</code>表記と現在の<code>git switch</code>・<code>git restore</code>を含む例を掲載。</li>
+    <li>確認時期<br>
+      2026年8月にGitの公式資料と照合。<br>
+      特定のリモートリポジトリに対する一連の操作は再実行していない。</li>
+    <li>現在そのまま利用できない箇所<br>
+      既定ブランチ名、リモート名、コミットID、コマンド出力は環境ごとに異なる。<br>
+      例の値をそのまま入力せず、対象リポジトリの状態を確認して置き換える。</li>
+  </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">作業時の注意点</th>
-        <th scope="col">整理するポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>addとcommit</td>
-        <td>addはコミット候補へ載せる操作、commitは履歴として保存する操作。</td>
-      </tr>
-      <tr>
-        <td>diffの対象</td>
-        <td>ワーキングツリー、インデックス、HEADのどこと比較するかで結果が変わる。</td>
-      </tr>
-      <tr>
-        <td>reset --hard</td>
-        <td>作業中の変更も消えるため、慎重に使う。</td>
-      </tr>
-      <tr>
-        <td>pushとpull</td>
-        <td>pushは送る、pullは取り込む操作として方向を意識する。</td>
-      </tr>
-    </tbody>
-  </table>
-  <h2 id="項目説明">項目説明</h2>
-  <h3 id="状態管理の概念">状態管理の概念</h3>
+  <ul>
+    <li>addとcommit<br>
+      addはコミット候補へ載せる操作、commitは履歴として保存する操作。</li>
+    <li>diffの対象<br>
+      ワーキングツリー、インデックス、HEADのどこと比較するかで結果が変わる。</li>
+    <li>reset --hard<br>
+      追跡済みファイルの未コミット変更も失われるため、実行前にstatusとdiffを確認。</li>
+    <li>pushとpull<br>
+      pushは送る、pullは取り込む操作として方向を意識する。</li>
+  </ul>
+  <p>以下のコマンド例にある<code>[FILE]</code>、<code>[FILE1]</code>、<code>[DIR]</code>などは、実際のファイルパスやディレクトリパスへ置き換えるための表記である。角括弧を含めて入力すると、シェルではglobパターンとして解釈されるため、そのままコピーしない。</p>
+  <h2 id="状態管理の概念">状態管理の概念</h2>
   <ul>
     <li>
       <p>ワーキングツリー（working tree）<br>
@@ -78,16 +59,15 @@
     </li>
     <li>
       <p>インデックス / ステージ（index / staging area）<br>
-        <code>commit</code>前に<strong>ワーキングツリー（working tree）<strong>の変更を一時的に保存する場所。<br>
-            変更が</strong>index</strong>として表示される。<br>
-        <code>commit</code>準備ができた変更を<strong>ステージ（staging area）</strong>に移動して<code>commit</code>対象を管理する。
+        次の<code>commit</code>に含める内容を準備する領域。<br>
+        <code>git add</code>でワーキングツリーの変更内容をインデックスへ記録し、コミット対象を選択。
       </p>
     </li>
     <li>
       <p>ローカルリポジトリ（local repository）<br>
         ローカルマシン上にある個別リポジトリ。<br>
         <code>commit</code>されたすべての履歴やバージョンが保存される場所。<br>
-        <code>branch</code>単位の<code>push</code>によって<code>commit</code>を<strong>リモートリポジトリ（remote repository）</strong>に反映する。
+        <code>branch</code>単位の<code>push</code>によって<code>commit</code>を<strong>リモートリポジトリ（remote repository）</strong>に反映。
       </p>
     </li>
     <li>
@@ -96,7 +76,7 @@
         通常は、<strong>GitHub</strong>や<strong>GitLab</strong>などのホスティングサービス上に存在する。</p>
     </li>
   </ul>
-  <h3 id="git-status--ステータス確認">[git status] : ステータス確認</h3>
+  <h2 id="git-status--ステータス確認">[git status] : ステータス確認</h2>
   <ul>
     <li>
       <p>確認用に<code>touch</code>でファイルを新規作成</p>
@@ -105,7 +85,7 @@
     </li>
     <li>
       <p><code>git status</code>でステータス確認<br>
-        <code>Untracked files</code>に表示されるファイル達は、Git管理下にないファイルが表示される。<br>
+        <code>Untracked files</code>には、まだGitの追跡対象になっていないファイルが表示される。<br>
         上記で新規作成した<code>example-src.txt</code>がバージョン管理下にないため<code>git add</code>を促す警告が表示されている。<br>
       </p>
       <pre><code class="language-bash">$ git status
@@ -128,7 +108,7 @@ $ git status [DIR]    <span class="hljs-comment"># ディレクトリ指定</spa
 </code></pre>
     </li>
   </ul>
-  <h3 id="git-add--インデックスへ反映">[git add] : インデックスへ反映</h3>
+  <h2 id="git-add--インデックスへ反映">[git add] : インデックスへ反映</h2>
   <ul>
     <li>
       <p>前項の警告に従い<code>git add</code>を実行<br>
@@ -156,9 +136,9 @@ Changes to be committed:
 $ git add [FILE1] [FILE2] [FILE3]    <span class="hljs-comment"># 複数ファイルを指定して追加する</span>
 $ git add [DIR]    <span class="hljs-comment"># ディレクトリを指定して追加する</span>
 $ git add [DIR1] [DIR2] [DIR3]    <span class="hljs-comment"># 複数ディレクトリを指定して追加する</span>
-$ git add .    <span class="hljs-comment"># カレントディレクトリ以下の変更を追加する</span>
-$ git add -A    <span class="hljs-comment"># Git管理下の変更をすべて追加する（--all と同じ）</span>
-$ git add --all    <span class="hljs-comment"># Git管理下の変更をすべて追加する（-A と同じ）</span>
+$ git add .    <span class="hljs-comment"># カレントディレクトリ以下の追加・変更・削除を追加する</span>
+$ git add -A    <span class="hljs-comment"># リポジトリ全体の追加・変更・削除を追加する（--all と同じ）</span>
+$ git add --all    <span class="hljs-comment"># リポジトリ全体の追加・変更・削除を追加する（-A と同じ）</span>
 $ git add -u    <span class="hljs-comment"># 追跡済みファイルの変更と削除を追加する（--update と同じ）</span>
 $ git add --update    <span class="hljs-comment"># 追跡済みファイルの変更と削除を追加する（-u と同じ）</span>
 $ git add -f [FILE]    <span class="hljs-comment"># .gitignore対象のファイルを強制的に追加する（--force と同じ）</span>
@@ -168,9 +148,10 @@ $ git add --patch    <span class="hljs-comment"># 差分を対話形式で確認
 $ git add -n    <span class="hljs-comment"># 実際には追加せず、追加対象を確認する（--dry-run と同じ）</span>
 $ git add --dry-run    <span class="hljs-comment"># 実際には追加せず、追加対象を確認する（-n と同じ）</span>
 </code></pre>
+      <p><code>git add -f</code>（<code>--force</code>）は<code>.gitignore</code>の対象も追加。秘密鍵、認証情報、環境変数ファイルなどを誤って登録しないよう、実行前後に<code>git status</code>と<code>git diff --cached</code>で対象を確認。</p>
     </li>
   </ul>
-  <h3 id="git-commit--ローカルリポジトリへ反映">[git commit] : ローカルリポジトリへ反映</h3>
+  <h2 id="git-commit--ローカルリポジトリへ反映">[git commit] : ローカルリポジトリへ反映</h2>
   <ul>
     <li>
       <p>上記の変更をメッセージ付きでコミット
@@ -178,32 +159,19 @@ $ git add --dry-run    <span class="hljs-comment"># 実際には追加せず、�
       </p>
       <pre><code class="language-bash">$ git commit -m <span class="hljs-string">&#x27;Add example-src.txt&#x27;</span>
 [master (root-commit) 304a1cd] Add example-src.txt
-Committer: root 
-Your name and email address were configured automatically based
-on your username and hostname. Please check that they are accurate.
-You can suppress this message by setting them explicitly. Run the
-following <span class="hljs-built_in">command</span> and follow the instructions <span class="hljs-keyword">in</span> your editor to edit
-your configuration file:
-
-    git config --global --edit
-
-After doing this, you may fix the identity used <span class="hljs-keyword">for</span> this commit with:
-
-    git commit --amend --reset-author
-
 1 file changed, 0 insertions(+), 0 deletions(-)
 create mode 100644 example-src.txt
 </code></pre>
     </li>
     <li>
       <p><code>git commit</code>のその他使用例<br></p>
-      <pre><code class="language-bash">$ git commit  -m <span class="hljs-string">&quot;コミットメッセージ&quot;</span>    <span class="hljs-comment"># コミットメッセージを指定</span>
-$ git commit  --amend    <span class="hljs-comment"># 直前のコミットを上書き</span>
-$ git commit  [FILE]    <span class="hljs-comment"># ファイルパス指定</span>
+      <pre><code class="language-bash">$ git commit -m <span class="hljs-string">&quot;コミットメッセージ&quot;</span>    <span class="hljs-comment"># コミットメッセージを指定</span>
+$ git commit --amend    <span class="hljs-comment"># 直前のコミットを作り直す</span>
 </code></pre>
+      <p><code>--amend</code>はコミットIDが変わるため、共有済みのコミットに対しては影響を確認してから使う。</p>
     </li>
   </ul>
-  <h3 id="git-diff--差分確認">[git diff] : 差分確認</h3>
+  <h2 id="git-diff--差分確認">[git diff] : 差分確認</h2>
   <ul>
     <li>
       <p>コミット後の編集<br>
@@ -213,7 +181,7 @@ $ git status
 On branch master
 Changes not staged <span class="hljs-keyword">for</span> commit:
 (use <span class="hljs-string">&quot;git add ...&quot;</span> to update what will be committed)
-(use <span class="hljs-string">&quot;git checkout -- ...&quot;</span> to discard changes <span class="hljs-keyword">in</span> working directory)
+(use <span class="hljs-string">&quot;git restore &lt;file&gt;...&quot;</span> to discard changes <span class="hljs-keyword">in</span> working directory)
 
         modified:   example-src.txt
 
@@ -237,31 +205,35 @@ index e69de29..c2cbb36 100644
       <pre><code class="language-bash">$ git diff HEAD    <span class="hljs-comment"># 最新コミットとの差分確認</span>
 $ git diff --cached    <span class="hljs-comment"># HEADとインデックスの差分確認</span>
 $ git diff --name-only    <span class="hljs-comment"># 差分が発生しているファイル名の一覧を表示する</span>
-$ git diff HEAD^ HEAD    <span class="hljs-comment"># 直前のコミット内容を確認</span>
+$ git diff HEAD^ HEAD    <span class="hljs-comment"># 2件以上コミットがある場合に、直前のコミット内容を確認</span>
 $ git show HEAD    <span class="hljs-comment"># HEADのコミット内容を確認</span>
 </code></pre>
     </li>
   </ul>
-  <h3 id="git-reset--コミットの取り消し">[git reset] : コミットの取り消し</h3>
+  <h2 id="git-reset--コミットの取り消し">[git reset] : コミットの取り消し</h2>
+  <p>以下の<code>HEAD~1</code>は一つ前のコミットを表すため、2件以上コミットがある状態で使用する。<br>最初のコミットしかないリポジトリでは参照先が存在しない。</p>
   <ul>
     <li>
-      <p>最新コミット（HEAD）だけを取り消し、<strong>ワーキングツリー</strong>はそのまま<br></p>
+      <p>ブランチの位置（HEAD）を1つ前へ戻し、<strong>インデックス</strong>と<strong>ワーキングツリー</strong>はそのまま<br>
+        取り消したコミットの変更は、ステージ済みの状態で残る。</p>
       <pre><code class="language-bash">git reset --soft HEAD~1
 </code></pre>
     </li>
     <li>
-      <p>最新コミット（HEAD）だけを取り消し、変更を<strong>ステージ</strong>から外す<br></p>
+      <p>ブランチの位置（HEAD）を1つ前へ戻し、<strong>インデックス</strong>も戻す<br>
+        変更内容はワーキングツリーに残るが、ステージからは外れる。<code>--mixed</code>はモードを省略した場合の既定値となる。</p>
       <pre><code class="language-bash">git reset --mixed HEAD~1
 </code></pre>
     </li>
     <li>
-      <p>最新のコミット（HEAD）だけを取り消し、<strong>HEADの位置</strong>、<strong>インデックス /
-          ステージ</strong>、<strong>ワーキングツリー</strong>も全て取り消す<br></p>
+      <p><strong>HEAD</strong>、<strong>インデックス</strong>、<strong>ワーキングツリー</strong>を1つ前のコミットへそろえる<br>
+        追跡済みファイルの未コミット変更も上書きされる。必要な変更が残っていないか、実行前に<code>git status</code>と<code>git diff</code>で必ず確認。</p>
       <pre><code class="language-bash">git reset --hard HEAD~1
 </code></pre>
     </li>
   </ul>
-  <h3 id="git-push--リモートリポジトリへ反映">[git push] : リモートリポジトリへ反映</h3>
+  <p>公開済みのコミットを取り消す場合、<code>reset</code>で共有履歴を書き換えるのではなく、打ち消し用コミットを作る<code>git revert</code>が適する場合がある。</p>
+  <h2 id="git-push--リモートリポジトリへ反映">[git push] : リモートリポジトリへ反映</h2>
   <ul>
     <li>
       <p>新規ブランチを<strong>リモートリポジトリ</strong>に反映し、追跡を設定<br>
@@ -272,26 +244,26 @@ $ git show HEAD    <span class="hljs-comment"># HEADのコミット内容を確�
     </li>
     <li>
       <p>特定のリモートブランチを指定して<strong>リモートリポジトリ</strong>へ反映<br>
-        ローカルの<code>develop</code>ブランチをリモートリポジトリの<code>origin</code>に反映する。<br></p>
+        ローカルの<code>develop</code>ブランチをリモートリポジトリの<code>origin</code>に反映。<br></p>
       <pre><code class="language-bash">git push origin develop
 </code></pre>
     </li>
     <li>
       <p><strong>リモートリポジトリ</strong>から特定のブランチを削除<br>
-        不要になったリモートブランチを<code>origin</code>から削除する。<br></p>
+        不要になったリモートブランチを<code>origin</code>から削除。<br>共有先へ反映される操作なので、対象名、マージ済みかどうか、共同作業者が使用中でないかを確認してから実行。<br></p>
       <pre><code class="language-bash">git push origin --delete branch_name
 </code></pre>
     </li>
   </ul>
-  <h3 id="git-pull--リモートリポジトリの変更を取込む">[git pull] : リモートリポジトリの変更を取込む</h3>
+  <h2 id="git-pull--リモートリポジトリの変更を取込む">[git pull] : リモートリポジトリの変更を取込む</h2>
   <ul>
     <li><strong>リモートリポジトリ</strong>の変更を<strong>ローカルリポジトリ</strong>に取り込む（リモートとブランチを明示的に指定）<br>
-      <code>git pull</code>は、<code>git fetch</code>と<code>git merge</code>の操作をまとめて行っている。<br>
+      <code>git pull</code>は<code>git fetch</code>後に、設定やオプションに応じて<code>merge</code>または<code>rebase</code>で現在のブランチへ変更を統合。<br>統合前に内容を確認したい場合は、先に<code>git fetch</code>を実行して差分を確認。
       <pre><code class="language-bash">git pull origin main
 </code></pre>
     </li>
   </ul>
-  <h3 id="git-checkout--チェックアウト">[git checkout] : チェックアウト</h3>
+  <h2 id="git-checkout--チェックアウト">[git checkout] : チェックアウト</h2>
   <ul>
     <li>
       <p>ブランチの切り替え<br>
@@ -307,25 +279,34 @@ $ git show HEAD    <span class="hljs-comment"># HEADのコミット内容を確�
     </li>
     <li>
       <p>特定のコミットをチェックアウト<br>
-        <strong>コミットハッシュ</strong>を指定し、<strong>ワーキングツリー</strong>を特定のコミットに変更する。<br>
+        <strong>コミットハッシュ</strong>を指定し、<strong>ワーキングツリー</strong>を特定のコミットに変更。この操作では特定ブランチを指さない<code>detached HEAD</code>状態になるため、そのままコミットを重ねる場合は新しいブランチを作成。<br>
       </p>
       <pre><code class="language-bash">git checkout a1b2c3d
 </code></pre>
     </li>
-  </ul>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-  <ul>
-    <li>状態管理<br>
-      レビュー前に変更範囲を確認する基本になる。</li>
-    <li>差分確認<br>
-      意図しない変更をコミットに混ぜないために重要になる。</li>
-    <li>ブランチ操作<br>
-      複数の修正を並行して進めるときの土台になる。</li>
+    <li>
+      <p>役割別の新しいコマンド<br>
+        近年のGitでは、ブランチの切り替えには<code>git switch</code>、ファイルの復元やステージ解除には<code>git restore</code>を使うと意図を区別しやすい。</p>
+      <pre><code class="language-bash">git switch develop
+git switch -c feature/develop-1
+git restore example-src.txt
+git restore --staged example-src.txt
+</code></pre>
+      <p><code>git restore example-src.txt</code>は、ワーキングツリーにある未ステージの変更を破棄する。復元前に<code>git diff -- example-src.txt</code>で内容を確認し、必要な変更はコミットまたは退避しておく。</p>
+    </li>
   </ul>
   <h2 id="まとめ">まとめ</h2>
   <ul>
     <li>Gitの基本は、変更がワーキングツリー、インデックス、リポジトリのどこにあるかを理解すること。</li>
     <li>status、diffで確認し、add、commitで履歴に残す流れを押さえる。</li>
-    <li>resetやpush/pullは影響範囲が大きいため、操作前にブランチと状態を確認する。</li>
+    <li>resetやpush/pullは影響範囲が大きいため、操作前にブランチと状態を確認。</li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li><a href="https://git-scm.com/book/ja/v2" class="link-secondary">Pro Git 第2版（日本語・Gitの概念と基本操作）</a></li>
+    <li><a href="https://git-scm.com/docs/git-status" class="link-secondary">Git Documentation, git-status（英語・状態確認コマンド仕様）</a></li>
+    <li><a href="https://git-scm.com/docs/git-reset" class="link-secondary">Git Documentation, git-reset（英語・変更取消しコマンド仕様）</a></li>
+    <li><a href="https://git-scm.com/docs/git-pull" class="link-secondary">Git Documentation, git-pull（英語・リモート変更取込みコマンド仕様）</a></li>
+    <li><a href="https://git-scm.com/docs/git#_reset_restore_and_revert" class="link-secondary">Git Documentation, Reset, restore and revert（英語・変更取消し操作の公式解説）</a></li>
   </ul>
 </div>

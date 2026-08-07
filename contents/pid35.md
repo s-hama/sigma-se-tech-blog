@@ -6,35 +6,33 @@ Pythonの論理演算子であるor、and、notの基本的な使い方を整理
 論理演算子は、条件分岐や入力チェックで複数の条件を組み合わせるために使う。PythonではTrue/Falseだけでなく、空文字、空リスト、0なども真偽値として評価される。
 ここでは、真偽値判定の基準と、or、and、notの実行結果を対話モードで確認する。
 
-## この記事で扱うこと
-- or、and、notの基本動作。
-- PythonでFalseとして扱われる値。
-- 短絡評価の考え方。
-- 条件式を読みやすく書くための注意点。
-
-## 作業前に確認すること
-| 確認項目 | 内容 |
-| --- | --- |
-| Python環境 | 対話モードで条件式を確認できる状態にしておく。 |
-| 前提知識 | 比較演算子、if文、bool型の基本を確認しておく。 |
-| 確認観点 | 式全体の結果だけでなく、どの値が返るかにも注目する。 |
-
+## この記事の構成
+- [論理演算子の種類](#論理演算子の種類)<br>
+  論理演算子の種類と各項目の特徴を整理。
+- [True/Falseの判定基準](#truefalseの判定基準)<br>
+  True/Falseの判定基準の意味と要点を具体例から整理。
+- [論理和（or）](#論理和or)<br>
+  論理和（or）の意味と要点を具体例から整理。
+- [論理積（and）](#論理積and)<br>
+  論理積（and）の意味と要点を具体例から整理。
+- [論理否定（not）](#論理否定not)<br>
+  論理否定（not）の意味と要点を具体例から整理。
 
 ## 各論理演算子の使い方と実装サンプル
 
 ### 論理演算子の種類
 
-**論理演算子**には、bool型に加え、数値型である int型、float型、complex型や文字列である str型、リスト型であるlist型、tuple型、dict型の指定ができる。
+Pythonでは、bool型に限らずすべてのオブジェクトが真偽値として評価される。組込み型では数値のゼロ、空の文字列やコンテナ、`None`などが`False`となり、それ以外は原則として`True`となる。独自クラスでは`__bool__()`または`__len__()`で判定方法を定義できる。
 
 - 各データ型の参考
-  - [Python - 組込みデータ型まとめ : bool , int, float, complex > bool型 : 真偽リテラル](<https://sigma-se.com/detail/30/#:~:text=%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E8%A8%98%E8%BC%89%E3%81%99%E3%82%8B%E3%80%82-,bool%E5%9E%8B%20%3A%20%E7%9C%9F%E5%81%BD%E3%83%AA%E3%83%86%E3%83%A9%E3%83%AB,-%E8%AB%96%E7%90%86%E5%9E%8B%E3%81%A8%E3%82%82>)
-  - [Python - 組込みデータ型まとめ : bool , int, float, complex > int型 : 数値（整数）](<https://sigma-se.com/detail/30/#:~:text=%E5%88%A4%E5%AE%9A%E3%81%95%E3%82%8C%E3%82%8B%E3%80%82-,int%E5%9E%8B%20%3A%20%E6%95%B0%E5%80%A4%EF%BC%88%E6%95%B4%E6%95%B0%EF%BC%89,-%E6%95%B4%E6%95%B0%E5%9E%8B%E3%81%A7>)
-  - [Python - 組込みデータ型まとめ : bool , int, float, complex > float型 : 浮動小数点数型](<https://sigma-se.com/detail/30/#:~:text=maxsize)%0A%20%20%20%209223372036854775807%0A%20%20%20%20%3E%3E%3E-,float%E5%9E%8B%20%3A%20%E6%B5%AE%E5%8B%95%E5%B0%8F%E6%95%B0%E7%82%B9%E6%95%B0%E5%9E%8B,-float%E5%9E%8B%E3%81%AF>)
-  - [Python - 組込みデータ型まとめ : bool , int, float, complex > complex型 : 複素数型](<https://sigma-se.com/detail/30/#:~:text=rounds%3D1)%0A%20%20%20%20%3E%3E%3E-,complex%E5%9E%8B%20%3A%20%E8%A4%87%E7%B4%A0%E6%95%B0%E5%9E%8B,-complex%E5%9E%8B%E3%81%AF>)
-  - [Python - 組込みデータ型まとめ : str, list, tuple, range, dict > str型 : 文字列型](<[str型 : 文字列型](https://sigma-se.com/detail/31/#:~:text=%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E8%A8%98%E8%BC%89%E3%81%99%E3%82%8B%E3%80%82-,str%E5%9E%8B%20%3A%20%E6%96%87%E5%AD%97%E5%88%97%E5%9E%8B,-%E6%96%87%E5%AD%97%E5%88%97%EF%BC%88Unicode)>)
-  - [Python - 組込みデータ型まとめ : str, list, tuple, range, dict > list型 : 配列型](<https://sigma-se.com/detail/31/#:~:text=print(str_a)%0A%20%20%20%20Let%27s%0A%20%20%20%20%3E%3E%3E-,list%E5%9E%8B%20%3A%20%E9%85%8D%E5%88%97%E5%9E%8B,-%E8%AB%96%E7%90%86%E5%9E%8B%E3%82%84>)
-  - [Python - 組込みデータ型まとめ : str, list, tuple, range, dict > tuple型 : 定数の配列型](<https://sigma-se.com/detail/31/#:~:text=%2C%2010%5D%0A%20%20%20%20%3E%3E%3E-,tuple%E5%9E%8B%20%3A%20%E5%AE%9A%E6%95%B0%E3%81%AE%E9%85%8D%E5%88%97%E5%9E%8B,-tuple%E5%9E%8B%E3%81%AF>)
-  - [Python - 組込みデータ型まとめ : str, list, tuple, range, dict > range型 : 範囲指定](<https://sigma-se.com/detail/31/#:~:text=%27index%27%2C%20...%5D%0A%20%20%20%20%3E%3E%3E-,range%E5%9E%8B%20%3A%20%E7%AF%84%E5%9B%B2%E6%8C%87%E5%AE%9A,-range%E5%9E%8B%E3%81%AF>)
+  - [Python - 組込みデータ型まとめ : bool , int, float, complex > bool型 : 真偽リテラル](<https://sigma-se.com/detail/30/#bool型--真偽リテラル>)
+  - [Python - 組込みデータ型まとめ : bool , int, float, complex > int型 : 数値（整数）](<https://sigma-se.com/detail/30/#int型--数値整数>)
+  - [Python - 組込みデータ型まとめ : bool , int, float, complex > float型 : 浮動小数点数型](<https://sigma-se.com/detail/30/#float型--浮動小数点数型>)
+  - [Python - 組込みデータ型まとめ : bool , int, float, complex > complex型 : 複素数型](<https://sigma-se.com/detail/30/#complex型--複素数型>)
+  - [Python - 組込みデータ型まとめ : str, list, tuple, range, dict > str型 : 文字列型](<https://sigma-se.com/detail/31/#str型--文字列型>)
+  - [Python - 組込みデータ型まとめ : str, list, tuple, range, dict > list型 : 配列型](<https://sigma-se.com/detail/31/#list型--配列型>)
+  - [Python - 組込みデータ型まとめ : str, list, tuple, range, dict > tuple型 : イミュータブルなシーケンス型](<https://sigma-se.com/detail/31/#tuple型--イミュータブルなシーケンス型>)
+  - [Python - 組込みデータ型まとめ : str, list, tuple, range, dict > range型 : 範囲指定](<https://sigma-se.com/detail/31/#range型--範囲指定>)
 
 - 論理演算子一覧（or, and, not の三つのみ）
     <table class="table" style="width: 80%;">
@@ -84,12 +82,12 @@ Pythonの論理演算子であるor、and、notの基本的な使い方を整理
 <br>
 
 ※ 各実装サンプルは、下記ページを参考。
-- [Python - 組込みデータ型まとめ : bool , int, float, complex > bool型 : 真偽リテラル](<https://sigma-se.com/detail/30/#:~:text=%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E8%A8%98%E8%BC%89%E3%81%99%E3%82%8B%E3%80%82-,bool%E5%9E%8B%20%3A%20%E7%9C%9F%E5%81%BD%E3%83%AA%E3%83%86%E3%83%A9%E3%83%AB,-%E8%AB%96%E7%90%86%E5%9E%8B%E3%81%A8%E3%82%82>)
+- [Python - 組込みデータ型まとめ : bool , int, float, complex > bool型 : 真偽リテラル](<https://sigma-se.com/detail/30/#bool型--真偽リテラル>)
 
 以降、論理演算子に関する実装サンプルを対話モード（インタプリタ）で解説する。
 
 ### 論理和（or）
-`a and b`は、前方から評価していき`True`となる要素が見つかった時点で（**ショートサーキット**と呼ぶ）その要素を返す。<br>
+`a or b`は、前方から評価して最初に`True`となるオペランドを返す。そこで評価を終える動作を**ショートサーキット**という。<br>
 a、b共にFalseである場合は、末尾の要素`b`を返す。
 
 - 論理和パターン
@@ -247,23 +245,13 @@ a、b共にTrueである場合は、末尾の要素`b`を返す。
     ```
 
 
-## 違いを整理する
-| 比較する項目 | 整理するポイント |
-| --- | --- |
-| True/False以外の評価 | 空の値や0はFalseとして扱われる。 |
-| 短絡評価 | orやandでは、後ろの式が評価されない場合がある。 |
-| 条件の詰め込みすぎ | 長すぎる条件式は、変数に分けると読みやすくなる。 |
-
-## 実務とのつながり
-- 入力チェック<br>
-    必須項目の有無や複数条件の組み合わせでよく使う。
-- ガード条件<br>
-    Noneチェックや空値チェックを先に置くことで、後続処理のエラーを防ぎやすい。
-
 ## まとめ
-- or、and、notは条件を組み合わせるための演算子。
-- Pythonでは空文字、空リスト、0、NoneなどがFalseとして扱われる。
-- 短絡評価を理解すると、条件式の挙動を追いやすくなる。
+- or、and、notは条件を組み合わせる論理演算子。
+- Pythonでは空文字、空リスト、0、NoneなどもFalseとして評価される。
+- orやandは短絡評価を行うため、条件によって後ろの式が実行されない場合がある。
+- 長い条件式へ処理を詰め込みすぎず、意味のある変数へ分けると読みやすくなる。
 
-## 参考文献
+### 参考文献
 - 金城 俊哉（\\(2018\\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム
+- [Python公式ドキュメント - 真理値判定（日本語・真偽値評価の公式解説）](https://docs.python.org/ja/3/library/stdtypes.html#truth-value-testing)
+- [Python公式ドキュメント - ブール演算（日本語・論理演算子の公式仕様）](https://docs.python.org/ja/3/reference/expressions.html#boolean-operations)

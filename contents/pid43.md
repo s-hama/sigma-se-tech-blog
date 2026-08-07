@@ -6,277 +6,277 @@ Python - タスク指向型対話：5/5 SVMモデル学習と発話行為推定
 前の記事で作成した学習データをMeCabで単語分割し、TF-IDFで数値ベクトルに変換し、SVMで発話行為タイプを分類するモデルを作成する。
 ここでは、モデル学習、モデル保存、推定用プログラム、実行結果の確認までを順番に見る。
 
-## この記事で扱うこと
-- MeCabで発話を単語列に変換する流れ。
-- TfidfVectorizerで発話を素性ベクトル化する方法。
-- LabelEncoderでラベルを数値化する理由。
-- SVMモデルを保存し、別プログラムで読み込んで推定する流れ。
+## この記事の構成
+- [対象環境と利用上の注意](#対象環境と利用上の注意)<br>
+  本文記載時の環境と現在そのまま利用できない箇所を確認。
+- [モデル学習の実装サンプル](#モデル学習の実装サンプル)<br>
+  モデル学習の実装サンプルをコードや具体例で確認。
+- [学習結果の確認](#学習結果の確認)<br>
+  学習結果について、確認する項目と結果の見方を整理。
 
-## 作業前に確認すること
-| 確認項目 | 内容 |
-| --- | --- |
-| 学習データ | pid42で作成したda_samples.datを用意する。 |
-| ライブラリ | MeCab、scikit-learn、dillを使える状態にする。 |
-| 確認観点 | 学習、保存、読み込み、推定を分けて確認する。 |
-
-## 注意したい点
-| 注意したい点 | 確認する観点 |
-| --- | --- |
-| 素性ベクトルとラベルの混同 | Xは発話内容の数値表現、Yは発話行為タイプの数値表現。 |
-| モデル保存の中身 | vectorizer、label_encoder、svcをセットで保存しないと推定時に同じ変換ができない。 |
-| 学習データの品質 | 例文が偏ると、正しくない発話行為タイプを推定しやすくなる。 |
+## 対象環境と利用上の注意
+- 本文記載時の環境<br>
+CentOS \\(7\\)、Python \\(3.6\\)系、当時のscikit-learn・MeCab・dillを前提としたモデル学習・保存例。
+- 確認時期<br>
+2026年8月にscikit-learn公式資料と照合し、モデル評価とモデル永続化の注意を見直した。
+- 現在そのまま利用できない箇所<br>
+掲載コード全体は現行環境で再実行していない。<br>
+旧環境をそのまま新規利用せず、依存版を固定し、信頼できるモデルファイルだけを読み込み、学習データと分離した評価データで性能を確認する。
 
 ## 解説と実装サンプル
 ### モデル学習の実装サンプル
+- TF-IDF・SVMモデルの学習<br>
+    先行記事で作成した学習データ`da_samples.dat`（＊1）を**MeCab**（＊2）で最小単位の単語（形態素）に分割し、**SVM**（＊3）で対話行為タイプを推定（モデル学習）する実装サンプル。
+    - （＊1）[Python - タスク指向型対話 : フレームベースの環境準備 > SVM（sklearn）と学習データの作成 > 学習データの作成](<https://sigma-se.com/detail/42/#学習データの作成>)
+    - （＊2）[Python - タスク指向型対話 : 状態遷移ベースの環境準備 > MeCab, SCXML > 対話の文章を解析する「MeCab」の概要とインストール](<https://sigma-se.com/detail/39/#対話の文章を解析するmecabの概要とインストール>)
+    - （＊3）[Python - タスク指向型対話 : フレームベースの環境準備 > SVM（sklearn）と学習データの作成 > フレームと対話行為を推定するSVM（sklearn）の概要とインストール](<https://sigma-se.com/detail/42/#フレームと対話行為を推定するsvmsklearnの概要とインストール>)
 
-先行記事で作成した学習データ`da_samples.dat`（＊1）を**MeCab**（＊2）で最小単位の単語（形態素）に分割し、**SVM**（＊3）で対話行為タイプを推定（モデル学習）する実装サンプル。
-- （＊1）[Python - タスク指向型対話 : フレームベースの環境準備 > SVM（sklearn）と学習データの作成 > 学習データの作成](<https://sigma-se.com/detail/42/#:~:text=%E3%82%92%E8%A7%A3%E8%AA%AC%E3%81%99%E3%82%8B%E3%80%82-,%E5%AD%A6%E7%BF%92%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E4%BD%9C%E6%88%90,-%E3%81%93%E3%81%AE%E6%A1%88%E5%86%85%E5%AF%BE%E8%A9%B1>) 
-- （＊2）[Python - タスク指向型対話 : 状態遷移ベースの環境準備 > MeCab, SCXML > 対話の文章を解析する「MeCab」の概要とインストール](<https://sigma-se.com/detail/39/#:~:text=%E5%AF%BE%E8%A9%B1%E3%81%AE%E6%96%87%E7%AB%A0%E3%82%92%E8%A7%A3%E6%9E%90%E3%81%99%E3%82%8B%E3%80%8CMeCab%E3%80%8D%E3%81%AE%E6%A6%82%E8%A6%81%E3%81%A8%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB>) 
-- （＊3）[Python - タスク指向型対話 : フレームベースの環境準備 > SVM（sklearn）と学習データの作成 > フレームと対話行為を推定するSVM（sklearn）の概要とインストール](<https://sigma-se.com/detail/42/#:~:text=%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%81%A8%E5%AF%BE%E8%A9%B1%E8%A1%8C%E7%82%BA%E3%82%92%E6%8E%A8%E5%AE%9A%E3%81%99%E3%82%8BSVM%EF%BC%88sklearn%EF%BC%89%E3%81%AE%E6%A6%82%E8%A6%81%E3%81%A8%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB>) 
 
+    - train_da_model.py
+        ```python
+        import MeCab
+        from sklearn.feature_extraction.text import TfidfVectorizer
+        from sklearn.svm import SVC
+        from sklearn.preprocessing import LabelEncoder
+        import dill
 
-- train_da_model.py
-    ```python
-    import MeCab
-    from sklearn.feature_extraction.text import TfidfVectorizer
-    from sklearn.svm import SVC
-    from sklearn.preprocessing import LabelEncoder
-    import dill
+        # MeCabの初期化
+        mecab = MeCab.Tagger()
+        mecab.parse('')
 
-    # MeCabの初期化
-    mecab = MeCab.Tagger()
-    mecab.parse('')
+        sents = []
+        labels = []
 
-    sents = []
-    labels = []
+        # generate-samples.txt の出力である samples.dat の読み込み
+        for line in open("da_samples.dat","r"):
+            line = line.rstrip()
+            # samples.dat は発話行為タイプ，発話文，タグとその文字位置が含まれている
+            da, utt = line.split('\t')
+            words = []
+            for line in mecab.parse(utt).splitlines():
+                if line == "EOS":
+                    break
+                else:
+                    # MeCabの出力から単語を抽出
+                    word, feature_str = line.split("\t")
+                    words.append(word)
+            # 空白区切りの単語列をsentsに追加
+            sents.append(" ".join(words))
+            # 発話行為タイプをlabelsに追加
+            labels.append(da)
 
-    # generate-samples.txt の出力である samples.dat の読み込み
-    for line in open("da_samples.dat","r"):
-        line = line.rstrip()
-        # samples.dat は発話行為タイプ，発話文，タグとその文字位置が含まれている
-        da, utt = line.split('\t')
-        words = []
-        for line in mecab.parse(utt).splitlines():
-            if line == "EOS":
-                break
-            else:
-                # MeCabの出力から単語を抽出
-                word, feature_str = line.split("\t")
-                words.append(word)
-        # 空白区切りの単語列をsentsに追加
-        sents.append(" ".join(words))
-        # 発話行為タイプをlabelsに追加
-        labels.append(da)
+        # TfidfVectorizerを用いて，各文をベクトルに変換
+        vectorizer = TfidfVectorizer(tokenizer=lambda x:x.split(), ngram_range=(1,3))
+        X = vectorizer.fit_transform(sents)
 
-    # TfidfVectorizerを用いて，各文をベクトルに変換
-    vectorizer = TfidfVectorizer(tokenizer=lambda x:x.split(), ngram_range=(1,3))
-    X = vectorizer.fit_transform(sents)
+        # LabelEncoderを用いて，ラベルを数値に変換
+        label_encoder = LabelEncoder()
+        Y = label_encoder.fit_transform(labels)
 
-    # LabelEncoderを用いて，ラベルを数値に変換
-    label_encoder = LabelEncoder()
-    Y = label_encoder.fit_transform(labels)
+        # SVMでベクトルからラベルを取得するモデルを学習
+        svc = SVC(gamma="scale")
+        svc.fit(X,Y)
 
-    # SVMでベクトルからラベルを取得するモデルを学習
-    svc = SVC(gamma="scale")
-    svc.fit(X,Y)
+        # 学習されたモデル等一式を svc.modelに保存
+        with open("svc.model","wb") as f:
+            dill.dump(vectorizer, f)
+            dill.dump(label_encoder, f)
+            dill.dump(svc, f)
+        ```
 
-    # 学習されたモデル等一式を svc.modelに保存
-    with open("svc.model","wb") as f:
-        dill.dump(vectorizer, f)
-        dill.dump(label_encoder, f)
-        dill.dump(svc, f)
-    ```
+        以下、処理解説。<br>
+        ※ 機械学習では、推定対象となるものを**ラベル**や**クラス**と呼ぶ。<br>
+        今回のデータでは、発話行為タイプの**request-weather**がラベルとなるため、コメントや変数名の表現もラベルとなっている。
 
-    以下、処理解説。<br>
-    ※ 機械学習では、推定対象となるものを**ラベル**や**クラス**と呼ぶ。<br>
-    今回のデータでは、発話行為タイプの**request-weather**がラベルとなるため、コメントや変数名の表現もラベルとなっている。
+      - sentsとlabelsの作成<br>
+        学習データ`da_samples.dat`を読み込み、それぞれの行に対して下記要領で発話文字列を単語分割した`sents`と発話行為タイプ`labels`をそれぞれ作成。
+        - （＊4）行の末尾の空白を削除し（rstrip）、タブで分割（split）する。
+        - （＊5）1つ目分割結果（発話行為タイプ）を`da`に、2つ目分割結果（発話文字列）を`utt`に格納する。
+        - （＊6）mecabで最小単位の単語（形態素）に分割し（splitlines）、最後（EOS）であればループを終了、最後（EOS）でなければタブで分割（split）し、先頭単語（word）のみを単語配列（words）に追加。
+        - （＊7）単語配列（words）を空白区切りに置き換え`sents`に追加。
+        - （＊8）発話行為タイプ（da）を`labels`に追加。
 
-  - sentsとlabelsの作成<br>
-    学習データ`da_samples.dat`を読み込み、それぞれの行に対して下記要領で発話文字列を単語分割した`sents`と発話行為タイプ`labels`をそれぞれ作成する。
-    - （＊4）行の末尾の空白を削除し（rstrip）、タブで分割（split）する。
-    - （＊5）1つ目分割結果（発話行為タイプ）を`da`に、2つ目分割結果（発話文字列）を`utt`に格納する。
-    - （＊6）mecabで最小単位の単語（形態素）に分割し（splitlines）、最後（EOS）であればループを終了、最後（EOS）でなければタブで分割（split）し、先頭単語（word）のみを単語配列（words）に追加する。
-    - （＊7）単語配列（words）を空白区切りに置き換え`sents`に追加する。
-    - （＊8）発話行為タイプ（da）を`labels`に追加する。
+        ```python
+        for line in open("da_samples.dat","r"):
+            line = line.rstrip()
+            # samples.dat は発話行為タイプ，発話文，タグとその文字位置が含まれている
+            da, utt = line.split('\t')
+            words = []
+            for line in mecab.parse(utt).splitlines():
+                if line == "EOS":
+                    break
+                else:
+                    # MeCabの出力から単語を抽出
+                    word, feature_str = line.split("\t")
+                    words.append(word)
+            # 空白区切りの単語列をsentsに追加
+            sents.append(" ".join(words))
+            # 発話行為タイプをlabelsに追加
+            labels.append(da)
+        ```
 
-    ```python
-    for line in open("da_samples.dat","r"):
-        line = line.rstrip()
-        # samples.dat は発話行為タイプ，発話文，タグとその文字位置が含まれている
-        da, utt = line.split('\t')
-        words = []
-        for line in mecab.parse(utt).splitlines():
-            if line == "EOS":
-                break
-            else:
-                # MeCabの出力から単語を抽出
-                word, feature_str = line.split("\t")
-                words.append(word)
-        # 空白区切りの単語列をsentsに追加
-        sents.append(" ".join(words))
-        # 発話行為タイプをlabelsに追加
-        labels.append(da)
-    ```
+    - 発話情報の変換<br>
+        上記で取得した発話内容`sents`と発話行為タイプ`labels`の関連付けを学習させるために発話情報を数値列に変換する必要がある。<br>
+        その作成には`TfidfVectorizer`を用いて変換。
 
-- 発話情報の変換<br>
-    上記で取得した発話内容`sents`と発話行為タイプ`labels`の関連付けを学習させるために発話情報を数値列に変換する必要がある。<br>
-    その作成には`TfidfVectorizer`を用いて変換する。
+        これを**素性ベクトル**と呼び、後続処理で**ラベル**との関連付け学習を行うために作成している。<br>
+        fit_transformで発話内容`sents`を素性ベクトルに変換したものが`X`で、発話情報にある単語の登場頻度と学習データから推測できる単語の重要度をもとに素性ベクトルを自動生成している。
 
-    これを**素性ベクトル**と呼び、後続処理で**ラベル**との関連付け学習を行うために作成している。<br>
-    fit_transformで発話内容`sents`を素性ベクトルに変換したものが`X`で、発話情報にある単語の登場頻度と学習データから推測できる単語の重要度をもとに素性ベクトルを自動生成している。
+        ```python
+        # TfidfVectorizerを用いて，各文をベクトルに変換
+        vectorizer = TfidfVectorizer(tokenizer=lambda x:x.split(), ngram_range=(1,3))
+        X = vectorizer.fit_transform(sents)
+        ```
 
-    ```python
-    # TfidfVectorizerを用いて，各文をベクトルに変換
-    vectorizer = TfidfVectorizer(tokenizer=lambda x:x.split(), ngram_range=(1,3))
-    X = vectorizer.fit_transform(sents)
-    ```
+    - 変換後の数値列を`Y`に保持<br>
+        上記と同様にfit_transformで発話行為タイプ**labels**（ラベル）を数値列に変換したものを`Y`に保持。
+        ```python
+        # LabelEncoderを用いて，ラベルを数値に変換
+        label_encoder = LabelEncoder()
+        Y = label_encoder.fit_transform(labels)
+        ```
 
-- 変換後の数値列を`Y`に保持<br>
-    上記と同様にfit_transformで発話行為タイプ**labels**（ラベル）を数値列に変換したものを`Y`に保持する。
-    ```python
-    # LabelEncoderを用いて，ラベルを数値に変換
-    label_encoder = LabelEncoder()
-    Y = label_encoder.fit_transform(labels)
-    ```
+    - ラベルを取得するモデルを学習させる<br>
+        コメントの通り、発話内容**sents**を素性ベクトル化した`X`から、発話行為タイプ**labels**（ラベル）を数値列化した**Y**を取得するモデルを**SVM**を用いて学習させている。<br>
+        ※ **モデル**とは素性ベクトルの各要素とラベルとの関連を定義した大量の数値データのこと指す。
+        ```python
+        # SVMでベクトルからラベルを取得するモデルを学習
+        svc = SVC(gamma="scale")
+        svc.fit(X,Y)
+        ```
 
-- ラベルを取得するモデルを学習させる<br>
-    コメントの通り、発話内容**sents**を素性ベクトル化した`X`から、発話行為タイプ**labels**（ラベル）を数値列化した**Y**を取得するモデルを**SVM**を用いて学習させている。<br>
-    ※ **モデル**とは素性ベクトルの各要素とラベルとの関連を定義した大量の数値データのこと指す。
-    ```python
-    # SVMでベクトルからラベルを取得するモデルを学習
-    svc = SVC(gamma="scale")
-    svc.fit(X,Y)
-    ```
+    - svc.modelに保存<br>
+        最後に素性ベクトル作成時に用いた`vectorizer`とラベルを数値列化する際に用いた`label_encoder`、そしてモデル学習時に用いた **svc**達を**dill**を用いて、ファイルに出力。
+        ```python
+        # 学習されたモデル等一式を svc.modelに保存
+        with open("svc.model","wb") as f:
+            dill.dump(vectorizer, f)
+            dill.dump(label_encoder, f)
+            dill.dump(svc, f)
+        ```
 
-- svc.modelに保存<br>
-    最後に素性ベクトル作成時に用いた`vectorizer`とラベルを数値列化する際に用いた`label_encoder`、そしてモデル学習時に用いた **svc**達を**dill**を用いて、ファイルに出力する。
-    ```python
-    # 学習されたモデル等一式を svc.modelに保存
-    with open("svc.model","wb") as f:
-        dill.dump(vectorizer, f)
-        dill.dump(label_encoder, f)
-        dill.dump(svc, f)
-    ```
+        ※ `dill`や`pickle`形式の読込みは任意のコードを実行し得るため、自分で生成した信頼できるファイルだけを読み込む。また、scikit-learnは異なるバージョン間でのモデル読込みを保証しないため、Pythonと依存ライブラリのバージョン、学習コード、データの識別情報も一緒に記録する。
 
-- 実行確認<br>
-    上記実装サンプル（train_da_model.py）の実行確認<br>
-    ※ 実行後`svc.model`が生成されていれば成功。
-    ```bash
-    $ python ~/gitlocalrep/dsbook/train_da_model.py
-    ```
+    - 実行確認<br>
+        上記実装サンプル（train_da_model.py）の実行確認<br>
+        ※ 実行後`svc.model`が生成されていれば成功。
+        ```bash
+        $ python ~/gitlocalrep/dsbook/train_da_model.py
+        ```
 
 ### 学習結果の確認
+- 発話行為タイプの推定<br>
+    前項で作成した`svc.model`を読み込み、推定処理が動くかを以下のプログラムで確認する。この確認は少数例による**疎通確認**であり、未知データに対する分類精度の評価ではない。
 
-前項で作成した`svc.model`が正しく推定できるか以下のテストプログラムを実行して確認する。
+    - `da_extractor.py`（テストプログラム）
+        ```python
+        import MeCab
+        from sklearn.feature_extraction.text import TfidfVectorizer
+        from sklearn.svm import SVC
+        from sklearn.preprocessing import LabelEncoder
+        import dill
 
-- `da_extractor.py`（テストプログラム）
-    ```python
-    import MeCab
-    from sklearn.feature_extraction.text import TfidfVectorizer
-    from sklearn.svm import SVC
-    from sklearn.preprocessing import LabelEncoder
-    import dill
+        mecab = MeCab.Tagger()
+        mecab.parse('')
 
-    mecab = MeCab.Tagger()
-    mecab.parse('')
+        # SVMモデルの読み込み
+        with open("svc.model","rb") as f:
+            vectorizer = dill.load(f)
+            label_encoder = dill.load(f)
+            svc = dill.load(f)
 
-    # SVMモデルの読み込み
-    with open("svc.model","rb") as f:
-        vectorizer = dill.load(f)
-        label_encoder = dill.load(f)
-        svc = dill.load(f)
+        # 発話から発話行為タイプを推定
+        def extract_da(utt):
+            words = []
+            for line in mecab.parse(utt).splitlines():
+                if line == "EOS":
+                    break
+                else:
+                    word, feature_str = line.split("\t")
+                    words.append(word)
+            tokens_str = " ".join(words)
+            X = vectorizer.transform([tokens_str])
+            Y = svc.predict(X)
+            # 数値を対応するラベルに戻す
+            da = label_encoder.inverse_transform(Y)[0]
+            return da
 
-    # 発話から発話行為タイプを推定  
-    def extract_da(utt):
-        words = []
-        for line in mecab.parse(utt).splitlines():
-            if line == "EOS":
-                break
-            else:
-                word, feature_str = line.split("\t")
-                words.append(word)
-        tokens_str = " ".join(words)
-        X = vectorizer.transform([tokens_str])
-        Y = svc.predict(X)
-        # 数値を対応するラベルに戻す
-        da = label_encoder.inverse_transform(Y)[0]
-        return da
+        for utt in ["大阪の明日の天気","もう一度はじめから","東京じゃなくて"]:
+            da = extract_da(utt)
+            print(utt,da)
+        ```
 
-    for utt in ["大阪の明日の天気","もう一度はじめから","東京じゃなくて"]:
-        da = extract_da(utt)
-        print(utt,da)
-    ```
+    以下、テストプログラム（da_extractor.py）の処理解説。
 
-以下、テストプログラム（da_extractor.py）の処理解説。
+    - SVMモデルの読み込み<br>
+    まず`svc.model`を開き、上記で出力した`vectorizer`、`label_encoder`、**svc**を**dill**を用いて読み込む。
+        ```python
+        # SVMモデルの読み込み
+        with open("svc.model","rb") as f:
+            vectorizer = dill.load(f)
+            label_encoder = dill.load(f)
+            svc = dill.load(f)
+        ```
 
-- SVMモデルの読み込み<br>
-まず`svc.model`を開き、上記で出力した`vectorizer`、`label_encoder`、**svc**を**dill**を用いて読み込む。
-    ```python
-    # SVMモデルの読み込み
-    with open("svc.model","rb") as f:
-        vectorizer = dill.load(f)
-        label_encoder = dill.load(f)
-        svc = dill.load(f)
-    ```
+    - 発話から発話行為タイプを推定 <br>
+    発話行為タイプを推定する`extract_da`メソッド。<br>
+    下記の要領で推定結果`da`を返す。<br>
+      - （＊9）mecabで最小単位の単語（形態素）に分割し（splitlines）、最後（EOS）であればループを終了、最後（EOS）でなければタブで分割（split）し、先頭単語（word）のみを単語配列（words）に追加。
+      - （＊10）単語配列（words）を空白区切りに置き換え `tokens_str`に格納する。
+      - （＊11）上記で読み込んだ`vectorizer`を `TfidfVectorizer`を用いて素性ベクトルに変換。
+      - （＊12）（＊11）の`X`と上記で読み込んだ**svc**の`predict`を用いて推定結果を取得。
+      - （＊13）上記で読み込んだ`label_encoder`をもとに数値列からラベル名に戻して返す。
 
-- 発話から発話行為タイプを推定 <br>
-発話行為タイプを推定する`extract_da`メソッド。<br>
-下記の要領で推定結果`da`を返す。<br>
-  - （＊9）mecabで最小単位の単語（形態素）に分割し（splitlines）、最後（EOS）であればループを終了、最後（EOS）でなければタブで分割（split）し、先頭単語（word）のみを単語配列（words）に追加する。
-  - （＊10）単語配列（words）を空白区切りに置き換え `tokens_str`に格納する。
-  - （＊11）上記で読み込んだ`vectorizer`を `TfidfVectorizer`を用いて素性ベクトルに変換する。
-  - （＊12）（＊11）の`X`と上記で読み込んだ**svc**の`predict`を用いて推定結果を取得する。
-  - （＊13）上記で読み込んだ`label_encoder`をもとに数値列からラベル名に戻して返す。
+        ```python
+        # 発話から発話行為タイプを推定
+        def extract_da(utt):
+            words = []
+            for line in mecab.parse(utt).splitlines():
+                if line == "EOS":
+                    break
+                else:
+                    word, feature_str = line.split("\t")
+                    words.append(word)
+            tokens_str = " ".join(words)
+            X = vectorizer.transform([tokens_str])
+            Y = svc.predict(X)
+            # 数値を対応するラベルに戻す
+            da = label_encoder.inverse_transform(Y)[0]
+            return da
+        ```
 
-    ```python
-    # 発話から発話行為タイプを推定  
-    def extract_da(utt):
-        words = []
-        for line in mecab.parse(utt).splitlines():
-            if line == "EOS":
-                break
-            else:
-                word, feature_str = line.split("\t")
-                words.append(word)
-        tokens_str = " ".join(words)
-        X = vectorizer.transform([tokens_str])
-        Y = svc.predict(X)
-        # 数値を対応するラベルに戻す
-        da = label_encoder.inverse_transform(Y)[0]
-        return da  
-    ```
+    - 推定結果の取得<br>
+        テスト用の3つの発話内容で上記`extract_da`メソッドを呼び、発話行為タイプの推定結果を取得。
+        ```python
+        for utt in ["大阪の明日の天気","もう一度はじめから","東京じゃなくて"]:
+            da = extract_da(utt)
+            print(utt,da)
+        ```
 
-- 推定結果の取得<br>
-    テスト用の3つの発話内容で上記`extract_da`メソッドを呼び、発話行為タイプの推定結果を取得する。
-    ```python
-    for utt in ["大阪の明日の天気","もう一度はじめから","東京じゃなくて"]:
-        da = extract_da(utt)
-        print(utt,da)
-    ```
+    - 実行結果<br>
+        上記テストプログラム（da_extractor.py）の実行結果
+        それぞれの発話内容（左）に対して、正しい発話行為タイプの推定（右）ができている。
+        ```bash
+        $ python ~/gitlocalrep/dsbook/da_extractor.py
+        大阪の明日の天気 request-weather
+        もう一度はじめから initialize
+        東京じゃなくて correct-info
+        ```
 
-- 実行結果<br>
-    上記テストプログラム（da_extractor.py）の実行結果
-    それぞれの発話内容（左）に対して、正しい発話行為タイプの推定（右）ができている。
-    ```bash
-    $ python ~/gitlocalrep/dsbook/da_extractor.py
-    大阪の明日の天気 request-weather
-    もう一度はじめから initialize
-    東京じゃなくて correct-info
-    ```
-
-## 実務とのつながり
-- 意図分類の基本<br>
-    問い合わせ分類、チャットBot、FAQルーティングなどでは、発話から意図を推定する処理が重要になる。
-- 推論環境への展開<br>
-    学習時に使った前処理器とモデルを一緒に保存しておくと、別プログラムで再利用しやすい。
+    分類性能を評価する場合は、学習に使っていないデータを用意し、正解率だけでなく適合率、再現率、混同行列などを確認する。同じテンプレートから生成した類似文が学習用と評価用の両方へ入ると、実際より高く評価されるため、元テンプレート単位で分離する。
 
 ## まとめ
-- MeCabで発話を単語分割し、TF-IDFで数値ベクトルに変換する。
-- SVMは発話ベクトルから発話行為タイプを分類する。
-- 推定時には、学習時と同じvectorizer、label_encoder、svcを読み込む必要がある。
+- MeCabで発話を単語分割し、TF-IDFで発話内容を素性ベクトルXへ変換。発話行為タイプはラベルYとして扱う。
+- SVMは発話ベクトルから発話行為タイプを分類。
+- 推定時にも学習時と同じ変換と分類を再現できるよう、vectorizer、label_encoder、svcをセットで保存して読み込む。
+- 掲載した3文の推定は疎通確認であり、モデルの性能評価には独立した評価データと評価指標が必要。
+- 学習用の例文が偏ると誤分類しやすくなるため、発話行為タイプごとのデータ内容と件数を確認。
 
-## 参考文献
+### 参考文献
 - 東中 竜一郎、稲葉 通将、水上 雅博（\\(2020\\)）『Pythonでつくる対話システム』株式会社オーム社
-
-## GitHubサポートページ
-- https://github.com/dsbook/dsbook
+- [MeCab公式サイト - MeCab: Yet Another Part-of-Speech and Morphological Analyzer（日本語・形態素解析器の公式解説）](https://taku910.github.io/mecab/)
+- [scikit-learn公式ドキュメント - TfidfVectorizer（英語・TF-IDF変換のAPI仕様）](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html)
+- [scikit-learn公式ドキュメント - SVC（英語・SVM分類器のAPI仕様）](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html)
+- [scikit-learn公式ドキュメント - Model persistence（英語・保存形式の安全性と互換性）](https://scikit-learn.org/stable/model_persistence.html)
+- [scikit-learn公式ドキュメント - train_test_split（英語・学習用と評価用データの分割）](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html)
+- [dill公式ドキュメント（英語・モデル保存に用いる機能の公式解説）](https://dill.readthedocs.io/en/latest/)

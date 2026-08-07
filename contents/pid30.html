@@ -3,28 +3,17 @@
   <p>Pythonの数値系データ型であるbool、int、float、complexの基本操作を整理する。</p>
   <p>数値型は計算の基本だが、真偽値が整数として扱えること、floatには丸め誤差があること、complexは実部と虚部を持つことなど、型ごとの性質を理解しておく必要がある。</p>
   <p>ここでは、それぞれの型の作り方、確認方法、代表的な演算を対話モードで確認する。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>bool、int、float、complexの基本的な違い。</li>
-  <li>数値型の変換と演算結果の型。</li>
-  <li>floatで丸め誤差が発生する理由。</li>
-  <li>complex型の実部、虚部の扱い方。</li>
-</ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">確認項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>Python環境</td><td>対話モードでtypeや演算結果を確認できる状態にしておく。</td></tr>
-      <tr><td>前提知識</td><td>四則演算、比較演算、真偽値の基本を確認しておく。</td></tr>
-      <tr><td>確認観点</td><td>値だけでなく、演算後の型も確認する。</td></tr>
-    </tbody>
-  </table>
-
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#bool型--真偽リテラル" class="link-secondary">bool型 : 真偽リテラル</a><br>
+      bool型 : 真偽リテラルの意味と要点を具体例から整理。</li>
+    <li><a href="#int型--数値整数" class="link-secondary">int型 : 数値（整数）</a><br>
+      int型 : 数値（整数）の意味と要点を具体例から整理。</li>
+    <li><a href="#float型--浮動小数点数型" class="link-secondary">float型 : 浮動小数点数型</a><br>
+      float型 : 浮動小数点数型の意味と要点を具体例から整理。</li>
+    <li><a href="#complex型--複素数型" class="link-secondary">complex型 : 複素数型</a><br>
+      complex型 : 複素数型の意味と要点を具体例から整理。</li>
+  </ul>
   <h2 id="各データ型の操作方法">各データ型の操作方法</h2>
   <h3 id="bool型--真偽リテラル">bool型 : 真偽リテラル</h3>
   <p>論理型とも呼ばれ、予約語である<code>True</code>または、<code>False</code>のいずれかの値を取る。</p>
@@ -46,10 +35,10 @@
       <p>型の特性</p>
       <ul>
         <li>
-          <p>イミュータブルオブジェクト : 同一アドレスで変更不可<br>
+          <p>イミュータブルオブジェクト : オブジェクト自体を変更不可<br>
             <a class="link-secondary"
-              href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF">Python
-              - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a>
+              href="https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可">Python
+              - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: オブジェクト自体を変更不可</a>
             を参照
           </p>
         </li>
@@ -65,12 +54,12 @@
     <li>
       <p>int型のサブクラスであることによる振る舞い</p>
       <ul>
-        <li>数値型 \(0\)、\(1\)と同義
+        <li>数値演算では <code>True</code> を \(1\)、<code>False</code> を \(0\) として扱える
           <pre><code class="language-python">$ python
-    &gt;&gt;&gt; <span class="hljs-literal">True</span> == <span class="hljs-number">1</span>    <span class="hljs-comment"># Trueは、1と同義</span>
+    &gt;&gt;&gt; <span class="hljs-literal">True</span> == <span class="hljs-number">1</span>    <span class="hljs-comment"># 数値として比較すると等しい</span>
     <span class="hljs-literal">True</span>
     &gt;&gt;&gt;
-    &gt;&gt;&gt; <span class="hljs-literal">False</span> == <span class="hljs-number">0</span>    <span class="hljs-comment"># Falseは、0と同義</span>
+    &gt;&gt;&gt; <span class="hljs-literal">False</span> == <span class="hljs-number">0</span>    <span class="hljs-comment"># 数値として比較すると等しい</span>
     <span class="hljs-literal">True</span>
     &gt;&gt;&gt;
 </code></pre>
@@ -78,12 +67,12 @@
       </ul>
     </li>
     <li>
-      <p>数値型と同義であるため、四則演算ができる</p>
+      <p>int型のサブクラスであるため、数値演算にも利用できる</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-literal">True</span> + <span class="hljs-literal">True</span> + <span class="hljs-literal">True</span>   <span class="hljs-comment"># 加算</span>
     <span class="hljs-number">3</span>
     &gt;&gt;&gt; <span class="hljs-number">6</span> - <span class="hljs-literal">False</span>   <span class="hljs-comment"># 減算</span>
-    <span class="hljs-number">5</span>
+    <span class="hljs-number">6</span>
     &gt;&gt;&gt; <span class="hljs-number">100</span> * <span class="hljs-literal">False</span>   <span class="hljs-comment"># 乗算</span>
     <span class="hljs-number">0</span>
     &gt;&gt;&gt; <span class="hljs-number">100</span> / <span class="hljs-literal">True</span>   <span class="hljs-comment"># 除算</span>
@@ -101,57 +90,57 @@
         Falseと判定されるオブジェクト</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-comment"># False : bool型のFalse</span>
-    ... <span class="hljs-built_in">bool</span>(<span class="hljs-literal">False</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">bool</span>(<span class="hljs-literal">False</span>)
     <span class="hljs-literal">False</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># None : 何もないことを示すオブジェクト ( 多言語で良く見かける null は、Pythonでは None と表現する )</span>
-    ... <span class="hljs-built_in">bool</span>(<span class="hljs-literal">None</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">bool</span>(<span class="hljs-literal">None</span>)
     <span class="hljs-literal">False</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># 0 : int型(整数)のゼロ</span>
-    ... <span class="hljs-built_in">bool</span>(<span class="hljs-number">0</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">bool</span>(<span class="hljs-number">0</span>)
     <span class="hljs-literal">False</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># 0.0 :  float型(浮動小数点数)のゼロ</span>
-    ... <span class="hljs-built_in">bool</span>(<span class="hljs-number">0.0</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">bool</span>(<span class="hljs-number">0.0</span>)
     <span class="hljs-literal">False</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># 0j :  complex型(複素数)のゼロ</span>
-    ... <span class="hljs-built_in">bool</span>(<span class="hljs-number">0j</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">bool</span>(<span class="hljs-number">0j</span>)
     <span class="hljs-literal">False</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># Decimal(0) :  decimal型のゼロ ※ decimal型は組込みデータ型でない</span>
-    ... <span class="hljs-keyword">from</span> decimal <span class="hljs-keyword">import</span> Decimal    <span class="hljs-comment"># decimal型は組込みデータ型でない</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">from</span> decimal <span class="hljs-keyword">import</span> Decimal    <span class="hljs-comment"># decimal型は組込みデータ型でない</span>
     &gt;&gt;&gt; <span class="hljs-built_in">bool</span>(Decimal(<span class="hljs-number">0</span>))
     <span class="hljs-literal">False</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># Fraction(0, 1) :  fraction型(有理数)のゼロ</span>
-    ... <span class="hljs-keyword">from</span> fractions <span class="hljs-keyword">import</span> Fraction    <span class="hljs-comment"># fraction型は組込みデータ型でない</span>
+    &gt;&gt;&gt; <span class="hljs-keyword">from</span> fractions <span class="hljs-keyword">import</span> Fraction    <span class="hljs-comment"># fraction型は組込みデータ型でない</span>
     &gt;&gt;&gt; <span class="hljs-built_in">bool</span>(Fraction(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>))
     <span class="hljs-literal">False</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># &#x27;&#x27; : str型(文字列)の空文字</span>
-    ... <span class="hljs-built_in">bool</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+    &gt;&gt;&gt; <span class="hljs-built_in">bool</span>(<span class="hljs-string">&#x27;&#x27;</span>)
     <span class="hljs-literal">False</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># [] : list型(配列)の空配列</span>
-    ... <span class="hljs-built_in">bool</span>([])
+    &gt;&gt;&gt; <span class="hljs-built_in">bool</span>([])
     <span class="hljs-literal">False</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># {} : dict型(連想配列)の空配列</span>
-    ... <span class="hljs-built_in">bool</span>({})
+    &gt;&gt;&gt; <span class="hljs-built_in">bool</span>({})
     <span class="hljs-literal">False</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># () : tuple型(タプル)の空配列</span>
-    ... <span class="hljs-built_in">bool</span>(())
+    &gt;&gt;&gt; <span class="hljs-built_in">bool</span>(())
     <span class="hljs-literal">False</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># set() : set型(集合)の空配列</span>
-    ... <span class="hljs-built_in">bool</span>(<span class="hljs-built_in">set</span>())
+    &gt;&gt;&gt; <span class="hljs-built_in">bool</span>(<span class="hljs-built_in">set</span>())
     <span class="hljs-literal">False</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># range(0) : range型(数値配列)の空配列</span>
-    ... <span class="hljs-built_in">bool</span>(<span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>))
+    &gt;&gt;&gt; <span class="hljs-built_in">bool</span>(<span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>))
     <span class="hljs-literal">False</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt;
@@ -159,7 +148,7 @@
     </li>
     <li>
       <p>Trueと判定されるオブジェクト<br>
-        上記、Falseと判定されるオブジェクト以外のオブジェクトすべてTrueと判定される。</p>
+        ここに挙げた代表的な偽と判定される値以外も、各型の <code>__bool__()</code> または <code>__len__()</code> などの真偽値規則に従って判定される。</p>
     </li>
   </ul>
   <h3 id="int型--数値整数">int型 : 数値（整数）</h3>
@@ -202,44 +191,28 @@
     <li>
       <p>型の特性</p>
       <ul>
-        <li>イミュータブルオブジェクト : 同一アドレスで変更不可<br>
+        <li>イミュータブルオブジェクト : オブジェクト自体を変更不可<br>
           <a class="link-secondary"
-            href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF">Python
-            - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a> を参照
+            href="https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可">Python
+            - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: オブジェクト自体を変更不可</a> を参照
         </li>
       </ul>
     </li>
     <li>
-      <p>最大値と最小値<br>
-        実質、CPUに依存するので上限、下限はない。</p>
-    </li>
-    <li>
-      <p>\(32\)ビットマシンの場合<br>
-        最大 \(2,147,483,647\) :（\(2^{31} - 1\) \(= 2147483647\)）<br>
-        最小 \(-2,147,483,648\) :（\(- 2^{31}\) \(= -2147483648\)）</p>
-    </li>
-    <li>
-      <p>\(62\)ビットマシンの場合<br>
-        最大 \(9,223,372,036\)\(,854,775,807\) :（\(2^{63} - 1\) \(= 922337203\)\(6854775807\)）<br>
-        最小 \(-9,223,372,036\)\(,854,775,808\) :（\(- 2^{63}\) \(= -922337203\)\(6854775808\)）</p>
-    </li>
-    <li>
-      <p>最大は、<strong>maxsize</strong>で確認できる<br>
-        ※ 下記、対話モード実施環境のCPUは、\(64\)ビット。</p>
+      <p>値の範囲<br>
+        Pythonのint型は任意精度であり、固定された最大値・最小値を持たない。扱える大きさは利用可能なメモリなどの実行環境の資源に制約される。<br>
+        <code>sys.maxsize</code>はint型の最大値ではなく、リストや文字列などの要素数・インデックスに使える実装上の上限を示す値である。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-keyword">import</span> sys
     &gt;&gt;&gt;
-    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(sys.maxsize)
+    &gt;&gt;&gt; <span class="hljs-built_in">print</span>(sys.maxsize)    <span class="hljs-comment"># int型の最大値ではない</span>
     <span class="hljs-number">9223372036854775807</span>
     &gt;&gt;&gt;
 </code></pre>
     </li>
   </ul>
   <h3 id="float型--浮動小数点数型">float型 : 浮動小数点数型</h3>
-  <p>float型は、\(64\)ビットの浮動小数点数表現（倍精度浮動小数点数）であり、C言語の倍精度浮動小数点数型である<code>double</code>を使用して実装されている。</p>
-  <p>
-    他言語の多くは、\(32\)ビットの浮動小数点数表現（単精度浮動小数点数）をfloat\(64\)、ビットの浮動小数点数表現（倍精度浮動小数点数）をdoubleとして型が分かれているが、Pythonは倍精度浮動小数点数をfloatとし\(32\)ビットの単精度浮動小数点数の型はない。
-  </p>
+  <p>Pythonのfloat型は、通常はC言語の<code>double</code>と同じ倍精度浮動小数点数として実装される。CPythonの一般的な環境ではIEEE 754のbinary64に相当するが、正確な精度や範囲は<code>sys.float_info</code>で確認する。Pythonの組込み型には、単精度専用のfloat型はない。</p>
   <ul>
     <li>
       <p>定義例</p>
@@ -250,10 +223,10 @@
     &gt;&gt;&gt; <span class="hljs-built_in">type</span>(float_a)
     &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;float&#x27;</span>&gt;
     &gt;&gt;&gt;
-    &gt;&gt;&gt; float_b = <span class="hljs-number">1.2345</span>    <span class="hljs-comment"># 固定小数点数でfloat_bを定義</span>
+    &gt;&gt;&gt; float_b = <span class="hljs-number">1.2345</span>    <span class="hljs-comment"># 小数点を含む通常表記でfloat_bを定義</span>
     &gt;&gt;&gt; float_b
     <span class="hljs-number">1.2345</span>
-    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(float_b)    <span class="hljs-comment"># 固定小数点数もfloatとして扱われる</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">type</span>(float_b)    <span class="hljs-comment"># 通常の小数表記もfloatとして扱われる</span>
     &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;float&#x27;</span>&gt;
     &gt;&gt;&gt;
 </code></pre>
@@ -261,26 +234,19 @@
     <li>
       <p>型の特性</p>
       <ul>
-        <li>イミュータブルオブジェクト : 同一アドレスで変更不可<br>
+        <li>イミュータブルオブジェクト : オブジェクト自体を変更不可<br>
           <a class="link-secondary"
-            href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF">Python
-            - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a> を参照
+            href="https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可">Python
+            - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: オブジェクト自体を変更不可</a> を参照
         </li>
       </ul>
     </li>
     <li>
-      <p>最大値と最小値
-        int型と同様にCPUに依存する。</p>
+      <p>値の範囲<br>
+        一般的なCPython環境では、正の有限最大値は約 \(1.7976931348623157 \times 10^{308}\) となる。<code>sys.float_info.min</code>は正の<strong>正規化数</strong>の最小値であり、表現できる正の値全体の最小値ではない。\(0\)に最も近い正の非正規化数は<code>math.ulp(0.0)</code>で確認できる。</p>
     </li>
     <li>
-      <p>64ビットマシンの場合<br>
-        正の最大値 \(1.79769313\)\(48623157e+308\)<br>
-        正規化数の正の最小値 \(2.2250738\)\(585072014e-308\)<br>
-        負の最小値 \(-1.797693\)\(1348623157e+308\)<br>
-        ※ 正規化数</p>
-    </li>
-    <li>
-      <p>最大・最小は、<strong>float_info</strong>でも確認できる。</p>
+      <p>実行環境の値を<strong>float_info</strong>で確認</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-keyword">import</span> sys
     &gt;&gt;&gt;
@@ -293,10 +259,14 @@
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(sys.float_info.<span class="hljs-built_in">min</span>)    <span class="hljs-comment"># 正規化数の正の最小値</span>
     <span class="hljs-number">2.2250738585072014e-308</span>
     &gt;&gt;&gt;
+    &gt;&gt;&gt; <span class="hljs-keyword">import</span> math
+    &gt;&gt;&gt; math.ulp(<span class="hljs-number">0.0</span>)    <span class="hljs-comment"># 0に最も近い正の非正規化数</span>
+    <span class="hljs-number">5e-324</span>
+    &gt;&gt;&gt;
     &gt;&gt;&gt; -sys.float_info.<span class="hljs-built_in">max</span>    <span class="hljs-comment"># 負の最小値</span>
     -<span class="hljs-number">1.7976931348623157e+308</span>
     &gt;&gt;&gt;
-    &gt;&gt;&gt; -<span class="hljs-number">1.8e+308</span>    <span class="hljs-comment"># 最小値を下回る数値は「inf」と表現される。</span>
+    &gt;&gt;&gt; -<span class="hljs-number">1.8e+308</span>    <span class="hljs-comment"># 負の有限値の範囲を下回ると「-inf」と表現される。</span>
     -inf
     &gt;&gt;&gt;
     &gt;&gt;&gt; sys.float_info    <span class="hljs-comment"># float_infoの情報すべて</span>
@@ -306,8 +276,7 @@
     </li>
   </ul>
   <h3 id="complex型--複素数型">complex型 : 複素数型</h3>
-  <p>complex型は、<strong>実部</strong>と<strong>虚部</strong>で構成され、虚部は虚数単位（\(2\)乗して\(-1\)となる）の \(j\) と表現する。<br>
-    ※ 数学の虚数単位は、\(i\)（imaginary part）で表現されるが、工学での \(i\) は、他の単位で使用されているケースがあり、混乱を招くため \(j\) が使われている。</p>
+  <p>complex型は、<strong>実部</strong>と<strong>虚部</strong>で構成され、虚数単位（\(2\)乗して\(-1\)となる）を \(j\) で表現する。数学では \(i\) が一般的だが、電気工学では \(i\) を電流に使うため、虚数単位に \(j\) を使う慣習がある。Pythonの複素数リテラルもこの \(j\) を採用している。</p>
   <ul>
     <li>
       <p>定義例</p>
@@ -334,16 +303,16 @@
 </code></pre>
     </li>
     <li>
-      <p>最大値と最小値
-        実部と虚部の値はそれぞれ <strong>浮動小数点</strong>でfloat型なのでfloat型と同様にCPUに依存する。</p>
+      <p>値の範囲<br>
+        実部と虚部はそれぞれfloat型で保持されるため、有限値の範囲や丸めの性質はfloat型と同様となる。</p>
     </li>
     <li>
       <p>型の特性</p>
       <ul>
-        <li>イミュータブルオブジェクト : 同一アドレスで変更不可<br>
+        <li>イミュータブルオブジェクト : オブジェクト自体を変更不可<br>
           <a class="link-secondary"
-            href="https://sigma-se.com/detail/29/#:~:text=%E3%82%A4%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%BF%E3%83%96%E3%83%AB%EF%BC%88immutable%EF%BC%89%3A%20%E5%90%8C%E4%B8%80%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E3%81%A7%E5%A4%89%E6%9B%B4%E4%B8%8D%E5%8F%AF">Python
-            - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: 同一アドレスで変更不可</a> を参照
+            href="https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可">Python
+            - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: オブジェクト自体を変更不可</a> を参照
         </li>
       </ul>
     </li>
@@ -363,6 +332,7 @@
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; complex_a = <span class="hljs-number">123j</span>   <span class="hljs-comment"># complex型の変数 complex_a を123jで定義</span>
     &gt;&gt;&gt; <span class="hljs-built_in">type</span>(complex_a)
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;complex&#x27;</span>&gt;
     &gt;&gt;&gt; complex_b = complex_a * complex_a    <span class="hljs-comment"># 123jを二乗する</span>
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_b)    <span class="hljs-comment"># -15129の実部のみとなる</span>
     (-<span class="hljs-number">15129</span>+<span class="hljs-number">0j</span>)
@@ -406,32 +376,17 @@
     </li>
   </ul>
 
-  <h2 id="違いを整理する">違いを整理する</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">比較する項目</th>
-        <th scope="col">整理するポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>boolはintの派生型</td><td>Trueは1、Falseは0のように扱えるが、意味としては真偽値として読む。</td></tr>
-      <tr><td>floatの誤差</td><td>10進数で自然に見える値でも、2進数では正確に表せないことがある。</td></tr>
-      <tr><td>complexの表記</td><td>Pythonでは虚数単位にjを使う。</td></tr>
-    </tbody>
-  </table>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-<ul>
-  <li>条件分岐<br>
-    boolの評価ルールはif文やwhile文の挙動に直結する。</li>
-  <li>計算処理<br>
-    floatの誤差を理解しておくと、金額計算や比較処理でのバグを避けやすい。</li>
-</ul>
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>bool、int、float、complexはPythonの基本的な数値系データ型。</li>
-  <li>演算によって結果の型が変わることがある。</li>
-  <li>floatの丸め誤差やcomplexの表記は、実装時に注意が必要。</li>
-</ul>
-
+  <ul>
+    <li>bool、int、float、complexはPythonの基本的な数値型で、演算によって結果の型が変わることがある。</li>
+    <li>boolはintの派生型なのでTrueを1、Falseを0として扱えるが、意味としては真偽値として読む。</li>
+    <li>floatは2進数で正確に表せない値があるため、丸め誤差が発生する場合がある。</li>
+    <li>complexでは虚数単位をjで表す。</li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#numeric-types-int-float-complex" class="link-secondary">Python公式ドキュメント - 数値型：int、float、complex（日本語・型と数値演算の公式解説）</a></li>
+    <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#truth-value-testing" class="link-secondary">Python公式ドキュメント - 真理値判定（日本語・真理値判定の公式解説）</a></li>
+    <li><a href="https://docs.python.org/ja/3/tutorial/floatingpoint.html" class="link-secondary">Python公式チュートリアル - 浮動小数点演算、その問題と制限（日本語・浮動小数点誤差の公式解説）</a></li>
+  </ul>
 </div>

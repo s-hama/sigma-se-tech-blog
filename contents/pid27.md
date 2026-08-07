@@ -6,262 +6,252 @@ Python - ニューラルネットワーク：13/14 重みに対する勾配と�
 前の記事までで扱った損失関数、数値微分、勾配降下法を、ニューラルネットワークの重み更新に結び付ける段階となる。
 ここでは、重みを少し変えたときに損失がどう変化するかを確認し、損失が小さくなる方向へ更新する考え方を実装する。
 
-## この記事で扱うこと
-- 重みに対する勾配の意味。
-- 損失関数と重み更新の関係。
-- 数値勾配を使った重み更新の流れ。
-- 学習率を掛けてパラメータを更新する方法。
-
-## 作業前に確認すること
-| 確認項目 | 内容 |
-| --- | --- |
-| 損失関数 | 予測と正解のずれを数値化する考え方を確認しておく。 |
-| 数値微分と勾配 | 各パラメータに対する損失の変化を求める流れを確認しておく。 |
-| Python | クラス、辞書、NumPy配列の基本を理解しておく。 |
-
+## この記事の構成
+- [重みに対する勾配法とは](#重みに対する勾配法とは)<br>
+  重みに対する勾配法の意味と基本的な考え方を整理。
+- [重みに対する勾配のPython実装サンプル](#重みに対する勾配のpython実装サンプル)<br>
+  重みに対する勾配のPython実装サンプルをコードや具体例で確認。
+- [実装サンプルの実行確認](#実装サンプルの実行確認)<br>
+  実装サンプルの実行確認をコードや具体例で確認。
 
 ## 概念の説明と実装サンプル
 
 ### 重みに対する勾配法とは
+- 重み行列と損失の勾配<br>
+    **重み**（weight）は、入力をどの程度増幅・減衰させて次の層へ伝えるかを決める係数で、一般に \\(w_{0}\\)、\\(w_{1}\\)、\\(w_{2}\\) …のように表す。学習では、損失が小さくなるようにこの値を更新する。重みの絶対値だけで入力特徴の重要度を常に判断できるわけではなく、他の重みや活性化関数も含めて解釈する必要がある。
 
-**重み**は、正解に対して**入力値**がどれだけ影響するかを示す**重要度**を表す。
+    ニューラルネットワークでは、この**重み**に対して、[Python - ニューラルネットワーク： 勾配降下法の実装サンプル](https://sigma-se.com/detail/26/) で解説した**勾配降下法**を実施し、損失が小さくなるように値を更新していく。
 
-**重み**という言葉からは全くイメージできない意味を持つが、これは英語の**Weigh**を直訳し、**重み**となっているからであり、本来は**大切さ**、**価値**、**重要性**という意味で命名されている。
+    層の重みを行列で管理する場合、各要素に対する損失の偏微分を同じ形状の行列にまとめる。以下の数値勾配の実装では、重み要素を一つずつ変化させて偏微分を近似する。
 
-そして、この**重み**（重要度）は、一般的に**Weigh**の \\(w\\) を取り、\\(w_{0}\\)、\\(w_{1}\\)、\\(w_{2}\\) …で表現され、**評価的に具体的な数値を入れてみて損失結果を計る**ためのパラメータとなる。
+    <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    W =
+    \begin{pmatrix}
+    w_{11} & w_{12} & w_{13} \\
+    w_{21} & w_{22} & w_{23} \\
+    \end{pmatrix}
+    \]
+    </div>
 
-ニューラルネットワークでは、この**重み**に対して、[Python - ニューラルネットワーク： 勾配降下法の実装サンプル](https://sigma-se.com/detail/26/) で解説した**勾配降下法**を実施し、最適な**重み**を求めていく。
+    <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
+    \[
+    \frac{∂L}{∂W} =
+    \begin{pmatrix}
+    \frac{∂L}{∂w_{11}} & \frac{∂L}{∂w_{12}} & \frac{∂L}{∂w_{13}} \\
+    \frac{∂L}{∂w_{21}} & \frac{∂L}{∂w_{22}} & \frac{∂L}{∂w_{23}} \\
+    \end{pmatrix}
+    \]
+    </div>
 
-また、下記に示す行列のよう色々なパターンの**重み**を行列計算で一斉に**偏微分**し、最適な**重み**を求めていく。
+    \\(W\\) は2行3列の重み行列。<br>
+    \\(L\\) は対象となる損失関数で、\\(\displaystyle \frac{∂L}{∂W}\\) は各重みに対する偏微分をまとめた勾配行列を表す。
 
-<div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
-\[
-W =
-\begin{pmatrix}
-w_{11} & w_{12} & w_{13} \\
-w_{21} & w_{22} & w_{23} \\
-\end{pmatrix}
-\]
-</div>
-
-<div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
-\[
-\frac{∂L}{∂W} =
-\begin{pmatrix}
-\frac{∂L}{∂w_{11}} & \frac{∂L}{∂w_{12}} & \frac{∂L}{∂w_{13}} \\
-\frac{∂L}{∂w_{21}} & \frac{∂L}{∂w_{22}} & \frac{∂L}{∂w_{23}} \\
-\end{pmatrix}
-\]
-</div>
-
-\\(W\\) は、一斉に偏微分しようとしている2行3列の**重み**達。<br>
-\\(L\\) は、対象となる**損失関数**で \\(\displaystyle \frac{∂L}{∂W}\\) の各要素で偏微分し、**損失関数**\\(L\\) の**勾配**を求めている。
-
-以降は、この**勾配**を求める実装サンプルを確認する。
+    以降は、この**勾配**を求める実装サンプルを確認する。
 
 ### 重みに対する勾配のPython実装サンプル
+- 推論・損失・数値勾配の定義<br>
+    以下、参考文献『ゼロから作るDeep Learning』から提供されている `ch04/gradient_simplenet.py` を用いたサンプル解説をしていく。
 
-以下、参考文献『ゼロから作るDeep Learning』から提供されている `ch04/gradient_simplenet.py` を用いたサンプル解説をしていく。
+    ※ サンプルコードは、下記Gitからダウンロードする。<br>
+    Git（deep-learning-from-scratch）：
+    [ch04/gradient_simplenet.py](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch04/gradient_simplenet.py)
 
-※ サンプルコードは、下記Gitからダウンロードする。<br>
-Git(deep-learning-from-scratch)：
-<a href="https://github.com/oreilly-japan/deep-learning-from-scratch">https://github.com/oreilly-japan/deep-learning-from-scratch</a>
+    ここでは、処理の流れを追いやすくするため、`ch04/gradient_simplenet.py`の`simpleNet`クラスで使われる下記3つの関数を、あえてPython対話モードで定義して確認する。
 
-ここでは、処理の流れを追いやすくするため、`ch04/gradient_simplenet.py`の`simpleNet`クラスで使われる下記3つの関数を、あえてPython対話モードで定義して確認する。
-
-- ソフトマックス関数：common/functions.pyのsoftmax関数<br>
-    ※ ソフトマックス関数の一般的な定義は下記ページを参考。<br>
-    [Python - ニューラルネットワーク： 活性化関数の実装サンプルまとめ（ステップ、シグモイド、ReLU、恒等関数、ソフトマックス関数） > ソフトマックス関数](<https://sigma-se.com/detail/18/#:~:text=pid18_4.png%27)%0A%20%3E%3E%3E-,%E3%82%BD%E3%83%95%E3%83%88%E3%83%9E%E3%83%83%E3%82%AF%E3%82%B9%E9%96%A2%E6%95%B0,-%E5%88%86%E9%A1%9E%E5%95%8F%E9%A1%8C%E3%81%A7>)
-
-
-    ```python
-    $ python
-    >>> import numpy as np
-    >>>
-    >>> def softmax(x):
-    ...     if x.ndim == 2:
-    ...         x = x.T
-    ...         x = x - np.max(x, axis=0)
-    ...         y = np.exp(x) / np.sum(np.exp(x), axis=0)
-    ...         return y.T
-    ...     x = x - np.max(x)
-    ...     return np.exp(x) / np.sum(np.exp(x))
-    ...
-    >>>
-    ```
-
-- 交差エントロピー誤差：common/functions.py の cross_entropy_error関数<br>
-    ※ 交差エントロピー誤差の処理内容については、下記ページを参考。<br>
-    [Python - ニューラルネットワーク： 損失関数（2乗和誤差、交差エントロピー誤差）と実装サンプル > ソフトマックス関数](<https://sigma-se.com/detail/22/#:~:text=%EF%BC%89-,%E4%BA%A4%E5%B7%AE%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AD%E3%83%94%E3%83%BC%E8%AA%A4%E5%B7%AE%E3%81%A8%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB,-%E5%89%8D%E9%A0%85%E3%81%A8%E5%90%8C%E6%A7%98>)
-    [Python - ニューラルネットワーク： 交差エントロピー誤差のミニバッチ学習と実装サンプル](<https://sigma-se.com/detail/23/#:~:text=%E4%BA%A4%E5%B7%AE%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AD%E3%83%94%E3%83%BC%E8%AA%A4%E5%B7%AE%E3%81%AE%E3%83%9F%E3%83%8B%E3%83%90%E3%83%83%E3%83%81%E5%AD%A6%E7%BF%92%EF%BC%88Python%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB%EF%BC%89>)
-
-    ```python
-    >>> # 上記対話モードの続き
-    >>> def cross_entropy_error(y, t):
-    ...     if y.ndim == 1:
-    ...         t = t.reshape(1, t.size)
-    ...         y = y.reshape(1, y.size)
-    ...
-    ...     if t.size == y.size:
-    ...         t = t.argmax(axis=1)
-    ...
-    ...     batch_size = y.shape[0]
-    ...     return -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size
-    ...
-    >>>
-    ```
-
-- 勾配処理：common/gradient.pyのnumerical_gradient関数<br>
-    ※ 勾配の処理内容は下記ページの勾配関数(num_gradient)を参考。<br>
-    [Python - ニューラルネットワーク： 偏微分と勾配の実装サンプル](<https://sigma-se.com/detail/25/#:~:text=%E3%81%AB%E9%81%8E%E3%81%8E%E3%81%AA%E3%81%84%E3%80%82-,%E5%8B%BE%E9%85%8D%E3%81%AEPython%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB,-%E4%B8%8A%E8%A8%98%E3%81%A7%E3%80%81>)
+    - ソフトマックス関数：common/functions.pyのsoftmax関数<br>
+        ※ ソフトマックス関数の一般的な定義は下記ページを参考。<br>
+        [Python - ニューラルネットワーク： 活性化関数の実装サンプルまとめ（ステップ、シグモイド、ReLU、恒等関数、ソフトマックス関数） > ソフトマックス関数](<https://sigma-se.com/detail/18/#ソフトマックス関数>)
 
 
-    ```python
-    >>> # 上記対話モードの続き
-    >>> def numerical_gradient(f, x):
-    ...     h = 1e-4
-    ...     grad = np.zeros_like(x)
-    ...
-    ...     it = np.nditer(x, flags=['multi_index'], op_flags=['readwrite'])
-    ...
-    ...     while not it.finished:
-    ...         idx = it.multi_index
-    ...         tmp_val = x[idx]
-    ...         x[idx] = float(tmp_val) + h
-    ...         fxh1 = f(x)
-    ...
-    ...         x[idx] = tmp_val - h
-    ...         fxh2 = f(x)
-    ...         grad[idx] = (fxh1 - fxh2) / (2*h)
-    ...
-    ...         x[idx] = tmp_val
-    ...         it.iternext()
-    ...
-    ...     return grad
-    ...
-    >>>
-    ```
+        ```python
+        $ python
+        >>> import numpy as np
+        >>>
+        >>> def softmax(x):
+        ...     if x.ndim == 2:
+        ...         x = x.T
+        ...         x = x - np.max(x, axis=0)
+        ...         y = np.exp(x) / np.sum(np.exp(x), axis=0)
+        ...         return y.T
+        ...     x = x - np.max(x)
+        ...     return np.exp(x) / np.sum(np.exp(x))
+        ...
+        >>>
+        ```
 
-- 重みに対する勾配処理：3つの関数を呼び出した形で`ch04/gradient_simplenet.py`の`simpleNet`クラスを実装
+    - 交差エントロピー誤差：common/functions.py の cross_entropy_error関数<br>
+        ※ 交差エントロピー誤差の処理内容については、下記ページを参考。<br>
+        [Python - ニューラルネットワーク： 損失関数（2乗和誤差、交差エントロピー誤差）と実装サンプル > 交差エントロピー誤差と実装サンプル](<https://sigma-se.com/detail/22/#交差エントロピー誤差と実装サンプル>)
+        [Python - ニューラルネットワーク： 交差エントロピー誤差のミニバッチ学習と実装サンプル](<https://sigma-se.com/detail/23/#交差エントロピー誤差のミニバッチ学習python実装サンプル>)
 
-    ```python
-    >>> # 上記対話モードの続き
-    >>> import sys, os
-    >>>
-    >>> class simpleNet:
-    ...     def __init__(self):
-    ...         self.W = np.random.randn(2,3)
-    ...
-    ...     def predict(self, x):
-    ...         return np.dot(x, self.W)
-    ...
-    ...     def loss(self, x, t):
-    ...         z = self.predict(x)
-    ...         y = softmax(z)
-    ...         loss = cross_entropy_error(y, t)
-    ...
-    ...         return loss
-    ...
-    >>>
-    ```
+        ```python
+        >>> # 上記対話モードの続き
+        >>> def cross_entropy_error(y, t):
+        ...     if y.ndim == 1:
+        ...         t = t.reshape(1, t.size)
+        ...         y = y.reshape(1, y.size)
+        ...
+        ...     if t.size == y.size:
+        ...         t = t.argmax(axis=1)
+        ...
+        ...     batch_size = y.shape[0]
+        ...     return -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size
+        ...
+        >>>
+        ```
 
-    \\(x\\) は、**入力データ**で \\(t\\) が**教師データ**。
+    - 勾配処理：common/gradient.pyのnumerical_gradient関数<br>
+        ※ 勾配の処理内容は下記ページの勾配関数(num_gradient)を参考。<br>
+        [Python - ニューラルネットワーク： 偏微分と勾配の実装サンプル](<https://sigma-se.com/detail/25/#勾配のpython実装サンプル>)
 
-    predict関数は、入力データ \\(x\\) と`__init__`で設定した仮（ランダム）の重みパラメータ`self.W`の**評価結果**（積）を返す。
 
-    loss関数は、predict関数、softmax関数を実施した \\(y\\) と教師データ \\(t\\) の**損失関数**（交差エントロピー誤差：cross_entropy_error関数）を返す。
+        ```python
+        >>> # 上記対話モードの続き
+        >>> def numerical_gradient(f, x):
+        ...     h = 1e-4
+        ...     grad = np.zeros_like(x)
+        ...
+        ...     it = np.nditer(x, flags=['multi_index'], op_flags=['readwrite'])
+        ...
+        ...     while not it.finished:
+        ...         idx = it.multi_index
+        ...         tmp_val = x[idx]
+        ...         x[idx] = float(tmp_val) + h
+        ...         fxh1 = f(x)
+        ...
+        ...         x[idx] = tmp_val - h
+        ...         fxh2 = f(x)
+        ...         grad[idx] = (fxh1 - fxh2) / (2*h)
+        ...
+        ...         x[idx] = tmp_val
+        ...         it.iternext()
+        ...
+        ...     return grad
+        ...
+        >>>
+        ```
+
+    - 重みに対する勾配処理：3つの関数を呼び出した形で`ch04/gradient_simplenet.py`の`simpleNet`クラスを実装
+
+        ```python
+        >>> # 上記対話モードの続き
+        >>> import sys, os
+        >>>
+        >>> class simpleNet:
+        ...     def __init__(self):
+        ...         self.W = np.array([[0.5, -0.2, 0.1],
+        ...                            [0.3,  0.4, -0.5]])
+        ...
+        ...     def predict(self, x):
+        ...         return np.dot(x, self.W)
+        ...
+        ...     def loss(self, x, t):
+        ...         z = self.predict(x)
+        ...         y = softmax(z)
+        ...         loss = cross_entropy_error(y, t)
+        ...
+        ...         return loss
+        ...
+        >>>
+        ```
+
+        \\(x\\) は、**入力データ**で \\(t\\) が**教師データ**。
+
+        predict関数は、入力データ \\(x\\) と`__init__`で設定した仮（ランダム）の重みパラメータ`self.W`の**評価結果**（積）を返す。
+
+        loss関数は、predict関数、softmax関数を実施した \\(y\\) と教師データ \\(t\\) の**損失関数**（交差エントロピー誤差：cross_entropy_error関数）を返す。
 
 ### 実装サンプルの実行確認
+- 損失減少の確認<br>
+    以降、上記`simpleNet`の実行例を基に解説する。
 
-以降、上記`simpleNet`の実行例を基に解説する。
+    - インスタンスの結果確認
+        ```python
+        >>> # 上記対話モードの続き
+        >>> net = simpleNet()
+        >>> print(net.W)
+        [[ 0.5 -0.2  0.1]
+         [ 0.3  0.4 -0.5]]
+        >>>
+        ```
 
-- インスタンスの結果確認
-    ```python
-    >>> # 上記対話モードの続き
-    >>> net = simpleNet()
-    >>> print(net.W)
-    [[ 0.49236891 -1.2239298  -1.13722119]
-    [ 0.05405365 -0.79897152 -0.08066587]]
-    >>>
-    ```
+        説明を再現できるように、ここでは2x3行列の重みを固定している。実際の学習では一般に、適切な方法で初期化した重みを利用する。
 
-    `simpleNet()`により、2x3行列のランダムな数値が生成される。
+    - 評価結果（積）の確認
+        ```python
+        >>> # ↑↑↑ 上記対話モードの続き
+        >>> x = np.array([0.6, 0.9])
+        >>> p = net.predict(x)
+        >>> print(p)
+        [ 0.57  0.24 -0.39]
+        >>> np.argmax(p)
+        0
+        >>>
+        ```
 
-- 評価結果（積）の確認
-    ```python
-    >>> # ↑↑↑ 上記対話モードの続き
-    >>> x = np.array([0.6, 0.9])
-    >>> p = net.predict(x)
-    >>> print(p)
-    [ 1.05414809 0.63071653 1.1328074  ]
-    >>> np.argmax(p)
-    2
-    >>>
-    ```
+        `predict(x)`により、入力データ \\([0.6, 0.9]\\) と重みパラメータ`net.W`の評価結果（積）を算出している。
+        （最大インデックスは0）
 
-    `predict(x)`により、入力データ \\([0.6, 0.9]\\) と重みパラメータ`net.W`の評価結果（積）を算出している。
-    （最大インデックスは、2）
+    - 損失関数の結果確認
+        ```python
+        >>> # 上記対話モードの続き
+        >>> t = np.array([0, 0, 1])
+        >>> net.loss(x, t)
+        1.7028014787132717
+        >>>
+        ```
 
-- 損失関数の結果確認
-    ```python
-    >>> # 上記対話モードの続き
-    >>> t = np.array([0, 0, 1])
-    >>> net.loss(x, t)
-    0.92806853663411326
-    >>>
-    ```
+        正解ラベルを\\(2\\)としたときの損失は約\\(1.70\\)となる。現在の予測クラス0とは一致していない。
 
-    上記で最大インデックスとなった\\(2\\)が正解ラベルとなる状態で損失関数の結果は、約\\(0.93\\)
+    - 勾配の結果確認
+        ```python
+        >>> # 上記対話モードの続き
+        >>> def f(W):
+        ...     return net.loss(x, t)
+        ...
+        >>> dW = numerical_gradient(f, net.W)
+        >>> print(dW)
+        [[ 0.28546734  0.20522925 -0.49069659]
+         [ 0.42820101  0.30784387 -0.73604488]]
+        >>>
+        ```
 
-- 勾配の結果確認
-    ```python
-    >>> # 上記対話モードの続き
-    >>> def f(W):
-    ...     return net.loss(x, t)
-    ...
-    >>> dW = numerical_gradient(f, net.W)
-    >>> print(dW)
-    [[ 0.21924763  0.14356247 -0.36281009 ]
-    [ 0.32887144  0.2153437 -0.544211514]]
-    >>>
-    ```
+        `net.loss(x, t)`を`f(W)`とし、勾配処理（`numerical_gradient`）を実施している。
 
-    `net.loss(x, t)`を`f(W)`とし、勾配処理（`numerical_gradient`）を実施している。
+        ※ `f(W)`の`W`は、勾配処理：common/gradient.pyのnumerical_gradient関数の\\(（A）\\)、\\(（B）\\)と整合性が取れるように定義したもの。
 
-    ※ `f(W)`の`W`は、勾配処理：common/gradient.pyのnumerical_gradient関数の\\(（A）\\)、\\(（B）\\)と整合性が取れるように定義したもの。
+    - 重みの更新確認
+        ```python
+        >>> loss_before = net.loss(x, t)
+        >>> learning_rate = 0.1
+        >>> net.W -= learning_rate * dW
+        >>> loss_after = net.loss(x, t)
+        >>> loss_before, loss_after
+        (1.7028014787132717, 1.5860075067483186)
+        ```
 
-- 結果から見る結論
+        勾配の逆方向へ重みを1回更新すると、この例では損失が約1.70から約1.59へ減少する。
 
-    重みパラメータ \\(w_{11}\\) と重みパラメータ \\(w_{23}\\) にスポットを当てた結果を見る。
+    - 結果から見る結論
 
-    \\(w_{11}\\) が \\(h\\)分増加すると、\\(\displaystyle \frac{∂L}{∂W}\\) の \\(\displaystyle \frac{∂L}{∂w_{11}}\\) は、約\\(0.2\\)となり、\\(0.2\\)増加している。
+        重みパラメータ \\(w_{11}\\) と重みパラメータ \\(w_{23}\\) にスポットを当てた結果を見る。
 
-    一方、\\(w_{23}\\) は \\(h\\) 分増加すると、\\(\displaystyle \frac{∂L}{∂W}\\) の \\(\displaystyle \frac{∂L}{∂w_{23}}\\) が約\\(-0.5\\)となり、\\(0.5\\)減少している。
+        \\(\displaystyle \frac{∂L}{∂w_{11}}\\) は約\\(0.29\\)であるため、\\(w_{11}\\)を微小量\\(h\\)増やすと、損失はおよそ\\(0.29h\\)増える。
 
-    よって、
-    重みパラメータ \\(w_{11}\\) は、**マイナス方向**に。<br>
-    重みパラメータ \\(w_{23}\\) は、**プラス方向**に**更新すべき**という結論となる。
+        一方、\\(\displaystyle \frac{∂L}{∂w_{23}}\\) は約\\(-0.74\\)であるため、\\(w_{23}\\)を微小量\\(h\\)増やすと、損失はおよそ\\(0.74h\\)減る。
 
-    ※ 以上の要領で重みパラメータを**より損失が少ない重みパラメータへ**更新していくことが目的。
+        よって、
+        重みパラメータ \\(w_{11}\\) は、**マイナス方向**に。<br>
+        重みパラメータ \\(w_{23}\\) は、**プラス方向**に**更新すべき**という結論となる。
 
-
-## 違いを整理する
-| 比較する項目 | 整理するポイント |
-| --- | --- |
-| 重みのshape | 入力数、出力数に合わせて重み行列の形が決まる。 |
-| 勾配の向き | 勾配は損失が増える方向なので、更新ではマイナス方向へ動かす。 |
-| 数値勾配の計算量 | 数値微分は理解しやすいが、大きなネットワークでは計算量が大きい。 |
-
-## 実務とのつながり
-- 学習処理の理解<br>
-    フレームワークが自動で行う重み更新の意味を、手元の実装で確認できる。
-- トラブルシュート<br>
-    損失が下がらないときは、勾配、学習率、初期値、データのshapeを順番に確認する。
+        ※ 以上の要領で重みパラメータを**より損失が少ない重みパラメータへ**更新していくことが目的。
 
 ## まとめ
-- 重みに対する勾配は、重みを変えたときの損失の変化を表す。
-- 学習では、勾配の逆方向に重みを更新して損失を下げる。
-- 数値勾配は学習の仕組みを理解するのに役立つが、計算量には注意が必要。
+- 重みに対する勾配は、重みを変えたときの損失の変化を表し、重み行列のshapeは入力数と出力数から決まる。
+- 勾配は損失が増える方向を示すため、学習では逆方向へ重みを更新。
+- 数値勾配は仕組みを理解しやすい一方、大きなネットワークでは計算量が大きくなる。
 
-## 参考文献
-- 斎藤 康毅（\\(2018\\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
+### 参考文献
+- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』（日本語・本記事シリーズの基礎文献）](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
+- [O'Reilly Japan「deep-learning-from-scratch」gradient_simplenet.py（Python・公式サンプルコード）](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch04/gradient_simplenet.py)

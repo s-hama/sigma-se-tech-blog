@@ -5,38 +5,49 @@ Python - 開発向けVim設定：インデント・PEP8・コードチェック
 
 Python開発で使うVimの基本設定と、flake8などのコードチェックツールの使い方を整理する。
 
-Pythonではインデントが構文に影響するため、エディタ設定は見た目だけでなく実行結果にも関係する。Vimのファイルタイプ別設定とコードチェックを組み合わせることで、保存前後のミスを見つけやすくなる。
+Pythonではインデントが構文に影響するため、エディタ設定は見た目だけでなく実行結果にも関係する。<br>Vimのファイルタイプ別設定とコードチェックを組み合わせることで、保存前後のミスを見つけやすくなる。
 
-## この記事で扱うこと
-- .vimrcで共通設定を行う方法。
-- Python専用のftplugin設定を分ける方法。
-- PEP8に合わせたインデントと行幅の考え方。
-- flake8、pyflakes、pycodestyle、mccabeの役割。
-- コードチェック結果の読み方。
+## この記事の構成
+- [対象環境と利用上の注意](#対象環境と利用上の注意)<br>
+  本文記載時の環境と現在そのまま利用できない箇所を確認。
+- [作業時の注意点](#作業時の注意点)<br>
+  設定変更やコマンド実行前に確認しておきたい注意点を整理。
+- [Vimの共通設定](#vimの共通設定)<br>
+  Vimの共通設定の手順と確認ポイントを整理。
+- [Python用のVim設定](#python用のvim設定)<br>
+  Python用のVim設定の手順と確認ポイントを整理。
+- [コードチェックツールのインストール](#コードチェックツールのインストール)<br>
+  コードチェックツールのインストールの手順と確認ポイントを整理。
+- [コードチェックの一例](#コードチェックの一例)<br>
+  コードチェックの一例の意味と要点を具体例から整理。
 
-## 作業前に確認すること
+## 対象環境と利用上の注意
 
-| 項目 | 確認内容 |
-| --- | --- |
-| Vim設定ファイル | .vimrcとftpluginの役割を分ける。 |
-| インデント | タブではなくスペース4つを基本にする。 |
-| 行末スペース | 保存時に余計な空白を除去する。 |
-| flake8 | 複数のチェックをまとめて実行する。 |
-| 複雑度 | 必要に応じてmccabeで関数の複雑さを見る。 |
+- 本文記載時の環境<br>
+Vimの`ftplugin`とPython向けのflake8を利用する、Unix系OSの設定例。<br>
+Vim・Python・flake8の特定バージョンには固定していない。
+- 確認時期<br>
+2026年8月にVim・Python・flake8の公式資料と照合。<br>
+新規環境へ同じ設定を一括適用する検証は行っていない。
+- 現在そのまま利用できない箇所<br>
+警告内容や設定の推奨値はツールのバージョンとプロジェクト規約で変わる。<br>
+行長などは掲載値を固定的に採用せず、利用中のツールとチームの規約へ合わせる。
 
 ## 作業時の注意点
 
-| 作業時の注意点 | 確認ポイント |
-| --- | --- |
-| filetype設定 | Python用設定が読み込まれない場合はディレクトリやファイル名を確認する。 |
-| タブとスペース | 混在するとインデントエラーや読みにくさにつながる。 |
-| flake8の警告 | 行番号、列番号、エラーコードの順に読む。 |
-| プラグイン追加 | 最初から入れすぎず、必要なチェックから増やす。 |
+- filetype設定<br>
+Python用設定が読み込まれない場合はディレクトリやファイル名を確認。
+- タブとスペース<br>
+混在するとインデントエラーや読みにくさにつながる。
+- flake8の警告<br>
+行番号、列番号、エラーコードの順に読む。
+- プラグイン追加<br>
+最初から入れすぎず、必要なチェックから増やす。
 
 ## 実施内容
 ### Vimの共通設定
 - ホームディレクトリに`.vimrc`ファイルを作成<br>
-`.vimrc`に設定を追記することでVim に反映される。<br>
+`.vimrc`に設定を追記することでVimに反映される。<br>
   ```bash
   touch ~/.vimrc
   ```
@@ -52,41 +63,30 @@ Pythonではインデントが構文に影響するため、エディタ設定�
 - ホームディレクトリに`.vim/ftplugin/python.vim`ファイルを作成<br>
 設定ファイルをファイルタイプ別に分割できるため、Pythonスクリプト専用の設定を定義することができる。<br>
   ```bash
-  $ mkdir ~/.vim
-  $ mkdir ~/.vim/ftplugin
+  $ mkdir -p ~/.vim/ftplugin
   $ touch ~/.vim/ftplugin/python.vim
   ```
 
 - Vimの設定を追記<br>
-下記は、Pythonコミュニティが推奨する**PEP8 ※1, 2：コーディング規約**に準拠した設定となる。<br>
-※1 PEP8（en） : https://www.python.org/dev/peps/pep-0008/<br>
-※2 PEP8（ja） : https://github.com/mumumu/pep8-ja<br>
+下記は、**PEP 8**が示す「1段につきスペース4つ」「コードは原則79文字以内」という基本に合わせた設定例となる。これだけでPEP 8のすべてへ準拠するわけではなく、行長などの方針はプロジェクトの規約を優先する。<br>
   ```bash
   $ vim ~/.vim/ftplugin/python.vim
    setlocal expandtab    # タブをスペースに置き換える設定
    setlocal tabstop=4    # タブのインデント幅を4に設定
    setlocal shiftwidth=4    # 自動インデント時の幅を4に設定
-   setlocal softtabstop=0    # キーボードから入るタブの数
-   autocmd BufWritePre * :%s/\s\+$//ge    # 保存時、行末スペースを除去する
-   setlocal textwidth=80    # 行折り返しを80文字に設定
+   setlocal softtabstop=4    # Tabキー入力時の幅を4に設定
+   autocmd BufWritePre <buffer> %s/\s\+$//e    # このバッファの保存時に行末スペースを除去
+   setlocal textwidth=79    # 自動折り返しの幅を79文字に設定
   ```
+  PEP 8ではコードを原則79文字以内、コメントとdocstringを72文字以内としている。一方、チームで合意している場合はコードを99文字まで広げる選択肢も示されているため、`textwidth`やflake8の設定は開発ルールに合わせる。
 
 ### コードチェックツールのインストール
 - **flake8**のインストール<br>
-Pythonで多く使用されているコードチェックツール**flake8**をインストールする。<br>
-下記、`pip show flake8`のRequires(依存ライブラリ)にもある通り、flake8は、pyflakes、pycodestyle、mccabe 3つライブラリをラップしているため、それぞれ個別のチェックも可能。<br>
+Pythonで多く使用されているコードチェックツール**flake8**をインストール。<br>
+flake8は、pyflakes、pycodestyle、mccabeを組み合わせて、論理的な誤り、コーディングスタイル、循環的複雑度を確認できる。インストールされるバージョンはPython環境によって異なるため、`flake8 --version`で確認。<br>
   ```bash
-  $ pip install flake8
-  $ pip show flake8
-   Name: flake8
-   Version: 3.6.0
-   Summary: the modular source code checker: pep8, pyflakes and co
-   Home-page: https://gitlab.com/pycqa/flake8
-   Author: Tarek Ziade
-   Author-email: tarek@ziade.org
-   License: MIT
-   Location: /var/www/vops/lib/python3.6/site-packages
-   Requires: pycodestyle, setuptools, pyflakes, mccabe
+  $ python -m pip install flake8
+  $ flake8 --version
   ```
 
 ### コードチェックの一例
@@ -117,7 +117,6 @@ Pythonで多く使用されているコードチェックツール**flake8**を�
 
 - **mccabe** : 循環的複雑度のチェック<br>
   **flake8**ではデフォルト無効になっているため、下記のように `--max-complexity`を指定すれば循環的複雑度のチェックが可能となる。<br>
-  ※ 参考URLより抜粋 : https://github.com/pycqa/mccabe#plugin-for-flake8<br>
   ```bash
   $ flake8 --max-complexity 10 coolproject
     ...
@@ -126,15 +125,14 @@ Pythonで多く使用されているコードチェックツール**flake8**を�
 <br>
 その他、**flake8**には、**flake8-docstrings**や**flake8-import-order**など色々なプラグインが用意されており、必要に応じてカスタマイズすることができる。
 
-## 実務とのつながり
-- エディタ設定<br>
-    チーム内で同じコーディング規約を保つ助けになる。
-- 静的チェック<br>
-    実行前に単純なミスを検出できる。
-- 複雑度チェック<br>
-    関数を分割する判断材料になる。
-
 ## まとめ
 - Python開発では、Vimのインデント設定がコード品質に直結する。
-- flake8を使うと、PEP8、未定義名、複雑度などをまとめて確認できる。
+- flake8を使うと、コーディングスタイルや未定義名を確認でき、`--max-complexity`を指定すれば複雑度も検査できる。
 - まずは最小限の設定から始め、必要に応じてチェックを増やすと扱いやすい。
+
+### 参考文献
+- [Python ドキュメント「間奏曲：コーディングスタイル」（日本語・PEP 8の要点をまとめた公式解説）](https://docs.python.org/ja/3/tutorial/controlflow.html#intermezzo-coding-style)
+- [Python Enhancement Proposals, PEP 8：Style Guide for Python Code（英語・Pythonコーディング規約原文）](https://peps.python.org/pep-0008/)
+- [Vim Reference Manual, filetype.txt（英語・ファイルタイプ設定仕様）](https://github.com/vim/vim/blob/master/runtime/doc/filetype.txt)
+- [Flake8 Documentation, Using Flake8（英語・コードチェック公式手順）](https://flake8.pycqa.org/en/latest/user/index.html)
+- [PyCQA, mccabe（英語・複雑度チェック実装元）](https://github.com/PyCQA/mccabe)

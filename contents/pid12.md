@@ -3,64 +3,43 @@ Python - NumPy：ndarrayの基本操作と配列計算の使い方
 
 ## 概要
 NumPyのndarrayを使い、Pythonで配列を効率よく扱うための基本操作を整理する。
-Python標準のリストでも複数の値は扱えるが、数値計算や機械学習では、配列同士の演算、条件抽出、行列計算をまとめて実行できるndarrayの理解が重要になる。
-ここでは、配列の作成、次元や形状の確認、要素アクセス、ブロードキャスト、条件指定による抽出を、対話モードの実行例で確認する。
+Python標準のリストでも複数の値は扱えるが、数値計算や機械学習では、配列同士の演算、条件抽出、行列計算をまとめて実行できるndarrayの理解が重要になる。<br>ここでは、配列の作成、次元や形状の確認、要素アクセス、ブロードキャスト、条件指定による抽出を、対話モードの実行例で確認する。
 
-## この記事で扱うこと
-- ndarrayとPythonリストの違い。
-- 配列の次元、形状、データ型を確認する方法。
-- 配列同士の演算やブロードキャストの基本。
-- インデックス指定、スライス、条件抽出の使い方。
-
-## 作業前に確認すること
-| 確認項目 | 内容 |
-| --- | --- |
-| Python環境 | pythonコマンドとpipが使える状態にしておく。 |
-| NumPy | pip install numpyでインストールできる環境を用意する。 |
-| 前提知識 | Pythonのリスト、インデックス、四則演算を軽く理解しておく。 |
-
-## 注意したい点
-| 注意したい点 | 確認する観点 |
-| --- | --- |
-| リストとndarrayの違い | リストは要素の集合、ndarrayは数値計算向けの多次元配列として考える。 |
-| shapeの読み方 | (行, 列)の順で読む。1次元配列では列ベクトルと混同しやすい。 |
-| 条件抽出 | 比較結果はTrue/Falseの配列になり、それを使って対象要素を取り出す。 |
+## この記事の構成
+- [NumPyの環境準備](#numpyの環境準備)<br>
+  NumPyの環境準備の手順と確認ポイントを整理。
+- [NumPyの使用方法](#numpyの使用方法)<br>
+  NumPyの使用方法をコードや具体例で確認。
 
 ## 実施内容
 ### NumPyの環境準備
-**NumPy**は、高速な数値演算をはじめ、学術計算も広く対応しているPythonの外部ライブラリ。
-Python自体は、動的言語(非コンパイル型言語)で**数値演算が遅い**が、NumPyは、静的型付け言語である**C**、**C++**、**Fortran**で実装されているため、高速な数値演算を可能にしている。
+**NumPy**は、高速な数値演算をはじめ、科学技術計算で広く利用されるPythonの外部ライブラリ。
+同じデータ型の値を連続的に扱う`ndarray`と、Cなどで実装されたベクトル化処理を利用することで、Pythonのループを要素ごとに実行する場合より効率よく数値計算できる。
 
 - NumPyインストール<br>
-インストールは、pipで`install numpy`を実行する。
+使用するPython環境を明確にするため、次のようにPython経由でpipを実行。
   ```bash
-  $ pip install numpy
-   Collecting numpy
-   Downloading
-   https://files.pythonhosted.org/packages/ff/7f/9d804d2348471c67a7d8b5f84f9bc59fd1cefa148986f2b74552f8573555/numpy-1.15.4-cp36-cp36m-manylinux1_x86_64.whl (13.9MB)
-       100% |################################| 13.9MB 1.3MB/s
-   Installing collected packages: numpy
-   Successfully installed numpy-1.15.4
+  $ python -m pip install numpy
   ```
+  インストール後は`python -c "import numpy as np; print(np.__version__)"`で、読み込まれたNumPyのバージョンを確認できる。
 
 ### NumPyの使用方法
 - 配列の定義と型の確認<br>
-NumPy配列は、Python配列を引数を基に**numpy.ndarray型**で生成される。<br>
-下記サンプルでは、Python配列`[0.5, 1.5, 2.5, 3.5, 4.5, 5.5]`を基にNumPy配列`[0.5, 1.5, 2.5, 3.5, 4.5, 5.5]`(numpy.ndarray型) を生成している。
+`np.array()`へPythonのリストなどを渡すと、**numpy.ndarray型**の配列を生成できる。<br>
+変数名に`list`を使うとPython組み込みの`list`を上書きしてしまうため、ここでは`values`とする。
   ```bash
   $ python
    >>> import numpy as np
-   >>> list = np.array([0.5, 1.5, 2.5, 3.5, 4.5, 5.5])
-   >>> print(list)
+   >>> values = np.array([0.5, 1.5, 2.5, 3.5, 4.5, 5.5])
+   >>> print(values)
    [0.5 1.5 2.5 3.5 4.5 5.5]
-   >>> type(list)
+   >>> type(values)
    <class 'numpy.ndarray'>
    >>>
   ```
 
 - 一次元配列同士の四則演算<br>
-**要素数が同じ**である場合、それぞれの要素同士で四則演算が可能。<br>
-※ 但し、下記ブロードキャストは例外で 要素数が一致していなくても 四則演算が可能。
+**形状が同じ**配列同士、または後述するブロードキャストが可能な形状同士では、それぞれの要素を対応させて四則演算できる。
   ```bash
   $ python
    >>> import numpy as np
@@ -78,9 +57,11 @@ NumPy配列は、Python配列を引数を基に**numpy.ndarray型**で生成さ�
   ```
 
 - 多次元配列（行列）の四則演算<br>
-上記一次元配列同士の四則演算と同様に**行列が同じ**である場合、それぞれの要素同士で四則演算が可能。
+一次元配列と同様に、**形状が同じ**多次元配列同士では、それぞれの要素を対応させて四則演算できる。
   ```bash
   $ python
+   >>> import numpy as np
+   >>> matrix_a = np.array([[1, 2], [3, 4]])
    >>> matrix_b = np.array([[5, 10], [15, 20]])
    >>> matrix_a + matrix_b    # 加算
    array([[ 6, 12],
@@ -96,8 +77,14 @@ NumPy配列は、Python配列を引数を基に**numpy.ndarray型**で生成さ�
            [0.2, 0.2]])
    >>>
   ```
+  `*`は行列積ではなく**要素ごとの乗算**である。線形代数の行列積には`@`または`np.matmul()`を使う。
+  ```bash
+  >>> matrix_a @ matrix_b
+  array([[ 35,  50],
+         [ 75, 110]])
+  ```
   - 形状とデータ型の確認<br>
-  shapeで形状 (行列) を、dtypeでデータ型を確認できる。
+  `shape`で各軸の要素数、`ndim`で次元数、`dtype`で要素のデータ型を確認できる。<br>二次元配列の`shape`は`(行数, 列数)`の順となる。
     ```bash
     $ python
      >>> import numpy as np
@@ -107,13 +94,16 @@ NumPy配列は、Python配列を引数を基に**numpy.ndarray型**で生成さ�
        [3 4]]
      >>> matrix_a.shape    # 形状の確認
      (2, 2)
+     >>> matrix_a.ndim     # 次元数の確認
+     2
      >>> matrix_a.dtype    # データ型の確認
      dtype('int64')
     >>>
     ```
+    `dtype`の表示はOSやPython、NumPyの環境によって異なる場合があるため、特定の整数幅を必要とする処理では`dtype=np.int64`のように明示する。
 
 - ブロードキャスト<br>
-NumPyでは、ブロードキャストという機能により、下記3つの例のように**形状(行列)が異なる配列**でも演算が可能。
+NumPyでは、末尾の次元から比較し、各次元の大きさが等しいか、どちらかが`1`であればブロードキャストできる。<br>単に要素数が近いだけでは演算できない。下記3つは、互換性のある形状の例である。
   - 一次元配列とスカラ値（単一の数値）<br>
     一次元配列とスカラ値｢2｣との四則演算。
     ```bash
@@ -177,7 +167,7 @@ NumPyでは、ブロードキャストという機能により、下記3つの�
 
 - 各要素の取得<br>
   - インデックスで要素を指定<br>
-    他言語と同様にNumPyでもインデックス0から始まり、下記要領でアクセスできる。
+    Pythonのリストと同様にNumPyでもインデックスは0から始まり、下記要領でアクセスできる。<br>多次元配列では`matrix_c[0, 1]`のように各軸をカンマで指定する書き方もできる。
     ```bash
     $ python
      >>> import numpy as np
@@ -211,11 +201,13 @@ NumPyでは、ブロードキャストという機能により、下記3つの�
     ```bash
     $ python
      >>> import numpy as np
-     >>> matrix_d = np.array([1, 5,10, 15, 20, 25])
+     >>> matrix_d = np.array([1, 5, 10, 15, 20, 25])
      >>> print(matrix_d)
      [ 1  5 10 15 20 25]
      >>> matrix_d[np.array([1, 3, 5])]    # インデックス 1, 3, 5 (2、4、6個目)を指定
      array([ 5, 15, 25])
+     >>> matrix_d[1:4]    # インデックス1以上4未満をスライス
+     array([ 5, 10, 15])
      >>>
     ```
   - 任意の条件で要素を指定<br>
@@ -233,16 +225,14 @@ NumPyでは、ブロードキャストという機能により、下記3つの�
      >>>
     ```
 
-## 実務とのつながり
-- 数値計算の土台<br>
-    機械学習、画像処理、統計処理では、データをndarrayとして扱う場面が多い。
-- データ前処理<br>
-    条件抽出や配列演算を理解していると、特徴量の加工や欠損値処理を読み解きやすくなる。
-
 ## まとめ
-- NumPyのndarrayは、数値計算に適した多次元配列。
-- shape、ndim、dtypeを確認すると、配列の構造を把握しやすい。
-- 配列演算や条件抽出は、機械学習前処理の基本になる。
+- NumPyのndarrayは、Pythonのリストとは異なる、数値計算に適した多次元配列。
+- shape、ndim、dtypeで配列の構造を確認できる。2次元配列のshapeは(行, 列)の順で、1次元配列は列ベクトルとは異なる。
+- 配列演算や、比較結果のTrue/False配列を使った条件抽出は、数値処理や機械学習の前処理の基本となる。
 
 ## 参考文献
-- 斎藤 康毅（\\(2018\\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
+- 斎藤 康毅（\\(2016\\)）『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
+- [NumPy, Installing NumPy（英語・公式インストール手順）](https://numpy.org/install/)
+- [NumPy User Guide, NumPy: the absolute basics for beginners（英語・配列操作の公式入門）](https://numpy.org/doc/stable/user/absolute_beginners.html)
+- [NumPy User Guide, Broadcasting（英語・ブロードキャスト仕様）](https://numpy.org/doc/stable/user/basics.broadcasting.html)
+- [NumPy User Guide, Indexing on ndarrays（英語・配列インデックス仕様）](https://numpy.org/doc/stable/user/basics.indexing.html)

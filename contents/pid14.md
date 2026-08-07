@@ -6,87 +6,43 @@ MathJaxを使い、Webページ上でMathMLやLaTeX形式の数式を表示す�
 技術記事では、数式を画像ではなくテキストとして扱えると、拡大表示、検索、修正がしやすくなる。
 ここでは、MathJaxの読み込み、MathMLの基本要素、LaTeXによる数式表現をサンプルで確認する。
 
-## この記事で扱うこと
-- MathJaxをWebページへ読み込む基本。
-- MathMLで数式を構造的に表す考え方。
-- LaTeX記法で分数、添字、平方根などを表示する方法。
-- ブログ記事で数式を書くときの注意点。
-
-## 作業前に確認すること
-| 確認項目 | 内容 |
-| --- | --- |
-| HTMLの基礎 | scriptタグやHTML要素の読み方を確認しておく。 |
-| 数式表記 | 分数、指数、添字などの基本的な数式表現を理解しておく。 |
-| 表示確認 | ブラウザでHTMLを表示し、MathJaxが読み込まれているか確認できるようにする。 |
-
-## 注意したい点
-| 注意したい点 | 確認する観点 |
-| --- | --- |
-| MathMLとLaTeXの違い | MathMLはHTMLに近い構造、LaTeXは短い記法で数式を書く方法として捉える。 |
-| エスケープ漏れ | HTML内では記号の扱いに注意し、ブログの変換処理で壊れない形にする。 |
-| 読み込み順序 | MathJaxのscriptが読み込まれないと、数式がそのまま文字として表示される。 |
+## この記事の構成
+- [MathJaxの導入](#mathjaxの導入)<br>
+  MathJaxの導入の手順と確認ポイントを整理。
+- [MathMLの要素](#mathmlの要素)<br>
+  MathMLを構成する主な要素と、数式を構造化して記述する方法を整理。
+- [MathMLの表示サンプル](#mathmlの表示サンプル)<br>
+  MathMLの表示サンプルをコードや具体例で確認。
+- [LaTeXの表示サンプル](#latexの表示サンプル)<br>
+  LaTeXの表示サンプルをコードや具体例で確認。
 
 ## 実施内容
 ### MathJaxの導入
-導入はJavaScriptの読み込みのみ。
+MathJaxはCDNからJavaScriptを読み込むだけで導入できる。
 
-- MathJax.jsを読み込む<br>
+- MathJax 4.xを読み込む<br>
+  TeXとMathMLを入力として受け取り、CommonHTMLで表示する公式ドキュメントの構成例は次のとおり。
   ```html
-  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
   ```
-  URLパラメータのconfigを**TeX-MML-AM_CHTML**と指定することにより、**MathML**、**LaTeX**、**AsciiMath**すべて認識できる状態となる。<br>
-  LaTeXのみ認識するのであれば、**TeX-AMS_CHTML**とするなど色々な設定方法があるため、詳細については下記ドキュメントを参考。<br>
-  ※ https://docs.mathjax.org/en/latest/config-files.html<br>
+  `mathjax@4`は最新の4.x系を取得する指定である。<br>再現性を重視する環境では`mathjax@4.0.0`のように完全なバージョンを固定。TeXだけを処理する場合は`tex-chtml.js`など、用途に合う小さなコンポーネントも選べる。
 
 ### MathMLの要素
-基本的には`<math>`内に、**mnタグ**や**moタグ**などのMathML要素を記述する形になる。<br>
+MathMLでは、トップレベルの`<math>`内に`<mn>`や`<mo>`などの要素を組み合わせ、数式の構造を記述する。
 
-- MathMLの全要素<br>
-※ より詳細なルールや使用方法は下記を参考。<br>
-https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
+- このページで使う主なMathML要素
+  - `<math>`：トップレベル要素。
+  - `<mrow>`：複数の要素を一つの部分式としてまとめる。
+  - `<mi>`：変数名や関数名などの識別子。
+  - `<mn>`：数値。
+  - `<mo>`：演算子や括弧。
+  - `<mfrac>`：分数。
+  - `<msqrt>`：平方根。
+  - `<msup>`：上付き文字。
+  - `<munder>`：式の真下に付ける要素。
+  - `<mtable>`、`<mtr>`、`<mtd>`：表や行列、その行、セル。
 
-  - `<math>`：トップレベル要素
-  - `<maction>`：部分式にバインドされたアクション
-  - `<maligngroup>`：揃えグループ
-  - `<malignmark>`：揃えポイント
-  - `<menclose>`：囲みコンテンツ
-  - `<merror>`：囲み構文エラーメッセージ
-  - `<mfenced>`：括弧
-  - `<mfrac>`：分数
-  - `<mglyph>`：非標準記号の表示
-  - `<mi>`：識別子
-  - `<mlabeledtr>`：表または行列のラベル付き行
-  - `<mlongdiv>`：割り算の筆算表記
-  - `<mmultiscripts>`：前置字とテンソル添字
-  - `<mn>`：数字
-  - `<mo>`：演算子
-  - `<mover>`：真上付き
-  - `<mpadded>`：コンテンツまわりの空白
-  - `<mphantom>`：予約スペースを持つ不可視コンテンツ
-  - `<mroot>`：累乗根
-  - `<mrow>`：グループ化された部分式
-  - `<ms>`：文字列リテラル
-  - `<mscarries>`：carries などのアノテーション
-  - `<mscarry>`：Single carry, <mscarries> の子要素
-  - `<msgroup>`：<mstack> および <mlongdiv> 要素のグループ化された行
-  - `<msline>`：<mstack> 要素内の水平線
-  - `<mspace>`：空白
-  - `<msqrt>`：平方根
-  - `<msrow>`：<mstack> 要素の行
-  - `<mstack>`：スタック揃え
-  - `<mstyle>`：書式変更
-  - `<msub>`：下付き
-  - `<msup>`：上付き
-  - `<msubsup>`：下付き上付きの組
-  - `<mtable>`：表または行列
-  - `<mtd>`：表または行列のセル
-  - `<mtext>`：テキスト
-  - `<mtr>`：表または行列の列
-  - `<munder>`：真下付き
-  - `<munderover>`：真下付きと真上付きの組
-  - `<semantics>`：セマンティックアノテーション用のコンテナ
-  - `<annotation>`：Data アノテーション
-  - `<annotation-xml>`：XML アノテーション
+※ MathML仕様には`<mfenced>`もあるが、ブラウザ実装を重視したMathML Coreには含まれない。<br>互換性を考え、このページでは`<mrow>`と括弧を表す`<mo>`を明示的に使用する。
 
 ### MathMLの表示サンプル
 以下の表示サンプルで確認する。
@@ -163,6 +119,7 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
     ```
 
 - 逆行列
+  - \(2 \times 2\)行列の逆行列を表示。ただし、逆行列が存在する条件は\(ad-bc \neq 0\)である。
   - 表示
     <div style="display: flex; overflow-x: auto; white-space: nowrap; height: 10rem; margin-left: 1rem; font-size: 1.2em; margin-top: 0.25em;">
       <math>
@@ -171,7 +128,8 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
             <mtd>
               <mi>A</mi>
               <mo>=</mo>
-              <mfenced>
+              <mrow>
+                <mo>(</mo>
                 <mtable>
                   <mtr>
                     <mtd>
@@ -190,7 +148,8 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
                     </mtd>
                   </mtr>
                 </mtable>
-              </mfenced>
+                <mo>)</mo>
+              </mrow>
             </mtd>
           </mtr>
           <mtr>
@@ -207,16 +166,17 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
                 <mn>1</mn>
                 <mrow>
                   <mi>a</mi>
-                  <mo></mo>
+                  <mo>⁢</mo>
                   <mi>d</mi>
                   <mo>-</mo>
                   <mi>b</mi>
-                  <mo></mo>
+                  <mo>⁢</mo>
                   <mi>c</mi>
                 </mrow>
               </mfrac>
-              <mo></mo>
-              <mfenced>
+              <mo>⁢</mo>
+              <mrow>
+                <mo>(</mo>
                 <mtable>
                   <mtr>
                     <mtd>
@@ -237,7 +197,8 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
                     </mtd>
                   </mtr>
                 </mtable>
-              </mfenced>
+                <mo>)</mo>
+              </mrow>
             </mtd>
           </mtr>
         </mtable>
@@ -251,7 +212,8 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
           <mtd>
             <mi>A</mi>
             <mo>=</mo>
-            <mfenced>
+            <mrow>
+              <mo>(</mo>
               <mtable>
                 <mtr>
                   <mtd>
@@ -270,7 +232,8 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
                   </mtd>
                 </mtr>
               </mtable>
-            </mfenced>
+              <mo>)</mo>
+            </mrow>
           </mtd>
         </mtr>
         <mtr>
@@ -287,16 +250,17 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
               <mn>1</mn>
               <mrow>
                 <mi>a</mi>
-                <mo></mo>
+                <mo>⁢</mo>
                 <mi>d</mi>
                 <mo>-</mo>
                 <mi>b</mi>
-                <mo></mo>
+                <mo>⁢</mo>
                 <mi>c</mi>
               </mrow>
             </mfrac>
-            <mo></mo>
-            <mfenced>
+            <mo>⁢</mo>
+            <mrow>
+              <mo>(</mo>
               <mtable>
                 <mtr>
                   <mtd>
@@ -317,7 +281,8 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
                   </mtd>
                 </mtr>
               </mtable>
-            </mfenced>
+              <mo>)</mo>
+            </mrow>
           </mtd>
         </mtr>
       </mtable>
@@ -325,8 +290,8 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
     ```
 
 ### LaTeXの表示サンプル
-  続いてLaTeX。<br>
-  以下の表示サンプルで確認する。
+MathJaxのTeX入力では、分数や行列をMathMLより短い記述で表せる。<br>ここでは、数式を`\[`と`\]`で囲んだ別行表示の例を確認する。
+
 - 二次方程式の解
   - 表示 
     <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
@@ -335,7 +300,7 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
     \]
     </div>
   - マークアップ
-    ```bash
+    ```latex
     \[
      x = \frac{-b\pm\sqrt{b^{2}-4ac}}{2a}
     \]
@@ -346,19 +311,18 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
     <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
     \[
      |x| = \begin{cases}
-       x & \text{\(x\ge0\) のとき} \\
-       -x & \text{\(x<0\) のとき}
+       x & (x\ge0\text{ のとき}) \\
+       -x & (x<0\text{ のとき})
      \end{cases}
     \]
     </div>
   - マークアップ
-    ```bash
+    ```latex
     \[
      |x| = \begin{cases}
-       x & \text{\(x\ge0\) のとき} \\
-       -x & \text{\(x<0\) のとき}
+       x & (x\ge0\text{ のとき}) \\
+       -x & (x<0\text{ のとき})
      \end{cases}
-    \end{cases}
     \]
     ```
 
@@ -366,13 +330,13 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
   - 表示 
     <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
     \[
-     f’(x) = \lim_{\Delta x \to 0} \frac{ f(x+\Delta x) - f(x) }{\Delta x}
+     f'(x) = \lim_{\Delta x \to 0} \frac{f(x+\Delta x) - f(x)}{\Delta x}
     \]
     </div>
   - マークアップ
-    ```bash
+    ```latex
     \[
-     f’(x) = \lim_{\Delta x \to 0} \frac{ f(x+\Delta x) - f(x) }{\Delta x}
+     f'(x) = \lim_{\Delta x \to 0} \frac{f(x+\Delta x) - f(x)}{\Delta x}
     \]
     ```
 
@@ -380,17 +344,17 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
   - 表示 
     <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
     \[
-     f’(x) = \lim_{\Delta x \to 0} \frac{ f(x+\Delta x) - f(x) }{\Delta x}
+     \int_{-\infty}^{\infty} e^{-x^{2}} \, dx = \sqrt{\pi}
     \]
     </div>
   - マークアップ
-    ```bash
+    ```latex
     \[
      \int_{-\infty}^{\infty} e^{-x^{2}} \, dx = \sqrt{\pi}
     \]
     ```
 
-- n × n行列
+- \(n \times n\)行列
   - 表示 
     <div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
     \[
@@ -403,7 +367,7 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
     \]
     </div>
   - マークアップ
-    ```bash
+    ```latex
     \[
      A = \begin{pmatrix}
      a_{11} & a_{12} & \ldots & a_{1n} \\
@@ -414,13 +378,14 @@ https://developer.mozilla.org/ja/docs/Web/MathML/Element/math
     \]
     ```
 
-## 実務とのつながり
-- 技術ブログでの数式表現<br>
-    機械学習、暗号技術、情報処理試験の記事では、数式を読みやすく表示できると理解しやすくなる。
-- 保守しやすい記事作成<br>
-    画像化した数式より、テキストで書いた数式の方が後から修正しやすい。
-
 ## まとめ
 - MathJaxを使うと、Webページ上でMathMLやLaTeXの数式を表示できる。
-- MathMLは構造的、LaTeXは短く書きやすい表現として使い分ける。
-- 数式をテキストとして管理すると、技術記事の保守性が上がる。
+- MathMLはHTMLに近い構造で数式を表し、LaTeXは短い記法で数式を書けるため、用途に応じて使い分ける。
+- MathJaxのscriptが正しく読み込まれない場合、数式は変換されず文字列のまま表示される。
+- HTMLの記号やブログの変換処理によるエスケープ漏れに注意し、数式を壊れないテキストとして管理すると記事を保守しやすい。
+
+### 参考文献
+- [MDN Web Docs「MathML要素リファレンス」（日本語・要素別解説）](https://developer.mozilla.org/ja/docs/Web/MathML/Reference/Element)
+- [MathJax Documentation, Getting Started with MathJax Components（英語・導入公式手順）](https://docs.mathjax.org/en/stable/web/start.html)
+- [MathJax Documentation, Input Components（英語・入力形式の公式仕様）](https://docs.mathjax.org/en/stable/web/components/input.html)
+- [W3C, MathML Core（英語・Web標準仕様原文）](https://www.w3.org/TR/mathml-core/)

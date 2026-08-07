@@ -3,35 +3,28 @@
   <p>ステップ関数、シグモイド関数、ReLU関数、恒等関数、ソフトマックス関数をPythonで実装し、それぞれの使いどころを整理する。</p>
   <p>活性化関数はすべて同じ役割ではなく、中間層で使いやすいもの、回帰の出力層で使うもの、分類の出力層で使うものがある。</p>
   <p>ここでは、関数ごとの特徴とNumPy実装をまとめて確認する。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>代表的な活性化関数の特徴。</li>
-  <li>中間層と出力層で使われる関数の違い。</li>
-  <li>NumPyで各関数を実装する方法。</li>
-  <li>ソフトマックス関数で確率のような出力を作る考え方。</li>
-</ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">確認項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>NumPy</td><td>配列演算、np.exp、np.maximumの基本を確認しておく。</td></tr>
-      <tr><td>前提知識</td><td>活性化関数の役割を前の記事で確認しておく。</td></tr>
-      <tr><td>数値の扱い</td><td>指数関数では値が大きくなりやすい点を意識する。</td></tr>
-    </tbody>
-  </table>
-
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#ステップ関数" class="link-secondary">ステップ関数</a><br>
+      ステップ関数の仕組みと要点を具体例から整理。</li>
+    <li><a href="#シグモイド関数" class="link-secondary">シグモイド関数</a><br>
+      シグモイド関数の仕組みと要点を具体例から整理。</li>
+    <li><a href="#relu関数" class="link-secondary">ReLU関数</a><br>
+      ReLU関数の仕組みと要点を具体例から整理。</li>
+    <li><a href="#恒等関数" class="link-secondary">恒等関数</a><br>
+      恒等関数の仕組みと要点を具体例から整理。</li>
+    <li><a href="#ソフトマックス関数" class="link-secondary">ソフトマックス関数</a><br>
+      ソフトマックス関数の仕組みと要点を具体例から整理。</li>
+  </ul>
   <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
   <h3 id="ステップ関数">ステップ関数</h3>
+  <ul>
+    <li>0と1を切り替える処理<br>
   <p><a class="link-secondary" href="https://sigma-se.com/detail/17/">前の記事 &gt; ニューラルネットワークの活性化関数と実装サンプル</a>
-    で触れた<strong>ステップ関数</strong>で、線形の<strong>活性化関数</strong>であり<strong>階段関数</strong>とも呼ばれる。</p>
+    で触れた<strong>ステップ関数</strong>で、不連続な非線形の<strong>活性化関数</strong>であり<strong>階段関数</strong>とも呼ばれる。</p>
   <ul>
     <li>定義<br>
-      \(x\) が \(0\) より大きければ、\(1\) を出力し、\(0\) 以下であれば \(0\) を出力する。</li>
+      \(x\) が \(0\) より大きければ、\(1\) を出力し、\(0\) 以下であれば \(0\) を出力。</li>
   </ul>
   <div
     style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
@@ -52,14 +45,14 @@
  &gt;&gt;&gt; import numpy as np
  &gt;&gt;&gt; import matplotlib.pylab as plt
  &gt;&gt;&gt; def step_func(x):    <span class="hljs-comment"># ステップ関数の定義</span>
- ...    <span class="hljs-built_in">return</span> np.array(x &gt; 0, dtype=np.int)
+ ...    <span class="hljs-built_in">return</span> np.array(x &gt; 0, dtype=int)
  ...
 </code></pre>
   <ul>
     <li>グラフ出力</li>
   </ul>
   <pre><code class="language-bash">$ python
- &gt;&gt;&gt; x = np.arange(-5.0, 5.0, 0.1)    <span class="hljs-comment"># 区間を-5～5 まで、描画制度を 0.1 刻みに設定</span>
+ &gt;&gt;&gt; x = np.arange(-5.0, 5.0, 0.1)    <span class="hljs-comment"># 区間を-5～5まで、描画間隔を0.1刻みに設定</span>
  &gt;&gt;&gt; y = step_func(x)    <span class="hljs-comment"># ステップ関数をコール</span>
  &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;step_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
  Text(0.5, 1.0, <span class="hljs-string">&#x27;step_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&#x27;</span>)
@@ -71,15 +64,20 @@
  Text(0, 0.5, <span class="hljs-string">&#x27;y&#x27;</span>)
  &gt;&gt;&gt; plt.plot(x, y)    <span class="hljs-comment"># グラフの描画</span>
  [&amp;lt;matplotlib.lines.Line2D object at 0x7fc13041e278&amp;gt;]
- &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;/var/www/vops/ops/macuos/static/macuos/img/pid18_1.png&#x27;</span>))    <span class="hljs-comment"># グラフの出力</span>
+ &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;pid18_1.png&#x27;</span>)    <span class="hljs-comment"># グラフの出力</span>
 </code></pre>
   <p><img src="/static/tblog/img/pid18_1.png" alt="pid18_1"></p>
+    </li>
+  </ul>
+
   <h3 id="シグモイド関数">シグモイド関数</h3>
+  <ul>
+    <li>滑らかな出力への変換<br>
   <p><a class="link-secondary" href="https://sigma-se.com/detail/17/">前の記事 &gt; ニューラルネットワークの活性化関数と実装サンプル</a>
-    で触れた<strong>シグモイド関数</strong>で、非線形のの<strong>活性化関数</strong>に分類される。</p>
+    で触れた<strong>シグモイド関数</strong>で、非線形の<strong>活性化関数</strong>に分類される。</p>
   <ul>
     <li>定義<br>
-      出力値は、\(x\) が小さいほど \(0\) になく近づき、\(x\) が大きいほど \(1\) に限りなく近づく。</li>
+      出力値は、\(x\) が小さいほど \(0\) に近づき、\(x\) が大きいほど \(1\) に近づく。</li>
   </ul>
   <div
     style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
@@ -94,14 +92,14 @@
  &gt;&gt;&gt; import numpy as np
  &gt;&gt;&gt; import matplotlib.pylab as plt
  &gt;&gt;&gt; def sigmoid_func(x):    <span class="hljs-comment"># シグモイド関数の定義</span>
- ...     <span class="hljs-built_in">return</span> 1 / (1 + np.exp(-x))    <span class="hljs-comment"># 自然対数の低 (e) の -x 乗</span>
+ ...     <span class="hljs-built_in">return</span> 1 / (1 + np.exp(-x))    <span class="hljs-comment"># 自然対数の底 (e) の -x 乗</span>
  ...
 </code></pre>
   <ul>
     <li>グラフ出力</li>
   </ul>
   <pre><code class="language-bash">$ python
- &gt;&gt;&gt; x = np.arange(-5.0, 5.0, 0.1)    <span class="hljs-comment"># 区間を-5～5 まで、描画制度を 0.1 刻みに設定</span>
+ &gt;&gt;&gt; x = np.arange(-5.0, 5.0, 0.1)    <span class="hljs-comment"># 区間を-5～5まで、描画間隔を0.1刻みに設定</span>
  &gt;&gt;&gt; y = sigmoid_func(x)    <span class="hljs-comment"># シグモイド関数をコール</span>
  &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;sigmoid_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
  Text(0.5, 1.0, <span class="hljs-string">&#x27;sigmoid_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&#x27;</span>)
@@ -116,12 +114,17 @@
  &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;/var/www/vops/ops/macuos/static/macuos/img/pid18_2.png&#x27;</span>)    <span class="hljs-comment"># グラフの出力</span>
 </code></pre>
   <p><img src="/static/tblog/img/pid18_2.png" alt="pid18_2"></p>
+    </li>
+  </ul>
+
   <h3 id="relu関数">ReLU関数</h3>
-  <p><strong>ReLU</strong>（Rectified Linear Unit：ランプ関数、正規化線形関数）と呼ばれ、非線形の<strong>活性化関数</strong>に分類される。<br>
+  <ul>
+    <li>0以下を0にする処理<br>
+  <p><strong>ReLU</strong>（Rectified Linear Unit：正規化線形ユニット）と呼ばれ、非線形の<strong>活性化関数</strong>に分類される。<br>
     ※ 最近では、ニューラルネットワークにおいて、<strong>シグモイド関数</strong>より、<strong>ReLU関数</strong>が多く用いられるようになった。<br></p>
   <ul>
     <li>定義<br>
-      \(x\) が \(0\) より大きい場合、\(x\) を出力し、\(0\) 以下である場合、\(0\) を出力する。</li>
+      \(x\) が \(0\) より大きい場合、\(x\) を出力し、\(0\) 以下である場合、\(0\) を出力。</li>
   </ul>
   <div
     style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
@@ -149,7 +152,7 @@
     <li>グラフ出力</li>
   </ul>
   <pre><code class="language-bash">$ python
- &gt;&gt;&gt; x = np.arange(-5.0, 5.0, 0.1)    <span class="hljs-comment"># 区間を-5～5 まで、描画制度を 0.1 刻みに設定</span>
+ &gt;&gt;&gt; x = np.arange(-5.0, 5.0, 0.1)    <span class="hljs-comment"># 区間を-5～5まで、描画間隔を0.1刻みに設定</span>
  &gt;&gt;&gt; y = relu_func(x)    <span class="hljs-comment"># ReLU関数をコール</span>
  &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;relu_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
  Text(0.5, 1.0, <span class="hljs-string">&#x27;relu_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&#x27;</span>)
@@ -163,11 +166,16 @@
  &gt;&gt;&gt;
 </code></pre>
   <p><img src="/static/tblog/img/pid18_3.png" alt="pid18_3"></p>
+    </li>
+  </ul>
+
   <h3 id="恒等関数">恒等関数</h3>
+  <ul>
+    <li>入力をそのまま出力する処理<br>
   <p><strong>出力層</strong>で使われる線形の<strong>活性化関数</strong>に分類される。</p>
   <ul>
     <li>定義<br>
-      \(x\) をそのまま出力する。</li>
+      \(x\) をそのまま出力。</li>
   </ul>
   <div
     style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
@@ -183,7 +191,7 @@
   <pre><code class="language-bash">$ python
  &gt;&gt;&gt; import numpy as np
  &gt;&gt;&gt; import matplotlib.pylab as plt
- &gt;&gt;&gt; def koutou_func(x):    <span class="hljs-comment"># 恒等関数の定義</span>
+ &gt;&gt;&gt; def identity_func(x):    <span class="hljs-comment"># 恒等関数の定義</span>
  ...     <span class="hljs-built_in">return</span> x
  ...
 </code></pre>
@@ -191,10 +199,10 @@
     <li>グラフ出力</li>
   </ul>
   <pre><code class="language-bash">$ python
- &gt;&gt;&gt; x = np.arange(-5.0, 5.0, 0.1)    <span class="hljs-comment"># 区間を-5～5 まで、描画制度を 0.1 刻みに設定</span>
- &gt;&gt;&gt; y = koutou_func(x)    <span class="hljs-comment"># 恒等関数をコール</span>
- &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;koutou_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
- Text(0.5, 1.0, <span class="hljs-string">&#x27;koutou_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&#x27;</span>)
+ &gt;&gt;&gt; x = np.arange(-5.0, 5.0, 0.1)    <span class="hljs-comment"># 区間を-5～5まで、描画間隔を0.1刻みに設定</span>
+ &gt;&gt;&gt; y = identity_func(x)    <span class="hljs-comment"># 恒等関数をコール</span>
+ &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;identity_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
+ Text(0.5, 1.0, <span class="hljs-string">&#x27;identity_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&#x27;</span>)
  &gt;&gt;&gt; plt.xlabel(<span class="hljs-string">&quot;x&quot;</span>)    <span class="hljs-comment"># x軸のラベルを設定</span>
  Text(0.5, 0, <span class="hljs-string">&#x27;x&#x27;</span>)
  &gt;&gt;&gt; plt.ylabel(<span class="hljs-string">&quot;y&quot;</span>)    <span class="hljs-comment"># y軸のラベルを設定</span>
@@ -206,11 +214,16 @@
 
 </code></pre>
   <p><img src="/static/tblog/img/pid18_4.png" alt="pid18_4"></p>
+    </li>
+  </ul>
+
   <h3 id="ソフトマックス関数">ソフトマックス関数</h3>
+  <ul>
+    <li>確率分布への変換<br>
   <p><strong>分類問題</strong>で使われる非線形の<strong>活性化関数</strong>に分類される。</p>
   <ul>
     <li>定義<br>
-      \(n \leqq k\) の時、\(k\) 番目の出力 \(h(x_{k})\) を表す。</li>
+      \(k=1,\ldots,n\) とすると、\(k\) 番目の出力 \(h(x_{k})\) を次の式で表す。各出力は入力ベクトル全体に依存し、出力の合計は\(1\)になる。</li>
   </ul>
   <div
     style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
@@ -225,60 +238,37 @@
   </ul>
   <pre><code class="language-bash">$ python
  &gt;&gt;&gt; def softmax_func(x):    <span class="hljs-comment"># ソフトマックス関数の定義</span>
- ...     exp_x = np.exp(x)
+ ...     shifted_x = x - np.max(x)    <span class="hljs-comment"># オーバーフローを防ぐ</span>
+ ...     exp_x = np.exp(shifted_x)
  ...     sum_exp_x = np.sum(exp_x)
  ...     y = exp_x / sum_exp_x
  ...     <span class="hljs-built_in">return</span> y
  ...    
 </code></pre>
   <ul>
-    <li>グラフ出力</li>
+    <li>実行例</li>
   </ul>
   <pre><code class="language-bash">$ python
- &gt;&gt;&gt; x = np.arange(-5.0, 5.0, 0.1)    <span class="hljs-comment"># 区間を-5～5 まで、描画制度を 0.1 刻みに設定</span>
- &gt;&gt;&gt; y = koutou_func(x)    <span class="hljs-comment"># ソフトマックス関数をコール</span>
- &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;softmax_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
- Text(0.5, 1.0, <span class="hljs-string">&#x27;softmax_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y&#x27;</span>)
- &gt;&gt;&gt; plt.xlabel(<span class="hljs-string">&quot;x&quot;</span>)    <span class="hljs-comment"># x軸のラベルを設定</span>
- Text(0.5, 0, <span class="hljs-string">&#x27;x&#x27;</span>)
- &gt;&gt;&gt; plt.ylabel(<span class="hljs-string">&quot;y&quot;</span>)    <span class="hljs-comment"># y軸のラベルを設定</span>
- Text(0, 0.5, <span class="hljs-string">&#x27;y&#x27;</span>)
- &gt;&gt;&gt; plt.plot(x, y)
- [&amp;lt;matplotlib.lines.Line2D object at 0x7ff04a9c4d68&amp;gt;]
- &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;/var/www/vops/ops/macuos/static/macuos/img/pid18_5.png&#x27;</span>)
- &gt;&gt;&gt;
+ &gt;&gt;&gt; x = np.array([0.3, 2.9, 4.0])
+ &gt;&gt;&gt; y = softmax_func(x)
+ &gt;&gt;&gt; y
+ array([0.01821127, 0.24519181, 0.73659691])
+ &gt;&gt;&gt; np.sum(y)
+ 1.0
 </code></pre>
-  <p><img src="/static/tblog/img/pid18_5.png" alt="pid18_5"></p>
+    </li>
+  </ul>
 
-  <h2 id="違いを整理する">違いを整理する</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">比較する項目</th>
-        <th scope="col">整理するポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>ReLUとステップ関数</td><td>どちらも0を境にするが、ReLUは正の値をそのまま通す。</td></tr>
-      <tr><td>恒等関数の使いどころ</td><td>主に回帰問題の出力層で、値をそのまま出したい場合に使う。</td></tr>
-      <tr><td>ソフトマックスのオーバーフロー</td><td>指数計算では入力値が大きいと桁あふれしやすいため、安定化の工夫が必要。</td></tr>
-    </tbody>
-  </table>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-<ul>
-  <li>分類と回帰の設計<br>
-    出力層の活性化関数は、解きたい問題が分類か回帰かで変わる。</li>
-  <li>学習の安定性<br>
-    ReLUやソフトマックスの性質を知っておくと、学習が進まない原因を切り分けやすい。</li>
-</ul>
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>活性化関数は、用途に応じて使い分ける。</li>
-  <li>ReLUは中間層、恒等関数は回帰の出力層、ソフトマックスは多クラス分類の出力層でよく使われる。</li>
-  <li>実装では、配列演算と数値安定性に注意する。</li>
-</ul>
-  <h2 id="参考文献">参考文献</h2>
   <ul>
-    <li>斎藤 康毅（\(2018\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
+    <li>ReLUは0以下を0、正の値をそのまま出力し、ステップ関数とは正の領域の扱いが異なる。中間層でよく使われる。</li>
+    <li>恒等関数は入力値をそのまま出力するため、主に回帰問題の出力層で使われる。</li>
+    <li>ソフトマックス関数は多クラス分類の出力層で使われ、指数計算のオーバーフローを避ける数値安定化が必要になる。</li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>斎藤 康毅（\(2016\)）<a href="https://www.oreilly.co.jp/books/9784873117584/" class="link-secondary">『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』（日本語・本記事シリーズの基礎文献）</a> 株式会社オライリー・ジャパン</li>
+    <li><a href="https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/common/functions.py" class="link-secondary">O'Reilly Japan「deep-learning-from-scratch」functions.py（Python・公式サンプルコード）</a></li>
+    <li><a href="https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch03/relu.py" class="link-secondary">O'Reilly Japan「deep-learning-from-scratch」relu.py（Python・公式サンプルコード）</a></li>
   </ul>
 </div>

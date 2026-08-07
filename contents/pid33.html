@@ -3,28 +3,19 @@
   <p>Pythonの算術演算子を使い、数値計算の基本を整理する。</p>
   <p>加算、減算、乗算だけでなく、通常の除算、切り捨て除算、剰余、べき乗は、用途によって結果が大きく変わる。</p>
   <p>ここでは、各演算子の意味と戻り値の違いを、対話モードの実行例で確認する。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>単項プラス、単項マイナスの意味。</li>
-  <li>+、-、*、/、//、%、**の違い。</li>
-  <li>通常の除算と切り捨て除算の違い。</li>
-  <li>剰余やべき乗を使う場面。</li>
-</ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">確認項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>Python環境</td><td>対話モードで演算結果を確認できる状態にしておく。</td></tr>
-      <tr><td>前提知識</td><td>整数、浮動小数点数、演算子の優先順位を確認しておく。</td></tr>
-      <tr><td>確認観点</td><td>演算結果の値だけでなく、型にも注目する。</td></tr>
-    </tbody>
-  </table>
-
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#算術演算子の種類" class="link-secondary">算術演算子の種類</a><br>
+      算術演算子の種類と各項目の特徴を整理。</li>
+    <li><a href="#単項プラスマイナス演算子-" class="link-secondary">単項プラス・マイナス演算子（+／-）</a><br>
+      単項プラス・マイナス演算子（+／-）をコードや具体例とともに整理。</li>
+    <li><a href="#加算減算-" class="link-secondary">加算（+）・減算（-）</a><br>
+      加算（+）・減算（-）の意味と要点を具体例から整理。</li>
+    <li><a href="#乗算除算剰余" class="link-secondary">乗算（*）・除算（/・//）・剰余（%）</a><br>
+      乗算（*）・除算（/・//）・剰余（%）の意味と要点を具体例から整理。</li>
+    <li><a href="#べき乗" class="link-secondary">べき乗（**）</a><br>
+      べき乗（**）の意味と要点を具体例から整理。</li>
+  </ul>
   <h2 id="各算術演算子の使い方と実装サンプル">各算術演算子の使い方と実装サンプル</h2>
   <h3 id="算術演算子の種類">算術演算子の種類</h3>
   <p>
@@ -43,7 +34,7 @@
           <tr>
             <td>+</td>
             <td>+a</td>
-            <td>正の整数：実質 a と同義。（暗黙的変換で用いる）</td>
+            <td>単項プラス：数値に単項正演算を適用する。</td>
           </tr>
           <tr>
             <td>-</td>
@@ -73,7 +64,7 @@
           <tr>
             <td>//</td>
             <td>a // b</td>
-            <td>整数除算：a を b で割った結果から小数以下を切り捨てる。</td>
+            <td>切り下げ除算：a を b で割った商を負の無限大方向へ丸める。</td>
           </tr>
           <tr>
             <td>%</td>
@@ -90,16 +81,16 @@
     </li>
   </ul>
   <p>以降、実装サンプルを対話モード（インタプリタ）で解説する。</p>
-  <p>※ 演算結果の <strong>最大値</strong>、<strong>最小値</strong> についてはPCのスペックに依存する。詳しくは下記を参考。<br></p>
+  <p>※ int型は任意精度であり、float型とcomplex型の有限値の範囲は実装環境の浮動小数点形式に依存する。詳しくは下記を参考。<br></p>
   <ul>
     <li><a class="link-secondary"
-        href="https://sigma-se.com/detail/30/#:~:text=%E5%88%A4%E5%AE%9A%E3%81%95%E3%82%8C%E3%82%8B%E3%80%82-,int%E5%9E%8B%20%3A%20%E6%95%B0%E5%80%A4%EF%BC%88%E6%95%B4%E6%95%B0%EF%BC%89,-%E6%95%B4%E6%95%B0%E5%9E%8B%E3%81%A7">Python
+        href="https://sigma-se.com/detail/30/#int型--数値整数">Python
         - 組込みデータ型まとめ : bool , int, float, complex &gt; int型 : 数値（整数）</a></li>
     <li><a class="link-secondary"
-        href="https://sigma-se.com/detail/30/#:~:text=maxsize)%0A%20%20%20%209223372036854775807%0A%20%20%20%20%3E%3E%3E-,float%E5%9E%8B%20%3A%20%E6%B5%AE%E5%8B%95%E5%B0%8F%E6%95%B0%E7%82%B9%E6%95%B0%E5%9E%8B,-float%E5%9E%8B%E3%81%AF">Python
+        href="https://sigma-se.com/detail/30/#float型--浮動小数点数型">Python
         - 組込みデータ型まとめ : bool , int, float, complex &gt; float型 : 浮動小数点数型</a></li>
     <li><a class="link-secondary"
-        href="https://sigma-se.com/detail/30/#:~:text=rounds%3D1)%0A%20%20%20%20%3E%3E%3E-,complex%E5%9E%8B%20%3A%20%E8%A4%87%E7%B4%A0%E6%95%B0%E5%9E%8B,-complex%E5%9E%8B%E3%81%AF">Python
+        href="https://sigma-se.com/detail/30/#complex型--複素数型">Python
         - 組込みデータ型まとめ : bool , int, float, complex &gt; complex型 : 複素数型</a></li>
   </ul>
   <h3 id="単項プラスマイナス演算子-">単項プラス・マイナス演算子（+／-）</h3>
@@ -115,7 +106,7 @@
     <span class="hljs-number">5</span>
     &gt;&gt;&gt;
 </code></pre>
-      <p>上記の通り、int型に単項プラス演算子を付加しても結果は同じだが、boolean型からint型の<strong>暗黙的な変換</strong>を利用してコーディングするケースがある。</p>
+      <p>上記の通り、通常のint型に単項プラス演算子を適用しても値は変わらない。bool型はint型のサブクラスであるため、単項プラスの結果はint型の<code>0</code>または<code>1</code>となるが、型変換を意図する場合は<code>int(value)</code>と明示する方が読みやすい。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># boolean を定義し、単項プラス演算子でintに変換</span>
@@ -135,7 +126,7 @@
     <li>
       <p>単項マイナス演算子（-）<br>
         単項マイナス演算子は、対象値の符号を反転する。<br>
-        ※ <strong>-1</strong> を掛けた結果が欲しいような場合に使用する。</p>
+        ※ <strong>-1</strong> を掛けた結果が欲しいような場合に使用。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># int型の 5 に単項マイナス演算子を付加して出力</span>
@@ -245,14 +236,14 @@
 </code></pre>
     </li>
     <li>
-      <p>除算（//） ※商のみ<br>
-        除算（//）は、演算結果の<strong>商（整数部のみ）</strong>を返す。</p>
+      <p>切り下げ除算（//）<br>
+        <code>//</code>は、除算結果を負の無限大方向へ丸めた商を返す。単なる小数部の切捨てではないため、負数では<code>-5.5 // 0.2</code>が<code>-28.0</code>となる。int同士なら結果はint、少なくとも一方がfloatなら結果はfloatとなる。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># int型の 6 を 2 で除算 (//)</span>
     &gt;&gt;&gt; int_a = <span class="hljs-number">5</span> // <span class="hljs-number">2</span>
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a)
-    <span class="hljs-number">2.0</span>
+    <span class="hljs-number">2</span>
     &gt;&gt;&gt; <span class="hljs-comment"># float型の -6.5 を 0.5 で除算 (//)</span>
     &gt;&gt;&gt; float_a = -<span class="hljs-number">5.5</span> // <span class="hljs-number">0.2</span>
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
@@ -261,7 +252,7 @@
     &gt;&gt;&gt; complex_a = <span class="hljs-number">3j</span> // <span class="hljs-number">2</span>
     Traceback (most recent call last):
     File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
-    TypeError: <span class="hljs-string">&quot;can&#x27;t take floor of complex number.&quot;</span>
+    TypeError: unsupported operand type(s) for //: <span class="hljs-string">&#x27;complex&#x27;</span> and <span class="hljs-string">&#x27;int&#x27;</span>
     &gt;&gt;&gt;
 </code></pre>
     </li>
@@ -284,9 +275,10 @@
     &gt;&gt;&gt; complex_a = <span class="hljs-number">5j</span> % <span class="hljs-number">2</span>
     Traceback (most recent call last):
     File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
-    TypeError: <span class="hljs-string">&quot;can&#x27;t mod complex numbers.&quot;</span>
+    TypeError: unsupported operand type(s) for %: <span class="hljs-string">&#x27;complex&#x27;</span> and <span class="hljs-string">&#x27;int&#x27;</span>
     &gt;&gt;&gt;
 </code></pre>
+      <p>※ 例外メッセージの文言はPythonのバージョンで変わる場合があるが、複素数に <code>//</code> や <code>%</code> を適用すると <code>TypeError</code> になる点が重要。</p>
     </li>
   </ul>
   <h3 id="べき乗">べき乗（**）</h3>
@@ -318,35 +310,15 @@
     </li>
   </ul>
 
-  <h2 id="違いを整理する">違いを整理する</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">比較する項目</th>
-        <th scope="col">整理するポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>`/`と`//`の違い</td><td>`/`は通常の除算、`//`は切り捨て除算。</td></tr>
-      <tr><td>負数の剰余</td><td>負の値を含む剰余は直感とずれることがあるため、実行結果を確認する。</td></tr>
-      <tr><td>べき乗の優先順位</td><td>`**`は他の算術演算子より優先される。</td></tr>
-    </tbody>
-  </table>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-<ul>
-  <li>集計処理<br>
-    平均、割合、余り判定、ページ数計算などで算術演算子を日常的に使う。</li>
-  <li>条件判定<br>
-    剰余を使うと偶数/奇数判定や周期処理を表現しやすい。</li>
-</ul>
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>算術演算子はPythonの数値計算の基本。</li>
-  <li>`/`、`//`、`%`は似ているが用途が異なる。</li>
-  <li>演算結果の型や優先順位を確認すると、計算ミスを防ぎやすい。</li>
-</ul>
-  <h2 id="参考文献">参考文献</h2>
+  <ul>
+    <li>通常の除算には /、負の無限大方向へ丸める切り下げ除算には //、剰余には % を使い、目的に応じて区別。</li>
+    <li>負数を含む剰余は直感と異なる場合があるため、必要に応じて実行結果を確認。</li>
+    <li>べき乗演算子 ** は他の算術演算子より優先されるため、複雑な式では括弧を使って計算順序を明確にする。</li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
   <ul>
     <li>金城 俊哉（\(2018\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム</li>
+    <li><a href="https://docs.python.org/ja/3/reference/expressions.html#binary-arithmetic-operations" class="link-secondary">Python公式ドキュメント - 二項算術演算（日本語・算術演算子の公式仕様）</a></li>
   </ul>
 </div>

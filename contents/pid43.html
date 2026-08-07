@@ -3,48 +3,34 @@
   <p>フレームベースのタスク指向型対話システムで使うSVMモデルを学習し、発話行為タイプを推定する流れを整理する。<br>
     前の記事で作成した学習データをMeCabで単語分割し、TF-IDFで数値ベクトルに変換し、SVMで発話行為タイプを分類するモデルを作成する。<br>
     ここでは、モデル学習、モデル保存、推定用プログラム、実行結果の確認までを順番に見る。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>MeCabで発話を単語列に変換する流れ。</li>
-  <li>TfidfVectorizerで発話を素性ベクトル化する方法。</li>
-  <li>LabelEncoderでラベルを数値化する理由。</li>
-  <li>SVMモデルを保存し、別プログラムで読み込んで推定する流れ。</li>
-</ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">確認項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>学習データ</td><td>pid42で作成したda_samples.datを用意する。</td></tr>
-      <tr><td>ライブラリ</td><td>MeCab、scikit-learn、dillを使える状態にする。</td></tr>
-      <tr><td>確認観点</td><td>学習、保存、読み込み、推定を分けて確認する。</td></tr>
-    </tbody>
-  </table>
-  <h2 id="注意したい点">注意したい点</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">注意したい点</th>
-        <th scope="col">確認する観点</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>素性ベクトルとラベルの混同</td><td>Xは発話内容の数値表現、Yは発話行為タイプの数値表現。</td></tr>
-      <tr><td>モデル保存の中身</td><td>vectorizer、label_encoder、svcをセットで保存しないと推定時に同じ変換ができない。</td></tr>
-      <tr><td>学習データの品質</td><td>例文が偏ると、正しくない発話行為タイプを推定しやすくなる。</td></tr>
-    </tbody>
-  </table>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#対象環境と利用上の注意" class="link-secondary">対象環境と利用上の注意</a><br>
+      本文記載時の環境と現在そのまま利用できない箇所を確認。</li>
+    <li><a href="#モデル学習の実装サンプル" class="link-secondary">モデル学習の実装サンプル</a><br>
+      モデル学習の実装サンプルをコードや具体例で確認。</li>
+    <li><a href="#学習結果の確認" class="link-secondary">学習結果の確認</a><br>
+      学習結果について、確認する項目と結果の見方を整理。</li>
+  </ul>
+  <h2 id="対象環境と利用上の注意">対象環境と利用上の注意</h2>
+  <ul>
+    <li>本文記載時の環境<br>
+      CentOS \(7\)、Python \(3.6\)系、当時のscikit-learn・MeCab・dillを前提としたモデル学習・保存例。</li>
+    <li>確認時期<br>
+      2026年8月にscikit-learn公式資料と照合し、モデル評価とモデル永続化の注意を見直した。</li>
+    <li>現在そのまま利用できない箇所<br>
+      掲載コード全体は現行環境で再実行していない。<br>
+      旧環境をそのまま新規利用せず、依存版を固定し、信頼できるモデルファイルだけを読み込み、学習データと分離した評価データで性能を確認する。</li>
+  </ul>
   <h2 id="解説と実装サンプル">解説と実装サンプル</h2>
   <h3 id="モデル学習の実装サンプル">モデル学習の実装サンプル</h3>
+  <ul>
+    <li>TF-IDF・SVMモデルの学習<br>
   <p>先行記事で作成した学習データ<code>da_samples.dat</code>（＊1）を<strong>MeCab</strong>（＊2）で最小単位の単語（形態素）に分割し、<strong>SVM</strong>（＊3）で対話行為タイプを推定（モデル学習）する実装サンプル。</p>
 <ul>
-  <li>（＊1）<a class="link-secondary" href="https://sigma-se.com/detail/42/#:~:text=%E3%82%92%E8%A7%A3%E8%AA%AC%E3%81%99%E3%82%8B%E3%80%82-,%E5%AD%A6%E7%BF%92%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E4%BD%9C%E6%88%90,-%E3%81%93%E3%81%AE%E6%A1%88%E5%86%85%E5%AF%BE%E8%A9%B1">Python - タスク指向型対話 : フレームベースの環境準備 &gt; SVM（sklearn）と学習データの作成 &gt; 学習データの作成</a></li>
-  <li>（＊2）<a class="link-secondary" href="https://sigma-se.com/detail/39/#:~:text=%E5%AF%BE%E8%A9%B1%E3%81%AE%E6%96%87%E7%AB%A0%E3%82%92%E8%A7%A3%E6%9E%90%E3%81%99%E3%82%8B%E3%80%8CMeCab%E3%80%8D%E3%81%AE%E6%A6%82%E8%A6%81%E3%81%A8%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Python - タスク指向型対話 : 状態遷移ベースの環境準備 &gt; MeCab, SCXML &gt; 対話の文章を解析する「MeCab」の概要とインストール</a></li>
-  <li>（＊3）<a class="link-secondary" href="https://sigma-se.com/detail/42/#:~:text=%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%81%A8%E5%AF%BE%E8%A9%B1%E8%A1%8C%E7%82%BA%E3%82%92%E6%8E%A8%E5%AE%9A%E3%81%99%E3%82%8BSVM%EF%BC%88sklearn%EF%BC%89%E3%81%AE%E6%A6%82%E8%A6%81%E3%81%A8%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">Python - タスク指向型対話 : フレームベースの環境準備 &gt; SVM（sklearn）と学習データの作成 &gt; フレームと対話行為を推定するSVM（sklearn）の概要とインストール</a></li>
+  <li>（＊1）<a class="link-secondary" href="https://sigma-se.com/detail/42/#学習データの作成">Python - タスク指向型対話 : フレームベースの環境準備 &gt; SVM（sklearn）と学習データの作成 &gt; 学習データの作成</a></li>
+  <li>（＊2）<a class="link-secondary" href="https://sigma-se.com/detail/39/#対話の文章を解析するmecabの概要とインストール">Python - タスク指向型対話 : 状態遷移ベースの環境準備 &gt; MeCab, SCXML &gt; 対話の文章を解析する「MeCab」の概要とインストール</a></li>
+  <li>（＊3）<a class="link-secondary" href="https://sigma-se.com/detail/42/#フレームと対話行為を推定するsvmsklearnの概要とインストール">Python - タスク指向型対話 : フレームベースの環境準備 &gt; SVM（sklearn）と学習データの作成 &gt; フレームと対話行為を推定するSVM（sklearn）の概要とインストール</a></li>
 </ul>
 <ul>
   <li>train_da_model.py</li>
@@ -98,19 +84,20 @@ with open(&quot;svc.model&quot;,&quot;wb&quot;) as f:
     dill.dump(label_encoder, f)
     dill.dump(svc, f)
 </code></pre>
+  <p>※ <code>dill</code>や<code>pickle</code>形式の読込みは任意のコードを実行し得るため、自分で生成した信頼できるファイルだけを読み込む。また、scikit-learnは異なるバージョン間でのモデル読込みを保証しないため、Pythonと依存ライブラリのバージョン、学習コード、データの識別情報も一緒に記録する。</p>
   <p>以下、処理解説。<br>
     ※ 機械学習では、推定対象となるものを<strong>ラベル</strong>や<strong>クラス</strong>と呼ぶ。<br>
     今回のデータでは、発話行為タイプの<strong>request-weather</strong>がラベルとなるため、コメントや変数名の表現もラベルとなっている。</p>
 <ul>
   <li>sentsとlabelsの作成</li>
 </ul>
-  <p>学習データ<code>da_samples.dat</code>を読み込み、それぞれの行に対して下記要領で発話文字列を単語分割した<code>sents</code>と発話行為タイプ<code>labels</code>をそれぞれ作成する。</p>
+  <p>学習データ<code>da_samples.dat</code>を読み込み、それぞれの行に対して下記要領で発話文字列を単語分割した<code>sents</code>と発話行為タイプ<code>labels</code>をそれぞれ作成。</p>
 <ul>
   <li>（＊4）行の末尾の空白を削除し（rstrip）、タブで分割（split）する。</li>
   <li>（＊5）1つ目分割結果（発話行為タイプ）を<code>da</code>に、2つ目分割結果（発話文字列）を<code>utt</code>に格納する。</li>
-  <li>（＊6）mecabで最小単位の単語（形態素）に分割し（splitlines）、最後（EOS）であればループを終了、最後（EOS）でなければタブで分割（split）し、先頭単語（word）のみを単語配列（words）に追加する。</li>
-  <li>（＊7）単語配列（words）を空白区切りに置き換え<code>sents</code>に追加する。</li>
-  <li>（＊8）発話行為タイプ（da）を<code>labels</code>に追加する。</li>
+  <li>（＊6）mecabで最小単位の単語（形態素）に分割し（splitlines）、最後（EOS）であればループを終了、最後（EOS）でなければタブで分割（split）し、先頭単語（word）のみを単語配列（words）に追加。</li>
+  <li>（＊7）単語配列（words）を空白区切りに置き換え<code>sents</code>に追加。</li>
+  <li>（＊8）発話行為タイプ（da）を<code>labels</code>に追加。</li>
 </ul>
   <pre><code class="language-python">for line in open(&quot;da_samples.dat&quot;,&quot;r&quot;):
     line = line.rstrip()
@@ -133,7 +120,7 @@ with open(&quot;svc.model&quot;,&quot;wb&quot;) as f:
   <li>発話情報の変換</li>
 </ul>
   <p>上記で取得した発話内容<code>sents</code>と発話行為タイプ<code>labels</code>の関連付けを学習させるために発話情報を数値列に変換する必要がある。<br>
-    その作成には<code>TfidfVectorizer</code>を用いて変換する。</p>
+    その作成には<code>TfidfVectorizer</code>を用いて変換。</p>
   <p>これを<strong>素性ベクトル</strong>と呼び、後続処理で<strong>ラベル</strong>との関連付け学習を行うために作成している。<br>
     fit_transformで発話内容<code>sents</code>を素性ベクトルに変換したものが<code>X</code>で、発話情報にある単語の登場頻度と学習データから推測できる単語の重要度をもとに素性ベクトルを自動生成している。</p>
   <pre><code class="language-python"># TfidfVectorizerを用いて，各文をベクトルに変換
@@ -143,7 +130,7 @@ X = vectorizer.fit_transform(sents)
 <ul>
   <li>変換後の数値列を<code>Y</code>に保持</li>
 </ul>
-  <p>上記と同様にfit_transformで発話行為タイプ<strong>labels</strong>（ラベル）を数値列に変換したものを<code>Y</code>に保持する。</p>
+  <p>上記と同様にfit_transformで発話行為タイプ<strong>labels</strong>（ラベル）を数値列に変換したものを<code>Y</code>に保持。</p>
   <pre><code class="language-python"># LabelEncoderを用いて，ラベルを数値に変換
 label_encoder = LabelEncoder()
 Y = label_encoder.fit_transform(labels)
@@ -160,7 +147,7 @@ svc.fit(X,Y)
 <ul>
   <li>svc.modelに保存</li>
 </ul>
-  <p>最後に素性ベクトル作成時に用いた<code>vectorizer</code>とラベルを数値列化する際に用いた<code>label_encoder</code>、そしてモデル学習時に用いた <strong>svc</strong>達を<strong>dill</strong>を用いて、ファイルに出力する。</p>
+  <p>最後に素性ベクトル作成時に用いた<code>vectorizer</code>とラベルを数値列化する際に用いた<code>label_encoder</code>、そしてモデル学習時に用いた <strong>svc</strong>達を<strong>dill</strong>を用いて、ファイルに出力。</p>
   <pre><code class="language-python"># 学習されたモデル等一式を svc.modelに保存
 with open(&quot;svc.model&quot;,&quot;wb&quot;) as f:
     dill.dump(vectorizer, f)
@@ -174,8 +161,13 @@ with open(&quot;svc.model&quot;,&quot;wb&quot;) as f:
     ※ 実行後<code>svc.model</code>が生成されていれば成功。</p>
   <pre><code class="language-bash">$ python ~/gitlocalrep/dsbook/train_da_model.py
 </code></pre>
+    </li>
+  </ul>
+
   <h3 id="学習結果の確認">学習結果の確認</h3>
-  <p>前項で作成した<code>svc.model</code>が正しく推定できるか以下のテストプログラムを実行して確認する。</p>
+  <ul>
+    <li>発話行為タイプの推定<br>
+  <p>前項で作成した<code>svc.model</code>を読み込み、推定処理が動くかを以下のプログラムで確認する。この確認は少数例による<strong>疎通確認</strong>であり、未知データに対する分類精度の評価ではない。</p>
 <ul>
   <li><code>da_extractor.py</code>（テストプログラム）</li>
 </ul>
@@ -231,10 +223,10 @@ with open(&quot;svc.model&quot;,&quot;rb&quot;) as f:
   <p>発話行為タイプを推定する<code>extract_da</code>メソッド。<br>
     下記の要領で推定結果<code>da</code>を返す。</p>
 <ul>
-  <li>（＊9）mecabで最小単位の単語（形態素）に分割し（splitlines）、最後（EOS）であればループを終了、最後（EOS）でなければタブで分割（split）し、先頭単語（word）のみを単語配列（words）に追加する。</li>
+  <li>（＊9）mecabで最小単位の単語（形態素）に分割し（splitlines）、最後（EOS）であればループを終了、最後（EOS）でなければタブで分割（split）し、先頭単語（word）のみを単語配列（words）に追加。</li>
   <li>（＊10）単語配列（words）を空白区切りに置き換え <code>tokens_str</code>に格納する。</li>
-  <li>（＊11）上記で読み込んだ<code>vectorizer</code>を <code>TfidfVectorizer</code>を用いて素性ベクトルに変換する。</li>
-  <li>（＊12）（＊11）の<code>X</code>と上記で読み込んだ<strong>svc</strong>の<code>predict</code>を用いて推定結果を取得する。</li>
+  <li>（＊11）上記で読み込んだ<code>vectorizer</code>を <code>TfidfVectorizer</code>を用いて素性ベクトルに変換。</li>
+  <li>（＊12）（＊11）の<code>X</code>と上記で読み込んだ<strong>svc</strong>の<code>predict</code>を用いて推定結果を取得。</li>
   <li>（＊13）上記で読み込んだ<code>label_encoder</code>をもとに数値列からラベル名に戻して返す。</li>
 </ul>
   <pre><code class="language-python"># 発話から発話行為タイプを推定  
@@ -256,7 +248,7 @@ def extract_da(utt):
 <ul>
   <li>推定結果の取得</li>
 </ul>
-  <p>テスト用の3つの発話内容で上記<code>extract_da</code>メソッドを呼び、発話行為タイプの推定結果を取得する。</p>
+  <p>テスト用の3つの発話内容で上記<code>extract_da</code>メソッドを呼び、発話行為タイプの推定結果を取得。</p>
   <pre><code class="language-python">for utt in [&quot;大阪の明日の天気&quot;,&quot;もう一度はじめから&quot;,&quot;東京じゃなくて&quot;]:
     da = extract_da(utt)
     print(utt,da)
@@ -265,31 +257,32 @@ def extract_da(utt):
   <li>実行結果</li>
 </ul>
   <p>上記テストプログラム（da_extractor.py）の実行結果<br>
-    それぞれの発話内容（左）に対して、正しい発話行為タイプの推定（右）ができている。</p>
+    それぞれの発話内容（左）に対して、想定した発話行為タイプ（右）が返ることを確認する。</p>
   <pre><code class="language-bash">$ python ~/gitlocalrep/dsbook/da_extractor.py
 大阪の明日の天気 request-weather
 もう一度はじめから initialize
 東京じゃなくて correct-info
 </code></pre>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-<ul>
-  <li>意図分類の基本<br>
-    問い合わせ分類、チャットBot、FAQルーティングなどでは、発話から意図を推定する処理が重要になる。</li>
-  <li>推論環境への展開<br>
-    学習時に使った前処理器とモデルを一緒に保存しておくと、別プログラムで再利用しやすい。</li>
-</ul>
+  <p>分類性能を評価する場合は、学習に使っていないデータを用意し、正解率だけでなく適合率、再現率、混同行列などを確認する。同じテンプレートから生成した類似文が学習用と評価用の両方へ入ると、実際より高く評価されるため、元テンプレート単位で分離する。</p>
+    </li>
+  </ul>
+
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>MeCabで発話を単語分割し、TF-IDFで数値ベクトルに変換する。</li>
-  <li>SVMは発話ベクトルから発話行為タイプを分類する。</li>
-  <li>推定時には、学習時と同じvectorizer、label_encoder、svcを読み込む必要がある。</li>
-</ul>
-  <h2 id="参考文献">参考文献</h2>
-<ul>
-  <li>東中 竜一郎、稲葉 通将、水上 雅博（\\(2020\\)）『Pythonでつくる対話システム』株式会社オーム社</li>
-</ul>
-  <h2 id="githubサポートページ">GitHubサポートページ</h2>
-<ul>
-  <li><a class="link-secondary" href="https://github.com/dsbook/dsbook">https://github.com/dsbook/dsbook</a></li>
-</ul>
+  <ul>
+    <li>MeCabで発話を単語分割し、TF-IDFで発話内容を素性ベクトルXへ変換。発話行為タイプはラベルYとして扱う。</li>
+    <li>SVMは発話ベクトルから発話行為タイプを分類。</li>
+    <li>推定時にも学習時と同じ変換と分類を再現できるよう、vectorizer、label_encoder、svcをセットで保存して読み込む。</li>
+    <li>掲載した3文の推定は疎通確認であり、モデルの性能評価には独立した評価データと評価指標が必要。</li>
+    <li>学習用の例文が偏ると誤分類しやすくなるため、発話行為タイプごとのデータ内容と件数を確認。</li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>東中 竜一郎、稲葉 通将、水上 雅博（\(2020\)）『Pythonでつくる対話システム』株式会社オーム社</li>
+    <li><a class="link-secondary" href="https://taku910.github.io/mecab/">MeCab公式サイト - MeCab: Yet Another Part-of-Speech and Morphological Analyzer（日本語・形態素解析器の公式解説）</a></li>
+    <li><a class="link-secondary" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html">scikit-learn公式ドキュメント - TfidfVectorizer（英語・TF-IDF変換のAPI仕様）</a></li>
+    <li><a class="link-secondary" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html">scikit-learn公式ドキュメント - SVC（英語・SVM分類器のAPI仕様）</a></li>
+    <li><a class="link-secondary" href="https://scikit-learn.org/stable/model_persistence.html">scikit-learn公式ドキュメント - Model persistence（英語・保存形式の安全性と互換性）</a></li>
+    <li><a class="link-secondary" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html">scikit-learn公式ドキュメント - train_test_split（英語・学習用と評価用データの分割）</a></li>
+    <li><a class="link-secondary" href="https://dill.readthedocs.io/en/latest/">dill公式ドキュメント（英語・モデル保存に用いる機能の公式解説）</a></li>
+  </ul>
 </div>

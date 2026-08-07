@@ -3,30 +3,19 @@
   <p>単純パーセプトロンでは表せないXORを題材に、多層パーセプトロンの考え方を整理する。</p>
   <p>単純パーセプトロンは直線で分けられる問題には対応できるが、XORのように一つの直線では分離できない問題には限界がある。</p>
   <p>ここでは、AND、NAND、ORを組み合わせることで、層を重ねる意味をPython実装で確認する。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>単純パーセプトロンがXORを表現できない理由。</li>
-  <li>複数のパーセプトロンを組み合わせる考え方。</li>
-  <li>中間層を持つことで表現力が増える理由。</li>
-  <li>XORをPythonで実装する流れ。</li>
-</ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">確認項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>前回の理解</td><td>AND、NAND、ORのパーセプトロン実装を確認しておく。</td></tr>
-      <tr><td>Python</td><td>関数を組み合わせて別の関数を作る流れを理解しておく。</td></tr>
-      <tr><td>図形的な理解</td><td>点を直線で分けるイメージを持っておくとXORの限界が分かりやすい。</td></tr>
-    </tbody>
-  </table>
-
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#単純パーセプトロンの限界" class="link-secondary">単純パーセプトロンの限界</a><br>
+      単純パーセプトロンの限界と、次の考え方へつながる論点を整理。</li>
+    <li><a href="#多層パーセプトロンの概念" class="link-secondary">多層パーセプトロンの概念</a><br>
+      多層パーセプトロンの概念の意味と要点を具体例から整理。</li>
+    <li><a href="#多層パーセプトロンの実装サンプル" class="link-secondary">多層パーセプトロンの実装サンプル</a><br>
+      多層パーセプトロンの実装サンプルをコードや具体例で確認。</li>
+  </ul>
   <h2 id="概念の説明と実装サンプル">概念の説明と実装サンプル</h2>
   <h3 id="単純パーセプトロンの限界">単純パーセプトロンの限界</h3>
+  <ul>
+    <li>XORを表現できない理由<br>
   <p><a class="link-secondary" href="https://sigma-se.com/detail/15/">前の記事</a> で単純パーセプトロンを<strong>AND、NAND、OR
       の論理回路</strong>で実装できることを説明したが、<strong>排他的論理和</strong>と呼ばれる下記<strong>XORゲート</strong>になると、以下で示す<strong>非線形</strong>でしか
     \(0\) と \(1\) の領域を分けられない。<br>
@@ -65,7 +54,7 @@
           </tr>
         </tbody>
       </table>
-      <p>下記の入力値が2つあるパーセプトロン\(（A）\)に対して、ORゲートを満たす、パラメータ \((b, w_{1}, w_{2})\) \(= (-0.5, 1.0, 1.0)\) を与えた場合を例にその根拠を説明する。</p>
+      <p>下記の入力値が2つあるパーセプトロン\(（A）\)に対して、ORゲートを満たす、パラメータ \((b, w_{1}, w_{2})\) \(= (-0.5, 1.0, 1.0)\) を与えた場合を例にその根拠を説明。</p>
       <div style="display: flex; margin-left: 1rem; font-size: 1.3em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
         \[
         {\small
@@ -143,11 +132,16 @@
       <p><img src="/static/tblog/img/pid16_2.png" alt="pid16_2"></p>
     </li>
   </ul>
+    </li>
+  </ul>
+
   <h3 id="多層パーセプトロンの概念">多層パーセプトロンの概念</h3>
-  <p>上記で触れたの通り、単純パーセプトロン（入力層と出力層のみの2層）では、XORゲートを表現できないが<strong>多層パーセプトロン</strong>（入力層が多層）だとそれが<strong>可能</strong>になる。
+  <ul>
+    <li>論理ゲートを組み合わせる考え方<br>
+  <p>上記で触れたとおり、単純パーセプトロンではXORゲートを表現できないが、複数のパーセプトロンを中間層で組み合わせる<strong>多層パーセプトロン</strong>では表現できる。
   </p>
   <p>単純パーセプトロンの説明で触れてきた<strong>AND、NAND、ORゲート</strong>を下記 <strong>1.</strong> ～ <strong>3.</strong> で組み合わせれば、<strong>4.
-      XORゲートの真理値表</strong>の通り、多層パーセプトロンを表現できる。</p>
+      XORゲートの真理値表</strong>のとおり、多層パーセプトロンを表現できる。以下の式では記号を簡略化しているが、NAND、OR、ANDにはそれぞれ異なる重みとバイアスを設定する。</p>
   <ul>
     <li>
       <p><strong>1.</strong> NANDゲート</p>
@@ -249,21 +243,25 @@
             <li>入力値1（\(x_{1}\)）、入力値2（\(x_{2}\)）のNANDゲートが <strong>1. の出力</strong>（\(s_{1}\)）となる。</li>
             <li>入力値1（\(x_{1}\)）、入力値2（\(x_{2}\)）のORゲートが <strong>2. の出力</strong>（\(s_{2}\)）となる。</li>
             <li>1.の出力（\(s_{1}\)）、2.の出力（\(s_{2}\)）のANDゲートが <strong>3. の出力</strong>（\(y\)）となる。</li>
+          </ul>
         </li>
       </ul>
     </li>
   </ul>
-  </li>
+    </li>
   </ul>
+
   <h3 id="多層パーセプトロンの実装サンプル">多層パーセプトロンの実装サンプル</h3>
+  <ul>
+    <li>XORゲートのPython実装<br>
   <p>最後に実装サンプル。</p>
   <ul>
     <li>
       <p>AND、NAND、ORゲートを定義<br>
         <a class="link-secondary"
-          href="https://sigma-se.com/detail/15/#:~:text=%E3%81%A8%E8%A1%A8%E7%8F%BE%E3%81%A7%E3%81%8D%E3%82%8B%E3%80%82-,%E5%8D%98%E7%B4%94%E3%83%91%E3%83%BC%E3%82%BB%E3%83%97%E3%83%88%E3%83%AD%E3%83%B3%E3%81%AE%E5%AE%9F%E8%A3%85%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB">前の記事
+          href="https://sigma-se.com/detail/15/#単純パーセプトロンの実装サンプル">前の記事
           &gt; 単純パーセプトロンの実装サンプル</a> で触れている<strong>ANDゲート</strong>に加え、パラメータ \(w_{1}\)（重み1）, \(w_{2}\)（重み2）,
-        \(b\)（バイアス）を<strong>NANDゲート</strong>、<strong>ORゲート</strong>の真理値表を満たすように変え、以下のように定義する。
+        \(b\)（バイアス）を<strong>NANDゲート</strong>、<strong>ORゲート</strong>の真理値表を満たすように変え、以下のように定義。
       </p>
       <pre><code class="language-bash">$ python
 &gt;&gt;&gt; import numpy as np
@@ -321,36 +319,18 @@
         （<strong>XORゲートの真理値表</strong>の \(y\) が出力できている。）</p>
     </li>
   </ul>
+    </li>
+  </ul>
 
-  <h2 id="違いを整理する">違いを整理する</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">比較する項目</th>
-        <th scope="col">整理するポイント</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>多層化の意味</td><td>単に関数を増やすことではなく、中間的な表現を作れるようになる点が重要。</td></tr>
-      <tr><td>XORだけが目的ではない</td><td>XORは、多層化によって表現力が増えることを示す代表例。</td></tr>
-      <tr><td>重みの決め方</td><td>ここでは手で決めた重みを使い、学習による自動調整は後続の記事で扱う。</td></tr>
-    </tbody>
-  </table>
-  <h2 id="実務とのつながり">実務とのつながり</h2>
-<ul>
-  <li>複雑な分類への入口<br>
-    実務の分類問題では、単純な直線だけでは分けられないデータが多く、多層化の考え方が必要になる。</li>
-  <li>深層学習への接続<br>
-    多層パーセプトロンは、後のニューラルネットワークや深層学習を理解する土台になる。</li>
-</ul>
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>単純パーセプトロンだけではXORを表現できない。</li>
-  <li>複数のパーセプトロンを組み合わせると、中間層を使って表現力を高められる。</li>
-  <li>多層パーセプトロンはニューラルネットワークの基本構造につながる。</li>
-</ul>
-  <h2 id="参考文献">参考文献</h2>
   <ul>
-    <li>斎藤 康毅（\(2018\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン</li>
+    <li>単純パーセプトロンだけでは、線形分離できないXORを表現できない。</li>
+    <li>複数のパーセプトロンを組み合わせると中間的な表現を作れるため、XORに限らず表現力を高められ、ニューラルネットワークの基本構造につながる。</li>
+    <li>ここでは重みを手で決めており、学習による自動調整は後続の処理として分けて考える。</li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>斎藤 康毅（\(2016\)）<a href="https://www.oreilly.co.jp/books/9784873117584/" class="link-secondary">『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』（日本語・本記事シリーズの基礎文献）</a> 株式会社オライリー・ジャパン</li>
+    <li><a href="https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch02/xor_gate.py" class="link-secondary">O'Reilly Japan「deep-learning-from-scratch」xor_gate.py（Python・公式サンプルコード）</a></li>
   </ul>
 </div>

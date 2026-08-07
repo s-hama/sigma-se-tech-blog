@@ -6,134 +6,118 @@ MNISTデータを使い、学習済みの重みパラメータによるニュー
 推論とは、入力データをネットワークに通し、最終的な出力から予測結果を得る処理となる。
 ここでは、入力層、中間層、出力層の計算を関数化し、手書き数字画像に対する予測の流れを確認する。
 
-## この記事で扱うこと
-- 推論処理の全体像。
-- 入力層、中間層、出力層の値の流れ。
-- 重み、バイアス、活性化関数を使った計算手順。
-- 予測結果を正解ラベルと比較する考え方。
-
-## 作業前に確認すること
-| 確認項目 | 内容 |
-| --- | --- |
-| MNIST | MNISTデータを読み込める状態にしておく。 |
-| NumPy | 行列積、配列shape、argmaxの基本を確認しておく。 |
-| 前提知識 | 活性化関数とソフトマックス関数の役割を確認しておく。 |
-
+## この記事の構成
+- [推論処理の実行準備](#推論処理の実行準備)<br>
+  推論処理の実行準備の手順と確認ポイントを整理。
+- [推論処理のニューロン構成と関数定義](#推論処理のニューロン構成と関数定義)<br>
+  入力層・中間層・出力層の構成と、推論に使う関数の役割を整理。
+- [推論処理の実行](#推論処理の実行)<br>
+  推論処理の実行の意味と要点を具体例から整理。
 
 ## 概念の説明と実装サンプル
 ### 推論処理の実行準備
-参考文献の『ゼロから作るDeep Learning』から提供されている推論処理のサンプルコード（`ch03/neuralnet_mnist.py`）をダウンロードする。
+- サンプルコードとデータの準備<br>
+    参考文献の『ゼロから作るDeep Learning』から提供されている推論処理のサンプルコード（`ch03/neuralnet_mnist.py`）をダウンロードする。
 
-Git(deep-learning-from-scratch)：
-<a href="https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/dataset/mnist.py">https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/dataset/mnist.py</a>
+    Git（deep-learning-from-scratch）：
+    [ch03/neuralnet_mnist.py](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch03/neuralnet_mnist.py)
 
-MNISTのダウンロードについては、[前の記事 > Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）> MNISTのダウンロード](https://sigma-se.com/detail/19/#:~:text=%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E3%83%A9%E3%83%99%E3%83%AB-,MNIST%E3%81%AE%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89,-%E4%B8%8B%E8%A8%98%E3%80%81mnist)を参照
-
+    MNISTのダウンロードについては、[前の記事 > Python - ニューラルネットワーク： MNISTのダウンロード方法（手書き数字画像セットを取込む）> MNISTのダウンロード](https://sigma-se.com/detail/19/#mnistのダウンロード)を参照
 
 ### 推論処理のニューロン構成と関数定義
-- ニューロン構成について<br>
-入力層：784個（画像データ28 x 28 = 784（px））<br>
-隠れ層1：50（任意の値）<br>
-隠れ層2：100（任意の値）<br>
-出力層：10（数字0～9の10クラス）
+- ネットワーク構成と関数<br>
+    - ニューロン構成について<br>
+    入力層：784個（画像データ28 x 28 = 784（px））<br>
+    隠れ層1：50（任意の値）<br>
+    隠れ層2：100（任意の値）<br>
+    出力層：10（数字0～9の10クラス）
 
-- 実装サンプル（関数定義）<br>
-以下、ch03/neuralnet_mnist.py内の3つの関数定義。<br>
-  ```python
-  import sys, os
-  sys.path.append(os.pardir) # 親ディレクトリのファイルをインポートするための設定
-  import numpy as np
-  import pickle
-  from dataset.mnist import load_mnist
-  from common.functions import sigmoid, softmax
+    - 実装サンプル（関数定義）<br>
+    以下、ch03/neuralnet_mnist.py内の3つの関数定義。<br>
+      ```python
+      import sys, os
+      sys.path.append(os.pardir) # 親ディレクトリのファイルをインポートするための設定
+      import numpy as np
+      import pickle
+      from dataset.mnist import load_mnist
+      from common.functions import sigmoid, softmax
 
-  def get_data():
-      (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, flatten=True, one_hot_label=False)
-      return x_test, t_test
+      def get_data():
+          (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, flatten=True, one_hot_label=False)
+          return x_test, t_test
 
-  def init_network():
-      with open("sample_weight.pkl", 'rb') as f:
-      network = pickle.load(f)
-      return network
+      def init_network():
+          with open("sample_weight.pkl", 'rb') as f:
+              network = pickle.load(f)
+          return network
 
-  def predict(network, x):
-      W1, W2, W3 = network['W1'], network['W2'], network['W3']
-      b1, b2, b3 = network['b1'], network['b2'], network['b3']
-      a1 = np.dot(x, W1) + b1
-      z1 = sigmoid(a1)
-      a2 = np.dot(z1, W2) + b2
-      z2 = sigmoid(a2)
-      a3 = np.dot(z2, W3) + b3
-      y = softmax(a3)
-      return y
-  ```
+      def predict(network, x):
+          W1, W2, W3 = network['W1'], network['W2'], network['W3']
+          b1, b2, b3 = network['b1'], network['b2'], network['b3']
+          a1 = np.dot(x, W1) + b1
+          z1 = sigmoid(a1)
+          a2 = np.dot(z1, W2) + b2
+          z2 = sigmoid(a2)
+          a3 = np.dot(z2, W3) + b3
+          y = softmax(a3)
+          return y
+      ```
 
-  `init_network()`では、pickleファイルとなる`sample_weight.pkl`を読み込んでいる。
+      `init_network()`では、pickleファイルとなる`sample_weight.pkl`を読み込んでいる。
 
-  ※ pickleファイルには、重みとバイアスのパラメータがdictionary型で保存されている。<br>
-  ※ predict(network, x)のsigmoid, softmaxについては、下記を参考。<br>
-  ・[Python - ニューラルネットワーク： ニューラルネットワークの活性化関数と実装サンプル](https://sigma-se.com/detail/17/)<br>
-  ・[Python - ニューラルネットワーク： 活性化関数の実装サンプルまとめ（ステップ、シグモイド、ReLU、恒等関数、ソフトマックス関数）](https://sigma-se.com/detail/18/)
+      ※ pickleファイルには、重みとバイアスのパラメータがdictionary型で保存されている。信頼できないpickleは任意のコードを実行する危険があるため、配布元を確認したファイルだけを読み込む。<br>
+      ※ predict(network, x)のsigmoid, softmaxについては、下記を参考。<br>
+      ・[Python - ニューラルネットワーク： ニューラルネットワークの活性化関数と実装サンプル](https://sigma-se.com/detail/17/)<br>
+      ・[Python - ニューラルネットワーク： 活性化関数の実装サンプルまとめ（ステップ、シグモイド、ReLU、恒等関数、ソフトマックス関数）](https://sigma-se.com/detail/18/)
 
 ### 推論処理の実行
-- ch03/neuralnet_mnist.py内の実行処理
-  ```python
-  x, t = get_data()    # … 1.
-  network = init_network()    # … 2.
-
-  accuracy_cnt = 0
-  for i in range(len(x)):    # … 3.
-      y = predict(network, x[i])    # … 4.
-      p= np.argmax(y)    # … 5.
-      if p == t[i]:    # … 6.
-          accuracy_cnt += 1    # … 7.
-
-  print("Accuracy:" + str(float(accuracy_cnt) / len(x)))    # … 8.
-  ```
-
-- 実行処理の解説<br>
-  1. `get_data()`でMNISTデータセットを取得。<br>
-  2. `init_network()`でpickleファイルを読み込む。<br>
-  3. \\(x\\)の画像データ60000枚をfor文でループ。<br>
-  4. 1枚の画像データに対して`predict(network, x[i])`を実行し、下記のNumPy配列のように数字0～9それぞれの確立を出力。<br>
-    ※ 0である確率：20%、1である確率：10%、2である確率：4%、… 9である確率：5%
+- 推論処理と認識精度<br>
+    - ch03/neuralnet_mnist.py内の実行処理
       ```python
-      [ 0.2, 0.1, 0.04 , … , 0.05  ]    # 0 ～ 9 それぞれの確率 (20%, 10%, 4%,  … , 5%)
+      x, t = get_data()    # … 1.
+      network = init_network()    # … 2.
+
+      accuracy_cnt = 0
+      for i in range(len(x)):    # … 3.
+          y = predict(network, x[i])    # … 4.
+          p= np.argmax(y)    # … 5.
+          if p == t[i]:    # … 6.
+              accuracy_cnt += 1    # … 7.
+
+      print("Accuracy:" + str(float(accuracy_cnt) / len(x)))    # … 8.
       ```
-  5. 「4.」の結果であるNumPy配列\\(y\\)に対して、最も確率が高い要素のインデックスを取得。<br>
-  6. 推論処理出した「5.」の予測結果が正解ラベル\\(t\\)と一致しているかチェック。<br>
-  7. 一致していれば、認識制度を加算。<br> 
-  8. 最後に正解率を出力。<br>
 
-- 実行結果<br>
-実際に上記を対話モードで実行すると`Accuracy:0.9352`が出力される。
-  ```python
-  $ cd gitlocalrep
-  $ cd deep-learning-from-scratch/ch03
-  $ source /var/www/vops/bin/activate
-  $ python neuralnet_mnist.py
-  Accuracy:0.9352
-  ```
-  上記実装サンプルでは、93％程度の精度だったが、実際のニューラルネットワークでは、さらにニューラルネットワークの構造や「4.」の関数`predict`内の処理にあたる学習方法を工夫し、99％以上の精度を出していく。
+    - 実行処理の解説<br>
+      1. `get_data()`でMNISTデータセットを取得。<br>
+      2. `init_network()`でpickleファイルを読み込む。<br>
+      3. \\(x\\)のテスト画像データ10,000枚をfor文でループ。<br>
+      4. 1枚の画像データに対して`predict(network, x[i])`を実行し、下記のNumPy配列のように数字0～9それぞれの確率を出力。<br>
+        ※ 0である確率：20%、1である確率：10%、2である確率：4%、… 9である確率：5%
+          ```text
+          [ 0.2, 0.1, 0.04 , … , 0.05  ]    # 0 ～ 9 それぞれの確率 (20%, 10%, 4%,  … , 5%)
+          ```
+      5. 「4.」の結果であるNumPy配列\\(y\\)に対して、最も確率が高い要素のインデックスを取得。<br>
+      6. 推論処理出した「5.」の予測結果が正解ラベル\\(t\\)と一致しているかチェック。<br>
+      7. 一致していれば、正解数を加算。<br>
+      8. 最後に正解率を出力。<br>
 
-
-## 違いを整理する
-| 比較する項目 | 整理するポイント |
-| --- | --- |
-| 学習と推論の違い | 推論では重みを更新せず、入力から出力を計算する。 |
-| shape不一致 | 入力、重み、バイアスの形が合わないと行列計算でエラーになる。 |
-| argmaxの意味 | 出力の中で最も大きい値の位置を予測クラスとして扱う。 |
-
-## 実務とのつながり
-- モデル利用の基本<br>
-    学習済みモデルをアプリケーションに組み込むときは、まず推論処理の流れを理解する必要がある。
-- 精度確認<br>
-    正解ラベルと比較することで、モデルがどれくらい正しく分類できているかを確認できる。
+    - 実行結果<br>
+    実際に上記を対話モードで実行すると`Accuracy:0.9352`が出力される。
+      ```bash
+      $ cd gitlocalrep
+      $ cd deep-learning-from-scratch/ch03
+      $ source /var/www/vops/bin/activate
+      $ python neuralnet_mnist.py
+      Accuracy:0.9352
+      ```
+      上記実装サンプルでは、93％程度の精度だったが、実際のニューラルネットワークでは、さらにニューラルネットワークの構造や「4.」の関数`predict`内の処理にあたる学習方法を工夫し、99％以上の精度を出していく。
 
 ## まとめ
-- 推論は、学習済みの重みを使って入力から予測を得る処理。
-- 各層では、行列積、バイアス加算、活性化関数の適用を行う。
-- shapeを確認しながら実装すると、計算の流れを追いやすい。
+- 推論は学習済みの重みを使って予測を得る処理であり、学習のように重みを更新しない。
+- 各層では、行列積、バイアス加算、活性化関数の適用を順に行う。
+- 入力、重み、バイアスのshapeが一致しないと行列計算でエラーになるため、各層の次元を確認。
+- 出力値の中で最大となる位置をargmaxで求め、予測クラスとして扱う。
 
-## 参考文献
-- 斎藤 康毅（\\(2018\\)）『ゼロから作るDeep Learning - Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン
+### 参考文献
+- 斎藤 康毅（\\(2016\\)）[『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』（日本語・本記事シリーズの基礎文献）](https://www.oreilly.co.jp/books/9784873117584/) 株式会社オライリー・ジャパン
+- [O'Reilly Japan「deep-learning-from-scratch」neuralnet_mnist.py（Python・公式サンプルコード）](https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch03/neuralnet_mnist.py)

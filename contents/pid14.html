@@ -1,117 +1,50 @@
-<div div class="post-body">
+<div class="post-body">
   <h2 id="概要">概要</h2>
   <p>MathJaxを使い、Webページ上でMathMLやLaTeX形式の数式を表示する方法を整理する。</p>
   <p>技術記事では、数式を画像ではなくテキストとして扱えると、拡大表示、検索、修正がしやすくなる。</p>
   <p>ここでは、MathJaxの読み込み、MathMLの基本要素、LaTeXによる数式表現をサンプルで確認する。</p>
-  <h2 id="この記事で扱うこと">この記事で扱うこと</h2>
-<ul>
-  <li>MathJaxをWebページへ読み込む基本。</li>
-  <li>MathMLで数式を構造的に表す考え方。</li>
-  <li>LaTeX記法で分数、添字、平方根などを表示する方法。</li>
-  <li>ブログ記事で数式を書くときの注意点。</li>
-</ul>
-  <h2 id="作業前に確認すること">作業前に確認すること</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">確認項目</th>
-        <th scope="col">内容</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>HTMLの基礎</td><td>scriptタグやHTML要素の読み方を確認しておく。</td></tr>
-      <tr><td>数式表記</td><td>分数、指数、添字などの基本的な数式表現を理解しておく。</td></tr>
-      <tr><td>表示確認</td><td>ブラウザでHTMLを表示し、MathJaxが読み込まれているか確認できるようにする。</td></tr>
-    </tbody>
-  </table>
-  <h2 id="注意したい点">注意したい点</h2>
-  <table class="table" style="width: 100%;">
-    <thead>
-      <tr>
-        <th scope="col">注意したい点</th>
-        <th scope="col">確認する観点</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>MathMLとLaTeXの違い</td><td>MathMLはHTMLに近い構造、LaTeXは短い記法で数式を書く方法として捉える。</td></tr>
-      <tr><td>エスケープ漏れ</td><td>HTML内では記号の扱いに注意し、ブログの変換処理で壊れない形にする。</td></tr>
-      <tr><td>読み込み順序</td><td>MathJaxのscriptが読み込まれないと、数式がそのまま文字として表示される。</td></tr>
-    </tbody>
-  </table>
-  <p>
-    MathJaxは、<strong>MathML</strong>、<strong>LaTeX</strong>、<strong>AsciiMath</strong>で記述された数式をウェブブラウザ上で表示するためのJavaScriptライブラリ。<br>
-    また、ブラウザ依存せず、如何なる環境下でも動作を保証するクロスブラウザ仕様となる。<br></p>
-  <p>※ MathMLの対応ブラウザについては、2018年1月時点で<strong>Firefox</strong>、<strong>Safari</strong>、<strong>iOS Safari</strong>のみ。<br>
-    より詳細な使用方法は、公式ドキュメントを参考。<br>
-    MathML3ドキュメント：<a class="link-secondary" href="https://www.w3.org/TR/MathML3/">https://www.w3.org/TR/MathML3/</a></p>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#mathjaxの導入" class="link-secondary">MathJaxの導入</a><br>
+      MathJaxの導入の手順と確認ポイントを整理。</li>
+    <li><a href="#mathmlの要素" class="link-secondary">MathMLの要素</a><br>
+      MathMLを構成する主な要素と、数式を構造化して記述する方法を整理。</li>
+    <li><a href="#mathmlの表示サンプル" class="link-secondary">MathMLの表示サンプル</a><br>
+      MathMLの表示サンプルをコードや具体例で確認。</li>
+    <li><a href="#latexの表示サンプル" class="link-secondary">LaTeXの表示サンプル</a><br>
+      LaTeXの表示サンプルをコードや具体例で確認。</li>
+  </ul>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="mathjaxの導入">MathJaxの導入</h3>
-  <p>導入はJavaScriptの読み込みのみ。</p>
+  <p>MathJaxはCDNからJavaScriptを読み込むだけで導入できる。</p>
   <ul>
-    <li>MathJax.jsを読み込む<br>
-      <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/javascript&quot;</span> <span class="hljs-attr">async</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <li>現行のMathJax 4.xを読み込む<br>
+      TeXとMathMLを入力として受け取り、CommonHTMLで表示する公式ドキュメントの構成例は次のとおり。
+      <pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">defer</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 </code></pre>
-      URLパラメータのconfigを<strong>TeX-MML-AM_CHTML</strong>と指定することにより、<strong>MathML</strong>、<strong>LaTeX</strong>、<strong>AsciiMath</strong>すべて認識できる状態となる。<br>
-      LaTeXのみ認識するのであれば、<strong>TeX-AMS_CHTML</strong>とするなど色々な設定方法があるため、詳細については下記ドキュメントを参考。<br>
-      ※ <a
-        class="link-secondary" href="https://docs.mathjax.org/en/latest/config-files.html">https://docs.mathjax.org/en/latest/config-files.html</a><br>
+      <code>mathjax@4</code>は最新の4.x系を取得する指定である。<br>再現性を重視する環境では<code>mathjax@4.0.0</code>のように完全なバージョンを固定。TeXだけを処理する場合は<code>tex-chtml.js</code>など、用途に合う小さなコンポーネントも選べる。
     </li>
   </ul>
   <h3 id="mathmlの要素">MathMLの要素</h3>
-  <p>基本的には<code>&lt;math&gt;</code>内に、<strong>mnタグ</strong>や<strong>moタグ</strong>などのMathML要素を記述する形になる。<br></p>
+  <p>MathMLでは、トップレベルの<code>&lt;math&gt;</code>内に<code>&lt;mn&gt;</code>や<code>&lt;mo&gt;</code>などの要素を組み合わせ、数式の構造を記述する。</p>
   <ul>
     <li>
-      <p>MathMLの全要素<br>
-        ※ より詳細なルールや使用方法は下記を参考。<br>
-        <a
-          class="link-secondary" href="https://developer.mozilla.org/ja/docs/Web/MathML/Element/math">https://developer.mozilla.org/ja/docs/Web/MathML/Element/math</a>
-      </p>
+      <p>このページで使う主なMathML要素</p>
       <ul>
-        <li><code>&lt;math&gt;</code>：トップレベル要素</li>
-        <li><code>&lt;maction&gt;</code>：部分式にバインドされたアクション</li>
-        <li><code>&lt;maligngroup&gt;</code>：揃えグループ</li>
-        <li><code>&lt;malignmark&gt;</code>：揃えポイント</li>
-        <li><code>&lt;menclose&gt;</code>：囲みコンテンツ</li>
-        <li><code>&lt;merror&gt;</code>：囲み構文エラーメッセージ</li>
-        <li><code>&lt;mfenced&gt;</code>：括弧</li>
-        <li><code>&lt;mfrac&gt;</code>：分数</li>
-        <li><code>&lt;mglyph&gt;</code>：非標準記号の表示</li>
-        <li><code>&lt;mi&gt;</code>：識別子</li>
-        <li><code>&lt;mlabeledtr&gt;</code>：表または行列のラベル付き行</li>
-        <li><code>&lt;mlongdiv&gt;</code>：割り算の筆算表記</li>
-        <li><code>&lt;mmultiscripts&gt;</code>：前置字とテンソル添字</li>
-        <li><code>&lt;mn&gt;</code>：数字</li>
-        <li><code>&lt;mo&gt;</code>：演算子</li>
-        <li><code>&lt;mover&gt;</code>：真上付き</li>
-        <li><code>&lt;mpadded&gt;</code>：コンテンツまわりの空白</li>
-        <li><code>&lt;mphantom&gt;</code>：予約スペースを持つ不可視コンテンツ</li>
-        <li><code>&lt;mroot&gt;</code>：累乗根</li>
-        <li><code>&lt;mrow&gt;</code>：グループ化された部分式</li>
-        <li><code>&lt;ms&gt;</code>：文字列リテラル</li>
-        <li><code>&lt;mscarries&gt;</code>：carries などのアノテーション</li>
-        <li><code>&lt;mscarry&gt;</code>：Single carry, <mscarries> の子要素</li>
-        <li><code>&lt;msgroup&gt;</code>：<mstack> および <mlongdiv> 要素のグループ化された行</li>
-        <li><code>&lt;msline&gt;</code>：<mstack> 要素内の水平線</li>
-        <li><code>&lt;mspace&gt;</code>：空白</li>
-        <li><code>&lt;msqrt&gt;</code>：平方根</li>
-        <li><code>&lt;msrow&gt;</code>：<mstack> 要素の行</li>
-        <li><code>&lt;mstack&gt;</code>：スタック揃え</li>
-        <li><code>&lt;mstyle&gt;</code>：書式変更</li>
-        <li><code>&lt;msub&gt;</code>：下付き</li>
-        <li><code>&lt;msup&gt;</code>：上付き</li>
-        <li><code>&lt;msubsup&gt;</code>：下付き上付きの組</li>
-        <li><code>&lt;mtable&gt;</code>：表または行列</li>
-        <li><code>&lt;mtd&gt;</code>：表または行列のセル</li>
-        <li><code>&lt;mtext&gt;</code>：テキスト</li>
-        <li><code>&lt;mtr&gt;</code>：表または行列の列</li>
-        <li><code>&lt;munder&gt;</code>：真下付き</li>
-        <li><code>&lt;munderover&gt;</code>：真下付きと真上付きの組</li>
-        <li><code>&lt;semantics&gt;</code>：セマンティックアノテーション用のコンテナ</li>
-        <li><code>&lt;annotation&gt;</code>：Data アノテーション</li>
-        <li><code>&lt;annotation-xml&gt;</code>：XML アノテーション</li>
+        <li><code>&lt;math&gt;</code>：トップレベル要素。</li>
+        <li><code>&lt;mrow&gt;</code>：複数の要素を一つの部分式としてまとめる。</li>
+        <li><code>&lt;mi&gt;</code>：変数名や関数名などの識別子。</li>
+        <li><code>&lt;mn&gt;</code>：数値。</li>
+        <li><code>&lt;mo&gt;</code>：演算子や括弧。</li>
+        <li><code>&lt;mfrac&gt;</code>：分数。</li>
+        <li><code>&lt;msqrt&gt;</code>：平方根。</li>
+        <li><code>&lt;msup&gt;</code>：上付き文字。</li>
+        <li><code>&lt;munder&gt;</code>：式の真下に付ける要素。</li>
+        <li><code>&lt;mtable&gt;</code>、<code>&lt;mtr&gt;</code>、<code>&lt;mtd&gt;</code>：表や行列、その行、セル。</li>
       </ul>
     </li>
   </ul>
+  <p>※ MathML仕様には<code>&lt;mfenced&gt;</code>もあるが、ブラウザ実装を重視したMathML Coreには含まれない。<br>互換性を考え、このページでは<code>&lt;mrow&gt;</code>と括弧を表す<code>&lt;mo&gt;</code>を明示的に使用する。</p>
   <h3 id="mathmlの表示サンプル">MathMLの表示サンプル</h3>
   <p>以下の表示サンプルで確認する。</p>
   <ul>
@@ -199,6 +132,7 @@
     </li>
     <li>
       <p>逆行列</p>
+      <p>\(2 \times 2\)行列の逆行列を表示。ただし、逆行列が存在する条件は\(ad-bc \neq 0\)である。</p>
       <ul>
         <li>表示<div style="display: flex; overflow-x: auto; white-space: nowrap; height: 10rem; margin-left: 1rem; font-size: 1.2em; margin-top: 0.25em;">
             <math>
@@ -207,7 +141,8 @@
                   <mtd>
                     <mi>A</mi>
                     <mo>=</mo>
-                    <mfenced>
+                    <mrow>
+                      <mo>(</mo>
                       <mtable>
                         <mtr>
                           <mtd>
@@ -226,7 +161,8 @@
                           </mtd>
                         </mtr>
                       </mtable>
-                    </mfenced>
+                      <mo>)</mo>
+                    </mrow>
                   </mtd>
                 </mtr>
                 <mtr>
@@ -243,16 +179,17 @@
                       <mn>1</mn>
                       <mrow>
                         <mi>a</mi>
-                        <mo></mo>
+                        <mo>⁢</mo>
                         <mi>d</mi>
                         <mo>-</mo>
                         <mi>b</mi>
-                        <mo></mo>
+                        <mo>⁢</mo>
                         <mi>c</mi>
                       </mrow>
                     </mfrac>
-                    <mo></mo>
-                    <mfenced>
+                    <mo>⁢</mo>
+                    <mrow>
+                      <mo>(</mo>
                       <mtable>
                         <mtr>
                           <mtd>
@@ -273,7 +210,8 @@
                           </mtd>
                         </mtr>
                       </mtable>
-                    </mfenced>
+                      <mo>)</mo>
+                    </mrow>
                   </mtd>
                 </mtr>
               </mtable>
@@ -287,7 +225,8 @@
       <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>A<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>=<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">mfenced</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">mrow</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>(<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-name">mtable</span>&gt;</span>
             <span class="hljs-tag">&lt;<span class="hljs-name">mtr</span>&gt;</span>
               <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
@@ -306,7 +245,8 @@
               <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
             <span class="hljs-tag">&lt;/<span class="hljs-name">mtr</span>&gt;</span>
           <span class="hljs-tag">&lt;/<span class="hljs-name">mtable</span>&gt;</span>
-        <span class="hljs-tag">&lt;/<span class="hljs-name">mfenced</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>)<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">mrow</span>&gt;</span>
       <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">mtr</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">mtr</span>&gt;</span>
@@ -323,16 +263,17 @@
           <span class="hljs-tag">&lt;<span class="hljs-name">mn</span>&gt;</span>1<span class="hljs-tag">&lt;/<span class="hljs-name">mn</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-name">mrow</span>&gt;</span>
             <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>a<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>⁢<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
             <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>d<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
             <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>-<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
             <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>b<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>⁢<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
             <span class="hljs-tag">&lt;<span class="hljs-name">mi</span>&gt;</span>c<span class="hljs-tag">&lt;/<span class="hljs-name">mi</span>&gt;</span>
           <span class="hljs-tag">&lt;/<span class="hljs-name">mrow</span>&gt;</span>
         <span class="hljs-tag">&lt;/<span class="hljs-name">mfrac</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">mfenced</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>⁢<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">mrow</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>(<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
           <span class="hljs-tag">&lt;<span class="hljs-name">mtable</span>&gt;</span>
             <span class="hljs-tag">&lt;<span class="hljs-name">mtr</span>&gt;</span>
               <span class="hljs-tag">&lt;<span class="hljs-name">mtd</span>&gt;</span>
@@ -353,7 +294,8 @@
               <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
             <span class="hljs-tag">&lt;/<span class="hljs-name">mtr</span>&gt;</span>
           <span class="hljs-tag">&lt;/<span class="hljs-name">mtable</span>&gt;</span>
-        <span class="hljs-tag">&lt;/<span class="hljs-name">mfenced</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">mo</span>&gt;</span>)<span class="hljs-tag">&lt;/<span class="hljs-name">mo</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">mrow</span>&gt;</span>
       <span class="hljs-tag">&lt;/<span class="hljs-name">mtd</span>&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-name">mtr</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-name">mtable</span>&gt;</span>
@@ -364,8 +306,7 @@
     </li>
   </ul>
   <h3 id="latexの表示サンプル">LaTeXの表示サンプル</h3>
-  <p>続いてLaTeX。<br>
-    以下の表示サンプルで確認する。</p>
+  <p>MathJaxのTeX入力では、分数や行列をMathMLより短い記述で表せる。<br>ここでは、数式を<code>\[</code>と<code>\]</code>で囲んだ別行表示の例を確認する。</p>
   <ul>
     <li>
       <p>二次方程式の解</p>
@@ -377,7 +318,7 @@
           </div>
         </li>
         <li>マークアップ
-          <pre><code class="language-bash">\[
+          <pre><code class="language-latex">\[
  x = \frac{-b\pm\sqrt{b^{2}-4ac}}{2a}
 \]
 </code></pre>
@@ -390,33 +331,32 @@
         <li>表示<div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
             \[
             |x| = \begin{cases}
-            x & \text{\(x\ge0\) のとき} \\
-            -x & \text{\(x<0\) のとき} \end{cases} \] </div>
+            x &amp; (x\ge0\text{ のとき}) \\
+            -x &amp; (x&lt;0\text{ のとき}) \end{cases} \] </div>
         </li>
         <li>マークアップ
-          <pre><code class="language-bash">\[
+          <pre><code class="language-latex">\[
  |x| = \begin{cases}
-   x &amp; \text{\(x\ge0\) のとき} \\
-   -x &amp; \text{\(x&lt;0\) のとき}
+   x &amp; (x\ge0\text{ のとき}) \\
+   -x &amp; (x&lt;0\text{ のとき})
  \end{cases}
-\end{cases}
 \]
 </code></pre>
         </li>
       </ul>
     </li>
     <li>
-      <p>(f(x))の導関数</p>
+      <p>\(f(x)\)の導関数</p>
       <ul>
         <li>表示<div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
             \[
-            f’(x) = \lim_{\Delta x \to 0} \frac{ f(x+\Delta x) - f(x) }{\Delta x}
+            f'(x) = \lim_{\Delta x \to 0} \frac{f(x+\Delta x) - f(x)}{\Delta x}
             \]
           </div>
         </li>
         <li>マークアップ
-          <pre><code class="language-bash">\[
- f’(x) = \lim_{\Delta x \to 0} \frac{ f(x+\Delta x) - f(x) }{\Delta x}
+          <pre><code class="language-latex">\[
+ f'(x) = \lim_{\Delta x \to 0} \frac{f(x+\Delta x) - f(x)}{\Delta x}
 \]
 </code></pre>
         </li>
@@ -427,12 +367,12 @@
       <ul>
         <li>表示<div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
             \[
-            f’(x) = \lim_{\Delta x \to 0} \frac{ f(x+\Delta x) - f(x) }{\Delta x}
+            \int_{-\infty}^{\infty} e^{-x^{2}} \, dx = \sqrt{\pi}
             \]
           </div>
         </li>
         <li>マークアップ
-          <pre><code class="language-bash">\[
+          <pre><code class="language-latex">\[
  \int_{-\infty}^{\infty} e^{-x^{2}} \, dx = \sqrt{\pi}
 \]
 </code></pre>
@@ -440,21 +380,21 @@
       </ul>
     </li>
     <li>
-      <p>n × n行列</p>
+      <p>\(n \times n\)行列</p>
       <ul>
         <li>表示<div style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -1em; overflow-x: auto; white-space: nowrap;">
             \[
             A = \begin{pmatrix}
-            a_{11} & a_{12} & \ldots & a_{1n} \\
-            a_{21} & a_{22} & \ldots & a_{2n} \\
-            \vdots & \vdots & \ddots & \vdots \\
-            a_{n1} & a_{n2} & \ldots & a_{nn}
+            a_{11} &amp; a_{12} &amp; \ldots &amp; a_{1n} \\
+            a_{21} &amp; a_{22} &amp; \ldots &amp; a_{2n} \\
+            \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+            a_{n1} &amp; a_{n2} &amp; \ldots &amp; a_{nn}
             \end{pmatrix}
             \]
           </div>
         </li>
         <li>マークアップ
-          <pre><code class="language-bash">\[
+          <pre><code class="language-latex">\[
  A = \begin{pmatrix}
  a_{11} &amp; a_{12} &amp; \ldots &amp; a_{1n} \\
  a_{21} &amp; a_{22} &amp; \ldots &amp; a_{2n} \\
@@ -467,18 +407,18 @@
       </ul>
     </li>
   </ul>
-<h2 id="実務とのつながり">実務とのつながり</h2>
-<ul>
-  <li>技術ブログでの数式表現<br>
-    機械学習、暗号技術、情報処理試験の記事では、数式を読みやすく表示できると理解しやすくなる。</li>
-  <li>保守しやすい記事作成<br>
-    画像化した数式より、テキストで書いた数式の方が後から修正しやすい。</li>
-</ul>
   <h2 id="まとめ">まとめ</h2>
-<ul>
-  <li>MathJaxを使うと、Webページ上でMathMLやLaTeXの数式を表示できる。</li>
-  <li>MathMLは構造的、LaTeXは短く書きやすい表現として使い分ける。</li>
-  <li>数式をテキストとして管理すると、技術記事の保守性が上がる。</li>
-</ul>
-
+  <ul>
+    <li>MathJaxを使うと、Webページ上でMathMLやLaTeXの数式を表示できる。</li>
+    <li>MathMLはHTMLに近い構造で数式を表し、LaTeXは短い記法で数式を書けるため、用途に応じて使い分ける。</li>
+    <li>MathJaxのscriptが正しく読み込まれない場合、数式は変換されず文字列のまま表示される。</li>
+    <li>HTMLの記号やブログの変換処理によるエスケープ漏れに注意し、数式を壊れないテキストとして管理すると記事を保守しやすい。</li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li><a href="https://developer.mozilla.org/ja/docs/Web/MathML/Reference/Element" class="link-secondary">MDN Web Docs「MathML要素リファレンス」（日本語・要素別解説）</a></li>
+    <li><a href="https://docs.mathjax.org/en/stable/web/start.html" class="link-secondary">MathJax Documentation, Getting Started with MathJax Components（英語・導入公式手順）</a></li>
+    <li><a href="https://docs.mathjax.org/en/stable/web/components/input.html" class="link-secondary">MathJax Documentation, Input Components（英語・入力形式の公式仕様）</a></li>
+    <li><a href="https://www.w3.org/TR/mathml-core/" class="link-secondary">W3C, MathML Core（英語・Web標準仕様原文）</a></li>
+  </ul>
 </div>
