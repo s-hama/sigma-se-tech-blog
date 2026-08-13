@@ -71,6 +71,17 @@ body {
     white-space: nowrap;
 }
 
+@media (max-width: 767px) {
+    .post-meta-dates {
+        align-items: flex-end;
+        flex-direction: column;
+    }
+
+    .post-date-separator {
+        display: none;
+    }
+}
+
 .card-meta {
     background-color: var(--bs-light);
     border-bottom: var(--bs-card-border-width) solid var(--bs-card-border-color);
