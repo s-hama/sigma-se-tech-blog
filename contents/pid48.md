@@ -119,3 +119,18 @@
 
     **最小値を求める場合**、子要素は親要素以上となるように構成する。<br>
     **最大値を求める場合**、子要素は親要素以下となるように構成する。
+
+## まとめ
+- スタックは最後に入れたデータを先に取り出すLIFO、キューは先に入れたデータを先に取り出すFIFO。
+- 配列は添字によるアクセスに向き、リストは挿入や削除を伴う構造変更に向く。
+- ハッシュ表ではキーをハッシュ関数へ渡してハッシュ値を求め、高速な探索に利用。
+- 木は閉路を持たない階層的なグラフとして、階層データの表現に使われる。
+- ヒープは親子間の大小関係を保つ木構造で、優先度付きキューなどに利用される。
+- データ構造のヒープとメモリ領域のヒープは、同じ名称でも意味が異なる。
+
+### 参考文献
+- 瀬戸 美月（\\(2020\\)）『徹底攻略 応用情報技術者教科書』株式会社インプレス
+- [Python公式チュートリアル - データ構造（日本語・リスト、スタック、キュー、集合の公式解説）](https://docs.python.org/ja/3/tutorial/datastructures.html)
+- [NIST Dictionary of Algorithms and Data Structures - Array（英語・配列の公的用語定義）](https://xlinux.nist.gov/dads/HTML/array.html)
+- [NIST Dictionary of Algorithms and Data Structures - Hash table（英語・ハッシュ表の公的用語定義）](https://xlinux.nist.gov/dads/HTML/hashtab.html)
+- [NIST Dictionary of Algorithms and Data Structures - Tree（英語・木構造の公的用語定義）](https://xlinux.nist.gov/dads/HTML/tree.html)
