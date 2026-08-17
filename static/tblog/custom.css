@@ -430,6 +430,26 @@ a.list-group-last-item {
 	max-height: 100%;
 }
 
+/* Keep article images readable on small screens by allowing horizontal panning. */
+.post-media-scroll {
+	max-width: 100%;
+}
+
+@media (max-width: 767px) {
+	.post-media-scroll {
+		overflow-x: auto;
+		overscroll-behavior-inline: contain;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.post-media-scroll > img {
+		width: var(--post-media-width, auto) !important;
+		max-width: none !important;
+		height: auto !important;
+		vertical-align: middle;
+	}
+}
+
 .post-body a:focus,
 .post-body input:focus,
 .post-body select:focus,
