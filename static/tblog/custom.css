@@ -435,7 +435,7 @@ a.list-group-last-item {
 	max-width: 100%;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 991px) {
 	.post-media-scroll {
 		overflow-x: auto;
 		overscroll-behavior-inline: contain;

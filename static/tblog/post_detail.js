@@ -1,6 +1,7 @@
 (() => {
-  const maxMobileMediaWidth = 760;
-  const mobileMediaQuery = window.matchMedia('(max-width: 767px)');
+  // At 992–1199px, Bootstrap's 960px container leaves 662px for the post body.
+  const referencePostBodyWidth = 662;
+  const scrollMediaQuery = window.matchMedia('(max-width: 991px)');
 
   const wrapPostImages = () => {
     document.querySelectorAll('.post-body img').forEach((image) => {
@@ -8,6 +9,10 @@
         return;
       }
 
+      const postBody = image.closest('.post-body');
+      const containingBlockWidth = image.parentElement.clientWidth;
+      const nestedHorizontalSpace = Math.max(postBody.clientWidth - containingBlockWidth, 0);
+      const referenceContainingBlockWidth = referencePostBodyWidth - nestedHorizontalSpace;
       const scrollContainer = document.createElement('div');
       scrollContainer.className = 'post-media-scroll';
       scrollContainer.dataset.autoScrollContainer = '';
@@ -19,12 +24,22 @@
           return;
         }
 
-        const inlineMaxWidth = image.style.maxWidth.match(/^(\d+(?:\.\d+)?)px$/);
-        const isSvg = /\.svg(?:$|[?#])/i.test(image.currentSrc || image.src);
-        const preferredMediaWidth = inlineMaxWidth
-          ? Number(inlineMaxWidth[1])
-          : (isSvg ? maxMobileMediaWidth : image.naturalWidth);
-        const mediaWidth = Math.min(preferredMediaWidth, maxMobileMediaWidth);
+        const inlineWidthPercent = image.style.width.match(/^(\d+(?:\.\d+)?)%$/);
+        const inlineWidthPixels = image.style.width.match(/^(\d+(?:\.\d+)?)px$/);
+        const inlineMaxWidthPixels = image.style.maxWidth.match(/^(\d+(?:\.\d+)?)px$/);
+        let mediaWidth = image.naturalWidth;
+
+        if (inlineWidthPercent) {
+          mediaWidth = referenceContainingBlockWidth * Number(inlineWidthPercent[1]) / 100;
+        } else if (inlineWidthPixels) {
+          mediaWidth = Number(inlineWidthPixels[1]);
+        }
+
+        if (inlineMaxWidthPixels) {
+          mediaWidth = Math.min(mediaWidth, Number(inlineMaxWidthPixels[1]));
+        }
+
+        mediaWidth = Math.min(mediaWidth, referenceContainingBlockWidth);
         image.style.setProperty('--post-media-width', `${mediaWidth}px`);
       };
 
@@ -43,7 +58,7 @@
   };
 
   const updatePostImages = () => {
-    if (mobileMediaQuery.matches) {
+    if (scrollMediaQuery.matches) {
       wrapPostImages();
     } else {
       unwrapPostImages();
@@ -118,10 +133,10 @@
   };
 
   updatePostImages();
-  if (mobileMediaQuery.addEventListener) {
-    mobileMediaQuery.addEventListener('change', updatePostImages);
+  if (scrollMediaQuery.addEventListener) {
+    scrollMediaQuery.addEventListener('change', updatePostImages);
   } else {
-    mobileMediaQuery.addListener(updatePostImages);
+    scrollMediaQuery.addListener(updatePostImages);
   }
 
   initializeSharing();
