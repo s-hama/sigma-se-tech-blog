@@ -1,0 +1,170 @@
+<div class="post-body">
+  <h2 id="概要">概要</h2>
+  <p>情報技術の基礎として理解しておきたい<strong>データ構造</strong>のうち、配列、スタック、キュー、リスト、ハッシュ、木構造、ヒープを整理する。</p>
+  <p>データ構造は、データをどのように持つか、どのように探すか、どのように追加・削除するかを決める考え方となる。<br>同じデータでも、構造の選び方によって処理のしやすさや計算量が変わる。</p>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#配列" class="link-secondary">配列</a><br>
+      配列：複数の類似データを連続的に集約したデータ型の総称。</li>
+    <li><a href="#スタックキュー" class="link-secondary">スタック/キュー</a><br>
+      スタック：後入れ先出し（LIFO：Last In First Out）のデータ構造のこと。</li>
+    <li><a href="#線形リスト" class="link-secondary">線形リスト</a><br>
+      線形リストの意味と要点を具体例から整理。</li>
+    <li><a href="#ハッシュ" class="link-secondary">ハッシュ</a><br>
+      ハッシュ関数：キーを一定の計算ルールでハッシュ値に変換する関数のこと。</li>
+    <li><a href="#木構造の分類" class="link-secondary">木構造の分類</a><br>
+      木構造の分類と各項目の特徴を整理。</li>
+    <li><a href="#ヒープ" class="link-secondary">ヒープ</a><br>
+      ヒープの意味と要点を具体例から整理。</li>
+  </ul>
+  <h2 id="配列">配列</h2>
+  <ul>
+    <li>
+      <p>配列<br>
+        複数の類似データを連続的に集約したデータ型の総称。</p>
+    </li>
+    <li>
+      <p>静的配列<br>
+        作成時に要素数を決め、後から長さを変更しない配列。</p>
+    </li>
+    <li>
+      <p>動的配列<br>
+        要素の追加や削除に応じて、長さを変更できる配列。<br>
+        異なるデータ型を格納できるかどうかは、使用するプログラム言語の型システムによる。</p>
+    </li>
+  </ul>
+  <h2 id="スタックキュー">スタック/キュー</h2>
+  <ul>
+    <li>
+      <p>スタック<br>
+        <strong>後入れ先出し</strong>（LIFO：Last In First Out）のデータ構造のこと。<br>
+        スタックにデータを入れることを<strong>push</strong>、データを出すことを<strong>pop</strong>という。
+      </p>
+    </li>
+    <li>
+      <p>キュー<br>
+        <strong>先入れ先出し</strong>（FIFO：First In First Out）のデータ構造のこと。<br>
+        キューにデータを入れることを<strong>enqueue</strong>、データを出すことを<strong>dequeue</strong>という。
+      </p>
+    </li>
+  </ul>
+  <h2 id="線形リスト">線形リスト</h2>
+  <p>※ 線形リストは、単に<strong>リスト</strong>とも呼ばれる。</p>
+  <ul>
+    <li>
+      <p>線形リスト<br>
+        順序付けされた関連データを集約したデータ構造のこと。</p>
+      <p>各ノードは、データ値を保持する<strong>データ部</strong>と、次または前のノードを参照する<strong>ポインタ部</strong>で構成される。リスト全体を管理する構造が、先頭ノードや末尾ノードへの参照を別に保持する場合もある。</p>
+    </li>
+    <li>
+      <p>単方向リスト<br>
+        <strong>ポインタ部</strong>に<strong>次データ</strong>へのポインタのみ保持するリスト。
+      </p>
+    </li>
+    <li>
+      <p>双方向リスト<br>
+        <strong>ポインタ部</strong>に<strong>次データ</strong>と<strong>前データ</strong>へのポインタを保持するリスト。
+      </p>
+    </li>
+    <li>
+      <p>環状リスト<br>
+        末尾ノードの<strong>次データ</strong>へのポインタが、先頭ノードを指すリスト。
+      </p>
+    </li>
+  </ul>
+  <h2 id="ハッシュ">ハッシュ</h2>
+  <ul>
+    <li>
+      <p>ハッシュ関数<br>
+        キーを一定の計算ルールで<strong>ハッシュ値</strong>に変換する関数のこと。<br>
+        ハッシュテーブルでは、ハッシュ値を格納位置を決めるために使う。</p>
+      <p>例えば、\(h(x) = x \bmod n\) では、複数の \(x\) が同じハッシュ値になる。このように異なるキーが同じハッシュ値になることを<strong>衝突</strong>という。<br>
+        暗号学的ハッシュ関数に求められる<strong>一方向性</strong>は、ハッシュテーブルの定義そのものではない。</p>
+    </li>
+    <li>
+      <p>ハッシュテーブル（ハッシュ表）<br>
+        <strong>キー（key）</strong>と<strong>値（value）</strong>を対応付けて格納するデータ構造。<br>
+        キーのハッシュ値から格納位置を求め、その位置でキーを照合して値を探索する。</p>
+      <ul>
+        <li>
+          <p>例 : ハッシュ関数を \(h(x) = x \bmod n\) とし、異なるキー \(a\)、\(b\) のハッシュ値が一致する条件を考える。</p>
+          <p>→ 「ハッシュ値が一致する」ことより、次のように置ける。<br>
+            \(a = a^{\prime} \times n + m\)<br>
+            \(b = b^{\prime} \times n + m\)<br>
+            （\(a^{\prime}, b^{\prime}\) は整数、\(m\) は共通するハッシュ値）</p>
+          <p>よって<br>
+            \(a - b = n (a^{\prime} - b^{\prime})\)</p>
+          <p>また、\(a^{\prime}\ -\ b^{\prime}\) は、整数である。</p>
+          <p>よって<br>
+            \(a - b\) が \(n\) の倍数であることが条件となる。</p>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <h2 id="木構造の分類">木構造の分類</h2>
+  <ul>
+    <li>
+      <p>木構造<br>
+        木構造は、グラフとして見ると<strong>連結</strong>で<strong>閉路</strong>を持たない構造となる。<br>
+        根付き木は、<strong>ルート（根）</strong>、<strong>ノード（節）</strong>、ノード間をつなぐ<strong>エッジ（枝）</strong>、<strong>リーフ（葉）</strong>から構成される。
+      </p>
+      <p>※ 上記は、応用数学の「5. グラフ理論」で触れた記載と同じ。<br>
+        → <a class="link-secondary" href="https://sigma-se.com/detail/45/#グラフ理論">応用情報技術
+          - 応用数学 &gt; グラフ理論</a></p>
+    </li>
+    <li>
+      <p>\(2\) 分木<br>
+        子ノードの数が \(2\) つ以下である木構造。<br>
+        実用例として、データの大小関係を木構造でたどる \(2\) 分探索木や構文・文法を表現する<strong>構文木</strong>などがある。</p>
+    </li>
+    <li>
+      <p>多分木<br>
+        各ノードが、任意の数の子ノードを持てる木構造。</p>
+    </li>
+    <li>
+      <p>完全 \(2\) 分木<br>
+        最下層以外のノードがすべて埋まり、最下層のノードが左から順に詰められた \(2\) 分木。<br>
+        実用例として、<strong>バイナリヒープ</strong>がある。</p>
+    </li>
+    <li>
+      <p>AVL木<br>
+        各ノードの左右の部分木の高さの差を \(1\) 以下に保つ、高さ平衡 \(2\) 分探索木。<br>
+        <strong>完全 \(2\) 分木</strong>とは別の概念となる。</p>
+    </li>
+    <li>
+      <p>B木<br>
+        一つのノードに複数のキーと子を持てる、平衡した多分探索木。<br>
+        木の高さを抑えられるため、データベースやファイルシステムの索引などで使われる。</p>
+    </li>
+  </ul>
+  <h2 id="ヒープ">ヒープ</h2>
+  <ul>
+    <li>
+      <p>ヒープ<br>
+        親子間で一定の大小関係を保つ木構造で、バイナリヒープは完全 \(2\) 分木として構成される。最小ヒープでは各親が子以下、最大ヒープでは各親が子以上となるため、根が全体の最小値または最大値となる。
+      </p>
+      <p>全要素から最大値または最小値を取り出す場合に適したデータ構造。</p>
+      <p><strong>最小値を求める場合</strong>、子要素は親要素以上となるように構成する。<br>
+        <strong>最大値を求める場合</strong>、子要素は親要素以下となるように構成する。
+      </p>
+    </li>
+  </ul>
+
+  <h2 id="まとめ">まとめ</h2>
+  <ul>
+    <li>スタックは最後に入れたデータを先に取り出すLIFO、キューは先に入れたデータを先に取り出すFIFO。</li>
+    <li>配列は添字によるアクセスに向き、リストは挿入や削除を伴う構造変更に向く。</li>
+    <li>ハッシュ表ではキーをハッシュ関数へ渡してハッシュ値を求め、高速な探索に利用。</li>
+    <li>木は閉路を持たない階層的なグラフとして、階層データの表現に使われる。</li>
+    <li>ヒープは親子間の大小関係を保つ木構造で、優先度付きキューなどに利用される。</li>
+    <li>データ構造のヒープとメモリ領域のヒープは、同じ名称でも意味が異なる。</li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>瀬戸 美月（\(2020\)）『徹底攻略 応用情報技術者教科書』株式会社インプレス</li>
+    <li><a href="https://docs.python.org/ja/3/tutorial/datastructures.html" class="link-secondary">Python公式チュートリアル - データ構造（日本語・リスト、スタック、キュー、集合の公式解説）</a></li>
+    <li><a href="https://xlinux.nist.gov/dads/HTML/array.html" class="link-secondary">NIST Dictionary of Algorithms and Data Structures - Array（英語・配列の公的用語定義）</a></li>
+    <li><a href="https://xlinux.nist.gov/dads/HTML/hashtab.html" class="link-secondary">NIST Dictionary of Algorithms and Data Structures - Hash table（英語・ハッシュ表の公的用語定義）</a></li>
+    <li><a href="https://xlinux.nist.gov/dads/HTML/tree.html" class="link-secondary">NIST Dictionary of Algorithms and Data Structures - Tree（英語・木構造の公的用語定義）</a></li>
+  </ul>
+</div>

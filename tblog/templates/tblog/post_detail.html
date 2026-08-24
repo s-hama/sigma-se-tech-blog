@@ -1,4 +1,5 @@
 {% extends "tblog/base.html" %}
+{% load static %}
 {% block title %}{{ post.title }} | SIGMA-SE Math & Tech Library{% endblock %}
 {% block canonical %}<link rel="canonical" href="https://sigma-se.com{% url 'tblog:detail' post.pk %}">{% endblock %}
 {% block og_url %}https://sigma-se.com{% url 'tblog:detail' post.pk %}{% endblock %}
@@ -44,69 +45,6 @@
         <p id="share-status" class="small mt-2 mb-0" role="status" aria-live="polite"></p>
       </section>
 
-      <script>
-        (() => {
-          const copyButton = document.getElementById('copy-article-url');
-          const shareButton = document.getElementById('share-article');
-          const status = document.getElementById('share-status');
-          const articleUrl = copyButton.dataset.url;
-          let statusTimer;
-
-          const showStatus = (message) => {
-            window.clearTimeout(statusTimer);
-            status.textContent = message;
-            statusTimer = window.setTimeout(() => {
-              status.textContent = '';
-            }, 4000);
-          };
-
-          const copyArticleUrl = async () => {
-            if (navigator.clipboard && window.isSecureContext) {
-              await navigator.clipboard.writeText(articleUrl);
-              return;
-            }
-
-            const textArea = document.createElement('textarea');
-            textArea.value = articleUrl;
-            textArea.setAttribute('readonly', '');
-            textArea.style.position = 'fixed';
-            textArea.style.opacity = '0';
-            document.body.appendChild(textArea);
-            textArea.select();
-            const copied = document.execCommand('copy');
-            textArea.remove();
-
-            if (!copied) {
-              throw new Error('Copy failed');
-            }
-          };
-
-          copyButton.addEventListener('click', async () => {
-            try {
-              await copyArticleUrl();
-              showStatus('記事のURLをコピーしました。');
-            } catch (error) {
-              showStatus('URLをコピーできませんでした。');
-            }
-          });
-
-          if (navigator.share) {
-            shareButton.hidden = false;
-            shareButton.addEventListener('click', async () => {
-              try {
-                await navigator.share({
-                  title: copyButton.dataset.title,
-                  url: articleUrl,
-                });
-              } catch (error) {
-                if (error.name !== 'AbortError') {
-                  showStatus('共有メニューを開けませんでした。');
-                }
-              }
-            });
-          }
-        })();
-      </script>
     {% endwith %}
     <hr>
     {% include "tblog/latest_post.html" %}
@@ -119,4 +57,5 @@
     {% endif %}
   </div>
 </div>
+<script src="{% static 'tblog/post_detail.js' %}" defer></script>
 {% endblock %}
