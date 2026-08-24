@@ -7,8 +7,7 @@
     {% endfor %}
   </div>
   <div class="post-meta-dates">
-    <span class="post-date"><span class="post-date-label">作成日：</span><time datetime="{{ post.created_at|date:'c' }}">{{ post.created_at|date:"Y/m/d H:i" }}</time></span>
-    <span class="post-date-separator" aria-hidden="true">、</span>
+    <span class="post-date"><span class="post-date-label">作成日：</span><time datetime="{{ post.created_at|date:'c' }}">{{ post.created_at|date:"Y/m/d H:i" }}</time>、</span>
     <span class="post-date"><span class="post-date-label">更新日：</span><time datetime="{{ post.updated_at|date:'c' }}">{{ post.updated_at|date:"Y/m/d H:i" }}</time></span>
   </div>
 </div>
