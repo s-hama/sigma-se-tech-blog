@@ -42,6 +42,11 @@ class PostIndexView(BaseListView):
         public_posts = Post.objects.filter(is_publick=True).exclude(category__name="PaidContent")
         context["series_guides"] = [
             {
+                "label": "数学 - 計算の仕組み",
+                "summary": "分数の除算や負の数、0で割れない理由など、計算規則の仕組みを具体例と数式で解説",
+                "posts": public_posts.filter(title__icontains="数学 - 計算の仕組み").order_by("pk")[:10],
+            },
+            {
                 "label": "Django - VPSで作るDjangoサイト",
                 "summary": "VPS上でDjangoサイトを構築し、公開するまでの手順を解説",
                 "posts": public_posts.filter(

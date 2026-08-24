@@ -71,6 +71,17 @@ body {
     white-space: nowrap;
 }
 
+@media (max-width: 767px) {
+    .post-meta-dates {
+        align-items: flex-end;
+        flex-direction: column;
+    }
+
+    .post-date-separator {
+        display: none;
+    }
+}
+
 .card-meta {
     background-color: var(--bs-light);
     border-bottom: var(--bs-card-border-width) solid var(--bs-card-border-color);
@@ -417,6 +428,26 @@ a.list-group-last-item {
 .post-body video {
 	max-width: 100%;
 	max-height: 100%;
+}
+
+/* Keep article images readable on small screens by allowing horizontal panning. */
+.post-media-scroll {
+	max-width: 100%;
+}
+
+@media (max-width: 991px) {
+	.post-media-scroll {
+		overflow-x: auto;
+		overscroll-behavior-inline: contain;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.post-media-scroll > img {
+		width: var(--post-media-width, auto) !important;
+		max-width: none !important;
+		height: auto !important;
+		vertical-align: middle;
+	}
 }
 
 .post-body a:focus,
