@@ -163,3 +163,17 @@
         - 照合不一致の場合、事前に作成した表から求めた文字数だけパターンを右へずらし、照合し直す。
 
 上記以外にも代表的なアルゴリズムとして、**メモリ管理**、**データ圧縮**、**グラフ**、**近似/統計確率**、**図形描画**、**遺伝的**なアルゴリズムなどがある。
+
+
+## まとめ
+- 二分探索は整列済みデータを前提とし、ハッシュ表探索は平均的に高速だが衝突対策が必要になる。
+- 再帰は問題を小さな同種の問題として解く表現で、無限に呼び出さないよう終了条件を明確にする。
+- 文字列探索では、照合する方向や不一致時の移動方法によって処理効率が変わる。
+- アルゴリズムはデータ数が増えたときの計算量の伸び方と、利用できる前提条件を合わせて比較。
+
+### 参考文献
+- 瀬戸 美月（\\(2020\\)）『徹底攻略 応用情報技術者教科書』株式会社インプレス
+- [Python公式ドキュメント - ソートのテクニック（日本語・整列処理の公式解説）](https://docs.python.org/ja/3/howto/sorting.html)
+- [NIST Dictionary of Algorithms and Data Structures - Binary search（英語・二分探索の公的用語定義）](https://xlinux.nist.gov/dads/HTML/binarySearch.html)
+- [NIST Dictionary of Algorithms and Data Structures - Quicksort（英語・クイックソートの公的用語定義）](https://xlinux.nist.gov/dads/HTML/quicksort.html)
+- [NIST Dictionary of Algorithms and Data Structures - Boyer-Moore（英語・文字列探索の公的用語定義）](https://xlinux.nist.gov/dads/HTML/boyermoore.html)
