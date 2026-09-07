@@ -1,0 +1,206 @@
+<div class="post-body">
+  <h2 id="概要">概要</h2>
+  <p>情報技術の基礎として理解しておきたい<strong>アルゴリズム</strong>のうち、フローチャート、探索、整列、再帰、文字列処理を整理する。</p>
+  <p>アルゴリズムは、問題を解く手順を明確にしたものとなる。<br>アルゴリズムを理解するには、手順の意味だけでなく、データ数が増えたときの計算量や、処理の流れを正しく追えるかが重要になる。</p>
+  <h2 id="この記事の構成">この記事の構成</h2>
+  <ul>
+    <li><a href="#フローチャート" class="link-secondary">フローチャート</a><br>
+      フローチャートを順にたどり、各処理の役割を整理。</li>
+    <li><a href="#探索アルゴリズム" class="link-secondary">探索アルゴリズム</a><br>
+      データ群から目的のデータを探すためのアルゴリズムで次の代表的なアルゴリズムがある。</li>
+    <li><a href="#整列アルゴリズム" class="link-secondary">整列アルゴリズム</a><br>
+      データを昇順または、降順にソートするためのアルゴリズムで次の代表的なアルゴリズムがある。</li>
+    <li><a href="#再帰アルゴリズム" class="link-secondary">再帰アルゴリズム</a><br>
+      再帰アルゴリズム：その名の通り、 再帰（自分自身を呼出す）するアルゴリズム。</li>
+    <li><a href="#文字列処理のアルゴリズム" class="link-secondary">文字列処理のアルゴリズム</a><br>
+      文字列処理のアルゴリズム：文字列探索後に挿入、 削除、 置換、 連結等を行うアルゴリズム。</li>
+  </ul>
+  <h2 id="フローチャート">フローチャート</h2>
+  <ul>
+    <li>フローチャート（流れ図）<br>
+      <strong>基本3構造</strong>と呼ばれる、<strong>順次</strong>、<strong>選択</strong>、<strong>繰返し</strong>を用いて、プログラムの処理の流れを図式化したもの。<br>
+      <strong>順次</strong>は、上から下へ順番に命令を実行する処理を指す。<br>
+      <strong>選択</strong>は、<code>if</code>文や<code>switch</code>文等の分岐処理を指す。<br>
+      <strong>繰返し</strong>は、<code>for</code>文や<code>while</code>文等のループ処理を指す。<br>
+    </li>
+  </ul>
+  <h2 id="探索アルゴリズム">探索アルゴリズム</h2>
+  <p>データ群から目的のデータを探すためのアルゴリズムで次の代表的なアルゴリズムがある。</p>
+  <p>※ \(n\) は、データの個数を表すものとする。<br>
+    <strong>計算量</strong>については、<br><a class="link-secondary"
+      href="https://sigma-se.com/detail/46/">応用情報技術
+      - 情報理論 &gt; 計算量</a> を参照。
+  </p>
+  <ul>
+    <li>
+      <p>線形探索<br>
+        先頭から順番に一つずつ評価して探索するアルゴリズム。</p>
+      <p>計算量は、\(O\ (n)\) となる。</p>
+    </li>
+    <li>
+      <p>2分探索<br>
+        事前にデータを整列させた<strong>探索されるデータ</strong>に対して<strong>中間データ</strong>の比較を繰返して探索するアルゴリズム。</p>
+      <p>計算量は、\(O\ (log\ n)\) となる。</p>
+    </li>
+    <li>
+      <p>ハッシュ表探索<br>
+        <strong>ハッシュ関数</strong>を用いて探索するアルゴリズム。<br>
+        <strong>探索されるデータ</strong>の<strong>ハッシュテーブル</strong>に対して、<strong>探索するデータ</strong>のハッシュ値で<strong>データ（値）</strong>を逆引きし探索する。
+      </p>
+      <p>ハッシュ関数がキーを適切に分散させ、衝突が少ない場合の平均計算量は \(O\ (1)\) となる。<br>
+        ただし、多くのキーが同じ位置に衝突する場合は探索回数が増え、最悪計算量は \(O\ (n)\) となる。</p>
+    </li>
+    <li>
+      <p>シノニム（synonym）<br>
+        <strong>ハッシュテーブル</strong>において、異なるキーが<strong>同じハッシュ値</strong>になること。<br>
+        この状態を<strong>衝突</strong>という。
+      </p>
+      <p>ハッシュ表は、衝突が起こる前提で、次のチェイン法やオープンアドレス法などを用いてデータを区別。</p>
+    </li>
+    <li>
+      <p>チェイン法（分離連鎖法）<br>
+        シノニム問題の解決法の一つ。</p>
+      <p>ハッシュ値に<strong>シノニム</strong>（衝突）が発生した場合、個々のデータを<strong>連結リスト</strong>（互いに参照できる仕組みを持つ）で繋ぎ、衝突を解決する方法のこと。</p>
+    </li>
+    <li>
+      <p>オープンアドレス法（ハッシュ法、閉番地法）<br>
+        シノニム問題の解決法の一つ。</p>
+      <p>ハッシュ値に<strong>シノニム</strong>（衝突）が発生した場合、<strong>再ハッシュ</strong>（別バケットにデータを格納する）の繰返しにより、衝突を解決する方法のこと。</p>
+    </li>
+  </ul>
+  <h2 id="整列アルゴリズム">整列アルゴリズム</h2>
+  <p>データを昇順または、降順にソートするためのアルゴリズムで次の代表的なアルゴリズムがある。</p>
+  <p>※ \(n\) は、データの個数を表すものとする。</p>
+  <ul>
+    <li>
+      <p>バブルソート<br>
+        隣合うデータを大小比較し、ソート順と逆ならば順番を入替えてソートするアルゴリズム。</p>
+      <p>すべての隣合うデータに対して大小比較を繰返すため、平均・最悪計算量は \(O\ (n^2)\) となる。</p>
+    </li>
+    <li>
+      <p>挿入ソート<br>
+        整列済のデータに対して<strong>線形探索</strong>で挿入位置を決め、データを挿入してソートするアルゴリズム。</p>
+      <p>挿入位置までの比較と要素の移動を繰り返すため、平均・最悪計算量は \(O\ (n^2)\) となる。<br>
+        ほぼ整列済みのデータに対しては高速に動作。</p>
+    </li>
+    <li>
+      <p>選択ソート<br>
+        未整列のデータ群からソート順に応じた最大値（最小値）を検索（特定）後、整列済データに分類し、ソートするアルゴリズム。</p>
+      <p>最大値（最小値）の探索をデータ数分行うため、平均・最悪計算量は \(O\ (n^2)\) となる。</p>
+    </li>
+    <li>
+      <p>クイックソート<br>
+        <strong>ピボット（基準値）</strong>を一つ決め、ピボットより小さい要素と大きい要素の部分列に分け、それぞれで同じ操作を繰り返すアルゴリズム。
+      </p>
+      <p><strong>分割統治法</strong>を利用し、平均計算量は \(O\ (n\ log\ n)\) となる。<br>
+        ピボットの選び方とデータの並びによって分割が偏ると、最悪計算量は \(O\ (n^2)\) となる。</p>
+    </li>
+    <li>
+      <p>シェルソート<br>
+        <strong>挿入ソート</strong>の改良版。<br>
+        一定間隔おきのデータを対象にした部分列をそれぞれ<strong>挿入ソート</strong>で整列させ、その間隔が<strong>1</strong>になるまで狭めてソートするアルゴリズム。
+      </p>
+      <p>計算量は間隔の選び方に依存するため、一律に \(O\ (n\ log\ n)\) とは言えない。</p>
+    </li>
+    <li>
+      <p>ヒープソート<br>
+        <strong>選択ソート</strong>の改良版。<br>
+        未整列データでヒープを構成することによって、最大値（最小値）となる<strong>根</strong>を整列済データとし、未整列データがなくなるまで繰返しソートするアルゴリズム。
+      </p>
+      <p>計算量は、\(O\ (n\ log\ n)\) となる。</p>
+      <p>※ <strong>ヒープ</strong>については、<a class="link-secondary" href="https://sigma-se.com/detail/48/#ヒープ">応用情報技術
+          - データ構造 &gt; ヒープ</a> を参照。</p>
+    </li>
+    <li>
+      <p>マージソート<br>
+        まず、未整列データを前後2つのグループに分け、この操作をデータ数が \(1\) になるまで再帰的に繰返す。<br>
+        次に、データ数が小さい方から順に前後2つのグループをソートしつつ併合（マージ）する操作を分割したグループ分、繰返してソートするアルゴリズム。</p>
+      <p>クイックソートと同じ<strong>分割統治法</strong>を利用しており、計算量は、\(O\ (n\ log\ n)\) となる。<br>
+        <strong>ただし、マージに伴うメモリ消費が多い。</strong>
+      </p>
+    </li>
+  </ul>
+  <h2 id="再帰アルゴリズム">再帰アルゴリズム</h2>
+  <ul>
+    <li>
+      <p>再帰アルゴリズム<br>
+        その名の通り、<strong>再帰</strong>（自分自身を呼出す）するアルゴリズム。</p>
+      <ul>
+        <li>例：\(0\) を含む自然数 \(n\) に対して、\(n\) の階乗を返す関数 \(fact\ (n)\) を再帰的に定義。</li>
+      </ul>
+      <p>※ Javaで書いた場合</p>
+      <pre><code class="language-java"><span class="hljs-keyword">if</span> (n == <span class="hljs-number">0</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+} <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">return</span> n * fact(n - <span class="hljs-number">1</span>);
+}
+</code></pre>
+    </li>
+  </ul>
+  <h2 id="文字列処理のアルゴリズム">文字列処理のアルゴリズム</h2>
+  <ul>
+    <li>
+      <p>文字列処理のアルゴリズム<br>
+        文字列の<strong>探索</strong>、<strong>挿入</strong>、<strong>削除</strong>、<strong>置換</strong>、<strong>連結</strong>などを行うアルゴリズムの総称。<br>
+        ここでは、<strong>文字列探索のアルゴリズム</strong>について、次の代表的な方法を扱う。
+      </p>
+    </li>
+    <li>
+      <p>順次探索法<br>
+        探索対象の文字列の先頭から、探したいパターンを \(1\) 文字ずつ照合するアルゴリズム。</p>
+      <ul>
+        <li>
+          <p>（＊1）<strong>探索</strong><br>
+            探索対象の現在位置とパターンの先頭を合わせ、文字を順に照合する。</p>
+        </li>
+        <li>
+          <p>（＊2）<strong>照合判断</strong><br></p>
+          <ul>
+            <li>照合一致の場合、探索対象とパターンの両方を次の文字へ進める。<br></li>
+            <li>照合不一致の場合、パターンを先頭に戻し、探索開始位置を \(1\) 文字右へずらして照合し直す。</li>
+          </ul>
+        </li>
+      </ul>
+      <p>探索対象の長さを \(n\)、パターンの長さを \(m\) とすると、最悪計算量は \(O\ (nm)\) となる。</p>
+    </li>
+    <li>
+      <p>BM法（ボイヤームーア法）<br>
+        パターンの末尾から先頭へ向かって照合し、不一致時に不要な照合を<strong>スキップ</strong>する文字列探索アルゴリズム。</p>
+      <ul>
+        <li>（＊1）<strong>事前準備</strong><br>
+          パターン内の文字位置を用いる<strong>不良文字規則</strong>と、一致済みの接尾部を用いる<strong>良い接尾辞規則</strong>のシフト表を準備する。
+        </li>
+        <li>
+          <p>（＊2）<strong>探索</strong><br>
+            探索対象とパターンの先頭位置を合わせ、パターンの末尾から左方向へ文字を照合する。</p>
+        </li>
+        <li>
+          <p>（＊3）<strong>照合判断</strong><br></p>
+          <ul>
+            <li>照合一致の場合、パタ       ーンの一つ左の文字を続けて照合する。先頭まで一致すると検索成功となる。<br></li>
+            <li>照合不一致の場合、事前に作成した表から求めた文字数だけパターンを右へずらし、照合し直す。</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <p>
+    上記以外にも代表的なアルゴリズムとして、<strong>メモリ管理</strong>、<strong>データ圧縮</strong>、<strong>グラフ</strong>、<strong>近似/統計確率</strong>、<strong>図形描画</strong>、<strong>遺伝的</strong>なアルゴリズムなどがある。
+  </p>
+
+  <h2 id="まとめ">まとめ</h2>
+  <ul>
+    <li>二分探索は整列済みデータを前提とし、ハッシュ表探索は平均的に高速だが衝突対策が必要になる。</li>
+    <li>再帰は問題を小さな同種の問題として解く表現で、無限に呼び出さないよう終了条件を明確にする。</li>
+    <li>文字列探索では、照合する方向や不一致時の移動方法によって処理効率が変わる。</li>
+    <li>アルゴリズムはデータ数が増えたときの計算量の伸び方と、利用できる前提条件を合わせて比較。</li>
+  </ul>
+  <h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>瀬戸 美月（\(2020\)）『徹底攻略 応用情報技術者教科書』株式会社インプレス</li>
+    <li><a href="https://docs.python.org/ja/3/howto/sorting.html" class="link-secondary">Python公式ドキュメント - ソートのテクニック（日本語・整列処理の公式解説）</a></li>
+    <li><a href="https://xlinux.nist.gov/dads/HTML/binarySearch.html" class="link-secondary">NIST Dictionary of Algorithms and Data Structures - Binary search（英語・二分探索の公的用語定義）</a></li>
+    <li><a href="https://xlinux.nist.gov/dads/HTML/quicksort.html" class="link-secondary">NIST Dictionary of Algorithms and Data Structures - Quicksort（英語・クイックソートの公的用語定義）</a></li>
+    <li><a href="https://xlinux.nist.gov/dads/HTML/boyermoore.html" class="link-secondary">NIST Dictionary of Algorithms and Data Structures - Boyer-Moore（英語・文字列探索の公的用語定義）</a></li>
+  </ul>
+</div>
