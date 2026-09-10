@@ -89,3 +89,55 @@
   代表例：`JavaScript`、`Perl`、`Ruby`、`PHP`、`Python` など。`JSP`（JavaServer Pages）はJavaコードなどを埋め込めるサーバーサイドのページ技術であり、独立したプログラム言語ではない。  
 
   **スクリプト言語**と**インタプリタ方式**は分類の観点が異なるため、同じ意味ではない。  
+
+## その他言語
+
+プログラム言語以外にも、実行環境、通信手法、文書やデータの記述形式など、さまざまな仕様を用いる。
+
+- 共通言語基盤（CLI）<br>
+  **CLI（Common Language Infrastructure）**は、実行可能コード、型、メタデータ、仮想実行システムなどを定めた**ECMA-335**の標準仕様。`.NET`はCLIを基盤とする実装・技術群の一つとなる。  
+
+  複数の言語を共通の実行基盤で扱えるが、別のプラットフォームでそのまま動くかどうかは、CLIの実装や利用するライブラリなどにも左右される。  
+
+- Ajax（Asynchronous JavaScript + XML）<br>
+  Webブラウザ上での**非同期通信**により、通信結果（レスポンス）をページ全体でなく**部分的**に書換える手法のこと。  
+
+  単一の部品や規格ではなく、`JavaScript`とWeb APIを組み合わせる開発手法であり、交換データにはXMLだけでなくJSONなども使える。  
+
+- データ定義言語（DDL：Data Definition Language）<br>
+  データベースの表や索引などの構造を定義・変更するSQLの命令群で、`CREATE`、`ALTER`、`DROP`などが代表例となる。<br>
+  XMLの**DTD（Document Type Definition）**はXML文書の構造を宣言する仕組みであり、SQLのDDLとは別のものとなる。  
+
+- マークアップ言語：HTML（HyperText Markup Language）<br>
+  **Webページ作成（文書を保管・閲覧する）**のために開発された言語でテキスト、音声、画像、動画、データファイルなどの表示やリンクを埋込むことができる。  
+
+  現在のHTMLはWHATWGの**HTML Living Standard**として継続的に更新されている。WebSocketはブラウザから利用できる別のWeb API・通信プロトコルであり、HTML要素そのものではない。  
+
+- マークアップ言語：XML（Extensible Markup Language）<br>
+  マークアップ言語**SGML**を基に、構造化された文書やデータを表現するために作られた言語で、文法には厳密なルールがある。  
+
+  文書構造の規則が必要な場合は、**DTD（Document Type Definition）**やXML Schemaなどで定義できる。  
+
+  XML文書はすべて整形式である必要があり、さらにDTDなどで宣言した規則にも適合する文書を妥当なXML文書という。  
+
+  - 整形式XML文書（well-formed XML Document）<br>
+  XMLの基本的な構文規則に従った文書。DTDなどの宣言は必須ではない。  
+
+  - 妥当なXML文書（valid XML Document）<br>
+  整形式であり、文書内で参照するDTDなどの構造規則にも適合した文書。  
+
+- マークアップ言語：XHTML（Extensible HyperText Markup Language）<br>
+  **HTML**を**XML**の文法に従って定義したもので、要素を正しく入れ子にする、終了タグを省略しないなど、XMLの構文規則に従う。  
+
+- スタイルシート言語：CSS（Cascading Style Sheets）<br>
+  文章やタグなどの要素をどう見せるか**そのスタイルを定義するため**に作られた言語で**HTML**や**XHTML**で使用される。  
+
+  Webページでは、文書の**構造**をHTML、見た目や配置などの**体裁**をCSSで記述し、役割を分けて管理できる。  
+
+- JSON（JavaScript Object Notation）<br>
+  `JavaScript`のオブジェクト記法を用いた軽量の**データ交換フォーマット**のこと。  
+
+- YAML（YAML Ain't Markup Language）<br>
+  配列やマッピングなどの**構造化データ**を、人が読み書きしやすいテキストで表現するデータシリアライズ形式。  
+
+  名前の由来は「YAMLはマークアップ言語でない」であり、マークアップ言語には分類されない。用途が重なる形式として**JSON**がある。  
