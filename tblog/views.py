@@ -38,6 +38,9 @@ class PostIndexView(BaseListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["is_top_page"] = self.is_top_page()
+        context["is_search_no_results"] = (
+            "quick" in self.request.GET and not context["post_list"]
+        )
         if not context["is_top_page"]:
             return context
 
