@@ -43,11 +43,15 @@
     {% include "tblog/post_meta.html" %}
   </a>
 </div>
+{% empty %}
+<p>該当する記事がありません。</p>
 {% endfor %}
+{% if post_list %}
 <div class="row">
   <div class="text-center">
     {% include "tblog/page.html" %}
   </div>
 </div>
+{% endif %}
 {% endif %}
 {% endblock %}
