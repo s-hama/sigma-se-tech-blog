@@ -1,9 +1,11 @@
 from django.db.models import Case, IntegerField, Q, Value, When
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 from django.views import generic
-from .models import Post
+from .models import BigCategory, Post, SmallCategory, Tag
 import logging
- 	
+
+
 class BaseListView(generic.ListView):
     paginate_by = 10 
     def base_queryset(self):
@@ -142,19 +144,25 @@ class PostIndexView(BaseListView):
 class CategoryView(BaseListView):
     def get_queryset(self):
         queryset = self.base_queryset()
-        category = self.kwargs.get("small")
-        if category:
-            queryset = queryset.filter(category__name=category)
+        big_name = self.kwargs["big"]
+        small_name = self.kwargs.get("small")
+        if small_name:
+            category = get_object_or_404(
+                SmallCategory,
+                parent__name=big_name,
+                name=small_name,
+            )
+            queryset = queryset.filter(category=category)
         else:
-            category = self.kwargs.get("big")
-            queryset = queryset.filter(category__parent__name=category)
+            category = get_object_or_404(BigCategory, name=big_name)
+            queryset = queryset.filter(category__parent=category)
         logging.getLogger('command').debug('ON View.py > CategoryView')
         return queryset
 
 class TagView(BaseListView):
     def get_queryset(self):
-        tag = self.kwargs["tag"]
-        queryset = self.base_queryset().filter(tag__name=tag)
+        tag = get_object_or_404(Tag, name=self.kwargs["tag"])
+        queryset = self.base_queryset().filter(tag=tag)
         logging.getLogger('command').debug('ON View.py > TagView')
         return queryset
 
