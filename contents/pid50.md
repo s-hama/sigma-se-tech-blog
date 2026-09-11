@@ -141,3 +141,17 @@
   配列やマッピングなどの**構造化データ**を、人が読み書きしやすいテキストで表現するデータシリアライズ形式。  
 
   名前の由来は「YAMLはマークアップ言語でない」であり、マークアップ言語には分類されない。用途が重なる形式として**JSON**がある。  
+
+## まとめ
+- プログラムの基本構造は、順次、選択、繰返しとして整理できる。
+- HTMLは文書構造を表すマークアップ言語であり、XMLやJSONも処理手順ではなくデータを表現するために使われるが、記法と用途が異なる。
+- スクリプト言語は軽量な記述や自動化に使われることが多いが、実装によって事前コンパイルやJITコンパイルを行う場合もある。
+- 手続き型は処理手順を中心にし、オブジェクト指向はデータと操作をまとめて設計。
+- 再使用可能、再入可能、再帰、再配置可能は、それぞれ再利用、同時実行、自己呼出し、配置場所の変更に関する異なる性質を表す。
+
+### 参考文献
+- 瀬戸 美月（\\(2020\\)）『徹底攻略 応用情報技術者教科書』株式会社インプレス
+- [MDN - HTML：ハイパーテキストマークアップ言語（日本語・HTMLの解説）](https://developer.mozilla.org/ja/docs/Web/HTML)
+- [Ecma International - ECMA-335 Common Language Infrastructure（英語・CLIの規格原文）](https://ecma-international.org/publications-and-standards/standards/ecma-335/)
+- [W3C - Extensible Markup Language（XML）1.0（英語・XMLの仕様原文）](https://www.w3.org/TR/xml/)
+- [RFC Editor - RFC 8259：The JavaScript Object Notation Data Interchange Format（英語・JSONの仕様原文）](https://www.rfc-editor.org/rfc/rfc8259.html)
