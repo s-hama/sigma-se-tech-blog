@@ -87,9 +87,11 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'tblog/custom.css' %}">
 
+    {% block ads %}
     <!-- Google AdSense MAIN -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9033413781185393"
      crossorigin="anonymous"></script>
+    {% endblock %}
 
     <!-- <script>
            (adsbygoogle = window.adsbygoogle || []).push({

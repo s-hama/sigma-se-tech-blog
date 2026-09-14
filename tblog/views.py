@@ -1,8 +1,11 @@
-from django.db.models import Case, IntegerField, Q, Value, When
-from django.http import Http404
+from django.db.models import Q
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from django.views import generic
-from .models import BigCategory, Post, SmallCategory, Tag
+from .models import BigCategory, Post, SmallCategory, Tag, get_public_posts
+from .series import group_posts_by_series
+from .sitemaps import CANONICAL_ORIGIN
 import logging
 
 
@@ -44,105 +47,54 @@ class PostIndexView(BaseListView):
         if not context["is_top_page"]:
             return context
 
-        public_posts = Post.objects.filter(is_publick=True).exclude(category__name="PaidContent")
-        context["series_guides"] = [
-            {
-                "label": "数学 - 計算の仕組み",
-                "summary": "分数の除算や負の数、0で割れない理由など、計算規則の仕組みを具体例と数式で解説",
-                "posts": public_posts.filter(title__icontains="数学 - 計算の仕組み").order_by("pk")[:10],
-            },
-            {
-                "label": "Django - VPSで作るDjangoサイト",
-                "summary": "VPS上でDjangoサイトを構築し、公開するまでの手順を解説",
-                "posts": public_posts.filter(
-                    Q(title__icontains="VPSで作るDjangoサイト構築手順 - Nginx編")
-                    | Q(title__icontains="VPSで作るDjangoサイト構築手順 - Apache編")
-                ).annotate(
-                    series_priority=Case(
-                        When(
-                            title__icontains="VPSで作るDjangoサイト構築手順 - Nginx編",
-                            then=Value(0),
-                        ),
-                        When(
-                            title__icontains="VPSで作るDjangoサイト構築手順 - Apache編",
-                            then=Value(1),
-                        ),
-                        default=Value(2),
-                        output_field=IntegerField(),
-                    )
-                ).order_by("series_priority", "pk")[:10],
-            },
-            {
-                "label": "暗号技術の仕組み",
-                "summary": "古典暗号から耐量子暗号まで、暗号の考え方を図解と具体例で解説",
-                "posts": public_posts.filter(title__icontains="情報セキュリティ - 暗号技術").order_by("pk")[:10],
-            },
-            {
-                "label": "Angular - システム開発の基礎",
-                "summary": "Angularの導入から基本構成まで、Webシステム開発の基礎を解説",
-                "posts": public_posts.filter(
-                    Q(title__icontains="Webシステム開発 - Angular基礎")
-                ).order_by("pk")[:10],
-            },
-            {
-                "label": "Python - 基礎",
-                "summary": "Pythonの開発環境、基本文法、標準機能、数値計算や可視化の基礎を整理",
-                "posts": public_posts.filter(
-                    Q(title__icontains="Python - 開発向けVim設定")
-                    | Q(title__icontains="Python - 対話モード")
-                    | Q(title__icontains="Python - 標準デバッガー（Pdb）")
-                    | Q(title__icontains="Python - NumPy")
-                    | Q(title__icontains="Python - Matplotlib")
-                    | Q(title__icontains="Python - 組込みデータ型")
-                    | Q(title__icontains="Python - 算術演算子")
-                    | Q(title__icontains="Python - 複合代入演算子")
-                    | Q(title__icontains="Python - 論理演算子")
-                    | Q(title__icontains="Python - ビット演算子")
-                    | Q(title__icontains="Python - 高階関数と畳込み")
-                    | Q(title__icontains="Python - 例外")
-                ).order_by("pk")[:30],
-            },
-            {
-                "label": "Python - タスク指向型対話",
-                "summary": "タスク指向型対話システムの考え方や構成要素をPythonを用いて解説",
-                "posts": public_posts.filter(
-                    Q(title__icontains="Python - タスク指向型対話")
-                ).order_by("pk")[:5],
-            },
-            {
-                "label": "Python - ニューラルネットワーク",
-                "summary": "ニューラルネットワークや深層学習の仕組みをPythonを用いて基礎から順番に解説",
-                "posts": public_posts.filter(
-                    Q(title__icontains="Python - ニューラルネットワーク")
-                ).order_by("pk")[:15],
-            },
-            {
-                "label": "Django - 基本操作",
-                "summary": "Django開発で使う基本操作やデバッグ支援ツールを整理",
-                "posts": public_posts.filter(
-                    Q(title__icontains="Django - Django Debug Toolbar")
-                ).order_by("pk")[:5],
-            },
-            {
-                "label": "応用情報技術 - 基礎",
-                "summary": "試験対策で押さえたい用語や考え方を、あとから見返しやすい形で整理",
-                "posts": public_posts.filter(title__icontains="応用情報技術 - 基礎").order_by("pk")[:25],
-            },
-            {
-                "label": "Git - 基本操作",
-                "summary": "Gitの開発準備や状態管理の考え方、基本操作を整理",
-                "posts": public_posts.filter(
-                    Q(title__icontains="Git - GitHub登録・SSH鍵設定・ブランチ作成までの開発準備")
-                    | Q(title__icontains="Git - 状態管理と基本操作")
-                ).order_by("pk")[:5],
-            },
-            {
-                "label": "MathJax",
-                "summary": "MathJaxを使った数式表示の基本と、MathML・LaTeXによる記述方法を整理",
-                "posts": public_posts.filter(title__icontains="MathJax - MathML、LaTeX ").order_by("pk")[:5],
-            },
-        ]
+        public_posts = get_public_posts().only("id", "title")
+        context["series_guides"] = group_posts_by_series(public_posts, for_home=True)
         return context
+
+
+class SitemapView(generic.TemplateView):
+    template_name = "tblog/sitemap.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        posts = get_public_posts().select_related("category__parent").defer("text").order_by(
+            "-category__parent_id", "category_id", "pk",
+        )
+        categories = {}
+        post_count = 0
+        for post in posts:
+            category = post.category
+            parent = categories.setdefault(category.parent_id, {
+                "category": category.parent,
+                "children": {},
+            })
+            child = parent["children"].setdefault(category.pk, {
+                "category": category,
+                "posts": [],
+            })
+            child["posts"].append(post)
+            post_count += 1
+
+        for parent in categories.values():
+            for child in parent["children"].values():
+                child["series"] = group_posts_by_series(child.pop("posts"))
+            parent["children"] = list(parent["children"].values())
+
+        context.update({
+            "sitemap_categories": list(categories.values()),
+            "sitemap_post_count": post_count,
+            "canonical_url": CANONICAL_ORIGIN + reverse("tblog:sitemap"),
+        })
+        return context
+
+
+def robots_txt(request):
+    sitemap_url = CANONICAL_ORIGIN + reverse("tblog:sitemap_xml")
+    return HttpResponse(
+        f"User-agent: *\nDisallow: /admin/\n\nSitemap: {sitemap_url}\n",
+        content_type="text/plain; charset=utf-8",
+    )
+
 
 class CategoryView(BaseListView):
     def get_queryset(self):

@@ -1,12 +1,19 @@
 from django.urls import path, re_path, include
 from django.http import HttpResponse
+from django.contrib.sitemaps.views import sitemap
 from . import views
+from .sitemaps import PostSitemap, StaticPageSitemap
 # import logging 
 
 # logging.getLogger('command').debug(' >>> ' + __name__)
 
 urlpatterns = [ 
     path('', views.PostIndexView.as_view(), name='index'), 
+    path('sitemap/', views.SitemapView.as_view(), name='sitemap'),
+    path('sitemap.xml', sitemap, {
+        'sitemaps': {'pages': StaticPageSitemap, 'posts': PostSitemap},
+    }, name='sitemap_xml'),
+    path('robots.txt', views.robots_txt, name='robots'),
 
     re_path(r'^detail/(?P<pk>[0-9]+)/$',
         views.PostDetailView.as_view(), name='detail'),
