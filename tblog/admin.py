@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Post, SmallCategory, BigCategory, Tag
+from .models import Post, SmallCategory, BigCategory, Tag
 
 admin.site.register(Post)
 admin.site.register(SmallCategory)
