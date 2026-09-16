@@ -7,8 +7,8 @@
 {% block content %}
 <article class="sitemap" aria-labelledby="sitemap-title">
   <h2 class="h4" id="sitemap-title">サイトマップ</h2>
-  <p>公開記事をカテゴリ・シリーズごとにまとめています。連載はタイトルの番号順に読み進められます。</p>
-  <p>公開記事：{{ sitemap_post_count }}件。新しく公開した記事は、<a class="link-secondary" href="{% url 'tblog:index' %}?page=1">新着記事</a>から確認できます。</p>
+  <p>全公開記事：{{ sitemap_post_count }}件をカテゴリ・シリーズごとに整理しています。<br>
+    新しい記事は、<a class="link-secondary" href="{% url 'tblog:index' %}?page=1">新着順一覧</a>から確認できます。</p>
 
   <nav class="sitemap-toc" aria-label="サイトマップの目次">
     <ul>
