@@ -10,7 +10,7 @@
     <h4>{{ post.title }}</h4>
   </div>
   <div class="card-meta">
-    {% include "tblog/post_meta.html" %}
+    {% include "tblog/post_meta.html" with show_author=True %}
   </div>
   <div class="card-body">
     {% if post.is_html %}
@@ -51,7 +51,7 @@
   </div>
  
   <div class="card-footer">
-    {% include "tblog/post_meta.html" %}
+    {% include "tblog/post_meta.html" with show_author=True %}
     {% if user.is_authenticated %}
       <p><a class="link-secondary" href="{% url 'admin:tblog_post_change' post.pk %}">Go to Admin Console</a></p>
     {% endif %}

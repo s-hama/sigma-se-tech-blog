@@ -40,7 +40,7 @@
 <div class="border-primary mb-3">
   <a class="btn btn-outline-primary btn-list-link col-12 col-sm-12 {% if post.category.name == 'PaidContent' %}disabled{% endif %}" href="{% url 'tblog:detail' post.pk %}">
     <h4>{{ post.title }}</h4>
-    {% include "tblog/post_meta.html" %}
+    {% include "tblog/post_meta.html" with show_author=False %}
   </a>
 </div>
 {% empty %}
