@@ -92,4 +92,66 @@
       <p><strong>スクリプト言語</strong>と<strong>インタプリタ方式</strong>は分類の観点が異なるため、同じ意味ではない。</p>
     </li>
   </ul>
+  <h2 id="その他言語">その他言語</h2>
+  <p>プログラム言語以外にも、実行環境、通信手法、文書やデータの記述形式など、さまざまな仕様を用いる。</p>
+  <ul>
+    <li>
+      <p>共通言語基盤（CLI）<br>
+        <strong>CLI（Common Language Infrastructure）</strong>は、実行可能コード、型、メタデータ、仮想実行システムなどを定めた<strong>ECMA-335</strong>の標準仕様。<code>.NET</code>はCLIを基盤とする実装・技術群の一つとなる。</p>
+      <p>複数の言語を共通の実行基盤で扱えるが、別のプラットフォームでそのまま動くかどうかは、CLIの実装や利用するライブラリなどにも左右される。</p>
+    </li>
+    <li>
+      <p>Ajax（Asynchronous JavaScript + XML）<br>
+        Webブラウザ上での<strong>非同期通信</strong>により、通信結果（レスポンス）をページ全体でなく<strong>部分的</strong>に書換える手法のこと。</p>
+      <p>単一の部品や規格ではなく、<code>JavaScript</code>とWeb APIを組み合わせる開発手法であり、交換データにはXMLだけでなくJSONなども使える。</p>
+    </li>
+    <li>
+      <p>データ定義言語（DDL：Data Definition Language）<br>
+        データベースの表や索引などの構造を定義・変更するSQLの命令群で、<code>CREATE</code>、<code>ALTER</code>、<code>DROP</code>などが代表例となる。<br>
+        XMLの<strong>DTD（Document Type Definition）</strong>はXML文書の構造を宣言する仕組みであり、SQLのDDLとは別のものとなる。</p>
+    </li>
+    <li>
+      <p>マークアップ言語：HTML（HyperText Markup Language）<br>
+        <strong>Webページ作成（文書を保管・閲覧する）</strong>のために開発された言語でテキスト、音声、画像、動画、データファイルなどの表示やリンクを埋込むことができる。</p>
+      <p>現在のHTMLはWHATWGの<strong>HTML Living Standard</strong>として継続的に更新されている。WebSocketはブラウザから利用できる別のWeb API・通信プロトコルであり、HTML要素そのものではない。</p>
+    </li>
+    <li>
+      <p>マークアップ言語：XML（Extensible Markup Language）<br>
+        マークアップ言語<strong>SGML</strong>を基に、構造化された文書やデータを表現するために作られた言語で、文法には厳密なルールがある。</p>
+      <p>文書構造の規則が必要な場合は、<strong>DTD（Document Type Definition）</strong>やXML Schemaなどで定義できる。</p>
+      <p>XML文書はすべて整形式である必要があり、さらにDTDなどで宣言した規則にも適合する文書を妥当なXML文書という。</p>
+      <ul>
+        <li>
+          <p>整形式XML文書（well-formed XML Document）<br>
+            XMLの基本的な構文規則に従った文書。DTDなどの宣言は必須ではない。</p>
+        </li>
+        <li>
+          <p>妥当なXML文書（valid XML Document）<br>
+            整形式であり、文書内で参照するDTDなどの構造規則にも適合した文書。</p>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>マークアップ言語：XHTML（Extensible HyperText Markup Language）<br>
+        <strong>HTML</strong>を<strong>XML</strong>の文法に従って定義したもので、要素を正しく入れ子にする、終了タグを省略しないなど、XMLの構文規則に従う。
+      </p>
+    </li>
+    <li>
+      <p>スタイルシート言語：CSS（Cascading Style Sheets）<br>
+        文章やタグなどの要素をどう見せるか<strong>そのスタイルを定義するため</strong>に作られた言語で<strong>HTML</strong>や<strong>XHTML</strong>で使用される。</p>
+      <p>
+        Webページでは、文書の<strong>構造</strong>をHTML、見た目や配置などの<strong>体裁</strong>をCSSで記述し、役割を分けて管理できる。
+      </p>
+    </li>
+    <li>
+      <p>JSON（JavaScript Object Notation）<br>
+        <code>JavaScript</code>のオブジェクト記法を用いた軽量の<strong>データ交換フォーマット</strong>のこと。
+      </p>
+    </li>
+    <li>
+      <p>YAML（YAML Ain't Markup Language）<br>
+        配列やマッピングなどの<strong>構造化データ</strong>を、人が読み書きしやすいテキストで表現するデータシリアライズ形式。</p>
+      <p>名前の由来は「YAMLはマークアップ言語でない」であり、マークアップ言語には分類されない。用途が重なる形式として<strong>JSON</strong>がある。</p>
+    </li>
+  </ul>
 </div>
