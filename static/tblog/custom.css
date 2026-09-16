@@ -282,6 +282,42 @@ a.list-group-last-item {
     padding-top: 2rem;
 }
 
+.home-guide {
+    overflow-wrap: anywhere;
+}
+
+.home-section {
+    margin-bottom: 1.5rem;
+}
+
+.home-recommendations {
+    margin-bottom: 0;
+    padding-left: 2.25rem;
+}
+
+.home-recommendation-name,
+.home-server-name {
+    display: block;
+    margin-bottom: .4rem;
+}
+
+.home-latest-posts {
+    margin-bottom: .5rem;
+    padding-left: 2.25rem;
+}
+
+.home-latest-posts li {
+    margin-bottom: .25rem;
+}
+
+.home-list-link {
+    padding-left: 1rem;
+}
+
+.home-server-series {
+    margin-top: .75rem;
+}
+
 .recommended-series {
     border-bottom: 1px solid var(--bs-light-border-subtle);
     margin-bottom: 1.5rem;

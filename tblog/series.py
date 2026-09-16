@@ -3,6 +3,11 @@
 import re
 
 
+VPS_SERIES_PREFIX = 'VPSで作るDjangoサイト構築手順 - '
+VPS_SERVERS = ('Nginx', 'Apache')
+ANGULAR_SERIES_PREFIX = 'Webシステム開発 - Angular基礎'
+
+
 SERIES_GUIDES = (
     {
         "label": '数学 - 計算の仕組み',
@@ -10,16 +15,11 @@ SERIES_GUIDES = (
         "keywords": (
             '数学 - 計算の仕組み',
         ),
-        "limit": 10,
     },
     {
         "label": 'Django - VPSで作るDjangoサイト',
         "summary": 'VPS上でDjangoサイトを構築し、公開するまでの手順を解説',
-        "keywords": (
-            'VPSで作るDjangoサイト構築手順 - Nginx編',
-            'VPSで作るDjangoサイト構築手順 - Apache編',
-        ),
-        "limit": 10,
+        "keywords": tuple(f'{VPS_SERIES_PREFIX}{server}編' for server in VPS_SERVERS),
         "keyword_order": True,
     },
     {
@@ -28,15 +28,13 @@ SERIES_GUIDES = (
         "keywords": (
             '情報セキュリティ - 暗号技術',
         ),
-        "limit": 10,
     },
     {
         "label": 'Angular - システム開発の基礎',
         "summary": 'Angularの導入から基本構成まで、Webシステム開発の基礎を解説',
         "keywords": (
-            'Webシステム開発 - Angular基礎',
+            ANGULAR_SERIES_PREFIX,
         ),
-        "limit": 10,
     },
     {
         "label": 'Python - 基礎',
@@ -55,7 +53,6 @@ SERIES_GUIDES = (
             'Python - 開発向けVim設定',
             'Python - 対話モード',
         ),
-        "limit": 30,
     },
     {
         "label": 'Python - タスク指向型対話',
@@ -63,7 +60,6 @@ SERIES_GUIDES = (
         "keywords": (
             'Python - タスク指向型対話',
         ),
-        "limit": 5,
     },
     {
         "label": 'Python - ニューラルネットワーク',
@@ -71,7 +67,6 @@ SERIES_GUIDES = (
         "keywords": (
             'Python - ニューラルネットワーク',
         ),
-        "limit": 15,
     },
     {
         "label": 'Django - 基本操作',
@@ -79,7 +74,6 @@ SERIES_GUIDES = (
         "keywords": (
             'Django - Django Debug Toolbar',
         ),
-        "limit": 5,
     },
     {
         "label": '応用情報技術 - 基礎',
@@ -87,7 +81,6 @@ SERIES_GUIDES = (
         "keywords": (
             '応用情報技術 - 基礎',
         ),
-        "limit": 25,
     },
     {
         "label": 'Git - 基本操作',
@@ -96,7 +89,6 @@ SERIES_GUIDES = (
             'Git - GitHub登録・SSH鍵設定・ブランチ作成までの開発準備',
             'Git - 状態管理と基本操作',
         ),
-        "limit": 5,
     },
     {
         "label": 'MathJax',
@@ -104,7 +96,6 @@ SERIES_GUIDES = (
         "keywords": (
             'MathJax - MathML、LaTeX ',
         ),
-        "limit": 5,
     },
 )
 
@@ -114,7 +105,27 @@ def _natural_title_key(title):
                  for part in re.split(r"(\d+)", title))
 
 
-def group_posts_by_series(posts, *, for_home=False):
+def order_series_posts(posts):
+    """Order numbered articles by their titles rather than registration order."""
+    return sorted(posts, key=lambda post: (_natural_title_key(post.title), post.pk))
+
+
+def group_vps_posts(posts):
+    """List every VPS article in reading order, separately for each server."""
+    posts = list(posts)
+    groups = []
+    for server in VPS_SERVERS:
+        keyword = f'{VPS_SERIES_PREFIX}{server}編'.casefold()
+        matched = [post for post in posts if keyword in post.title.casefold()]
+        if matched:
+            groups.append({
+                "label": f'{server}編',
+                "posts": order_series_posts(matched),
+            })
+    return groups
+
+
+def group_posts_by_series(posts):
     """Keep known themes in order and retain unmatched posts in the directory."""
     remaining = list(posts)
     groups = []
@@ -130,8 +141,7 @@ def group_posts_by_series(posts, *, for_home=False):
             if definition.get("keyword_order"):
                 keyword_position = next(index for index, term in enumerate(keywords)
                                         if term in post.title.casefold())
-            order = (post.pk,) if for_home else (_natural_title_key(post.title), post.pk)
-            return (keyword_position, *order)
+            return (keyword_position, _natural_title_key(post.title), post.pk)
 
         matched.sort(key=sort_key)
         matched_ids = {post.pk for post in matched}
@@ -139,12 +149,12 @@ def group_posts_by_series(posts, *, for_home=False):
         groups.append({
             "label": definition["label"],
             "summary": definition["summary"],
-            "posts": matched[:definition["limit"]] if for_home else matched,
+            "posts": matched,
         })
-    if remaining and not for_home:
+    if remaining:
         groups.append({
             "label": "その他の記事",
             "summary": "",
-            "posts": sorted(remaining, key=lambda post: (_natural_title_key(post.title), post.pk)),
+            "posts": order_series_posts(remaining),
         })
     return groups

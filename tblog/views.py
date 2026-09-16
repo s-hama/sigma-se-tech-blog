@@ -4,7 +4,10 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views import generic
 from .models import BigCategory, Post, SmallCategory, Tag, get_public_posts
-from .series import group_posts_by_series
+from .series import (
+    ANGULAR_SERIES_PREFIX, VPS_SERIES_PREFIX,
+    group_posts_by_series, group_vps_posts, order_series_posts,
+)
 from .sitemaps import CANONICAL_ORIGIN
 import logging
 
@@ -47,8 +50,19 @@ class PostIndexView(BaseListView):
         if not context["is_top_page"]:
             return context
 
-        public_posts = get_public_posts().only("id", "title")
-        context["series_guides"] = group_posts_by_series(public_posts, for_home=True)
+        public_posts = get_public_posts()
+        context["latest_posts"] = public_posts.only("id", "title", "created_at").order_by(
+            "-created_at", "-pk",
+        )[:5]
+        context["math_posts"] = public_posts.filter(
+            category__parent__name="数理科学",
+        ).only("id", "title").order_by("pk")
+        context["vps_series"] = group_vps_posts(
+            public_posts.filter(title__icontains=VPS_SERIES_PREFIX).only("id", "title"),
+        )
+        context["angular_posts"] = order_series_posts(
+            public_posts.filter(title__icontains=ANGULAR_SERIES_PREFIX).only("id", "title"),
+        )
         return context
 
 
