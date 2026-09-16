@@ -138,7 +138,7 @@ class SitemapTest(TestCase):
     def setUpTestData(cls):
         cls.big = BigCategory.objects.create(name="情報技術")
         cls.small = SmallCategory.objects.create(name="暗号技術", parent=cls.big)
-        # Create out of sequence, and exceed the home page's ten-article limit.
+        # Create out of sequence to verify numeric ordering and complete coverage.
         cls.series_posts = {
             number: Post.objects.create(
                 title=f"情報セキュリティ - 暗号技術：{number}/12 解説",
@@ -285,14 +285,123 @@ class SitemapTest(TestCase):
         self.assertEqual(response.content.decode(),
                          "User-agent: *\nDisallow: /admin/\n\nSitemap: https://sigma-se.com/sitemap.xml\n")
 
-    def test_home_keeps_existing_series_limit_and_server_order(self):
+
+class HomePageTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        math = BigCategory.objects.create(name="数理科学")
+        math_category = SmallCategory.objects.create(name="計算の仕組み", parent=math)
+        geometry_category = SmallCategory.objects.create(name="幾何", parent=math)
+        tech = BigCategory.objects.create(name="情報技術")
+        tech_category = SmallCategory.objects.create(name="Web開発", parent=tech)
+        cls.math_posts = [
+            Post.objects.create(title=f"計算規則の解説 {number}", text="本文", category=math_category)
+            for number in range(1, 13)
+        ]
+        cls.math_posts.append(Post.objects.create(
+            title="図形の性質", text="本文", category=geometry_category,
+        ))
+        cls.math_title_outside_category = Post.objects.create(
+            title="数学 - 計算の仕組み：Webで数式を表示する", text="本文", category=tech_category,
+        )
+        cls.vps_posts = {}
         for server in ("Apache", "Nginx"):
-            Post.objects.create(
-                title=f"VPSで作るDjangoサイト構築手順 - {server}編：1/4 初期設定",
-                text="本文", category=self.small,
+            cls.vps_posts[server] = {
+                number: Post.objects.create(
+                    title=f"VPSで作るDjangoサイト構築手順 - {server}編：{number}/12 解説",
+                    text="本文", category=tech_category,
+                )
+                for number in (10, 2, 1, 12, 3, 11, 4, 5, 6, 7, 8, 9)
+            }
+        cls.angular_posts = {
+            number: Post.objects.create(
+                title=f"Webシステム開発 - Angular基礎：{number}/6 解説",
+                text="本文", category=tech_category,
             )
+            for number in (6, 2, 4, 1, 5, 3)
+        }
+        Post.objects.update(created_at=datetime(2024, 1, 1, tzinfo=timezone.utc))
+        cls.recent_posts = {}
+        for day in (6, 2, 7, 4, 5, 3, 1):
+            post = Post.objects.create(title=f"新着の解説 {day}", text="本文", category=tech_category)
+            Post.objects.filter(pk=post.pk).update(created_at=datetime(2025, 1, day, tzinfo=timezone.utc))
+            cls.recent_posts[day] = post
+        paid_category = SmallCategory.objects.create(name="PaidContent", parent=math)
+        cls.restricted_posts = [
+            Post.objects.create(
+                title="数学の下書き", text="本文", category=math_category, is_publick=False,
+            ),
+            Post.objects.create(
+                title="VPSで作るDjangoサイト構築手順 - Nginx編：13/13 下書き",
+                text="本文", category=tech_category, is_publick=False,
+            ),
+            Post.objects.create(
+                title="VPSで作るDjangoサイト構築手順 - Apache編：13/13 限定記事",
+                text="本文", category=paid_category,
+            ),
+            Post.objects.create(
+                title="Webシステム開発 - Angular基礎：7/8 下書き",
+                text="本文", category=tech_category, is_publick=False,
+            ),
+            Post.objects.create(
+                title="Webシステム開発 - Angular基礎：8/8 限定記事",
+                text="本文", category=paid_category,
+            ),
+        ]
+
+    def test_latest_lists_five_public_posts_by_created_date_even_when_signed_in(self):
+        user = get_user_model().objects.create_user(username="home-reader", password="test-password")
+        for authenticated in (False, True):
+            with self.subTest(authenticated=authenticated):
+                if authenticated:
+                    self.client.force_login(user)
+                response = self.client.get(reverse("tblog:index"))
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(list(response.context["latest_posts"]),
+                                 [self.recent_posts[day] for day in (7, 6, 5, 4, 3)])
+                for post in self.restricted_posts:
+                    self.assertNotContains(response, post.title)
+
+    def test_recommendations_include_entire_math_category_and_vps_series_in_reading_order(self):
         response = self.client.get(reverse("tblog:index"))
-        guides = {guide["label"]: guide["posts"] for guide in response.context["series_guides"]}
-        self.assertEqual(len(guides["暗号技術の仕組み"]), 10)
-        self.assertIn("Nginx編", guides["Django - VPSで作るDjangoサイト"][0].title)
-        self.assertContains(response, "新着記事を見る")
+        self.assertEqual(list(response.context["math_posts"]), self.math_posts)
+        self.assertNotIn(self.math_title_outside_category, response.context["math_posts"])
+        groups = response.context["vps_series"]
+        self.assertEqual([group["label"] for group in groups], ["Nginx編", "Apache編"])
+        for server, group in zip(("Nginx", "Apache"), groups):
+            self.assertEqual(group["posts"], [self.vps_posts[server][number] for number in range(1, 13)])
+        for post in self.math_posts + [post for group in groups for post in group["posts"]]:
+            self.assertContains(response, f'href="{reverse("tblog:detail", args=[post.pk])}"')
+        html = response.content.decode()
+        self.assertLess(html.index('id="home-latest-title"'), html.index('id="home-recommended-title"'))
+
+    def test_angular_recommendations_include_all_public_parts_in_reading_order(self):
+        expected_posts = [self.angular_posts[number] for number in range(1, 7)]
+        for angular_only in (False, True):
+            with self.subTest(angular_only=angular_only):
+                if angular_only:
+                    Post.objects.exclude(pk__in=[post.pk for post in expected_posts]).delete()
+                response = self.client.get(reverse("tblog:index"))
+                self.assertEqual(response.context["angular_posts"], expected_posts)
+                self.assertContains(response, 'id="home-recommended-title"')
+                self.assertContains(response, 'id="home-angular-title"')
+                for post in expected_posts:
+                    self.assertContains(response, f'href="{reverse("tblog:detail", args=[post.pk])}"')
+
+    def test_newest_archive_retains_pagination_without_recommendations(self):
+        response = self.client.get(reverse("tblog:index"), {"page": 1})
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.context["is_top_page"])
+        self.assertEqual(len(response.context["post_list"]), 10)
+        self.assertTrue(response.context["page_obj"].has_next())
+        self.assertNotContains(response, 'id="home-recommended-title"')
+        self.assertNotContains(response, 'rel="author"')
+
+    def test_empty_home_keeps_sitemap_and_newest_archive_links(self):
+        Post.objects.all().delete()
+        response = self.client.get(reverse("tblog:index"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "公開記事はまだありません。")
+        self.assertContains(response, 'href="/sitemap/"')
+        self.assertContains(response, 'href="/?page=1"')
+        self.assertNotContains(response, 'id="home-recommended-title"')
