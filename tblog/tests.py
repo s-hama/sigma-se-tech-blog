@@ -58,6 +58,7 @@ class ListPageTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.post.title)
+        self.assertNotContains(response, "noindex,follow")
 
     def test_unknown_small_category_returns_404(self):
         response = self.client.get(
@@ -83,6 +84,65 @@ class ListPageTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.post.title)
+        self.assertNotContains(response, "noindex,follow")
+
+    def test_empty_categories_are_noindex(self):
+        big = BigCategory.objects.create(name="未使用カテゴリ")
+        small = SmallCategory.objects.create(name="未使用の小カテゴリ", parent=big)
+        for kwargs in ({"big": big.name}, {"big": big.name, "small": small.name}):
+            with self.subTest(category=kwargs):
+                response = self.client.get(reverse("tblog:category", kwargs=kwargs))
+                self.assertEqual(response.status_code, 200)
+                self.assertContains(
+                    response,
+                    '<meta name="robots" content="noindex,follow">',
+                    html=True,
+                )
+                self.assertContains(response, "該当する記事がありません。")
+                self.assertNotContains(response, 'aria-label="Page navigation"')
+
+    def test_empty_tags_are_noindex(self):
+        for tag in (self.unused_tag, self.private_only_tag):
+            with self.subTest(tag=tag.name):
+                response = self.client.get(reverse("tblog:tag", kwargs={"tag": tag.name}))
+                self.assertEqual(response.status_code, 200)
+                self.assertContains(
+                    response,
+                    '<meta name="robots" content="noindex,follow">',
+                    html=True,
+                )
+                self.assertContains(response, "該当する記事がありません。")
+                self.assertNotContains(response, 'aria-label="Page navigation"')
+
+    def test_list_indexability_follows_publication_status(self):
+        big = BigCategory.objects.create(name="公開状態確認")
+        small = SmallCategory.objects.create(name="公開状態確認の小カテゴリ", parent=big)
+        tag = Tag.objects.create(name="公開状態確認のタグ")
+        post = Post.objects.create(
+            title="公開切替の解説", text="本文", category=small, is_publick=False,
+        )
+        post.tag.add(tag)
+        paths = (
+            reverse("tblog:category", kwargs={"big": big.name}),
+            reverse("tblog:category", kwargs={"big": big.name, "small": small.name}),
+            reverse("tblog:tag", kwargs={"tag": tag.name}),
+        )
+        for is_public in (False, True, False):
+            Post.objects.filter(pk=post.pk).update(is_publick=is_public)
+            for path in paths:
+                with self.subTest(is_public=is_public, path=path):
+                    response = self.client.get(path)
+                    self.assertEqual(response.status_code, 200)
+                    if is_public:
+                        self.assertNotContains(response, "noindex,follow")
+                        self.assertContains(response, post.title)
+                    else:
+                        self.assertContains(
+                            response,
+                            '<meta name="robots" content="noindex,follow">',
+                            html=True,
+                        )
+                        self.assertContains(response, "該当する記事がありません。")
 
     def test_search_with_no_results_is_noindex(self):
         response = self.client.get(reverse("tblog:index"), {"quick": "該当なし"})
@@ -402,6 +462,7 @@ class HomePageTest(TestCase):
         response = self.client.get(reverse("tblog:index"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "公開記事はまだありません。")
+        self.assertNotContains(response, "noindex,follow")
         self.assertContains(response, 'href="/sitemap/"')
         self.assertContains(response, 'href="/?page=1"')
         self.assertNotContains(response, 'id="home-recommended-title"')
