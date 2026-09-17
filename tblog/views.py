@@ -14,11 +14,18 @@ import logging
 
 class BaseListView(generic.ListView):
     paginate_by = 10 
+    noindex_empty_results = False
+
     def base_queryset(self):
         queryset = Post.objects.filter(
             is_publick=True).order_by('-created_at')
         logging.getLogger('command').debug('ON View.py > BaseListView')
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["noindex"] = self.noindex_empty_results and not context["post_list"]
+        return context
 
 class PostIndexView(BaseListView):
     def get_queryset(self):
@@ -44,7 +51,7 @@ class PostIndexView(BaseListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["is_top_page"] = self.is_top_page()
-        context["is_search_no_results"] = (
+        context["noindex"] = (
             "quick" in self.request.GET and not context["post_list"]
         )
         if not context["is_top_page"]:
@@ -111,6 +118,8 @@ def robots_txt(request):
 
 
 class CategoryView(BaseListView):
+    noindex_empty_results = True
+
     def get_queryset(self):
         queryset = self.base_queryset()
         big_name = self.kwargs["big"]
@@ -129,6 +138,8 @@ class CategoryView(BaseListView):
         return queryset
 
 class TagView(BaseListView):
+    noindex_empty_results = True
+
     def get_queryset(self):
         tag = get_object_or_404(Tag, name=self.kwargs["tag"])
         queryset = self.base_queryset().filter(tag=tag)

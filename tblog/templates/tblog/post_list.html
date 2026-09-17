@@ -1,7 +1,7 @@
 {% extends "tblog/base.html" %}
 {% load static %}
 {% block nav_home %}active{% endblock %}
-{% block robots %}{% if is_search_no_results %}<meta name="robots" content="noindex,follow">{% endif %}{% endblock %}
+{% block robots %}{% if noindex %}<meta name="robots" content="noindex,follow">{% endif %}{% endblock %}
 {% block content %}
 {% if is_top_page %}
 <div class="home-guide">
