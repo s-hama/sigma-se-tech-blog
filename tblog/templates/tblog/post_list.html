@@ -1,52 +1,90 @@
 {% extends "tblog/base.html" %}
 {% load static %}
 {% block nav_home %}active{% endblock %}
+{% block robots %}{% if noindex %}<meta name="robots" content="noindex,follow">{% endif %}{% endblock %}
 {% block content %}
 {% if is_top_page %}
-<section class="recommended-series">
-  <div class="recommended-series-group">
-    <h4>記事一覧</h4>
-    <p>公開記事を新着順にまとめた一覧</p>
-    <ul>
+<div class="home-guide">
+  <section class="home-section" aria-labelledby="home-latest-title">
+    <h2 class="h4" id="home-latest-title">新着</h2>
+    <ul class="home-latest-posts">
+      {% for latest_post in latest_posts %}
       <li>
-        <a class="link-secondary" href="?page=1">
-          すべての記事を見る
-        </a>
+        <a class="link-secondary" href="{% url 'tblog:detail' latest_post.pk %}">{{ latest_post.title }}</a>
       </li>
+      {% empty %}
+      <li>公開記事はまだありません。</li>
+      {% endfor %}
     </ul>
-  </div>
-  {% for guide in series_guides %}
-    {% if guide.posts %}
-    <div class="recommended-series-group">
-      <h4>{{ guide.label }}</h4>
-      <p>{{ guide.summary }}</p>
-      <ul>
-        {% for series_post in guide.posts %}
-        <li>
-          <a class="link-secondary" href="{% url 'tblog:detail' series_post.pk %}">
-            {{ series_post.title }}
-          </a>
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
-    {% endif %}
-  {% endfor %}
-</section>
+    <p class="home-list-link"><a class="link-secondary" href="{% url 'tblog:index' %}?page=1">新着順一覧</a>を見る</p>
+  </section>
+
+  {% if math_posts or vps_series or angular_posts %}
+  <section class="home-section" aria-labelledby="home-recommended-title">
+    <h2 class="h4" id="home-recommended-title">主要コンテンツ</h2>
+    <ul class="home-recommendations">
+      {% if math_posts %}
+      <li class="recommended-series-group">
+        <span class="home-recommendation-name" id="home-math-title">数学 - 計算の仕組み</span>
+        <p>分数の除算や負の数、0で割れない理由など、計算規則の仕組みを具体例と数式で解説</p>
+        <ul>
+          {% for math_post in math_posts %}
+          <li><a class="link-secondary" href="{% url 'tblog:detail' math_post.pk %}">{{ math_post.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </li>
+      {% endif %}
+      {% if vps_series %}
+      <li class="recommended-series-group">
+        <span class="home-recommendation-name" id="home-vps-title">Django - VPSで作るDjangoサイト</span>
+        <p>VPS上でDjangoサイトを構築し、公開するまでの手順を解説</p>
+        <ul>
+          {% for series in vps_series %}
+          <li class="home-server-series">
+            <span class="home-server-name">{{ series.label }}</span>
+            <ul>
+              {% for series_post in series.posts %}
+              <li><a class="link-secondary" href="{% url 'tblog:detail' series_post.pk %}">{{ series_post.title }}</a></li>
+              {% endfor %}
+            </ul>
+          </li>
+          {% endfor %}
+        </ul>
+      </li>
+      {% endif %}
+      {% if angular_posts %}
+      <li class="recommended-series-group">
+        <span class="home-recommendation-name" id="home-angular-title">Webシステム開発 - Angular基礎</span>
+        <p>Angularの導入から基本構成まで、Webシステム開発の基礎を解説</p>
+        <ul>
+          {% for angular_post in angular_posts %}
+          <li><a class="link-secondary" href="{% url 'tblog:detail' angular_post.pk %}">{{ angular_post.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </li>
+      {% endif %}
+    </ul>
+  </section>
+  {% endif %}
+</div>
 {% else %}
 
 {% for post in post_list %}
 <div class="border-primary mb-3">
   <a class="btn btn-outline-primary btn-list-link col-12 col-sm-12 {% if post.category.name == 'PaidContent' %}disabled{% endif %}" href="{% url 'tblog:detail' post.pk %}">
     <h4>{{ post.title }}</h4>
-    {% include "tblog/post_meta.html" %}
+    {% include "tblog/post_meta.html" with show_author=False %}
   </a>
 </div>
+{% empty %}
+<p>該当する記事がありません。</p>
 {% endfor %}
+{% if post_list %}
 <div class="row">
   <div class="text-center">
     {% include "tblog/page.html" %}
   </div>
 </div>
+{% endif %}
 {% endif %}
 {% endblock %}

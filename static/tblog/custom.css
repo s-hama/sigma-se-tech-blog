@@ -271,6 +271,42 @@ a.list-group-last-item {
     padding-top: 2rem;
 }
 
+.home-guide {
+    overflow-wrap: anywhere;
+}
+
+.home-section {
+    margin-bottom: 1.5rem;
+}
+
+.home-recommendations {
+    margin-bottom: 0;
+    padding-left: 2.25rem;
+}
+
+.home-recommendation-name,
+.home-server-name {
+    display: block;
+    margin-bottom: .4rem;
+}
+
+.home-latest-posts {
+    margin-bottom: .5rem;
+    padding-left: 2.25rem;
+}
+
+.home-latest-posts li {
+    margin-bottom: .25rem;
+}
+
+.home-list-link {
+    padding-left: 1rem;
+}
+
+.home-server-series {
+    margin-top: .75rem;
+}
+
 .recommended-series {
     border-bottom: 1px solid var(--bs-light-border-subtle);
     margin-bottom: 1.5rem;
@@ -296,7 +332,9 @@ a.list-group-last-item {
     margin-top: 1.5rem;
 }
 
-.recommended-series-group {
+.recommended-series-group,
+.sitemap section,
+.sitemap-series {
     margin-bottom: 1rem;
 }
 
@@ -308,7 +346,8 @@ a.list-group-last-item {
     margin-bottom: .35rem;
 }
 
-.recommended-series-group p {
+.recommended-series-group p,
+.sitemap p {
     font-size: .92rem;
     line-height: 1.65;
     margin-bottom: .4rem;
@@ -325,17 +364,39 @@ a.list-group-last-item {
     padding-left: 1rem;
 }
 
-.recommended-series-group ul {
+.recommended-series-group ul,
+.sitemap ul {
     margin-bottom: 0;
     padding-left: 2.25rem;
 }
 
-.recommended-series-group li {
+.recommended-series-group li,
+.sitemap li {
     margin-bottom: .25rem;
 }
 
-.recommended-series-group li:last-child {
+.recommended-series-group li:last-child,
+.sitemap li:last-child {
     margin-bottom: 0;
+}
+
+.sitemap {
+    overflow-wrap: anywhere;
+}
+
+.sitemap h2,
+.sitemap h3,
+.sitemap-subcategories > li {
+    scroll-margin-top: 110px;
+}
+
+.sitemap-subcategory-name {
+    display: block;
+    margin-bottom: .4rem;
+}
+
+.sitemap-toc {
+    margin-bottom: 1rem;
 }
 
 .latest-posts-title {
