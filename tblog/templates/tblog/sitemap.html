@@ -1,0 +1,53 @@
+{% extends "tblog/base.html" %}
+{% block title %}サイトマップ | SIGMA-SE Math & Tech Library{% endblock %}
+{% block canonical %}<link rel="canonical" href="{{ canonical_url }}">{% endblock %}
+{% block og_url %}{{ canonical_url }}{% endblock %}
+{% block og_title %}サイトマップ{% endblock %}
+{% block ads %}{% endblock %}
+{% block content %}
+<article class="sitemap" aria-labelledby="sitemap-title">
+  <h2 class="h4" id="sitemap-title">サイトマップ</h2>
+  <p>全公開記事：{{ sitemap_post_count }}件をカテゴリ・シリーズごとに整理しています。<br>
+    新しい記事は、<a class="link-secondary" href="{% url 'tblog:index' %}?page=1">新着順一覧</a>から確認できます。</p>
+
+  <nav class="sitemap-toc" aria-label="サイトマップの目次">
+    <ul>
+      {% for group in sitemap_categories %}
+      <li>
+        <a class="link-secondary" href="#sitemap-category-{{ group.category.pk }}">{{ group.category.name }}</a>
+        <ul>
+          {% for child in group.children %}
+          <li><a class="link-secondary" href="#sitemap-subcategory-{{ child.category.pk }}">{{ child.category.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </li>
+      {% endfor %}
+    </ul>
+  </nav>
+
+  {% for group in sitemap_categories %}
+  <section aria-labelledby="sitemap-category-{{ group.category.pk }}">
+    <h3 class="h4" id="sitemap-category-{{ group.category.pk }}">{{ group.category.name }}</h3>
+    <ul class="sitemap-subcategories">
+      {% for child in group.children %}
+      <li id="sitemap-subcategory-{{ child.category.pk }}">
+        <span class="sitemap-subcategory-name">{{ child.category.name }}</span>
+        {% for series in child.series %}
+        <div class="sitemap-series">
+          {% if series.summary %}<p>{{ series.summary }}</p>{% endif %}
+          <ul>
+            {% for post in series.posts %}
+            <li><a class="link-secondary" href="{% url 'tblog:detail' post.pk %}">{{ post.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% empty %}
+  <p>公開記事はまだありません。</p>
+  {% endfor %}
+</article>
+{% endblock %}

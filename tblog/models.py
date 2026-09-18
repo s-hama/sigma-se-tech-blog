@@ -43,3 +43,8 @@ class Post(models.Model):
     updated_at = models.DateTimeField("更新日", auto_now=True)
     def __str__(self):
         return self.title
+
+
+def get_public_posts():
+    """Articles that readers can open without signing in."""
+    return Post.objects.filter(is_publick=True).exclude(category__name="PaidContent")

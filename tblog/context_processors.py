@@ -12,6 +12,11 @@ def common(request):
                 filter=Q(post__is_publick=True),
                 distinct=True,
             )
-        ).order_by("-public_post_count", "id"),
+        ).filter(
+            public_post_count__gt=0,
+        ).order_by(
+            "-public_post_count",
+            "id",
+        ),
     }
     return context
