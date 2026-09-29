@@ -1,18 +1,17 @@
 <div class="post-body">
   <h2 id="概要">概要</h2>
-  <p>Pythonの高階関数として、map、filter、reduceの基本的な使い方を整理する。</p>
-  <p>高階関数は、関数を引数として受け取ったり、関数を戻り値として返したりする関数を指す。map、filter、reduceを理解すると、繰り返し処理を「変換」「抽出」「集約」という観点で整理できる。</p>
-  <p>ここでは、通常の関数、lambda式、畳込み処理を実行例で確認する。</p>
+  <p>高階関数とmap・filter・reduceを、変換・抽出・集約の操作として整理する。</p>
+  <p>mapやfilterを一度取り出した後の状態と、reduceが途中結果を次の計算へ渡す順序を確認する。結果を繰り返し使う必要があるか、空の入力をどう扱うかまで考えて関数を選ぶ。イテレータと畳込みの比較例はPython 3.12.2で確認。</p>
   <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
-    <li><a href="#高階関数とは" class="link-secondary">高階関数とは</a><br>
+    <li><a class="link-secondary" href="#高階関数とは">高階関数とは</a><br/>
       高階関数の意味と基本的な考え方を整理。</li>
-    <li><a href="#map要素別の演算" class="link-secondary">map（要素別の演算）</a><br>
-      map（要素別の演算）の仕組みと要点を具体例から整理。</li>
-    <li><a href="#filter条件に合う要素の抽出" class="link-secondary">filter（条件に合う要素の抽出）</a><br>
-      条件を満たす元の要素だけを遅延評価で取り出す方法を整理。</li>
-    <li><a href="#reduce畳込み演算" class="link-secondary">reduce（畳込み演算）</a><br>
-      reduce（畳込み演算）の仕組みと要点を具体例から整理。</li>
+    <li><a class="link-secondary" href="#map要素別の演算">map（要素別の演算）</a><br/>
+      変換が実行される時点と一度取り出した後の状態を確認。</li>
+    <li><a class="link-secondary" href="#filter条件に合う要素の抽出">filter（条件に合う要素の抽出）</a><br/>
+      元の要素を取り出す条件と結果を再利用する方法を確認。</li>
+    <li><a class="link-secondary" href="#reduce畳込み演算">reduce（畳込み演算）</a><br/>
+      減算の途中結果と初期値・空入力の関係を追う。</li>
   </ul>
   <h2 id="高階関数の説明と実装サンプル">高階関数の説明と実装サンプル</h2>
   <h3 id="高階関数とは">高階関数とは</h3>
@@ -113,7 +112,7 @@
 </code></pre>
     </li>
     <li>
-      <p>上記の実装サンプルのmapを使用せず内包表記で記述</p>
+      <p>上記の実装サンプルをジェネレータ式で記述</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-comment"># map(triple, list_a) と同義</span>
     &gt;&gt;&gt; result = (triple(p) <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> list_a)
@@ -121,6 +120,27 @@
     [<span class="hljs-number">3</span>, <span class="hljs-number">6</span>, <span class="hljs-number">9</span>, <span class="hljs-number">12</span>, <span class="hljs-number">15</span>]
     &gt;&gt;&gt;
 </code></pre>
+    </li>
+    <li>
+      <p>mapを作る時点と結果を取り出す時点を分ける<br/></p>
+      <pre><code class="language-python"><span class="hljs-keyword">def</span> <span class="hljs-title">to_number</span>(raw):
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">"</span><span class="hljs-string">convert</span><span class="hljs-string">"</span>, raw)
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">int</span>(raw)
+
+
+result = <span class="hljs-built_in">map</span>(to_number, [<span class="hljs-string">"</span><span class="hljs-string">10</span><span class="hljs-string">"</span>, <span class="hljs-string">"</span><span class="hljs-string">20</span><span class="hljs-string">"</span>])
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"</span><span class="hljs-string">created</span><span class="hljs-string">"</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(result))
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(result))
+</code></pre>
+      <pre><code class="language-text">created
+convert 10
+convert 20
+[10, 20]
+[]
+</code></pre>
+      <p><code>map()</code>を作っただけでは変換関数は呼ばれず、最初の<code>list(result)</code>が要素を取り出す時点で実行される。イテレータは読み進めた状態を持つので、取り出し終わった後の2回目は空になる。</p>
+      <p>表示と集計などで結果を繰り返し使う場合は、最初に<code>numbers = list(map(int, raw_values))</code>のようにlistへ保存する。<code>numbers = [int(raw) for raw in raw_values]</code>でも同じ目的を表せる。一度ずつ順に処理する用途ではイテレータのまま扱える。</p>
     </li>
   </ul>
   <h3 id="filter条件に合う要素の抽出">filter（条件に合う要素の抽出）</h3>
@@ -159,7 +179,7 @@
 </code></pre>
     </li>
     <li>
-      <p>上記の実装サンプルのfilterを使用せず内包表記で記述</p>
+      <p>上記の実装サンプルをジェネレータ式で記述</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-comment"># filter(is_plus, list_a) と同義</span>
     &gt;&gt;&gt; result = (p <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> list_a <span class="hljs-keyword">if</span> is_plus(p))
@@ -168,16 +188,29 @@
     &gt;&gt;&gt;
 </code></pre>
     </li>
+    <li>
+      <p>抽出した結果を繰り返し使う<br/>
+      filterも一度取り出すと進むイテレータである。件数の確認と合計の両方に使うなら抽出結果を保存する。</p>
+      <pre><code class="language-python">values = [-<span class="hljs-number">2</span>, -<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]
+positives = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">filter</span>(<span class="hljs-keyword">lambda</span> value: value &gt; <span class="hljs-number">0</span>, values))
+<span class="hljs-built_in">print</span>(positives)
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">len</span>(positives), <span class="hljs-built_in">sum</span>(positives))
+</code></pre>
+      <pre><code class="language-text">[1, 2]
+2 3
+</code></pre>
+      <p>この処理は<code>[value for value in values if value &gt; 0]</code>というリスト内包表記でも書ける。変換するmapと異なり、filterが返すのは条件に合う元の要素である。</p>
+    </li>
   </ul>
   <h3 id="reduce畳込み演算">reduce（畳込み演算）</h3>
-  <p><code>reduce(function, iterable [, initializer])</code> は、<strong>畳み込み演算</strong> と呼ばれ、第 \(2\)
-    引数（iterable）に指定したイテレータの2つの要素に対して、左から順に第 \(1\) 引数（function）を実行していき、これをイテレータの最終要素まで繰り返し、1つの結果を返す。</p>
-  <p>そのため、第 \(1\) 引数（function）の引数は、<strong>必ず2つ</strong> であることが前提となる。</p>
+  <p><code>reduce(function, iterable [, initializer])</code>は<strong>畳み込み演算</strong>を行う関数である。入力を左から取り出し、累積した結果と次の要素に関数を適用して1つの結果を返す。</p>
+  <p>関数はこの2つの位置引数を受け取れる必要がある。</p>
   <p><strong>第3引数</strong>（initializer）は、初期値を指定することができる。
-    初期値を指定した場合、最初の演算は、<strong>初期値</strong> と第 \(2\) 引数（iterable）の先頭要素で第 \(1\) 引数（function）を実行する。</p>
+  初期値を指定した場合、最初の演算は、<strong>初期値</strong> と第 \(2\) 引数（iterable）の先頭要素で第 \(1\) 引数（function）を実行する。</p>
   <p>※ 内包表記には、複数要素を一つの値へ直接集約する構文はない。合計には<code>sum()</code>などの専用関数を優先し、一般的な畳込みが必要な場合に<code>reduce()</code>を検討する。</p>
   <ul>
-    <li>実装サンプル
+    <li>
+      <p>実装サンプル</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-comment"># functoolsからインポート</span>
     &gt;&gt;&gt; <span class="hljs-keyword">from</span> functools <span class="hljs-keyword">import</span> reduce
@@ -200,7 +233,8 @@
     &gt;&gt;&gt;
 </code></pre>
     </li>
-    <li>上記の実装サンプルをラムダ式で記述
+    <li>
+      <p>上記の実装サンプルをラムダ式で記述</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; result = reduce(<span class="hljs-keyword">lambda</span> x, y: x - y, list_a)
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(result)
@@ -208,13 +242,71 @@
     &gt;&gt;&gt;
 </code></pre>
     </li>
-  </ul>
+    <li>
+      <p>減算の途中結果を追う<br/>
+      上の<code>[-5, -4, -3, -2, -1]</code>を使う例では、初期値なしなら先頭の-5が最初の累積値となる。</p>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">手順</th>
+            <th scope="col">初期値なし</th>
+            <th scope="col">初期値-6</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>最初の計算</td>
+            <td>-5 - (-4) = -1</td>
+            <td>-6 - (-5) = -1</td>
+          </tr>
+          <tr>
+            <td>次の計算</td>
+            <td>-1 - (-3) = 2</td>
+            <td>-1 - (-4) = 3</td>
+          </tr>
+          <tr>
+            <td>次の計算</td>
+            <td>2 - (-2) = 4</td>
+            <td>3 - (-3) = 6</td>
+          </tr>
+          <tr>
+            <td>次の計算</td>
+            <td>4 - (-1) = 5</td>
+            <td>6 - (-2) = 8</td>
+          </tr>
+          <tr>
+            <td>最後の計算</td>
+            <td>すでに終了</td>
+            <td>8 - (-1) = 9</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>減算は括弧の位置で結果が変わる。reduceでは累積値を左側の引数にして計算を進めるため、初期値の有無は最初の計算だけでなく最終結果にも影響する。</p>
+    </li>
+    <li>
+      <p>空の入力と初期値<br/></p>
+      <pre><code class="language-python"><span class="hljs-keyword">from</span> functools <span class="hljs-keyword">import</span> reduce
 
+<span class="hljs-built_in">print</span>(reduce(<span class="hljs-keyword">lambda</span> total, value: total + value, [], <span class="hljs-number">0</span>))
+<span class="hljs-keyword">try</span>:
+    <span class="hljs-built_in">print</span>(reduce(<span class="hljs-keyword">lambda</span> total, value: total + value, []))
+<span class="hljs-keyword">except</span> TypeError <span class="hljs-keyword">as</span> error:
+    <span class="hljs-built_in">print</span>(<span class="hljs-built_in">type</span>(error).__name__)
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">sum</span>([]))
+</code></pre>
+      <pre><code class="language-text">0
+TypeError
+0
+</code></pre>
+      <p>初期値があれば空の入力でもその値を返せる。初期値なしでは最初の累積値が存在しないためエラーになる。合計なら<code>sum()</code>の方が意図を直接表せる。一般的な畳込みが必要な場合にreduceを選び、初期値と空入力で期待する結果を決める。</p>
+    </li>
+  </ul>
   <h2 id="まとめ">まとめ</h2>
   <ul>
-    <li>高階関数は関数を値として扱い、mapは変換、filterは抽出、reduceは集約に使う。</li>
-    <li>mapやfilterの戻り値はイテレータなので、リストが必要な場合はlistへ変換。</li>
-    <li>複雑な処理はfor文や内包表記の方が読みやすい場合があり、集約にはsumなどの専用関数も含めて使い分ける。</li>
+    <li>mapは変換、filterは抽出、reduceは集約を表す。</li>
+    <li>mapとfilterは要素を取り出すと処理が進む。結果を複数回使う場合はlistなどへ保存する。</li>
+    <li>reduceは累積値と次の要素を左から順に計算する。初期値は結果と空入力の扱いに影響する。</li>
+    <li>合計にはsum()など目的を直接表す関数を選ぶ。変換・抽出は内包表記とも読みやすさを比較する。</li>
   </ul>
   <h3 id="参考文献">参考文献</h3>
   <ul>
