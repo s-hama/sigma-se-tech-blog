@@ -2,53 +2,113 @@
 Python - 例外処理：try・exceptと組込み例外クラス
 
 ## 概要
-Pythonの例外処理と組込み例外クラスの基本を整理する。
-例外処理は、想定外の入力、ファイル操作の失敗、型の不一致などが起きたときに、プログラムを安全に制御するための仕組みとなる。
-ここでは、try、except、else、finallyの役割と、代表的な組込み例外クラスの位置づけを確認する。
+
+Pythonのtry・except・else・finallyと組込み例外クラスを整理する。
+
+整数への変換が成功する場合、ValueErrorを処理する場合、別の例外を呼び出し元へ伝える場合を同じ関数で比較する。実行経路を追いながら捕捉する例外とtryの範囲を決める。例外階層の一覧と過去のツリー出力は参照用に掲載する。
 
 ## この記事の構成
 - [対象環境と利用上の注意](#対象環境と利用上の注意)<br>
   本文記載時の環境と現在そのまま利用できない箇所を確認。
 - [例外処理と例外クラス](#例外処理と例外クラス)<br>
-  例外処理と例外クラスの意味と要点を具体例から整理。
+  成功・捕捉・伝播で通る経路とtryの範囲を比較。
 - [組込み例外クラス一覧](#組込み例外クラス一覧)<br>
-  組込み例外クラス一覧の意味と要点を具体例から整理。
+  発生条件から例外クラスを調べるための一覧。
 - [組込み例外クラスのツリー表示サンプル](#組込み例外クラスのツリー表示サンプル)<br>
-  組込み例外クラスのツリー表示サンプルをコードや具体例で確認。
+  実行環境の例外階層を調べる方法と過去の出力例。
 
 ## 対象環境と利用上の注意
 - 本文記載時の環境<br>
 Python \\(3.6.4\\)。掲載した例外クラスのツリー出力は、この環境で取得したもの。
 - 確認時期<br>
-2026年8月にPython公式ドキュメントと照合し、例外処理の基本仕様と記載内容を見直した。
+2026年9月にPython公式ドキュメントと照合。処理経路の比較例はPython 3.12.2で実行確認。
 - 現在そのまま利用できない箇所<br>
-掲載コード全体を現行Pythonでは再実行していない。<br>
+Python 3.6.4当時のツリー出力は履歴として残している。<br>
 Pythonの更新で例外階層は追加・変更されるため、掲載ツリーを現行版の完全な一覧として利用せず、利用中のバージョンの公式ドキュメントを確認する。
 
 ## 解説と実装サンプル
 
 ### 例外処理と例外クラス
-- try・exceptと例外クラス<br>
-    文字通り、**例外**（正常系でない想定外のエラー）が発生した場合に対処する処理を**例外処理**と呼び、Pythonでは、メイン処理を**try句**に、例外処理を**except句**に書く。
 
-    また、**except句**に指定する**例外クラス**によって、どの例外をキャッチするか指定することができる。
+例外は処理の失敗などを知らせる仕組みである。`try`には例外の発生を想定する処理を書き、`except`には指定した例外への対処を書く。例外クラスを指定すると、処理できる原因を選んで捕捉できる。
 
-    - `ValueError`を捕捉し、`else`と`finally`を使う構文例
-        ```python
-        $ python
-        >>> try:
-        ...     value = int('123')
-        ... except ValueError:
-        ...     print('整数へ変換できません')
-        ... else:
-        ...     print(value)    # 例外が発生しなかった場合だけ実行
-        ... finally:
-        ...     print('処理終了')    # 例外の有無にかかわらず実行
-        123
-        処理終了
-        ```
+- 入力を変えて実行経路を比べる<br>
+  次の関数は整数への変換だけをtryに入れる。`"123"`、`"abc"`、`None`を渡して通る経路を確認する。
 
-    `BaseException`は`SystemExit`や`KeyboardInterrupt`も含む最上位の基底クラスであり、通常のアプリケーション処理で直接捕捉しない。可能な限り`ValueError`など原因に対応する具体的な例外クラスを指定する。
+  ```python
+  def show_integer(raw):
+      try:
+          value = int(raw)
+      except ValueError:
+          print("except: 整数へ変換できません")
+      else:
+          print("else:", value)
+      finally:
+          print("finally: 処理終了")
+
+
+  for raw in ("123", "abc", None):
+      print("input:", repr(raw))
+      try:
+          show_integer(raw)
+      except TypeError:
+          print("caller: TypeError")
+  ```
+
+  ```text
+  input: '123'
+  else: 123
+  finally: 処理終了
+  input: 'abc'
+  except: 整数へ変換できません
+  finally: 処理終了
+  input: None
+  finally: 処理終了
+  caller: TypeError
+  ```
+
+  | 入力 | int()の結果 | 関数内の経路 | 呼び出し元への例外 |
+  | --- | --- | --- | --- |
+  | `"123"` | 変換成功 | try → else → finally | なし |
+  | `"abc"` | ValueError | try → except → finally | 捕捉済みなのでなし |
+  | `None` | TypeError | try → finally | TypeErrorが伝わる |
+
+  `else`はtryが例外なく終了した場合に実行される。`finally`は捕捉されない例外で関数を抜ける際にも実行されるが、例外を消す役割ではない。最後のTypeErrorは呼び出し元で捕捉しているため3ケースを続けて確認できる。
+
+  ここでは文字列の形式不正を利用者へ伝え、文字列ではない値が渡された場合は呼び出し側の問題として伝播させている。Noneも通常の入力として受け付ける仕様なら、先に未設定を判定するなど対処を変える。何を回復可能な失敗とみなすかを決めてから例外を選ぶ。
+
+- tryの範囲を狭めて原因を取り違えない<br>
+  入力の変換と変換後の処理を同じtryへ入れると、後段のValueErrorまで「入力が不正」と扱うおそれがある。次の例では変換に成功した後の処理をelseへ分ける。
+
+  ```python
+  def use_value(value):
+      raise ValueError("後段の設定が不正です")
+
+
+  def handle(raw):
+      try:
+          value = int(raw)
+      except ValueError:
+          print("入力を整数にしてください")
+      else:
+          use_value(value)
+
+
+  try:
+      handle("123")
+  except ValueError as error:
+      print("呼び出し元:", str(error))
+  ```
+
+  ```text
+  呼び出し元: 後段の設定が不正です
+  ```
+
+  else内の例外は同じtryに対応するexceptでは捕捉されない。変換には成功しているため、後段の失敗を入力ミスに読み替えず呼び出し元へ伝えられる。
+
+  ファイルを閉じる用途では通常`with open(...)`を使う。[ファイル操作の記事](https://sigma-se.com/detail/32/#file%20object型--ファイル操作オブジェクト)に読み取り位置とクローズの例を掲載している。finally内でreturnすると元の戻り値や例外を上書きし得るため、後始末と結果の返却は分ける。
+
+  `BaseException`は`SystemExit`や`KeyboardInterrupt`も含む最上位の基底クラスである。通常のアプリケーション処理では直接捕捉せず、対処できる具体的な例外を指定する。
 
 ### 組込み例外クラス一覧
 - 代表的な例外と発生条件<br>
@@ -134,13 +194,15 @@ Pythonの更新で例外階層は追加・変更されるため、掲載ツリ�
 ### 組込み例外クラスのツリー表示サンプル
 - 例外階層の出力<br>
     以下、前項の組込み例外クラス一覧をツリー表示した実装サンプル。<br>
-    `classtree`関数に`BaseException`を渡し、再帰的に`BaseException`を出力している。<br>
+    `classtree`関数に`BaseException`を渡し、サブクラスを再帰的にたどる。組込み例外だけでなく、その時点で読み込まれているモジュールや利用者が定義した例外も含まれるため、出力はimport済みの内容でも変わる。<br>
 
     ※ 参考元：[Pythonの組み込み例外の木構造を見てみる](https://qiita.com/amedama/items/aa840a0a98f720cfc4ca)
 
     - ツリー表示サンプル
         ```python
         $ python
+        >>> import platform
+        >>>
         >>> def classtree(cls, depth=0):
         ...     if depth == 0:
         ...         prefix = ''
@@ -335,12 +397,14 @@ Pythonの更新で例外階層は追加・変更されるため、掲載ツリ�
     ```
 
 ## まとめ
-- 例外処理はエラー発生時の流れを制御する仕組みで、exceptでは捕捉する例外クラスをできるだけ具体的に指定。
-- BaseExceptionにはSystemExitやKeyboardInterruptも含まれるため、通常の処理で安易に捕捉しない。
-- 例外を何もせず握りつぶすと原因を追えなくなるため、ログ記録や再送出を検討する。
-- finallyは後片付け、elseは例外が発生しなかった場合の処理に使う。
+
+- exceptには対処できる例外を指定する。指定と異なる例外は呼び出し元へ伝わる。
+- elseはtryが例外なく終了した場合、finallyは捕捉されない例外で抜ける場合にも実行される。
+- tryの範囲を狭めると入力の問題と後段の失敗を取り違えにくくなる。
+- 例外階層の出力はPythonのバージョンや読み込んだモジュールで変わる。過去の出力と現在の一覧を区別する。
 
 ### 参考文献
 - 金城 俊哉（\\(2018\\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム
 - [Python公式ドキュメント - 組み込み例外（日本語・例外クラスの公式解説）](https://docs.python.org/ja/3/library/exceptions.html)
 - [Python公式チュートリアル - エラーと例外（日本語・例外処理の公式解説）](https://docs.python.org/ja/3/tutorial/errors.html)
+- [Python公式チュートリアル - エラーと例外（日本語・try、else、finallyの動作）](https://docs.python.org/ja/3/tutorial/errors.html)
