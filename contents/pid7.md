@@ -3,9 +3,9 @@ Python - 開発向けVim設定：インデント・PEP8・コードチェック
 
 ## 概要
 
-Python開発で使うVimの基本設定と、flake8などのコードチェックツールの使い方を整理する。
+Python開発で使うVimのインデント設定とflake8によるコードチェックを整理する。
 
-Pythonではインデントが構文に影響するため、エディタ設定は見た目だけでなく実行結果にも関係する。<br>Vimのファイルタイプ別設定とコードチェックを組み合わせることで、保存前後のミスを見つけやすくなる。
+設定ファイルの置き場所だけでなく、実際に有効な設定とその読み込み元を確認する。コードチェックでは未使用のimportと未定義名を含む小さなファイルを使い、行・列・エラーコードから修正箇所を特定する。
 
 ## この記事の構成
 - [対象環境と利用上の注意](#対象環境と利用上の注意)<br>
@@ -13,13 +13,13 @@ Pythonではインデントが構文に影響するため、エディタ設定�
 - [作業時の注意点](#作業時の注意点)<br>
   設定変更やコマンド実行前に確認しておきたい注意点を整理。
 - [Vimの共通設定](#vimの共通設定)<br>
-  Vimの共通設定の手順と確認ポイントを整理。
+  ファイルタイプ別の設定とインデントを有効にする。
 - [Python用のVim設定](#python用のvim設定)<br>
-  Python用のVim設定の手順と確認ポイントを整理。
+  Python用の設定を作り、有効な値と読み込み元を確認。
 - [コードチェックツールのインストール](#コードチェックツールのインストール)<br>
-  コードチェックツールのインストールの手順と確認ポイントを整理。
+  利用するPythonとflake8の実行環境をそろえる。
 - [コードチェックの一例](#コードチェックの一例)<br>
-  コードチェックの一例の意味と要点を具体例から整理。
+  警告の行・列・コードを読み、修正前後を比較。
 
 ## 対象環境と利用上の注意
 
@@ -27,8 +27,8 @@ Pythonではインデントが構文に影響するため、エディタ設定�
 Vimの`ftplugin`とPython向けのflake8を利用する、Unix系OSの設定例。<br>
 Vim・Python・flake8の特定バージョンには固定していない。
 - 確認時期<br>
-2026年8月にVim・Python・flake8の公式資料と照合。<br>
-新規環境へ同じ設定を一括適用する検証は行っていない。
+2026年9月に公式資料と照合。Vim 9.1では一時ディレクトリの設定を読み込み、インデント設定と保存時の行末空白除去を確認。<br>
+コードチェックの比較例はPython 3.12.2・flake8 7.4.1で確認。
 - 現在そのまま利用できない箇所<br>
 警告内容や設定の推奨値はツールのバージョンとプロジェクト規約で変わる。<br>
 行長などは掲載値を固定的に採用せず、利用中のツールとチームの規約へ合わせる。
@@ -46,50 +46,109 @@ Python用設定が読み込まれない場合はディレクトリやファイ�
 
 ## 実施内容
 ### Vimの共通設定
-- ホームディレクトリに`.vimrc`ファイルを作成<br>
-`.vimrc`に設定を追記することでVimに反映される。<br>
-  ```bash
-  touch ~/.vimrc
+
+- `.vimrc`でファイルタイプ別の設定を有効にする<br>
+  ホームディレクトリの`.vimrc`へ次のVim scriptを記述する。すでに同じ設定があれば重複して追加する必要はない。
+
+  ```vim
+  " ファイルタイプの判定・専用設定・インデントを有効にする
+  filetype plugin indent on
+  " シンタックスハイライトを有効にする
+  syntax on
   ```
 
-- Pythonを使う上で最低限必要な**自動インデント**と**シンタックスハイライト**のみ設定<br>
-  ```bash
-  $ vim ~/.vimrc
-   filetype plugin indent on    # 自動インデントの設定
-   syntax on    # シンタックスハイライトの設定
-  ```
+  従来のVim scriptではコメントに`"`を使う。シェルのコマンドやPythonコードで使う`#`とは区別する。
 
 ### Python用のVim設定
-- ホームディレクトリに`.vim/ftplugin/python.vim`ファイルを作成<br>
-設定ファイルをファイルタイプ別に分割できるため、Pythonスクリプト専用の設定を定義することができる。<br>
+
+- ファイルタイプ専用の設定を作る<br>
+  次のコマンドをシェルで実行し、`~/.vim/ftplugin/python.vim`を編集する。
+
   ```bash
-  $ mkdir -p ~/.vim/ftplugin
-  $ touch ~/.vim/ftplugin/python.vim
+  mkdir -p ~/.vim/ftplugin
+  touch ~/.vim/ftplugin/python.vim
   ```
 
-- Vimの設定を追記<br>
-下記は、**PEP 8**が示す「1段につきスペース4つ」「コードは原則79文字以内」という基本に合わせた設定例となる。これだけでPEP 8のすべてへ準拠するわけではなく、行長などの方針はプロジェクトの規約を優先する。<br>
-  ```bash
-  $ vim ~/.vim/ftplugin/python.vim
-   setlocal expandtab    # タブをスペースに置き換える設定
-   setlocal tabstop=4    # タブのインデント幅を4に設定
-   setlocal shiftwidth=4    # 自動インデント時の幅を4に設定
-   setlocal softtabstop=4    # Tabキー入力時の幅を4に設定
-   autocmd BufWritePre <buffer> %s/\s\+$//e    # このバッファの保存時に行末スペースを除去
-   setlocal textwidth=79    # 自動折り返しの幅を79文字に設定
+  `python.vim`には次のVim scriptを記述する。
+
+  ```vim
+  " Tabキー入力などで使うインデントをスペース4つにそろえる
+  setlocal expandtab
+  setlocal tabstop=4
+  setlocal shiftwidth=4
+  setlocal softtabstop=4
+  " 自動折り返しの幅
+  setlocal textwidth=79
+
+  " このバッファの保存時に行末の空白を除去する
+  augroup sigma_python_whitespace
+      autocmd! * <buffer>
+      autocmd BufWritePre <buffer> %s/\s\+$//e
+  augroup END
   ```
-  PEP 8ではコードを原則79文字以内、コメントとdocstringを72文字以内としている。一方、チームで合意している場合はコードを99文字まで広げる選択肢も示されているため、`textwidth`やflake8の設定は開発ルールに合わせる。
+
+  `expandtab`は新たに入力するタブをスペースへ置き換える設定であり、ファイル内の既存タブを一括変換するものではない。保存時の置換は複数行文字列の末尾にも作用するため、末尾空白をデータとして保持するコードでは自動除去の設定を外す。
+
+  PEP 8ではインデントをスペース4つ、コードを原則79文字以内、コメントとdocstringを72文字以内としている。チームで合意した場合はコードを99文字まで広げる選択肢もあるため、行長はプロジェクトの規約を優先する。この設定だけでPEP 8のすべてに準拠するわけではない。
+
+- 設定したのに反映されない場合の確認順序<br>
+  `.py`ファイルを開き直し、Vimのコマンドラインで順に確認する。
+
+  ```vim
+  :set filetype?
+  :setlocal expandtab? tabstop? shiftwidth? softtabstop? textwidth?
+  :verbose setlocal shiftwidth?
+  :scriptnames
+  ```
+
+  この設定が有効なら`filetype=python`、`expandtab`、`tabstop=4`、`shiftwidth=4`、`softtabstop=4`、`textwidth=79`を確認できる。
+
+  まず`filetype`がpythonかを調べる。次に各設定値を読み、想定と違う値があれば`verbose`で最後に設定したファイルと行を確認する。`scriptnames`には読み込まれたスクリプトが表示されるので、専用設定が未読なのか、後から別の設定で上書きされたのかを分けて調べられる。Python用設定が未読なら共通設定とファイル名・配置先を確認する。
 
 ### コードチェックツールのインストール
 - **flake8**のインストール<br>
 Pythonで多く使用されているコードチェックツール**flake8**をインストール。<br>
-flake8は、pyflakes、pycodestyle、mccabeを組み合わせて、論理的な誤り、コーディングスタイル、循環的複雑度を確認できる。インストールされるバージョンはPython環境によって異なるため、`flake8 --version`で確認。<br>
+flake8は、pyflakes、pycodestyle、mccabeを組み合わせて、論理的な誤り、コーディングスタイル、循環的複雑度を確認できる。インストールされるバージョンはPython環境によって異なるため、`python -m flake8 --version`で確認。<br>
   ```bash
   $ python -m pip install flake8
-  $ flake8 --version
+  $ python -m flake8 --version
   ```
 
 ### コードチェックの一例
+- 小さなファイルで指摘と修正を対応させる<br>
+  次の5行を`lint_example.py`として保存する。未使用のimportと変数名の取り違えを含む確認用のコードである。
+
+  ```python
+  import os
+
+
+  def total(prices):
+      return sum(price)
+  ```
+
+  ```bash
+  python -m flake8 --isolated lint_example.py
+  ```
+
+  ```text
+  lint_example.py:1:1: F401 'os' imported but unused
+  lint_example.py:5:16: F821 undefined name 'price'
+  ```
+
+  `--isolated`は既存のflake8設定ファイルの影響を避けてこの例を試すための指定である。通常のプロジェクトではプロジェクト側の設定に従う。
+
+  1件目は1行目1列目のimportが未使用という指摘で、2件目は5行目16列目の`price`が未定義という指摘になる。引数名は`prices`なので次のように直す。
+
+  ```python
+  def total(prices):
+      return sum(prices)
+
+
+  print(total([100, 200, 300]))
+  ```
+
+  同じflake8コマンドを再実行すると指摘がなくなり、`python lint_example.py`では`600`を表示する。チェックを通ることと計算結果が正しいことは別なので、入力と期待値でも確認する。論理的な計算ミスを追う方法は[Pdbの記事](https://sigma-se.com/detail/9/)で扱う。
+
 以下、**flake8**、**pyflakes**、**pycodestyle**、**mccabe**の一例。
 - **flake8** : コードチェック<br>
   ```bash
@@ -122,13 +181,14 @@ flake8は、pyflakes、pycodestyle、mccabeを組み合わせて、論理的な�
     ...
     coolproject/mod.py:1204:1: C901 'CoolFactory.prepare' is too complex (14)
   ```
-<br>
+
 その他、**flake8**には、**flake8-docstrings**や**flake8-import-order**など色々なプラグインが用意されており、必要に応じてカスタマイズすることができる。
 
 ## まとめ
-- Python開発では、Vimのインデント設定がコード品質に直結する。
-- flake8を使うと、コーディングスタイルや未定義名を確認でき、`--max-complexity`を指定すれば複雑度も検査できる。
-- まずは最小限の設定から始め、必要に応じてチェックを増やすと扱いやすい。
+
+- Python用設定が効かない場合はfiletype、有効な設定値、最後に設定したスクリプトの順に確認する。
+- expandtabなどの入力設定と既存ファイルのタブ・空白は区別する。保存時の空白除去も文字列データへの影響を確認して使う。
+- flake8の指摘はファイル・行・列・コードから読み、修正後に再実行する。計算の正しさは具体的な入力と期待値でも確認する。
 
 ### 参考文献
 - [Python ドキュメント「間奏曲：コーディングスタイル」（日本語・PEP 8の要点をまとめた公式解説）](https://docs.python.org/ja/3/tutorial/controlflow.html#intermezzo-coding-style)
