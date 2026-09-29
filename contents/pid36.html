@@ -1,23 +1,22 @@
 <div class="post-body">
   <h2 id="概要">概要</h2>
-  <p>Pythonのビット演算子を使い、整数を2進数のビット列として扱う考え方を整理する。</p>
-  <p>ビット演算は、普段の業務コードでは頻度が高くない一方で、フラグ管理、権限管理、低レイヤ処理、暗号やネットワークの理解で重要になる。</p>
-  <p>ここでは、OR、XOR、AND、反転、左シフト、右シフトの結果を、2進数の動きとあわせて確認する。</p>
+  <p>Pythonの整数に対するOR、XOR、AND、反転、左右のシフトを整理する。</p>
+  <p>読み取り・書き込み・実行の3種類を説明用のフラグに割り当て、設定・反転・判定・解除の違いを追う。同じ操作を繰り返した結果も比べ、目的に合う演算子を選ぶ。フラグの比較例はPython 3.12.2で確認。</p>
   <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
-    <li><a href="#ビット演算子の種類" class="link-secondary">ビット演算子の種類</a><br>
+    <li><a class="link-secondary" href="#ビット演算子の種類">ビット演算子の種類</a><br/>
       ビット演算子の種類と各項目の特徴を整理。</li>
-    <li><a href="#論理和-or--" class="link-secondary">論理和 OR（ | ）</a><br>
-      論理和 OR（ | ）の意味と要点を具体例から整理。</li>
-    <li><a href="#排他的論理和-xor--" class="link-secondary">排他的論理和 XOR（ ^ ）</a><br>
-      排他的論理和 XOR（ ^ ）の意味と要点を具体例から整理。</li>
-    <li><a href="#論理積-and--" class="link-secondary">論理積 AND（ &amp; ）</a><br>
-      論理積 AND（ &amp; ）の意味と要点を具体例から整理。</li>
-    <li><a href="#反転-not--" class="link-secondary">反転 NOT（ ~ ）</a><br>
-      反転 NOT（ ~ ）の意味と要点を具体例から整理。</li>
-    <li><a href="#左シフト--" class="link-secondary">左シフト（ &lt;&lt; ）</a><br>
+    <li><a class="link-secondary" href="#論理和-or--">論理和 OR（ | ）</a><br/>
+      ビットを立てる操作と同じフラグを再設定した結果を確認。</li>
+    <li><a class="link-secondary" href="#排他的論理和-xor--">排他的論理和 XOR（ ^ ）</a><br/>
+      反転を2回行うと元へ戻ることを設定操作と比較。</li>
+    <li><a class="link-secondary" href="#論理積-and--">論理積 AND（ &amp; ）</a><br/>
+      フラグの有無と複数フラグをすべて満たす条件を確認。</li>
+    <li><a class="link-secondary" href="#反転-not--">反転 NOT（ ~ ）</a><br/>
+      必要なフラグだけを解除し、固定幅の反転と区別。</li>
+    <li><a class="link-secondary" href="#左シフト--">左シフト（ &lt;&lt; ）</a><br/>
       左シフト（ &lt;&lt; ）の意味と要点を具体例から整理。</li>
-    <li><a href="#右シフト--" class="link-secondary">右シフト（ &gt;&gt; ）</a><br>
+    <li><a class="link-secondary" href="#右シフト--">右シフト（ &gt;&gt; ）</a><br/>
       右シフト（ &gt;&gt; ）の意味と要点を具体例から整理。</li>
   </ul>
   <h2 id="各ビット演算子の使い方と実装サンプル">各ビット演算子の使い方と実装サンプル</h2>
@@ -70,10 +69,11 @@
   <p>以降、ビット演算子に関する実装サンプルを対話モード（インタプリタ）で解説する。</p>
   <h3 id="論理和-or--">論理和 OR（ | ）</h3>
   <p><code>a|b</code> は、ビット単位（同じ桁同士）で、\(1\) が少なくとも一つ存在すれば \(1\) を返し、\(1\) が存在しなければ \(0\) を返す。</p>
-  <p>※ 使用用途<br>
-    特定のビットを強制的に \(1\)（ON）にしたい場合、対応するビットを \(1\) とし、それ以外は、元のままとすることで、特定のビットのみ \(1\) に変更することができる。</p>
+  <p>※ 使用用途<br/>
+  特定のビットを強制的に \(1\)（ON）にしたい場合、対応するビットを \(1\) とし、それ以外は、元のままとすることで、特定のビットのみ \(1\) に変更することができる。</p>
   <ul>
-    <li>実装サンプル
+    <li>
+      <p>実装サンプル</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-comment"># 0100 の 末尾2桁 を 1 (ON) にする</span>
     &gt;&gt;&gt; bit_a = <span class="hljs-number">0b0100</span>
@@ -88,13 +88,31 @@
     &gt;&gt;&gt;
 </code></pre>
     </li>
+    <li>
+      <p>名前のあるフラグを設定する<br/>
+      ここでは説明用に<code>READ = 0b001</code>、<code>WRITE = 0b010</code>、<code>EXECUTE = 0b100</code>を割り当てる。OSの権限設定を直接変更するコードではない。</p>
+      <pre><code class="language-python">READ, WRITE, EXECUTE = <span class="hljs-number">0b001</span>, <span class="hljs-number">0b010</span>, <span class="hljs-number">0b100</span>
+flags = READ
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f</span><span class="hljs-string">"</span><span class="hljs-string">{</span>flags<span class="hljs-string">:</span><span class="hljs-string">03b</span><span class="hljs-string">}</span><span class="hljs-string">"</span>)
+flags |= WRITE
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f</span><span class="hljs-string">"</span><span class="hljs-string">{</span>flags<span class="hljs-string">:</span><span class="hljs-string">03b</span><span class="hljs-string">}</span><span class="hljs-string">"</span>)
+flags |= WRITE
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f</span><span class="hljs-string">"</span><span class="hljs-string">{</span>flags<span class="hljs-string">:</span><span class="hljs-string">03b</span><span class="hljs-string">}</span><span class="hljs-string">"</span>)
+</code></pre>
+      <pre><code class="language-text">001
+011
+011
+</code></pre>
+      <p><code>03b</code>は少なくとも3桁の2進数として表示する指定である。ORはすでに1の桁を1のまま保つので、同じフラグを再設定しても解除されない。</p>
+    </li>
   </ul>
   <h3 id="排他的論理和-xor--">排他的論理和 XOR（ ^ ）</h3>
   <p><code>a^b</code> は、ビット単位（同じ桁同士）で双方が一致すれば \(0\) を返し、違っていれば \(1\) を返す。</p>
-  <p>※ 使用用途<br>
-    特定のビットだけを反転させたい場合は、その位置を \(1\)、変更しない位置を \(0\) としたマスクとのXORを取る。</p>
+  <p>※ 使用用途<br/>
+  特定のビットだけを反転させたい場合は、その位置を \(1\)、変更しない位置を \(0\) としたマスクとのXORを取る。</p>
   <ul>
-    <li>実装サンプル
+    <li>
+      <p>実装サンプル</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-comment"># 1111 のうち、マスクが1となる先頭2桁だけを反転する。</span>
     &gt;&gt;&gt; bit_a = <span class="hljs-number">0b1111</span>
@@ -109,13 +127,28 @@
     &gt;&gt;&gt;
 </code></pre>
     </li>
+    <li>
+      <p>XORで2回反転すると元に戻る<br/></p>
+      <pre><code class="language-python">READ, WRITE = <span class="hljs-number">0b001</span>, <span class="hljs-number">0b010</span>
+flags = READ
+flags ^= WRITE
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f</span><span class="hljs-string">"</span><span class="hljs-string">{</span>flags<span class="hljs-string">:</span><span class="hljs-string">03b</span><span class="hljs-string">}</span><span class="hljs-string">"</span>)
+flags ^= WRITE
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f</span><span class="hljs-string">"</span><span class="hljs-string">{</span>flags<span class="hljs-string">:</span><span class="hljs-string">03b</span><span class="hljs-string">}</span><span class="hljs-string">"</span>)
+</code></pre>
+      <pre><code class="language-text">011
+001
+</code></pre>
+      <p>XORは現在の値を反転する操作なので、2回目は書き込みフラグが消える。「書き込みを許可する」にはOR、「書き込みの状態を切り替える」にはXORというように目的で選ぶ。</p>
+    </li>
   </ul>
   <h3 id="論理積-and--">論理積 AND（ &amp; ）</h3>
   <p><code>a&amp;b</code> は、ビット単位（同じ桁同士）で互いに \(1\) である場合 \(1\) を返し、互いに \(1\) でない場合 \(0\) を返す。</p>
-  <p>※ 使用用途<br>
-    特定のビットを強制的に \(0\)（OFF）としたい場合、対応するマスクを \(0\)、残したい位置を \(1\) としてANDを取る。</p>
+  <p>※ 使用用途<br/>
+  特定のビットを強制的に \(0\)（OFF）としたい場合、対応するマスクを \(0\)、残したい位置を \(1\) としてANDを取る。</p>
   <ul>
-    <li>実装サンプル
+    <li>
+      <p>実装サンプル</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-comment"># 1111 の 末尾3桁 を 0 (OFF) にする</span>
     &gt;&gt;&gt; bit_a = <span class="hljs-number">0b1111</span>
@@ -130,13 +163,34 @@
     &gt;&gt;&gt;
 </code></pre>
     </li>
+    <li>
+      <p>一つでも立っているか、すべて立っているかを分ける<br/></p>
+      <pre><code class="language-python">READ, WRITE, EXECUTE = <span class="hljs-number">0b001</span>, <span class="hljs-number">0b010</span>, <span class="hljs-number">0b100</span>
+flags = READ | WRITE
+required = READ | EXECUTE
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">bool</span>(flags &amp; READ))
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">bool</span>(flags &amp; EXECUTE))
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">bool</span>(flags &amp; required))
+<span class="hljs-built_in">print</span>((flags &amp; required) == required)
+</code></pre>
+      <pre><code class="language-text">True
+False
+True
+False
+</code></pre>
+      <p><code>flags &amp; required</code>がゼロでなければ必要なビットのうち少なくとも一つが立っている。すべてを要求する場合はANDの結果が<code>required</code>と一致するかを調べる。この例ではREADだけが一致し、EXECUTEがないため最後の判定は偽になる。</p>
+    </li>
   </ul>
   <h3 id="反転-not--">反転 NOT（ ~ ）</h3>
   <p>Pythonのint型は固定ビット幅を持たず、ビット演算は符号ビットが無限に続く \(2\) の補数表現として計算される。このため、すべてのビットを反転する<code>~a</code>は常に<code>-(a + 1)</code>、すなわち<code>-a - 1</code>となる。固定幅のレジスタや通信データだけを反転したい場合は、必要な幅のマスクとのXORを使う。</p>
   <ul>
     <li>
-      <p>実装サンプル : <code>~a</code> が \(- ( a + 1 )\) となる確認<br>
-        ※ \(2\)進数 \(0101\)\((\)\(10\)進数：\(5\)\()\)を反転する。<br></p>
+      実装サンプル :
+      <code>~a</code>
+      が \(- ( a + 1 )\) となる確認
+      <br/>
+      ※ \(2\)進数 \(0101\)\((\)\(10\)進数：\(5\)\()\)を反転する。
+      <br/>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-comment"># 0b0101 を反転する</span>
     &gt;&gt;&gt; bit_a = <span class="hljs-number">0b0101</span>
@@ -152,14 +206,32 @@
     </li>
   </ul>
   <p>例えば \(4\) ビット幅に限定して \(0101\) だけを反転する場合は、<code>0b0101 ^ 0b1111</code>で<code>0b1010</code>を得る。これはPythonの無限幅の<code>~0b0101</code>とは目的が異なる。</p>
-  <h3 id="左シフト--">左シフト（ &lt;&lt; ）</h3>
-  <p><code>a&lt;&lt;b</code> は、<code>b</code> の桁数分 左にシフトし、空白となった右側の桁は \(0\) で埋められる。</p>
-  <p>※ 使用用途<br>
-    元の値を \(2\) のプラスべき乗倍する場合に使用する。<br>
-    ※ 左に \(1\) シフトすると \(2\)倍(\(\displaystyle 2^1\)乗)、\(2\)シフトすると \(4\)倍(\(\displaystyle 2^2\)) … \(n\) シフトすると
-    \(2\)の\(n\)乗倍といった増え方をする</p>
   <ul>
-    <li>実装サンプル
+    <li>
+      <p>他のフラグを残して書き込みだけを解除する<br/></p>
+      <pre><code class="language-python">READ, WRITE, EXECUTE = <span class="hljs-number">0b001</span>, <span class="hljs-number">0b010</span>, <span class="hljs-number">0b100</span>
+flags = READ | WRITE | EXECUTE
+flags &amp;= ~WRITE
+<span class="hljs-built_in">print</span>(<span class="hljs-string">f</span><span class="hljs-string">"</span><span class="hljs-string">{</span>flags<span class="hljs-string">:</span><span class="hljs-string">03b</span><span class="hljs-string">}</span><span class="hljs-string">"</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">bool</span>(flags &amp; WRITE))
+<span class="hljs-built_in">print</span>((flags &amp; (READ | EXECUTE)) == (READ | EXECUTE))
+</code></pre>
+      <pre><code class="language-text">101
+False
+True
+</code></pre>
+      <p><code>~WRITE</code>は書き込みの桁を0、それ以外を1にするマスクとして働く。ANDを取ると対象の桁だけが消える。今回は非負整数のフラグを扱っているため、結果もそのフラグの範囲に収まる。</p>
+      <p>OR・AND・XORと集合の関係は<a class="link-secondary" href="https://sigma-se.com/detail/44/#集合">離散数学の集合の説明</a>も参照。</p>
+    </li>
+  </ul>
+  <h3 id="左シフト--">左シフト（ &lt;&lt; ）</h3>
+  <p><code>a &lt;&lt; b</code>は整数<code>a</code>を非負整数<code>b</code>ビット分だけ左へシフトする。右側にできる桁は0で埋められる。</p>
+  <p>※ 使用用途<br/>
+  元の値を \(2\) のプラスべき乗倍する場合に使用する。<br/>
+  ※ 左に \(1\) シフトすると \(2\)倍(\(\displaystyle 2^1\)乗)、\(2\)シフトすると \(4\)倍(\(\displaystyle 2^2\)) … \(n\) シフトすると \(2\)の\(n\)乗倍といった増え方をする</p>
+  <ul>
+    <li>
+      実装サンプル
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-comment"># 0b10101111(10 進数で175)を左に2シフトする</span>
     &gt;&gt;&gt; bit_a = <span class="hljs-number">0b10101111</span>
@@ -176,10 +248,11 @@
   </ul>
   <h3 id="右シフト--">右シフト（ &gt;&gt; ）</h3>
   <p><code>a&gt;&gt;b</code> は、<code>a</code>を<code>b</code>ビット右へシフトする。Pythonでは<code>a // (2 ** b)</code>と同じ結果になり、正数では左側を \(0\) で補うように見える。負数では符号を保つように \(1\) が続くため、常に \(0\) 埋めとはならない。</p>
-  <p>※ 使用用途<br>
-    元の整数を \(2^b\) で切り下げ除算する場合に使用する。</p>
+  <p>※ 使用用途<br/>
+  元の整数を \(2^b\) で切り下げ除算する場合に使用する。</p>
   <ul>
-    <li>実装サンプル
+    <li>
+      実装サンプル
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-comment"># 0b10000000(10 進数で128)を右に2シフトする</span>
     &gt;&gt;&gt; bit_a = <span class="hljs-number">0b10000000</span>
@@ -205,12 +278,13 @@
 </code></pre>
     </li>
   </ul>
-
+  <p>シフト数は非負整数で指定する。負のシフト数は<code>ValueError</code>となる。</p>
   <h2 id="まとめ">まとめ</h2>
   <ul>
-    <li>andやorは真偽値を扱う論理演算子、&amp;や|は整数の各ビットを扱うビット演算子で、用途が異なる。</li>
-    <li>|、^、&amp;はビットごとの比較を行い、左シフトは2倍方向、右シフトは2で割る方向へ値を変化させる。</li>
-    <li>Pythonの整数は固定ビット幅ではないため、ビット反転~xは-(x + 1)として考えると理解しやすい。</li>
+    <li>フラグを設定するにはOR、切り替えるにはXOR、残っているビットを調べるにはANDを使う。</li>
+    <li>複数フラグのうち一つでも立っている条件と、すべて立っている条件を区別する。</li>
+    <li>flags &amp;= ~maskで指定したビットだけを解除できる。Pythonの整数は固定ビット幅ではなく、~xは-(x + 1)となる。</li>
+    <li>非負整数bによる左シフトは2 ** b倍、右シフトは2 ** bによる切り下げ除算に対応する。</li>
   </ul>
   <h3 id="参考文献">参考文献</h3>
   <ul>
