@@ -1,13 +1,13 @@
 <div class="post-body">
   <h2 id="概要">概要</h2>
-  <p>Matplotlibのpyplotを使い、Pythonでグラフを描画する基本手順を整理する。</p>
-  <p>数値だけを眺めても傾向はつかみにくいため、折れ線グラフや散布図として可視化することで、変化、分布、外れ値を確認しやすくなる。<br>ここでは、インストール、基本的な描画、複数系列、ラベルや凡例の設定を実行例で確認する。</p>
+  <p>Matplotlibのpyplotでグラフを描き、タイトル・軸名・凡例を設定して保存する手順を整理する。</p>
+  <p>同じ観測値を散布図と折れ線で描き、点を線で結ぶ順番によって伝わる意味が変わることを確かめる。観測点の関係と時間に沿った変化を区別し、目的に合う描き方を選ぶ。比較図はPython 3.12.2・Matplotlib 3.11.2で生成。</p>
   <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
-    <li><a href="#matplotlibの環境準備" class="link-secondary">Matplotlibの環境準備</a><br>
+    <li><a class="link-secondary" href="#matplotlibの環境準備">Matplotlibの環境準備</a><br/>
       Matplotlibの環境準備の手順と確認ポイントを整理。</li>
-    <li><a href="#matplotlibの使用方法" class="link-secondary">Matplotlibの使用方法</a><br>
-      Matplotlibの使用方法をコードや具体例で確認。</li>
+    <li><a class="link-secondary" href="#matplotlibの使用方法">Matplotlibの使用方法</a><br/>
+      基本描画と保存、画像表示、散布図と折れ線の使い分けを確認。</li>
   </ul>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="matplotlibの環境準備">Matplotlibの環境準備</h3>
@@ -23,107 +23,132 @@
   <h3 id="matplotlibの使用方法">Matplotlibの使用方法</h3>
   <ul>
     <li>
-      <p>区間、刻み幅、グラフタイトル、軸ラベルの設定と表示<br>
-        二次関数<strong>y = x^2</strong>を例に区間、刻み幅、グラフタイトル、軸ラベルを設定してグラフを描画する。<br><code>np.arange(0, 20, 0.01)</code>は、0以上20未満の値を0.01刻みで生成。</p>
+      <p>区間、刻み幅、グラフタイトル、軸ラベルの設定と表示<br/>
+      二次関数<strong>y = x^2</strong>を例に区間、刻み幅、グラフタイトル、軸ラベルを設定してグラフを描画する。<br/><code>np.arange(0, 20, 0.01)</code>は、0以上20未満の値を0.01刻みで生成。</p>
       <pre><code class="language-bash">$ python
  &gt;&gt;&gt; import numpy as np
  &gt;&gt;&gt; import matplotlib.pyplot as plt
  &gt;&gt;&gt; x = np.arange(0, 20, 0.01)    <span class="hljs-comment"># 0以上20未満の範囲を0.01刻みに設定</span>
  &gt;&gt;&gt; y = x**2
- &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;y = x^2\n# arange:0, 20, 0.01, xlabel:x, ylabel:y&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
-   Text(0.5, 1.0, <span class="hljs-string">&#x27;y = x^2\n# arange:0, 20, 0.01, xlabel:x, ylabel:y&#x27;</span>)
- &gt;&gt;&gt; plt.xlabel(<span class="hljs-string">&quot;x&quot;</span>)    <span class="hljs-comment"># x軸のラベルを設定</span>
-   Text(0.5, 0, <span class="hljs-string">&#x27;x&#x27;</span>)
- &gt;&gt;&gt; plt.ylabel(<span class="hljs-string">&quot;y&quot;</span>)    <span class="hljs-comment"># y軸のラベルを設定</span>
-   Text(0, 0.5, <span class="hljs-string">&#x27;y&#x27;</span>)
+ &gt;&gt;&gt; plt.title(<span class="hljs-string">"y = x^2\n# arange:0, 20, 0.01, xlabel:x, ylabel:y"</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
+   Text(0.5, 1.0, <span class="hljs-string">'y = x^2\n# arange:0, 20, 0.01, xlabel:x, ylabel:y'</span>)
+ &gt;&gt;&gt; plt.xlabel(<span class="hljs-string">"x"</span>)    <span class="hljs-comment"># x軸のラベルを設定</span>
+   Text(0.5, 0, <span class="hljs-string">'x'</span>)
+ &gt;&gt;&gt; plt.ylabel(<span class="hljs-string">"y"</span>)    <span class="hljs-comment"># y軸のラベルを設定</span>
+   Text(0, 0.5, <span class="hljs-string">'y'</span>)
  &gt;&gt;&gt; plt.plot(x,y)    <span class="hljs-comment"># グラフの描画</span>
    [&lt;matplotlib.lines.Line2D object at 0x7fa0a479eb70&gt;]
- &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;pid13_1.png&#x27;</span>)    <span class="hljs-comment"># 任意の保存先を指定</span>
+ &gt;&gt;&gt; plt.savefig(<span class="hljs-string">'pid13_1.png'</span>)    <span class="hljs-comment"># 任意の保存先を指定</span>
  &gt;&gt;&gt; plt.close()    <span class="hljs-comment"># 図を閉じ、次の描画へ状態を持ち越さない</span>
 </code></pre>
       <ul>
         <li>上記で出力したグラフ「pid13_1.png」
-          <img src="/static/tblog/img/pid13_1.png" alt="0以上20未満の二次関数y=x^2を描画した折れ線グラフ">
-        </li>
+          <img alt="0以上20未満の二次関数y=x^2を描画した折れ線グラフ" src="/static/tblog/img/pid13_1.png"/></li>
       </ul>
     </li>
     <li>
-      <p>2つのグラフ、凡例の設定と表示<br>
-        三角関数<strong>y = sin(x)</strong>と<strong>y = cos(x)</strong>を例に凡例の設定を行い、2つのグラフを表示。</p>
+      <p>2つのグラフ、凡例の設定と表示<br/>
+      三角関数<code>y = sin(x)</code>と<code>y = cos(x)</code>を例に凡例の設定を行い、2つのグラフを表示。</p>
       <pre><code class="language-bash">$ python
  &gt;&gt;&gt; import numpy as np
  &gt;&gt;&gt; import matplotlib.pyplot as plt
  &gt;&gt;&gt; x = np.arange(0, 6, 0.01)    <span class="hljs-comment"># 0以上6未満の範囲を0.01刻みに設定</span>
- &gt;&gt;&gt; plt.title(<span class="hljs-string">&quot;y = sin(x), y = cos(x)\n# arange:0, 6, 0.01, xlabel:x, ylabel:y, legend:sin&amp;cos&quot;</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
- Text(0.5, 1.0, <span class="hljs-string">&#x27;y = sin(x), y = cos(x)\n# arange:0, 6, 0.01, xlabel:x, ylabel:y, legend:sin&amp;cos&#x27;</span>)
- &gt;&gt;&gt; plt.xlabel(<span class="hljs-string">&quot;x&quot;</span>)    <span class="hljs-comment"># x軸のラベルを設定</span>
-   Text(0.5, 0, <span class="hljs-string">&#x27;x&#x27;</span>)
- &gt;&gt;&gt; plt.ylabel(<span class="hljs-string">&quot;y&quot;</span>)    <span class="hljs-comment"># y軸のラベルを設定</span>
-   Text(0, 0.5, <span class="hljs-string">&#x27;y&#x27;</span>)
+ &gt;&gt;&gt; plt.title(<span class="hljs-string">"y = sin(x), y = cos(x)\n# arange:0, 6, 0.01, xlabel:x, ylabel:y, legend:sin&amp;cos"</span>)    <span class="hljs-comment"># グラフタイトルを設定</span>
+ Text(0.5, 1.0, <span class="hljs-string">'y = sin(x), y = cos(x)\n# arange:0, 6, 0.01, xlabel:x, ylabel:y, legend:sin&amp;cos'</span>)
+ &gt;&gt;&gt; plt.xlabel(<span class="hljs-string">"x"</span>)    <span class="hljs-comment"># x軸のラベルを設定</span>
+   Text(0.5, 0, <span class="hljs-string">'x'</span>)
+ &gt;&gt;&gt; plt.ylabel(<span class="hljs-string">"y"</span>)    <span class="hljs-comment"># y軸のラベルを設定</span>
+   Text(0, 0.5, <span class="hljs-string">'y'</span>)
  &gt;&gt;&gt; y_sin = np.sin(x)
  &gt;&gt;&gt; y_cos = np.cos(x)
- &gt;&gt;&gt; plt.plot(x, y_sin, label=<span class="hljs-string">&quot;sin&quot;</span>)   <span class="hljs-comment"># グラフの描画 ※実線で描画 ( デフォルト )</span>
+ &gt;&gt;&gt; plt.plot(x, y_sin, label=<span class="hljs-string">"sin"</span>)   <span class="hljs-comment"># グラフの描画 ※実線で描画 ( デフォルト )</span>
    [&lt;matplotlib.lines.Line2D object at 0x7fde03617fd0&gt;]
- &gt;&gt;&gt; plt.plot(x, y_cos, linestyle=<span class="hljs-string">&quot;--&quot;</span>, label=<span class="hljs-string">&quot;cos&quot;</span>)    <span class="hljs-comment"># グラフの描画 ※破線で描画</span>
+ &gt;&gt;&gt; plt.plot(x, y_cos, linestyle=<span class="hljs-string">"--"</span>, label=<span class="hljs-string">"cos"</span>)    <span class="hljs-comment"># グラフの描画 ※破線で描画</span>
    [&lt;matplotlib.lines.Line2D object at 0x7fde03625048&gt;]
  &gt;&gt;&gt; plt.legend()    <span class="hljs-comment"># 凡例の描画</span>
    &lt;matplotlib.legend.Legend object at 0x7fde03625358&gt;
- &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;pid13_2.png&#x27;</span>)    <span class="hljs-comment"># 任意の保存先を指定</span>
+ &gt;&gt;&gt; plt.savefig(<span class="hljs-string">'pid13_2.png'</span>)    <span class="hljs-comment"># 任意の保存先を指定</span>
  &gt;&gt;&gt; plt.close()
 </code></pre>
       <ul>
         <li>上記で出力したグラフ「pid13_2.png」
-          <img src="/static/tblog/img/pid13_2.png" alt="0以上6未満のsin関数とcos関数を重ねて描画したグラフ">
-        </li>
+          <img alt="0以上6未満のsin関数とcos関数を重ねて描画したグラフ" src="/static/tblog/img/pid13_2.png"/></li>
       </ul>
     </li>
     <li>
-      <p><strong>imread</strong>を使った画像表示<br>
-        <code>matplotlib.image</code>の<code>imread</code>によって画像をNumPy配列として読み込み、<code>pyplot.imshow</code>で座標軸上に表示。<br>
-        ここでは、透過背景のPythonロゴ画像「pid13_3.png」を読み込み、描画結果を「pid13_4.png」として保存。<br>読み込んだ配列の<code>shape</code>を確認すると、画像の高さ、幅、色チャンネル数も確認できる。
-      </p>
+      <p><strong>imread</strong>を使った画像表示<br/>
+      <code>matplotlib.image</code>の<code>imread</code>によって画像をNumPy配列として読み込み、<code>pyplot.imshow</code>で座標軸上に表示。<br/>
+      ここでは、透過背景のPythonロゴ画像「pid13_3.png」を読み込み、描画結果を「pid13_4.png」として保存。<br/>読み込んだ配列の<code>shape</code>を確認すると、画像の高さ、幅、色チャンネル数も確認できる。</p>
       <ul>
         <li>
-          <p>読み込み元の画像「pid13_3.png」<br>
-            <img src="/static/tblog/img/pid13_3.png" alt="imreadで読み込む透過背景のPythonロゴ画像">
-          </p>
+          <p>読み込み元の画像「pid13_3.png」
+          <img alt="imreadで読み込む透過背景のPythonロゴ画像" src="/static/tblog/img/pid13_3.png"/></p>
         </li>
         <li>
           <p>「pid13_3.png」を<code>imread</code>で読み込み、<code>imshow</code>で表示して「pid13_4.png」として保存</p>
           <pre><code class="language-bash">$ python
  &gt;&gt;&gt; import matplotlib.pyplot as plt
  &gt;&gt;&gt; from matplotlib.image import imread
- &gt;&gt;&gt; img = imread(<span class="hljs-string">&#x27;pid13_3.png&#x27;</span>)    <span class="hljs-comment"># Pythonロゴ画像を読み込み</span>
+ &gt;&gt;&gt; img = imread(<span class="hljs-string">'pid13_3.png'</span>)    <span class="hljs-comment"># Pythonロゴ画像を読み込み</span>
  &gt;&gt;&gt; img.shape
  (500, 500, 4)
  &gt;&gt;&gt; plt.imshow(img)    <span class="hljs-comment"># 画像表示</span>
  &lt;matplotlib.image.AxesImage object at 0x7f4b80106f60&gt;
- &gt;&gt;&gt; plt.title(<span class="hljs-string">&#x27;pid13_3.png Read with image.imread \n and output as pid13_4.png in pyplot.imshow&#x27;</span>)
- &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;pid13_4.png&#x27;</span>)
+ &gt;&gt;&gt; plt.title(<span class="hljs-string">'pid13_3.png Read with image.imread \n and output as pid13_4.png in pyplot.imshow'</span>)
+ &gt;&gt;&gt; plt.savefig(<span class="hljs-string">'pid13_4.png'</span>)
  &gt;&gt;&gt; plt.close()
 </code></pre>
         </li>
         <li>
-          <p>上記で出力した画像「pid13_4.png」<br>
-            <img src="/static/tblog/img/pid13_4.png" alt="Pythonロゴ画像をimshowで描画した結果">
-          </p>
+          <p>上記で出力した画像「pid13_4.png」
+          <img alt="Pythonロゴ画像をimshowで描画した結果" src="/static/tblog/img/pid13_4.png"/></p>
         </li>
       </ul>
       <p><code>shape</code>の値や保存画像の余白は、元画像やMatplotlibのバージョン・設定によって異なる。</p>
     </li>
     <li>
-      <p>その他のグラフ<br>
-        上記以外にも<code>plt.scatter()</code>による散布図、<code>plt.hist()</code>によるヒストグラムなど、さまざまなグラフに対応している。目的に合うグラフを選び、軸名、単位、凡例を付けると、画像だけを見ても意味を判断しやすくなる。
-      </p>
+      <p>同じ観測値を散布図と折れ線で比べる<br/>
+      時刻と気温の組が<code>(0分, 20℃)</code>、<code>(20分, 23℃)</code>、<code>(10分, 21℃)</code>、<code>(30分, 22℃)</code>の順に届いたとする。説明用の観測値であり、入力の並びは時刻順ではない。</p>
+      <pre><code class="language-python"><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt
+
+minutes = [<span class="hljs-number">0</span>, <span class="hljs-number">20</span>, <span class="hljs-number">10</span>, <span class="hljs-number">30</span>]
+temperatures = [<span class="hljs-number">20</span>, <span class="hljs-number">23</span>, <span class="hljs-number">21</span>, <span class="hljs-number">22</span>]
+ordered = <span class="hljs-built_in">sorted</span>(<span class="hljs-built_in">zip</span>(minutes, temperatures))
+ordered_minutes, ordered_temperatures = <span class="hljs-built_in">zip</span>(*ordered)
+
+<span class="hljs-keyword">with</span> plt.rc_context({<span class="hljs-string">"</span><span class="hljs-string">font.size</span><span class="hljs-string">"</span>: <span class="hljs-number">16</span>}):
+    fig, axes = plt.subplots(<span class="hljs-number">3</span>, <span class="hljs-number">1</span>, figsize=(<span class="hljs-number">6</span>, <span class="hljs-number">10</span>), sharex=<span class="hljs-keyword">True</span>,
+                             sharey=<span class="hljs-keyword">True</span>, layout=<span class="hljs-string">"</span><span class="hljs-string">constrained</span><span class="hljs-string">"</span>)
+    axes[<span class="hljs-number">0</span>].scatter(minutes, temperatures, s=<span class="hljs-number">70</span>)
+    axes[<span class="hljs-number">0</span>].set_title(<span class="hljs-string">"</span><span class="hljs-string">Scatter</span><span class="hljs-string">"</span>)
+    axes[<span class="hljs-number">1</span>].plot(minutes, temperatures, <span class="hljs-string">"</span><span class="hljs-string">o--</span><span class="hljs-string">"</span>)
+    axes[<span class="hljs-number">1</span>].set_title(<span class="hljs-string">"</span><span class="hljs-string">Line: input order</span><span class="hljs-string">"</span>)
+    axes[<span class="hljs-number">2</span>].plot(ordered_minutes, ordered_temperatures, <span class="hljs-string">"</span><span class="hljs-string">o-</span><span class="hljs-string">"</span>)
+    axes[<span class="hljs-number">2</span>].set_title(<span class="hljs-string">"</span><span class="hljs-string">Line: time order</span><span class="hljs-string">"</span>)
+    <span class="hljs-keyword">for</span> ax in axes:
+        ax.set_ylabel(<span class="hljs-string">"</span><span class="hljs-string">Temperature [°C]</span><span class="hljs-string">"</span>)
+        ax.set_xlim(-<span class="hljs-number">2</span>, <span class="hljs-number">32</span>)
+        ax.set_ylim(<span class="hljs-number">19</span>, <span class="hljs-number">24</span>)
+        ax.grid(alpha=<span class="hljs-number">0.3</span>)
+    axes[<span class="hljs-number">2</span>].set_xlabel(<span class="hljs-string">"</span><span class="hljs-string">Time [min]</span><span class="hljs-string">"</span>)
+    fig.savefig(<span class="hljs-string">"</span><span class="hljs-string">pid13_5.png</span><span class="hljs-string">"</span>, dpi=<span class="hljs-number">120</span>)
+    plt.close(fig)
+</code></pre>
+      <div>
+        <img alt="同じ4つの観測点を散布図、入力順の折れ線、時刻順の折れ線で比較。入力順では20分から10分へ線が戻る。" src="/static/tblog/img/pid13_5.png"/>
+      </div>
+      <p>上段の散布図は4つの観測点を線で結ばずに示す。中段の折れ線は渡した順番の0分→20分→10分→30分を結ぶため、時間が戻る線ができる。<code>plot()</code>が時刻順へ自動で並べ替えるわけではない。</p>
+      <p>下段では時刻と気温を<code>zip()</code>で組にしてから並べ替えた。時刻だけを並べ替えると気温との対応が壊れるため、組のまま順序を変える。時間変化を伝えたい場合はこちらの並びを使う。ただし観測点の間を結んだ線は未観測時刻の実測値ではない。</p>
+      <p>散布図は観測点の位置関係、折れ線は意味のある順序に沿った変化を示す場合に選ぶ。移動経路など入力順そのものに意味があるデータでは、xの値で並べ替えることが適切とは限らない。軸の意味と結ぶ順序を決めてから描画する。</p>
+      <p>分布を見たい場合は<code>plt.hist()</code>によるヒストグラムも選択肢になる。グラフの種類にかかわらず軸名・単位・必要な凡例を付け、画像だけでも対象を読み取れるようにする。</p>
     </li>
   </ul>
   <h2 id="まとめ">まとめ</h2>
   <ul>
-    <li>MatplotlibはPythonでグラフを描く代表的なライブラリ。</li>
-    <li>pyplotでは、要素数をそろえたxとyのデータを渡して描画する。要素数が異なると描画エラーになる。</li>
-    <li>軸名や凡例を付けるとグラフの意味が伝わりやすくなり、数値の傾向や異常を判断しやすくなる。</li>
-    <li>スクリプトから画面に表示する場合は<code>plt.show()</code>、画像として保存する場合は<code>plt.savefig()</code>を使用。</li>
-    <li><code>imread</code>で読み込んだ画像はNumPy配列として扱われ、<code>imshow</code>で表示できる。</li>
+    <li>散布図は観測点の位置関係、折れ線は意味のある順序に沿った変化を示す場合に使う。</li>
+    <li>plot()は渡した順に点を結ぶ。時刻順へ並べ替える場合は観測値との組を保ち、点の間の線を実測値と混同しない。</li>
+    <li>軸名・単位・凡例を付け、画面表示にはshow()、画像保存にはsavefig()を使う。保存後はclose()で図を閉じる。</li>
+    <li>imread()で読み込んだ画像はNumPy配列として扱い、imshow()で表示できる。</li>
   </ul>
   <h2 id="参考文献">参考文献</h2>
   <ul>
