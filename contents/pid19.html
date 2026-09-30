@@ -60,7 +60,7 @@
           <tr>
             <td>0004</td>
             <td>32 bit integer</td>
-            <td>60000</td>
+            <td>60000 or 10000</td>
             <td>画像データの数</td>
           </tr>
           <tr>
@@ -160,14 +160,15 @@
   <h3 id="mnistのダウンロード">MNISTのダウンロード</h3>
   <ul>
     <li>データ取得と読み込み<br>
-  <p>下記、<code>mnist.py</code>を使用し、MNISTをダウンロードする。</p>
+  <p>下記、<code>mnist.py</code>を使用し、MNISTをダウンロードする。Python環境にはNumPyと画像表示用のPillowを用意しておく（<code>python -m pip install numpy pillow</code>）。</p>
   <p>Git（deep-learning-from-scratch）：<a class="link-secondary"
       href="https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/dataset/mnist.py">https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/dataset/mnist.py</a>
   </p>
   <ul>
     <li>
       <p>リポジトリをクローン</p>
-      <pre><code class="language-bash">$ <span class="hljs-built_in">cd</span> gitlocalrep
+      <pre><code class="language-bash">$ mkdir -p gitlocalrep
+$ <span class="hljs-built_in">cd</span> gitlocalrep
 $ git <span class="hljs-built_in">clone</span> https://github.com/oreilly-japan/deep-learning-from-scratch.git
 Cloning into <span class="hljs-string">&#x27;deep-learning-from-scratch&#x27;</span>...
 remote: Enumerating objects: 381, <span class="hljs-keyword">done</span>.
@@ -177,8 +178,8 @@ Resolving deltas: 100% (197/197), <span class="hljs-keyword">done</span>.
 </code></pre>
     </li>
     <li>
-      <p>カレントディレクトに移動<br>
-        <code>mnist.py</code>の利用時は、カレントディレクトを ch01、ch02、ch03 … ch08 のいずれかで実施する必要がある。<br>
+      <p>カレントディレクトリに移動<br>
+        このサンプルでは親ディレクトリから<code>mnist.py</code>を読み込むため、ch03をカレントディレクトリにする。<br>
         ここでは、ch03から実施。
       </p>
       <pre><code class="language-bash">$ <span class="hljs-built_in">cd</span> deep-learning-from-scratch/ch03
@@ -187,7 +188,7 @@ Resolving deltas: 100% (197/197), <span class="hljs-keyword">done</span>.
     <li>
       <p>ダウンロード<br>
         下記、load_mnistによってMNISTデータセットのダウンロードを行っているが、初回のみオンラインである必要があり数分かかる。<br />
-        初回で読み込み時に<code>pickle</code>というローカルファイルが作成され、ダウンロード結果を保持しているので、2回目以降は、オフラインかつ、すぐに処理が終わる。<br />
+        初回の読み込み時に<code>mnist.pkl</code>というローカルファイルが作成され、ダウンロード結果を保持しているので、2回目以降は、オフラインかつ、すぐに処理が終わる。<br />
         ※ Pythonの<code>pickle</code>は、Pythonオブジェクトをファイルへ保存・復元する機能。信頼できないpickleを読み込むと任意のコードが実行される危険があるため、この例では取得元を確認したファイルだけを使用する。</p>
       <pre><code class="language-bash">$ python
  &gt;&gt;&gt; import sys, os
