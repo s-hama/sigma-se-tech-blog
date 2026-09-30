@@ -81,8 +81,10 @@
       ここでは、透過背景のPythonロゴ画像「pid13_3.png」を読み込み、描画結果を「pid13_4.png」として保存。<br/>読み込んだ配列の<code>shape</code>を確認すると、画像の高さ、幅、色チャンネル数も確認できる。</p>
       <ul>
         <li>
-          <p>読み込み元の画像「pid13_3.png」
-          <img alt="imreadで読み込む透過背景のPythonロゴ画像" src="/static/tblog/img/pid13_3.png"/></p>
+          <p>読み込み元の画像「pid13_3.png」</p>
+          <div>
+            <img alt="imreadで読み込む透過背景のPythonロゴ画像" src="/static/tblog/img/pid13_3.png" style="display: block; width: 60%; max-width: 300px; height: auto;"/>
+          </div>
         </li>
         <li>
           <p>「pid13_3.png」を<code>imread</code>で読み込み、<code>imshow</code>で表示して「pid13_4.png」として保存</p>
@@ -134,13 +136,20 @@ ordered_minutes, ordered_temperatures = <span class="hljs-built_in">zip</span>(*
     fig.savefig(<span class="hljs-string">"</span><span class="hljs-string">pid13_5.png</span><span class="hljs-string">"</span>, dpi=<span class="hljs-number">120</span>)
     plt.close(fig)
 </code></pre>
-      <div>
-        <img alt="同じ4つの観測点を散布図、入力順の折れ線、時刻順の折れ線で比較。入力順では20分から10分へ線が戻る。" src="/static/tblog/img/pid13_5.png"/>
+      <div style="margin-bottom: 1em;">
+        <img alt="同じ4つの観測点を散布図、入力順の折れ線、時刻順の折れ線で比較。入力順では20分から10分へ線が戻る。" src="/static/tblog/img/pid13_5.png" style="display: block; width: 70%; max-width: 504px; height: auto;"/>
       </div>
-      <p>上段の散布図は4つの観測点を線で結ばずに示す。中段の折れ線は渡した順番の0分→20分→10分→30分を結ぶため、時間が戻る線ができる。<code>plot()</code>が時刻順へ自動で並べ替えるわけではない。</p>
-      <p>下段では時刻と気温を<code>zip()</code>で組にしてから並べ替えた。時刻だけを並べ替えると気温との対応が壊れるため、組のまま順序を変える。時間変化を伝えたい場合はこちらの並びを使う。ただし観測点の間を結んだ線は未観測時刻の実測値ではない。</p>
-      <p>散布図は観測点の位置関係、折れ線は意味のある順序に沿った変化を示す場合に選ぶ。移動経路など入力順そのものに意味があるデータでは、xの値で並べ替えることが適切とは限らない。軸の意味と結ぶ順序を決めてから描画する。</p>
-      <p>分布を見たい場合は<code>plt.hist()</code>によるヒストグラムも選択肢になる。グラフの種類にかかわらず軸名・単位・必要な凡例を付け、画像だけでも対象を読み取れるようにする。</p>
+      <p>上段の散布図は4つの観測点を線で結ばずに示す。<br/>
+      中段の折れ線は渡した順番の0分→20分→10分→30分を結ぶため、時間が戻る線ができる。<br/>
+      <code>plot()</code>が時刻順へ自動で並べ替えるわけではない。</p>
+      <p>下段では時刻と気温を<code>zip()</code>で組にしてから並べ替えた。<br/>
+      時刻だけを並べ替えると気温との対応が壊れるため、組のまま順序を変える。<br/>
+      時間変化を伝えたい場合はこちらの並びを使う。ただし観測点の間を結んだ線は未観測時刻の実測値ではない。</p>
+      <p>散布図は観測点の位置関係、折れ線は意味のある順序に沿った変化を示す場合に選ぶ。<br/>
+      移動経路など入力順そのものに意味があるデータでは、xの値で並べ替えることが適切とは限らない。<br/>
+      軸の意味と結ぶ順序を決めてから描画する。</p>
+      <p>分布を見たい場合は<code>plt.hist()</code>によるヒストグラムも選択肢になる。<br/>
+      グラフの種類にかかわらず軸名・単位・必要な凡例を付け、画像だけでも対象を読み取れるようにする。</p>
     </li>
   </ul>
   <h2 id="まとめ">まとめ</h2>
