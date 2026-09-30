@@ -68,11 +68,11 @@ MNISTの推論処理を1件ずつではなく、複数件まとめて処理す�
 - バッチ推論の実行結果<br>
     上記の実行部分は、`ch03/neuralnet_mnist.py`の実行部分を**100個単位**でバッチ実行しているため、`ch03/neuralnet_mnist_batch.py`内の実行部分を実行すると`neuralnet_mnist.py`の実行時と同じ`Accuracy:0.9352`が出力される。
 
-    - 対話モードで確認
+    - スクリプトを実行して確認
         ```bash
         $ cd gitlocalrep
         $ cd deep-learning-from-scratch/ch03
-        $ source /var/www/vops/bin/activate
+        # NumPyをインストールしたPython環境で実行
         $ python neuralnet_mnist_batch.py
             Accuracy:0.9352
         ```
@@ -142,7 +142,7 @@ MNISTの推論処理を1件ずつではなく、複数件まとめて処理す�
             [2 1 0 0 1]
             >>>
             ```
-    - （＊6）バッチ単位で抽出した結果pと正解tを比較し、**一致している個数（合計値）**を取得
+    - （＊6）バッチ単位で抽出した結果pと正解tを比較し、<strong>一致している個数（合計値）</strong>を取得
         - sum（bool値）の例
             ```python
             $ python
