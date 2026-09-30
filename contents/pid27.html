@@ -158,7 +158,7 @@
 </code></pre>
       <p>\(x\) は、<strong>入力データ</strong>で \(t\) が<strong>教師データ</strong>。</p>
       <p>predict関数は、入力データ \(x\)
-        と<code>__init__</code>で設定した仮（ランダム）の重みパラメータ<code>self.W</code>の<strong>評価結果</strong>（積）を返す。</p>
+        と<code>__init__</code>で設定した説明用に固定した重みパラメータ<code>self.W</code>の<strong>評価結果</strong>（積）を返す。</p>
       <p>loss関数は、predict関数、softmax関数を実施した \(y\) と教師データ \(t\)
         の<strong>損失関数</strong>（交差エントロピー誤差：cross_entropy_error関数）を返す。</p>
     </li>
@@ -219,8 +219,7 @@
 &gt;&gt;&gt;
 </code></pre>
       <p><code>net.loss(x, t)</code>を<code>f(W)</code>とし、勾配処理（<code>numerical_gradient</code>）を実施している。</p>
-      <p>※
-        <code>f(W)</code>の<code>W</code>は、勾配処理：common/gradient.pyのnumerical_gradient関数の\(（A）\)、\(（B）\)と整合性が取れるように定義したもの。
+      <p>※ <code>f(W)</code>は引数の<code>W</code>を直接使わず、<code>net.W</code>で損失を計算する。<code>numerical_gradient(f, net.W)</code>が同じ配列を一時的に書き換えるため、各重みを変えたときの損失を計算できる。
       </p>
     </li>
     <li>
