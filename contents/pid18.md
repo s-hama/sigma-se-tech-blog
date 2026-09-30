@@ -49,7 +49,7 @@ Python - ニューラルネットワーク：4/14 代表的な活性化関数の
 
     - グラフ出力
     ```bash
-    $ python
+    >>> # 上記対話モードの続き
      >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5まで、描画間隔を0.1刻みに設定
      >>> y = step_func(x)    # ステップ関数をコール
      >>> plt.title("step_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
@@ -90,7 +90,7 @@ Python - ニューラルネットワーク：4/14 代表的な活性化関数の
 
     - グラフ出力
     ```bash
-    $ python
+    >>> # 上記対話モードの続き
      >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5まで、描画間隔を0.1刻みに設定
      >>> y = sigmoid_func(x)    # シグモイド関数をコール
      >>> plt.title("sigmoid_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
@@ -103,13 +103,13 @@ Python - ニューラルネットワーク：4/14 代表的な活性化関数の
      Text(0, 0.5, 'y')
      >>> plt.plot(x, y)
      [&lt;matplotlib.lines.Line2D object at 0x7f727fbc1be0&gt;]
-     >>> plt.savefig('/var/www/vops/ops/macuos/static/macuos/img/pid18_2.png')    # グラフの出力
+     >>> plt.savefig('pid18_2.png')    # グラフの出力
     ```
     ![pid18_2](/static/tblog/img/pid18_2.png)
 
 ### ReLU関数
 - 0以下を0にする処理<br>
-    **ReLU**（Rectified Linear Unit：正規化線形ユニット）と呼ばれ、非線形の**活性化関数**に分類される。<br>
+    **ReLU**（Rectified Linear Unit：整流線形ユニット）と呼ばれ、非線形の**活性化関数**に分類される。<br>
     ※ 最近では、ニューラルネットワークにおいて、**シグモイド関数**より、**ReLU関数**が多く用いられるようになった。<br>
 
     - 定義<br>
@@ -138,7 +138,7 @@ Python - ニューラルネットワーク：4/14 代表的な活性化関数の
 
     - グラフ出力
     ```bash
-    $ python
+    >>> # 上記対話モードの続き
      >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5まで、描画間隔を0.1刻みに設定
      >>> y = relu_func(x)    # ReLU関数をコール
      >>> plt.title("relu_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
@@ -149,7 +149,7 @@ Python - ニューラルネットワーク：4/14 代表的な活性化関数の
      Text(0, 0.5, 'y')
      >>> plt.plot(x, y)
      [&lt;matplotlib.lines.Line2D object at 0x7fbf1cfeecc0&gt;]
-     >>> plt.savefig('/var/www/vops/ops/macuos/static/macuos/img/pid18_3.png')
+     >>> plt.savefig('pid18_3.png')
      >>>
     ```
     ![pid18_3](/static/tblog/img/pid18_3.png)
@@ -181,7 +181,7 @@ Python - ニューラルネットワーク：4/14 代表的な活性化関数の
 
     - グラフ出力
     ```bash
-    $ python
+    >>> # 上記対話モードの続き
      >>> x = np.arange(-5.0, 5.0, 0.1)    # 区間を-5～5まで、描画間隔を0.1刻みに設定
      >>> y = identity_func(x)    # 恒等関数をコール
      >>> plt.title("identity_func\n# arange:-5.0, 5.0, 0.1, xlabel:x, ylabel:y")    # グラフタイトルを設定
@@ -192,7 +192,7 @@ Python - ニューラルネットワーク：4/14 代表的な活性化関数の
      Text(0, 0.5, 'y')
      >>> plt.plot(x, y)
      [&lt;matplotlib.lines.Line2D object at 0x7fba4d928f60&gt;]
-     >>> plt.savefig('/var/www/vops/ops/macuos/static/macuos/img/pid18_4.png')
+     >>> plt.savefig('pid18_4.png')
      >>>
 
     ```
@@ -215,6 +215,7 @@ Python - ニューラルネットワーク：4/14 代表的な活性化関数の
     - 実装
     ```bash
     $ python
+     >>> import numpy as np
      >>> def softmax_func(x):    # ソフトマックス関数の定義
      ...     shifted_x = x - np.max(x)    # オーバーフローを防ぐ
      ...     exp_x = np.exp(shifted_x)
@@ -226,7 +227,7 @@ Python - ニューラルネットワーク：4/14 代表的な活性化関数の
 
     - 実行例
     ```bash
-    $ python
+    >>> # 上記対話モードの続き
      >>> x = np.array([0.3, 2.9, 4.0])
      >>> y = softmax_func(x)
      >>> y
