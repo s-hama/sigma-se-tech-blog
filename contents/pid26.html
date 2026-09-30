@@ -41,13 +41,13 @@
     \]
   </div>
   <p>と表せ、<strong>\(μ\)</strong>
-    を<strong>学習率</strong>といい、複数回の勾配を実施するにあたって前回の勾配が示す方向へどのくらい進めるかの<strong>基準値</strong>となる。<br>
+    を<strong>学習率</strong>といい、複数回の勾配を実施するにあたって現在の勾配の逆方向へどのくらい進めるかの<strong>基準値</strong>となる。<br>
     （勾配1回に対し、\(（A）\)と\(（B）\)をそれぞれ一回実施する。）</p>
   <p>※ \(\displaystyle \frac{∂ f}{∂x_{0}}\) と \(\displaystyle \frac{∂ f}{∂x_{1}}\) の<strong>偏微分</strong>については、<a
       href="https://sigma-se.com/detail/25/#勾配のpython実装サンプル" class="link-secondary">Python - ニューラルネットワーク： 偏微分と勾配の実装サンプル &gt; 勾配のPython実装サンプル</a> を参考のこと。</p>
   <ul>
     <li><strong>学習率</strong>についての補足<br>
-      下記の記事で触れている<strong>重み</strong>は、機械学習アルゴリズムにより自動で変化していくが、<strong>学習率</strong>は、あらかじめ人の手で設定するパラメータとなり、深層学習では勾配法によって、<strong>最適化できない（しない）パラメータ</strong>になる。<br>
+      下記の記事で触れている<strong>重み</strong>は、機械学習アルゴリズムにより自動で変化していくが、<strong>学習率</strong>は、あらかじめ人の手で設定するパラメータとなり、この勾配降下法では<strong>重みと同じようには更新しない</strong>パラメータになる。<br>
       （このようなパラメータを<strong>ハイパーパラメータ</strong>という。）
       <ul>
         <li><a href="https://sigma-se.com/detail/15/" class="link-secondary">Python - ニューラルネットワーク： 単純パーセプトロンの概念と実装サンプル</a></li>
