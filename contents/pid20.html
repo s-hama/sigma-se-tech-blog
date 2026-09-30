@@ -34,8 +34,8 @@
     <li>
       <p>ニューロン構成について<br>
         入力層：784個（画像データ28 x 28 = 784（px））<br>
-        隠れ層1：50（任意の値）<br>
-        隠れ層2：100（任意の値）<br>
+        隠れ層1：50（配布された学習済み重みの構成）<br>
+        隠れ層2：100（配布された学習済み重みの構成）<br>
         出力層：10（数字0～9の10クラス）</p>
     </li>
     <li>
@@ -109,22 +109,22 @@ accuracy_cnt = <span class="hljs-number">0</span>
 </code></pre>
         </li>
         <li>「4.」の結果であるNumPy配列\(y\)に対して、最も確率が高い要素のインデックスを取得。<br></li>
-        <li>推論処理出した「5.」の予測結果が正解ラベル\(t\)と一致しているかチェック。<br></li>
+        <li>推論処理で出した「5.」の予測結果が正解ラベル\(t\)と一致しているかチェック。<br></li>
         <li>一致していれば、正解数を加算。<br></li>
         <li>最後に正解率を出力。<br></li>
       </ol>
     </li>
     <li>
       <p>実行結果<br>
-        実際に上記を対話モードで実行すると<code>Accuracy:0.9352</code>が出力される。</p>
+        実際に上記のスクリプトを実行すると<code>Accuracy:0.9352</code>が出力される。</p>
       <pre><code class="language-bash">$ cd gitlocalrep
 $ cd deep-learning-<span class="hljs-keyword">from</span>-scratch/ch03
-$ source /var/www/vops/<span class="hljs-built_in">bin</span>/activate
+<span class="hljs-comment"># NumPyをインストールしたPython環境で実行</span>
 $ python neuralnet_mnist.py
 Accuracy:<span class="hljs-number">0.9352</span>
 </code></pre>
       <p>
-        上記実装サンプルでは、93％程度の精度だったが、実際のニューラルネットワークでは、さらにニューラルネットワークの構造や「4.」の関数<code>predict</code>内の処理にあたる学習方法を工夫し、99％以上の精度を出していく。
+        上記実装サンプルでは93％程度の精度だった。さらに精度を高めるには、ネットワークの構造や学習方法を工夫して重みを学習し直す。<code>predict</code>は学習済みの重みで推論する関数であり、学習処理は行わない。
       </p>
     </li>
   </ul>
