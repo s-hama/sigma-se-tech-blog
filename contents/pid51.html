@@ -80,4 +80,41 @@
       <p>また、GPUの並列演算能力を画像処理以外にも利用する<strong>GPGPU</strong>（General-Purpose computing on Graphics Processing Units）があり、科学技術計算やディープラーニングなどで用いられている。</p>
     </li>
   </ul>
+  <h2 id="プロセッサ命令とステージ">プロセッサ命令とステージ</h2>
+  <p>
+    <strong>CPU</strong>における<strong>プロセッサ</strong>で一つの命令を実行する際、<strong>制御装置</strong>、<strong>演算装置</strong>以外にも<strong>入力データ</strong>の準備や命令となるプログラムを<strong>記憶装置</strong>から<strong>演算装置</strong>に取出す処理など、命令実行完了となるまでにいくつかの工程がある。
+  </p>
+  <p>この工程を<strong>ステージ</strong>と呼び、次の代表的な<strong>ステージ</strong>（＊1）～（＊5）の順で実行される。</p>
+  <ul>
+    <li>
+      <p>（＊1）命令の取出し<br></p>
+      <ul>
+        <li><strong>記憶装置</strong>やキャッシュから次に実行する命令を取り出す。</li>
+      </ul>
+    </li>
+    <li>
+      <p>（＊2）命令の解読<br></p>
+      <ul>
+        <li><strong>制御装置</strong>で命令を解読する。</li>
+      </ul>
+    </li>
+    <li>
+      <p>（＊3）データの取出し<br></p>
+      <ul>
+        <li><strong>記憶装置</strong>から（＊4）<strong>命令の実行</strong>に必要な<strong>データ</strong>を取出す。</li>
+      </ul>
+    </li>
+    <li>
+      <p>（＊4）命令の実行<br></p>
+      <ul>
+        <li><strong>演算装置</strong>で<strong>命令の実行</strong>を行う。</li>
+      </ul>
+    </li>
+    <li>
+      <p>（＊5）結果の格納<br></p>
+      <ul>
+        <li><strong>演算結果</strong>を<strong>記憶装置</strong>に格納する。</li>
+      </ul>
+    </li>
+  </ul>
 </div>
