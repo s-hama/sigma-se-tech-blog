@@ -405,4 +405,26 @@
       </p>
     </li>
   </ul>
+
+  <h2 id="まとめ">まとめ</h2>
+  <ul>
+    <li>プロセッサは命令を取り出して解釈し実行。</li>
+    <li>性能はクロック周波数だけで決まらず、命令数や命令当たりのクロック数を表すCPI、1秒当たりの百万命令数を表すMIPSなどを組み合わせて判断する。</li>
+    <li>パイプラインは命令の各段階を重ねて実行し、並列処理は複数の処理を同時に進める。密結合と疎結合はメモリ共有や結合度が異なる。</li>
+    <li>割込みは実行中の処理を一時中断し、内部または外部で発生した事象に対応する処理へ制御を移す仕組み。</li>
+    <li>ビッグエンディアンとリトルエンディアンでは複数バイトをメモリへ格納する順序が異なる。</li>
+  </ul>
+  <ul>
+    <li>
+      パイプラインは処理の重なりを増やし、並列化の効果は直列部分に制限される。CPU時間は命令数・CPI・周波数を組み合わせて比較する。
+    </li>
+  </ul>
+<h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>瀬戸 美月（\(2020\)）『徹底攻略 応用情報技術者教科書』株式会社インプレス</li>
+    <li><a href="https://www.renesas.com/ja/support/engineer-school/mcu-01-basic-structure-operation" class="link-secondary">ルネサス エレクトロニクス - マイコンの基本構成、動作（日本語・CPUの命令実行の公式解説）</a></li>
+    <li><a href="https://docs.nvidia.com/cuda/cuda-programming-guide/01-introduction/introduction.html" class="link-secondary">NVIDIA - CUDA Programming Guide：Introduction（英語・GPU並列処理の公式解説）</a></li>
+    <li><a href="https://www.intel.com/content/www/us/en/docs/vtune-profiler/user-guide/2026-1/cpu-metrics-reference.html" class="link-secondary">Intel - CPU Metrics Reference（英語・プロセッサ性能指標の公式資料）</a></li>
+    <li><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/ByteOrder.html" class="link-secondary">Oracle Java SE 21 API - ByteOrder（英語・エンディアンの公式API資料）</a></li>
+  </ul>
 </div>
