@@ -1,47 +1,49 @@
 <div class="post-body">
   <h2 id="概要">概要</h2>
-  <p>NumPyのndarrayを使い、Pythonで配列を効率よく扱うための基本操作を整理する。</p>
-  <p>Python標準のリストでも複数の値は扱えるが、数値計算や機械学習では、配列同士の演算、条件抽出、行列計算をまとめて実行できるndarrayの理解が重要になる。<br>ここでは、配列の作成、次元や形状の確認、要素アクセス、ブロードキャスト、条件指定による抽出を、対話モードの実行例で確認する。</p>
+  <p>NumPyのndarrayによる配列の作成、四則演算、形状確認、ブロードキャスト、条件抽出を整理する。</p>
+  <p>3日分・2地点の気温データで地点別と日別の補正を比べる。行と列が何を表すかを決め、演算が失敗したときにshapeのどこを確認するかまで追う。補正の比較例はPython 3.12.2・NumPy 2.5.3で確認。</p>
   <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
-    <li><a href="#numpyの環境準備" class="link-secondary">NumPyの環境準備</a><br>
+    <li><a class="link-secondary" href="#numpyの環境準備">NumPyの環境準備</a><br/>
       NumPyの環境準備の手順と確認ポイントを整理。</li>
-    <li><a href="#numpyの使用方法" class="link-secondary">NumPyの使用方法</a><br>
-      NumPyの使用方法をコードや具体例で確認。</li>
+    <li><a class="link-secondary" href="#numpyの使用方法">NumPyの使用方法</a><br/>
+      基本操作から地点別・日別の補正と形状エラーの切り分けへ進む。</li>
   </ul>
   <h2 id="実施内容">実施内容</h2>
   <h3 id="numpyの環境準備">NumPyの環境準備</h3>
   <p><strong>NumPy</strong>は、高速な数値演算をはじめ、科学技術計算で広く利用されるPythonの外部ライブラリ。
-    同じデータ型の値を連続的に扱う<code>ndarray</code>と、Cなどで実装されたベクトル化処理を利用することで、Pythonのループを要素ごとに実行する場合より効率よく数値計算できる。
-  </p>
+  同じデータ型の要素を持つ多次元配列<code>ndarray</code>と、Cなどで実装されたベクトル化処理を提供する。配列をまとめて計算するとPythonで要素ごとにループする場合より効率よく処理できることがあるが、効果はデータ量や演算内容に依存する。</p>
   <ul>
-    <li>NumPyインストール<br>
+    <li>
+      NumPyインストール
+      <br/>
       使用するPython環境を明確にするため、次のようにPython経由でpipを実行。
       <pre><code class="language-bash">$ python -m pip install numpy
 </code></pre>
-      インストール後は<code>python -c "import numpy as np; print(np.__version__)"</code>で、読み込まれたNumPyのバージョンを確認できる。
+      インストール後は
+      <code>python -c "import numpy as np; print(np.__version__)"</code>
+      で、読み込まれたNumPyのバージョンを確認できる。
     </li>
   </ul>
   <h3 id="numpyの使用方法">NumPyの使用方法</h3>
   <ul>
     <li>
-      <p>配列の定義と型の確認<br>
-        <code>np.array()</code>へPythonのリストなどを渡すと、<strong>numpy.ndarray型</strong>の配列を生成できる。<br>
-        変数名に<code>list</code>を使うとPython組み込みの<code>list</code>を上書きしてしまうため、ここでは<code>values</code>とする。</p>
-        <pre><code class="language-bash">$ python
+      <p>配列の定義と型の確認<br/>
+      <code>np.array()</code>へPythonのリストなどを渡すと、<strong>numpy.ndarray型</strong>の配列を生成できる。<br/>
+      変数名に<code>list</code>を使うとPython組み込みの<code>list</code>を上書きしてしまうため、ここでは<code>values</code>とする。</p>
+      <pre><code class="language-bash">$ python
  &gt;&gt;&gt; import numpy as np
  &gt;&gt;&gt; values = np.array([0.5, 1.5, 2.5, 3.5, 4.5, 5.5])
  &gt;&gt;&gt; <span class="hljs-built_in">print</span>(values)
  [0.5 1.5 2.5 3.5 4.5 5.5]
  &gt;&gt;&gt; <span class="hljs-built_in">type</span>(values)
- &lt;class <span class="hljs-string">&#x27;numpy.ndarray&#x27;</span>&gt;
+ &lt;class <span class="hljs-string">'numpy.ndarray'</span>&gt;
  &gt;&gt;&gt;
 </code></pre>
     </li>
     <li>
-      <p>一次元配列同士の四則演算<br>
-        <strong>形状が同じ</strong>配列同士、または後述するブロードキャストが可能な形状同士では、それぞれの要素を対応させて四則演算できる。
-      </p>
+      <p>一次元配列同士の四則演算<br/>
+      <strong>形状が同じ</strong>配列同士、または後述するブロードキャストが可能な形状同士では、それぞれの要素を対応させて四則演算できる。</p>
       <pre><code class="language-bash">$ python
  &gt;&gt;&gt; import numpy as np
  &gt;&gt;&gt; list_a = np.array([1.0, 2.0, 3.0])
@@ -58,9 +60,9 @@
 </code></pre>
     </li>
     <li>
-      <p>多次元配列（行列）の四則演算<br>
-        一次元配列と同様に、<strong>形状が同じ</strong>多次元配列では対応する要素ごとに四則演算を行う。</p>
-        <pre><code class="language-bash">$ python
+      <p>多次元配列（行列）の四則演算<br/>
+      一次元配列と同様に、<strong>形状が同じ</strong>多次元配列同士では、それぞれの要素を対応させて四則演算できる。</p>
+      <pre><code class="language-bash">$ python
  &gt;&gt;&gt; import numpy as np
  &gt;&gt;&gt; matrix_a = np.array([[1, 2], [3, 4]])
  &gt;&gt;&gt; matrix_b = np.array([[5, 10], [15, 20]])
@@ -84,8 +86,21 @@ array([[ 35,  50],
        [ 75, 110]])
 </code></pre>
       <ul>
-        <li>形状とデータ型の確認<br>
-          <code>shape</code>で各軸の要素数、<code>ndim</code>で次元数、<code>dtype</code>で要素のデータ型を確認できる。<br>二次元配列の<code>shape</code>は<code>(行数, 列数)</code>の順となる。
+        <li>
+          形状とデータ型の確認
+          <br/>
+          <code>shape</code>
+          で各軸の要素数、
+          <code>ndim</code>
+          で次元数、
+          <code>dtype</code>
+          で要素のデータ型を確認できる。
+          <br/>
+          二次元配列の
+          <code>shape</code>
+          は
+          <code>(行数, 列数)</code>
+          の順となる。
           <pre><code class="language-bash">$ python
  &gt;&gt;&gt; import numpy as np
  &gt;&gt;&gt; matrix_a = np.array([[1, 2], [3, 4]])
@@ -97,18 +112,23 @@ array([[ 35,  50],
  &gt;&gt;&gt; matrix_a.ndim     <span class="hljs-comment"># 次元数の確認</span>
  2
  &gt;&gt;&gt; matrix_a.dtype    <span class="hljs-comment"># データ型の確認</span>
- dtype(<span class="hljs-string">&#x27;int64&#x27;</span>)
+ dtype(<span class="hljs-string">'int64'</span>)
 &gt;&gt;&gt;
 </code></pre>
-          <p><code>dtype</code>の表示はOSやPython、NumPyの環境によって異なる場合があるため、特定の整数幅を必要とする処理では<code>dtype=np.int64</code>のように明示する。</p>
+          <code>dtype</code>
+          の表示はOSやPython、NumPyの環境によって異なる場合があるため、特定の整数幅を必要とする処理では
+          <code>dtype=np.int64</code>
+          のように明示する。
         </li>
       </ul>
     </li>
     <li>
-      <p>ブロードキャスト<br>
-        NumPyでは、末尾の次元から比較し、各次元の大きさが等しいか、どちらかが<code>1</code>であればブロードキャストできる。<br>単に要素数が近いだけでは演算できない。下記3つは、互換性のある形状の例である。</p>
+      <p>ブロードキャスト<br/>
+      NumPyでは、末尾の次元から比較し、各次元の大きさが等しいか、どちらかが<code>1</code>であればブロードキャストできる。<br/>単に要素数が近いだけでは演算できない。下記3つは、互換性のある形状の例である。</p>
       <ul>
-        <li>一次元配列とスカラ値（単一の数値）<br>
+        <li>
+          一次元配列とスカラ値（単一の数値）
+          <br/>
           一次元配列とスカラ値｢2｣との四則演算。
           <pre><code class="language-bash">$ python
  &gt;&gt;&gt; import numpy as np
@@ -124,7 +144,9 @@ array([[ 35,  50],
  &gt;&gt;&gt;
 </code></pre>
         </li>
-        <li>多次元配列とスカラ値<br>
+        <li>
+          多次元配列とスカラ値
+          <br/>
           多次元配列とスカラ値｢16｣との四則演算。
           <pre><code class="language-bash">$ python
  &gt;&gt;&gt; import numpy as np
@@ -143,7 +165,9 @@ array([[ 35,  50],
  &gt;&gt;&gt;
 </code></pre>
         </li>
-        <li>多次元配列と一次元配列<br>
+        <li>
+          多次元配列と一次元配列
+          <br/>
           多次元配列と一次元配列との四則演算。
           <pre><code class="language-bash">$ python
  &gt;&gt;&gt; import numpy as np
@@ -171,10 +195,82 @@ array([[ 35,  50],
       </ul>
     </li>
     <li>
-      <p>各要素の取得<br></p>
+      <p>地点ごとの補正と日ごとの補正をshapeで区別する<br/>
+      次の値は説明用の気温データで、行が1〜3日目、列が地点A・Bを表す。単位はすべて℃とする。まず地点Aへ1℃、地点Bへ-1℃を加える。</p>
+      <pre><code class="language-python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+
+temperatures = np.array([[<span class="hljs-number">20</span>, <span class="hljs-number">22</span>], [<span class="hljs-number">21</span>, <span class="hljs-number">23</span>], [<span class="hljs-number">19</span>, <span class="hljs-number">21</span>]])
+by_site = np.array([<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>])
+<span class="hljs-built_in">print</span>(temperatures.shape, by_site.shape)
+<span class="hljs-built_in">print</span>(temperatures + by_site)
+</code></pre>
+      <pre><code class="language-text">(3, 2) (2,)
+[[21 21]
+ [22 22]
+ [20 20]]
+</code></pre>
+      <p>末尾の次元が2で一致するため、地点別の補正を各行へ適用できる。今度は1日目に1℃、2日目に0℃、3日目に-1℃を加えたいとする。</p>
+      <pre><code class="language-python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+
+temperatures = np.array([[<span class="hljs-number">20</span>, <span class="hljs-number">22</span>], [<span class="hljs-number">21</span>, <span class="hljs-number">23</span>], [<span class="hljs-number">19</span>, <span class="hljs-number">21</span>]])
+by_day = np.array([<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, -<span class="hljs-number">1</span>])
+<span class="hljs-keyword">try</span>:
+    <span class="hljs-built_in">print</span>(temperatures + by_day)
+<span class="hljs-keyword">except</span> ValueError <span class="hljs-keyword">as</span> error:
+    <span class="hljs-built_in">print</span>(<span class="hljs-built_in">type</span>(error).__name__)
+by_day_column = by_day.reshape(<span class="hljs-number">3</span>, <span class="hljs-number">1</span>)
+<span class="hljs-built_in">print</span>(by_day_column.shape)
+<span class="hljs-built_in">print</span>(temperatures + by_day_column)
+</code></pre>
+      <pre><code class="language-text">ValueError
+(3, 1)
+[[21 23]
+ [21 23]
+ [18 20]]
+</code></pre>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">加える配列</th>
+            <th scope="col">shape</th>
+            <th scope="col">末尾からの比較</th>
+            <th scope="col">結果</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>地点別の補正</td>
+            <td><code>(2,)</code></td>
+            <td>2と2が一致</td>
+            <td>各地点へ同じ補正を全日適用</td>
+          </tr>
+          <tr>
+            <td>日別の補正を1次元のまま指定</td>
+            <td><code>(3,)</code></td>
+            <td>2と3が不一致</td>
+            <td>ValueError</td>
+          </tr>
+          <tr>
+            <td>日別の補正を列の形に変更</td>
+            <td><code>(3, 1)</code></td>
+            <td>2と1、3と3で互換</td>
+            <td>各日の補正を両地点へ適用</td>
+          </tr>
+        </tbody>
+      </table>
+      <p><code>reshape(3, 1)</code>は値の順番を変えずに「3行・1列」の形にする。1列を2地点へ広げて対応させられるため、日別の補正になる。エラーを消すためだけに形を変えず、補正値がどの軸に対応するかを先に確かめる。配列が正方形なら意図と違う軸でも演算できる場合があるので、成功したことだけでは対応の正しさを判断できない。</p>
+    </li>
+    <li>
+      <p>各要素の取得<br/></p>
       <ul>
-        <li>インデックスで要素を指定<br>
-          Pythonのリストと同様にNumPyでもインデックスは0から始まり、下記要領でアクセスできる。<br>多次元配列では<code>matrix_c[0, 1]</code>のように各軸をカンマで指定する書き方もできる。
+        <li>
+          インデックスで要素を指定
+          <br/>
+          Pythonのリストと同様にNumPyでもインデックスは0から始まり、下記要領でアクセスできる。
+          <br/>
+          多次元配列では
+          <code>matrix_c[0, 1]</code>
+          のように各軸をカンマで指定する書き方もできる。
           <pre><code class="language-bash">$ python
  &gt;&gt;&gt; import numpy as np
  &gt;&gt;&gt; matrix_c = np.array([[1, 5], [10, 15], [20, 25]])
@@ -203,7 +299,9 @@ array([[ 35,  50],
  &gt;&gt;&gt;
 </code></pre>
         </li>
-        <li>配列で要素を指定<br>
+        <li>
+          配列で要素を指定
+          <br/>
           インデックスだけでなく一次元配列に対して、配列で要素を指定することもできる。
           <pre><code class="language-bash">$ python
   &gt;&gt;&gt; import numpy as np
@@ -217,7 +315,9 @@ array([[ 35,  50],
   &gt;&gt;&gt;
 </code></pre>
         </li>
-        <li>任意の条件で要素を指定<br>
+        <li>
+          任意の条件で要素を指定
+          <br/>
           <pre><code class="language-bash">$ python
   &gt;&gt;&gt; import numpy as np
   &gt;&gt;&gt; matrix_e = np.array([1, 5, 2, 10, 3, 15, 4, 20, 5, 25])
@@ -236,9 +336,10 @@ array([[ 35,  50],
   </ul>
   <h2 id="まとめ">まとめ</h2>
   <ul>
-    <li>NumPyのndarrayは、Pythonのリストとは異なる、数値計算に適した多次元配列。</li>
-    <li>shape、ndim、dtypeで配列の構造を確認できる。2次元配列のshapeは(行, 列)の順で、1次元配列は列ベクトルとは異なる。</li>
-    <li>配列演算や、比較結果のTrue/False配列を使った条件抽出は、数値処理や機械学習の前処理の基本となる。</li>
+    <li>ndarrayではshapeと各軸の意味を対応させてから演算する。2次元配列のshapeは行数・列数の順となる。</li>
+    <li>ブロードキャストは末尾の次元から比較し、大きさが等しいか片方が1なら適用できる。</li>
+    <li>3行2列への地点別補正は(2,)、日別補正は(3, 1)というように目的に合わせて形を選ぶ。</li>
+    <li>演算の成功は軸の対応が意図どおりである保証にはならない。具体的な行・列の結果でも確かめる。</li>
   </ul>
   <h2 id="参考文献">参考文献</h2>
   <ul>

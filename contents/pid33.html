@@ -1,28 +1,27 @@
 <div class="post-body">
   <h2 id="概要">概要</h2>
-  <p>Pythonの算術演算子を使い、数値計算の基本を整理する。</p>
-  <p>加算、減算、乗算だけでなく、通常の除算、切り捨て除算、剰余、べき乗は、用途によって結果が大きく変わる。</p>
-  <p>ここでは、各演算子の意味と戻り値の違いを、対話モードの実行例で確認する。</p>
+  <p>Pythonの算術演算子の意味と結果の型を整理する。</p>
+  <p>秒数を分と残りの秒へ分ける例から<code>//</code>と<code>%</code>の役割を確認し、負数でも商と余りから元の整数へ戻せることを検算する。べき乗では括弧の位置による結果の違いも扱う。商・余り・優先順位の比較例はPython 3.12.2で確認。</p>
   <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
-    <li><a href="#算術演算子の種類" class="link-secondary">算術演算子の種類</a><br>
+    <li><a class="link-secondary" href="#算術演算子の種類">算術演算子の種類</a><br/>
       算術演算子の種類と各項目の特徴を整理。</li>
-    <li><a href="#単項プラスマイナス演算子-" class="link-secondary">単項プラス・マイナス演算子（+／-）</a><br>
+    <li><a class="link-secondary" href="#単項プラスマイナス演算子-">単項プラス・マイナス演算子（+／-）</a><br/>
       単項プラス・マイナス演算子（+／-）をコードや具体例とともに整理。</li>
-    <li><a href="#加算減算-" class="link-secondary">加算（+）・減算（-）</a><br>
+    <li><a class="link-secondary" href="#加算減算-">加算（+）・減算（-）</a><br/>
       加算（+）・減算（-）の意味と要点を具体例から整理。</li>
-    <li><a href="#乗算除算剰余" class="link-secondary">乗算（*）・除算（/・//）・剰余（%）</a><br>
-      乗算（*）・除算（/・//）・剰余（%）の意味と要点を具体例から整理。</li>
-    <li><a href="#べき乗" class="link-secondary">べき乗（**）</a><br>
-      べき乗（**）の意味と要点を具体例から整理。</li>
+    <li><a class="link-secondary" href="#乗算除算剰余">乗算（*）・除算（/・//）・剰余（%）</a><br/>
+      秒数の分解と負数の検算で除算・商・余りを区別。</li>
+    <li><a class="link-secondary" href="#べき乗">べき乗（**）</a><br/>
+      基本計算と負号・括弧による優先順位の違いを確認。</li>
   </ul>
   <h2 id="各算術演算子の使い方と実装サンプル">各算術演算子の使い方と実装サンプル</h2>
   <h3 id="算術演算子の種類">算術演算子の種類</h3>
-  <p>
-    <strong>算術演算子</strong>は、一般的な<strong>四則演算</strong>とプログラム特有の表現である<strong>単項プラス演算</strong>と<strong>単項マイナス演算</strong>を合わせた演算子を指す。
-  </p>
+  <p><strong>算術演算子</strong>は数値の加減乗除、剰余、べき乗や符号の操作に使う。以下では各演算の結果と型を確認する。</p>
   <ul>
-    <li>算術演算子一覧<table class="table" style="width: 100%;">
+    <li>
+      算術演算子一覧
+      <table class="table" style="width: 100%;">
         <thead>
           <tr>
             <th scope="col">演算子</th>
@@ -81,17 +80,11 @@
     </li>
   </ul>
   <p>以降、実装サンプルを対話モード（インタプリタ）で解説する。</p>
-  <p>※ int型は任意精度であり、float型とcomplex型の有限値の範囲は実装環境の浮動小数点形式に依存する。詳しくは下記を参考。<br></p>
+  <p>※ int型は任意精度であり、float型とcomplex型の有限値の範囲は実装環境の浮動小数点形式に依存する。詳しくは下記を参考。<br/></p>
   <ul>
-    <li><a class="link-secondary"
-        href="https://sigma-se.com/detail/30/#int型--数値整数">Python
-        - 組込みデータ型まとめ : bool , int, float, complex &gt; int型 : 数値（整数）</a></li>
-    <li><a class="link-secondary"
-        href="https://sigma-se.com/detail/30/#float型--浮動小数点数型">Python
-        - 組込みデータ型まとめ : bool , int, float, complex &gt; float型 : 浮動小数点数型</a></li>
-    <li><a class="link-secondary"
-        href="https://sigma-se.com/detail/30/#complex型--複素数型">Python
-        - 組込みデータ型まとめ : bool , int, float, complex &gt; complex型 : 複素数型</a></li>
+    <li><a class="link-secondary" href="https://sigma-se.com/detail/30/#int型--数値整数">Python - 組込みデータ型まとめ : bool , int, float, complex &gt; int型 : 数値（整数）</a></li>
+    <li><a class="link-secondary" href="https://sigma-se.com/detail/30/#float型--浮動小数点数型">Python - 組込みデータ型まとめ : bool , int, float, complex &gt; float型 : 浮動小数点数型</a></li>
+    <li><a class="link-secondary" href="https://sigma-se.com/detail/30/#complex型--複素数型">Python - 組込みデータ型まとめ : bool , int, float, complex &gt; complex型 : 複素数型</a></li>
   </ul>
   <h3 id="単項プラスマイナス演算子-">単項プラス・マイナス演算子（+／-）</h3>
   <ul>
@@ -196,8 +189,8 @@
   <h3 id="乗算除算剰余">乗算（*）・除算（/・//）・剰余（%）</h3>
   <ul>
     <li>
-      <p>乗算（*）<br>
-        ※ 四則演算の<strong>乗算</strong>と同じ結果。</p>
+      <p>乗算（*）<br/>
+      ※ 四則演算の<strong>乗算</strong>と同じ結果。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># int型の 2に 2 を乗算</span>
@@ -216,8 +209,8 @@
 </code></pre>
     </li>
     <li>
-      <p>除算（/）<br>
-        ※ 四則演算の<strong>除算</strong>と同じ結果。</p>
+      <p>除算（/）<br/>
+      ※ 四則演算の<strong>除算</strong>と同じ結果。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># int型の 6 を 2 で除算</span>
@@ -236,29 +229,29 @@
 </code></pre>
     </li>
     <li>
-      <p>切り下げ除算（//）<br>
-        <code>//</code>は、除算結果を負の無限大方向へ丸めた商を返す。単なる小数部の切捨てではないため、負数では<code>-5.5 // 0.2</code>が<code>-28.0</code>となる。int同士なら結果はint、少なくとも一方がfloatなら結果はfloatとなる。</p>
+      <p>切り下げ除算（//）<br/>
+      <code>//</code>は、除算結果を負の無限大方向へ丸めた商を返す。単なる小数部の切捨てではないため、負数では<code>-5.5 // 0.2</code>が<code>-28.0</code>となる。int同士なら結果はint、少なくとも一方がfloatなら結果はfloatとなる。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt;
-    &gt;&gt;&gt; <span class="hljs-comment"># int型の 6 を 2 で除算 (//)</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># int型の 5 を 2 で切り下げ除算 (//)</span>
     &gt;&gt;&gt; int_a = <span class="hljs-number">5</span> // <span class="hljs-number">2</span>
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(int_a)
     <span class="hljs-number">2</span>
-    &gt;&gt;&gt; <span class="hljs-comment"># float型の -6.5 を 0.5 で除算 (//)</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># float型の -5.5 を 0.2 で切り下げ除算 (//)</span>
     &gt;&gt;&gt; float_a = -<span class="hljs-number">5.5</span> // <span class="hljs-number">0.2</span>
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
     -<span class="hljs-number">28.0</span>
     &gt;&gt;&gt; <span class="hljs-comment"># complex型の除算 (//)はできない</span>
-    &gt;&gt;&gt; complex_a = <span class="hljs-number">3j</span> // <span class="hljs-number">2</span>
+    &gt;&gt;&gt; complex_a = <span class="hljs-number">3</span>j // <span class="hljs-number">2</span>
     Traceback (most recent call last):
-    File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
-    TypeError: unsupported operand type(s) for //: <span class="hljs-string">&#x27;complex&#x27;</span> and <span class="hljs-string">&#x27;int&#x27;</span>
+    File <span class="hljs-string">"</span><span class="hljs-string">&lt;stdin&gt;</span><span class="hljs-string">"</span>, line <span class="hljs-number">1</span>, in &lt;module&gt;
+    TypeError: unsupported operand <span class="hljs-built_in">type</span>(s) <span class="hljs-keyword">for</span> //: <span class="hljs-string">'</span><span class="hljs-string">complex</span><span class="hljs-string">'</span> and <span class="hljs-string">'</span><span class="hljs-string">int</span><span class="hljs-string">'</span>
     &gt;&gt;&gt;
 </code></pre>
     </li>
     <li>
-      <p>剰余（%）<br>
-        除算の演算結果の<strong>余り</strong>を返す。</p>
+      <p>剰余（%）<br/>
+      除算の演算結果の<strong>余り</strong>を返す。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># int型の 5 に 2 の剰余</span>
@@ -274,17 +267,46 @@
     &gt;&gt;&gt; <span class="hljs-comment"># complex型に剰余はできない</span>
     &gt;&gt;&gt; complex_a = <span class="hljs-number">5j</span> % <span class="hljs-number">2</span>
     Traceback (most recent call last):
-    File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
-    TypeError: unsupported operand type(s) for %: <span class="hljs-string">&#x27;complex&#x27;</span> and <span class="hljs-string">&#x27;int&#x27;</span>
+    File <span class="hljs-string">"&lt;stdin&gt;"</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
+    TypeError: unsupported operand type(s) for %: <span class="hljs-string">'complex'</span> and <span class="hljs-string">'int'</span>
     &gt;&gt;&gt;
 </code></pre>
       <p>※ 例外メッセージの文言はPythonのバージョンで変わる場合があるが、複素数に <code>//</code> や <code>%</code> を適用すると <code>TypeError</code> になる点が重要。</p>
+    </li>
+    <li>
+      <p>商と余りを組み合わせて秒数を分解する<br/>
+      125秒を分と残りの秒で表すには、60で割った商と余りを使う。<code>divmod()</code>なら両方をまとめて得られる。</p>
+      <pre><code class="language-python">seconds = <span class="hljs-number">125</span>
+minutes, remainder = <span class="hljs-built_in">divmod</span>(seconds, <span class="hljs-number">60</span>)
+<span class="hljs-built_in">print</span>(minutes, remainder)
+<span class="hljs-built_in">print</span>(minutes * <span class="hljs-number">60</span> + remainder == seconds)
+</code></pre>
+      <pre><code class="language-text">2 5
+True
+</code></pre>
+      <p><code>125 // 60</code>が2分、<code>125 % 60</code>が残り5秒に対応する。整数<code>a</code>とゼロでない整数<code>b</code>では<code>a == (a // b) * b + a % b</code>が成り立つので、商と余りを元に戻して確認できる。</p>
+    </li>
+    <li>
+      <p>負数では小数部の切り捨てと商が異なる<br/>
+      <code>-5 / 2</code>は<code>-2.5</code>である。<code>int()</code>はゼロへ近づく向き、<code>//</code>は負の無限大方向へ丸めるため結果が異なる。</p>
+      <pre><code class="language-python"><span class="hljs-built_in">print</span>(<span class="hljs-built_in">int</span>(-<span class="hljs-number">5</span> / <span class="hljs-number">2</span>), -<span class="hljs-number">5</span> // <span class="hljs-number">2</span>)
+<span class="hljs-keyword">for</span> a, b in ((<span class="hljs-number">5</span>, <span class="hljs-number">2</span>), (-<span class="hljs-number">5</span>, <span class="hljs-number">2</span>), (<span class="hljs-number">5</span>, -<span class="hljs-number">2</span>), (-<span class="hljs-number">5</span>, -<span class="hljs-number">2</span>)):
+    quotient, remainder = <span class="hljs-built_in">divmod</span>(a, b)
+    <span class="hljs-built_in">print</span>(a, b, quotient, remainder, quotient * b + remainder)
+</code></pre>
+      <pre><code class="language-text">-2 -3
+5 2 2 1 5
+-5 2 -3 1 -5
+5 -2 -3 -1 5
+-5 -2 2 -1 -5
+</code></pre>
+      <p>各行は「割られる数・割る数・商・余り・復元した値」の順である。<code>-5 = (-3) * 2 + 1</code>となるように、切り下げた商と余りが組になる。整数の余りはゼロか除数と同じ符号で、絶対値は除数の絶対値より小さい。負数の処理でも商だけで判断せず、この関係を確認する。</p>
     </li>
   </ul>
   <h3 id="べき乗">べき乗（**）</h3>
   <ul>
     <li>
-      <p><strong>底</strong>と<strong>指数</strong>の演算結果（底のべき乗）<br></p>
+      <p><strong>底</strong>と<strong>指数</strong>の演算結果（底のべき乗）<br/></p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># int型の 2 の 3 乗</span>
@@ -301,20 +323,31 @@
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
     <span class="hljs-number">5.656854249492381</span>
     &gt;&gt;&gt;
-    &gt;&gt;&gt; <span class="hljs-comment"># complex型の 2 + 2j の 3 を乗算</span>
-    &gt;&gt;&gt; complex_a = (<span class="hljs-number">2</span> + <span class="hljs-number">2j</span>) ** <span class="hljs-number">3</span>
+    &gt;&gt;&gt; <span class="hljs-comment"># complex型の 2 + 2j を3乗</span>
+    &gt;&gt;&gt; complex_a = (<span class="hljs-number">2</span> + <span class="hljs-number">2</span>j) ** <span class="hljs-number">3</span>
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(complex_a)
-    (-<span class="hljs-number">16</span>+<span class="hljs-number">16j</span>)
+    (-<span class="hljs-number">16</span>+<span class="hljs-number">16</span>j)
     &gt;&gt;&gt;
 </code></pre>
     </li>
+    <li>
+      <p>負号を含めて2乗するには括弧を使う<br/></p>
+      <pre><code class="language-python"><span class="hljs-built_in">print</span>(-<span class="hljs-number">3</span> ** <span class="hljs-number">2</span>)
+<span class="hljs-built_in">print</span>((-<span class="hljs-number">3</span>) ** <span class="hljs-number">2</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-number">2</span> ** -<span class="hljs-number">3</span>)
+</code></pre>
+      <pre><code class="language-text">-9
+9
+0.125
+</code></pre>
+      <p><code>-3 ** 2</code>は<code>-(3 ** 2)</code>として評価される。負数全体を底にするなら<code>(-3) ** 2</code>と書く。一方で右側の<code>-3</code>は負の指数として扱われるため、<code>2 ** -3</code>は8分の1になる。</p>
+    </li>
   </ul>
-
   <h2 id="まとめ">まとめ</h2>
   <ul>
-    <li>通常の除算には /、負の無限大方向へ丸める切り下げ除算には //、剰余には % を使い、目的に応じて区別。</li>
-    <li>負数を含む剰余は直感と異なる場合があるため、必要に応じて実行結果を確認。</li>
-    <li>べき乗演算子 ** は他の算術演算子より優先されるため、複雑な式では括弧を使って計算順序を明確にする。</li>
+    <li>/は通常の除算、//は商の切り下げ、%は余りを求める。整数の商と余りを同時に使う場合はdivmod()で取り出せる。</li>
+    <li>ゼロでない整数bに対してa == (a // b) * b + a % bが成り立つ。負数ではint(a / b)とa // bが異なる場合がある。</li>
+    <li>負数を底としてべき乗する場合は括弧を付ける。-3 ** 2と(-3) ** 2は異なる結果になる。</li>
   </ul>
   <h3 id="参考文献">参考文献</h3>
   <ul>

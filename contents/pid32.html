@@ -1,39 +1,36 @@
 <div class="post-body">
   <h2 id="概要">概要</h2>
-  <p>set、bytes、bytearray、file objectの基本操作を整理する。</p>
-  <p>これらはlistやdictほど最初に触れる機会は多くないが、集合演算、バイナリデータ、ファイル入出力を扱うときに重要になる。</p>
-  <p>ここでは、重複を持たない集合、変更不可/変更可能なバイト列、ファイル操作の基本を実行例で確認する。</p>
+  <p>set、bytes、bytearray、ファイルオブジェクトの基本操作を整理する。</p>
+  <p>集合演算では予定者と参加者の差分を調べる。文字列とバイト列では日本語の長さと切り出し結果を比べ、ファイル操作では同じ入力を読み進めたときの位置を確認する。比較例はPython 3.12.2で確認。</p>
   <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
-    <li><a href="#set型--集合" class="link-secondary">set型 : 集合</a><br>
-      set型 : 集合の意味と要点を具体例から整理。</li>
-    <li><a href="#bytes型--バイト" class="link-secondary">bytes型 : バイト</a><br>
-      bytes型 : バイトの意味と要点を具体例から整理。</li>
-    <li><a href="#bytearray型--バイト配列" class="link-secondary">bytearray型 : バイト配列</a><br>
-      bytearray型 : バイト配列の意味と要点を具体例から整理。</li>
-    <li><a href="#file object型--ファイル操作オブジェクト" class="link-secondary">file object型 : ファイル操作オブジェクト</a><br>
-      file object型 : ファイル操作オブジェクトの意味と要点を具体例から整理。</li>
+    <li><a class="link-secondary" href="#set型--集合">set型 : 集合</a><br/>
+      予定者と参加者の集合から共通・不足・予定外を取り出す。</li>
+    <li><a class="link-secondary" href="#bytes型--バイト">bytes型 : バイト</a><br/>
+      文字数とバイト数、文字の途中で切る場合の違いを確認。</li>
+    <li><a class="link-secondary" href="#bytearray型--バイト配列">bytearray型 : バイト配列</a><br/>
+      バイト列を直接変更する操作と戻り値を確認。</li>
+    <li><a class="link-secondary" href="#file%20object型--ファイル操作オブジェクト">file object型 : ファイル操作オブジェクト</a><br/>
+      読み書きの基本と読み取り位置・文字コードの扱いを確認。</li>
   </ul>
   <h2 id="各データ型の操作方法">各データ型の操作方法</h2>
   <h3 id="set型--集合">set型 : 集合</h3>
   <p>set型は、<strong>重複した要素</strong>がなく、要素に<strong>順番を</strong>持たない配列のような集合。</p>
-  <p>記述は、dict型と同じ中カッコ<strong>{}</strong>で囲み、<strong>キーが無い状態</strong>（値のみ）で定義する。</p>
+  <p>記述は、dict型と同じ中カッコ<code>{}</code>で囲み、<strong>キーが無い状態</strong>（値のみ）で定義する。</p>
   <ul>
     <li>
       <p>型の特性</p>
       <ul>
-        <li>ミュータブルオブジェクト
+        <li>
+          ミュータブルオブジェクト
           <ul>
-            <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#ミュータブルmutable--オブジェクト自体を変更可">Python
-                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; ミュータブル（mutable）: オブジェクト自体を変更可</a></li>
+            <li><a class="link-secondary" href="https://sigma-se.com/detail/29/#ミュータブルmutable--オブジェクト自体を変更可">Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; ミュータブル（mutable）: オブジェクト自体を変更可</a></li>
           </ul>
         </li>
-        <li>イテラブルオブジェクト
+        <li>
+          イテラブルオブジェクト
           <ul>
-            <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可">Python
-                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イテラブル（iterable）: 反復抽出可</a></li>
+            <li><a class="link-secondary" href="https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可">Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イテラブル（iterable）: 反復抽出可</a></li>
           </ul>
         </li>
       </ul>
@@ -41,53 +38,53 @@
     <li>
       <p>定義例</p>
       <pre><code class="language-python">$ python
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 1 ～ 5 の数値を昇順で定義</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_a)
+&gt;&gt;&gt; <span class="hljs-comment"># 1 ～ 5 の数値を昇順で定義</span>
+&gt;&gt;&gt; set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+&gt;&gt;&gt; <span class="hljs-built_in">print</span>(set_a)
 {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(set_a)
-&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;set&#x27;</span>&gt;
+&gt;&gt;&gt; <span class="hljs-built_in">type</span>(set_a)
+&lt;<span class="hljs-keyword">class</span> '<span class="hljs-title">set</span><span class="hljs-string">'</span><span class="hljs-string">&gt;</span>
 &gt;&gt;&gt;
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 1 ～ 5 の数値を順不同、重複ありで定義</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>set_b = {<span class="hljs-number">5</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>}
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_b)     <span class="hljs-comment"># 重複は無視される</span>
+&gt;&gt;&gt; <span class="hljs-comment"># 1 ～ 5 の数値を順不同、重複ありで定義</span>
+&gt;&gt;&gt; set_b = {<span class="hljs-number">5</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>}
+&gt;&gt;&gt; <span class="hljs-built_in">print</span>(set_b)     <span class="hljs-comment"># 重複は無視される</span>
 {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(set_b)
-&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;set&#x27;</span>&gt;
+&gt;&gt;&gt; <span class="hljs-built_in">type</span>(set_b)
+&lt;<span class="hljs-keyword">class</span> '<span class="hljs-title">set</span><span class="hljs-string">'</span><span class="hljs-string">&gt;</span>
 &gt;&gt;&gt;
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># イミュータブルな型であれば、異なる型でも定義できる</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>set_c = {<span class="hljs-number">1</span>, <span class="hljs-string">&#x27;one&#x27;</span>, (<span class="hljs-string">&#x27;two&#x27;</span>, <span class="hljs-number">2</span>)}
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_c)
-{<span class="hljs-string">&#x27;one&#x27;</span>, <span class="hljs-number">1</span>, (<span class="hljs-string">&#x27;two&#x27;</span>, <span class="hljs-number">2</span>)}
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(set_c)
-&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;set&#x27;</span>&gt;
+&gt;&gt;&gt; <span class="hljs-comment"># ハッシュ可能なオブジェクトなら異なる型でも要素にできる</span>
+&gt;&gt;&gt; set_c = {<span class="hljs-number">1</span>, <span class="hljs-string">'</span><span class="hljs-string">one</span><span class="hljs-string">'</span>, (<span class="hljs-string">'</span><span class="hljs-string">two</span><span class="hljs-string">'</span>, <span class="hljs-number">2</span>)}
+&gt;&gt;&gt; <span class="hljs-built_in">print</span>(set_c)
+{<span class="hljs-string">'</span><span class="hljs-string">one</span><span class="hljs-string">'</span>, <span class="hljs-number">1</span>, (<span class="hljs-string">'</span><span class="hljs-string">two</span><span class="hljs-string">'</span>, <span class="hljs-number">2</span>)}
+&gt;&gt;&gt; <span class="hljs-built_in">type</span>(set_c)
+&lt;<span class="hljs-keyword">class</span> '<span class="hljs-title">set</span><span class="hljs-string">'</span><span class="hljs-string">&gt;</span>
 &gt;&gt;&gt;
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 【注意】空集合 {} で定義するとdict型となる</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>set_d = {}
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_d)
+&gt;&gt;&gt; <span class="hljs-comment"># 【注意】空集合 {} で定義するとdict型となる</span>
+&gt;&gt;&gt; set_d = {}
+&gt;&gt;&gt; <span class="hljs-built_in">print</span>(set_d)
 {}
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(set_d)
-&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;dict&#x27;</span>&gt;
+&gt;&gt;&gt; <span class="hljs-built_in">type</span>(set_d)
+&lt;<span class="hljs-keyword">class</span> '<span class="hljs-title">dict</span><span class="hljs-string">'</span><span class="hljs-string">&gt;</span>
 &gt;&gt;&gt;
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># コンストラクタを用いて空集合を定義</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>set_e = <span class="hljs-built_in">set</span>()
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_e)
+&gt;&gt;&gt; <span class="hljs-comment"># コンストラクタを用いて空集合を定義</span>
+&gt;&gt;&gt; set_e = <span class="hljs-built_in">set</span>()
+&gt;&gt;&gt; <span class="hljs-built_in">print</span>(set_e)
 <span class="hljs-built_in">set</span>()
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(set_e)
-&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;set&#x27;</span>&gt;
+&gt;&gt;&gt; <span class="hljs-built_in">type</span>(set_e)
+&lt;<span class="hljs-keyword">class</span> '<span class="hljs-title">set</span><span class="hljs-string">'</span><span class="hljs-string">&gt;</span>
 &gt;&gt;&gt;
 </code></pre>
     </li>
     <li>
-      <p>set型要素の追加、削除<br>
-        ※ <code>pop()</code>は位置を指定できず、任意の要素を一つ削除して返す。無作為抽出を保証する操作ではない。</p>
+      <p>set型要素の追加、削除<br/>
+      ※ <code>pop()</code>は位置を指定できず、任意の要素を一つ削除して返す。無作為抽出を保証する操作ではない。</p>
       <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 要素を追加</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>}
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_a.add(<span class="hljs-number">5</span>)    <span class="hljs-comment"># int型で追加</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>set_a.add(<span class="hljs-string">&#x27;str add&#x27;</span>)    <span class="hljs-comment"># str型で追加</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>set_a.add(<span class="hljs-string">'str add'</span>)    <span class="hljs-comment"># str型で追加</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_a)
-{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-string">&#x27;str add&#x27;</span>}
+{<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-string">'str add'</span>}
 &gt;&gt;&gt;
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 指定した要素を削除</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ※要素が存在しない場合はエラー</span>
@@ -99,7 +96,7 @@
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_c = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_c.remove(<span class="hljs-number">100</span>)    <span class="hljs-comment"># 要素がないためエラー</span>
 Traceback (most recent call last):
-  File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
+  File <span class="hljs-string">"&lt;stdin&gt;"</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
 KeyError: <span class="hljs-number">100</span>
 &gt;&gt;&gt;
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 指定した要素を削除（要素が存在しない場合も正常終了）</span>
@@ -211,8 +208,8 @@ KeyError: <span class="hljs-number">100</span>
 </code></pre>
         </li>
         <li>
-          <p>対称差集合（^ 演算子 or symmetric_difference）<br>
-            二つの集合のどちらか一方だけに含まれる要素を取得する。集合の包含判定をビットで考えると、排他的論理和（XOR）に対応する。</p>
+          <p>対称差集合（^ 演算子 or symmetric_difference）<br/>
+          二つの集合のどちらか一方だけに含まれる要素を取得する。集合の包含判定をビットで考えると、排他的論理和（XOR）に対応する。</p>
           <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ^ 演算子を用いた対称差集合</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
@@ -234,14 +231,14 @@ KeyError: <span class="hljs-number">100</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_j = {<span class="hljs-number">8</span>, <span class="hljs-number">9</span>, <span class="hljs-number">10</span>}
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_k = set_g.symmetric_difference(set_h, set_j)
 Traceback (most recent call last):
-  File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
+  File <span class="hljs-string">"&lt;stdin&gt;"</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
 TypeError: symmetric_difference() takes exactly one argument (<span class="hljs-number">2</span> given)
 &gt;&gt;&gt;
 </code></pre>
         </li>
         <li>
-          <p>部分集合の判定（&lt;=演算子 or issubset）<br>
-            ※ 以下、サンプルコードでは集合<code>set_b</code>が集合<code>set_a</code>の部分集合であるかを判定している。</p>
+          <p>部分集合の判定（&lt;=演算子 or issubset）<br/>
+          ※ 以下、サンプルコードでは集合<code>set_b</code>が集合<code>set_a</code>の部分集合であるかを判定している。</p>
           <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># &lt;= を用いた判定</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
@@ -260,29 +257,29 @@ TypeError: symmetric_difference() takes exactly one argument (<span class="hljs-
 </code></pre>
         </li>
         <li>
-          <p>上位集合か判定（&gt;= or issuperset）<br>
-            ※ 以下、サンプルコードでは、集合<code>set_b</code>が集合<code>set_a</code>の上位集合であるかを判定している。</p>
+          <p>上位集合か判定（&gt;= or issuperset）<br/>
+          ※ 以下、サンプルコードでは、集合<code>set_a</code>が集合<code>set_b</code>の上位集合であるかを判定している。</p>
           <pre><code class="language-python">$ python
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># &gt;= を用いた判定</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
-<span class="hljs-meta">&gt;&gt;&gt; </span>set_b = {<span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
-<span class="hljs-meta">&gt;&gt;&gt; </span>set_c = set_a &gt;= set_b
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_a)
-<span class="hljs-literal">True</span>
+&gt;&gt;&gt; <span class="hljs-comment"># &gt;= を用いた判定</span>
+&gt;&gt;&gt; set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+&gt;&gt;&gt; set_b = {<span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+&gt;&gt;&gt; set_c = set_a &gt;= set_b
+&gt;&gt;&gt; <span class="hljs-built_in">print</span>(set_c)
+<span class="hljs-keyword">True</span>
 &gt;&gt;&gt;
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># issupersetを用いた判定</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>set_d = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
-<span class="hljs-meta">&gt;&gt;&gt; </span>set_e = {<span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
-<span class="hljs-meta">&gt;&gt;&gt; </span>set_f = set_d.issuperset(set_e)
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(set_f)
-<span class="hljs-literal">True</span>
+&gt;&gt;&gt; <span class="hljs-comment"># issupersetを用いた判定</span>
+&gt;&gt;&gt; set_d = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+&gt;&gt;&gt; set_e = {<span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
+&gt;&gt;&gt; set_f = set_d.issuperset(set_e)
+&gt;&gt;&gt; <span class="hljs-built_in">print</span>(set_f)
+<span class="hljs-keyword">True</span>
 &gt;&gt;&gt;
 </code></pre>
         </li>
         <li>
-          <p>真部分集合の判定（&lt; 演算子 or &gt; 演算子）<br>
-            双方が完全一致でする集合である場合、<strong>部分集合</strong>であり、<strong>上位集合</strong>でもあるが、<strong>真部分集合</strong>ではない。<br>
-            真部分集合であるかの判定は &lt;演算子 または、&gt;演算子を使う。<br></p>
+          <p>真部分集合の判定（&lt; 演算子 or &gt; 演算子）<br/>
+          双方が完全一致でする集合である場合、<strong>部分集合</strong>であり、<strong>上位集合</strong>でもあるが、<strong>真部分集合</strong>ではない。<br/>
+          真部分集合であるかの判定は &lt;演算子 または、&gt;演算子を使う。<br/></p>
           <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 完全一致する場合、部分集合の判定は真となる</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>set_a = {<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>}
@@ -334,6 +331,24 @@ TypeError: symmetric_difference() takes exactly one argument (<span class="hljs-
         </li>
       </ul>
     </li>
+    <li>
+      <p>予定者と参加者を集合で照合する<br/>
+      次のIDは説明用のデータである。予定者に対して誰が参加し、誰が未参加で、誰が予定外だったかを同じ2集合から取り出す。</p>
+      <pre><code class="language-python">planned = {<span class="hljs-string">"</span><span class="hljs-string">A</span><span class="hljs-string">"</span>, <span class="hljs-string">"</span><span class="hljs-string">B</span><span class="hljs-string">"</span>, <span class="hljs-string">"</span><span class="hljs-string">C</span><span class="hljs-string">"</span>}
+attended = {<span class="hljs-string">"</span><span class="hljs-string">B</span><span class="hljs-string">"</span>, <span class="hljs-string">"</span><span class="hljs-string">C</span><span class="hljs-string">"</span>, <span class="hljs-string">"</span><span class="hljs-string">D</span><span class="hljs-string">"</span>}
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"</span><span class="hljs-string">参加済み:</span><span class="hljs-string">"</span>, <span class="hljs-built_in">sorted</span>(planned &amp; attended))
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"</span><span class="hljs-string">未参加:</span><span class="hljs-string">"</span>, <span class="hljs-built_in">sorted</span>(planned - attended))
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"</span><span class="hljs-string">予定外:</span><span class="hljs-string">"</span>, <span class="hljs-built_in">sorted</span>(attended - planned))
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"</span><span class="hljs-string">双方を合わせたID:</span><span class="hljs-string">"</span>, <span class="hljs-built_in">sorted</span>(planned | attended))
+</code></pre>
+      <pre><code class="language-text">参加済み: ['B', 'C']
+未参加: ['A']
+予定外: ['D']
+双方を合わせたID: ['A', 'B', 'C', 'D']
+</code></pre>
+      <p>差集合は引く向きで意味が変わる。<code>planned - attended</code>は予定者から参加済みを除く操作になる。<code>sorted()</code>は表示順を固定するために使っており、set自体が順序を保持するわけではない。同じIDの参加回数もsetでは残らないため、回数が必要な処理では元のlistなどを保持する。</p>
+      <p>演算と条件の対応は<a class="link-secondary" href="https://sigma-se.com/detail/44/#集合">集合の具体例</a>も参照。</p>
+    </li>
   </ul>
   <h3 id="bytes型--バイト">bytes型 : バイト</h3>
   <p>bytes型は、各要素が \(0\) から \(255\) の整数となるイミュータブルなバイト列である。</p>
@@ -342,26 +357,22 @@ TypeError: symmetric_difference() takes exactly one argument (<span class="hljs-
     <li>
       <p>型の特性</p>
       <ul>
-        <li>イミュータブルオブジェクト
+        <li>
+          イミュータブルオブジェクト
           <ul>
-            <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可">Python
-                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: オブジェクト自体を変更不可</a>
-            </li>
+            <li><a class="link-secondary" href="https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可">Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: オブジェクト自体を変更不可</a></li>
           </ul>
         </li>
-        <li>イテラブルオブジェクト
+        <li>
+          イテラブルオブジェクト
           <ul>
-            <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可">Python
-                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イテラブル（iterable）: 反復抽出可</a></li>
+            <li><a class="link-secondary" href="https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可">Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イテラブル（iterable）: 反復抽出可</a></li>
           </ul>
         </li>
-        <li>シーケンスオブジェクト
+        <li>
+          シーケンスオブジェクト
           <ul>
-            <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#シーケンスsequence--インデックス指定可">Python
-                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; シーケンス（sequence）: インデックス指定可</a></li>
+            <li><a class="link-secondary" href="https://sigma-se.com/detail/29/#シーケンスsequence--インデックス指定可">Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; シーケンス（sequence）: インデックス指定可</a></li>
           </ul>
         </li>
       </ul>
@@ -370,69 +381,92 @@ TypeError: symmetric_difference() takes exactly one argument (<span class="hljs-
       <p>定義例</p>
       <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># シングルクォーテーションで定義</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>byte_a = <span class="hljs-string">b&#x27;abcde&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>byte_a = <span class="hljs-string">b'abcde'</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(byte_a)
-<span class="hljs-string">b&#x27;abcde&#x27;</span>
+<span class="hljs-string">b'abcde'</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(byte_a)
-&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bytes&#x27;</span>&gt;
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">'bytes'</span>&gt;
 &gt;&gt;&gt;
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ダブルクォーテーションで定義</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>byte_b = <span class="hljs-string">b&quot;abcde&quot;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>byte_b = <span class="hljs-string">b"abcde"</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(byte_b)
-<span class="hljs-string">b&#x27;abcde&#x27;</span>
+<span class="hljs-string">b'abcde'</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(byte_b)
-&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bytes&#x27;</span>&gt;
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">'bytes'</span>&gt;
 &gt;&gt;&gt;
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># トリプルクォーテーションで定義</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>byte_c = <span class="hljs-string">b&quot;&quot;&quot;abcde
-<span class="hljs-meta">... </span>fghij&quot;&quot;&quot;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>byte_c = <span class="hljs-string">b"""abcde
+<span class="hljs-meta">... </span>fghij"""</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(byte_c)
-<span class="hljs-string">b&#x27;abcde\nfghij&#x27;</span>
+<span class="hljs-string">b'abcde\nfghij'</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(byte_c)
-&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bytes&#x27;</span>&gt;
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">'bytes'</span>&gt;
 &gt;&gt;&gt;
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># コンストラクタで定義</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>byte_d = <span class="hljs-built_in">bytes</span>(<span class="hljs-string">b&#x27;abc&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span>byte_d = <span class="hljs-built_in">bytes</span>(<span class="hljs-string">b'abc'</span>)
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(byte_d)
-<span class="hljs-string">b&#x27;abc&#x27;</span>
+<span class="hljs-string">b'abc'</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(byte_d)
-&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bytes&#x27;</span>&gt;
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">'bytes'</span>&gt;
 &gt;&gt;&gt;
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># コンストラクタで文字コードを指定</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>byte_f = <span class="hljs-built_in">bytes</span>(<span class="hljs-string">&#x27;abc&#x27;</span>, <span class="hljs-string">&#x27;utf-8&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span>byte_f = <span class="hljs-built_in">bytes</span>(<span class="hljs-string">'abc'</span>, <span class="hljs-string">'utf-8'</span>)
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(byte_f)
-<span class="hljs-string">b&#x27;abc&#x27;</span>
+<span class="hljs-string">b'abc'</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(byte_f)
-&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bytes&#x27;</span>&gt;
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">'bytes'</span>&gt;
 &gt;&gt;&gt;
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># bytesオブジェクトを変換元にした場合、encoding引数は指定できない。</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>byte_f = <span class="hljs-built_in">bytes</span>(<span class="hljs-string">b&#x27;abc&#x27;</span>, <span class="hljs-string">&#x27;utf-8&#x27;</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span>byte_f = <span class="hljs-built_in">bytes</span>(<span class="hljs-string">b'abc'</span>, <span class="hljs-string">'utf-8'</span>)
 Traceback (most recent call last):
-  File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
+  File <span class="hljs-string">"&lt;stdin&gt;"</span>, line <span class="hljs-number">1</span>, <span class="hljs-keyword">in</span> &lt;module&gt;
 TypeError: encoding without a string argument
 &gt;&gt;&gt;
 </code></pre>
     </li>
     <li>
-      <p>bytesとstrの変換<br>
-        ※ 文字コードを指定し、<strong>encode</strong>でbytes型に、<strong>decode</strong>でstr型に変換できる。</p>
+      <p>bytesとstrの変換<br/>
+      ※ 文字コードを指定し、<strong>encode</strong>でbytes型に、<strong>decode</strong>でstr型に変換できる。</p>
       <pre><code class="language-python">$ python
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># str型の文字列をUTF-8でエンコード(bytes型に変換)</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>str_a = <span class="hljs-string">&#x27;abcde&#x27;</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>byte_a = str_a.encode(<span class="hljs-string">&#x27;utf-8&#x27;</span>)
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(byte_a)
-<span class="hljs-string">b&#x27;abcde&#x27;</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(byte_a)
-&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bytes&#x27;</span>&gt;
+&gt;&gt;&gt; <span class="hljs-comment"># str型の文字列をUTF-8でエンコード(bytes型に変換)</span>
+&gt;&gt;&gt; str_a = <span class="hljs-string">'</span><span class="hljs-string">abcde</span><span class="hljs-string">'</span>
+&gt;&gt;&gt; byte_a = str_a.encode(<span class="hljs-string">'</span><span class="hljs-string">utf-8</span><span class="hljs-string">'</span>)
+&gt;&gt;&gt; <span class="hljs-built_in">print</span>(byte_a)
+<span class="hljs-string">b</span><span class="hljs-string">'</span><span class="hljs-string">abcde</span><span class="hljs-string">'</span>
+&gt;&gt;&gt; <span class="hljs-built_in">type</span>(byte_a)
+&lt;<span class="hljs-keyword">class</span> '<span class="hljs-title">bytes</span><span class="hljs-string">'</span><span class="hljs-string">&gt;</span>
 &gt;&gt;&gt;
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 上記に続き、bytes型の文字列をUTF-8でデコード(str型に変換)</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>str_b = byte_a.decode(<span class="hljs-string">&#x27;utf-8&#x27;</span>)
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">print</span>(str_b)
-<span class="hljs-string">&#x27;abcde&#x27;</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(str_b)
-&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;str&#x27;</span>&gt;
+&gt;&gt;&gt; <span class="hljs-comment"># 上記に続き、bytes型の文字列をUTF-8でデコード(str型に変換)</span>
+&gt;&gt;&gt; str_b = byte_a.decode(<span class="hljs-string">'</span><span class="hljs-string">utf-8</span><span class="hljs-string">'</span>)
+&gt;&gt;&gt; <span class="hljs-built_in">print</span>(str_b)
+abcde
+&gt;&gt;&gt; <span class="hljs-built_in">type</span>(str_b)
+&lt;<span class="hljs-keyword">class</span> '<span class="hljs-title">str</span><span class="hljs-string">'</span><span class="hljs-string">&gt;</span>
 &gt;&gt;&gt;
 </code></pre>
+    </li>
+    <li>
+      <p>日本語の文字数とUTF-8のバイト数を区別する<br/>
+      ASCII文字だけの例では長さが一致するため、文字列<code>"Aあ"</code>で確認する。</p>
+      <pre><code class="language-python">text = <span class="hljs-string">"</span><span class="hljs-string">Aあ</span><span class="hljs-string">"</span>
+encoded = text.encode(<span class="hljs-string">"</span><span class="hljs-string">utf-8</span><span class="hljs-string">"</span>)
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">len</span>(text), <span class="hljs-built_in">len</span>(encoded))
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(encoded))
+<span class="hljs-built_in">print</span>(text[:<span class="hljs-number">2</span>])
+<span class="hljs-keyword">try</span>:
+    <span class="hljs-built_in">print</span>(encoded[:<span class="hljs-number">2</span>].decode(<span class="hljs-string">"</span><span class="hljs-string">utf-8</span><span class="hljs-string">"</span>))
+<span class="hljs-keyword">except</span> UnicodeDecodeError <span class="hljs-keyword">as</span> error:
+    <span class="hljs-built_in">print</span>(<span class="hljs-built_in">type</span>(error).__name__)
+<span class="hljs-built_in">print</span>(encoded.decode(<span class="hljs-string">"</span><span class="hljs-string">utf-8</span><span class="hljs-string">"</span>) == text)
+</code></pre>
+      <pre><code class="language-text">2 4
+[65, 227, 129, 130]
+Aあ
+UnicodeDecodeError
+True
+</code></pre>
+      <p>この例の<code>A</code>は1バイト、<code>あ</code>は3バイトで表される。<code>encoded[:2]</code>は<code>あ</code>の途中までしか含まないのでUTF-8として復元できない。文字として切り出したい場合はデコード後のstrを扱い、通信などのバイト数制限とは分けて考える。</p>
+      <p>strの<code>len()</code>が数えるのはUnicodeの符号位置であり、結合文字や一部の絵文字では画面上の見た目の文字数とも一致しない。エラーを無視してデコードすると失われるデータがあるため、まず文字コードと切り出した境界を確認する。</p>
     </li>
   </ul>
   <h3 id="bytearray型--バイト配列">bytearray型 : バイト配列</h3>
@@ -569,21 +603,20 @@ TypeError: encoding without a string argument
     <li>
       <p>型の特性</p>
       <ul>
-        <li>テキストファイルは行単位で反復できるイテラブルオブジェクト
+        <li>
+          テキストファイルは行単位で反復できるイテラブルオブジェクト
           <ul>
-            <li><a class="link-secondary"
-                href="https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可">Python
-                - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イテラブル（iterable）: 反復抽出可</a></li>
+            <li><a class="link-secondary" href="https://sigma-se.com/detail/29/#イテラブルiterable--反復抽出可">Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イテラブル（iterable）: 反復抽出可</a></li>
           </ul>
         </li>
         <li>使用後はクローズが必要なため、通常は<code>with open(...) as f:</code>で扱う</li>
       </ul>
     </li>
     <li>
-      <p>定義例<br>
-        open()でファイルを開き、処理終了時にclose()で閉じる。<br>
-        open()の第\(1\)引数にファイルパスを指定して定義。<br>
-        第2引数のmodeは、読み書きの指定やテキスト or バイナリの指定に使用。<br></p>
+      <p>定義例<br/>
+      open()でファイルを開き、処理終了時にclose()で閉じる。<br/>
+      open()の第\(1\)引数にファイルパスを指定して定義。<br/>
+      第2引数のmodeは、読み書きの指定やテキスト or バイナリの指定に使用。<br/></p>
       <ul>
         <li>
           <p><code>mode</code>の種類</p>
@@ -601,11 +634,11 @@ TypeError: encoding without a string argument
           <p>下記サンプルでは、カレントディレクトリの<code>data/sample.txt</code>を事前に作成している前提</p>
           <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># テキストファイルをopen() で開く。</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/sample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">'data/sample.txt'</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>tFile = <span class="hljs-built_in">open</span>(fPath)
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># テキストであるため、io.TextIOWrapperとして定義される。</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-built_in">type</span>(tFile)
-&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;_io.TextIOWrapper&#x27;</span>&gt;
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">'_io.TextIOWrapper'</span>&gt;
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 開いたら必ず閉じる。</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span>tFile.close()
 &gt;&gt;&gt;
@@ -613,7 +646,7 @@ TypeError: encoding without a string argument
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
 <span class="hljs-meta">... </span>    <span class="hljs-built_in">type</span>(tFile)
 ...
-&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;_io.TextIOWrapper&#x27;</span>&gt;
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">'_io.TextIOWrapper'</span>&gt;
 &gt;&gt;&gt;
 </code></pre>
           <p>また、今どこで作業しているかは<code>getcwd()</code>で取得できる。</p>
@@ -621,17 +654,17 @@ TypeError: encoding without a string argument
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># カレント（作業）ディレクトリの取得</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> os
 <span class="hljs-meta">&gt;&gt;&gt; </span>os.getcwd()
-<span class="hljs-string">&#x27;/home/hama&#x27;</span>
+<span class="hljs-string">'/home/hama'</span>
 &gt;&gt;&gt;
 </code></pre>
         </li>
       </ul>
     </li>
     <li>
-      <p><code>mode='r'</code>：読込モード（書込不可）<br>
-        modeの引数なしでデフォルト <strong>'r'</strong> で open() するため、省略する。<br>
-        以下、open(mode='r')で開いた後の読込方法。<br>
-        ※ 下記サンプルでは<code>data/sample.txt</code>を事前に作成している前提。<code>open()</code>は<code>~</code>をホームディレクトリへ自動展開しない。<br></p>
+      <p><code>mode='r'</code>：読込モード（書込不可）<br/>
+      modeの引数なしでデフォルト <strong>'r'</strong> で open() するため、省略する。<br/>
+      以下、open(mode='r')で開いた後の読込方法。<br/>
+      ※ 下記サンプルでは<code>data/sample.txt</code>を事前に作成し、最終行の後にも改行を入れる。<code>open()</code>は<code>~</code>をホームディレクトリへ自動展開しない。<br/></p>
       <pre><code class="language-text">line1 work file sample
 line2 work file sample
 line3 work file sample
@@ -639,16 +672,18 @@ line4 work file sample
 line5 work file sample
 </code></pre>
       <ul>
-        <li><code>read()</code>：全行読込
+        <li>
+          <code>read()</code>
+          ：全行読込
           <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># read()で全文読込</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/sample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">'data/sample.txt'</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
 <span class="hljs-meta">... </span>    fLines = tFile.read()
 <span class="hljs-meta">... </span>    <span class="hljs-built_in">type</span>(fLines)
 <span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(fLines)
 ...
-&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;str&#x27;</span>&gt;
+&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">'str'</span>&gt;
 line1 work file sample
 line2 work file sample
 line3 work file sample
@@ -657,39 +692,44 @@ line5 work file sample
 &gt;&gt;&gt;
 </code></pre>
         </li>
-        <li><code>readlines()</code>：リスト型で全行読込<br>
+        <li>
+          <code>readlines()</code>
+          ：リスト型で全行読込
+          <br/>
           <pre><code class="language-python">$ python
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># readlines()で行分割したリスト型で全行読込</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/sample.txt&#x27;</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
-<span class="hljs-meta">... </span>    fLines = tFile.readlines()
-<span class="hljs-meta">... </span>    <span class="hljs-built_in">type</span>(fLines)
-<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(fLines)
+&gt;&gt;&gt; <span class="hljs-comment"># readlines()で行分割したリスト型で全行読込</span>
+&gt;&gt;&gt; fPath = <span class="hljs-string">'</span><span class="hljs-string">data/sample.txt</span><span class="hljs-string">'</span>
+&gt;&gt;&gt; <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+...     fLines = tFile.readlines()
+...     <span class="hljs-built_in">type</span>(fLines)
+...     <span class="hljs-built_in">print</span>(fLines)
 ...
-&lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;list&#x27;</span>&gt;
-[<span class="hljs-string">&#x27;line1 work file sample\n&#x27;</span>, <span class="hljs-string">&#x27;line2 work file sample\n&#x27;</span>, <span class="hljs-string">&#x27;line3 work file sample\n&#x27;</span>, <span class="hljs-string">&#x27;line4 work file sample\n&#x27;</span>, <span class="hljs-string">&#x27;line5 work file sample\n&#x27;</span>]
+&lt;<span class="hljs-keyword">class</span> '<span class="hljs-title">list</span><span class="hljs-string">'</span><span class="hljs-string">&gt;</span>
+[<span class="hljs-string">'</span><span class="hljs-string">line1 work file sample</span><span class="hljs-string">\n</span><span class="hljs-string">'</span>, <span class="hljs-string">'</span><span class="hljs-string">line2 work file sample</span><span class="hljs-string">\n</span><span class="hljs-string">'</span>, <span class="hljs-string">'</span><span class="hljs-string">line3 work file sample</span><span class="hljs-string">\n</span><span class="hljs-string">'</span>, <span class="hljs-string">'</span><span class="hljs-string">line4 work file sample</span><span class="hljs-string">\n</span><span class="hljs-string">'</span>, <span class="hljs-string">'</span><span class="hljs-string">line5 work file sample</span><span class="hljs-string">\n</span><span class="hljs-string">'</span>]
 &gt;&gt;&gt;
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ※ 改行コードを排除して取得する場合</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;/root/data/sample.txt&#x27;</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
-<span class="hljs-meta">... </span>    fLines = [line.strip() <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> tFile.readlines()]
-<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(fLines)
+&gt;&gt;&gt; <span class="hljs-comment"># ※ 改行コードを排除して取得する場合</span>
+&gt;&gt;&gt; fPath = <span class="hljs-string">'</span><span class="hljs-string">data/sample.txt</span><span class="hljs-string">'</span>
+&gt;&gt;&gt; <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+...     fLines = [line.rstrip(<span class="hljs-string">"</span><span class="hljs-string">\n</span><span class="hljs-string">"</span>) <span class="hljs-keyword">for</span> line in tFile]
+...     <span class="hljs-built_in">print</span>(fLines)
 ...
-[<span class="hljs-string">&#x27;line1 work file sample&#x27;</span>, <span class="hljs-string">&#x27;line2 work file sample&#x27;</span>, <span class="hljs-string">&#x27;line3 work file sample&#x27;</span>, <span class="hljs-string">&#x27;line4 work file sample&#x27;</span>, <span class="hljs-string">&#x27;line5 work file sample&#x27;</span>]
+[<span class="hljs-string">'</span><span class="hljs-string">line1 work file sample</span><span class="hljs-string">'</span>, <span class="hljs-string">'</span><span class="hljs-string">line2 work file sample</span><span class="hljs-string">'</span>, <span class="hljs-string">'</span><span class="hljs-string">line3 work file sample</span><span class="hljs-string">'</span>, <span class="hljs-string">'</span><span class="hljs-string">line4 work file sample</span><span class="hljs-string">'</span>, <span class="hljs-string">'</span><span class="hljs-string">line5 work file sample</span><span class="hljs-string">'</span>]
 &gt;&gt;&gt;
 </code></pre>
         </li>
-        <li><code>readline()</code>：1行ずつ読込
+        <li>
+          <code>readline()</code>
+          ：1行ずつ読込
           <pre><code class="language-python">$ python
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># readline()で1行ずつ読込</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;/root/data/sample.txt&#x27;</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
-<span class="hljs-meta">... </span>    fLine = tFile.readline()    <span class="hljs-comment"># 1行目 読込</span>
-<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(fLine)
-<span class="hljs-meta">... </span>    fLine = tFile.readline()    <span class="hljs-comment"># 2行目 読込</span>
-<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(fLine)
-<span class="hljs-meta">... </span>    fLine = tFile.readline()    <span class="hljs-comment"># 3行目 読込</span>
-<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(fLine)
+&gt;&gt;&gt; <span class="hljs-comment"># readline()で1行ずつ読込</span>
+&gt;&gt;&gt; fPath = <span class="hljs-string">'</span><span class="hljs-string">data/sample.txt</span><span class="hljs-string">'</span>
+&gt;&gt;&gt; <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+...     fLine = tFile.readline()    <span class="hljs-comment"># 1行目 読込</span>
+...     <span class="hljs-built_in">print</span>(fLine)
+...     fLine = tFile.readline()    <span class="hljs-comment"># 2行目 読込</span>
+...     <span class="hljs-built_in">print</span>(fLine)
+...     fLine = tFile.readline()    <span class="hljs-comment"># 3行目 読込</span>
+...     <span class="hljs-built_in">print</span>(fLine)
 ...
 line1 work file sample
 
@@ -698,14 +738,14 @@ line2 work file sample
 line3 work file sample
 
 &gt;&gt;&gt;
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># readline()で1行ずつ末尾まで読込</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;/root/data/sample.txt&#x27;</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
-<span class="hljs-meta">... </span>    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
-<span class="hljs-meta">... </span>        fLine = tFile.readline()
-<span class="hljs-meta">... </span>        <span class="hljs-built_in">print</span>(fLine)
-<span class="hljs-meta">... </span>        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> fLine:
-<span class="hljs-meta">... </span>            <span class="hljs-keyword">break</span>
+&gt;&gt;&gt; <span class="hljs-comment"># readline()で1行ずつ末尾まで読込</span>
+&gt;&gt;&gt; fPath = <span class="hljs-string">'</span><span class="hljs-string">data/sample.txt</span><span class="hljs-string">'</span>
+&gt;&gt;&gt; <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+...     <span class="hljs-keyword">while</span> <span class="hljs-keyword">True</span>:
+...         fLine = tFile.readline()
+...         <span class="hljs-built_in">print</span>(fLine)
+...         <span class="hljs-keyword">if</span> not fLine:
+...             <span class="hljs-keyword">break</span>
 ...
 line1 work file sample
 
@@ -723,18 +763,18 @@ line5 work file sample
       </ul>
     </li>
     <li>
-      <p><code>mode='w'</code>：書込モード（読込不可）<br>
-        以下、open(mode='w')で開いた後の書込方法。<br>
-        ※ 下記サンプルでは<code>data</code>フォルダがあることが前提。<br></p>
+      <p><code>mode='w'</code>：書込モード（読込不可）<br/>
+      以下、open(mode='w')で開いた後の書込方法。<br/>
+      ※ 下記サンプルでは<code>data</code>フォルダがあることが前提。<br/></p>
       <ul>
         <li>
           <p><code>write()</code>：新規作成</p>
           <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># write()でファイルを新規作成</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/newsample.txt&#x27;</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fInput = <span class="hljs-string">&#x27;line1 new work file sample&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">'data/newsample.txt'</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fInput = <span class="hljs-string">'line1 new work file sample'</span>
 &gt;&gt;&gt;
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">'w'</span>) <span class="hljs-keyword">as</span> tFile:
 <span class="hljs-meta">... </span>    tFile.write(fInput)
 ...
 <span class="hljs-number">26</span>
@@ -747,10 +787,10 @@ line1 new work file sample
 </code></pre>
         </li>
         <li>
-          <p><code>write()</code>：書込（上書き）<br>
-            ※ 上記の続き（newsample.txtが作成済）</p>
+          <p><code>write()</code>：書込（上書き）<br/>
+          ※ 上記の続き（newsample.txtが作成済）</p>
           <pre><code class="language-python">$ python
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/newsample.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">'data/newsample.txt'</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># read()で全行読込</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
 <span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(tFile.read())
@@ -758,12 +798,12 @@ line1 new work file sample
 line1 new work file sample
 &gt;&gt;&gt;
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># write()で書込（上書き）</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fInput = <span class="hljs-string">&#x27;edit new work file sample&#x27;</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> tFile:
+<span class="hljs-meta">&gt;&gt;&gt; </span>fInput = <span class="hljs-string">'edit new work file sample'</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">'w'</span>) <span class="hljs-keyword">as</span> tFile:
 <span class="hljs-meta">... </span>    tFile.write(fInput)
 ...
 <span class="hljs-number">24</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># &#x27;line1 new work file sample&#x27; が上書きされている。</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 'line1 new work file sample' が上書きされている。</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
 <span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(tFile.read())
 ...
@@ -774,26 +814,26 @@ edit new work file sample
         <li>
           <p><code>writelines()</code>：リスト型で全行書込</p>
           <pre><code class="language-python">$ python
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/newsample.txt&#x27;</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># writelines()でリスト型を全行書込</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fInput = [<span class="hljs-string">&#x27;line1&#x27;</span>, <span class="hljs-string">&#x27;line2&#x27;</span>, <span class="hljs-string">&#x27;line3&#x27;</span>, <span class="hljs-string">&#x27;line4&#x27;</span>, <span class="hljs-string">&#x27;line5&#x27;</span>]
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> tFile:
-<span class="hljs-meta">... </span>    tFile.writelines(fInput)
+&gt;&gt;&gt; fPath = <span class="hljs-string">'</span><span class="hljs-string">data/newsample.txt</span><span class="hljs-string">'</span>
+&gt;&gt;&gt; <span class="hljs-comment"># writelines()でリスト型を全行書込</span>
+&gt;&gt;&gt; fInput = [<span class="hljs-string">'</span><span class="hljs-string">line1</span><span class="hljs-string">'</span>, <span class="hljs-string">'</span><span class="hljs-string">line2</span><span class="hljs-string">'</span>, <span class="hljs-string">'</span><span class="hljs-string">line3</span><span class="hljs-string">'</span>, <span class="hljs-string">'</span><span class="hljs-string">line4</span><span class="hljs-string">'</span>, <span class="hljs-string">'</span><span class="hljs-string">line5</span><span class="hljs-string">'</span>]
+&gt;&gt;&gt; <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">'</span><span class="hljs-string">w</span><span class="hljs-string">'</span>) <span class="hljs-keyword">as</span> tFile:
+...     tFile.writelines(fInput)
 ...
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
-<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(tFile.read())
+&gt;&gt;&gt; <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+...     <span class="hljs-built_in">print</span>(tFile.read())
 ...
 line1line2line3line4line5
 &gt;&gt;&gt;
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># ※ 改行コードを排除して書込する場合</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/newsample.txt&#x27;</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fInput = [<span class="hljs-string">&#x27;line1&#x27;</span>, <span class="hljs-string">&#x27;line2&#x27;</span>, <span class="hljs-string">&#x27;line3&#x27;</span>, <span class="hljs-string">&#x27;line4&#x27;</span>, <span class="hljs-string">&#x27;line5&#x27;</span>]
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> tFile:
-<span class="hljs-meta">... </span>    tFile.write(<span class="hljs-string">&#x27;\n&#x27;</span>.join(fInput))
+&gt;&gt;&gt; <span class="hljs-comment"># ※ 各行の間に改行を入れて書き込む場合</span>
+&gt;&gt;&gt; fPath = <span class="hljs-string">'</span><span class="hljs-string">data/newsample.txt</span><span class="hljs-string">'</span>
+&gt;&gt;&gt; fInput = [<span class="hljs-string">'</span><span class="hljs-string">line1</span><span class="hljs-string">'</span>, <span class="hljs-string">'</span><span class="hljs-string">line2</span><span class="hljs-string">'</span>, <span class="hljs-string">'</span><span class="hljs-string">line3</span><span class="hljs-string">'</span>, <span class="hljs-string">'</span><span class="hljs-string">line4</span><span class="hljs-string">'</span>, <span class="hljs-string">'</span><span class="hljs-string">line5</span><span class="hljs-string">'</span>]
+&gt;&gt;&gt; <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">'</span><span class="hljs-string">w</span><span class="hljs-string">'</span>) <span class="hljs-keyword">as</span> tFile:
+...     tFile.write(<span class="hljs-string">'</span><span class="hljs-string">\n</span><span class="hljs-string">'</span>.join(fInput))
 ...
 <span class="hljs-number">29</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
-<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(tFile.read())
+&gt;&gt;&gt; <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+...     <span class="hljs-built_in">print</span>(tFile.read())
 ...
 line1
 line2
@@ -804,11 +844,11 @@ line5
 </code></pre>
         </li>
         <li>
-          <p><code>pass</code>で空ファイルを新規作成<br></p>
+          <p><code>pass</code>で空ファイルを新規作成<br/></p>
           <pre><code class="language-python">$ python
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/empty.txt&#x27;</span>
+<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">'data/empty.txt'</span>
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 空ファイルを新規作成</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;w&#x27;</span>):
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">'w'</span>):
 <span class="hljs-meta">... </span>    <span class="hljs-keyword">pass</span>    <span class="hljs-comment"># 何もしない</span>
 ...
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># 空ファイルの内容を出力</span>
@@ -821,9 +861,9 @@ line5
       </ul>
     </li>
     <li>
-      <p><code>mode='a'</code>：追加・書込モード（読込不可）<br>
-        以下、open(mode='a') で開いた後の書込方法。<br>
-        ※ 下記サンプルでは、<code>data/sample.txt</code>を事前に作成している前提。<br></p>
+      <p><code>mode='a'</code>：追加・書込モード（読込不可）<br/>
+      以下、open(mode='a') で開いた後の書込方法。<br/>
+      ※ 下記サンプルでは<code>data/sample.txt</code>を事前に作成し、最終行の後にも改行を入れる。<br/></p>
       <pre><code class="language-text">line1 work file sample
 line2 work file sample
 line3 work file sample
@@ -831,16 +871,19 @@ line4 work file sample
 line5 work file sample
 </code></pre>
       <ul>
-        <li><code>write()</code>：末尾に追加
+        <li>
+          <code>write()</code>
+          ：末尾に追加
           <pre><code class="language-python">$ python
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-comment"># write()で末尾に追加</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fPath = <span class="hljs-string">&#x27;data/sample.txt&#x27;</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span>fAdd = <span class="hljs-string">&#x27;\nline6 work file sample&#x27;</span>    <span class="hljs-comment"># 改行コードも込み</span>
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">&#x27;a&#x27;</span>) <span class="hljs-keyword">as</span> tFile:
-<span class="hljs-meta">... </span>    tFile.writelines(fAdd)
+&gt;&gt;&gt; <span class="hljs-comment"># write()で末尾に追加</span>
+&gt;&gt;&gt; fPath = <span class="hljs-string">'</span><span class="hljs-string">data/sample.txt</span><span class="hljs-string">'</span>
+&gt;&gt;&gt; fAdd = <span class="hljs-string">'</span><span class="hljs-string">line6 work file sample</span><span class="hljs-string">\n</span><span class="hljs-string">'</span>    <span class="hljs-comment"># 行末に改行を付けて追加</span>
+&gt;&gt;&gt; <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath, mode=<span class="hljs-string">'</span><span class="hljs-string">a</span><span class="hljs-string">'</span>) <span class="hljs-keyword">as</span> tFile:
+...     tFile.write(fAdd)
 ...
-<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
-<span class="hljs-meta">... </span>    <span class="hljs-built_in">print</span>(tFile.read())
+<span class="hljs-number">23</span>
+&gt;&gt;&gt; <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(fPath) <span class="hljs-keyword">as</span> tFile:
+...     <span class="hljs-built_in">print</span>(tFile.read())
 ...
 line1 work file sample
 line2 work file sample
@@ -853,13 +896,38 @@ line6 work file sample
         </li>
       </ul>
     </li>
-  </ul>
+    <li>
+      <p>同じファイルを2回readすると空になる理由<br/>
+      説明用ファイルを一時ディレクトリに作り、先頭から読み終えた後の位置を確認する。一時ディレクトリはwithブロックを抜けると削除される。</p>
+      <pre><code class="language-python"><span class="hljs-keyword">from</span> pathlib <span class="hljs-keyword">import</span> Path
+<span class="hljs-keyword">from</span> tempfile <span class="hljs-keyword">import</span> TemporaryDirectory
 
+<span class="hljs-keyword">with</span> TemporaryDirectory() <span class="hljs-keyword">as</span> directory:
+    path = Path(directory) / <span class="hljs-string">"</span><span class="hljs-string">sample.txt</span><span class="hljs-string">"</span>
+    path.write_text(<span class="hljs-string">"</span><span class="hljs-string">Aあ</span><span class="hljs-string">\n</span><span class="hljs-string">Bい</span><span class="hljs-string">\n</span><span class="hljs-string">"</span>, encoding=<span class="hljs-string">"</span><span class="hljs-string">utf-8</span><span class="hljs-string">"</span>)
+    <span class="hljs-keyword">with</span> path.open(encoding=<span class="hljs-string">"</span><span class="hljs-string">utf-8</span><span class="hljs-string">"</span>) <span class="hljs-keyword">as</span> stream:
+        <span class="hljs-built_in">print</span>(<span class="hljs-built_in">repr</span>(stream.read()))
+        <span class="hljs-built_in">print</span>(<span class="hljs-built_in">repr</span>(stream.read()))
+        stream.seek(<span class="hljs-number">0</span>)
+        <span class="hljs-built_in">print</span>([line.rstrip(<span class="hljs-string">"</span><span class="hljs-string">\n</span><span class="hljs-string">"</span>) <span class="hljs-keyword">for</span> line in stream])
+    <span class="hljs-built_in">print</span>(stream.closed)
+</code></pre>
+      <pre><code class="language-text">'Aあ\nBい\n'
+''
+['Aあ', 'Bい']
+True
+</code></pre>
+      <p>最初の<code>read()</code>で位置が末尾へ進むため2回目は空文字列になる。ファイルの内容が消えたわけではなく、<code>seek(0)</code>で先頭へ戻すと再び読める。書き込みと読み込みの両方で文字コードを指定し、<code>with</code>でクローズする範囲を明確にする。</p>
+      <p>行末の改行だけを除く例では<code>rstrip("\n")</code>を使う。引数なしの<code>strip()</code>は行頭・行末の空白やタブも除くため、空白をデータとして残す必要がある場合は結果が異なる。</p>
+    </li>
+  </ul>
   <h2 id="まとめ">まとめ</h2>
   <ul>
-    <li>setは重複しない要素を扱う集合型で、順序やインデックスによるアクセスを前提にせず、重複排除や集合演算に使う。</li>
+    <li>setの差集合は向きによって結果が変わる。予定者と参加者の照合では不足と予定外を別々に取り出せる。</li>
+    <li>setは重複回数や順序を保持する用途には向かない。表示順が必要ならsorted()などで明示する。</li>
+    <li>strの長さと符号化後のバイト数は異なる。bytesを文字の途中で切るとデコードできない場合がある。</li>
     <li>bytesは変更不可、bytearrayは変更可能なバイト列として使い分ける。</li>
-    <li>file objectはファイルを読み書きする入口となり、with文を使うと処理後に自動でクローズできる。</li>
+    <li>ファイルは読み進めた位置を持つ。文字コードを明示し、withによるクローズと必要に応じた位置の移動を行う。</li>
   </ul>
   <h3 id="参考文献">参考文献</h3>
   <ul>

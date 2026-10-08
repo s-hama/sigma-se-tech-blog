@@ -2,21 +2,22 @@
 Python - 組込みデータ型：3/4 str・list・tuple・range・dict
 
 ## 概要
-Pythonで頻繁に使うstr、list、tuple、range、dictの基本操作を整理する。
-これらの型は、文字列、複数要素の管理、繰り返し処理、キーと値の対応付けなど、日常的なPythonコードの中心になる。
-ここでは、作成、参照、更新、反復、メソッドの使い方を、型ごとの性質とあわせて確認する。
+
+str、list、tuple、range、dictの生成・参照・更新を整理する。
+
+listで複数行を初期化したときの共有と、dictをコピーしたときに残る共有を実行例で追う。元データへの影響を確かめながら、要素の置換・オブジェクトの変更・コピーの範囲を区別する。参照共有とコピーの比較例はPython 3.12.2で確認。
 
 ## この記事の構成
 - [str型 : 文字列型](#str型--文字列型)<br>
-  str型 : 文字列型の意味と要点を具体例から整理。
+  文字列の生成と引用符・エスケープの使い分けを確認。
 - [list型 : 配列型](#list型--配列型)<br>
-  list型 : 配列型の意味と要点を具体例から整理。
+  追加・削除・並べ替えと複数行の初期化で起こる共有を確認。
 - [tuple型 : イミュータブルなシーケンス型](#tuple型--イミュータブルなシーケンス型)<br>
-  tupleの生成方法と、要素の並びを変更できない性質を整理。
+  要素の置換と要素が指すlistの変更を区別。
 - [range型 : 範囲指定](#range型--範囲指定)<br>
-  range型 : 範囲指定の意味と要点を具体例から整理。
+  開始・終了・刻み幅から生成される範囲を確認。
 - [dict型 : 連想配列型（辞書型）](#dict型--連想配列型辞書型)<br>
-  dict型 : 連想配列型（辞書型）の意味と要点を具体例から整理。
+  キーによる操作と浅いコピーが分離する範囲を確認。
 
 ## 各データ型の操作方法
 
@@ -62,7 +63,7 @@ Unicodeは文字に符号位置を割り当てる規格であり、その文字�
         ... defg"""
         >>> print(str_d)    # 定義文字として改行（\n）を認識する
         abc
-    defg
+        defg
         >>>
         >>> type(str_d)
         <class 'str'>
@@ -184,6 +185,32 @@ Unicodeは文字に符号位置を割り当てる規格であり、その文字�
         >>>
     ```
 
+- 複数行の初期化で同じlistを共有しないようにする<br>
+  `[0] * 3`は数値の初期化に使えるが、`[[0, 0]] * 3`では内側のlistが複製されない。3日分の記録を用意し、1日目の最初の値だけを更新して比べる。
+
+  ```python
+  shared_rows = [[0, 0]] * 3
+  shared_rows[0][0] = 8
+  print(shared_rows)
+  print(shared_rows[0] is shared_rows[1])
+
+  separate_rows = [[0, 0] for _ in range(3)]
+  separate_rows[0][0] = 8
+  print(separate_rows)
+  print(separate_rows[0] is separate_rows[1])
+  ```
+
+  ```text
+  [[8, 0], [8, 0], [8, 0]]
+  True
+  [[8, 0], [0, 0], [0, 0]]
+  False
+  ```
+
+  最初の例は一つの内側listへの参照を3回並べている。`is`は同じオブジェクトかを調べる演算子なので、最初の2行の比較が`True`になる。内包表記では繰り返すたびに`[0, 0]`を生成するため各行を独立して更新できる。
+
+  `[0] * 3`の各要素も同じ整数を参照し得るが、整数自体は変更できない。`values[0] = 8`はその位置の参照を置き換える操作なので他の位置には伝わらない。
+
 - list要素の取得
     ```python
     $ python
@@ -240,7 +267,7 @@ Unicodeは文字に符号位置を割り当てる規格であり、その文字�
         >>> print(list_a)
         [10, 20, 30, 40, 50, 60]
         >>>
-        >>> # 5番目と6番目の間に要素を挿入
+        >>> # インデックス5（現在の末尾の後ろ）に要素を挿入
         >>> list_b = [10, 20, 30, 40, 50]
         >>>
         >>> list_b.insert(5, 55)
@@ -305,7 +332,7 @@ Unicodeは文字に符号位置を割り当てる規格であり、その文字�
         >>> print(list_a)
         [10, 20, 30, 40, 50]
         >>>
-        >>> # 降順に並び替え
+        >>> # 直前に昇順へ並べたlistを反転して降順にする
         >>> list_a.reverse()
         >>>
         >>> print(list_a)
@@ -403,7 +430,7 @@ tupleを作る構文上の要点は小カッコではなくカンマである。
     ```
 
 - tuple要素の取得<br>
-list型と同じく、インデックスやスライスの指定には大カッコ**[]**を使う。小カッコ**()**は要素取得の記号ではない。
+list型と同じく、インデックスやスライスの指定には大カッコ`[]`を使う。小カッコ`()`は要素取得の記号ではない。
     ```python
     $ python
         >>> # 変数 tuple_a を string型の1次元配列で定義
@@ -441,7 +468,7 @@ list型と同じく、インデックスやスライスの指定には大カッ�
         >>> print(tuple_a[::2])
         ('a', 'c', 'e')
         >>>
-        >>> # tuple内包表記でfor文の結果を取得
+        >>> # 内包表記の結果をtupleへ変換
         >>> tuple_b = (1, 2, 3, 4, 5)
         >>> tuple([tuple_b_row for tuple_b_row in tuple_b if tuple_b_row > 2])
         (3, 4, 5)
@@ -490,11 +517,31 @@ tuple型は、**イミュータブルオブジェクト**であるため要素�
         >>>
         >>> tuple_a = tuple_a + (45, 55, 65)    # 連結した新しいtupleを変数tuple_aへ再代入
         >>> print(tuple_a)
-        (15, 25, 35, 45, 55, 65)
+        (15, 25, 35, 45, 55, 45, 55, 65)
         >>> id(tuple_a)    # 上記のidと違う
         139970072464168
         >>>
     ```
+
+- tupleの要素がlistの場合<br>
+  tupleが固定するのは要素を指す参照の並びであり、参照先のlistまで変更不可になるわけではない。
+
+  ```python
+  record = ("day1", [10, 20])
+  record[1].append(30)
+  print(record)
+  try:
+      record[1] = [99]
+  except TypeError as error:
+      print(type(error).__name__)
+  ```
+
+  ```text
+  ('day1', [10, 20, 30])
+  TypeError
+  ```
+
+  `append()`は既存のlistの内容を変更する。後半の代入はtupleの2番目を別のlistへ置き換えようとするため失敗する。変更されない記録が必要なら、内側のデータも含めて型を選ぶ。
 
 - その他補足<br>
 list型は**ミュータブルオブジェクト**であるため、appendやinsertやremoveなど、様々なメソッドが準備されているが、tuple型は**イミュータブルオブジェクト**なので、countとindexの\\(2\\)つだけ。
@@ -743,6 +790,37 @@ dict型（辞書型）は、キーと値の対応関係を保持するミュー�
         >>>
     ```
 
+- 浅いコピーでは入れ子のlistが共有される<br>
+  直前の例はdictの値が整数だったため、コピー先の値を置き換えても元のdictへ影響しなかった。値にlistが入っている場合は外側と内側を分けて確認する。
+
+  ```python
+  from copy import deepcopy
+
+  original = {"name": "A", "scores": [70, 80]}
+  shallow = original.copy()
+  independent = deepcopy(original)
+
+  shallow["name"] = "B"
+  shallow["scores"].append(90)
+  print(original)
+  print(shallow)
+  print(independent)
+  print(shallow is original)
+  print(shallow["scores"] is original["scores"])
+  ```
+
+  ```text
+  {'name': 'A', 'scores': [70, 80, 90]}
+  {'name': 'B', 'scores': [70, 80, 90]}
+  {'name': 'A', 'scores': [70, 80]}
+  False
+  True
+  ```
+
+  `copy()`で外側のdictは分かれるので`name`の置換は伝わらない。一方で`scores`に対応するlistは共有され、`append()`による変更が両方から見える。ここでの`deepcopy()`は内側のlistも複製するため元の記録を保てる。
+
+  コピーの方法は「どこを変更するか」で選ぶ。外側のキーと値の対応だけを編集するなら浅いコピーで足りる。入れ子の内容まで独立して編集するなら必要な部分の複製やdeepcopyを検討する。
+
 - dict型の結合<br>
 str型、list型、tuple型のように**+演算子**で結合ができない。
     ```python
@@ -765,9 +843,11 @@ str型、list型、tuple型のように**+演算子**で結合ができない。
 
 
 ## まとめ
-- str、list、tuple、rangeは順序を持つデータとして扱え、listは変更可能、tupleは変更不可として使い分ける。
-- strはimmutableなので、変更に見える操作でも新しい文字列が作られる。
-- dictはキーと値を対応付けるmapping型で、キーによって値へアクセスし、同じキーは重複して保持できない。
+
+- listの繰り返しは内側のオブジェクトを複製しない。各行を独立して更新する配列は内包表記などで行ごとに生成する。
+- tupleでは要素を置き換えられないが、要素が指すlistの内容は変更できる。
+- dict.copy()は外側のdictを複製する。入れ子のlistなども独立して編集する場合はコピーの範囲を確認する。
+- str・list・tuple・rangeは位置で、dictはキーで参照する。更新方法は各型の変更可能性に合わせて選ぶ。
 
 ### 参考文献
 - [Python公式ドキュメント - テキストシーケンス型：str（日本語・文字列型の公式解説）](https://docs.python.org/ja/3/library/stdtypes.html#text-sequence-type-str)

@@ -1,20 +1,19 @@
 <div class="post-body">
   <h2 id="概要">概要</h2>
-  <p>Pythonの組込みデータ型を理解する前提として、immutable、mutable、iterable、sequence、mappingの意味を整理する。</p>
-  <p>これらの用語は、list、tuple、dict、setなどの挙動を説明するときに頻繁に登場する。単語だけを暗記するより、値を変更できるか、繰り返し処理できるか、インデックスで参照できるかという観点で分けると理解しやすい。</p>
-  <p>ここでは、代表的なデータ型を例に、それぞれの特性がコード上でどのように現れるかを確認する。</p>
+  <p>Pythonの組込みデータ型を説明するimmutable、mutable、iterable、sequence、mappingの意味を整理する。</p>
+  <p>同じlistを参照する変数への変更が伝わる理由を確認した後、list・set・dictに同じ操作を試す。反復できることと整数の位置で取り出せることを区別し、型の説明から使える操作を判断する。比較例はPython 3.12.2で確認。</p>
   <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
-    <li><a href="#イミュータブルimmutable--オブジェクト自体を変更不可" class="link-secondary">イミュータブル（immutable）: オブジェクト自体を変更不可</a><br>
+    <li><a class="link-secondary" href="#イミュータブルimmutable--オブジェクト自体を変更不可">イミュータブル（immutable）: オブジェクト自体を変更不可</a><br/>
       オブジェクト自体を変更できない性質と、変数への再代入との違いを整理。</li>
-    <li><a href="#ミュータブルmutable--オブジェクト自体を変更可" class="link-secondary">ミュータブル（mutable）: オブジェクト自体を変更可</a><br>
-      オブジェクト自体を変更できる性質を具体例から整理。</li>
-    <li><a href="#イテラブルiterable--反復抽出可" class="link-secondary">イテラブル（iterable）: 反復抽出可</a><br>
-      イテラブル（iterable）: 反復抽出可の意味と要点を具体例から整理。</li>
-    <li><a href="#シーケンスsequence--インデックス指定可" class="link-secondary">シーケンス（sequence）: インデックス指定可</a><br>
-      シーケンス（sequence）: インデックス指定可の意味と要点を具体例から整理。</li>
-    <li><a href="#マッピングmapping--連想配列" class="link-secondary">マッピング（mapping）: 連想配列</a><br>
-      マッピング（mapping）: 連想配列の意味と要点を具体例から整理。</li>
+    <li><a class="link-secondary" href="#ミュータブルmutable--オブジェクト自体を変更可">ミュータブル（mutable）: オブジェクト自体を変更可</a><br/>
+      listへの変更が別の変数にも見える理由を確認。</li>
+    <li><a class="link-secondary" href="#イテラブルiterable--反復抽出可">イテラブル（iterable）: 反復抽出可</a><br/>
+      for文で要素を取り出せる性質と変更可能性を区別。</li>
+    <li><a class="link-secondary" href="#シーケンスsequence--インデックス指定可">シーケンス（sequence）: インデックス指定可</a><br/>
+      listとsetで反復と添字アクセスの可否を比較。</li>
+    <li><a class="link-secondary" href="#マッピングmapping--連想配列">マッピング（mapping）: 連想配列</a><br/>
+      dictの整数キーとシーケンスの位置指定の違いを確認。</li>
   </ul>
   <h2 id="各データ型の特性">各データ型の特性</h2>
   <h3 id="イミュータブルimmutable--オブジェクト自体を変更不可">イミュータブル（immutable）: オブジェクト自体を変更不可</h3>
@@ -125,17 +124,17 @@
   </ul>
   <h3 id="シーケンスsequence--インデックス指定可">シーケンス（sequence）: インデックス指定可</h3>
   <p>要素に順序があり、0から始まる整数インデックスで要素へアクセスできるオブジェクト。</p>
-  <p>また、ミュータブルと同様にシーケンスオブジェクトはすべてイテラブルなオブジェクトとなる。</p>
+  <p>シーケンスはイテラブルでもある。一方でイテラブルがすべてシーケンスとは限らず、変更できるかどうかも別に判断する。</p>
   <ul>
     <li>
       <p>シーケンスな型: Python公式ページのドキュメント</p>
       <ul>
-        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#str" class="link-secondary">str 型</a></li>
-        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#list" class="link-secondary">list 型</a></li>
-        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#tuple" class="link-secondary">tuple 型</a></li>
-        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#range" class="link-secondary">range 型</a></li>
-        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#bytes" class="link-secondary">bytes 型</a></li>
-        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#bytearray" class="link-secondary">bytearray 型</a></li>
+        <li><a class="link-secondary" href="https://docs.python.org/ja/3/library/stdtypes.html#str">str 型</a></li>
+        <li><a class="link-secondary" href="https://docs.python.org/ja/3/library/stdtypes.html#list">list 型</a></li>
+        <li><a class="link-secondary" href="https://docs.python.org/ja/3/library/stdtypes.html#tuple">tuple 型</a></li>
+        <li><a class="link-secondary" href="https://docs.python.org/ja/3/library/stdtypes.html#range">range 型</a></li>
+        <li><a class="link-secondary" href="https://docs.python.org/ja/3/library/stdtypes.html#bytes">bytes 型</a></li>
+        <li><a class="link-secondary" href="https://docs.python.org/ja/3/library/stdtypes.html#bytearray">bytearray 型</a></li>
       </ul>
     </li>
     <li>
@@ -150,25 +149,45 @@
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(list_a[<span class="hljs-number">2</span>])    <span class="hljs-comment"># インデックス 2 を指定</span>
     <span class="hljs-number">3</span>
     <span class="hljs-comment"># str_a を str型で定義</span>
-    &gt;&gt;&gt; str_a = <span class="hljs-string">"abcdefg"</span>
+    &gt;&gt;&gt; str_a = <span class="hljs-string">"</span><span class="hljs-string">abcdefg</span><span class="hljs-string">"</span>
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(str_a[<span class="hljs-number">1</span>])    <span class="hljs-comment"># インデックス 1 を指定</span>
-    <span class="hljs-string">&#x27;b&#x27;</span>
+    b
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(str_a[<span class="hljs-number">3</span>])    <span class="hljs-comment"># インデックス 3 を指定</span>
-    <span class="hljs-string">&#x27;d&#x27;</span>
+    d
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(str_a[<span class="hljs-number">5</span>])    <span class="hljs-comment"># インデックス 5 を指定</span>
-    <span class="hljs-string">&#x27;f&#x27;</span>
+    f
 </code></pre>
+    </li>
+    <li>
+      <p>for文で取り出せても位置を指定できるとは限らない<br/>
+      listとsetに同じ文字列を入れて比べる。setも反復できるが順序を保証せず、<code>[0]</code>による位置指定には対応しない。</p>
+      <pre><code class="language-python">names = [<span class="hljs-string">"</span><span class="hljs-string">A</span><span class="hljs-string">"</span>, <span class="hljs-string">"</span><span class="hljs-string">B</span><span class="hljs-string">"</span>]
+unique_names = {<span class="hljs-string">"</span><span class="hljs-string">A</span><span class="hljs-string">"</span>, <span class="hljs-string">"</span><span class="hljs-string">B</span><span class="hljs-string">"</span>}
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(names))
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">sorted</span>(unique_names))
+<span class="hljs-built_in">print</span>(names[<span class="hljs-number">0</span>])
+<span class="hljs-keyword">try</span>:
+    <span class="hljs-built_in">print</span>(unique_names[<span class="hljs-number">0</span>])
+<span class="hljs-keyword">except</span> TypeError <span class="hljs-keyword">as</span> error:
+    <span class="hljs-built_in">print</span>(<span class="hljs-built_in">type</span>(error).__name__)
+</code></pre>
+      <pre><code class="language-text">['A', 'B']
+['A', 'B']
+A
+TypeError
+</code></pre>
+      <p><code>sorted()</code>はsetから要素を取り出して並べ替えた<strong>新しいlist</strong>を返す。出力が同じ並びでも元のsetがシーケンスになったわけではない。到着順を保って先頭を取り出す用途にはlistを使い、重複を除いた要素の有無を調べる用途にはsetを検討する。</p>
     </li>
   </ul>
   <h3 id="マッピングmapping--連想配列">マッピング（mapping）: 連想配列</h3>
   <p>任意に決めたキーで要素を抽出することができるオブジェクト。</p>
-  <p>シーケンスオブジェクトがインデックスを指定して抽出するのに対し、マッピングオブジェクトは、オブジェクト生成時に自作したキーを指定して抽出する。<br>
-    ※ 一般的に連想配列と言われる配列のこと。</p>
+  <p>シーケンスオブジェクトがインデックスを指定して抽出するのに対し、マッピングオブジェクトは、オブジェクト生成時に自作したキーを指定して抽出する。<br/>
+  ※ 一般的に連想配列と言われる配列のこと。</p>
   <ul>
     <li>
       <p>組込みの代表的なマッピング型: Python公式ページのドキュメント</p>
       <ul>
-        <li><a href="https://docs.python.org/ja/3/library/stdtypes.html#dict" class="link-secondary">dict 型</a></li>
+        <li><a class="link-secondary" href="https://docs.python.org/ja/3/library/stdtypes.html#dict">dict 型</a></li>
       </ul>
     </li>
     <li>
@@ -176,7 +195,7 @@
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; dict_a = {<span class="hljs-string">"s1"</span>:<span class="hljs-number">123</span>, <span class="hljs-string">"s2"</span>:<span class="hljs-number">456</span>, <span class="hljs-string">"s3"</span>:<span class="hljs-number">789</span>}
     &gt;&gt;&gt; <span class="hljs-built_in">type</span>(dict_a)
-    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;dict&#x27;</span>&gt;
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">'dict'</span>&gt;
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_a[<span class="hljs-string">"s1"</span>])
     <span class="hljs-number">123</span>
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(dict_a[<span class="hljs-string">"s2"</span>])
@@ -185,13 +204,62 @@
     <span class="hljs-number">789</span>
 </code></pre>
     </li>
+    <li>
+      <p>dictの<code>[0]</code>は先頭要素を意味しない<br/>
+      dictにも大カッコを使うが指定するのはキーである。次のdictではキー<code>1</code>を先に登録していても、<code>[0]</code>はキー<code>0</code>に対応する値を返す。</p>
+      <pre><code class="language-python">labels = {<span class="hljs-number">1</span>: <span class="hljs-string">"</span><span class="hljs-string">first inserted</span><span class="hljs-string">"</span>, <span class="hljs-number">0</span>: <span class="hljs-string">"</span><span class="hljs-string">zero key</span><span class="hljs-string">"</span>}
+<span class="hljs-built_in">print</span>(<span class="hljs-built_in">list</span>(labels))
+<span class="hljs-built_in">print</span>(labels[<span class="hljs-number">0</span>])
+</code></pre>
+      <pre><code class="language-text">[1, 0]
+zero key
+</code></pre>
+      <p>dictをそのまま反復するとキーを取り出す。挿入順を保持する現在のdictでも、値へのアクセスは位置ではなくキーで決まる。</p>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">型</th>
+            <th scope="col">内容の変更</th>
+            <th scope="col">for文による反復</th>
+            <th scope="col">大カッコでの指定</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>list</td>
+            <td>できる</td>
+            <td>できる</td>
+            <td>整数の位置やスライス</td>
+          </tr>
+          <tr>
+            <td>tuple</td>
+            <td>要素の置換はできない</td>
+            <td>できる</td>
+            <td>整数の位置やスライス</td>
+          </tr>
+          <tr>
+            <td>set</td>
+            <td>できる</td>
+            <td>できる</td>
+            <td>対応しない</td>
+          </tr>
+          <tr>
+            <td>dict</td>
+            <td>できる</td>
+            <td>キーを取り出せる</td>
+            <td>キー</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>tupleの中にlistがある場合の変更可能性と、list・dictを複製する際の注意は<a class="link-secondary" href="https://sigma-se.com/detail/31/">各データ型の操作例</a>で扱う。</p>
+    </li>
   </ul>
-
   <h2 id="まとめ">まとめ</h2>
   <ul>
-    <li>immutableは変数を再代入できないという意味ではなく、オブジェクト自体を変更できない性質を表す。mutableなオブジェクトは内容を変更できる。</li>
-    <li>sequenceは順序とインデックスを持ち、iterableはfor文などで要素を順に取り出せる性質を表す。</li>
-    <li>mappingはインデックス番号ではなくキーを使って値へアクセス。型の特性を知ると、Pythonの挙動やエラーを追いやすくなる。</li>
+    <li>immutableはオブジェクト自体を変更できない性質を表す。変数への再代入とは区別する。</li>
+    <li>同じmutableなオブジェクトを複数の変数が参照すると、内容の変更は他の変数からも見える。</li>
+    <li>iterableであることから位置指定ができるとは限らない。setは反復できるが添字アクセスには対応しない。</li>
+    <li>sequenceは位置、mappingはキーで要素を指定する。dictの整数キーも位置番号とは区別する。</li>
   </ul>
   <h3 id="参考文献">参考文献</h3>
   <ul>

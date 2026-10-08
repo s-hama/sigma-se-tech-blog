@@ -1,32 +1,32 @@
 <div class="post-body">
   <h2 id="概要">概要</h2>
-  <p>Python開発で使うVimの基本設定と、flake8などのコードチェックツールの使い方を整理する。</p>
-  <p>Pythonではインデントが構文に影響するため、エディタ設定は見た目だけでなく実行結果にも関係する。<br>Vimのファイルタイプ別設定とコードチェックを組み合わせることで、保存前後のミスを見つけやすくなる。</p>
+  <p>Python開発で使うVimのインデント設定とflake8によるコードチェックを整理する。</p>
+  <p>設定ファイルの置き場所だけでなく、実際に有効な設定とその読み込み元を確認する。コードチェックでは未使用のimportと未定義名を含む小さなファイルを使い、行・列・エラーコードから修正箇所を特定する。</p>
   <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
-    <li><a href="#対象環境と利用上の注意" class="link-secondary">対象環境と利用上の注意</a><br>
+    <li><a class="link-secondary" href="#対象環境と利用上の注意">対象環境と利用上の注意</a><br/>
       本文記載時の環境と現在そのまま利用できない箇所を確認。</li>
-    <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
+    <li><a class="link-secondary" href="#作業時の注意点">作業時の注意点</a><br/>
       設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
-    <li><a href="#vimの共通設定" class="link-secondary">Vimの共通設定</a><br>
-      Vimの共通設定の手順と確認ポイントを整理。</li>
-    <li><a href="#python用のvim設定" class="link-secondary">Python用のVim設定</a><br>
-      Python用のVim設定の手順と確認ポイントを整理。</li>
-    <li><a href="#コードチェックツールのインストール" class="link-secondary">コードチェックツールのインストール</a><br>
-      コードチェックツールのインストールの手順と確認ポイントを整理。</li>
-    <li><a href="#コードチェックの一例" class="link-secondary">コードチェックの一例</a><br>
-      コードチェックの一例の意味と要点を具体例から整理。</li>
+    <li><a class="link-secondary" href="#vimの共通設定">Vimの共通設定</a><br/>
+      ファイルタイプ別の設定とインデントを有効にする。</li>
+    <li><a class="link-secondary" href="#python用のvim設定">Python用のVim設定</a><br/>
+      Python用の設定を作り、有効な値と読み込み元を確認。</li>
+    <li><a class="link-secondary" href="#コードチェックツールのインストール">コードチェックツールのインストール</a><br/>
+      利用するPythonとflake8の実行環境をそろえる。</li>
+    <li><a class="link-secondary" href="#コードチェックの一例">コードチェックの一例</a><br/>
+      警告の行・列・コードを読み、修正前後を比較。</li>
   </ul>
   <h2 id="対象環境と利用上の注意">対象環境と利用上の注意</h2>
   <ul>
-    <li>本文記載時の環境<br>
-      Vimの<code>ftplugin</code>とPython向けのflake8を利用する、Unix系OSの設定例。<br>
+    <li>本文記載時の環境<br/>
+      Vimの<code>ftplugin</code>とPython向けのflake8を利用する、Unix系OSの設定例。<br/>
       Vim・Python・flake8の特定バージョンには固定していない。</li>
-    <li>確認時期<br>
-      2026年8月にVim・Python・flake8の公式資料と照合。<br>
-      新規環境へ同じ設定を一括適用する検証は行っていない。</li>
-    <li>現在そのまま利用できない箇所<br>
-      警告内容や設定の推奨値はツールのバージョンとプロジェクト規約で変わる。<br>
+    <li>確認時期<br/>
+      2026年9月に公式資料と照合。Vim 9.1では一時ディレクトリの設定を読み込み、インデント設定と保存時の行末空白除去を確認。<br/>
+      コードチェックの比較例はPython 3.12.2・flake8 7.4.1で確認。</li>
+    <li>現在そのまま利用できない箇所<br/>
+      警告内容や設定の推奨値はツールのバージョンとプロジェクト規約で変わる。<br/>
       行長などは掲載値を固定的に採用せず、利用中のツールとチームの規約へ合わせる。</li>
   </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
@@ -44,58 +44,104 @@
   <h3 id="vimの共通設定">Vimの共通設定</h3>
   <ul>
     <li>
-      <p>ホームディレクトリに<code>.vimrc</code>ファイルを作成<br>
-        <code>.vimrc</code>に設定を追記することでVimに反映される。<br>
-      </p>
-      <pre><code class="language-bash"><span class="hljs-built_in">touch</span> ~/.vimrc
+      <p><code>.vimrc</code>でファイルタイプ別の設定を有効にする<br/>
+      ホームディレクトリの<code>.vimrc</code>へ次のVim scriptを記述する。すでに同じ設定があれば重複して追加する必要はない。</p>
+      <pre><code class="language-vim"><span class="hljs-comment">" ファイルタイプの判定・専用設定・インデントを有効にする</span>
+<span class="hljs-built_in">filetype</span> plugin <span class="hljs-keyword">indent</span> <span class="hljs-keyword">on</span>
+<span class="hljs-comment">" シンタックスハイライトを有効にする</span>
+<span class="hljs-built_in">syntax</span> <span class="hljs-keyword">on</span>
 </code></pre>
-    </li>
-    <li>
-      <p>Pythonを使う上で最低限必要な<strong>自動インデント</strong>と<strong>シンタックスハイライト</strong>のみ設定<br></p>
-      <pre><code class="language-bash">$ vim ~/.vimrc
- filetype plugin indent on    <span class="hljs-comment"># 自動インデントの設定</span>
- syntax on    <span class="hljs-comment"># シンタックスハイライトの設定</span>
-</code></pre>
+      <p>従来のVim scriptではコメントに<code>"</code>を使う。シェルのコマンドやPythonコードで使う<code>#</code>とは区別する。</p>
     </li>
   </ul>
   <h3 id="python用のvim設定">Python用のVim設定</h3>
   <ul>
     <li>
-      <p>ホームディレクトリに<code>.vim/ftplugin/python.vim</code>ファイルを作成<br>
-        設定ファイルをファイルタイプ別に分割できるため、Pythonスクリプト専用の設定を定義することができる。<br></p>
-      <pre><code class="language-bash">$ <span class="hljs-built_in">mkdir</span> -p ~/.vim/ftplugin
-$ <span class="hljs-built_in">touch</span> ~/.vim/ftplugin/python.vim
+      <p>ファイルタイプ専用の設定を作る<br/>
+      次のコマンドをシェルで実行し、<code>~/.vim/ftplugin/python.vim</code>を編集する。</p>
+      <pre><code class="language-bash">mkdir -p ~/.vim/ftplugin
+touch ~/.vim/ftplugin/python.vim
 </code></pre>
+      <p><code>python.vim</code>には次のVim scriptを記述する。</p>
+      <pre><code class="language-vim"><span class="hljs-comment">" Tabキー入力などで使うインデントをスペース4つにそろえる</span>
+setlocal <span class="hljs-built_in">expandtab</span>
+setlocal <span class="hljs-built_in">tabstop</span>=<span class="hljs-number">4</span>
+setlocal <span class="hljs-keyword">shiftwidth</span>=<span class="hljs-number">4</span>
+setlocal <span class="hljs-built_in">softtabstop</span>=<span class="hljs-number">4</span>
+<span class="hljs-comment">" 自動折り返しの幅</span>
+setlocal <span class="hljs-built_in">textwidth</span>=<span class="hljs-number">79</span>
+<span class="hljs-comment">
+" このバッファの保存時に行末の空白を除去する</span>
+augroup sigma_python_whitespace
+    autocmd! * &lt;buffer&gt;
+    autocmd <span class="hljs-built_in">BufWritePre</span> &lt;buffer&gt; %s<span class="hljs-string">/\s\+$/</span>/<span class="hljs-keyword">e</span>
+augroup END
+</code></pre>
+      <p><code>expandtab</code>は新たに入力するタブをスペースへ置き換える設定であり、ファイル内の既存タブを一括変換するものではない。保存時の置換は複数行文字列の末尾にも作用するため、末尾空白をデータとして保持するコードでは自動除去の設定を外す。</p>
+      <p>PEP 8ではインデントをスペース4つ、コードを原則79文字以内、コメントとdocstringを72文字以内としている。チームで合意した場合はコードを99文字まで広げる選択肢もあるため、行長はプロジェクトの規約を優先する。この設定だけでPEP 8のすべてに準拠するわけではない。</p>
     </li>
     <li>
-      <p>Vimの設定を追記<br>
-        下記は、<strong>PEP 8</strong>が示す「1段につきスペース4つ」「コードは原則79文字以内」という基本に合わせた設定例となる。これだけでPEP 8のすべてへ準拠するわけではなく、行長などの方針はプロジェクトの規約を優先する。<br></p>
-      <pre><code class="language-bash">$ vim ~/.vim/ftplugin/python.vim
- setlocal expandtab    <span class="hljs-comment"># タブをスペースに置き換える設定</span>
- setlocal tabstop=4    <span class="hljs-comment"># タブのインデント幅を4に設定</span>
- setlocal shiftwidth=4    <span class="hljs-comment"># 自動インデント時の幅を4に設定</span>
- setlocal softtabstop=4    <span class="hljs-comment"># Tabキー入力時の幅を4に設定</span>
- autocmd BufWritePre &lt;buffer&gt; %s/\s\+$//e    <span class="hljs-comment"># このバッファの保存時に行末スペースを除去</span>
- setlocal textwidth=79    <span class="hljs-comment"># 自動折り返しの幅を79文字に設定</span>
+      <p>設定したのに反映されない場合の確認順序<br/>
+      <code>.py</code>ファイルを開き直し、Vimのコマンドラインで順に確認する。</p>
+      <pre><code class="language-vim">:<span class="hljs-keyword">set</span> <span class="hljs-built_in">filetype</span>?
+:setlocal <span class="hljs-built_in">expandtab</span>? <span class="hljs-built_in">tabstop</span>? <span class="hljs-keyword">shiftwidth</span>? <span class="hljs-built_in">softtabstop</span>? <span class="hljs-built_in">textwidth</span>?
+:<span class="hljs-built_in">verbose</span> setlocal <span class="hljs-keyword">shiftwidth</span>?
+:scriptnames
 </code></pre>
-      <p>PEP 8ではコードを原則79文字以内、コメントとdocstringを72文字以内としている。一方、チームで合意している場合はコードを99文字まで広げる選択肢も示されているため、<code>textwidth</code>やflake8の設定は開発ルールに合わせる。</p>
+      <p>この設定が有効なら<code>filetype=python</code>、<code>expandtab</code>、<code>tabstop=4</code>、<code>shiftwidth=4</code>、<code>softtabstop=4</code>、<code>textwidth=79</code>を確認できる。</p>
+      <p>まず<code>filetype</code>がpythonかを調べる。次に各設定値を読み、想定と違う値があれば<code>verbose</code>で最後に設定したファイルと行を確認する。<code>scriptnames</code>には読み込まれたスクリプトが表示されるので、専用設定が未読なのか、後から別の設定で上書きされたのかを分けて調べられる。Python用設定が未読なら共通設定とファイル名・配置先を確認する。</p>
     </li>
   </ul>
   <h3 id="コードチェックツールのインストール">コードチェックツールのインストール</h3>
   <ul>
-    <li><strong>flake8</strong>のインストール<br>
-      Pythonで多く使用されているコードチェックツール<strong>flake8</strong>をインストール。<br>
-      flake8は、pyflakes、pycodestyle、mccabeを組み合わせて、論理的な誤り、コーディングスタイル、循環的複雑度を確認できる。インストールされるバージョンはPython環境によって異なるため、<code>flake8 --version</code>で確認。<br>
+    <li>
+      <strong>flake8</strong>
+      のインストール
+      <br/>
+      Pythonで多く使用されているコードチェックツール
+      <strong>flake8</strong>
+      をインストール。
+      <br/>
+      flake8は、pyflakes、pycodestyle、mccabeを組み合わせて、論理的な誤り、コーディングスタイル、循環的複雑度を確認できる。インストールされるバージョンはPython環境によって異なるため、
+      <code>python -m flake8 --version</code>
+      で確認。
+      <br/>
       <pre><code class="language-bash">$ python -m pip install flake8
-$ flake8 --version
+$ python -m flake8 --version
 </code></pre>
     </li>
   </ul>
   <h3 id="コードチェックの一例">コードチェックの一例</h3>
+  <ul>
+    <li>
+      <p>小さなファイルで指摘と修正を対応させる<br/>
+      次の5行を<code>lint_example.py</code>として保存する。未使用のimportと変数名の取り違えを含む確認用のコードである。</p>
+      <pre><code class="language-python"><span class="hljs-keyword">import</span> os
+
+
+<span class="hljs-keyword">def</span> <span class="hljs-title">total</span>(prices):
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">sum</span>(price)
+</code></pre>
+      <pre><code class="language-bash">python -m flake8 --isolated lint_example.py
+</code></pre>
+      <pre><code class="language-text">lint_example.py:1:1: F401 'os' imported but unused
+lint_example.py:5:16: F821 undefined name 'price'
+</code></pre>
+      <p><code>--isolated</code>は既存のflake8設定ファイルの影響を避けてこの例を試すための指定である。通常のプロジェクトではプロジェクト側の設定に従う。</p>
+      <p>1件目は1行目1列目のimportが未使用という指摘で、2件目は5行目16列目の<code>price</code>が未定義という指摘になる。引数名は<code>prices</code>なので次のように直す。</p>
+      <pre><code class="language-python"><span class="hljs-keyword">def</span> <span class="hljs-title">total</span>(prices):
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">sum</span>(prices)
+
+
+<span class="hljs-built_in">print</span>(total([<span class="hljs-number">100</span>, <span class="hljs-number">200</span>, <span class="hljs-number">300</span>]))
+</code></pre>
+      <p>同じflake8コマンドを再実行すると指摘がなくなり、<code>python lint_example.py</code>では<code>600</code>を表示する。チェックを通ることと計算結果が正しいことは別なので、入力と期待値でも確認する。論理的な計算ミスを追う方法は<a class="link-secondary" href="https://sigma-se.com/detail/9/">Pdbの記事</a>で扱う。</p>
+    </li>
+  </ul>
   <p>以下、<strong>flake8</strong>、<strong>pyflakes</strong>、<strong>pycodestyle</strong>、<strong>mccabe</strong>の一例。</p>
   <ul>
     <li>
-      <p><strong>flake8</strong> : コードチェック<br></p>
+      <p><strong>flake8</strong> : コードチェック<br/></p>
       <pre><code class="language-bash">$ flake8 example.py
  example.py:11:1: E302 expected 2 blank lines, found 1
  example.py:12:21: W291 trailing whitespace
@@ -103,14 +149,14 @@ $ flake8 --version
 </code></pre>
     </li>
     <li>
-      <p><strong>pyflakes</strong> : コードチェック<br></p>
+      <p><strong>pyflakes</strong> : コードチェック<br/></p>
       <pre><code class="language-bash">$ pyflakes example.py
- example.py:74: undefined name <span class="hljs-string">&#x27;Http404&#x27;</span>
+ example.py:74: undefined name <span class="hljs-string">'Http404'</span>
 …
 </code></pre>
     </li>
     <li>
-      <p><strong>pycodestyle</strong> : PEP8に準拠しているかチェック<br></p>
+      <p><strong>pycodestyle</strong> : PEP8に準拠しているかチェック<br/></p>
       <pre><code class="language-bash">$ pycodestyle example.py
  example.py:10:1: W293 blank line contains whitespace
  example.py:11:1: E302 expected 2 blank lines, found 1
@@ -119,22 +165,20 @@ $ flake8 --version
 </code></pre>
     </li>
     <li>
-      <p><strong>mccabe</strong> : 循環的複雑度のチェック<br>
-        <strong>flake8</strong>ではデフォルト無効になっているため、下記のように <code>--max-complexity</code>を指定すれば循環的複雑度のチェックが可能となる。<br>
-      </p>
+      <p><strong>mccabe</strong> : 循環的複雑度のチェック<br/>
+      <strong>flake8</strong>ではデフォルト無効になっているため、下記のように <code>--max-complexity</code>を指定すれば循環的複雑度のチェックが可能となる。<br/></p>
       <pre><code class="language-bash">$ flake8 --max-complexity 10 coolproject
   ...
-  coolproject/mod.py:1204:1: C901 <span class="hljs-string">&#x27;CoolFactory.prepare&#x27;</span> is too complex (14)
+  coolproject/mod.py:1204:1: C901 <span class="hljs-string">'CoolFactory.prepare'</span> is too complex (14)
 </code></pre>
     </li>
   </ul>
-  <br>
-  その他、<strong>flake8</strong>には、<strong>flake8-docstrings</strong>や<strong>flake8-import-order</strong>など色々なプラグインが用意されており、必要に応じてカスタマイズすることができる。
+  <p>その他、<strong>flake8</strong>には、<strong>flake8-docstrings</strong>や<strong>flake8-import-order</strong>など色々なプラグインが用意されており、必要に応じてカスタマイズすることができる。</p>
   <h2 id="まとめ">まとめ</h2>
   <ul>
-    <li>Python開発では、Vimのインデント設定がコード品質に直結する。</li>
-    <li>flake8を使うと、コーディングスタイルや未定義名を確認でき、<code>--max-complexity</code>を指定すれば複雑度も検査できる。</li>
-    <li>まずは最小限の設定から始め、必要に応じてチェックを増やすと扱いやすい。</li>
+    <li>Python用設定が効かない場合はfiletype、有効な設定値、最後に設定したスクリプトの順に確認する。</li>
+    <li>expandtabなどの入力設定と既存ファイルのタブ・空白は区別する。保存時の空白除去も文字列データへの影響を確認して使う。</li>
+    <li>flake8の指摘はファイル・行・列・コードから読み、修正後に再実行する。計算の正しさは具体的な入力と期待値でも確認する。</li>
   </ul>
   <h3 id="参考文献">参考文献</h3>
   <ul>

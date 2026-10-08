@@ -1,18 +1,17 @@
 <div class="post-body">
   <h2 id="概要">概要</h2>
-  <p>Pythonの数値系データ型であるbool、int、float、complexの基本操作を整理する。</p>
-  <p>数値型は計算の基本だが、真偽値が整数として扱えること、floatには丸め誤差があること、complexは実部と虚部を持つことなど、型ごとの性質を理解しておく必要がある。</p>
-  <p>ここでは、それぞれの型の作り方、確認方法、代表的な演算を対話モードで確認する。</p>
+  <p>Pythonのbool、int、float、complexの作り方と演算を整理する。</p>
+  <p>文字列の<code>"False"</code>をboolへ変換するとどうなるか、小数の足し算を<code>==</code>で比較してよいかを具体例で確かめる。入力の意味を解釈する処理と型変換を区別し、数値の性質に合わせた比較方法を選ぶ。入力変換と誤差の比較例はPython 3.12.2で確認。</p>
   <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
-    <li><a href="#bool型--真偽リテラル" class="link-secondary">bool型 : 真偽リテラル</a><br>
-      bool型 : 真偽リテラルの意味と要点を具体例から整理。</li>
-    <li><a href="#int型--数値整数" class="link-secondary">int型 : 数値（整数）</a><br>
-      int型 : 数値（整数）の意味と要点を具体例から整理。</li>
-    <li><a href="#float型--浮動小数点数型" class="link-secondary">float型 : 浮動小数点数型</a><br>
-      float型 : 浮動小数点数型の意味と要点を具体例から整理。</li>
-    <li><a href="#complex型--複素数型" class="link-secondary">complex型 : 複素数型</a><br>
-      complex型 : 複素数型の意味と要点を具体例から整理。</li>
+    <li><a class="link-secondary" href="#bool型--真偽リテラル">bool型 : 真偽リテラル</a><br/>
+      真理値判定と文字列で渡された設定値の解釈を区別。</li>
+    <li><a class="link-secondary" href="#int型--数値整数">int型 : 数値（整数）</a><br/>
+      基数ごとの表記と整数の値域を確認。</li>
+    <li><a class="link-secondary" href="#float型--浮動小数点数型">float型 : 浮動小数点数型</a><br/>
+      表現範囲に加えて小数の誤差と比較方法を確認。</li>
+    <li><a class="link-secondary" href="#complex型--複素数型">complex型 : 複素数型</a><br/>
+      複素数リテラルのjと変数名jの違いを確認。</li>
   </ul>
   <h2 id="各データ型の操作方法">各データ型の操作方法</h2>
   <h3 id="bool型--真偽リテラル">bool型 : 真偽リテラル</h3>
@@ -23,11 +22,11 @@
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; bool_a = <span class="hljs-literal">True</span>    <span class="hljs-comment"># bool型の変数bool_aをTrueで定義</span>
     &gt;&gt;&gt; <span class="hljs-built_in">type</span>(bool_a)
-    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bool&#x27;</span>&gt;
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">'bool'</span>&gt;
     &gt;&gt;&gt;
     &gt;&gt;&gt; bool_a = <span class="hljs-literal">False</span>    <span class="hljs-comment"># 変数bool_aをFalseに更新</span>
     &gt;&gt;&gt; <span class="hljs-built_in">type</span>(bool_a)
-    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;bool&#x27;</span>&gt;
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">'bool'</span>&gt;
     &gt;&gt;&gt;
 </code></pre>
     </li>
@@ -35,12 +34,8 @@
       <p>型の特性</p>
       <ul>
         <li>
-          <p>イミュータブルオブジェクト : オブジェクト自体を変更不可<br>
-            <a class="link-secondary"
-              href="https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可">Python
-              - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: オブジェクト自体を変更不可</a>
-            を参照
-          </p>
+          <p>イミュータブルオブジェクト : オブジェクト自体を変更不可<br/>
+          <a class="link-secondary" href="https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可">Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: オブジェクト自体を変更不可</a> を参照</p>
         </li>
         <li>
           <p>bool型はint型のサブクラス</p>
@@ -54,7 +49,12 @@
     <li>
       <p>int型のサブクラスであることによる振る舞い</p>
       <ul>
-        <li>数値演算では <code>True</code> を \(1\)、<code>False</code> を \(0\) として扱える
+        <li>
+          数値演算では
+          <code>True</code>
+          を \(1\)、
+          <code>False</code>
+          を \(0\) として扱える
           <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-literal">True</span> == <span class="hljs-number">1</span>    <span class="hljs-comment"># 数値として比較すると等しい</span>
     <span class="hljs-literal">True</span>
@@ -86,8 +86,8 @@
 </code></pre>
     </li>
     <li>
-      <p>判定基準<br>
-        Falseと判定されるオブジェクト</p>
+      <p>判定基準<br/>
+      Falseと判定されるオブジェクト</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-comment"># False : bool型のFalse</span>
     &gt;&gt;&gt; <span class="hljs-built_in">bool</span>(<span class="hljs-literal">False</span>)
@@ -119,8 +119,8 @@
     &gt;&gt;&gt; <span class="hljs-built_in">bool</span>(Fraction(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>))
     <span class="hljs-literal">False</span>
     &gt;&gt;&gt;
-    &gt;&gt;&gt; <span class="hljs-comment"># &#x27;&#x27; : str型(文字列)の空文字</span>
-    &gt;&gt;&gt; <span class="hljs-built_in">bool</span>(<span class="hljs-string">&#x27;&#x27;</span>)
+    &gt;&gt;&gt; <span class="hljs-comment"># '' : str型(文字列)の空文字</span>
+    &gt;&gt;&gt; <span class="hljs-built_in">bool</span>(<span class="hljs-string">''</span>)
     <span class="hljs-literal">False</span>
     &gt;&gt;&gt;
     &gt;&gt;&gt; <span class="hljs-comment"># [] : list型(配列)の空配列</span>
@@ -147,8 +147,41 @@
 </code></pre>
     </li>
     <li>
-      <p>Trueと判定されるオブジェクト<br>
-        ここに挙げた代表的な偽と判定される値以外も、各型の <code>__bool__()</code> または <code>__len__()</code> などの真偽値規則に従って判定される。</p>
+      <p>Trueと判定されるオブジェクト<br/>
+      ここに挙げた代表的な偽と判定される値以外も、各型の <code>__bool__()</code> または <code>__len__()</code> などの真偽値規則に従って判定される。</p>
+    </li>
+    <li>
+      <p>文字列の設定値をboolへ変換する<br/>
+      <code>bool()</code>は文字列の単語を解釈しない。空でない文字列は<code>"False"</code>や<code>"0"</code>でも真になる。</p>
+      <pre><code class="language-python"><span class="hljs-keyword">for</span> raw in (<span class="hljs-string">"</span><span class="hljs-string">False</span><span class="hljs-string">"</span>, <span class="hljs-string">"</span><span class="hljs-string">0</span><span class="hljs-string">"</span>, <span class="hljs-string">"</span><span class="hljs-string">"</span>):
+    <span class="hljs-built_in">print</span>(<span class="hljs-built_in">repr</span>(raw), <span class="hljs-built_in">bool</span>(raw))
+</code></pre>
+      <pre><code class="language-text">'False' True
+'0' True
+'' False
+</code></pre>
+      <p>設定ファイルなどで<code>true</code>と<code>false</code>だけを受け付けるなら、その入力規則をコードにする。以下では前後の空白と大文字・小文字を吸収し、それ以外の値は入力ミスとして扱う。</p>
+      <pre><code class="language-python"><span class="hljs-keyword">def</span> <span class="hljs-title">parse_enabled</span>(raw):
+    value = raw.strip().lower()
+    <span class="hljs-keyword">if</span> value == <span class="hljs-string">"</span><span class="hljs-string">true</span><span class="hljs-string">"</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">True</span>
+    <span class="hljs-keyword">if</span> value == <span class="hljs-string">"</span><span class="hljs-string">false</span><span class="hljs-string">"</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">False</span>
+    <span class="hljs-keyword">raise</span> ValueError(<span class="hljs-string">"</span><span class="hljs-string">true または false を指定してください</span><span class="hljs-string">"</span>)
+
+
+<span class="hljs-keyword">for</span> raw in (<span class="hljs-string">"</span><span class="hljs-string"> TRUE </span><span class="hljs-string">"</span>, <span class="hljs-string">"</span><span class="hljs-string">False</span><span class="hljs-string">"</span>, <span class="hljs-string">"</span><span class="hljs-string">flase</span><span class="hljs-string">"</span>, <span class="hljs-string">"</span><span class="hljs-string">"</span>):
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-built_in">print</span>(<span class="hljs-built_in">repr</span>(raw), parse_enabled(raw))
+    <span class="hljs-keyword">except</span> ValueError <span class="hljs-keyword">as</span> error:
+        <span class="hljs-built_in">print</span>(<span class="hljs-built_in">repr</span>(raw), <span class="hljs-built_in">str</span>(error))
+</code></pre>
+      <pre><code class="language-text">' TRUE ' True
+'False' False
+'flase' true または false を指定してください
+'' true または false を指定してください
+</code></pre>
+      <p>この関数の引数は文字列を前提とする。単に<code>raw == "true"</code>と比較すると誤字も<code>False</code>になり、明示的な無効指定と区別できない。許可する表記と不正な入力の扱いを決めてから変換する。変換後の値を条件に組み合わせる方法は<a class="link-secondary" href="https://sigma-se.com/detail/35/">論理演算子の記事</a>で扱う。</p>
     </li>
   </ul>
   <h3 id="int型--数値整数">int型 : 数値（整数）</h3>
@@ -221,29 +254,26 @@
     &gt;&gt;&gt; <span class="hljs-built_in">print</span>(float_a)
     <span class="hljs-number">100000.0</span>
     &gt;&gt;&gt; <span class="hljs-built_in">type</span>(float_a)
-    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;float&#x27;</span>&gt;
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">'float'</span>&gt;
     &gt;&gt;&gt;
     &gt;&gt;&gt; float_b = <span class="hljs-number">1.2345</span>    <span class="hljs-comment"># 小数点を含む通常表記でfloat_bを定義</span>
     &gt;&gt;&gt; float_b
     <span class="hljs-number">1.2345</span>
     &gt;&gt;&gt; <span class="hljs-built_in">type</span>(float_b)    <span class="hljs-comment"># 通常の小数表記もfloatとして扱われる</span>
-    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">&#x27;float&#x27;</span>&gt;
+    &lt;<span class="hljs-keyword">class</span> <span class="hljs-string">'float'</span>&gt;
     &gt;&gt;&gt;
 </code></pre>
     </li>
     <li>
       <p>型の特性</p>
       <ul>
-        <li>イミュータブルオブジェクト : オブジェクト自体を変更不可<br>
-          <a class="link-secondary"
-            href="https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可">Python
-            - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: オブジェクト自体を変更不可</a> を参照
-        </li>
+        <li>イミュータブルオブジェクト : オブジェクト自体を変更不可<br/>
+          <a class="link-secondary" href="https://sigma-se.com/detail/29/#イミュータブルimmutable--オブジェクト自体を変更不可">Python - 組込みデータ型の特性 : immutable, mutable, iterable, sequence, mapping &gt; イミュータブル（immutable）: オブジェクト自体を変更不可</a> を参照</li>
       </ul>
     </li>
     <li>
-      <p>値の範囲<br>
-        一般的なCPython環境では、正の有限最大値は約 \(1.7976931348623157 \times 10^{308}\) となる。<code>sys.float_info.min</code>は正の<strong>正規化数</strong>の最小値であり、表現できる正の値全体の最小値ではない。\(0\)に最も近い正の非正規化数は<code>math.ulp(0.0)</code>で確認できる。</p>
+      <p>値の範囲<br/>
+      一般的なCPython環境では、正の有限最大値は約 \(1.7976931348623157 \times 10^{308}\) となる。<code>sys.float_info.min</code>は正の<strong>正規化数</strong>の最小値であり、表現できる正の値全体の最小値ではない。\(0\)に最も近い正の非正規化数は<code>math.ulp(0.0)</code>で確認できる。</p>
     </li>
     <li>
       <p>実行環境の値を<strong>float_info</strong>で確認</p>
@@ -273,6 +303,27 @@
     sys.float_info(<span class="hljs-built_in">max</span>=<span class="hljs-number">1.7976931348623157e+308</span>, max_exp=<span class="hljs-number">1024</span>, max_10_exp=<span class="hljs-number">308</span>, <span class="hljs-built_in">min</span>=<span class="hljs-number">2.2250738585072014e-308</span>, min_exp=-<span class="hljs-number">1021</span>, min_10_exp=-<span class="hljs-number">307</span>, dig=<span class="hljs-number">15</span>, mant_dig=<span class="hljs-number">53</span>, epsilon=<span class="hljs-number">2.220446049250313e-16</span>, radix=<span class="hljs-number">2</span>, rounds=<span class="hljs-number">1</span>)
     &gt;&gt;&gt;
 </code></pre>
+    </li>
+    <li>
+      <p>小数の計算結果は何を基準に比較するか<br/>
+      <code>0.1</code>や<code>0.2</code>は2進数では有限桁で正確に表せない。保存時や演算時の丸めによって、次の比較は偽になる。</p>
+      <pre><code class="language-python"><span class="hljs-keyword">import</span> math
+<span class="hljs-keyword">from</span> decimal <span class="hljs-keyword">import</span> Decimal
+
+total = <span class="hljs-number">0.1</span> + <span class="hljs-number">0.2</span>
+<span class="hljs-built_in">print</span>(total)
+<span class="hljs-built_in">print</span>(total == <span class="hljs-number">0.3</span>)
+<span class="hljs-built_in">print</span>(math.isclose(total, <span class="hljs-number">0.3</span>, rel_tol=<span class="hljs-number">1e-9</span>, abs_tol=<span class="hljs-number">0.0</span>))
+<span class="hljs-built_in">print</span>(Decimal(<span class="hljs-string">"</span><span class="hljs-string">0.1</span><span class="hljs-string">"</span>) + Decimal(<span class="hljs-string">"</span><span class="hljs-string">0.2</span><span class="hljs-string">"</span>) == Decimal(<span class="hljs-string">"</span><span class="hljs-string">0.3</span><span class="hljs-string">"</span>))
+</code></pre>
+      <pre><code class="language-text">0.30000000000000004
+False
+True
+True
+</code></pre>
+      <p><code>math.isclose()</code>は指定した許容誤差の範囲で近いかを判定する。<code>rel_tol</code>は値の大きさに対する相対的な許容差、<code>abs_tol</code>は絶対的な許容差であり、例の値をすべての計算へ流用するものではない。測定精度や必要な桁数に合わせて決める。ゼロ付近を比較する場合は特に<code>abs_tol</code>の検討が必要になる。</p>
+      <p><code>Decimal</code>は10進小数を扱う型で、この例の足し算を正確に表せる。元の10進表記を保つため文字列から生成する。<code>Decimal(0.1)</code>では先にfloatへ丸められた値を受け取るため目的が異なる。Decimalでも除算などの精度や丸め方は設定に依存する。</p>
+      <p>2進数で循環する理由は<a class="link-secondary" href="https://sigma-se.com/detail/44/#基数変換の誤差">基数変換の誤差</a>を参照。表示だけを丸める処理と、計算結果を比較する処理も区別する。</p>
     </li>
   </ul>
   <h3 id="complex型--複素数型">complex型 : 複素数型</h3>
@@ -378,10 +429,10 @@
 
   <h2 id="まとめ">まとめ</h2>
   <ul>
-    <li>bool、int、float、complexはPythonの基本的な数値型で、演算によって結果の型が変わることがある。</li>
-    <li>boolはintの派生型なのでTrueを1、Falseを0として扱えるが、意味としては真偽値として読む。</li>
-    <li>floatは2進数で正確に表せない値があるため、丸め誤差が発生する場合がある。</li>
-    <li>complexでは虚数単位をjで表す。</li>
+    <li>boolの真理値判定は設定文字列の解釈とは異なる。受け付ける表記を決め、不正な値を明示的なFalseと区別する。</li>
+    <li>intは任意精度であり、sys.maxsizeはintの最大値ではない。</li>
+    <li>floatの近似値を比較する場合は目的に合う許容誤差を決める。10進表記を保ちたい処理では文字列からのDecimal生成も検討する。</li>
+    <li>complexの虚数リテラルは1jのように書く。変数名jとは区別する。</li>
   </ul>
   <h3 id="参考文献">参考文献</h3>
   <ul>

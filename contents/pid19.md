@@ -46,7 +46,7 @@ MNISTは、画像分類の入門でよく使われるデータセットで、入
         </thead>
         <tbody>
           <tr><td>0000</td><td>32 bit integer</td><td>0x00000803(2051)</td><td>識別子（定数）</td></tr>
-          <tr><td>0004</td><td>32 bit integer</td><td>60000</td><td>画像データの数</td></tr>
+          <tr><td>0004</td><td>32 bit integer</td><td>60000 or 10000</td><td>画像データの数</td></tr>
           <tr><td>0008</td><td>32 bit integer</td><td>28</td><td>1画像あたりのデータ行数</td></tr>
           <tr><td>0012</td><td>32 bit integer</td><td>28</td><td>1画像あたりのデータ列数</td></tr>
           <tr><td>0016</td><td>unsigned byte</td><td>0 ～ 255</td><td>1つめの画像の1ピクセル目の値</td></tr>
@@ -78,12 +78,13 @@ MNISTは、画像分類の入門でよく使われるデータセットで、入
 
 ### MNISTのダウンロード
 - データ取得と読み込み<br>
-    下記、`mnist.py`を使用し、MNISTをダウンロードする。
+    下記、`mnist.py`を使用し、MNISTをダウンロードする。Python環境にはNumPyと画像表示用のPillowを用意しておく（`python -m pip install numpy pillow`）。
 
-    Git（deep-learning-from-scratch）：https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/dataset/mnist.py
+    Git（deep-learning-from-scratch）：<https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/dataset/mnist.py>
 
     - リポジトリをクローン
       ```bash
+      $ mkdir -p gitlocalrep
       $ cd gitlocalrep
       $ git clone https://github.com/oreilly-japan/deep-learning-from-scratch.git
       Cloning into 'deep-learning-from-scratch'...
@@ -93,8 +94,8 @@ MNISTは、画像分類の入門でよく使われるデータセットで、入
       Resolving deltas: 100% (197/197), done.
       ```
 
-    - カレントディレクトに移動<br>
-      `mnist.py`の利用時は、カレントディレクトを ch01、ch02、ch03 … ch08 のいずれかで実施する必要がある。<br>
+    - カレントディレクトリに移動<br>
+      このサンプルでは親ディレクトリから`mnist.py`を読み込むため、ch03をカレントディレクトリにする。<br>
       ここでは、ch03から実施。
       ```bash
       $ cd deep-learning-from-scratch/ch03
@@ -102,7 +103,7 @@ MNISTは、画像分類の入門でよく使われるデータセットで、入
 
     - ダウンロード<br>
     下記、load_mnistによってMNISTデータセットのダウンロードを行っているが、初回のみオンラインである必要があり数分かかる。<br />
-    初回で読み込み時に`pickle`というローカルファイルが作成され、ダウンロード結果を保持しているので、2回目以降は、オフラインかつ、すぐに処理が終わる。<br />
+    初回の読み込み時に`mnist.pkl`というローカルファイルが作成され、ダウンロード結果を保持しているので、2回目以降は、オフラインかつ、すぐに処理が終わる。<br />
     ※ Pythonの`pickle`は、Pythonオブジェクトをファイルへ保存・復元する機能。信頼できないpickleを読み込むと任意のコードが実行される危険があるため、この例では取得元を確認したファイルだけを使用する。
       ```bash
       $ python
