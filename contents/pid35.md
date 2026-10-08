@@ -2,27 +2,28 @@
 Python - 論理演算子：or・and・notと真偽値判定
 
 ## 概要
-Pythonの論理演算子であるor、and、notの基本的な使い方を整理する。
-論理演算子は、条件分岐や入力チェックで複数の条件を組み合わせるために使う。PythonではTrue/Falseだけでなく、空文字、空リスト、0なども真偽値として評価される。
-ここでは、真偽値判定の基準と、or、and、notの実行結果を対話モードで確認する。
+
+Pythonの論理演算子or、and、notを真理値判定と実行順序から整理する。
+
+再試行回数の0を残す初期値設定と、ゼロ除算を避ける条件式を比較する。何が偽になるかに加えて、どの値が返り、どこまで式が実行されるかを確認する。設定値と短絡評価の比較例はPython 3.12.2で確認。
 
 ## この記事の構成
 - [論理演算子の種類](#論理演算子の種類)<br>
   論理演算子の種類と各項目の特徴を整理。
 - [True/Falseの判定基準](#truefalseの判定基準)<br>
-  True/Falseの判定基準の意味と要点を具体例から整理。
+  数値の0・空のコンテナ・Noneなどの真理値判定を確認。
 - [論理和（or）](#論理和or)<br>
-  論理和（or）の意味と要点を具体例から整理。
+  返される値を確認し、有効な0を残す初期値設定と比較。
 - [論理積（and）](#論理積and)<br>
-  論理積（and）の意味と要点を具体例から整理。
+  評価順序を追い、ゼロ除算を防ぐ条件の並べ方を確認。
 - [論理否定（not）](#論理否定not)<br>
-  論理否定（not）の意味と要点を具体例から整理。
+  真理値を反転し、boolとして返す動作を確認。
 
 ## 各論理演算子の使い方と実装サンプル
 
 ### 論理演算子の種類
 
-Pythonでは、bool型に限らずすべてのオブジェクトが真偽値として評価される。組込み型では数値のゼロ、空の文字列やコンテナ、`None`などが`False`となり、それ以外は原則として`True`となる。独自クラスでは`__bool__()`または`__len__()`で判定方法を定義できる。
+Pythonではbool型以外のオブジェクトも条件式に使える。組込み型では数値のゼロ、空の文字列やコンテナ、`None`などが`False`となり、それ以外は原則として`True`となる。独自クラスでは`__bool__()`または`__len__()`で判定方法を定義できる。
 
 - 各データ型の参考
   - [Python - 組込みデータ型まとめ : bool , int, float, complex > bool型 : 真偽リテラル](<https://sigma-se.com/detail/30/#bool型--真偽リテラル>)
@@ -53,7 +54,7 @@ Pythonでは、bool型に限らずすべてのオブジェクトが真偽値と�
 ### True/Falseの判定基準
 
 論理演算で最も重要となるTrue/Falseの判定基準として、**空文字**や**空リスト**等も`False`と判定される。<br>
-下記一覧で示す要素以外は、すべて`True`として判定される。
+下記は偽と判定される代表例である。独自クラスなどでは型が定めた真理値判定に従い、判定自体が例外になる場合もある。
 
 - False判定一覧
     <table class="table" style="width: 80%;">
@@ -96,14 +97,14 @@ a、b共にFalseである場合は、末尾の要素`b`を返す。
         <tr>
         <th scope="col">a の評価</th>
         <th scope="col">b の評価</th>
-        <th scope="col">a or b の評価</th>
+        <th scope="col">a or b の戻り値</th>
         </tr>
     </thead>
     <tbody>
-        <tr><td>True</td><td>False</td><td>a の評価</td></tr>
-        <tr><td>False</td><td>True</td><td>b の評価</td></tr>
-        <tr><td>True</td><td>True</td><td>a の評価</td></tr>
-        <tr><td>False</td><td>False</td><td>b の評価</td></tr>
+        <tr><td>True</td><td>False</td><td>a の値</td></tr>
+        <tr><td>False</td><td>True</td><td>b の値</td></tr>
+        <tr><td>True</td><td>True</td><td>a の値</td></tr>
+        <tr><td>False</td><td>False</td><td>b の値</td></tr>
     </tbody>
     </table>
 
@@ -130,7 +131,7 @@ a、b共にFalseである場合は、末尾の要素`b`を返す。
     ```
 
 - ショートサーキットの例<br>
-    一度に複数の論理和を行う場合、ショートサーキットの性質を利用し、Trueになる可能性が高い評価対象を前方に置くことで、不要な演算を省くことができる。
+    複数の候補は左から評価され、最初に真となった値が返る。順番を変えると返る値や実行される処理も変わるため、候補の優先順位に合わせて並べる。
     ```python
     $ python
         >>> # 先頭の 2 (True) のみで評価が返される。
@@ -146,6 +147,26 @@ a、b共にFalseである場合は、末尾の要素`b`を返す。
         >>>
     ```
 
+- 有効な0を初期値で置き換えない<br>
+  再試行回数は`0`なら再試行なし、`None`なら未設定として扱う。未設定のときだけ3回へ補うつもりで`or`を使うと、0回の指定も置き換わる。
+
+  ```python
+  for retries in (None, 0, 5):
+      by_or = retries or 3
+      by_none = 3 if retries is None else retries
+      print(retries, by_or, by_none)
+  ```
+
+  ```text
+  None 3 3
+  0 3 0
+  5 5 5
+  ```
+
+  各行は「元の指定・orの結果・Noneだけを補う結果」の順である。`or`は未設定かを調べる演算子ではなく、左辺が偽なら右辺を返す演算子なので0も対象になる。
+
+  空文字列や0をすべて既定値へ置き換えたい仕様なら`or`を使える。値として有効な0を残したい場合は`is None`で未設定を判定する。入力の型や範囲の検査は別途必要であり、この例は非負整数またはNoneを前提とする。
+
 ### 論理積（and）
 `a and b`は、前方から評価していき`False`となる要素が見つかった時点（ショートサーキット）でその要素を返す。
 a、b共にTrueである場合は、末尾の要素`b`を返す。
@@ -156,14 +177,14 @@ a、b共にTrueである場合は、末尾の要素`b`を返す。
         <tr>
         <th scope="col">a の評価</th>
         <th scope="col">b の評価</th>
-        <th scope="col">a and b の評価</th>
+        <th scope="col">a and b の戻り値</th>
         </tr>
     </thead>
     <tbody>
-        <tr><td>True</td><td>False</td><td>b の評価</td></tr>
-        <tr><td>False</td><td>True</td><td>a の評価</td></tr>
-        <tr><td>True</td><td>True</td><td>b の評価</td></tr>
-        <tr><td>False</td><td>False</td><td>a の評価</td></tr>
+        <tr><td>True</td><td>False</td><td>b の値</td></tr>
+        <tr><td>False</td><td>True</td><td>a の値</td></tr>
+        <tr><td>True</td><td>True</td><td>b の値</td></tr>
+        <tr><td>False</td><td>False</td><td>a の値</td></tr>
     </tbody>
     </table>
 
@@ -190,7 +211,7 @@ a、b共にTrueである場合は、末尾の要素`b`を返す。
     ```
 
 - ショートサーキットの例
-    上記の論理和と同様に、一度に複数の論理積を行う場合、ショートサーキットの性質を利用し、Falseになる可能性が高い評価対象を前方に置くことで、不要な演算を省くことができる。
+    左から評価して最初に偽となった値を返し、残りの式は実行しない。後ろの式を実行できる条件を先に確認すると、前提を満たさない計算を避けられる。
     ```python
     $ python
         >>> # 先頭の 0 (False) のみで評価が返される。
@@ -205,6 +226,42 @@ a、b共にTrueである場合は、末尾の要素`b`を返す。
         0
         >>>
     ```
+
+- ゼロ除算を避ける条件は左側で確認する<br>
+  「分母が0でなく、割った結果が2を超える」という条件を考える。関数内で表示させ、割り算が実行されたかも確認する。
+
+  ```python
+  def exceeds_two(numerator, denominator):
+      print("divide", numerator, denominator)
+      return numerator / denominator > 2
+
+
+  for denominator in (0, 2):
+      result = denominator != 0 and exceeds_two(6, denominator)
+      print("result", denominator, result)
+  ```
+
+  ```text
+  result 0 False
+  divide 6 2
+  result 2 True
+  ```
+
+  分母が0のときは左辺が偽なので関数自体が呼ばれない。次のように逆順にすると先に割り算が実行され、右側の判定では防げない。
+
+  ```python
+  denominator = 0
+  try:
+      print(6 / denominator > 2 and denominator != 0)
+  except ZeroDivisionError as error:
+      print(type(error).__name__)
+  ```
+
+  ```text
+  ZeroDivisionError
+  ```
+
+  真になりやすさや偽になりやすさだけで順番を変えず、後続の式が安全に評価できる前提と副作用を確認する。長い条件は名前の付いた変数やif文へ分けると、その依存関係を追いやすい。
 
 ### 論理否定（not）
 `not x`は、対象`x`を否定した結果をbool型で返す。<br>
@@ -246,10 +303,11 @@ a、b共にTrueである場合は、末尾の要素`b`を返す。
 
 
 ## まとめ
-- or、and、notは条件を組み合わせる論理演算子。
-- Pythonでは空文字、空リスト、0、NoneなどもFalseとして評価される。
-- orやandは短絡評価を行うため、条件によって後ろの式が実行されない場合がある。
-- 長い条件式へ処理を詰め込みすぎず、意味のある変数へ分けると読みやすくなる。
+
+- orとandはTrue/Falseへ変換した値ではなく、選ばれたオペランドの値を返す。notはboolを返す。
+- 0もNoneも真理値判定では偽になる。有効な0を残して未設定だけを補う場合はis Noneを使う。
+- 短絡評価では後ろの式が実行されないことがある。後続の計算に必要な前提を左側で確認する。
+- 条件の並べ替えは返る値や副作用にも影響する。処理の意味を保てるか確認してから変更する。
 
 ### 参考文献
 - 金城 俊哉（\\(2018\\)）『現場ですぐに使える! Pythonプログラミング逆引き大全313の極意』株式会社昭和システム

@@ -78,7 +78,7 @@
       style="width: 80%; height: auto; margin-top: -1.25rem;" />
   </div>
   <p>図の丸は処理単位となる<strong>ニューロン</strong>（またはノード）を表し、\(a\)、\(h(a)\)、\(y\) はその途中の値や関数を表す。</p>
-  <p>上記のとおり、\(（C）\)で表される活性化関数は、バイアスを境に出力が切り替わる関数となっているが、このような関数を<strong>ステップ関数</strong>または<strong>階段関数</strong>という。</p>
+  <p>上記のとおり、\(（C）\)で表される活性化関数は、入力値\(a\)が0を境に出力が切り替わる関数となっているが、このような関数を<strong>ステップ関数</strong>または<strong>階段関数</strong>という。</p>
   <p>従って、このパーセプトロンは活性化関数に<strong>ステップ関数</strong>を用いて表現される。</p>
   <p>パーセプトロンにも重みを更新する学習則はあるが、ステップ関数はほとんどの点で微分が\(0\)となるため、勾配を逆伝播して多層ネットワークを学習する方法には適さない。シグモイド関数のように微分可能な活性化関数を使うと、損失の勾配に基づいて各層の重みを更新できる。</p>
     </li>
@@ -121,18 +121,18 @@
  ...
 </code></pre>
   <p>上記引数の \(x\) を（＊2）のNumPy配列で定義する。</p>
-  <pre><code class="language-bash">$ python
+  <pre><code class="language-bash">&gt;&gt;&gt; <span class="hljs-comment"># 上記対話モードの続き</span>
  &gt;&gt;&gt; x = np.array([-0.5, 0.5, 1.5])    <span class="hljs-comment"># （＊2） NumPy配列の定義</span>
  &gt;&gt;&gt; x    <span class="hljs-comment"># （＊3）NumPy配列の確認</span>
  array([-0.5,  0.5,  1.5])
 </code></pre>
   <p>ここで（＊4）のとおり、\(x &gt; 0\)を評価するとbool値のNumPy配列が返される。</p>
-  <pre><code class="language-bash">$ python
+  <pre><code class="language-bash">&gt;&gt;&gt; <span class="hljs-comment"># 上記対話モードの続き</span>
  &gt;&gt;&gt; x &gt; 0    <span class="hljs-comment"># （＊4） NumPy配列をbool値で表示</span>
  array([False,  True,  True])
 </code></pre>
   <p>さらに（＊5）でこの \(x &gt; 0\) をastypeでint変換している。</p>
-  <pre><code class="language-bash">$ python
+  <pre><code class="language-bash">&gt;&gt;&gt; <span class="hljs-comment"># 上記対話モードの続き</span>
  &gt;&gt;&gt; (x &gt; 0).astype(int)    <span class="hljs-comment"># （＊5） NumPy配列のbool値を 0：false、1：true で表示</span>
  array([0, 1, 1])
  &gt;&gt;&gt;
@@ -208,7 +208,7 @@
   <p><strong>ステップ関数</strong>は、\(y = 0\) or \(y = 1\) のみの出力なのに対して<strong>シグモイド関数</strong>の出力 \(y\)
     は、<strong>連続的な実数</strong>を出力しており、滑らかな曲線を描いている。</p>
   <p>
-    これは、<strong>ニューラルネットワークのシグモイド関数</strong>がパーセプトロンのステップ関数では表現できない<strong>柔軟性や複雑な処理を表現できる</strong>ことを意味し、自動学習においても重要な役割を果たしている。
+    シグモイド関数は滑らかで微分できるため、<strong>損失の勾配を使って重みを更新する学習</strong>に利用できる。ステップ関数はほとんどの点で微分が0となるため、この学習方法には適さない。
   </p>
     </li>
   </ul>

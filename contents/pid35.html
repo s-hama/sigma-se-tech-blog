@@ -1,52 +1,35 @@
 <div class="post-body">
   <h2 id="概要">概要</h2>
-  <p>Pythonの論理演算子であるor、and、notの基本的な使い方を整理する。</p>
-  <p>論理演算子は、条件分岐や入力チェックで複数の条件を組み合わせるために使う。PythonではTrue/Falseだけでなく、空文字、空リスト、0なども真偽値として評価される。</p>
-  <p>ここでは、真偽値判定の基準と、or、and、notの実行結果を対話モードで確認する。</p>
+  <p>Pythonの論理演算子or、and、notを真理値判定と実行順序から整理する。</p>
+  <p>再試行回数の0を残す初期値設定と、ゼロ除算を避ける条件式を比較する。何が偽になるかに加えて、どの値が返り、どこまで式が実行されるかを確認する。設定値と短絡評価の比較例はPython 3.12.2で確認。</p>
   <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
-    <li><a href="#論理演算子の種類" class="link-secondary">論理演算子の種類</a><br>
+    <li><a class="link-secondary" href="#論理演算子の種類">論理演算子の種類</a><br/>
       論理演算子の種類と各項目の特徴を整理。</li>
-    <li><a href="#truefalseの判定基準" class="link-secondary">True/Falseの判定基準</a><br>
-      True/Falseの判定基準の意味と要点を具体例から整理。</li>
-    <li><a href="#論理和or" class="link-secondary">論理和（or）</a><br>
-      論理和（or）の意味と要点を具体例から整理。</li>
-    <li><a href="#論理積and" class="link-secondary">論理積（and）</a><br>
-      論理積（and）の意味と要点を具体例から整理。</li>
-    <li><a href="#論理否定not" class="link-secondary">論理否定（not）</a><br>
-      論理否定（not）の意味と要点を具体例から整理。</li>
+    <li><a class="link-secondary" href="#truefalseの判定基準">True/Falseの判定基準</a><br/>
+      数値の0・空のコンテナ・Noneなどの真理値判定を確認。</li>
+    <li><a class="link-secondary" href="#論理和or">論理和（or）</a><br/>
+      返される値を確認し、有効な0を残す初期値設定と比較。</li>
+    <li><a class="link-secondary" href="#論理積and">論理積（and）</a><br/>
+      評価順序を追い、ゼロ除算を防ぐ条件の並べ方を確認。</li>
+    <li><a class="link-secondary" href="#論理否定not">論理否定（not）</a><br/>
+      真理値を反転し、boolとして返す動作を確認。</li>
   </ul>
   <h2 id="各論理演算子の使い方と実装サンプル">各論理演算子の使い方と実装サンプル</h2>
   <h3 id="論理演算子の種類">論理演算子の種類</h3>
-  <p>Pythonでは、bool型に限らずすべてのオブジェクトが真偽値として評価される。組込み型では数値のゼロ、空の文字列やコンテナ、<code>None</code>などが<code>False</code>となり、それ以外は原則として<code>True</code>となる。独自クラスでは<code>__bool__()</code>または<code>__len__()</code>で判定方法を定義できる。</p>
+  <p>Pythonではbool型以外のオブジェクトも条件式に使える。組込み型では数値のゼロ、空の文字列やコンテナ、<code>None</code>などが<code>False</code>となり、それ以外は原則として<code>True</code>となる。独自クラスでは<code>__bool__()</code>または<code>__len__()</code>で判定方法を定義できる。</p>
   <ul>
     <li>
       <p>各データ型の参考</p>
       <ul>
-        <li><a class="link-secondary"
-            href="https://sigma-se.com/detail/30/#bool型--真偽リテラル">Python
-            - 組込みデータ型まとめ : bool , int, float, complex &gt; bool型 : 真偽リテラル</a></li>
-        <li><a class="link-secondary"
-            href="https://sigma-se.com/detail/30/#int型--数値整数">Python
-            - 組込みデータ型まとめ : bool , int, float, complex &gt; int型 : 数値（整数）</a></li>
-        <li><a class="link-secondary"
-            href="https://sigma-se.com/detail/30/#float型--浮動小数点数型">Python
-            - 組込みデータ型まとめ : bool , int, float, complex &gt; float型 : 浮動小数点数型</a></li>
-        <li><a class="link-secondary"
-            href="https://sigma-se.com/detail/30/#complex型--複素数型">Python
-            - 組込みデータ型まとめ : bool , int, float, complex &gt; complex型 : 複素数型</a></li>
-        <li><a class="link-secondary"
-            href="https://sigma-se.com/detail/31/#str型--文字列型">Python
-            - 組込みデータ型まとめ : str, list, tuple, range, dict &gt; str型 : 文字列型</a></li>
-        <li><a class="link-secondary"
-            href="https://sigma-se.com/detail/31/#list型--配列型">Python
-            - 組込みデータ型まとめ : str, list, tuple, range, dict &gt; list型 : 配列型</a></li>
-        <li><a class="link-secondary"
-            href="https://sigma-se.com/detail/31/#tuple型--イミュータブルなシーケンス型">Python
-            - 組込みデータ型まとめ : str, list, tuple, range, dict &gt; tuple型 : イミュータブルなシーケンス型</a></li>
-        <li><a class="link-secondary"
-            href="https://sigma-se.com/detail/31/#range型--範囲指定">Python
-            - 組込みデータ型まとめ : str, list, tuple, range, dict &gt; range型 : 範囲指定</a></li>
+        <li><a class="link-secondary" href="https://sigma-se.com/detail/30/#bool型--真偽リテラル">Python - 組込みデータ型まとめ : bool , int, float, complex &gt; bool型 : 真偽リテラル</a></li>
+        <li><a class="link-secondary" href="https://sigma-se.com/detail/30/#int型--数値整数">Python - 組込みデータ型まとめ : bool , int, float, complex &gt; int型 : 数値（整数）</a></li>
+        <li><a class="link-secondary" href="https://sigma-se.com/detail/30/#float型--浮動小数点数型">Python - 組込みデータ型まとめ : bool , int, float, complex &gt; float型 : 浮動小数点数型</a></li>
+        <li><a class="link-secondary" href="https://sigma-se.com/detail/30/#complex型--複素数型">Python - 組込みデータ型まとめ : bool , int, float, complex &gt; complex型 : 複素数型</a></li>
+        <li><a class="link-secondary" href="https://sigma-se.com/detail/31/#str型--文字列型">Python - 組込みデータ型まとめ : str, list, tuple, range, dict &gt; str型 : 文字列型</a></li>
+        <li><a class="link-secondary" href="https://sigma-se.com/detail/31/#list型--配列型">Python - 組込みデータ型まとめ : str, list, tuple, range, dict &gt; list型 : 配列型</a></li>
+        <li><a class="link-secondary" href="https://sigma-se.com/detail/31/#tuple型--イミュータブルなシーケンス型">Python - 組込みデータ型まとめ : str, list, tuple, range, dict &gt; tuple型 : イミュータブルなシーケンス型</a></li>
+        <li><a class="link-secondary" href="https://sigma-se.com/detail/31/#range型--範囲指定">Python - 組込みデータ型まとめ : str, list, tuple, range, dict &gt; range型 : 範囲指定</a></li>
       </ul>
     </li>
     <li>
@@ -80,10 +63,12 @@
     </li>
   </ul>
   <h3 id="truefalseの判定基準">True/Falseの判定基準</h3>
-  <p>論理演算で最も重要となるTrue/Falseの判定基準として、<strong>空文字</strong>や<strong>空リスト</strong>等も<code>False</code>と判定される。<br>
-    下記一覧で示す要素以外は、すべて<code>True</code>として判定される。</p>
+  <p>論理演算で最も重要となるTrue/Falseの判定基準として、<strong>空文字</strong>や<strong>空リスト</strong>等も<code>False</code>と判定される。<br/>
+  下記は偽と判定される代表例である。独自クラスなどでは型が定めた真理値判定に従い、判定自体が例外になる場合もある。</p>
   <ul>
-    <li>False判定一覧 <table class="table" style="width: 80%;">
+    <li>
+      False判定一覧
+      <table class="table" style="width: 80%;">
         <thead>
           <tr>
             <th scope="col">False判定となる要素</th>
@@ -147,17 +132,15 @@
       </table>
     </li>
   </ul>
-  <br>
+  <br/>
   <p>※ 各実装サンプルは、下記ページを参考。</p>
   <ul>
-    <li><a class="link-secondary"
-        href="https://sigma-se.com/detail/30/#bool型--真偽リテラル">Python
-        - 組込みデータ型まとめ : bool , int, float, complex &gt; bool型 : 真偽リテラル</a></li>
+    <li><a class="link-secondary" href="https://sigma-se.com/detail/30/#bool型--真偽リテラル">Python - 組込みデータ型まとめ : bool , int, float, complex &gt; bool型 : 真偽リテラル</a></li>
   </ul>
   <p>以降、論理演算子に関する実装サンプルを対話モード（インタプリタ）で解説する。</p>
   <h3 id="論理和or">論理和（or）</h3>
-  <p><code>a or b</code>は、前方から評価して最初に<code>True</code>となるオペランドを返す。そこで評価を終える動作を<strong>ショートサーキット</strong>という。<br>
-    a、b共にFalseである場合は、末尾の要素<code>b</code>を返す。</p>
+  <p><code>a or b</code>は、前方から評価して最初に<code>True</code>となるオペランドを返す。そこで評価を終える動作を<strong>ショートサーキット</strong>という。<br/>
+  a、b共にFalseである場合は、末尾の要素<code>b</code>を返す。</p>
   <ul>
     <li>
       <p>論理和パターン</p>
@@ -166,29 +149,29 @@
           <tr>
             <th scope="col">a の評価</th>
             <th scope="col">b の評価</th>
-            <th scope="col">a or b の評価</th>
+            <th scope="col">a or b の戻り値</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>True</td>
             <td>False</td>
-            <td>a の評価</td>
+            <td>a の値</td>
           </tr>
           <tr>
             <td>False</td>
             <td>True</td>
-            <td>b の評価</td>
+            <td>b の値</td>
           </tr>
           <tr>
             <td>True</td>
             <td>True</td>
-            <td>a の評価</td>
+            <td>a の値</td>
           </tr>
           <tr>
             <td>False</td>
             <td>False</td>
-            <td>b の評価</td>
+            <td>b の値</td>
           </tr>
         </tbody>
       </table>
@@ -216,8 +199,8 @@
 </code></pre>
     </li>
     <li>
-      <p>ショートサーキットの例<br>
-        一度に複数の論理和を行う場合、ショートサーキットの性質を利用し、Trueになる可能性が高い評価対象を前方に置くことで、不要な演算を省くことができる。</p>
+      <p>ショートサーキットの例<br/>
+      複数の候補は左から評価され、最初に真となった値が返る。順番を変えると返る値や実行される処理も変わるため、候補の優先順位に合わせて並べる。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-comment"># 先頭の 2 (True) のみで評価が返される。</span>
     &gt;&gt;&gt; <span class="hljs-comment"># 以降の 0 (False)、1 (True) は評価しない。</span>
@@ -232,10 +215,25 @@
     &gt;&gt;&gt;
 </code></pre>
     </li>
+    <li>
+      <p>有効な0を初期値で置き換えない<br/>
+      再試行回数は<code>0</code>なら再試行なし、<code>None</code>なら未設定として扱う。未設定のときだけ3回へ補うつもりで<code>or</code>を使うと、0回の指定も置き換わる。</p>
+      <pre><code class="language-python"><span class="hljs-keyword">for</span> retries in (<span class="hljs-keyword">None</span>, <span class="hljs-number">0</span>, <span class="hljs-number">5</span>):
+    by_or = retries or <span class="hljs-number">3</span>
+    by_none = <span class="hljs-number">3</span> <span class="hljs-keyword">if</span> retries is <span class="hljs-keyword">None</span> <span class="hljs-keyword">else</span> retries
+    <span class="hljs-built_in">print</span>(retries, by_or, by_none)
+</code></pre>
+      <pre><code class="language-text">None 3 3
+0 3 0
+5 5 5
+</code></pre>
+      <p>各行は「元の指定・orの結果・Noneだけを補う結果」の順である。<code>or</code>は未設定かを調べる演算子ではなく、左辺が偽なら右辺を返す演算子なので0も対象になる。</p>
+      <p>空文字列や0をすべて既定値へ置き換えたい仕様なら<code>or</code>を使える。値として有効な0を残したい場合は<code>is None</code>で未設定を判定する。入力の型や範囲の検査は別途必要であり、この例は非負整数またはNoneを前提とする。</p>
+    </li>
   </ul>
   <h3 id="論理積and">論理積（and）</h3>
   <p><code>a and b</code>は、前方から評価していき<code>False</code>となる要素が見つかった時点（ショートサーキット）でその要素を返す。
-    a、b共にTrueである場合は、末尾の要素<code>b</code>を返す。</p>
+  a、b共にTrueである場合は、末尾の要素<code>b</code>を返す。</p>
   <ul>
     <li>
       <p>論理積パターン</p>
@@ -244,29 +242,29 @@
           <tr>
             <th scope="col">a の評価</th>
             <th scope="col">b の評価</th>
-            <th scope="col">a and b の評価</th>
+            <th scope="col">a and b の戻り値</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>True</td>
             <td>False</td>
-            <td>b の評価</td>
+            <td>b の値</td>
           </tr>
           <tr>
             <td>False</td>
             <td>True</td>
-            <td>a の評価</td>
+            <td>a の値</td>
           </tr>
           <tr>
             <td>True</td>
             <td>True</td>
-            <td>b の評価</td>
+            <td>b の値</td>
           </tr>
           <tr>
             <td>False</td>
             <td>False</td>
-            <td>a の評価</td>
+            <td>a の値</td>
           </tr>
         </tbody>
       </table>
@@ -295,7 +293,7 @@
     </li>
     <li>
       <p>ショートサーキットの例
-        上記の論理和と同様に、一度に複数の論理積を行う場合、ショートサーキットの性質を利用し、Falseになる可能性が高い評価対象を前方に置くことで、不要な演算を省くことができる。</p>
+      左から評価して最初に偽となった値を返し、残りの式は実行しない。後ろの式を実行できる条件を先に確認すると、前提を満たさない計算を避けられる。</p>
       <pre><code class="language-python">$ python
     &gt;&gt;&gt; <span class="hljs-comment"># 先頭の 0 (False) のみで評価が返される。</span>
     &gt;&gt;&gt; <span class="hljs-comment"># 以降の 1 (True)、2 (True) は評価しない。</span>
@@ -309,6 +307,33 @@
     <span class="hljs-number">0</span>
     &gt;&gt;&gt;
 </code></pre>
+    </li>
+    <li>
+      <p>ゼロ除算を避ける条件は左側で確認する<br/>
+      「分母が0でなく、割った結果が2を超える」という条件を考える。関数内で表示させ、割り算が実行されたかも確認する。</p>
+      <pre><code class="language-python"><span class="hljs-keyword">def</span> <span class="hljs-title">exceeds_two</span>(numerator, denominator):
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">"</span><span class="hljs-string">divide</span><span class="hljs-string">"</span>, numerator, denominator)
+    <span class="hljs-keyword">return</span> numerator / denominator &gt; <span class="hljs-number">2</span>
+
+
+<span class="hljs-keyword">for</span> denominator in (<span class="hljs-number">0</span>, <span class="hljs-number">2</span>):
+    result = denominator != <span class="hljs-number">0</span> and exceeds_two(<span class="hljs-number">6</span>, denominator)
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">"</span><span class="hljs-string">result</span><span class="hljs-string">"</span>, denominator, result)
+</code></pre>
+      <pre><code class="language-text">result 0 False
+divide 6 2
+result 2 True
+</code></pre>
+      <p>分母が0のときは左辺が偽なので関数自体が呼ばれない。次のように逆順にすると先に割り算が実行され、右側の判定では防げない。</p>
+      <pre><code class="language-python">denominator = <span class="hljs-number">0</span>
+<span class="hljs-keyword">try</span>:
+    <span class="hljs-built_in">print</span>(<span class="hljs-number">6</span> / denominator &gt; <span class="hljs-number">2</span> and denominator != <span class="hljs-number">0</span>)
+<span class="hljs-keyword">except</span> ZeroDivisionError <span class="hljs-keyword">as</span> error:
+    <span class="hljs-built_in">print</span>(<span class="hljs-built_in">type</span>(error).__name__)
+</code></pre>
+      <pre><code class="language-text">ZeroDivisionError
+</code></pre>
+      <p>真になりやすさや偽になりやすさだけで順番を変えず、後続の式が安全に評価できる前提と副作用を確認する。長い条件は名前の付いた変数やif文へ分けると、その依存関係を追いやすい。</p>
     </li>
   </ul>
   <h3 id="論理否定not">論理否定（not）</h3>
@@ -353,10 +378,10 @@
 
   <h2 id="まとめ">まとめ</h2>
   <ul>
-    <li>or、and、notは条件を組み合わせる論理演算子。</li>
-    <li>Pythonでは空文字、空リスト、0、NoneなどもFalseとして評価される。</li>
-    <li>orやandは短絡評価を行うため、条件によって後ろの式が実行されない場合がある。</li>
-    <li>長い条件式へ処理を詰め込みすぎず、意味のある変数へ分けると読みやすくなる。</li>
+    <li>orとandはTrue/Falseへ変換した値ではなく、選ばれたオペランドの値を返す。notはboolを返す。</li>
+    <li>0もNoneも真理値判定では偽になる。有効な0を残して未設定だけを補う場合はis Noneを使う。</li>
+    <li>短絡評価では後ろの式が実行されないことがある。後続の計算に必要な前提を左側で確認する。</li>
+    <li>条件の並べ替えは返る値や副作用にも影響する。処理の意味を保てるか確認してから変更する。</li>
   </ul>
   <h3 id="参考文献">参考文献</h3>
   <ul>

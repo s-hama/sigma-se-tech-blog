@@ -31,8 +31,8 @@
   <ul>
     <li>数式と変数の意味<br>
     <p>ここで扱う2乗和誤差は、予測値と正解値の差を2乗して合計し、微分を簡潔にするため全体へ\(\frac{1}{2}\)を掛けた値である。全要素の平均を取る平均二乗誤差（MSE）とは区別する。</p>
-    <p>この2つの変数のうち \(y_{k}\) をニューラルネットワークの出力、もう1つの \(t_{k}\) を教師データ（訓練データ）と置く。<br>
-        ※ \(k\) はデータの次元数</p>
+    <p>この2つの変数のうち \(y_{k}\) をニューラルネットワークの出力、もう1つの \(t_{k}\) を教師データ（正解ラベル）と置く。<br>
+        ※ \(k\) は出力要素の番号、\(K\) は出力要素の個数</p>
     <div
         style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
         \[
@@ -52,11 +52,11 @@
 <span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
 </code></pre>
     <ul>
-        <li>\(k=10\) は、10個の要素からなるデータでMNISTで扱うデータ数（0～9の数字）</li>
+        <li>\(K=10\) は、MNISTで扱うクラス数（0～9の数字）</li>
         <li>\(y_{k}\) にあたる \(y\) は、ニューラルネットワークの出力でソフトマックス関数出力値（確率）<br>
             ※ この出力値の算出処理については、<a
                 href="https://sigma-se.com/detail/20/#推論処理のニューロン構成と関数定義" class="link-secondary">Python - ニューラルネットワーク： MNISTを使ったニューラルネットワークの推論処理と実装サンプル&gt; 推論処理のニューロン構成と関数定義</a> の<strong>predict関数</strong>を参考。</li>
-        <li>\(t_{k}\) にあたる \(t\) は、教師データでMNISTであらかじめ準備されている正解表す配列（1が正解）</li>
+        <li>\(t_{k}\) にあたる \(t\) は、教師データでMNISTであらかじめ準備されている正解を表す配列（1が正解）</li>
         <li>\(y\) と \(t\) は、それぞれの要素同士が対となっている
             <ul>
                 <li>要素1：数字画像が0の確率が10%（0.1）→ 不正解（0）</li>
@@ -72,7 +72,7 @@
             </ul>
         </li>
     </ul>
-    <p>上記 \(（A）\) は、この要素別の \(y\) と \(t\) の差を2乗した総和を2で割ったものでPythonで書くと</p>
+    <p>上記 \(（A）\) は、この要素別の \(y\) と \(t\) の差を2乗した総和を2で割ったもので、NumPy配列のyとtを使ってPythonで書くと</p>
     <pre><code class="language-python"><span class="hljs-number">0.5</span> * np.<span class="hljs-built_in">sum</span>((y-t)**<span class="hljs-number">2</span>)
 </code></pre>
     <p>となる。</p>
@@ -113,8 +113,8 @@
   <ul>
     <li>数式と変数の意味<br>
     <p>交差エントロピー誤差（cross entropy error）は、各クラスの教師データに予測確率の自然対数（底は \(e\)）を掛け、その総和へマイナスを付けた値を取る。</p>
-    <p>この2つの変数のうち \(y_{k}\) をニューラルネットワークの出力、もう1つの \(t_{k}\) を<strong>教師データ（訓練データ）</strong>とする。<br>
-        ※ \(k\) はデータの次元数</p>
+    <p>この2つの変数のうち \(y_{k}\) をニューラルネットワークの出力、もう1つの \(t_{k}\) を<strong>教師データ（正解ラベル）</strong>とする。<br>
+        ※ \(k\) は出力要素の番号、\(K\) は出力要素の個数</p>
     <div
         style="display: flex; margin-left: 1rem; font-size: 1.2em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
         \[
@@ -132,14 +132,14 @@
 <span class="hljs-meta">&gt;&gt;&gt; </span>y = [<span class="hljs-number">0.1</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.05</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.0</span>]
 <span class="hljs-meta">&gt;&gt;&gt; </span>t = [<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>]
 </code></pre>
-    <p>\(y_{k}\)、\(t_{k}\) と同様に \(k=10\) となる \(y\) は、<strong>ソフトマックス関数の出力値</strong>で \(t\)
+    <p>\(y_{k}\)、\(t_{k}\) と同様に \(K=10\) となる \(y\) は、<strong>ソフトマックス関数の出力値</strong>で \(t\)
         は、<strong>正解のみ1</strong>、<strong>不正解は0</strong>を取る。</p>
     <p>そして、上記 \(（B）\) の \(t_{k}\) は、不正解が0となる9つは積も必ず0となる。
         よって、結局は正解1である \(y_{k}\)、<strong>つまり0.6の自然対数にマイナスをかけた値</strong>である</p>
     <div
         style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
         \[
-        -\log 0.6 = 0.51
+        -\log 0.6 \simeq 0.51
         \]
     </div>
     のみとなる。<br>
@@ -147,11 +147,11 @@
     <div
         style="display: flex; margin-left: 1rem; font-size: 1.1em; margin-top: -0.75em; overflow-x: auto; white-space: nowrap;">
         \[
-        -\log 0.1 = 2.30
+        -\log 0.1 \simeq 2.30
         \]
     </div>
     <p>となるため、結果(損失値)が高くなっていることが分かる。</p>
-    <p>これをPythonで書くと</p>
+    <p>これをNumPy配列のyとtを使ってPythonで書くと</p>
     <pre><code class="language-python">delta = <span class="hljs-number">1e-7</span>
 -np.<span class="hljs-built_in">sum</span>(t * np.log(y + delta))
 </code></pre>
@@ -170,7 +170,7 @@
 <span class="hljs-number">0.510825457099338</span>
 </code></pre>
     <p>正解である2が60%となる上記cross_entropy_errorの結果は、<strong>約0.510</strong>となった。</p>
-    <p>わざとはずして不正解である2が10%となる \(y\) だと</p>
+    <p>わざとはずして正解である2が10%、不正解の7が60%となる \(y\) だと</p>
     <pre><code class="language-python">$ python
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
 <span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">def</span> <span class="hljs-title function_">cross_entropy_error</span>(<span class="hljs-params">y, t</span>):

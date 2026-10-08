@@ -2,19 +2,20 @@
 Python - 組込みデータ型：4/4 set・bytes・bytearray・file object
 
 ## 概要
-set、bytes、bytearray、file objectの基本操作を整理する。
-これらはlistやdictほど最初に触れる機会は多くないが、集合演算、バイナリデータ、ファイル入出力を扱うときに重要になる。
-ここでは、重複を持たない集合、変更不可/変更可能なバイト列、ファイル操作の基本を実行例で確認する。
+
+set、bytes、bytearray、ファイルオブジェクトの基本操作を整理する。
+
+集合演算では予定者と参加者の差分を調べる。文字列とバイト列では日本語の長さと切り出し結果を比べ、ファイル操作では同じ入力を読み進めたときの位置を確認する。比較例はPython 3.12.2で確認。
 
 ## この記事の構成
 - [set型 : 集合](#set型--集合)<br>
-  set型 : 集合の意味と要点を具体例から整理。
+  予定者と参加者の集合から共通・不足・予定外を取り出す。
 - [bytes型 : バイト](#bytes型--バイト)<br>
-  bytes型 : バイトの意味と要点を具体例から整理。
+  文字数とバイト数、文字の途中で切る場合の違いを確認。
 - [bytearray型 : バイト配列](#bytearray型--バイト配列)<br>
-  bytearray型 : バイト配列の意味と要点を具体例から整理。
-- [file object型 : ファイル操作オブジェクト](#file object型--ファイル操作オブジェクト)<br>
-  file object型 : ファイル操作オブジェクトの意味と要点を具体例から整理。
+  バイト列を直接変更する操作と戻り値を確認。
+- [file object型 : ファイル操作オブジェクト](#file%20object型--ファイル操作オブジェクト)<br>
+  読み書きの基本と読み取り位置・文字コードの扱いを確認。
 
 ## 各データ型の操作方法
 
@@ -22,7 +23,7 @@ set、bytes、bytearray、file objectの基本操作を整理する。
 
 set型は、**重複した要素**がなく、要素に**順番を**持たない配列のような集合。
 
-記述は、dict型と同じ中カッコ**{}**で囲み、**キーが無い状態**（値のみ）で定義する。
+記述は、dict型と同じ中カッコ`{}`で囲み、**キーが無い状態**（値のみ）で定義する。
 
 - 型の特性
   - ミュータブルオブジェクト
@@ -47,7 +48,7 @@ set型は、**重複した要素**がなく、要素に**順番を**持たない
     >>> type(set_b)
     <class 'set'>
     >>>
-    >>> # イミュータブルな型であれば、異なる型でも定義できる
+    >>> # ハッシュ可能なオブジェクトなら異なる型でも要素にできる
     >>> set_c = {1, 'one', ('two', 2)}
     >>> print(set_c)
     {'one', 1, ('two', 2)}
@@ -250,14 +251,14 @@ set型は、**重複した要素**がなく、要素に**順番を**持たない
     ```
 
   - 上位集合か判定（>= or issuperset）<br>
-  ※ 以下、サンプルコードでは、集合`set_b`が集合`set_a`の上位集合であるかを判定している。
+  ※ 以下、サンプルコードでは、集合`set_a`が集合`set_b`の上位集合であるかを判定している。
     ```python
     $ python
     >>> # >= を用いた判定
     >>> set_a = {1, 2, 3, 4, 5}
     >>> set_b = {4, 5}
     >>> set_c = set_a >= set_b
-    >>> print(set_a)
+    >>> print(set_c)
     True
     >>>
     >>> # issupersetを用いた判定
@@ -321,6 +322,29 @@ set型は、**重複した要素**がなく、要素に**順番を**持たない
     True
     >>>
     ```
+
+- 予定者と参加者を集合で照合する<br>
+  次のIDは説明用のデータである。予定者に対して誰が参加し、誰が未参加で、誰が予定外だったかを同じ2集合から取り出す。
+
+  ```python
+  planned = {"A", "B", "C"}
+  attended = {"B", "C", "D"}
+  print("参加済み:", sorted(planned & attended))
+  print("未参加:", sorted(planned - attended))
+  print("予定外:", sorted(attended - planned))
+  print("双方を合わせたID:", sorted(planned | attended))
+  ```
+
+  ```text
+  参加済み: ['B', 'C']
+  未参加: ['A']
+  予定外: ['D']
+  双方を合わせたID: ['A', 'B', 'C', 'D']
+  ```
+
+  差集合は引く向きで意味が変わる。`planned - attended`は予定者から参加済みを除く操作になる。`sorted()`は表示順を固定するために使っており、set自体が順序を保持するわけではない。同じIDの参加回数もsetでは残らないため、回数が必要な処理では元のlistなどを保持する。
+
+  演算と条件の対応は[集合の具体例](https://sigma-se.com/detail/44/#集合)も参照。
 
 ### bytes型 : バイト
 
@@ -398,11 +422,39 @@ bytes型は、各要素が \\(0\\) から \\(255\\) の整数となるイミュ�
     >>> # 上記に続き、bytes型の文字列をUTF-8でデコード(str型に変換)
     >>> str_b = byte_a.decode('utf-8')
     >>> print(str_b)
-    'abcde'
+    abcde
     >>> type(str_b)
     <class 'str'>
     >>>
     ```
+
+- 日本語の文字数とUTF-8のバイト数を区別する<br>
+  ASCII文字だけの例では長さが一致するため、文字列`"Aあ"`で確認する。
+
+  ```python
+  text = "Aあ"
+  encoded = text.encode("utf-8")
+  print(len(text), len(encoded))
+  print(list(encoded))
+  print(text[:2])
+  try:
+      print(encoded[:2].decode("utf-8"))
+  except UnicodeDecodeError as error:
+      print(type(error).__name__)
+  print(encoded.decode("utf-8") == text)
+  ```
+
+  ```text
+  2 4
+  [65, 227, 129, 130]
+  Aあ
+  UnicodeDecodeError
+  True
+  ```
+
+  この例の`A`は1バイト、`あ`は3バイトで表される。`encoded[:2]`は`あ`の途中までしか含まないのでUTF-8として復元できない。文字として切り出したい場合はデコード後のstrを扱い、通信などのバイト数制限とは分けて考える。
+
+  strの`len()`が数えるのはUnicodeの符号位置であり、結合文字や一部の絵文字では画面上の見た目の文字数とも一致しない。エラーを無視してデコードすると失われるデータがあるため、まず文字コードと切り出した境界を確認する。
 
 ### bytearray型 : バイト配列
 
@@ -569,7 +621,7 @@ bytearray型は、bytes型に対応するミュータブルなバイト列であ
 - `mode='r'`：読込モード（書込不可）<br>
   modeの引数なしでデフォルト **'r'** で open() するため、省略する。<br>
   以下、open(mode='r')で開いた後の読込方法。<br>
-  ※ 下記サンプルでは`data/sample.txt`を事前に作成している前提。`open()`は`~`をホームディレクトリへ自動展開しない。<br>
+  ※ 下記サンプルでは`data/sample.txt`を事前に作成し、最終行の後にも改行を入れる。`open()`は`~`をホームディレクトリへ自動展開しない。<br>
   ```text
   line1 work file sample
   line2 work file sample
@@ -610,9 +662,9 @@ bytearray型は、bytes型に対応するミュータブルなバイト列であ
       ['line1 work file sample\n', 'line2 work file sample\n', 'line3 work file sample\n', 'line4 work file sample\n', 'line5 work file sample\n']
       >>>
       >>> # ※ 改行コードを排除して取得する場合
-      >>> fPath = '/root/data/sample.txt'
+      >>> fPath = 'data/sample.txt'
       >>> with open(fPath) as tFile:
-      ...     fLines = [line.strip() for line in tFile.readlines()]
+      ...     fLines = [line.rstrip("\n") for line in tFile]
       ...     print(fLines)
       ...
       ['line1 work file sample', 'line2 work file sample', 'line3 work file sample', 'line4 work file sample', 'line5 work file sample']
@@ -622,7 +674,7 @@ bytearray型は、bytes型に対応するミュータブルなバイト列であ
       ```python
       $ python
       >>> # readline()で1行ずつ読込
-      >>> fPath = '/root/data/sample.txt'
+      >>> fPath = 'data/sample.txt'
       >>> with open(fPath) as tFile:
       ...     fLine = tFile.readline()    # 1行目 読込
       ...     print(fLine)
@@ -639,7 +691,7 @@ bytearray型は、bytes型に対応するミュータブルなバイト列であ
 
       >>>
       >>> # readline()で1行ずつ末尾まで読込
-      >>> fPath = '/root/data/sample.txt'
+      >>> fPath = 'data/sample.txt'
       >>> with open(fPath) as tFile:
       ...     while True:
       ...         fLine = tFile.readline()
@@ -721,7 +773,7 @@ bytearray型は、bytes型に対応するミュータブルなバイト列であ
       ...
       line1line2line3line4line5
       >>>
-      >>> # ※ 改行コードを排除して書込する場合
+      >>> # ※ 各行の間に改行を入れて書き込む場合
       >>> fPath = 'data/newsample.txt'
       >>> fInput = ['line1', 'line2', 'line3', 'line4', 'line5']
       >>> with open(fPath, mode='w') as tFile:
@@ -755,7 +807,7 @@ bytearray型は、bytes型に対応するミュータブルなバイト列であ
 
 - `mode='a'`：追加・書込モード（読込不可）<br>
   以下、open(mode='a') で開いた後の書込方法。<br>
-  ※ 下記サンプルでは、`data/sample.txt`を事前に作成している前提。<br>
+  ※ 下記サンプルでは`data/sample.txt`を事前に作成し、最終行の後にも改行を入れる。<br>
   ```text
   line1 work file sample
   line2 work file sample
@@ -769,10 +821,11 @@ bytearray型は、bytes型に対応するミュータブルなバイト列であ
       $ python
       >>> # write()で末尾に追加
       >>> fPath = 'data/sample.txt'
-      >>> fAdd = '\nline6 work file sample'    # 改行コードも込み
+      >>> fAdd = 'line6 work file sample\n'    # 行末に改行を付けて追加
       >>> with open(fPath, mode='a') as tFile:
-      ...     tFile.writelines(fAdd)
+      ...     tFile.write(fAdd)
       ...
+      23
       >>> with open(fPath) as tFile:
       ...     print(tFile.read())
       ...
@@ -786,10 +839,42 @@ bytearray型は、bytes型に対応するミュータブルなバイト列であ
       ```
 
 
+- 同じファイルを2回readすると空になる理由<br>
+  説明用ファイルを一時ディレクトリに作り、先頭から読み終えた後の位置を確認する。一時ディレクトリはwithブロックを抜けると削除される。
+
+  ```python
+  from pathlib import Path
+  from tempfile import TemporaryDirectory
+
+  with TemporaryDirectory() as directory:
+      path = Path(directory) / "sample.txt"
+      path.write_text("Aあ\nBい\n", encoding="utf-8")
+      with path.open(encoding="utf-8") as stream:
+          print(repr(stream.read()))
+          print(repr(stream.read()))
+          stream.seek(0)
+          print([line.rstrip("\n") for line in stream])
+      print(stream.closed)
+  ```
+
+  ```text
+  'Aあ\nBい\n'
+  ''
+  ['Aあ', 'Bい']
+  True
+  ```
+
+  最初の`read()`で位置が末尾へ進むため2回目は空文字列になる。ファイルの内容が消えたわけではなく、`seek(0)`で先頭へ戻すと再び読める。書き込みと読み込みの両方で文字コードを指定し、`with`でクローズする範囲を明確にする。
+
+  行末の改行だけを除く例では`rstrip("\n")`を使う。引数なしの`strip()`は行頭・行末の空白やタブも除くため、空白をデータとして残す必要がある場合は結果が異なる。
+
 ## まとめ
-- setは重複しない要素を扱う集合型で、順序やインデックスによるアクセスを前提にせず、重複排除や集合演算に使う。
+
+- setの差集合は向きによって結果が変わる。予定者と参加者の照合では不足と予定外を別々に取り出せる。
+- setは重複回数や順序を保持する用途には向かない。表示順が必要ならsorted()などで明示する。
+- strの長さと符号化後のバイト数は異なる。bytesを文字の途中で切るとデコードできない場合がある。
 - bytesは変更不可、bytearrayは変更可能なバイト列として使い分ける。
-- file objectはファイルを読み書きする入口となり、with文を使うと処理後に自動でクローズできる。
+- ファイルは読み進めた位置を持つ。文字コードを明示し、withによるクローズと必要に応じた位置の移動を行う。
 
 ### 参考文献
 - [Python公式ドキュメント - 集合型：set、frozenset（日本語・集合型の公式解説）](https://docs.python.org/ja/3/library/stdtypes.html#set-types-set-frozenset)

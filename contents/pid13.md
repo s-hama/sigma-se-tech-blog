@@ -2,14 +2,16 @@
 Python - Matplotlib：pyplotでグラフを描画する基本操作
 
 ## 概要
-Matplotlibのpyplotを使い、Pythonでグラフを描画する基本手順を整理する。
-数値だけを眺めても傾向はつかみにくいため、折れ線グラフや散布図として可視化することで、変化、分布、外れ値を確認しやすくなる。<br>ここでは、インストール、基本的な描画、複数系列、ラベルや凡例の設定を実行例で確認する。
+
+Matplotlibのpyplotでグラフを描き、タイトル・軸名・凡例を設定して保存する手順を整理する。
+
+同じ観測値を散布図と折れ線で描き、点を線で結ぶ順番によって伝わる意味が変わることを確かめる。観測点の関係と時間に沿った変化を区別し、目的に合う描き方を選ぶ。比較図はPython 3.12.2・Matplotlib 3.11.2で生成。
 
 ## この記事の構成
 - [Matplotlibの環境準備](#matplotlibの環境準備)<br>
   Matplotlibの環境準備の手順と確認ポイントを整理。
 - [Matplotlibの使用方法](#matplotlibの使用方法)<br>
-  Matplotlibの使用方法をコードや具体例で確認。
+  基本描画と保存、画像表示、散布図と折れ線の使い分けを確認。
 
 ## 実施内容
 ### Matplotlibの環境準備
@@ -46,7 +48,7 @@ Matplotlibのpyplotを使い、Pythonでグラフを描画する基本手順を�
   ![0以上20未満の二次関数y=x^2を描画した折れ線グラフ](/static/tblog/img/pid13_1.png)
 
 - 2つのグラフ、凡例の設定と表示<br>
-三角関数**y = sin(x)**と**y = cos(x)**を例に凡例の設定を行い、2つのグラフを表示。
+三角関数`y = sin(x)`と`y = cos(x)`を例に凡例の設定を行い、2つのグラフを表示。
   ```bash
   $ python
    >>> import numpy as np
@@ -77,7 +79,10 @@ Matplotlibのpyplotを使い、Pythonでグラフを描画する基本手順を�
 ここでは、透過背景のPythonロゴ画像「pid13_3.png」を読み込み、描画結果を「pid13_4.png」として保存。<br>読み込んだ配列の`shape`を確認すると、画像の高さ、幅、色チャンネル数も確認できる。
 
   - 読み込み元の画像「pid13_3.png」
-  ![imreadで読み込む透過背景のPythonロゴ画像](/static/tblog/img/pid13_3.png)
+
+    <div>
+      <img alt="imreadで読み込む透過背景のPythonロゴ画像" src="/static/tblog/img/pid13_3.png" style="display: block; width: 60%; max-width: 300px; height: auto;" />
+    </div>
 
   - 「pid13_3.png」を`imread`で読み込み、`imshow`で表示して「pid13_4.png」として保存
     ```bash
@@ -99,15 +104,61 @@ Matplotlibのpyplotを使い、Pythonでグラフを描画する基本手順を�
 
   `shape`の値や保存画像の余白は、元画像やMatplotlibのバージョン・設定によって異なる。
 
-- その他のグラフ<br>
-上記以外にも`plt.scatter()`による散布図、`plt.hist()`によるヒストグラムなど、さまざまなグラフに対応している。<br>目的に合うグラフを選び、軸名、単位、凡例を付けると、画像だけを見ても意味を判断しやすくなる。
+- 同じ観測値を散布図と折れ線で比べる<br>
+  時刻と気温の組が`(0分, 20°C)`、`(20分, 23°C)`、`(10分, 21°C)`、`(30分, 22°C)`の順に届いたとする。説明用の観測値であり、入力の並びは時刻順ではない。
+
+  ```python
+  import matplotlib.pyplot as plt
+
+  minutes = [0, 20, 10, 30]
+  temperatures = [20, 23, 21, 22]
+  ordered = sorted(zip(minutes, temperatures))
+  ordered_minutes, ordered_temperatures = zip(*ordered)
+
+  with plt.rc_context({"font.size": 16}):
+      fig, axes = plt.subplots(3, 1, figsize=(6, 10), sharex=True,
+                               sharey=True, layout="constrained")
+      axes[0].scatter(minutes, temperatures, s=70)
+      axes[0].set_title("Scatter")
+      axes[1].plot(minutes, temperatures, "o--")
+      axes[1].set_title("Line: input order")
+      axes[2].plot(ordered_minutes, ordered_temperatures, "o-")
+      axes[2].set_title("Line: time order")
+      for ax in axes:
+          ax.set_ylabel("Temperature [°C]")
+          ax.set_xlim(-2, 32)
+          ax.set_ylim(19, 24)
+          ax.grid(alpha=0.3)
+      axes[2].set_xlabel("Time [min]")
+      fig.savefig("pid13_5.png", dpi=120)
+      plt.close(fig)
+  ```
+
+  <div style="margin-bottom: 1em;">
+    <img alt="同じ4つの観測点を散布図、入力順の折れ線、時刻順の折れ線で比較。入力順では20分から10分へ線が戻る。" src="/static/tblog/img/pid13_5.png" style="display: block; width: 70%; max-width: 504px; height: auto;" />
+  </div>
+
+  上段の散布図は4つの観測点を線で結ばずに示す。<br>
+  中段の折れ線は渡した順番の0分→20分→10分→30分を結ぶため、時間が戻る線ができる。<br>
+  `plot()`が時刻順へ自動で並べ替えるわけではない。
+
+  下段では時刻と気温を`zip()`で組にしてから並べ替えた。<br>
+  時刻だけを並べ替えると気温との対応が壊れるため、組のまま順序を変える。<br>
+  時間変化を伝えたい場合はこちらの並びを使う。ただし観測点の間を結んだ線は未観測時刻の実測値ではない。
+
+  散布図は観測点の位置関係、折れ線は意味のある順序に沿った変化を示す場合に選ぶ。<br>
+  移動経路など入力順そのものに意味があるデータでは、xの値で並べ替えることが適切とは限らない。<br>
+  軸の意味と結ぶ順序を決めてから描画する。
+
+  分布を見たい場合は`plt.hist()`によるヒストグラムも選択肢になる。<br>
+  グラフの種類にかかわらず軸名・単位・必要な凡例を付け、画像だけでも対象を読み取れるようにする。
 
 ## まとめ
-- MatplotlibはPythonでグラフを描く代表的なライブラリ。
-- pyplotでは、要素数をそろえたxとyのデータを渡して描画する。要素数が異なると描画エラーになる。
-- 軸名や凡例を付けるとグラフの意味が伝わりやすくなり、数値の傾向や異常を判断しやすくなる。
-- スクリプトから画面に表示する場合は`plt.show()`、画像として保存する場合は`plt.savefig()`を使用。
-- `imread`で読み込んだ画像はNumPy配列として扱われ、`imshow`で表示できる。
+
+- 散布図は観測点の位置関係、折れ線は意味のある順序に沿った変化を示す場合に使う。
+- plot()は渡した順に点を結ぶ。時刻順へ並べ替える場合は観測値との組を保ち、点の間の線を実測値と混同しない。
+- 軸名・単位・凡例を付け、画面表示にはshow()、画像保存にはsavefig()を使う。保存後はclose()で図を閉じる。
+- imread()で読み込んだ画像はNumPy配列として扱い、imshow()で表示できる。
 
 ## 参考文献
 - 斎藤 康毅（\\(2016\\)）『ゼロから作るDeep Learning ―Pythonで学ぶディープラーニングの理論と実装』株式会社オライリー・ジャパン

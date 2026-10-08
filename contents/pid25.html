@@ -64,7 +64,7 @@
     &gt;&gt;&gt; X0, X1 = np.meshgrid(x0, x1)
     &gt;&gt;&gt; Z = func_ex(X0, X1)
     &gt;&gt;&gt; fig = plt.figure()
-    &gt;&gt;&gt; ax = Axes3D(fig)
+    &gt;&gt;&gt; ax = fig.add_subplot(projection=<span class="hljs-string">"</span><span class="hljs-string">3d</span><span class="hljs-string">"</span>)
     &gt;&gt;&gt; ax.set_xlabel(<span class="hljs-string">&quot;x0&quot;</span>)
     Text(<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-string">&#x27;x0&#x27;</span>)
     &gt;&gt;&gt; ax.set_ylabel(<span class="hljs-string">&quot;x1&quot;</span>)
@@ -72,7 +72,7 @@
     &gt;&gt;&gt; ax.set_zlabel(<span class="hljs-string">&quot;f(x0, x1)&quot;</span>)
     Text(<span class="hljs-number">0.5</span>, <span class="hljs-number">0</span>, <span class="hljs-string">&#x27;f(x0, x1)&#x27;</span>)
     &gt;&gt;&gt; ax.set_title(<span class="hljs-string">&quot;f(x0, x1) = x0^2+x1^2 # arange:-3.0, 3.0, 0.1, label:f(x0, x1), x0, x1&quot;</span>)
-    Text(<span class="hljs-number">0.5</span>, <span class="hljs-number">0.92</span>, <span class="hljs-string">&#x27;f(x0, x1) = x0^2+x1^2 # arange:-3.0, 3.0, 0.1, label:f(x0, x_{1}), x0, x_{1}&#x27;</span>)
+    Text(<span class="hljs-number">0.5</span>, <span class="hljs-number">0.92</span>, <span class="hljs-string">&#x27;f(x0, x1) = x0^2+x1^2 # arange:-3.0, 3.0, 0.1, label:f(x0, x1), x0, x1&#x27;</span>)
     &gt;&gt;&gt; ax.plot_wireframe(X0, X1, Z)
     [&lt;mpl_toolkits.mplot3d.art3d.Line3DCollection <span class="hljs-built_in">object</span> at <span class="hljs-number">0x7f6ae0cec6d8</span>&gt;]
     &gt;&gt;&gt; plt.savefig(<span class="hljs-string">&#x27;pid25_1.png&#x27;</span>)
@@ -158,7 +158,7 @@
   <h3 id="勾配のpython実装サンプル">勾配のPython実装サンプル</h3>
   <ul>
     <li>勾配ベクトルの計算<br>
-  <p>上記で、\(x_{0}\)、\(x_{1}\) それぞれの偏微分について実装サンプルを解説したが、次は、<strong>同時に偏微分する場合</strong>を考える。</p>
+  <p>上記で、\(x_{0}\)、\(x_{1}\) それぞれの偏微分について実装サンプルを解説したが、次は、<strong>同じ点で求めた偏微分をまとめる場合</strong>を考える。</p>
   <p>\(x_{0}\)、\(x_{1}\) 両方の偏微分 \(\displaystyle \left(\frac{\partial f}{\partial x_{0}}, \frac{\partial f}{\partial x_{1}} \right)\) を<strong>ベクトルとしてまとめたもの</strong>を<strong>勾配</strong>という。</p>
   <ul>
     <li>
@@ -192,7 +192,7 @@
     <li>
       <p>勾配関数の実施確認<br>
         この勾配関数で前項の \(x_{0} = 5\)、\(x_{1} = 10\) とした時をはじめ、いくつかの点の勾配を出してみる。</p>
-      <pre><code class="language-python">$ python
+      <pre><code class="language-python">&gt;&gt;&gt; # 上記対話モードの続き
     &gt;&gt;&gt; num_gradient(func_ex, np.array([<span class="hljs-number">5.0</span>, <span class="hljs-number">10.0</span>]))
     array([<span class="hljs-number">10.</span>, <span class="hljs-number">20.</span>])
     &gt;&gt;&gt; num_gradient(func_ex, np.array([<span class="hljs-number">0.0</span>, <span class="hljs-number">10.0</span>]))

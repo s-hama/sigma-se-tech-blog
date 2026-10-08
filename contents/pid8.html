@@ -1,29 +1,29 @@
 <div class="post-body">
   <h2 id="概要">概要</h2>
-  <p>Pythonの対話モードの基本操作と、PYTHONSTARTUPを使った起動時スクリプトの設定方法を整理する。</p>
-  <p>対話モードは、短いコードの確認、ライブラリの挙動確認、環境変数やパスの調査に便利な実験場所になる。<br>PYTHONSTARTUPを使うと、毎回使うimportや補助関数を起動時に読み込める。</p>
+  <p>Pythonの対話モードとPYTHONSTARTUPによる起動時設定を整理する。</p>
+  <p>対話モードで使えた名前がスクリプトでは未定義になる例を、起動方法を変えて確かめる。自動で読み込まれた設定とファイル自身に必要なimportを分け、別の起動方法でも再現できるコードにする。</p>
   <h2 id="この記事の構成">この記事の構成</h2>
   <ul>
-    <li><a href="#対象環境と利用上の注意" class="link-secondary">対象環境と利用上の注意</a><br>
+    <li><a class="link-secondary" href="#対象環境と利用上の注意">対象環境と利用上の注意</a><br/>
       本文記載時の環境と現在そのまま利用できない箇所を確認。</li>
-    <li><a href="#作業時の注意点" class="link-secondary">作業時の注意点</a><br>
+    <li><a class="link-secondary" href="#作業時の注意点">作業時の注意点</a><br/>
       設定変更やコマンド実行前に確認しておきたい注意点を整理。</li>
-    <li><a href="#対話モードの使用例" class="link-secondary">対話モードの使用例</a><br>
+    <li><a class="link-secondary" href="#対話モードの使用例">対話モードの使用例</a><br/>
       対話モードの使用例をコードや具体例で確認。</li>
-    <li><a href="#環境変数pythonstartupの設定" class="link-secondary">環境変数（PYTHONSTARTUP）の設定</a><br>
-      環境変数（PYTHONSTARTUP）の設定の手順と確認ポイントを整理。</li>
-    <li><a href="#その他対話モードの補足" class="link-secondary">その他、対話モードの補足</a><br>
+    <li><a class="link-secondary" href="#環境変数pythonstartupの設定">環境変数（PYTHONSTARTUP）の設定</a><br/>
+      設定手順と通常起動・スクリプト実行・-iによる違いを比較。</li>
+    <li><a class="link-secondary" href="#その他対話モードの補足">その他、対話モードの補足</a><br/>
       直前の実行結果や組込みヘルプなど、対話モードの便利な機能を確認。</li>
   </ul>
   <h2 id="対象環境と利用上の注意">対象環境と利用上の注意</h2>
   <ul>
-    <li>本文記載時の環境<br>
+    <li>本文記載時の環境<br/>
       掲載した出力はCentOS 7上のPython 3.6.4を利用した当時の例。</li>
-    <li>確認時期<br>
-      2026年8月にPythonの公式資料と照合し、基本動作を確認。<br>
-      掲載環境と同じ条件では再実行していない。</li>
-    <li>現在そのまま利用できない箇所<br>
-      起動メッセージ、実行コマンド名、<code>sys.path</code>、シェルの起動設定はOS・Python・仮想環境で異なる。<br>
+    <li>確認時期<br/>
+      2026年9月にPythonの公式資料と照合。起動方法の比較例はPython 3.12.2で確認。<br/>
+      CentOS 7・Python 3.6.4当時の起動表示は履歴として残しており、同じ環境では再実行していない。</li>
+    <li>現在そのまま利用できない箇所<br/>
+      起動メッセージ、実行コマンド名、<code>sys.path</code>、シェルの起動設定はOS・Python・仮想環境で異なる。<br/>
       出力値やパスは現在の環境で読み替える。</li>
   </ul>
   <h2 id="作業時の注意点">作業時の注意点</h2>
@@ -79,50 +79,103 @@ $ python    <span class="hljs-comment"># 対話モード起動 (マイナーバ�
     </li>
   </ul>
   <h3 id="環境変数pythonstartupの設定">環境変数（PYTHONSTARTUP）の設定</h3>
-  <p>対話モードでは、環境変数<code>PYTHONSTARTUP</code>に指定したスクリプトを最初に実行する。<br>
-    以下は、簡単な例として上記、<strong>対話モードの実行</strong>で記述した<code>sys.path</code>を<code>import sys</code>なしで実行できるように事前に環境変数<code>PYTHONSTARTUP</code>に設定する手順。<br>
-  </p>
+  <p>対話モードでは、環境変数<code>PYTHONSTARTUP</code>に指定したスクリプトを最初に実行する。<br/>
+  以下は、簡単な例として上記、<strong>対話モードの実行</strong>で記述した<code>sys.path</code>を<code>import sys</code>なしで実行できるように事前に環境変数<code>PYTHONSTARTUP</code>に設定する手順。<br/></p>
   <ul>
     <li>
-      <p>環境変数未設定で<code>sys.path</code>を実行<br></p>
+      <p>環境変数未設定で<code>sys.path</code>を実行<br/></p>
       <pre><code class="language-bash">$ python
  Python 3.6.4 (default, Dec 19 2017, 14:48:12)
  [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
- Type <span class="hljs-string">&quot;help&quot;</span>, <span class="hljs-string">&quot;copyright&quot;</span>, <span class="hljs-string">&quot;credits&quot;</span> or <span class="hljs-string">&quot;license&quot;</span> <span class="hljs-keyword">for</span> more information.
+ Type <span class="hljs-string">"help"</span>, <span class="hljs-string">"copyright"</span>, <span class="hljs-string">"credits"</span> or <span class="hljs-string">"license"</span> <span class="hljs-keyword">for</span> more information.
  &gt;&gt;&gt; sys.path
  Traceback (most recent call last):
-   File <span class="hljs-string">&quot;&lt;stdin&gt;&quot;</span>, line 1, <span class="hljs-keyword">in</span> &lt;module&gt;
- NameError: name <span class="hljs-string">&#x27;sys&#x27;</span> is not defined
+   File <span class="hljs-string">"&lt;stdin&gt;"</span>, line 1, <span class="hljs-keyword">in</span> &lt;module&gt;
+ NameError: name <span class="hljs-string">'sys'</span> is not defined
  &gt;&gt;&gt;
 </code></pre>
       <p><code>sys</code>をインポートしていないので当然エラーが発生。</p>
     </li>
     <li>
-      <p><strong>PYTHONSTARTUP</strong>に<code>import sys</code>を追記<br>
-        ホームディレクトリに<code>.pythonstartup</code>を作成後、環境変数「PYTHONSTARTUP」に<code>.pythonstartup</code>を設定し、<code>import sys</code>を追記する。<br>
-      </p>
+      <p><strong>PYTHONSTARTUP</strong>に<code>import sys</code>を追記<br/>
+      ホームディレクトリに<code>.pythonstartup</code>を作成後、環境変数「PYTHONSTARTUP」に<code>.pythonstartup</code>を設定し、<code>import sys</code>を追記する。<br/></p>
       <pre><code class="language-bash">$ <span class="hljs-built_in">touch</span>  ~/.pythonstartup    <span class="hljs-comment"># 空ファイル新規作成</span>
 $ vim  ~/.pythonstartup    <span class="hljs-comment"># import sys を追記</span>
  import sys
-$ <span class="hljs-built_in">export</span> PYTHONSTARTUP=<span class="hljs-string">&quot;$HOME/.pythonstartup&quot;</span>    <span class="hljs-comment"># 起動時スクリプトのパスを設定</span>
+$ <span class="hljs-built_in">export</span> PYTHONSTARTUP=<span class="hljs-string">"$HOME/.pythonstartup"</span>    <span class="hljs-comment"># 起動時スクリプトのパスを設定</span>
 </code></pre>
       <p><code>export</code>の効果は現在のシェルに限られる。常に有効にする場合は、利用しているシェルに応じて<code>.zshrc</code>や<code>.bashrc</code>などへ同じ設定を記述。</p>
     </li>
     <li>
-      <p>再度対話モードで<code>sys.path</code>を実行<br></p>
+      <p>再度対話モードで<code>sys.path</code>を実行<br/></p>
       <pre><code class="language-bash">$ python
- Python 3.6.4 (default, Dec 19 2017, 14:48:12)
- [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
- Type <span class="hljs-string">&quot;help&quot;</span>, <span class="hljs-string">&quot;copyright&quot;</span>, <span class="hljs-string">&quot;credits&quot;</span> or <span class="hljs-string">&quot;license&quot;</span> <span class="hljs-keyword">for</span> more information.
+ Python <span class="hljs-number">3</span>.6.4 (default, Dec <span class="hljs-number">19</span> <span class="hljs-number">2017</span>, <span class="hljs-number">14</span>:48:12)
+ [GCC <span class="hljs-number">4</span>.8.5 <span class="hljs-number">20150623</span> (Red Hat <span class="hljs-number">4</span>.8.5-16)] on linux
+ Type <span class="hljs-string">"help"</span>, <span class="hljs-string">"copyright"</span>, <span class="hljs-string">"credits"</span> or <span class="hljs-string">"license"</span> <span class="hljs-keyword">for</span> more information.
  &gt;&gt;&gt; sys.path
- [<span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python36.zip&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python3.6&#x27;</span>, <span class="hljs-string">&#x27;/usr/lib64/python3.6/lib-dynload&#x27;</span>, 
- <span class="hljs-string">&#x27;/var/www/vops/lib64/python3.6/site-packages&#x27;</span>, <span class="hljs-string">&#x27;/var/www/vops/lib/python3.6/site-packages&#x27;</span>]
+ [<span class="hljs-string">''</span>, <span class="hljs-string">'/usr/lib64/python36.zip'</span>, <span class="hljs-string">'/usr/lib64/python3.6'</span>, <span class="hljs-string">'/usr/lib64/python3.6/lib-dynload'</span>,
+ <span class="hljs-string">'/var/www/vops/lib64/python3.6/site-packages'</span>, <span class="hljs-string">'/var/www/vops/lib/python3.6/site-packages'</span>]
  &gt;&gt;&gt;
 </code></pre>
       <p><code>.pythonstartup</code>を読み込んで<code>sys</code>をインポート後、正常に<code>sys.path</code>の結果が表示されている。</p>
     </li>
   </ul>
   <p>上記の要領で、Pythonの標準ライブラリなどの共通モジュールを環境変数(PYTHONSTARTUP)に設定しておくと対話モードのコーディングが簡潔になる。</p>
+  <ul>
+    <li>
+      <p>対話モードで使えたsysがスクリプトでは未定義になる理由<br/>
+      普段の設定と分けて確認するため、作業ディレクトリに次の2ファイルを作る。<code>startup_check.py</code>は起動時スクリプトである。</p>
+      <pre><code class="language-python"><span class="hljs-keyword">import</span> sys
+<span class="hljs-built_in">print</span>(<span class="hljs-string">"</span><span class="hljs-string">startup loaded</span><span class="hljs-string">"</span>)
+</code></pre>
+      <p><code>check_script.py</code>は、名前<code>sys</code>が現在のグローバル名前空間にあるかを調べる。</p>
+      <pre><code class="language-python"><span class="hljs-built_in">print</span>(<span class="hljs-string">"</span><span class="hljs-string">sys available:</span><span class="hljs-string">"</span>, <span class="hljs-string">"</span><span class="hljs-string">sys</span><span class="hljs-string">"</span> in <span class="hljs-built_in">globals</span>())
+</code></pre>
+      <p>Unix系シェルで次のように起動する。環境変数は各コマンドの実行時だけ指定する。以下はPythonの起動メッセージを省いた操作例である。</p>
+      <pre><code class="language-text">$ PYTHONSTARTUP="$PWD/startup_check.py" python3
+startup loaded
+&gt;&gt;&gt; "sys" in globals()
+True
+&gt;&gt;&gt; exit()
+
+$ PYTHONSTARTUP="$PWD/startup_check.py" python3 check_script.py
+sys available: False
+
+$ PYTHONSTARTUP="$PWD/startup_check.py" python3 -i check_script.py
+sys available: False
+&gt;&gt;&gt; "sys" in globals()
+False
+&gt;&gt;&gt; exit()
+</code></pre>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">起動方法</th>
+            <th scope="col">PYTHONSTARTUPの実行</th>
+            <th scope="col">この例のsys</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>通常の対話起動</td>
+            <td>実行される</td>
+            <td>起動時スクリプトが定義する</td>
+          </tr>
+          <tr>
+            <td>ファイルを指定して実行</td>
+            <td>実行されない</td>
+            <td>未定義</td>
+          </tr>
+          <tr>
+            <td>-iでファイル実行後に対話へ移行</td>
+            <td>実行されない</td>
+            <td>ファイルにもimportがないので未定義</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>対話中に<code>sys.path</code>が使えても、その行だけをファイルへ移せば同じ条件で動くとは限らない。<code>check_script.py</code>でsysを使うなら先頭に<code>import sys</code>を記述する。必要なimportをファイル自身にそろえ、新しいプロセスで実行して確認する。</p>
+    </li>
+  </ul>
   <h3 id="その他対話モードの補足">その他、対話モードの補足</h3>
   <ul>
     <li>
@@ -164,9 +217,9 @@ $ <span class="hljs-built_in">export</span> PYTHONSTARTUP=<span class="hljs-stri
   </ul>
   <h2 id="まとめ">まとめ</h2>
   <ul>
-    <li>Pythonの対話モードは、小さなコードをすぐ試すための実験環境になる。</li>
-    <li>PYTHONSTARTUPを使うと、起動時に共通処理を読み込める。</li>
-    <li>バージョンや環境変数の違いに注意すると、環境調査にも使いやすい。</li>
+    <li>PYTHONSTARTUPは通常の対話起動時に実行される。ファイルの実行時や-iによる実行後の対話移行では読み込まれない。</li>
+    <li>対話環境で使える名前がスクリプトにもあるとは限らない。必要なimportをファイル自身に記述し、新しいプロセスで確認する。</li>
+    <li>対話モードの_は直前に表示した式の結果を参照する。コードを再実行する機能とは区別する。</li>
   </ul>
   <h3 id="参考文献">参考文献</h3>
   <ul>

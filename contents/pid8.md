@@ -3,9 +3,9 @@ Python - 対話モード：PYTHONSTARTUPと起動時設定の使い方
 
 ## 概要
 
-Pythonの対話モードの基本操作と、PYTHONSTARTUPを使った起動時スクリプトの設定方法を整理する。
+Pythonの対話モードとPYTHONSTARTUPによる起動時設定を整理する。
 
-対話モードは、短いコードの確認、ライブラリの挙動確認、環境変数やパスの調査に便利な実験場所になる。<br>PYTHONSTARTUPを使うと、毎回使うimportや補助関数を起動時に読み込める。
+対話モードで使えた名前がスクリプトでは未定義になる例を、起動方法を変えて確かめる。自動で読み込まれた設定とファイル自身に必要なimportを分け、別の起動方法でも再現できるコードにする。
 
 ## この記事の構成
 - [対象環境と利用上の注意](#対象環境と利用上の注意)<br>
@@ -15,7 +15,7 @@ Pythonの対話モードの基本操作と、PYTHONSTARTUPを使った起動時�
 - [対話モードの使用例](#対話モードの使用例)<br>
   対話モードの使用例をコードや具体例で確認。
 - [環境変数（PYTHONSTARTUP）の設定](#環境変数pythonstartupの設定)<br>
-  環境変数（PYTHONSTARTUP）の設定の手順と確認ポイントを整理。
+  設定手順と通常起動・スクリプト実行・-iによる違いを比較。
 - [その他、対話モードの補足](#その他対話モードの補足)<br>
   直前の実行結果や組込みヘルプなど、対話モードの便利な機能を確認。
 
@@ -24,8 +24,8 @@ Pythonの対話モードの基本操作と、PYTHONSTARTUPを使った起動時�
 - 本文記載時の環境<br>
 掲載した出力はCentOS 7上のPython 3.6.4を利用した当時の例。
 - 確認時期<br>
-2026年8月にPythonの公式資料と照合し、基本動作を確認。<br>
-掲載環境と同じ条件では再実行していない。
+2026年9月にPythonの公式資料と照合。起動方法の比較例はPython 3.12.2で確認。<br>
+CentOS 7・Python 3.6.4当時の起動表示は履歴として残しており、同じ環境では再実行していない。
 - 現在そのまま利用できない箇所<br>
 起動メッセージ、実行コマンド名、`sys.path`、シェルの起動設定はOS・Python・仮想環境で異なる。<br>
 出力値やパスは現在の環境で読み替える。
@@ -114,13 +114,54 @@ importしていないモジュールは対話モードでも使えない。
    [GCC 4.8.5 20150623 (Red Hat 4.8.5-16)] on linux
    Type "help", "copyright", "credits" or "license" for more information.
    >>> sys.path
-   ['', '/usr/lib64/python36.zip', '/usr/lib64/python3.6', '/usr/lib64/python3.6/lib-dynload', 
+   ['', '/usr/lib64/python36.zip', '/usr/lib64/python3.6', '/usr/lib64/python3.6/lib-dynload',
    '/var/www/vops/lib64/python3.6/site-packages', '/var/www/vops/lib/python3.6/site-packages']
    >>>
   ```
   `.pythonstartup`を読み込んで`sys`をインポート後、正常に`sys.path`の結果が表示されている。
 
 上記の要領で、Pythonの標準ライブラリなどの共通モジュールを環境変数(PYTHONSTARTUP)に設定しておくと対話モードのコーディングが簡潔になる。
+
+- 対話モードで使えたsysがスクリプトでは未定義になる理由<br>
+  普段の設定と分けて確認するため、作業ディレクトリに次の2ファイルを作る。`startup_check.py`は起動時スクリプトである。
+
+  ```python
+  import sys
+  print("startup loaded")
+  ```
+
+  `check_script.py`は、名前`sys`が現在のグローバル名前空間にあるかを調べる。
+
+  ```python
+  print("sys available:", "sys" in globals())
+  ```
+
+  Unix系シェルで次のように起動する。環境変数は各コマンドの実行時だけ指定する。以下はPythonの起動メッセージを省いた操作例である。
+
+  ```text
+  $ PYTHONSTARTUP="$PWD/startup_check.py" python3
+  startup loaded
+  >>> "sys" in globals()
+  True
+  >>> exit()
+
+  $ PYTHONSTARTUP="$PWD/startup_check.py" python3 check_script.py
+  sys available: False
+
+  $ PYTHONSTARTUP="$PWD/startup_check.py" python3 -i check_script.py
+  sys available: False
+  >>> "sys" in globals()
+  False
+  >>> exit()
+  ```
+
+  | 起動方法 | PYTHONSTARTUPの実行 | この例のsys |
+  | --- | --- | --- |
+  | 通常の対話起動 | 実行される | 起動時スクリプトが定義する |
+  | ファイルを指定して実行 | 実行されない | 未定義 |
+  | -iでファイル実行後に対話へ移行 | 実行されない | ファイルにもimportがないので未定義 |
+
+  対話中に`sys.path`が使えても、その行だけをファイルへ移せば同じ条件で動くとは限らない。`check_script.py`でsysを使うなら先頭に`import sys`を記述する。必要なimportをファイル自身にそろえ、新しいプロセスで実行して確認する。
 
 ### その他、対話モードの補足
 - 直前に表示された式の結果を参照する<br>
@@ -158,9 +199,10 @@ importしていないモジュールは対話モードでも使えない。
 対話モードで`import this`を実行すると、Tim Petersがまとめた「The Zen of Python」を確認できる。<br>全文を覚えるものではなく、可読性、明示性、単純さ、名前空間など、Pythonコードを設計・レビューするときの判断軸として読むと役立つ。背景と原文はPEP 20で確認できる。
 
 ## まとめ
-- Pythonの対話モードは、小さなコードをすぐ試すための実験環境になる。
-- PYTHONSTARTUPを使うと、起動時に共通処理を読み込める。
-- バージョンや環境変数の違いに注意すると、環境調査にも使いやすい。
+
+- PYTHONSTARTUPは通常の対話起動時に実行される。ファイルの実行時や-iによる実行後の対話移行では読み込まれない。
+- 対話環境で使える名前がスクリプトにもあるとは限らない。必要なimportをファイル自身に記述し、新しいプロセスで確認する。
+- 対話モードの_は直前に表示した式の結果を参照する。コードを再実行する機能とは区別する。
 
 ### 参考文献
 - [Python 3 ドキュメント「コマンドラインと環境：PYTHONSTARTUP」（日本語・公式仕様）](https://docs.python.org/ja/3/using/cmdline.html#envvar-PYTHONSTARTUP)
