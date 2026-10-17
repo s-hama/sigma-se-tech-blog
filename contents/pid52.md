@@ -213,3 +213,18 @@
     データ幅64 bit、周波数100 MHzで、1クロックにつき1回転送するなら、\\(64/8\times100\times10^6=800\times10^6\\) byte/s、すなわち800 MB/sが理論値になる。ここでは1 MBを100万byteとしている。
 
     1クロックに複数回転送する方式ではその回数も掛ける必要がある。一方、実効速度では制御情報や待ち時間などの影響を受ける。「幅」「周波数」「一周期の転送回数」を分けると、bitとbyteの取り違えやクロック周波数だけの比較を避けられる。
+
+## まとめ
+- 主記憶はCPUが直接扱う作業領域、補助記憶はデータを長期保存する領域で、速度と容量の違いから記憶階層を構成する。
+- キャッシュはヒット率が高いほど平均アクセス時間を短縮できる。ライトスルーは書込みごとに下位メモリへ反映し、ライトバックは置換時などにまとめて書き戻す。
+- ファーストフィットは最初に見つかった十分な空き領域、ベストフィットは条件を満たす最小の空き領域を割り当てる。
+- バスには1ビットずつ転送するシリアル方式と複数ビットを同時に転送するパラレル方式がある。BluetoothとZigBeeは無線通信規格であり、バスとは区別する。
+
+- 同じキャッシュ容量でも参照順序や格納場所の制約でヒット率は変わる。平均アクセス時間を求める際はミス時の値が追加時間か合計時間かを区別する。
+
+### 参考文献
+- 瀬戸 美月（\\(2020\\)）『徹底攻略 応用情報技術者教科書』株式会社インプレス
+- [ルネサス エレクトロニクス - マイコンの基本構成、動作（日本語・CPUとメモリ構成の公式解説）](https://www.renesas.com/ja/support/engineer-school/mcu-01-basic-structure-operation)
+- [Arm - L210 Cache Controller Technical Reference Manual（英語・キャッシュ制御の技術資料）](https://documentation-service.arm.com/static/5e8e2524fd977155116a583c)
+- [Linux Kernel Documentation - Memory Management Documentation（英語・仮想記憶管理の公式解説）](https://docs.kernel.org/mm/index.html)
+- [USB-IF - USB Data Performance Language Usage Guidelines（英語・USB転送速度表記の公式指針）](https://www.usb.org/sites/default/files/usb_data_performance_language_usage_guidelines_jan_2024.pdf)
