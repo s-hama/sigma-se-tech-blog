@@ -33,4 +33,42 @@
     <li><a href="#バス" class="link-secondary">バス</a><br>
       バスとはデータをやり取りするための伝送路のことで、次の種類がある。</li>
   </ul>
+  <h2 id="メモリ">メモリ</h2>
+  <p>
+    <strong>記憶装置</strong>とは情報を記憶する装置で<strong>主記憶装置</strong>と<strong>補助記憶装置</strong>に分類され、<strong>主記憶装置</strong>は以下<strong>RAM</strong>と<strong>ROM</strong>に分類される。
+  </p>
+  <ul>
+    <li>
+      <p>RAM（Random Access Memory）<br>
+        一般的に<strong>RAM</strong>のことを<strong>メモリ</strong>と呼ぶ。</p>
+      <p>
+        <strong>RAM</strong>は<strong>読み書きが自由</strong>で電源供給がなくなると書き込まれた情報が消えるため、電源状態に関わらず保存すべき情報は<strong>補助記憶装置</strong>に退避させ、必要に応じて<strong>RAM</strong>（メモリ）へ呼び出す。
+      </p>
+      <p>また、<strong>RAM</strong>には次の2種類がある。</p>
+      <ul>
+        <li>
+          <p>DRAM（Dynamic RAM）<br>
+            コンデンサに蓄えた電荷でデータを保持するため、電源供給中も一定間隔で<strong>リフレッシュ</strong>する必要がある。</p>
+          <p><strong>SRAM</strong>と比べてアクセスは低速だが、メモリセルの構造が単純で高密度化しやすく、ビット単価が低いため、主に<strong>主記憶装置</strong>として用いられる。</p>
+          <p>現在の主記憶で広く用いられるのはシステムクロックに同期して動作する<strong>SDRAM（Synchronous
+              DRAM）</strong>である。データ転送を高速化したDDR
+            SDRAMには、<strong>DDR</strong>、<strong>DDR2</strong>、<strong>DDR3</strong>、<strong>DDR4</strong>、<strong>DDR5</strong>などの世代がある。最初の世代のDDRは後続世代と区別するためにDDR1と呼ばれる場合もある。
+          </p>
+        </li>
+        <li>
+          <p>SRAM（Static RAM）<br>
+            電源供給中は<strong>リフレッシュを行わずに</strong>データを保持できる。ただし、DRAMと同じく電源を切るとデータが失われる揮発性メモリである。</p>
+          <p><strong>DRAM</strong>と比べて高速だが、メモリセルの構造が複雑で高密度化しにくく、ビット単価が高い。そのため、主に下記で触れる<strong>キャッシュメモリ</strong>として用いられる。
+          </p>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <p>ROM（Read Only Memory）<br>
+        <strong>ROM</strong>は電源を切ってもデータを保持する不揮発性メモリで、狭義には読み取り専用だが、ROMの分類には消去や再書込みができるものも含まれる。
+      </p>
+      <p>製造時に内容を書き込み変更できない<strong>マスクROM</strong>、利用者が一度だけ書き込める<strong>PROM</strong>、紫外線で消去して再書込みできる<strong>EPROM</strong>、電気的に消去・再書込みできる<strong>EEPROM</strong>などがある。<strong>フラッシュメモリ</strong>はEEPROMの一種で、一般に一定のブロック単位で消去する。<strong>相変化メモリ</strong>は材料の相状態を利用する別方式の不揮発性メモリであり、PROMの一種ではない。
+      </p>
+    </li>
+  </ul>
 </div>
