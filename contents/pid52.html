@@ -229,4 +229,101 @@
       </p>
     </li>
   </ul>
+  <h2 id="バス">バス</h2>
+  <p><strong>バス</strong>とはデータをやり取りするための<strong>伝送路</strong>のことで、次の種類がある。</p>
+  <ul>
+    <li>
+      <p>シリアルバス<br>
+        \(1\) ビットずつ順番にデータを転送する直列の伝送路のこと。
+      </p>
+    </li>
+    <li>
+      <p>パラレルバス<br>
+        <strong>複数ビット</strong>をひとかたまりにして複数本の通信路でデータを転送する並列の伝送路のこと。
+      </p>
+      <p>
+        また、<strong>パラレルバス</strong>は高速化するほど信号間のタイミングを取ることが難しくなるため、次で触れる<strong>USB</strong>を筆頭に<strong>シリアルバス</strong>での高速化が主流となっている。
+      </p>
+    </li>
+  </ul>
+  <p>以下、代表的なバス。</p>
+  <ul>
+    <li>
+      <p>USB（Universal Serial Bus）<br>
+        <strong>周辺機器を接続</strong>するための<strong>シリアルバス規格</strong>の一つで、マウスやキーボード等、様々な周辺機器が接続できる。
+      </p>
+      <p>また、USBケーブルから電力を供給して周辺機器自体を動作させる<strong>バスパワー</strong>が使用できる。</p>
+    </li>
+    <li>
+      <p>USBの規格<br>
+        USBは規格名の変更が行われてきたため、<strong>末尾の数字だけでは転送速度を判断できない</strong>。例えば旧称の<strong>USB
+          3.0</strong>、<strong>USB 3.1 Gen 1</strong>、現在の仕様上の<strong>USB 3.2 Gen
+          1x1</strong>は、いずれも最大信号速度5Gbpsを表す。</p>
+      <p>主な仕様上の名称と最大信号速度は次のとおり。実際の転送速度は符号化やプロトコルのオーバーヘッド、接続機器などにより低くなる。<br></p>
+      <ul>
+        <li>USB \(1.1\)<br>
+          → 最大12Mbps（フルスピードモード）</li>
+        <li>USB \(2.0\)<br>
+          → 最大480Mbps（ハイスピードモード、半二重通信）</li>
+        <li>USB 3.2 Gen 1x1<br>
+          → 最大5Gbps（旧称 USB 3.0、USB 3.1 Gen 1）</li>
+        <li>USB 3.2 Gen 2x1<br>
+          → 最大10Gbps（旧称 USB 3.1 Gen 2）</li>
+        <li>USB 3.2 Gen 2x2<br>
+          → 最大20Gbps</li>
+        <li>USB4<br>
+          → 実装する仕様により最大20Gbps、40Gbps、80Gbps</li>
+      </ul>
+      <p>USB-IFは消費者向けの表記として世代名よりも<strong>USB 5Gbps</strong>、<strong>USB 10Gbps</strong>、<strong>USB
+          20Gbps</strong>など、速度を明示する名称を推奨している。</p>
+    </li>
+    <li>
+      <p>IEEE 1394
+        <strong>AV機器</strong>等を接続するための<strong>シリアルバス規格</strong>の一つで、アップルが提唱した<strong>FireWire</strong>を標準化したもの。
+      </p>
+      <p>
+        PCポートからDVDドライブに接続し、DVDドライブポートからハードディスクに接続するといった<strong>前の機器</strong>に<strong>次の機器</strong>を数珠繋ぎに連結していく<strong>デイジーチェーン方式</strong>を採用している。
+      </p>
+    </li>
+    <li>
+      <p>ATA（Advanced Technology Attachment）
+        コンピュータとハードディスク間の<strong>インターフェース規格</strong>で<strong>パラレルバス規格</strong>の一つで<strong>パラレルATA</strong>とも呼ばれる。</p>
+    </li>
+    <li>
+      <p>シリアルATA
+        <strong>パラレルATA</strong>をシリアルバスにして高速化した<strong>インターフェース規格</strong>でハードディスク、SSD、光学ドライブなどの接続規格となっている。
+      </p>
+    </li>
+  </ul>
+  <p>以下のBluetoothとZigBeeは機器間接続に使われるが、配線を共有するバスではなく<strong>無線通信規格</strong>となる。</p>
+  <ul>
+    <li>
+      <p>Bluetooth
+        ディジタル機器用の近距離無線通信規格の一つで<strong>2.4GHz帯</strong>を利用し、マウスやキーボードなどの周辺機器を接続できる。</p>
+      <p>また、Bluetoothの<strong>バージョン 4.0</strong>で<strong>BLE（Bluetooth Low
+          Energy）</strong>という規格で大幅に<strong>省電力化</strong>された。</p>
+    </li>
+    <li>
+      <p>ZigBee
+        <strong>センサーネットワーク</strong>で用いられる<strong>低電力</strong>、<strong>低速</strong>の規格で、ワイヤレスセンサーネットワーク構築に適した無線通信規格。
+      </p>
+    </li>
+    <li>
+      <p>DisplayPort
+        モニターディスプレイなどの出力装置を接続する<strong>ディジタル映像・音声インターフェース</strong>規格。<br>
+        ※ 同種の規格として HDMI、DVI、VGA などがある。</p>
+    </li>
+  </ul>
+  <ul>
+    <li>
+      <p>
+        転送幅と転送回数から理論上の帯域を求める
+        <br/>
+        データ幅64 bit、周波数100 MHzで、1クロックにつき1回転送するなら、\(64/8\times100\times10^6=800\times10^6\) byte/s、すなわち800 MB/sが理論値になる。ここでは1 MBを100万byteとしている。
+      </p>
+      <p>
+        1クロックに複数回転送する方式ではその回数も掛ける必要がある。一方、実効速度では制御情報や待ち時間などの影響を受ける。「幅」「周波数」「一周期の転送回数」を分けると、bitとbyteの取り違えやクロック周波数だけの比較を避けられる。
+      </p>
+    </li>
+  </ul>
 </div>
