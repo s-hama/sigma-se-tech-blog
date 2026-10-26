@@ -326,4 +326,25 @@
       </p>
     </li>
   </ul>
+
+  <h2 id="まとめ">まとめ</h2>
+  <ul>
+    <li>主記憶はCPUが直接扱う作業領域、補助記憶はデータを長期保存する領域で、速度と容量の違いから記憶階層を構成する。</li>
+    <li>キャッシュはヒット率が高いほど平均アクセス時間を短縮できる。ライトスルーは書込みごとに下位メモリへ反映し、ライトバックは置換時などにまとめて書き戻す。</li>
+    <li>ファーストフィットは最初に見つかった十分な空き領域、ベストフィットは条件を満たす最小の空き領域を割り当てる。</li>
+    <li>バスには1ビットずつ転送するシリアル方式と複数ビットを同時に転送するパラレル方式がある。BluetoothとZigBeeは無線通信規格であり、バスとは区別する。</li>
+  </ul>
+  <ul>
+    <li>
+      同じキャッシュ容量でも参照順序や格納場所の制約でヒット率は変わる。平均アクセス時間を求める際はミス時の値が追加時間か合計時間かを区別する。
+    </li>
+  </ul>
+<h3 id="参考文献">参考文献</h3>
+  <ul>
+    <li>瀬戸 美月（\(2020\)）『徹底攻略 応用情報技術者教科書』株式会社インプレス</li>
+    <li><a href="https://www.renesas.com/ja/support/engineer-school/mcu-01-basic-structure-operation" class="link-secondary">ルネサス エレクトロニクス - マイコンの基本構成、動作（日本語・CPUとメモリ構成の公式解説）</a></li>
+    <li><a href="https://documentation-service.arm.com/static/5e8e2524fd977155116a583c" class="link-secondary">Arm - L210 Cache Controller Technical Reference Manual（英語・キャッシュ制御の技術資料）</a></li>
+    <li><a href="https://docs.kernel.org/mm/index.html" class="link-secondary">Linux Kernel Documentation - Memory Management Documentation（英語・仮想記憶管理の公式解説）</a></li>
+    <li><a href="https://www.usb.org/sites/default/files/usb_data_performance_language_usage_guidelines_jan_2024.pdf" class="link-secondary">USB-IF - USB Data Performance Language Usage Guidelines（英語・USB転送速度表記の公式指針）</a></li>
+  </ul>
 </div>
