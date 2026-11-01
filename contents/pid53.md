@@ -179,3 +179,17 @@
     7200 rpmのHDDは1秒に120回転し、一周には \\(60/7200=1/120\\) 秒、約8.33 msかかる。目的の位置が一様に分布すると仮定すれば、平均回転待ち時間はその半分の約4.17 msになる。
 
     読み出し時間にはこのほかにヘッドの移動時間と実際の転送時間などが加わる。小さなデータを離れた場所から何度も読むと、転送量が少なくても移動と回転待ちが繰り返される。連続読み出しの転送速度だけでは、小さなランダムアクセスの性能を判断できない理由である。SSDには機械的な回転待ちはないが、制御やフラッシュメモリへのアクセス時間は残る。
+
+## まとめ
+- 入力装置はデータをコンピュータへ取り込み、出力装置は処理結果を外部へ伝える。
+- 割込みはCPUへ処理を通知し、DMAは初期設定後のデータ転送をコントローラが進めてCPU負荷を抑える。
+- 主記憶は作業領域、補助記憶は永続保存に使う。SSDは半導体、HDDは磁気ディスクを利用し、速度や容量などの特性が異なる。
+
+- 割込みによる通知とDMAによる転送は組み合わせられる。記憶装置の比較では連続転送と小さなランダムアクセスを分け、待ち時間も評価する。
+
+### 参考文献
+- 瀬戸 美月（\\(2020\\)）『徹底攻略 応用情報技術者教科書』株式会社インプレス
+- [ソニー - 有機EL（Electroluminescence）ディスプレイとは（日本語・有機ELの公式解説）](https://www.sony.com/ja/SonyInfo/News/Press/200102/01-271/)
+- [Intel - DMA Controller Core：Functional Description（英語・DMA制御の技術資料）](https://www.intel.com/content/www/us/en/docs/programmable/683130/24-3/functional-description-05387.html)
+- [Samsung Display - Thin Film Transistor（英語・TFTの公式解説）](https://global.samsungdisplay.com/29136/)
+- [Ecma International - ECMA-267：120 mm DVD Read-only Disk（英語・DVD-ROMの規格原文）](https://ecma-international.org/publications-and-standards/standards/ecma-267/)
