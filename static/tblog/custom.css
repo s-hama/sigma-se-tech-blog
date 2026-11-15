@@ -331,7 +331,7 @@ a.list-group-last-item {
 }
 
 .blog-header {
-    padding: 2rem 1rem;
+    padding: 2rem 0;
     background-color: var(--bs-gray-700);
     border-radius: .1rem;
     margin-top: 54px;
@@ -340,12 +340,13 @@ a.list-group-last-item {
 .blog-title {
     color: var(--bs-white);
     margin-bottom: unset;
-    margin-left: -0.25rem;
+    margin-left: 0;
 }
 
 .blog-notice {
     font-size: .85rem;
     line-height: 1.6;
+    padding-left: 1rem;
 }
 
 .blog-container {
@@ -507,11 +508,6 @@ a.list-group-last-item {
 
 /* width > 576px */
 @media (min-width: 576px) {
-    .blog-title {
-        color: var(--bs-white);
-        margin-bottom: unset;
-        margin-left: -0.7rem;
-    }
     .category-menu {
         margin-top: 0;
     }
