@@ -517,6 +517,14 @@ a.list-group-last-item {
     }
 }
 
+/* Let tablet content grow fluidly up to Bootstrap's next container width. */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .blog-header > .container-lg,
+    body > .container {
+        max-width: 960px;
+    }
+}
+
 /* post-body markdown */
 .post-body h1,
 .post-body h2,
