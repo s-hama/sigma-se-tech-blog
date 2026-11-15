@@ -17,19 +17,19 @@
   </defs>
 
   <!-- 状態 a -->
-  <circle cx="0" cy="150" r="30" stroke="rgb(73, 80, 87)" stroke-width="1" fill="white"/>
+  <circle cx="0" cy="150" r="30" stroke="rgb(73, 80, 87)" stroke-width="1" fill="none"/>
   <text x="-5" y="156" font-size="16" fill="rgb(73, 80, 87)">a</text>
 
   <!-- 状態 b -->
-  <circle cx="150" cy="50" r="30" stroke="rgb(73, 80, 87)" stroke-width="1" fill="white"/>
+  <circle cx="150" cy="50" r="30" stroke="rgb(73, 80, 87)" stroke-width="1" fill="none"/>
   <text x="145" y="56" font-size="16" fill="rgb(73, 80, 87)">b</text>
 
   <!-- 状態 c -->
-  <circle cx="150" cy="250" r="30" stroke="rgb(73, 80, 87)" stroke-width="1" fill="white"/>
+  <circle cx="150" cy="250" r="30" stroke="rgb(73, 80, 87)" stroke-width="1" fill="none"/>
   <text x="145" y="256" font-size="16" fill="rgb(73, 80, 87)">c</text>
 
   <!-- 状態 d -->
-  <circle cx="300" cy="150" r="30" stroke="rgb(73, 80, 87)" stroke-width="1" fill="white"/>
+  <circle cx="300" cy="150" r="30" stroke="rgb(73, 80, 87)" stroke-width="1" fill="none"/>
   <text x="295" y="156" font-size="16" fill="rgb(73, 80, 87)">d</text>
 
   <!-- a のループ遷移 -->
