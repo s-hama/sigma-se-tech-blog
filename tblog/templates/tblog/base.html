@@ -189,9 +189,9 @@
         </div>
         <!-- <img border="0" width="1" height="1" src="https://www16.a8.net/0.gif?a8mat=3NN1YJ+3JES8I+50+2HN8K1" alt=""> -->
     </div>
-    <div class="container">
+    <div class="container blog-main">
         <div class="row blog-container">
-            <div class="col-12 col-sm-9">
+            <div class="col-12 col-md-9">
                 {% if request.path == '/profile/' %}
                 {% include "tblog/profile.html" %}
                 {% elif request.path == '/contact/' %}
@@ -202,7 +202,7 @@
                 {% block content %}{% endblock %}
                 {% endif %}
             </div>
-            <div class="col-12 col-sm-3">
+            <div class="col-12 col-md-3">
                 {% include "tblog/side.html" %}
             </div>
         </div>

@@ -101,6 +101,21 @@ body {
     height: 22px;
 }
 
+/* Keep the article full-width on narrow tablets. */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    body > .container {
+        max-width: none;
+    }
+
+    .blog-container > .col-12 {
+        width: 100%;
+    }
+
+    .blog-container .category-menu {
+        margin-top: 1.5rem;
+    }
+}
+
 .btn-list-link {
     background-color: var(--bs-white);
     text-align: left;
