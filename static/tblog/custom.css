@@ -27,12 +27,23 @@ body {
 
 .menu-header .nav-link {
     font-size: .9rem;
+    white-space: nowrap;
 }
 
 .menu-header .form-inline {
     align-items: center;
     display: flex;
     gap: .35rem;
+}
+
+.menu-header .form-control {
+    width: 130px;
+    flex-shrink: 0;
+}
+
+.menu-header .form-inline button {
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 /* Theme toggle layout and interaction are shared by light and dark modes. */
@@ -630,7 +641,11 @@ a.list-group-last-item {
 	background: var(--bs-dark-text-emphasis);
 }
 
-@media (max-width: 575.98px) {
+@media (max-width: 991.98px) {
+    .menu-header .navbar-collapse > .container {
+        max-width: none;
+    }
+
     .menu-header .navbar-nav {
         padding: .5rem 0 .65rem;
     }
