@@ -63,6 +63,25 @@ body {
     color: var(--bs-white);
 }
 
+/* Match Bootstrap's desktop container widths and the sidebar's .75rem inset. */
+@media (min-width: 992px) {
+    .menu-header .theme-toggle-dm {
+        right: calc((100% - 960px) / 2 + .75rem);
+    }
+}
+
+@media (min-width: 1200px) {
+    .menu-header .theme-toggle-dm {
+        right: calc((100% - 1140px) / 2 + .75rem);
+    }
+}
+
+@media (min-width: 1400px) {
+    .menu-header .theme-toggle-dm {
+        right: calc((100% - 1320px) / 2 + .75rem);
+    }
+}
+
 .theme-toggle-dm[hidden],
 .theme-toggle-dm .bi-sun {
     display: none;
