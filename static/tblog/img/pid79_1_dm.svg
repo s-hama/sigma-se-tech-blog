@@ -1,0 +1,45 @@
+<svg color="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 302" role="img" aria-labelledby="title desc">
+  <title id="title">AEADの入力と出力</title>
+  <desc id="desc">鍵、nonce、平文、AADを入力し、平文は暗号文に変換し、AADは暗号化せず認証タグの検証対象にすることを示す図。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 16 10" markerWidth="16" markerHeight="10" refX="0" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L16 5 L0 10 Z" fill="#ffffff" />
+    </marker>
+  </defs>
+
+  <rect x="0.5" y="0.5" width="819" height="299" rx="16" fill="none" stroke="#ffffff" stroke-width="1" />
+  <text x="410" y="40" text-anchor="middle" font-family="sans-serif" font-size="23" font-weight="700" fill="#ffffff">AEAD: 隠すデータと守るデータを分ける</text>
+
+  <g fill="none" stroke="#ffffff">
+    <rect x="54" y="57" width="142" height="52" rx="8" />
+    <rect x="54" y="127" width="142" height="52" rx="8" />
+    <rect x="54" y="197" width="142" height="52" rx="8" />
+    <rect x="302" y="63" width="226" height="184" rx="12" />
+    <rect x="626" y="73" width="140" height="58" rx="8" />
+    <rect x="626" y="185" width="140" height="58" rx="8" />
+  </g>
+
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="125" y="88" font-size="15" font-weight="700">鍵 + nonce</text>
+    <text x="125" y="150" font-size="15" font-weight="700">平文</text>
+    <text x="125" y="170" font-size="13">暗号化する</text>
+    <text x="125" y="220" font-size="15" font-weight="700">AAD</text>
+    <text x="125" y="240" font-size="13">暗号化しない</text>
+    <text x="415" y="138" font-size="18" font-weight="700">AEAD</text>
+    <text x="415" y="160" font-size="15">平文を隠す</text>
+    <text x="415" y="180" font-size="15">AADはタグに含める</text>
+    <text x="696" y="99" font-size="15" font-weight="700">暗号文</text>
+    <text x="696" y="119" font-size="13">平文を隠した結果</text>
+    <text x="696" y="211" font-size="15" font-weight="700">認証タグ</text>
+    <text x="696" y="231" font-size="13">改ざん検知に使う</text>
+    <text x="410" y="280" font-size="15">AADは見えてよいが、勝手に変わるとタグ検証で失敗する</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow)">
+    <path d="M202 83 H282" />
+    <path d="M202 153 H282" />
+    <path d="M202 223 H282" />
+    <path d="M534 102 H606" />
+    <path d="M534 214 H606" />
+  </g>
+</svg>

@@ -1,0 +1,115 @@
+<svg color="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 444" role="img" aria-labelledby="title desc">
+  <title id="title">アルベルティの暗号円盤の仕組み</title>
+  <desc id="desc">外側の平文リングと内側の暗号文リングを回し、上の基準位置で対応する文字を読む図。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 24 14" markerWidth="24" markerHeight="14" refX="0" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L24 7 L0 14 Z" fill="#ffffff" />
+    </marker>
+  </defs>
+
+  <rect x="1" y="1" width="678" height="442" rx="18" fill="none" stroke="#ffffff" stroke-width="1" />
+  <text x="340" y="42" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="700" fill="#ffffff">アルベルティの暗号円盤: 基準位置で対応を読む</text>
+
+  <g transform="translate(186 258)">
+    <g fill="none" stroke="#ffffff">
+      <circle cx="0" cy="0" r="166" stroke-width="2" />
+      <circle cx="0" cy="0" r="135" stroke-width="2" />
+      <circle cx="0" cy="0" r="102" stroke-width="2" />
+    </g>
+
+    <g font-family="monospace" font-size="22" font-weight="700" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">
+      <text transform="rotate(0) translate(0 -149)">A</text>
+      <text transform="rotate(13.8) translate(0 -149)">B</text>
+      <text transform="rotate(27.7) translate(0 -149)">C</text>
+      <text transform="rotate(41.5) translate(0 -149)">D</text>
+      <text transform="rotate(55.4) translate(0 -149)">E</text>
+      <text transform="rotate(69.2) translate(0 -149)">F</text>
+      <text transform="rotate(83.1) translate(0 -149)">G</text>
+      <text transform="rotate(96.9) translate(0 -149)">H</text>
+      <text transform="rotate(110.8) translate(0 -149)">I</text>
+      <text transform="rotate(124.6) translate(0 -149)">J</text>
+      <text transform="rotate(138.5) translate(0 -149)">K</text>
+      <text transform="rotate(152.3) translate(0 -149)">L</text>
+      <text transform="rotate(166.2) translate(0 -149)">M</text>
+      <text transform="rotate(180) translate(0 -149)">N</text>
+      <text transform="rotate(193.8) translate(0 -149)">O</text>
+      <text transform="rotate(207.7) translate(0 -149)">P</text>
+      <text transform="rotate(221.5) translate(0 -149)">Q</text>
+      <text transform="rotate(235.4) translate(0 -149)">R</text>
+      <text transform="rotate(249.2) translate(0 -149)">S</text>
+      <text transform="rotate(263.1) translate(0 -149)">T</text>
+      <text transform="rotate(276.9) translate(0 -149)">U</text>
+      <text transform="rotate(290.8) translate(0 -149)">V</text>
+      <text transform="rotate(304.6) translate(0 -149)">W</text>
+      <text transform="rotate(318.5) translate(0 -149)">X</text>
+      <text transform="rotate(332.3) translate(0 -149)">Y</text>
+      <text transform="rotate(346.2) translate(0 -149)">Z</text>
+    </g>
+
+    <g font-family="monospace" font-size="22" font-weight="700" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">
+      <text transform="rotate(0) translate(0 -118)">d</text>
+      <text transform="rotate(13.8) translate(0 -118)">e</text>
+      <text transform="rotate(27.7) translate(0 -118)">f</text>
+      <text transform="rotate(41.5) translate(0 -118)">g</text>
+      <text transform="rotate(55.4) translate(0 -118)">h</text>
+      <text transform="rotate(69.2) translate(0 -118)">i</text>
+      <text transform="rotate(83.1) translate(0 -118)">j</text>
+      <text transform="rotate(96.9) translate(0 -118)">k</text>
+      <text transform="rotate(110.8) translate(0 -118)">l</text>
+      <text transform="rotate(124.6) translate(0 -118)">m</text>
+      <text transform="rotate(138.5) translate(0 -118)">n</text>
+      <text transform="rotate(152.3) translate(0 -118)">o</text>
+      <text transform="rotate(166.2) translate(0 -118)">p</text>
+      <text transform="rotate(180) translate(0 -118)">q</text>
+      <text transform="rotate(193.8) translate(0 -118)">r</text>
+      <text transform="rotate(207.7) translate(0 -118)">s</text>
+      <text transform="rotate(221.5) translate(0 -118)">t</text>
+      <text transform="rotate(235.4) translate(0 -118)">u</text>
+      <text transform="rotate(249.2) translate(0 -118)">v</text>
+      <text transform="rotate(263.1) translate(0 -118)">w</text>
+      <text transform="rotate(276.9) translate(0 -118)">x</text>
+      <text transform="rotate(290.8) translate(0 -118)">y</text>
+      <text transform="rotate(304.6) translate(0 -118)">z</text>
+      <text transform="rotate(318.5) translate(0 -118)">a</text>
+      <text transform="rotate(332.3) translate(0 -118)">b</text>
+      <text transform="rotate(346.2) translate(0 -118)">c</text>
+    </g>
+
+    <g fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round">
+      <line x1="0" y1="-182" x2="0" y2="-74" />
+      <path d="M-12 -172 L0 -186 L12 -172" />
+    </g>
+
+    <g font-family="sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="middle">
+      <text x="0" y="-52">基準位置</text>
+      <text x="0" y="-10">外側: 平文</text>
+      <text x="0" y="10">内側: 暗号文</text>
+    </g>
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="butt" marker-end="url(#arrow)">
+    <line x1="372" y1="258" x2="416" y2="258" />
+  </g>
+
+  <g fill="none" stroke="#ffffff">
+    <rect x="460" y="108" width="200" height="56" rx="9" />
+    <rect x="460" y="228" width="200" height="56" rx="9" />
+    <rect x="460" y="348" width="200" height="56" rx="9" />
+  </g>
+
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="560" y="130" font-size="16" font-weight="700">基準位置で読む</text>
+    <text x="560" y="155" font-family="monospace" font-size="19" font-weight="700">A → d</text>
+
+    <text x="560" y="250" font-size="16" font-weight="700">内側リングを回す</text>
+    <text x="560" y="275" font-family="monospace" font-size="19" font-weight="700">A → q</text>
+
+    <text x="560" y="370" font-size="16" font-weight="700">さらに回す</text>
+    <text x="560" y="395" font-family="monospace" font-size="19" font-weight="700">A → m</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="butt" marker-end="url(#arrow)">
+    <line x1="560" y1="173" x2="560" y2="196" />
+    <line x1="560" y1="294" x2="560" y2="316" />
+  </g>
+</svg>

@@ -1,0 +1,59 @@
+<svg color="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="173 0 519 496" role="img" aria-labelledby="title desc">
+  <title id="title">Feistel構造の1ラウンド</title>
+  <desc id="desc">平文ブロックを左半分と右半分に分け、右半分とラウンド鍵を関数Fに入れ、その結果を左半分とXORして次の左右を作る流れ。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 16 10" markerWidth="16" markerHeight="10" refX="0" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L16 5 L0 10 Z" fill="#ffffff" />
+    </marker>
+  </defs>
+
+  <rect x="173.5" y="0.5" width="518" height="493" rx="12" fill="none" stroke="#ffffff" stroke-width="1" />
+  <text x="438" y="38" text-anchor="middle" font-family="sans-serif" font-size="23" font-weight="700" fill="#ffffff">Feistel構造の1ラウンド</text>
+
+  <g fill="none" stroke="#ffffff" stroke-width="1">
+    <rect x="195" y="78" width="250" height="54" rx="8" />
+    <rect x="195" y="162" width="118" height="56" rx="8" />
+    <rect x="327" y="162" width="118" height="56" rx="8" />
+    <rect x="528" y="78" width="136" height="54" rx="8" />
+    <rect x="528" y="162" width="136" height="56" rx="8" />
+    <circle cx="425" cy="302" r="28" />
+    <rect x="195" y="398" width="210" height="56" rx="8" />
+    <rect x="444" y="398" width="220" height="56" rx="8" />
+  </g>
+
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="320" y="111" font-size="16" font-weight="700">平文ブロック P</text>
+    <text x="254" y="186" font-size="14" font-weight="700">左半分</text>
+    <text x="254" y="207" font-family="monospace" font-size="20" font-weight="700">L<tspan font-size="14">0</tspan></text>
+    <text x="386" y="186" font-size="14" font-weight="700">右半分</text>
+    <text x="386" y="207" font-family="monospace" font-size="20" font-weight="700">R<tspan font-size="14">0</tspan></text>
+    <text x="596" y="103" font-size="14" font-weight="700">ラウンド鍵</text>
+    <text x="596" y="123" font-family="monospace" font-size="16" font-weight="700">K<tspan font-size="12">1</tspan></text>
+    <text x="596" y="186" font-size="15" font-weight="700">関数 F</text>
+    <text x="596" y="207" font-family="monospace" font-size="18" font-weight="700">F(R<tspan font-size="13">0</tspan>, K<tspan font-size="13">1</tspan>)</text>
+    <text x="425" y="265" font-size="13" font-weight="700">XOR: どちらか一方のみ真ならば真</text>
+    <text x="425" y="310" font-family="monospace" font-size="21" font-weight="700">XOR</text>
+    <text x="300" y="422" font-size="14" font-weight="700">次の左</text>
+    <text x="300" y="443" font-family="monospace" font-size="18" font-weight="700">L<tspan font-size="13">1</tspan> = R<tspan font-size="13">0</tspan></text>
+    <text x="559" y="422" font-size="14" font-weight="700">次の右</text>
+    <text x="559" y="443" font-family="monospace" font-size="18" font-weight="700">R<tspan font-size="13">1</tspan> = L<tspan font-size="13">0</tspan> XOR F(R<tspan font-size="13">0</tspan>, K<tspan font-size="13">1</tspan>)</text>
+  </g>
+
+  <g fill="#ffffff" font-family="sans-serif" font-size="13" font-weight="700">
+    <text x="227" y="69">1. 平文ブロックを左右に分ける</text>
+    <text x="518" y="69">2. R<tspan font-size="11">0</tspan> と K<tspan font-size="11">1</tspan> を F に入れる</text>
+    <text x="263" y="238">3. L<tspan font-size="11">0</tspan> と F の結果を XOR する</text>
+    <text x="296" y="381">4. R0を次の左、XOR結果を次の右へ渡す</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow)">
+    <path d="M320 118 V142" />
+    <path d="M451 190 H508" />
+    <path d="M596 130 V142" />
+    <path d="M596 224 V302 H473" />
+    <path d="M254 224 V302 H377" />
+    <path d="M425 336 V356 H555 V378" />
+  </g>
+
+  <text x="438" y="480" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#ffffff">復号では、ラウンド鍵を逆順に使って同じ構造をたどる</text>
+</svg>

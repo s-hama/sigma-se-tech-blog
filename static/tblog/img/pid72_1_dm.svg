@@ -1,0 +1,53 @@
+<svg color="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 314" role="img" aria-labelledby="title desc">
+  <title id="title">頻度分析の考え方</title>
+  <desc id="desc">暗号文で多く出る文字から、平文でよく出る文字を推測する流れ。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 24 14" markerWidth="24" markerHeight="14" refX="0" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L24 7 L0 14 Z" fill="#ffffff" />
+    </marker>
+  </defs>
+  <rect x="1" y="1" width="718" height="312" rx="18" fill="none" stroke="#ffffff" stroke-width="1" />
+  <text x="360" y="42" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="700" fill="#ffffff">頻度分析の考え方</text>
+
+  <g fill="none" stroke="#ffffff">
+    <rect x="34" y="82" width="188" height="210" rx="10" />
+    <rect x="266" y="82" width="188" height="210" rx="10" />
+    <rect x="498" y="82" width="188" height="210" rx="10" />
+  </g>
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="128" y="116" font-size="18" font-weight="700">暗号文を数える</text>
+    <text x="360" y="116" font-size="18" font-weight="700">多い文字を見つける</text>
+    <text x="592" y="116" font-size="18" font-weight="700">平文を推測する</text>
+  </g>
+
+  <g font-family="monospace" font-size="22" font-weight="700" fill="#ffffff" text-anchor="middle">
+    <text x="128" y="179">T Q T R T</text>
+    <text x="128" y="209">W T E T Q</text>
+    <text x="128" y="239">T R W T E</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="2">
+    <line x1="300" y1="248" x2="300" y2="166" />
+    <line x1="300" y1="248" x2="420" y2="248" />
+    <rect x="315" y="160" width="24" height="88" rx="3" />
+    <rect x="351" y="202" width="24" height="46" rx="3" />
+    <rect x="387" y="222" width="24" height="26" rx="3" />
+  </g>
+  <g font-family="monospace" font-size="16" font-weight="700" fill="#ffffff" text-anchor="middle">
+    <text x="328" y="272">T</text>
+    <text x="363" y="272">Q</text>
+    <text x="400" y="272">R</text>
+  </g>
+
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="592" y="168" font-size="16">暗号文で多い</text>
+    <text x="592" y="200" font-family="monospace" font-size="26" font-weight="700">T</text>
+    <text x="592" y="235" font-size="16">平文でよく出る</text>
+    <text x="592" y="268" font-family="monospace" font-size="26" font-weight="700">E</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="butt" marker-end="url(#arrow)">
+    <line x1="232" y1="187" x2="246" y2="187" />
+    <line x1="464" y1="187" x2="478" y2="187" />
+  </g>
+</svg>

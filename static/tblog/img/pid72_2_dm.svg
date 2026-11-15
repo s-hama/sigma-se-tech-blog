@@ -1,0 +1,46 @@
+<svg color="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 344" role="img" aria-labelledby="title desc">
+  <title id="title">ノーメンクラタの仕組み</title>
+  <desc id="desc">文字の換字と単語のコードを組み合わせる外交暗号の仕組み。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 24 14" markerWidth="24" markerHeight="14" refX="0" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L24 7 L0 14 Z" fill="#ffffff" />
+    </marker>
+  </defs>
+  <rect x="1" y="1" width="758" height="342" rx="18" fill="none" stroke="#ffffff" stroke-width="1" />
+  <text x="380" y="42" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="700" fill="#ffffff">ノーメンクラタ: 暗号とコードを組み合わせる</text>
+
+  <g fill="none" stroke="#ffffff">
+    <rect x="36" y="92" width="194" height="178" rx="10" />
+    <rect x="282" y="92" width="194" height="178" rx="10" />
+    <rect x="530" y="92" width="194" height="178" rx="10" />
+  </g>
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="133" y="126" font-size="18" font-weight="700">元の文</text>
+    <text x="379" y="126" font-size="18" font-weight="700">種類で分ける</text>
+    <text x="627" y="126" font-size="18" font-weight="700">暗号文</text>
+  </g>
+
+  <g font-family="monospace" font-size="16" font-weight="700" fill="#ffffff" text-anchor="middle">
+    <text x="133" y="170">Q U E E N</text>
+    <text x="133" y="204">S E N D</text>
+    <text x="133" y="238">L E T T E R</text>
+  </g>
+
+  <g font-family="sans-serif" font-size="16" fill="#ffffff" text-anchor="middle">
+    <text x="379" y="186">重要語 → 番号コード</text>
+    <text x="379" y="224">普通の文字 → 換字</text>
+  </g>
+
+  <g font-family="monospace" font-size="16" font-weight="700" fill="#ffffff" text-anchor="middle">
+    <text x="627" y="170">Q U E E N → 742</text>
+    <text x="627" y="204">S E N D → X Q A R</text>
+    <text x="627" y="238">L E T T E R → 319</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="butt" marker-end="url(#arrow)">
+    <line x1="236" y1="181" x2="252" y2="181" />
+    <line x1="482" y1="181" x2="500" y2="181" />
+  </g>
+
+  <text x="380" y="312" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#ffffff">人名・地名・重要語は番号、通常文字は換字で隠す。</text>
+</svg>

@@ -1,0 +1,67 @@
+<svg color="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 805 325" role="img" aria-labelledby="title desc">
+  <title id="title">ジェファーソン・ディスクの仕組み</title>
+  <desc id="desc">複数の円盤を同じ順番で並べ、平文を一列にそろえて別の列を暗号文として読む流れ。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 24 14" markerWidth="24" markerHeight="14" refX="0" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L24 7 L0 14 Z" fill="#ffffff" />
+    </marker>
+  </defs>
+  <rect x="1" y="1" width="803" height="323" rx="18" fill="none" stroke="#ffffff" stroke-width="1" />
+  <text x="402.5" y="42" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="700" fill="#ffffff">ジェファーソン・ディスク: 平文をそろえて別の列を読む</text>
+
+  <g fill="none" stroke="#ffffff" stroke-width="2">
+    <rect x="95" y="92" width="70" height="174" rx="10" />
+    <rect x="171" y="92" width="70" height="174" rx="10" />
+    <rect x="247" y="92" width="70" height="174" rx="10" />
+    <rect x="323" y="92" width="70" height="174" rx="10" />
+    <rect x="399" y="92" width="70" height="174" rx="10" />
+    <rect x="475" y="92" width="70" height="174" rx="10" />
+    <path d="M95 154 H545" />
+    <path d="M95 214 H545" />
+  </g>
+
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="130" y="80" font-size="16" font-weight="700">円盤1</text>
+    <text x="206" y="80" font-size="16" font-weight="700">円盤2</text>
+    <text x="282" y="80" font-size="16" font-weight="700">円盤3</text>
+    <text x="358" y="80" font-size="16" font-weight="700">円盤4</text>
+    <text x="434" y="80" font-size="16" font-weight="700">円盤5</text>
+    <text x="510" y="80" font-size="16" font-weight="700">円盤6</text>
+    <text x="37" y="132" font-size="16" font-weight="700" text-anchor="start">平文行</text>
+    <text x="21" y="190" font-size="16" font-weight="700" text-anchor="start">暗号文行</text>
+  </g>
+
+  <g font-family="monospace" fill="#ffffff" text-anchor="middle" font-size="30" font-weight="700">
+    <text x="130" y="134">A</text>
+    <text x="206" y="134">T</text>
+    <text x="282" y="134">T</text>
+    <text x="358" y="134">A</text>
+    <text x="434" y="134">C</text>
+    <text x="510" y="134">K</text>
+    <text x="130" y="196">X</text>
+    <text x="206" y="196">Q</text>
+    <text x="282" y="196">M</text>
+    <text x="358" y="196">N</text>
+    <text x="434" y="196">L</text>
+    <text x="510" y="196">R</text>
+  </g>
+
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="320" y="300" font-size="16" font-weight="700">鍵 = 円盤の順番、各円盤の向き、読み取る行</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="butt" marker-end="url(#arrow)">
+    <line x1="560" y1="182" x2="606" y2="182" />
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="2">
+    <rect x="643" y="120" width="142" height="54" rx="9" />
+    <rect x="643" y="188" width="142" height="54" rx="9" />
+  </g>
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="714" y="142" font-size="15" font-weight="700">そろえる平文</text>
+    <text x="714" y="164" font-family="monospace" font-size="20" font-weight="700">ATTACK</text>
+    <text x="714" y="210" font-size="15" font-weight="700">送る暗号文</text>
+    <text x="714" y="232" font-family="monospace" font-size="20" font-weight="700">XQMNLR</text>
+  </g>
+</svg>
