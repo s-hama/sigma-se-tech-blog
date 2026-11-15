@@ -1,0 +1,68 @@
+<svg color="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 770 400" role="img" aria-labelledby="title desc">
+  <title id="title">内接正六角形の一辺は半径と同じ長さ</title>
+  <desc id="desc">左は半径1の円と内接正六角形。中心Oと隣り合う頂点A、Bを結ぶと、中心角60度の二等辺三角形OABができる。右はその三角形を拡大した図。OAとOBは半径なので長さは1。残りの二つの角も60度となるため正三角形であり、正六角形の一辺ABも1になる。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 16 10" refX="16" refY="5" markerWidth="16" markerHeight="10" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L16 5 L0 10 Z" fill="#ffffff"/>
+    </marker>
+  </defs>
+  <rect x="1" y="1" width="768" height="398" rx="18" fill="none" stroke="#ffffff" stroke-width="1"/>
+  <g font-family="sans-serif" text-anchor="middle" fill="#ffffff">
+    <text x="385" y="43" font-size="23" font-weight="700">内接正六角形の一辺は半径と同じ長さ</text>
+    <text x="178" y="85" font-size="19" font-weight="700">半径1の円と内接正六角形</text>
+    <text x="570" y="85" font-size="19" font-weight="700">取り出した正三角形</text>
+  </g>
+  <g fill="none" stroke="#ffffff">
+    <circle cx="180" cy="240" r="130" stroke-width="1.5"/>
+    <polygon points="292.583,175 292.583,305 180,370 67.417,305 67.417,175 180,110" stroke-width="1.7"/>
+    <path d="M180 110 V240 L67.417 175 M67.417 305 L180 240 V370" stroke-width="1.2" stroke-dasharray="6 4" stroke-opacity="0.65"/>
+    <polygon points="180,240 292.583,175 292.583,305" stroke-width="2.5"/>
+    <path d="M212.909 221 A38 38 0 0 1 212.909 259" stroke-width="1.2"/>
+  </g>
+  <g fill="#ffffff">
+    <circle cx="180" cy="240" r="3"/>
+    <circle cx="292.583" cy="175" r="3"/>
+    <circle cx="292.583" cy="305" r="3"/>
+  </g>
+  <g font-family="STIX Two Math, Cambria Math, Times New Roman, serif" text-anchor="middle" fill="#ffffff">
+    <g font-size="26" font-style="italic">
+      <text x="159" y="257">O</text>
+      <text x="309" y="169">A</text>
+      <text x="309" y="326">B</text>
+    </g>
+    <g font-size="26">
+      <text x="231" y="197">1</text>
+      <text x="231" y="299">1</text>
+    </g>
+    <text x="238" y="247" font-size="20">60°</text>
+  </g>
+  <line x1="335" y1="240" x2="435" y2="240" fill="none" stroke="#ffffff" stroke-width="1.3" marker-end="url(#arrow)"/>
+  <g fill="none" stroke="#ffffff">
+    <polygon points="480,240 670,130.303 670,349.697" stroke-width="2.5"/>
+    <path d="M512.909 221 A38 38 0 0 1 512.909 259" stroke-width="1.2"/>
+    <path d="M670 160.303 A30 30 0 0 1 644.019 145.303" stroke-width="1.2"/>
+    <path d="M644.019 334.697 A30 30 0 0 1 670 319.697" stroke-width="1.2"/>
+  </g>
+  <g fill="#ffffff">
+    <circle cx="480" cy="240" r="3"/>
+    <circle cx="670" cy="130.303" r="3"/>
+    <circle cx="670" cy="349.697" r="3"/>
+  </g>
+  <g font-family="STIX Two Math, Cambria Math, Times New Roman, serif" text-anchor="middle" fill="#ffffff">
+    <g font-size="26" font-style="italic">
+      <text x="458" y="257">O</text>
+      <text x="687" y="126">A</text>
+      <text x="687" y="372">B</text>
+    </g>
+    <g font-size="26">
+      <text x="568" y="173">1</text>
+      <text x="568" y="324">1</text>
+      <text x="688" y="249">1</text>
+    </g>
+    <g font-size="20">
+      <text x="538" y="247">60°</text>
+      <text x="647" y="180">60°</text>
+      <text x="647" y="315">60°</text>
+    </g>
+  </g>
+</svg>
