@@ -92,14 +92,6 @@
     border-color: var(--bs-gray-600);
 }
 
-[data-bs-theme="dark"] .menu-header .nav-link {
-    color: var(--bs-link-color);
-}
-
-[data-bs-theme="dark"] .menu-header .nav-link:is(:hover, :focus-visible, .active) {
-    color: var(--bs-link-hover-color);
-}
-
 [data-bs-theme="dark"] .blog-header,
 [data-bs-theme="dark"] .bg-primary {
     background-color: var(--bs-gray-800) !important;

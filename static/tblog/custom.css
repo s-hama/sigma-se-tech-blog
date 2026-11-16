@@ -21,6 +21,7 @@ body {
 }
 
 .menu-header {
+    --bs-navbar-padding-y: 5px;
     background-color: var(--bs-gray-dark) !important;
     border-color: var(--bs-gray-dark);
     border-radius: 0;
@@ -29,6 +30,7 @@ body {
 .menu-header .nav-link {
     font-size: .9rem;
     white-space: nowrap;
+    padding: .5rem;
 }
 
 .menu-header .form-inline {
@@ -59,9 +61,46 @@ body {
     height: 44px;
     padding: 10px;
     border: 0;
+}
+
+/* One interaction style for header links and the theme control in both modes. */
+.menu-header :is(.nav-link, .theme-toggle-dm) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
     border-radius: var(--bs-border-radius);
-    background: transparent;
+    background-color: transparent;
+    color: var(--bs-gray-400);
+    text-decoration: none;
+    transition: none;
+}
+
+@media (hover: hover) {
+    .menu-header :is(.nav-link, .theme-toggle-dm):hover {
+        background-color: var(--bs-gray-700);
+        color: var(--bs-white);
+    }
+}
+
+.menu-header :is(.nav-link, .theme-toggle-dm):focus-visible {
+    background-color: var(--bs-gray-700);
     color: var(--bs-white);
+    outline: var(--bs-border-width) solid var(--bs-gray-500);
+    outline-offset: -2px;
+    box-shadow: none;
+}
+
+.menu-header :is(.nav-link, .theme-toggle-dm):active {
+    background-color: var(--bs-gray-600);
+    color: var(--bs-white);
+}
+
+.menu-header .nav-link[aria-current="page"] {
+    color: var(--bs-white);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: .2em;
 }
 
 /* Match Bootstrap's desktop container widths and the sidebar's .75rem inset. */
@@ -86,15 +125,6 @@ body {
 .theme-toggle-dm[hidden],
 .theme-toggle-dm .bi-sun {
     display: none;
-}
-
-.theme-toggle-dm:hover {
-    background-color: var(--bs-gray-700);
-}
-
-.theme-toggle-dm:focus-visible {
-    outline: 2px solid var(--bs-white);
-    outline-offset: -2px;
 }
 
 .theme-toggle-dm svg {
@@ -667,11 +697,6 @@ a.list-group-last-item {
 
     .menu-header .navbar-nav {
         padding: .5rem 0 .65rem;
-    }
-
-    .menu-header .nav-link {
-        padding-bottom: .2rem;
-        padding-top: .2rem;
     }
 
     .menu-header .form-inline {
