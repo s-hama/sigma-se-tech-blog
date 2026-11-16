@@ -576,6 +576,34 @@ a.list-group-last-item {
 	max-height: 100%;
 }
 
+/* Scale from desktop size, retaining more size for wide article images. */
+.post-body {
+	--post-media-scale: 0.8;
+	--post-media-wide-scale: 0.9;
+}
+
+@media (max-width: 991px) {
+	.post-media-scroll {
+		display: block;
+		max-width: 100%;
+		overflow-x: auto;
+		overscroll-behavior-inline: contain;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.post-media-scroll > img {
+		width: calc(var(--post-media-width) * var(--post-media-scale)) !important;
+		max-width: none !important;
+		height: auto !important;
+		margin: 0 !important;
+		vertical-align: middle;
+	}
+
+	.post-media-scroll[data-wide-image] {
+		--post-media-scale: var(--post-media-wide-scale);
+	}
+}
+
 .post-body a:focus,
 .post-body input:focus,
 .post-body select:focus,
