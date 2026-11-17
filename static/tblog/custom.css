@@ -501,6 +501,18 @@ body {
     margin-bottom: 1rem;
 }
 
+.sitemap-toc > ul > li + li {
+    margin-top: .75rem;
+}
+
+.sitemap-toc > ul > li > ul {
+    margin-top: .5rem;
+}
+
+.sitemap-subcategories > li + li {
+    margin-top: 1.25rem;
+}
+
 /* Categories stay as indented text; each article gets its own title panel. */
 .home-guide ul,
 .sitemap ul {
