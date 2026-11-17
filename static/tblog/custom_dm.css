@@ -225,19 +225,9 @@
     border-color: var(--bs-gray-600);
 }
 
-/* Paint the outer frame above the cells without changing layout or separators. */
+/* Sidebar outer frames and hovered rows use the shared frame color. */
 [data-bs-theme="dark"] :is(.category-menu, .tags-menu) {
-    position: relative;
-}
-
-[data-bs-theme="dark"] :is(.category-menu, .tags-menu)::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    border: var(--bs-border-width) solid var(--theme-frame-color-dm);
-    border-radius: inherit;
-    pointer-events: none;
+    border-color: var(--theme-frame-color-dm);
 }
 
 [data-bs-theme="dark"] :is(.category-menu, .tags-menu) .list-group-item-action:is(:hover, :focus-visible) {

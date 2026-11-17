@@ -282,10 +282,6 @@ body {
     border-right: var(--bs-list-group-border-width) solid var(--bs-gray-700);
 }
 
-a.list-group-last-item {
-    padding: 0.15rem 0.15rem;
-}
-
 .list-group > .list-group-item:last-of-type {
     border-bottom-color: var(--bs-gray-700);
     border-bottom-right-radius: inherit;
@@ -503,6 +499,23 @@ a.list-group-last-item {
 
 .sitemap-toc {
     margin-bottom: 1rem;
+}
+
+/* A real outer border closes the list, including collapsed category groups. */
+:is(.category-menu, .tags-menu) {
+    border: var(--bs-border-width) solid var(--bs-gray-700);
+    border-radius: var(--bs-list-group-border-radius);
+    overflow: hidden;
+}
+
+:is(.category-menu, .tags-menu) .list-group-item {
+    border: 0;
+    border-top: var(--bs-border-width) solid var(--bs-light-border-subtle);
+    border-radius: 0;
+}
+
+:is(.category-menu, .tags-menu) > .list-group-item:first-child {
+    border-top: 0;
 }
 
 .latest-posts-title {
