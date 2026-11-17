@@ -501,6 +501,44 @@ body {
     margin-bottom: 1rem;
 }
 
+/* Categories stay as indented text; each article gets its own title panel. */
+.home-guide ul,
+.sitemap ul {
+    list-style: none;
+}
+
+.home-guide .article-link-list,
+.sitemap .article-link-list {
+    padding-left: 0;
+    margin-left: 2.25rem;
+}
+
+.home-guide .article-link-list > li,
+.sitemap .article-link-list > li {
+    margin-bottom: .5rem;
+}
+
+.home-guide .article-link-list > li:last-child,
+.sitemap .article-link-list > li:last-child {
+    margin-bottom: 0;
+}
+
+.article-link-list .btn-list-link {
+    display: block;
+}
+
+.article-link-list .btn-list-link:focus-visible {
+    outline: var(--bs-border-width) solid var(--bs-btn-border-color);
+    outline-offset: 2px;
+    box-shadow: none;
+}
+
+.home-recommendation-name,
+.home-server-name,
+.sitemap-subcategory-name {
+    font-weight: 600;
+}
+
 /* A real outer border closes the list, including collapsed category groups. */
 :is(.category-menu, .tags-menu) {
     border: var(--bs-border-width) solid var(--bs-gray-700);

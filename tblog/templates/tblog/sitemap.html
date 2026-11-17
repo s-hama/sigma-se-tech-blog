@@ -35,9 +35,9 @@
         {% for series in child.series %}
         <div class="sitemap-series">
           {% if series.summary %}<p>{{ series.summary }}</p>{% endif %}
-          <ul>
+          <ul class="article-link-list">
             {% for post in series.posts %}
-            <li><a class="link-secondary" href="{% url 'tblog:detail' post.pk %}">{{ post.title }}</a></li>
+            <li><a class="btn btn-outline-primary btn-list-link" href="{% url 'tblog:detail' post.pk %}">{{ post.title }}</a></li>
             {% endfor %}
           </ul>
         </div>

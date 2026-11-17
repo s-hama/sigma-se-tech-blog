@@ -7,10 +7,10 @@
 <div class="home-guide">
   <section class="home-section" aria-labelledby="home-latest-title">
     <h2 class="h4" id="home-latest-title">新着</h2>
-    <ul class="home-latest-posts">
+    <ul class="home-latest-posts article-link-list">
       {% for latest_post in latest_posts %}
       <li>
-        <a class="link-secondary" href="{% url 'tblog:detail' latest_post.pk %}">{{ latest_post.title }}</a>
+        <a class="btn btn-outline-primary btn-list-link" href="{% url 'tblog:detail' latest_post.pk %}">{{ latest_post.title }}</a>
       </li>
       {% empty %}
       <li>公開記事はまだありません。</li>
@@ -27,9 +27,9 @@
       <li class="recommended-series-group">
         <span class="home-recommendation-name" id="home-math-title">数学 - 計算の仕組み</span>
         <p>分数の除算や負の数、0で割れない理由など、計算規則の仕組みを具体例と数式で解説</p>
-        <ul>
+        <ul class="article-link-list">
           {% for math_post in math_posts %}
-          <li><a class="link-secondary" href="{% url 'tblog:detail' math_post.pk %}">{{ math_post.title }}</a></li>
+          <li><a class="btn btn-outline-primary btn-list-link" href="{% url 'tblog:detail' math_post.pk %}">{{ math_post.title }}</a></li>
           {% endfor %}
         </ul>
       </li>
@@ -42,9 +42,9 @@
           {% for series in vps_series %}
           <li class="home-server-series">
             <span class="home-server-name">{{ series.label }}</span>
-            <ul>
+            <ul class="article-link-list">
               {% for series_post in series.posts %}
-              <li><a class="link-secondary" href="{% url 'tblog:detail' series_post.pk %}">{{ series_post.title }}</a></li>
+              <li><a class="btn btn-outline-primary btn-list-link" href="{% url 'tblog:detail' series_post.pk %}">{{ series_post.title }}</a></li>
               {% endfor %}
             </ul>
           </li>
@@ -56,9 +56,9 @@
       <li class="recommended-series-group">
         <span class="home-recommendation-name" id="home-angular-title">Webシステム開発 - Angular基礎</span>
         <p>Angularの導入から基本構成まで、Webシステム開発の基礎を解説</p>
-        <ul>
+        <ul class="article-link-list">
           {% for angular_post in angular_posts %}
-          <li><a class="link-secondary" href="{% url 'tblog:detail' angular_post.pk %}">{{ angular_post.title }}</a></li>
+          <li><a class="btn btn-outline-primary btn-list-link" href="{% url 'tblog:detail' angular_post.pk %}">{{ angular_post.title }}</a></li>
           {% endfor %}
         </ul>
       </li>
