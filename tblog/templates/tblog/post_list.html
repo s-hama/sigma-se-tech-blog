@@ -10,7 +10,10 @@
     <ul class="home-latest-posts article-link-list">
       {% for latest_post in latest_posts %}
       <li>
-        <a class="btn btn-outline-primary btn-list-link" href="{% url 'tblog:detail' latest_post.pk %}">{{ latest_post.title }}</a>
+        <a class="btn btn-outline-primary btn-list-link" href="{% url 'tblog:detail' latest_post.pk %}">
+          <span class="article-link-title">{{ latest_post.title }}</span>
+          {% include "tblog/post_meta.html" with post=latest_post show_author=False compact=True only %}
+        </a>
       </li>
       {% empty %}
       <li>公開記事はまだありません。</li>
@@ -29,7 +32,7 @@
         <p>分数の除算や負の数、0で割れない理由など、計算規則の仕組みを具体例と数式で解説</p>
         <ul class="article-link-list">
           {% for math_post in math_posts %}
-          <li><a class="btn btn-outline-primary btn-list-link" href="{% url 'tblog:detail' math_post.pk %}">{{ math_post.title }}</a></li>
+          <li><a class="btn btn-outline-primary btn-list-link" href="{% url 'tblog:detail' math_post.pk %}"><span class="article-link-title">{{ math_post.title }}</span></a></li>
           {% endfor %}
         </ul>
       </li>
@@ -44,7 +47,7 @@
             <span class="home-server-name">{{ series.label }}</span>
             <ul class="article-link-list">
               {% for series_post in series.posts %}
-              <li><a class="btn btn-outline-primary btn-list-link" href="{% url 'tblog:detail' series_post.pk %}">{{ series_post.title }}</a></li>
+              <li><a class="btn btn-outline-primary btn-list-link" href="{% url 'tblog:detail' series_post.pk %}"><span class="article-link-title">{{ series_post.title }}</span></a></li>
               {% endfor %}
             </ul>
           </li>
@@ -58,7 +61,7 @@
         <p>Angularの導入から基本構成まで、Webシステム開発の基礎を解説</p>
         <ul class="article-link-list">
           {% for angular_post in angular_posts %}
-          <li><a class="btn btn-outline-primary btn-list-link" href="{% url 'tblog:detail' angular_post.pk %}">{{ angular_post.title }}</a></li>
+          <li><a class="btn btn-outline-primary btn-list-link" href="{% url 'tblog:detail' angular_post.pk %}"><span class="article-link-title">{{ angular_post.title }}</span></a></li>
           {% endfor %}
         </ul>
       </li>
@@ -72,7 +75,7 @@
 {% for post in post_list %}
 <div class="border-primary mb-3">
   <a class="btn btn-outline-primary btn-list-link col-12 col-sm-12 {% if post.category.name == 'PaidContent' %}disabled{% endif %}" href="{% url 'tblog:detail' post.pk %}">
-    <h4>{{ post.title }}</h4>
+    <h4 class="article-link-title">{{ post.title }}</h4>
     {% include "tblog/post_meta.html" with show_author=False %}
   </a>
 </div>

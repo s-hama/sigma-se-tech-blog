@@ -577,8 +577,24 @@ body {
     margin-bottom: 0;
 }
 
+/* Article titles share typography across guides, listings, and detail pages. */
+.article-link-title {
+    font-size: 1.125rem;
+    color: var(--bs-heading-color, inherit);
+    font-weight: 600;
+}
+
 .article-link-list .btn-list-link {
     display: block;
+    font-size: 1.125rem;
+}
+
+.post-meta-compact {
+    font-size: 1rem;
+}
+
+.post-meta-compact .post-meta-dates {
+    font-size: .875rem;
 }
 
 .article-link-list .btn-list-link:focus-visible {

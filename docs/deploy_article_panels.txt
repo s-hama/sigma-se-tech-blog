@@ -1,0 +1,24 @@
+# 記事パネルの表示統一：デプロイコマンド（前回分を含む7ファイル）
+# このコマンド集自体はサーバーへ配置する必要はありません。
+
+# 1. scp（ローカルのMacで実行）
+scp -P 22 /Users/s-hama/github/sigma-se-tech-blog/static/tblog/custom.css vpsuser@sigma-se-vps:/home/vpsuser/
+scp -P 22 /Users/s-hama/github/sigma-se-tech-blog/tblog/templates/tblog/post_list.html vpsuser@sigma-se-vps:/home/vpsuser/
+scp -P 22 /Users/s-hama/github/sigma-se-tech-blog/tblog/templates/tblog/sitemap.html vpsuser@sigma-se-vps:/home/vpsuser/
+scp -P 22 /Users/s-hama/github/sigma-se-tech-blog/tblog/templates/tblog/post_detail.html vpsuser@sigma-se-vps:/home/vpsuser/
+scp -P 22 /Users/s-hama/github/sigma-se-tech-blog/tblog/templates/tblog/post_meta.html vpsuser@sigma-se-vps:/home/vpsuser/
+scp -P 22 /Users/s-hama/github/sigma-se-tech-blog/tblog/views.py vpsuser@sigma-se-vps:/home/vpsuser/
+scp -P 22 /Users/s-hama/github/sigma-se-tech-blog/docs/dark_mode.md vpsuser@sigma-se-vps:/home/vpsuser/
+
+# 2. mv（サーバーにログインして実行）
+mv -f /home/vpsuser/custom.css /var/www/projs/sweb/static/tblog/custom.css
+mv -f /home/vpsuser/post_list.html /var/www/projs/sweb/tblog/templates/tblog/post_list.html
+mv -f /home/vpsuser/sitemap.html /var/www/projs/sweb/tblog/templates/tblog/sitemap.html
+mv -f /home/vpsuser/post_detail.html /var/www/projs/sweb/tblog/templates/tblog/post_detail.html
+mv -f /home/vpsuser/post_meta.html /var/www/projs/sweb/tblog/templates/tblog/post_meta.html
+mv -f /home/vpsuser/views.py /var/www/projs/sweb/tblog/views.py
+mv -f /home/vpsuser/dark_mode.md /var/www/projs/sweb/docs/dark_mode.md
+
+# Pythonとテンプレートを変更したため、配置後に普段の手順でアプリケーションを再起動してください。
+# 静的ファイルを別のSTATIC_ROOTから配信している場合は、普段のcollectstatic手順も実施してください。
+# custom_dm.css、JavaScript、SVGの更新はありません。

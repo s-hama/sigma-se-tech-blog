@@ -37,7 +37,7 @@
           {% if series.summary %}<p>{{ series.summary }}</p>{% endif %}
           <ul class="article-link-list">
             {% for post in series.posts %}
-            <li><a class="btn btn-outline-primary btn-list-link" href="{% url 'tblog:detail' post.pk %}">{{ post.title }}</a></li>
+            <li><a class="btn btn-outline-primary btn-list-link" href="{% url 'tblog:detail' post.pk %}"><span class="article-link-title">{{ post.title }}</span></a></li>
             {% endfor %}
           </ul>
         </div>
