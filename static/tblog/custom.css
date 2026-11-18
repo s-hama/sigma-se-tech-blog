@@ -22,6 +22,8 @@ body {
 
 .menu-header {
     --bs-navbar-padding-y: 5px;
+    /* Match the offset above .blog-header, including the collapsed menu. */
+    min-height: 54px;
     background-color: var(--bs-gray-dark) !important;
     border-color: var(--bs-gray-dark);
     border-radius: 0;
