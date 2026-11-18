@@ -331,6 +331,15 @@ body {
     margin-bottom: 0;
 }
 
+/* Match the sidebar heading's 24px line and 40px total height. */
+.article-header {
+    padding-bottom: calc(var(--bs-card-cap-padding-y) - var(--bs-card-border-width));
+}
+
+.article-header .article-link-title {
+    line-height: 1.5rem;
+}
+
 .card-header:first-child {
     border-color: var(--bs-gray-700) !important;
 }
