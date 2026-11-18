@@ -477,6 +477,31 @@ body {
     padding-left: 1rem;
 }
 
+/* Long technology names must not squeeze the project column. */
+.profile-history {
+    overflow-wrap: anywhere;
+}
+
+.profile-history tr > :first-child {
+    white-space: nowrap;
+}
+
+@media (max-width: 991.98px) {
+    .profile-history {
+        --history-number-width: 5%;
+        --history-period-width: 18%;
+        --history-industry-width: 11%;
+        --history-project-width: 29%;
+        --history-position-width: 14%;
+        --history-language-width: 23%;
+    }
+
+    .profile-history > :not(caption) > * > * {
+        padding-left: .25rem;
+        padding-right: .25rem;
+    }
+}
+
 .page-section-content,
 .policy-section-content,
 .policy-subsection-content {
