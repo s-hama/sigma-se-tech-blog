@@ -42,8 +42,16 @@ body {
 }
 
 .menu-header .form-control {
-    width: 130px;
-    flex-shrink: 0;
+    width: 240px;
+    min-width: 0;
+    flex-shrink: 1;
+}
+
+/* Keep room for the navigation and theme control on smaller desktops. */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .menu-header .form-control {
+        width: 200px;
+    }
 }
 
 .menu-header .form-inline button {
