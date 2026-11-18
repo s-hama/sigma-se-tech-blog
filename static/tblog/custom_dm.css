@@ -225,6 +225,10 @@
     border-color: var(--bs-gray-600);
 }
 
+[data-bs-theme="dark"] :is(.category-menu, .tags-menu) .list-group-item-light {
+    color: var(--bs-body-color);
+}
+
 /* Sidebar outer frames and hovered rows use the shared frame color. */
 [data-bs-theme="dark"] :is(.category-menu, .tags-menu) {
     border-color: var(--theme-frame-color-dm);
