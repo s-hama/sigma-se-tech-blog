@@ -198,6 +198,21 @@ body {
     white-space: nowrap;
 }
 
+/* At a wrapped row's right edge, clip the comma placed in the column gap. */
+.post-meta-dates-list {
+    column-gap: 1em;
+    overflow: hidden;
+}
+
+.post-meta-dates-list .post-date:first-child {
+    position: relative;
+}
+
+.post-meta-dates-list .post-date-comma {
+    position: absolute;
+    left: 100%;
+}
+
 .card-meta {
     background-color: var(--bs-light);
     border-bottom: var(--bs-card-border-width) solid var(--bs-card-border-color);

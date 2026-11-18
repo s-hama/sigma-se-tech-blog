@@ -6,8 +6,8 @@
       <span class="badge category-grandchild">{{ tag.name }}</span>
     {% endfor %}
   </div>
-  <div class="post-meta-dates">
-    <span class="post-date"><span class="post-date-label">作成日：</span><time datetime="{{ post.created_at|date:'c' }}">{{ post.created_at|date:"Y/m/d H:i" }}</time>、</span>
+  <div class="post-meta-dates{% if not show_author %} post-meta-dates-list{% endif %}">
+    <span class="post-date"><span class="post-date-label">作成日：</span><time datetime="{{ post.created_at|date:'c' }}">{{ post.created_at|date:"Y/m/d H:i" }}</time><span class="post-date-comma" aria-hidden="true">、</span></span>
     <span class="post-date"><span class="post-date-label">更新日：</span><time datetime="{{ post.updated_at|date:'c' }}">{{ post.updated_at|date:"Y/m/d H:i" }}</time></span>
     {% if show_author %}
     <span class="post-date-separator mx-1" aria-hidden="true">｜</span>
