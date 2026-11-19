@@ -327,3 +327,8 @@
     color: var(--bs-gray-400) !important;
     text-decoration: underline double;
 }
+
+/* Give the mobile menu a distinct pressed state without changing its size. */
+[data-bs-theme="dark"] .menu-header > [data-bs-toggle="collapse"] {
+    --bs-btn-active-bg: var(--bs-gray-600);
+}

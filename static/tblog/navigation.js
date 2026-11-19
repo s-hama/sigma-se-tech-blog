@@ -1,5 +1,24 @@
-/* Navigate between the page top and the shared mobile category/tag section. */
+/* Keep fragment destinations below the fixed header in every layout. */
 (() => {
+    const header = document.querySelector('.menu-header');
+    const updateHeaderHeight = () => {
+        if (!header) return;
+        document.documentElement.style.setProperty(
+            '--site-header-height', `${header.getBoundingClientRect().height}px`
+        );
+    };
+    updateHeaderHeight();
+    if (header) new ResizeObserver(updateHeaderHeight).observe(header);
+
+    // Reapply a directly opened fragment after layout and assets have loaded.
+    window.addEventListener('load', () => {
+        updateHeaderHeight();
+        if (!location.hash) return;
+        let id;
+        try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+        document.getElementById(id)?.scrollIntoView({ block: 'start', behavior: 'instant' });
+    }, { once: true });
+
     const menu = document.getElementById('exCollapsingNavbar2');
     const link = document.getElementById('category-tags-link');
     const destination = document.getElementById('category-tags');
@@ -14,7 +33,8 @@
         pendingJump = false;
         if (!mobile.matches) return;
         destination.focus({ preventScroll: true });
-        const top = window.scrollY + destination.getBoundingClientRect().top - 70;
+        const top = window.scrollY + destination.getBoundingClientRect().top
+            - (header?.getBoundingClientRect().height || 54) - 16;
         window.scrollTo({ top, behavior: 'instant' });
     };
 
