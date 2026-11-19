@@ -144,9 +144,11 @@
                             {% if request.path == '/' and request.GET.page and not request.GET.quick %}aria-current="page"{% endif %}
                             href="{% url 'tblog:index' %}?page=1">記事一覧</a>
                     </li>
+                    {% if request.path != '/profile/' and request.path != '/contact/' and request.path != '/ppolicy/' %}
                     <li class="nav-item d-lg-none">
                         <a class="nav-link" id="category-tags-link" href="#category-tags">カテゴリ・タグ</a>
                     </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == '/sitemap/' %}active{% endif %}"
                             {% if request.path == '/sitemap/' %}aria-current="page"{% endif %}
@@ -214,7 +216,7 @@
                 {% block content %}{% endblock %}
                 {% endif %}
             </div>
-            <div class="col-12 col-lg-3" id="category-tags" tabindex="-1" aria-label="カテゴリ・タグ">
+            <div class="col-12 col-lg-3{% if request.path == '/profile/' or request.path == '/contact/' or request.path == '/ppolicy/' %} d-none d-lg-block{% endif %}" id="category-tags" tabindex="-1" aria-label="カテゴリ・タグ">
                 <p class="mb-3 d-lg-none"><a class="link-secondary" id="category-tags-top" href="#page-top">先頭に戻る</a></p>
                 {% include "tblog/side.html" %}
             </div>
