@@ -10,8 +10,8 @@
 [data-bs-theme="dark"] {
     color-scheme: dark;
     --theme-frame-color-dm: var(--bs-gray-500);
-    /* Darker outer frames, lighter reading surfaces: gray-900 → 800 → 700. */
-    --bs-body-bg: var(--bs-gray-900);
+    /* Keep the page between the navigation and title surfaces in brightness. */
+    --bs-body-bg: color-mix(in srgb, var(--bs-gray-900) 50%, var(--bs-gray-800));
     --bs-body-color: var(--bs-gray-200);
     --bs-emphasis-color: var(--bs-white);
     --bs-secondary-color: var(--bs-gray-300);
