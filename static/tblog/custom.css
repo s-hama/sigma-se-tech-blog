@@ -510,7 +510,8 @@ body {
     padding-left: 1rem;
 }
 
-.profile-section-title {
+.profile-section-title,
+.policy-section-title {
     font-size: 1.125rem;
     font-weight: 400;
 }
