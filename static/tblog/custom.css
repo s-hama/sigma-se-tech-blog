@@ -199,18 +199,42 @@ body {
 }
 
 /* At a wrapped row's right edge, clip the comma placed in the column gap. */
-.post-meta-dates-list {
+.post-meta-dates-separated {
     column-gap: 1em;
     overflow: hidden;
 }
 
-.post-meta-dates-list .post-date:first-child {
+.post-meta-dates-separated .post-date:first-child {
     position: relative;
 }
 
-.post-meta-dates-list .post-date-comma {
+.post-meta-dates-separated .post-date-comma {
     position: absolute;
     left: 100%;
+}
+
+/* Reserve comma space only between dates, not before the author separator. */
+.article-detail .post-meta-dates-separated {
+    column-gap: 0;
+}
+
+.article-detail .post-meta-dates-separated .post-date + .post-date {
+    margin-left: 1em;
+}
+
+/* In the stacked date layout, the author occupies its own right-aligned row. */
+.article-detail .post-meta-dates-wrapped .post-author {
+    flex-basis: 100%;
+    text-align: right;
+}
+
+.article-detail .post-meta-dates-wrapped .post-date-separator {
+    display: none;
+}
+
+/* Keep the separator's width to avoid changing the wrap decision repeatedly. */
+.article-detail .post-meta-author-wrapped .post-date-separator {
+    visibility: hidden;
 }
 
 .card-meta {
