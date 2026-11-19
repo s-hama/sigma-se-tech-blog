@@ -54,6 +54,8 @@ body {
     width: 240px;
     min-width: 0;
     flex-shrink: 1;
+    /* Fill beneath the rounded border to avoid a dark seam at its inner edge. */
+    background-clip: border-box;
 }
 
 /* Keep room for the navigation and theme control on smaller desktops. */
