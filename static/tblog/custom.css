@@ -590,7 +590,7 @@ body {
 .article-link-title {
     font-size: 1.125rem;
     color: var(--bs-heading-color, inherit);
-    font-weight: 600;
+    font-weight: 400;
 }
 
 .article-link-list .btn-list-link {
@@ -598,12 +598,26 @@ body {
     font-size: 1.125rem;
 }
 
+/* Guide article links use the same size and weight as their descriptions. */
+.sitemap .article-link-title,
+.home-recommendations .article-link-title {
+    font-size: .92rem;
+    font-weight: 400;
+}
+
+.post-meta .badge {
+    font-weight: 400;
+}
+
 .post-meta-compact {
     font-size: 1rem;
 }
 
-.post-meta-compact .post-meta-dates {
+.post-meta-compact .post-meta-dates,
+.btn-list-link .post-meta-dates,
+.article-detail .post-meta-dates {
     font-size: .875rem;
+    font-weight: 400;
 }
 
 .article-link-list .btn-list-link:focus-visible {
@@ -615,7 +629,8 @@ body {
 .home-recommendation-name,
 .home-server-name,
 .sitemap-subcategory-name {
-    font-weight: 600;
+    font-size: 1.125rem;
+    font-weight: 400;
 }
 
 /* A real outer border closes the list, including collapsed category groups. */
