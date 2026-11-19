@@ -1,0 +1,57 @@
+<svg color="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 344" role="img" aria-labelledby="title desc">
+  <title id="title">カルダノの格子の仕組み</title>
+  <desc id="desc">穴の開いた格子で秘密文を書き、周囲に普通の文章を足して隠す流れ。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 24 14" markerWidth="24" markerHeight="14" refX="0" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L24 7 L0 14 Z" fill="#ffffff" />
+    </marker>
+  </defs>
+  <rect x="1" y="1" width="818" height="342" rx="18" fill="none" stroke="#ffffff" stroke-width="1" />
+  <text x="410" y="42" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="700" fill="#ffffff">カルダノの格子: 秘密文の存在を隠す</text>
+
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="130" y="82" font-size="17" font-weight="700">1. 格子を置く</text>
+    <text x="410" y="82" font-size="17" font-weight="700">2. 穴だけに書く</text>
+    <text x="690" y="82" font-size="17" font-weight="700">3. 普通の手紙に見せる</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff">
+    <rect x="50" y="106" width="160" height="160" rx="8" />
+    <rect x="330" y="106" width="160" height="160" rx="8" />
+    <rect x="610" y="106" width="160" height="160" rx="8" />
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="">
+    <path d="M90 106 V266 M130 106 V266 M170 106 V266 M50 146 H210 M50 186 H210 M50 226 H210" />
+    <path d="M370 106 V266 M410 106 V266 M450 106 V266 M330 146 H490 M330 186 H490 M330 226 H490" />
+    <path d="M650 106 V266 M690 106 V266 M730 106 V266 M610 146 H770 M610 186 H770 M610 226 H770" />
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="2">
+    <rect x="56" y="112" width="28" height="28" rx="4" />
+    <rect x="136" y="152" width="28" height="28" rx="4" />
+    <rect x="96" y="192" width="28" height="28" rx="4" />
+    <rect x="176" y="232" width="28" height="28" rx="4" />
+  </g>
+
+  <g font-family="monospace" font-size="22" font-weight="700" fill="#ffffff" text-anchor="middle">
+    <text x="350" y="134">M</text>
+    <text x="430" y="174">E</text>
+    <text x="390" y="214">E</text>
+    <text x="470" y="254">T</text>
+  </g>
+
+  <g font-family="monospace" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">
+    <text x="630" y="132">M</text><text x="670" y="132">A</text><text x="710" y="132">I</text><text x="750" y="132">L</text>
+    <text x="630" y="172">N</text><text x="670" y="172">I</text><text x="710" y="172">E</text><text x="750" y="172">D</text>
+    <text x="630" y="212">T</text><text x="670" y="212">E</text><text x="710" y="212">A</text><text x="750" y="212">M</text>
+    <text x="630" y="252">S</text><text x="670" y="252">O</text><text x="710" y="252">O</text><text x="750" y="252">T</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="butt" marker-end="url(#arrow)">
+    <line x1="232" y1="186" x2="270" y2="186" />
+    <line x1="512" y1="186" x2="550" y2="186" />
+  </g>
+
+  <text x="410" y="313" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#ffffff">同じ格子を重ねると、穴の位置の文字だけを読める。</text>
+</svg>

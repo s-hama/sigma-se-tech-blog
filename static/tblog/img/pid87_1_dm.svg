@@ -1,0 +1,44 @@
+<svg color="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 315" role="img" aria-labelledby="title desc">
+  <title id="title">除算を乗算の式で比較</title>
+  <desc id="desc">6割る2では商が3に一意に定まり、6割る0では商が存在しないため定義できず、0割る0では商が一意に定まらないため定義できないことを比較した図。</desc>
+
+  <style>
+    .math {
+      font-family: "STIX Two Math", "Cambria Math", "Times New Roman", serif;
+    }
+    .variable {
+      font-style: italic;
+    }
+  </style>
+
+  <rect x="0.5" y="0.5" width="819" height="314" rx="16" fill="none" stroke="#ffffff" stroke-width="1" />
+  <text x="410" y="41" text-anchor="middle" font-family="sans-serif" font-size="23" font-weight="700" fill="#ffffff">除算を乗算の式で比べる</text>
+
+  <g fill="none" stroke="#ffffff" stroke-width="1">
+    <rect x="26" y="62" width="238" height="194" rx="12" />
+    <rect x="291" y="62" width="238" height="194" rx="12" />
+    <rect x="556" y="62" width="238" height="194" rx="12" />
+  </g>
+
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="145" y="99" font-size="18" font-weight="700">通常の除算</text>
+    <text x="410" y="99" font-size="18" font-weight="700">商が存在しない</text>
+    <text x="675" y="99" font-size="18" font-weight="700">商が一意に定まらない</text>
+
+    <text x="145" y="138" class="math" font-size="26">6 ÷ 2 = <tspan class="variable">x</tspan></text>
+    <text x="145" y="174" class="math" font-size="26">2 × <tspan class="variable">x</tspan> = 6</text>
+    <text x="145" y="210" font-size="16" font-weight="700">商は <tspan class="math variable" font-size="20">x</tspan><tspan class="math" font-size="20"> = 3</tspan> に一意に定まる</text>
+
+    <text x="410" y="138" class="math" font-size="26">6 ÷ 0 = <tspan class="variable">x</tspan></text>
+    <text x="410" y="174" class="math" font-size="26">0 × <tspan class="variable">x</tspan> = 6</text>
+    <text x="410" y="210" font-size="16" font-weight="700">商が存在しないため</text>
+    <text x="410" y="234" font-size="16" font-weight="700">定義できない</text>
+
+    <text x="675" y="138" class="math" font-size="26">0 ÷ 0 = <tspan class="variable">x</tspan></text>
+    <text x="675" y="174" class="math" font-size="26">0 × <tspan class="variable">x</tspan> = 0</text>
+    <text x="675" y="210" font-size="16" font-weight="700">商が一意に定まらないため</text>
+    <text x="675" y="234" font-size="16" font-weight="700">定義できない</text>
+
+    <text x="410" y="292" font-size="16" font-weight="700">除算の定義が成り立つには、商が一意に定まる必要がある</text>
+  </g>
+</svg>

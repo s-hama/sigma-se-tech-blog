@@ -58,7 +58,9 @@ class PostIndexView(BaseListView):
             return context
 
         public_posts = get_public_posts()
-        context["latest_posts"] = public_posts.only("id", "title", "created_at").order_by(
+        context["latest_posts"] = public_posts.select_related("category__parent").prefetch_related("tag").only(
+            "id", "title", "created_at", "category__name", "category__parent__name",
+        ).order_by(
             "-created_at", "-pk",
         )[:5]
         context["math_posts"] = public_posts.filter(

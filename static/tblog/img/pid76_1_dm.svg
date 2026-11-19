@@ -1,0 +1,179 @@
+<svg color="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="49.5 19.5 803 667" role="img" aria-labelledby="title desc">
+  <title id="title">エニグマ暗号機の部品配置と信号の流れ</title>
+  <desc id="desc">エニグマ暗号機を上から見た簡略図。実機の部品配置と、キーボード入力からランプ表示までの信号の流れを分けて示す。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 24 14" markerWidth="24" markerHeight="14" refX="0" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L24 7 L0 14 Z" fill="#ffffff" />
+    </marker>
+  </defs>
+
+  <rect x="50" y="20" width="802" height="666" rx="18" fill="none" stroke="#ffffff" stroke-width="1" />
+  <text x="450" y="64" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="700" fill="#ffffff">エニグマ: 実機の配置と信号の流れ</text>
+
+  <g fill="none" stroke="#ffffff">
+    <rect x="78" y="88" width="744" height="475" rx="18" />
+    <path d="M92 238 H808" />
+    <path d="M92 316 H808" />
+    <path d="M92 446 H808" />
+  </g>
+
+  <g font-family="sans-serif" fill="#ffffff">
+    <text x="94" y="114" font-size="16" font-weight="700">ローター窓</text>
+    <text x="94" y="264" font-size="16" font-weight="700">ランプボード</text>
+    <text x="94" y="342" font-size="16" font-weight="700">キーボード</text>
+    <text x="94" y="472" font-size="16" font-weight="700">プラグボード</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff">
+    <circle cx="218" cy="166" r="36" />
+    <circle cx="362" cy="166" r="36" />
+    <circle cx="506" cy="166" r="36" />
+    <rect x="636" y="138" width="82" height="56" rx="10" />
+  </g>
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="218" y="164" font-size="14" font-weight="700">ローター</text>
+    <text x="218" y="186" font-family="monospace" font-size="20" font-weight="700">I</text>
+    <text x="362" y="164" font-size="14" font-weight="700">ローター</text>
+    <text x="362" y="186" font-family="monospace" font-size="20" font-weight="700">II</text>
+    <text x="506" y="164" font-size="14" font-weight="700">ローター</text>
+    <text x="506" y="186" font-family="monospace" font-size="20" font-weight="700">III</text>
+    <text x="676" y="170" font-size="15" font-weight="700">反射板</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-linecap="butt" marker-end="url(#arrow)">
+    <path d="M258 154 H300" />
+    <path d="M402 154 H444" />
+    <path d="M546 154 H608" />
+    <path d="M630 178 H568" />
+    <path d="M466 178 H424" />
+    <path d="M322 178 H280" />
+  </g>
+  <g font-family="sans-serif" font-size="13" fill="#ffffff" font-weight="700">
+    <text x="290" y="135">反射前</text>
+    <text x="432" y="208">反射後</text>
+    <text x="576" y="208">折り返す</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff">
+    <circle cx="240" cy="276" r="20" />
+    <circle cx="298" cy="276" r="20" />
+    <circle cx="356" cy="276" r="20" />
+    <circle cx="414" cy="276" r="20" />
+    <circle cx="472" cy="276" r="20" />
+    <circle cx="530" cy="276" r="20" />
+    <circle cx="588" cy="276" r="20" />
+    <circle cx="646" cy="276" r="20" stroke-width="3"/>
+  </g>
+  <g font-family="monospace" font-size="18" font-weight="700" text-anchor="middle">
+    <text x="240" y="282" fill="#ffffff">A</text>
+    <text x="298" y="282" fill="#ffffff">B</text>
+    <text x="356" y="282" fill="#ffffff">C</text>
+    <text x="414" y="282" fill="#ffffff">D</text>
+    <text x="472" y="282" fill="#ffffff">E</text>
+    <text x="530" y="282" fill="#ffffff">F</text>
+    <text x="588" y="282" fill="#ffffff">G</text>
+    <text x="646" y="282" fill="#ffffff">K</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff">
+    <circle cx="240" cy="368" r="20" stroke-width="3"/>
+    <circle cx="298" cy="368" r="20" />
+    <circle cx="356" cy="368" r="20" />
+    <circle cx="414" cy="368" r="20" />
+    <circle cx="472" cy="368" r="20" />
+    <circle cx="530" cy="368" r="20" />
+    <circle cx="588" cy="368" r="20" />
+    <circle cx="646" cy="368" r="20" />
+    <circle cx="269" cy="408" r="20" />
+    <circle cx="327" cy="408" r="20" />
+    <circle cx="385" cy="408" r="20" />
+    <circle cx="443" cy="408" r="20" />
+    <circle cx="501" cy="408" r="20" />
+    <circle cx="559" cy="408" r="20" />
+    <circle cx="617" cy="408" r="20" />
+  </g>
+
+  <g font-family="monospace" font-size="18" font-weight="700" text-anchor="middle">
+    <text x="240" y="374" fill="#ffffff">A</text>
+    <text x="298" y="374" fill="#ffffff">B</text>
+    <text x="356" y="374" fill="#ffffff">C</text>
+    <text x="414" y="374" fill="#ffffff">D</text>
+    <text x="472" y="374" fill="#ffffff">E</text>
+    <text x="530" y="374" fill="#ffffff">F</text>
+    <text x="588" y="374" fill="#ffffff">G</text>
+    <text x="646" y="374" fill="#ffffff">H</text>
+    <text x="269" y="414" fill="#ffffff">I</text>
+    <text x="327" y="414" fill="#ffffff">J</text>
+    <text x="385" y="414" fill="#ffffff">K</text>
+    <text x="443" y="414" fill="#ffffff">L</text>
+    <text x="501" y="414" fill="#ffffff">M</text>
+    <text x="559" y="414" fill="#ffffff">N</text>
+    <text x="617" y="414" fill="#ffffff">O</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff">
+    <circle cx="250" cy="502" r="8" />
+    <circle cx="292" cy="502" r="8" />
+    <circle cx="334" cy="502" r="8" />
+    <circle cx="376" cy="502" r="8" />
+    <circle cx="418" cy="502" r="8" />
+    <circle cx="460" cy="502" r="8" />
+    <circle cx="502" cy="502" r="8" />
+    <circle cx="544" cy="502" r="8" />
+    <circle cx="586" cy="502" r="8" />
+    <circle cx="628" cy="502" r="8" />
+    <path d="M250 502 C272 482 312 482 334 502" />
+    <path d="M418 502 C440 482 480 482 502 502" />
+    <path d="M544 502 C566 522 606 522 628 502" />
+  </g>
+
+  <g font-family="sans-serif" font-size="13" fill="#ffffff" font-weight="700">
+    <circle cx="194" cy="368" r="14" fill="#ffffff" stroke="#ffffff" stroke-width="2" />
+    <text x="194" y="373" fill="#212529" text-anchor="middle">1</text>
+    <text x="174" y="402">平文 A</text>
+    <text x="174" y="418">を押す</text>
+    <circle cx="214" cy="502" r="14" fill="#ffffff" stroke="#ffffff" stroke-width="2" />
+    <text x="214" y="507" fill="#212529" text-anchor="middle">2</text>
+    <text x="187" y="536">配線入替</text>
+    <circle cx="270" cy="130" r="14" fill="#ffffff" stroke="#ffffff" stroke-width="2" />
+    <text x="270" y="135" fill="#212529" text-anchor="middle">3</text>
+    <circle cx="556" cy="204" r="14" fill="#ffffff" stroke="#ffffff" stroke-width="2" />
+    <text x="556" y="209" fill="#212529" text-anchor="middle">4</text>
+    <circle cx="412" cy="204" r="14" fill="#ffffff" stroke="#ffffff" stroke-width="2" />
+    <text x="412" y="209" fill="#212529" text-anchor="middle">5</text>
+    <circle cx="692" cy="276" r="14" fill="#ffffff" stroke="#ffffff" stroke-width="2" />
+    <text x="692" y="281" fill="#212529" text-anchor="middle">6</text>
+    <text x="714" y="274">暗号文 Kが</text>
+    <text x="714" y="290">点灯する</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff">
+    <rect x="78" y="584" width="744" height="76" rx="10" />
+    <path d="M205 584 V660" />
+    <path d="M322 584 V660" />
+    <path d="M456 584 V660" />
+    <path d="M590 584 V660" />
+    <path d="M705 584 V660" />
+  </g>
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="146" y="618" font-size="14" font-weight="700">1. キー入力</text>
+    <text x="146" y="638" font-size="13">平文 A</text>
+    <text x="264" y="618" font-size="14" font-weight="700">2. プラグ</text>
+    <text x="264" y="638" font-size="13">配線を入替</text>
+    <text x="389" y="618" font-size="14" font-weight="700">3. 反射前</text>
+    <text x="390" y="638" font-size="13">3枚ローター</text>
+    <text x="523" y="618" font-size="14" font-weight="700">4. 反射板</text>
+    <text x="523" y="638" font-size="13">信号を戻す</text>
+    <text x="648" y="618" font-size="14" font-weight="700">5. 反射後</text>
+    <text x="648" y="638" font-size="13">同じ3枚</text>
+    <text x="758" y="618" font-size="14" font-weight="700">6. ランプ</text>
+    <text x="758" y="638" font-size="13">暗号文 K</text>
+  </g>
+  <g fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="butt" marker-end="url(#arrow)">
+    <path d="M194 620 H202" />
+    <path d="M310 620 H324" />
+    <path d="M432 620 H460" />
+    <path d="M564 620 H590" />
+    <path d="M688 620 H700" />
+  </g>
+</svg>

@@ -1,0 +1,73 @@
+<svg color="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 424" role="img" aria-labelledby="title desc">
+  <title id="title">カシスキー検査の考え方</title>
+  <desc id="desc">暗号文に繰り返し出る同じ文字列の間隔から、鍵の長さを推測する流れ。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 24 14" markerWidth="24" markerHeight="14" refX="0" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L24 7 L0 14 Z" fill="#ffffff" />
+    </marker>
+  </defs>
+  <rect x="1" y="1" width="818" height="422" rx="18" fill="none" stroke="#ffffff" stroke-width="1" />
+  <text x="410" y="42" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="700" fill="#ffffff">カシスキー検査: 繰り返しから鍵の長さを探す</text>
+
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="410" y="82" font-size="17" font-weight="700">同じ文字列が繰り返し出る位置を探す</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="2">
+    <rect x="90" y="108" width="64" height="44" rx="7" />
+    <rect x="162" y="108" width="64" height="44" rx="7" />
+    <rect x="234" y="108" width="64" height="44" rx="7" />
+    <rect x="306" y="108" width="64" height="44" rx="7" />
+    <rect x="378" y="108" width="64" height="44" rx="7" />
+    <rect x="450" y="108" width="64" height="44" rx="7" />
+    <rect x="522" y="108" width="64" height="44" rx="7" />
+    <rect x="594" y="108" width="64" height="44" rx="7" />
+    <rect x="666" y="108" width="64" height="44" rx="7" />
+  </g>
+
+  <g font-family="monospace" font-size="22" font-weight="700" fill="#ffffff" text-anchor="middle">
+    <text x="122" y="137">KXR</text>
+    <text x="194" y="137">QTA</text>
+    <text x="266" y="137">LMP</text>
+    <text x="338" y="137">KXR</text>
+    <text x="410" y="137">NVE</text>
+    <text x="482" y="137">OQP</text>
+    <text x="554" y="137">KXR</text>
+    <text x="626" y="137">TAD</text>
+    <text x="698" y="137">RFI</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="1" stroke-linecap="round">
+    <path d="M122 164 C160 208 300 208 338 164" />
+    <path d="M338 164 C376 208 516 208 554 164" />
+  </g>
+  <g font-family="sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="middle">
+    <text x="230" y="222">間隔 9</text>
+    <text x="446" y="222">間隔 9</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="butt" marker-end="url(#arrow)">
+    <line x1="445" y1="230" x2="445" y2="245" />
+  </g>
+
+  <text x="440" y="293" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#ffffff">間隔の約数から、鍵の長さ候補を考える</text>
+
+  <g fill="none" stroke="#ffffff">
+    <rect x="20" y="324" width="218" height="50" rx="9" />
+    <rect x="301" y="324" width="218" height="50" rx="9" />
+    <rect x="582" y="324" width="218" height="50" rx="9" />
+  </g>
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="129" y="345" font-size="16" font-weight="700">1. 繰り返しを探す</text>
+    <text x="129" y="365" font-size="16">同じ暗号文字列を見つける</text>
+    <text x="410" y="345" font-size="16" font-weight="700">2. 間隔から推測する</text>
+    <text x="410" y="365" font-size="16">約数から鍵長候補を考える</text>
+    <text x="691" y="345" font-size="16" font-weight="700">3. 頻度分析する</text>
+    <text x="691" y="365" font-size="16">同じ鍵位置ごとに調べる</text>
+  </g>
+  <g fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="butt" marker-end="url(#arrow)">
+    <line x1="246" y1="349" x2="270" y2="349" />
+    <line x1="526" y1="349" x2="552" y2="349" />
+  </g>
+  <text x="425" y="404" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#ffffff">間隔 9 の約数は 1, 3, 9、鍵長 3 などを疑う</text>
+</svg>

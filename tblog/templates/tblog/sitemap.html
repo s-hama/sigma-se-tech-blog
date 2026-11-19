@@ -7,8 +7,7 @@
 {% block content %}
 <article class="sitemap" aria-labelledby="sitemap-title">
   <h2 class="h4" id="sitemap-title">サイトマップ</h2>
-  <p>全公開記事：{{ sitemap_post_count }}件をカテゴリ・シリーズごとに整理しています。<br>
-    新しい記事は、<a class="link-secondary" href="{% url 'tblog:index' %}?page=1">新着順一覧</a>から確認できます。</p>
+  <p>全公開記事：{{ sitemap_post_count }}件をカテゴリ・シリーズごとに整理しています。</p>
 
   <nav class="sitemap-toc" aria-label="サイトマップの目次">
     <ul>
@@ -35,9 +34,9 @@
         {% for series in child.series %}
         <div class="sitemap-series">
           {% if series.summary %}<p>{{ series.summary }}</p>{% endif %}
-          <ul>
+          <ul class="article-link-list">
             {% for post in series.posts %}
-            <li><a class="link-secondary" href="{% url 'tblog:detail' post.pk %}">{{ post.title }}</a></li>
+            <li><a class="btn btn-outline-primary btn-list-link" href="{% url 'tblog:detail' post.pk %}"><span class="article-link-title">{{ post.title }}</span></a></li>
             {% endfor %}
           </ul>
         </div>
