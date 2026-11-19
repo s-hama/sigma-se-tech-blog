@@ -1,12 +1,13 @@
 {% extends "tblog/base.html" %}
+{% load static %}
 {% block title %}{{ post.title }} | SIGMA-SE Math & Tech Library{% endblock %}
 {% block canonical %}<link rel="canonical" href="https://sigma-se.com{% url 'tblog:detail' post.pk %}">{% endblock %}
 {% block og_url %}https://sigma-se.com{% url 'tblog:detail' post.pk %}{% endblock %}
 {% block og_title %}{{ post.title }}{% endblock %}
 {% block content %}
-<div class="card border-primary">
-  <div class="card-header bg-primary text-white">
-    <h4>{{ post.title }}</h4>
+<div class="card border-primary article-detail">
+  <div class="card-header bg-primary text-white article-header">
+    <h4 class="article-link-title">{{ post.title }}</h4>
   </div>
   <div class="card-meta">
     {% include "tblog/post_meta.html" with show_author=True %}
@@ -119,4 +120,6 @@
     {% endif %}
   </div>
 </div>
+<script src="{% static 'tblog/post_media.js' %}" defer></script>
+<script src="{% static 'tblog/post_meta.js' %}" defer></script>
 {% endblock %}

@@ -1,0 +1,89 @@
+<svg color="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 470" role="img" aria-labelledby="title desc">
+  <title id="title">積の変化を負の数の範囲へ延長した場合の予測</title>
+  <desc id="desc">既知の積を表す点の変化を負の数の範囲へ延長し、予測される点を破線で示すグラフ。</desc>
+  <defs>
+    <marker id="axis-arrow" viewBox="0 0 12 8" markerWidth="12" markerHeight="8" refX="10" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L12 4 L0 8 Z" fill="#ffffff" />
+    </marker>
+  </defs>
+
+  <rect x="1" y="1" width="818" height="468" rx="18" fill="none" stroke="#ffffff" stroke-width="1" />
+  <text x="410" y="40" text-anchor="middle" font-family="sans-serif" font-size="23" font-weight="700" fill="#ffffff">積の変化を負の数の範囲へ延長した場合の予測</text>
+
+  <g fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="4 6">
+    <line x1="140" y1="70" x2="140" y2="410" />
+    <line x1="230" y1="70" x2="230" y2="410" />
+    <line x1="320" y1="70" x2="320" y2="410" />
+    <line x1="500" y1="70" x2="500" y2="410" />
+    <line x1="590" y1="70" x2="590" y2="410" />
+    <line x1="680" y1="70" x2="680" y2="410" />
+    <line x1="95" y1="78" x2="725" y2="78" />
+    <line x1="95" y1="132" x2="725" y2="132" />
+    <line x1="95" y1="186" x2="725" y2="186" />
+    <line x1="95" y1="294" x2="725" y2="294" />
+    <line x1="95" y1="348" x2="725" y2="348" />
+    <line x1="95" y1="402" x2="725" y2="402" />
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="2" marker-end="url(#axis-arrow)">
+    <line x1="95" y1="240" x2="742" y2="240" />
+    <line x1="410" y1="420" x2="410" y2="58" />
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="1.5">
+    <line x1="140" y1="234" x2="140" y2="246" />
+    <line x1="230" y1="234" x2="230" y2="246" />
+    <line x1="320" y1="234" x2="320" y2="246" />
+    <line x1="500" y1="234" x2="500" y2="246" />
+    <line x1="590" y1="234" x2="590" y2="246" />
+    <line x1="680" y1="234" x2="680" y2="246" />
+    <line x1="404" y1="78" x2="416" y2="78" />
+    <line x1="404" y1="132" x2="416" y2="132" />
+    <line x1="404" y1="186" x2="416" y2="186" />
+    <line x1="404" y1="294" x2="416" y2="294" />
+    <line x1="404" y1="348" x2="416" y2="348" />
+    <line x1="404" y1="402" x2="416" y2="402" />
+  </g>
+
+  <line x1="410" y1="240" x2="680" y2="402" stroke="#ffffff" stroke-width="3" />
+  <line x1="140" y1="78" x2="410" y2="240" stroke="#ffffff" stroke-width="3" stroke-dasharray="8 7" />
+
+  <g fill="#ffffff">
+    <circle cx="410" cy="240" r="5" />
+    <circle cx="500" cy="294" r="5" />
+    <circle cx="590" cy="348" r="5" />
+    <circle cx="680" cy="402" r="5" />
+  </g>
+  <g fill="none" stroke="#ffffff" stroke-width="2">
+    <circle cx="140" cy="78" r="5" />
+    <circle cx="230" cy="132" r="5" />
+    <circle cx="320" cy="186" r="7" />
+  </g>
+  <circle cx="320" cy="186" r="13" fill="none" stroke="#ffffff" stroke-width="3" />
+
+  <g font-family="serif" font-size="16" fill="#ffffff" text-anchor="middle">
+    <text x="116" y="265">−3</text>
+    <text x="206" y="265">−2</text>
+    <text x="296" y="265">−1</text>
+    <text x="390" y="265">0</text>
+    <text x="482" y="265">1</text>
+    <text x="572" y="265">2</text>
+    <text x="664" y="265">3</text>
+  </g>
+
+  <g font-family="serif" font-size="16" fill="#ffffff" text-anchor="end">
+    <text x="394" y="99">6</text>
+    <text x="394" y="153">4</text>
+    <text x="394" y="207">2</text>
+    <text x="394" y="315">−2</text>
+    <text x="394" y="369">−4</text>
+    <text x="394" y="423">−6</text>
+  </g>
+
+  <g font-family="sans-serif" fill="#ffffff">
+    <text x="755" y="246" font-family="serif" font-style="italic" font-size="19" font-weight="700">x</text>
+    <text x="420" y="65" font-family="serif" font-style="italic" font-size="19" font-weight="700">y</text>
+    <text x="335" y="176" font-size="15" font-weight="700">予測される点</text>
+    <text x="410" y="450" text-anchor="middle" font-size="16" font-weight="700">破線は、既知の変化を左側へ延長した場合の予測</text>
+  </g>
+</svg>

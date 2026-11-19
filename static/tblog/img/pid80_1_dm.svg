@@ -1,0 +1,43 @@
+<svg color="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 289" role="img" aria-labelledby="title desc">
+  <title id="title">耐量子暗号が必要になる理由</title>
+  <desc id="desc">RSAやECCの前提が量子コンピュータで弱くなる可能性があるため、格子やハッシュなど別の難しさを使う耐量子暗号へ移行する流れ。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 16 10" markerWidth="16" markerHeight="10" refX="0" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L16 5 L0 10 Z" fill="#ffffff" />
+    </marker>
+  </defs>
+
+  <rect x="0.5" y="0.5" width="859" height="286" rx="16" fill="none" stroke="#ffffff" stroke-width="1" />
+  <text x="430" y="40" text-anchor="middle" font-family="sans-serif" font-size="23" font-weight="700" fill="#ffffff">耐量子暗号: 前提になる難しさを変える</text>
+
+  <g fill="none" stroke="#ffffff">
+    <rect x="48" y="61" width="224" height="68" rx="10" />
+    <rect x="318" y="61" width="224" height="68" rx="10" />
+    <rect x="588" y="61" width="224" height="68" rx="10" />
+    <rect x="48" y="181" width="224" height="58" rx="10" />
+    <rect x="588" y="181" width="224" height="58" rx="10" />
+  </g>
+
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="160" y="90" font-size="16" font-weight="700">従来の公開鍵暗号</text>
+    <text x="160" y="110" font-size="15">RSA / ECC</text>
+    <text x="430" y="90" font-size="16" font-weight="700">量子コンピュータ</text>
+    <text x="430" y="110" font-size="15">前提を崩す可能性</text>
+    <text x="700" y="90" font-size="16" font-weight="700">耐量子暗号</text>
+    <text x="700" y="110" font-size="15">ML-KEM / ML-DSA</text>
+    <text x="160" y="205" font-size="15" font-weight="700">素因数分解・離散対数</text>
+    <text x="160" y="225" font-size="14">RSAやECCの土台</text>
+    <text x="700" y="205" font-size="15" font-weight="700">格子・ハッシュなど</text>
+    <text x="700" y="225" font-size="14">別の難しさを使う</text>
+    <text x="430" y="168" font-size="15" font-weight="700">弱くなる前提から、別の前提へ移る</text>
+    <text x="430" y="268" font-size="15" font-weight="700">標準と実装を見ながら、段階的に移行する</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow)">
+    <path d="M278 96 H298" />
+    <path d="M548 96 H568" />
+    <path d="M160 135 V161" />
+    <path d="M700 135 V161" />
+    <path d="M278 210 H568" />
+  </g>
+</svg>

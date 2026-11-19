@@ -1,0 +1,49 @@
+<svg color="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="34 0 752 322" role="img" aria-labelledby="title desc">
+  <title id="title">RSA暗号の基本構造</title>
+  <desc id="desc">公開鍵で平文を暗号文に変換し、秘密鍵で元の平文へ戻す流れと、公開鍵に含まれる大きな数nを素因数分解しにくいことを示す図。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 16 10" markerWidth="16" markerHeight="10" refX="0" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L16 5 L0 10 Z" fill="#ffffff" />
+    </marker>
+  </defs>
+
+  <rect x="34.5" y="0.5" width="751" height="321" rx="16" fill="none" stroke="#ffffff" stroke-width="1" />
+  <text x="410" y="38" text-anchor="middle" font-family="sans-serif" font-size="23" font-weight="700" fill="#ffffff">RSA: 公開鍵で暗号化し、秘密鍵で復号する</text>
+
+  <g fill="none" stroke="#ffffff">
+    <rect x="56" y="58" width="142" height="58" rx="8" />
+    <rect x="306" y="58" width="208" height="58" rx="8" />
+    <rect x="622" y="58" width="142" height="58" rx="8" />
+    <rect x="306" y="190" width="208" height="58" rx="8" />
+    <rect x="622" y="190" width="142" height="58" rx="8" />
+  </g>
+
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="127" y="83" font-size="15" font-weight="700">平文</text>
+    <text x="127" y="104" font-family="monospace" font-size="18" font-weight="700">M</text>
+    <text x="410" y="82" font-size="15" font-weight="700">受信者の公開鍵</text>
+    <text x="410" y="103" font-size="14">暗号化に使う</text>
+    <text x="693" y="83" font-size="15" font-weight="700">暗号文</text>
+    <text x="693" y="104" font-family="monospace" font-size="18" font-weight="700">C</text>
+
+    <text x="410" y="214" font-size="15" font-weight="700">受信者の秘密鍵</text>
+    <text x="410" y="235" font-size="14">復号に使う</text>
+    <text x="693" y="214" font-size="15" font-weight="700">元の平文</text>
+    <text x="693" y="235" font-family="monospace" font-size="18" font-weight="700">M</text>
+
+    <text x="410" y="280" font-size="14" font-weight="700">公開鍵には大きな数 n = p × q が含まれるが n だけで p と q を特定するのには時間がかかる</text>
+    <text x="410" y="301" font-size="14" font-weight="700">そのため、公開鍵から対応する秘密鍵を作りにくい</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow)">
+    <path d="M204 87 H286" />
+    <path d="M520 87 H602" />
+    <path d="M693 122 V150 H430" />
+    <path d="M520 219 H602" />
+    <path d="M410 122 V170" />
+  </g>
+
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="556" y="142" font-size="13">対応する秘密鍵だけが戻せる</text>
+  </g>
+</svg>

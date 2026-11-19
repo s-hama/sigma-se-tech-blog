@@ -1,0 +1,45 @@
+<svg color="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="54 0 637 296" role="img" aria-labelledby="title desc">
+  <title id="title">楕円曲線暗号の基本構造</title>
+  <desc id="desc">基準点Gを秘密の回数dだけ足して公開点Qを作り、公開点Qからdを戻すのは難しいことを示す図。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 16 10" markerWidth="16" markerHeight="10" refX="0" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L16 5 L0 10 Z" fill="#ffffff" />
+    </marker>
+  </defs>
+
+  <rect x="54.5" y="0.5" width="636" height="295" rx="16" fill="none" stroke="#ffffff" stroke-width="1" />
+  <text x="382" y="38" text-anchor="middle" font-family="sans-serif" font-size="23" font-weight="700" fill="#ffffff">ECC: 秘密の回数だけ点を足す</text>
+
+  <g fill="none" stroke="#ffffff">
+    <path d="M84 214 C144 96 256 86 342 214" />
+    <line x1="74" y1="214" x2="366" y2="214" />
+    <line x1="184" y1="70" x2="184" y2="236" />
+    <rect x="445" y="64" width="226" height="56" rx="8" />
+    <rect x="445" y="154" width="226" height="34" rx="8" />
+    <rect x="445" y="222" width="226" height="56" rx="8" />
+  </g>
+
+  <g fill="#ffffff">
+    <circle cx="132" cy="158" r="8" />
+    <circle cx="246" cy="118" r="8" />
+    <circle cx="304" cy="178" r="8" />
+  </g>
+
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="middle">
+    <text x="132" y="143" font-size="15" font-weight="700">G</text>
+    <text x="246" y="102" font-size="15" font-weight="700">2G</text>
+    <text x="304" y="163" font-size="15" font-weight="700">Q = dG</text>
+    <text x="558" y="88" font-size="15" font-weight="700">秘密鍵</text>
+    <text x="558" y="109" font-size="15">回数 d</text>
+    <text x="558" y="176" font-size="14" font-weight="700">G を d 回足す</text>
+    <text x="558" y="246" font-size="15" font-weight="700">公開鍵</text>
+    <text x="558" y="266" font-size="15">点 Q = dG</text>
+    <text x="254" y="256" font-size="15" font-weight="700">G と Q は公開できるが、Q から d を戻すのは難しい</text>
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow)">
+    <path d="M360 171 H423" />
+    <path d="M558 125 V134" />
+    <path d="M558 193 V202" />
+  </g>
+</svg>

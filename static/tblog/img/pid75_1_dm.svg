@@ -1,0 +1,48 @@
+<svg color="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 805 355" role="img" aria-labelledby="title desc">
+  <title id="title">プレイフェア暗号の変換例</title>
+  <desc id="desc">5x5の表でATを長方形として見て、対角側のDQへ変換する例。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 24 14" markerWidth="24" markerHeight="14" refX="0" refY="7" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L24 7 L0 14 Z" fill="#ffffff" />
+    </marker>
+  </defs>
+  <rect x="1" y="1" width="803" height="353" rx="18" fill="none" stroke="#ffffff" stroke-width="1" />
+  <text x="402.5" y="46" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="700" fill="#ffffff">プレイフェア暗号: 2文字を表の位置関係で変換する</text>
+
+  <g transform="translate(30 74)">
+    <g fill="none" stroke="#ffffff">
+      <rect x="0" y="0" width="250" height="250" rx="8" />
+      <path d="M50 0 V250 M100 0 V250 M150 0 V250 M200 0 V250" />
+      <path d="M0 50 H250 M0 100 H250 M0 150 H250 M0 200 H250" />
+      <rect x="50" y="50" width="50" height="50" rx="4" stroke-width="4" />
+      <rect x="150" y="150" width="50" height="50" rx="4" stroke-width="4" />
+      <rect x="150" y="50" width="50" height="50" rx="4" stroke-width="4" />
+      <rect x="50" y="150" width="50" height="50" rx="4" stroke-width="4" />
+      <path d="M75 75 H175 V175 H75 Z" stroke-width="1" />
+    </g>
+    <g font-family="monospace" font-size="24" font-weight="700" fill="#ffffff" text-anchor="middle">
+      <text x="25" y="33">C</text><text x="75" y="33">I</text><text x="125" y="33">P</text><text x="175" y="33">H</text><text x="225" y="33">E</text>
+      <text x="25" y="83">R</text><text x="75" y="83">A</text><text x="125" y="83">B</text><text x="175" y="83">D</text><text x="225" y="83">F</text>
+      <text x="25" y="133">G</text><text x="75" y="133">K</text><text x="125" y="133">L</text><text x="175" y="133">M</text><text x="225" y="133">N</text>
+      <text x="25" y="183">O</text><text x="75" y="183">Q</text><text x="125" y="183">S</text><text x="175" y="183">T</text><text x="225" y="183">U</text>
+      <text x="25" y="233">V</text><text x="75" y="233">W</text><text x="125" y="233">X</text><text x="175" y="233">Y</text><text x="225" y="233">Z</text>
+    </g>
+  </g>
+
+  <g fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="butt" marker-end="url(#arrow)">
+    <line x1="294" y1="199" x2="350" y2="199" />
+  </g>
+
+  <g fill="none" stroke="#ffffff">
+    <rect x="390" y="74" width="385" height="250" rx="10" />
+    <path d="M390 136.5 H775" />
+    <path d="M390 199 H775" />
+    <path d="M390 261.5 H775" />
+  </g>
+  <g font-family="sans-serif" fill="#ffffff" text-anchor="start">
+    <text x="438" y="112" font-size="18" font-weight="700">AT を変換する</text>
+    <text x="438" y="173" font-size="18">A と T は同じ行でも同じ列でもない</text>
+    <text x="436" y="236" font-size="18">長方形の対角にある文字へ置き換え</text>
+    <text x="438" y="298" font-size="18" font-weight="700">A → D、T → Q なので AT → DQ</text>
+  </g>
+</svg>

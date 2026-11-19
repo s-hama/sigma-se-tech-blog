@@ -1,0 +1,44 @@
+<svg color="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 470" role="img" aria-labelledby="title desc">
+  <title id="title">全周に同じ幅の隙間ができる広げ方</title>
+  <desc id="desc">実線は半径rの元の円、破線は半径r+hのひも。同じ中心Oを持つ円として広げると、半径の差hが全周で共通する隙間になる。図は隙間を大きく描いた模式図。</desc>
+  <defs>
+    <marker id="dimension" viewBox="0 0 8 8" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+      <path d="M0 0 L8 4 L0 8 Z" fill="#ffffff"/>
+    </marker>
+  </defs>
+  <style>
+    .math { font-family: "STIX Two Math", "Cambria Math", "Times New Roman", serif; }
+    .var { font-style: italic; }
+  </style>
+  <rect x="1" y="1" width="818" height="468" rx="18" fill="none" stroke="#ffffff" stroke-width="1"/>
+  <text x="410" y="40" text-anchor="middle" font-family="sans-serif" font-size="23" font-weight="700" fill="#ffffff">同じ中心の円として均等に広げる</text>
+  <g fill="none" stroke="#ffffff">
+    <circle cx="230" cy="230" r="100" stroke-width="2.5"/>
+    <circle cx="230" cy="230" r="140" stroke-width="2.5" stroke-dasharray="8 6"/>
+    <line x1="230" y1="230" x2="330" y2="230" stroke-width="1.5"/>
+    <line x1="335" y1="230" x2="365" y2="230" stroke-width="1.5" marker-start="url(#dimension)" marker-end="url(#dimension)"/>
+    <line x1="230" y1="95" x2="230" y2="125" stroke-width="1.5" marker-start="url(#dimension)" marker-end="url(#dimension)"/>
+    <line x1="230" y1="247" x2="230" y2="390" stroke-width="1"/>
+    <line x1="370" y1="247" x2="370" y2="390" stroke-width="1"/>
+    <line x1="230" y1="385" x2="370" y2="385" stroke-width="1.5"/>
+    <line x1="455" y1="175" x2="500" y2="175" stroke-width="2.5"/>
+    <line x1="455" y1="218" x2="500" y2="218" stroke-width="2.5" stroke-dasharray="8 6"/>
+  </g>
+  <circle cx="230" cy="230" r="4" fill="#ffffff"/>
+  <g class="math var" fill="#ffffff" font-size="25" text-anchor="middle">
+    <text x="214" y="252">O</text>
+    <text x="280" y="216">r</text>
+    <text x="350" y="213">h</text>
+    <text x="249" y="117">h</text>
+    <text x="300" y="416">r + h</text>
+  </g>
+  <g font-family="sans-serif" fill="#ffffff" font-size="21">
+    <text x="455" y="126" font-weight="700">隙間 h はどの方向でも同じ</text>
+    <text x="518" y="182">元の円</text>
+    <text x="518" y="225">広げた後のひも</text>
+    <text x="455" y="288">元の半径：<tspan class="math var" font-size="25">r</tspan></text>
+    <text x="455" y="327">新しい半径：<tspan class="math var" font-size="25">r + h</tspan></text>
+    <text x="455" y="366" font-weight="700">隙間 = 半径の増分</text>
+    <text x="410" y="447" text-anchor="middle" font-size="18">模式図：ひもの太さ・たるみは考えない</text>
+  </g>
+</svg>
