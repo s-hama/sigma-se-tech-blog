@@ -510,6 +510,11 @@ body {
     padding-left: 1rem;
 }
 
+.profile-section-title {
+    font-size: 1.125rem;
+    font-weight: 400;
+}
+
 /* Long technology names must not squeeze the project column. */
 .profile-history {
     overflow-wrap: anywhere;
@@ -517,6 +522,10 @@ body {
 
 .profile-history tr > :first-child {
     white-space: nowrap;
+}
+
+.profile-history tbody th[scope="row"] {
+    font-weight: 400;
 }
 
 @media (max-width: 991.98px) {
