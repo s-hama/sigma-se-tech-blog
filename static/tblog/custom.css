@@ -808,6 +808,17 @@ body {
 	font-size: 1.25em;
 }
 
+/* Only article detail content uses this compact heading scale. */
+.article-detail .card-body h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.article-detail .card-body h3 {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
 .post-body h4 {
 	font-size: 1em;
 }
