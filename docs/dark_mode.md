@@ -47,7 +47,7 @@
 
 ライトモードの記事一覧とページネーションは、サイドメニューと同じ淡いグレー（`--bs-light-border-subtle`）をホバー背景に使用し、記事一覧の文字・タグは反転させない。
 
-グレー系と白以外の新規色は定義せず、Bootstrapの青いリンク・フォーカス色やコードの構文色もグレーに統一する。リンクは既存の下線、操作部品は枠・ホバー・フォーカスで識別する。サイト全体や画像への反転フィルターは使用しない。
+グレー系と白以外の新規色は定義せず、Bootstrapの青いリンク・フォーカス色もグレーに統一する。コードブロックは例外として、ライトモードの構文色・文字の太さ・斜体を維持し、ダークモードでは背景だけをgray-900へ変更する。リンクは既存の下線、操作部品は枠・ホバー・フォーカスで識別する。サイト全体や画像への反転フィルターは使用しない。
 
 PNGなどのスクリーンショット・既存画像は内容と色を維持し、透過画像内の暗い文字が消えないよう記事内画像の背面に白を敷く。広告など外部iframeの内容はサイトCSSの対象外。
 
@@ -174,3 +174,5 @@ python3 -m tblog.svg_dm --check
 - [Bootstrap 5.3 Color modes](https://getbootstrap.com/docs/5.3/customize/color-modes/)
 - [Bootstrap Icons: moon-stars](https://icons.getbootstrap.com/icons/moon-stars/)
 - [Bootstrap Icons: sun](https://icons.getbootstrap.com/icons/sun/)
+
+モバイル用メニューボタンは、ダークモードでホバー時gray-700、押下中gray-600とし、押した瞬間を色の変化で示す。

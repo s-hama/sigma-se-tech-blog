@@ -255,29 +255,11 @@
     border-color: var(--bs-gray-600);
 }
 
+/* Preserve the shared syntax highlighting; only code surfaces change. */
 [data-bs-theme="dark"] .post-body pre,
 [data-bs-theme="dark"] .post-body pre code,
 [data-bs-theme="dark"] .hljs {
-    color: var(--bs-gray-200);
     background-color: var(--bs-gray-900);
-}
-
-[data-bs-theme="dark"] .hljs [class*="hljs-"],
-[data-bs-theme="dark"] .post-body pre [class*="hljs-"] {
-    color: var(--bs-gray-300);
-    background-color: transparent;
-}
-
-[data-bs-theme="dark"] .hljs :is(.hljs-keyword, .hljs-title, .hljs-built_in),
-[data-bs-theme="dark"] .post-body pre :is(.hljs-keyword, .hljs-title, .hljs-built_in) {
-    color: var(--bs-white);
-    font-weight: 700;
-}
-
-[data-bs-theme="dark"] .hljs :is(.hljs-comment, .hljs-quote),
-[data-bs-theme="dark"] .post-body pre :is(.hljs-comment, .hljs-quote) {
-    color: var(--bs-gray-500);
-    font-style: italic;
 }
 
 [data-bs-theme="dark"] mjx-container {
